@@ -1,0 +1,27 @@
+pluginManagement {
+    resolutionStrategy {
+        eachPlugin {
+            if (requested.id.id == "kotlinx-serialization") {
+                useModule("org.jetbrains.kotlin:kotlin-serialization:${requested.version}")
+            }
+        }
+    }
+
+    repositories {
+        maven { url 'https://dl.bintray.com/kotlin/kotlin-dev' }
+        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+        mavenCentral()
+        maven { url 'https://plugins.gradle.org/m2/' }
+        maven { url "https://dl.bintray.com/badoo/maven" }
+        maven { url "https://dl.bintray.com/kotlin/ktor" }
+    }
+}
+rootProject.name = 'FantomWeb'
+
+enableFeaturePreview('GRADLE_METADATA')
+
+include 'shared'
+include 'js-frontend'
+include 'main-server'
+include 'api-models'
+include 'library-server'

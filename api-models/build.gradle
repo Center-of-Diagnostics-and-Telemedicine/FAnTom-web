@@ -1,0 +1,58 @@
+plugins {
+    id 'org.jetbrains.kotlin.multiplatform'
+    id 'kotlinx-serialization'
+}
+
+repositories {
+    maven { url 'https://dl.bintray.com/kotlin/kotlin-dev' }
+    maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+    maven { url "https://dl.bintray.com/kotlin/kotlinx" }
+    jcenter()
+    mavenCentral()
+}
+
+//version '0.1.1'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+def kotlinx_serialization_version = '0.20.0'
+
+
+kotlin {
+    /* Targets configuration omitted. 
+    *  To find out how to configure the targets, please follow the link:
+    *  https://kotlinlang.org/docs/reference/building-mpp-with-gradle.html#setting-up-targets */
+
+    js {
+        browser{}
+    }
+    jvm {}
+
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation kotlin('stdlib-common')
+                implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$kotlinx_serialization_version"
+            }
+        }
+        jvmMain {
+            dependencies {
+                implementation kotlin('stdlib-jdk8')
+                implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$kotlinx_serialization_version"
+
+            }
+        }
+
+        jsMain {
+            dependencies {
+                implementation kotlin('stdlib-js')
+                implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:$kotlinx_serialization_version"
+            }
+        }
+
+    }
+}
