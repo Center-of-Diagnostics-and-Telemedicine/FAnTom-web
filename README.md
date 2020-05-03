@@ -10,9 +10,9 @@
 ## Run application
 
 - `./gradlew :main-server:run` will run development [Main Backend Server](main-server)
-- `./gradlew :livrary-server:run` will run development [Fantom-Library Backend Server](library-server)
+- `./gradlew :library-server:run` will run development [Fantom-Library Backend Server](library-server)
 - `./gradlew :js-frontend:run` will build optimized [KotlinJs React](js-frontend) bundle and run it on https://localhost:8080
-- `./gradlew :client:run -t` will run development [KotlinJs React](js-frontend) at https://localhost:8080 with live reload
+- `./gradlew :js-frontend:run -t` will run development [KotlinJs React](js-frontend) at https://localhost:8080 with live reload
     
 ## Distribution
 
