@@ -34,7 +34,8 @@ const val MARKS_TABLE = "marks"
 const val ROOT = "/"
 const val STATIC_ROUTE = "/static"
 const val RESOURCE_STATIC = "static/static"
-const val RESOURCE_INDEX = "static/index.html"
+const val RESOURCE_INDEX = "index.html"
+const val RESOURCE_JS = "js-frontend.js"
 
 
 const val data_store_root_path = "/data/Dicom/CT"

@@ -2,8 +2,10 @@ package client.datasource.remote
 
 import model.*
 import io.ktor.client.HttpClient
+import io.ktor.client.features.HttpTimeout
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.serializer.KotlinxSerializer
+import io.ktor.client.features.timeout
 import io.ktor.client.request.*
 import io.ktor.http.takeFrom
 import kotlinx.serialization.json.Json
@@ -14,6 +16,7 @@ class ResearchRemoteDataSource : ResearchRemote {
     install(JsonFeature) {
       serializer = KotlinxSerializer()
     }
+    install(HttpTimeout)
   }
 
   override suspend fun getResearches(token: String): List<Research> {
@@ -25,6 +28,9 @@ class ResearchRemoteDataSource : ResearchRemote {
 
   override suspend fun initResearch(token: String, researchId: Int): ResearchInitResponse {
     return client.get {
+      timeout {
+        requestTimeoutMillis = 20000
+      }
       authHeader(token)
       apiUrl("$RESEARCH_ROUTE/$INIT_ROUTE/$researchId")
     }

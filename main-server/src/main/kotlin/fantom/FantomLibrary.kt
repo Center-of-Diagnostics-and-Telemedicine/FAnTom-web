@@ -8,6 +8,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.features.HttpTimeout
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.serializer.KotlinxSerializer
+import io.ktor.client.features.timeout
 import io.ktor.client.request.*
 import io.ktor.http.takeFrom
 import kotlinx.serialization.json.Json
@@ -68,6 +69,9 @@ class FantomLibraryImpl(
 
   override suspend fun initResearch(researchName: String): ResearchInitResponse {
     return client.get {
+      timeout {
+        requestTimeoutMillis = 20000
+      }
       apiUrl("$RESEARCH_ROUTE/$INIT_ROUTE?id=$researchName")
     }
   }

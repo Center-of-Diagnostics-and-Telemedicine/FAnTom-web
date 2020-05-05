@@ -25,7 +25,11 @@ def reaktive_version = '1.1.12'
 kotlin {
     target {
         useCommonJs()
-        browser
+        browser{
+            dceTask {
+                keep 'ktor-ktor-io.\$\$importsForInline\$\$.ktor-ktor-io.io.ktor.utils.io'
+            }
+        }
     }
 }
 

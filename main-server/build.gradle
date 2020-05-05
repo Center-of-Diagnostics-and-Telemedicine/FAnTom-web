@@ -76,3 +76,20 @@ compileKotlin {
 application {
     mainClassName = main_class_name
 }
+
+task cleanStatic(type: Delete) {
+    delete '/resources/static'
+}
+
+task deployScript(type: Copy, dependsOn: 'cleanStatic') {
+    from '../js-frontend/build/distributions'
+    into 'src/main/resources/static/static/js'
+}
+
+task deployStatic(type: Copy, dependsOn: 'deployScript') {
+    from '../js-frontend/build/distributions'
+    into 'src/main/resources/static'
+}
+
+processResources { dependsOn 'deployStatic' }
+clean { dependsOn 'cleanStatic' }
