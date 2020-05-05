@@ -8,6 +8,7 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.request.receive
 import io.ktor.response.respond
 import model.*
+import saveCtTypeConfirmation
 import updateResearch
 import util.*
 
@@ -62,7 +63,7 @@ class ResearchController {
         if (instanceForUser != null) {
           val slice = instanceForUser
             .getSlice(sliceRequest = request, researchName = research.name)
-            call.respond(slice)
+          call.respond(slice)
         } else {
           respondError(call)
         }
@@ -96,6 +97,7 @@ class ResearchController {
 
   suspend fun close(call: ApplicationCall) {
     val id = call.parameters[ID_FIELD]
+    val request = call.receive<ConfirmCTTypeRequest>()
     if (id != null && id.isNotEmpty()) {
       debugLog("id is: $id")
       val research = getResearch(parseInt(id), call.user.id)
@@ -103,6 +105,7 @@ class ResearchController {
         call.respond(HttpStatusCode.NotFound)
       } else {
         try {
+          saveCtTypeConfirmation(request, call.user.id)
           updateResearch(research.copy(done = true), userId = call.user.id)
           call.respond(HttpStatusCode.OK)
         } catch (e: Exception) {

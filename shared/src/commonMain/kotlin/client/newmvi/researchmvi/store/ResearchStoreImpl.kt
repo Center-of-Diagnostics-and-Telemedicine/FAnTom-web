@@ -6,13 +6,12 @@ import client.newmvi.researchmvi.store.ResearchStore.Intent
 import client.newmvi.researchmvi.store.ResearchStore.State
 import com.badoo.reaktive.disposable.CompositeDisposable
 import com.badoo.reaktive.disposable.Disposable
-import com.badoo.reaktive.observable.*
+import com.badoo.reaktive.observable.Observable
 import com.badoo.reaktive.scheduler.computationScheduler
 import com.badoo.reaktive.scheduler.mainScheduler
 import com.badoo.reaktive.single.*
 import com.badoo.reaktive.subject.Subject
 import com.badoo.reaktive.subject.behavior.BehaviorSubject
-import com.badoo.reaktive.subject.publish.PublishSubject
 import model.*
 
 class ResearchStoreImpl(
@@ -39,16 +38,6 @@ class ResearchStoreImpl(
 
   private val disposables = CompositeDisposable()
   override val isDisposed: Boolean get() = disposables.isDisposed
-  private val sessionDebounceSubject = PublishSubject<Boolean>()
-
-  init {
-    sessionDebounceSubject
-      .debounce(20000, computationScheduler)
-      .subscribe {
-        debugLog("going to close container")
-        accept(Intent.CloseSession)
-      }
-  }
 
   override fun dispose() {
     disposables.dispose()
@@ -56,7 +45,6 @@ class ResearchStoreImpl(
   }
 
   override fun accept(intent: Intent) {
-    sessionDebounceSubject.onNext(true)
     execute(intent)?.also { disposables.add(it) }
   }
 
@@ -120,13 +108,21 @@ class ResearchStoreImpl(
         callBackToResearchListListener.onNext(true)
         null
       }
-      Intent.Close -> close()//todo(использовать как метод для сохранения отметки)
+      Intent.Close -> {
+        debugLog("Intent.Close income")
+//        close(
+//          intent.ctType,
+//          intent.leftPercent,
+//          intent.rightPercent
+//       )
+        null
+      }//todo(использовать как метод для сохранения отметки)
       Intent.ShowAreasNotFull -> {
         onResult(Effect.AreaSaveError("Необходимо указать типы для всех очаговых образований"))
         null
       }
       Intent.BackToResearchList -> {
-        closeSession(false)
+        closeSession()
       }
       Intent.Clear -> {
         onResult(Effect.ClearOldData)
@@ -137,15 +133,19 @@ class ResearchStoreImpl(
         null
       }
       Intent.CloseSession -> {
-        closeSession(true)
+        closeSession()
+      }
+      is Intent.ConfirmCTType -> {
+        debugLog("Intent.ConfirmCTType income, left = ${intent.leftPercent}, right = ${intent.rightPercent}, cttype = ${intent.ctType.ordinal}")
+        close(intent.ctType, intent.leftPercent, intent.rightPercent)
       }
     }
 
   //todo(использовать как метод сохранения отметок)
-  private fun close(): Disposable? {
+  private fun close(ctType: CTType, leftPercent: Int, rightPercent: Int): Disposable? {
     onResult(Effect.LoadingStarted)
     return closeResearchProcessor
-      .close(state.researchId)
+      .close(ctType, leftPercent, rightPercent, state.researchId)
       .observeOn(computationScheduler)
       .map {
         when (it) {
@@ -231,7 +231,7 @@ class ResearchStoreImpl(
       .observeOn(mainScheduler)
       .subscribe(onSuccess = ::onResult)
 
-  private fun closeSession(showMessage: Boolean): Disposable? {
+  private fun closeSession(): Disposable? {
     onResult(Effect.LoadingStarted)
     return closeSessionProcessor
       .close(state.researchId)
@@ -239,10 +239,7 @@ class ResearchStoreImpl(
       .map {
         when (it) {
           is CloseSessionProcessor.Result.Success -> {
-            if (showMessage)
-              Effect.SessionClosed
-            else
-              Effect.Close
+            Effect.Close
           }
           is CloseSessionProcessor.Result.Error -> Effect.LoadingFailed(it.message)
         }
@@ -280,7 +277,6 @@ class ResearchStoreImpl(
     class CloseCutFullMode(val gridModel: GridModel) : Effect()
 
     class ConfirmCTType(val ctType: CTType) : Effect()
-    object SessionClosed : Effect()
   }
 
   private object Reducer {
@@ -313,7 +309,6 @@ class ResearchStoreImpl(
         is Effect.AreasNotFullError -> state.copy(studyCompleted = false, error = effect.message)
         Effect.ClearOldData -> State(data = null, gridModel = initialGridModel())
         is Effect.ConfirmCTType -> state.copy(ctTypeToConfirm = effect.ctType)
-        Effect.SessionClosed -> state.copy(sessionClosed = true)
       }
   }
 }

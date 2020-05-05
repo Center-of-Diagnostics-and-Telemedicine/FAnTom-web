@@ -1,11 +1,8 @@
-
-
-import model.*
-import util.csv_store_path
-import model.Research
 import io.ktor.auth.UserPasswordCredential
+import model.*
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
+import util.csv_store_path
 import java.io.*
 
 fun init() {
@@ -13,7 +10,8 @@ fun init() {
     SchemaUtils.create(
       UserVos,
       ResearchVos,
-      UserResearchVos
+      UserResearchVos,
+      UserMarkVos
     )
     val login = "admin"
     val pass = hash("vfrcbv16")
@@ -188,6 +186,18 @@ fun updateResearch(research: Research, userId: Int) = transaction {
     }
 //  getResearch(researchId = research.id, userId = userId)
 }
+
+
+fun saveCtTypeConfirmation(request: ConfirmCTTypeRequest, userrId: Int) = transaction {
+  UserMarkVos.insertIgnore {
+    it[userId] = userrId
+    it[researchId] = request.researchId
+    it[ctType] = request.ctType
+    it[leftPercent] = request.leftPercent
+    it[rightPercent] = request.rightPercent
+  }
+}
+
 
 fun isMarked(userrId: Int, researchhId: Int): Boolean = transaction {
   false

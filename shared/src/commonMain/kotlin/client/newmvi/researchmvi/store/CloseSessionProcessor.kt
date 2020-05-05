@@ -24,7 +24,7 @@ class CloseSessionProcessorImpl(
 
   override fun close(researchId: Int): Single<CloseSessionProcessor.Result> =
     singleFromCoroutine {
-      repository.closeResearch(researchId)
+      repository.closeSession()
     }
       .map { CloseSessionProcessor.Result.Success }
       .onErrorReturnValue(CloseSessionProcessor.Result.Error("Произошла ошибка"))

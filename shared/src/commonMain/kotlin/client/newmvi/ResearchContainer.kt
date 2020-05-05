@@ -131,6 +131,8 @@ object ResearchContainer {
 
   init {
 
+    initSessionSubscription()
+
     axialContainerSizeChangeListener.subscribe(onNext = {
       val heightRatio = it.height.toDouble() / axialSlicesSizesDataObservable.value.height
       val widthRatio = it.width.toDouble() / 512
@@ -842,6 +844,9 @@ object ResearchContainer {
     }
   }
 
+  private fun initSessionSubscription() {
+  }
+
   private fun initResearch(slicesSizesData: ResearchSlicesSizesData) {
 
     axialSlicesSizesDataObservable.onNext(slicesSizesData.axial)
@@ -859,114 +864,6 @@ object ResearchContainer {
     mipMethodObservable.onNext(MIP_METHOD_TYPE_NO_MIP)
     mipValueObservable.onNext(INITIAL_MIP_VALUE)
   }
-
-//  private fun updateAreas(list: List<SelectedArea>) {
-//    val axialCirclesList = mutableListOf<CircleShape>()
-//    val frontalCirclesList = mutableListOf<CircleShape>()
-//    val sagittalCirclesList = mutableListOf<CircleShape>()
-//
-//    val axialMovableRectsList = mutableListOf<MoveRect>()
-//    val frontalMovableRectsList = mutableListOf<MoveRect>()
-//    val sagittalMovableRectsList = mutableListOf<MoveRect>()
-//
-//    val selectedArea = areasObservable.value.firstOrNull { selectedAreaObservable.value == it.id }
-//
-//    val frontalAxialCoefficient = frontalSlicesSizesDataObservable.value.height.toDouble() / axialSlicesSizesDataObservable.value.maxFramesSize
-//    val sagittalAxialCoefficient = sagittalSlicesSizesDataObservable.value.height.toDouble() / axialSlicesSizesDataObservable.value.maxFramesSize
-//
-//    val axialSliceNumber = axialSliceNumberObservable.value
-//    val frontalSliceNumber = frontalSliceNumberObservable.value
-//    val sagittalSliceNumber = sagittalSliceNumberObservable.value
-//
-//    list.forEach { area ->
-//      AreaToAxialCircleMapper
-//        .invoke(
-//          axialSliceNumber,
-//          area,
-//          frontalAxialCoefficient,
-//          selectedAreaObservable.value,
-//          axialContentRatioObservable.value
-//        )?.let { circle ->
-//          axialCirclesList.add(circle)
-//          circle
-//        }?.let { circle ->
-//          if (selectedArea != null && selectedArea.id == circle.areaId) {
-//            CircleToMoveRectsMapper.invoke(
-//              circle = circle,
-//              sideLength = 6.0,
-//              color = "#fff",
-//              h = abs(axialSliceNumber - round(area.z)) * frontalAxialCoefficient
-//            )
-//          } else {
-//            null
-//          }
-//        }?.let { listOfMovableRects ->
-//          axialMovableRectsList.addAll(listOfMovableRects)
-//        }
-//
-//      AreaToFrontalCircleMapper
-//        .invoke(
-//          frontalSliceNumber,
-//          area,
-//          frontalAxialCoefficient,
-//          selectedAreaObservable.value,
-//          frontalContentRatioObservable.value,
-//          height = axialSlicesSizesDataObservable.value.maxFramesSize,
-//          reversed = sliceSizesDataObservable.value.reversed
-//        )?.let { circle ->
-//          frontalCirclesList.add(circle)
-//          circle
-//        }?.let { circle ->
-//          if (selectedArea != null && selectedArea.id == circle.areaId) {
-//            CircleToMoveRectsMapper.invoke(
-//              circle = circle,
-//              sideLength = 6.0,
-//              color = "#fff",
-//              h = abs(frontalSliceNumber - round(area.y))
-//            )
-//          } else {
-//            null
-//          }
-//        }?.let { listOfMovableRects ->
-//          frontalMovableRectsList.addAll(listOfMovableRects)
-//        }
-//
-//      AreaToSagittalCircleMapper
-//        .invoke(
-//          sagittalSliceNumber,
-//          area,
-//          sagittalAxialCoefficient,
-//          selectedAreaObservable.value,
-//          sagittalContentRatioObservable.value,
-//          height = axialSlicesSizesDataObservable.value.maxFramesSize,
-//          reversed = sliceSizesDataObservable.value.reversed
-//        )?.let { circle ->
-//          sagittalCirclesList.add(circle)
-//          circle
-//        }?.let { circle ->
-//          if (selectedArea != null && selectedArea.id == circle.areaId) {
-//            CircleToMoveRectsMapper.invoke(
-//              circle = circle,
-//              sideLength = 6.0,
-//              color = "#fff",
-//              h = abs(sagittalSliceNumber - round(area.x))
-//            )
-//          } else {
-//            null
-//          }
-//        }?.let { listOfMovableRects ->
-//          sagittalMovableRectsList.addAll(listOfMovableRects)
-//        }
-//    }
-//
-//    axialCirclesObservable.onNext(axialCirclesList)
-//    frontalCirclesObservable.onNext(frontalCirclesList)
-//    sagittalCirclesObservable.onNext(sagittalCirclesList)
-//
-//    axialMoveRectsObservable.onNext(axialMovableRectsList)
-//    frontalMoveRectsObservable.onNext(frontalMovableRectsList)
-//    sagittalMoveRectsObservable.onNext(sagittalMovableRectsList)
-//  }
 
   private fun updateLinesByAxial(axialSliceNumber: Int) {
     val isReversed = sliceSizesDataObservable.value.reversed

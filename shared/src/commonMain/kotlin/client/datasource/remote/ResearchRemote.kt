@@ -16,6 +16,6 @@ interface ResearchRemote {
     request: HounsfieldRequest
   ): Double
 
-  suspend fun closeResearch(token: String, researchId: Int)
+  suspend fun closeResearch(token: String, request: ConfirmCTTypeRequest)
   suspend fun closeSession(token: String)
 }

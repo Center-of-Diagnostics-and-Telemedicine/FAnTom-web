@@ -149,3 +149,11 @@ data class User(
   val name: String,
   val password: String
 )
+
+@Serializable
+data class ConfirmCTTypeRequest(
+  val researchId: Int,
+  val ctType: Int,
+  val leftPercent: Int,
+  val rightPercent: Int
+)

@@ -1,10 +1,8 @@
 package client.newmvi.researchmvi.view
 
-import com.badoo.reaktive.subject.publish.PublishSubject
-import model.CTType
-import model.CutsGridType
 import client.newmvi.researchmvi.BaseEvent
 import client.newmvi.researchmvi.BaseView
+import com.badoo.reaktive.subject.publish.PublishSubject
 import model.*
 
 interface ResearchView : BaseView<ResearchView.Event> {
@@ -19,8 +17,7 @@ interface ResearchView : BaseView<ResearchView.Event> {
     val data: ResearchSlicesSizesData?,
     val gridModel: GridModel,
     val studyCompleted: Boolean,
-    val ctTypeToConfirm: CTType?,
-    val sessionClosed: Boolean
+    val ctTypeToConfirm: CTType?
   )
 
   sealed class Event : BaseEvent {
@@ -28,11 +25,17 @@ interface ResearchView : BaseView<ResearchView.Event> {
     class GridChanged(val type: CutsGridType) : Event()
     class CellFullMode(val cellModel: CellModel) : Event()
     class CTTypeChosen(val ctType: CTType) : Event()
+    class ConfirmCtType(
+      val ctType: CTTypeModel,
+      val leftPercent: String,
+      val rightPercent: String
+    ) : Event()
 
     object ErrorShown : Event()
     object Delete : Event()
-//    object Close : Event()
+    //    object Close : Event()
     object Clear : Event()
+
     object Back : Event()
   }
 }

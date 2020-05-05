@@ -6,12 +6,16 @@ import com.badoo.reaktive.subject.publish.PublishSubject
 import com.ccfraser.muirwik.components.*
 import com.ccfraser.muirwik.components.button.*
 import com.ccfraser.muirwik.components.dialog.*
+import com.ccfraser.muirwik.components.form.MFormControlVariant
+import com.ccfraser.muirwik.components.input.mInputLabel
 import com.ccfraser.muirwik.components.list.mListItemWithIcon
+import com.ccfraser.muirwik.components.menu.mMenuItem
 import kotlinext.js.jsObject
 import kotlinx.css.*
 import kotlinx.css.Position
 import kotlinx.html.DIV
 import model.*
+import org.w3c.dom.events.Event
 import org.w3c.dom.events.KeyboardEvent
 import presentation.di.injectNewResearch
 import presentation.screen.ComponentStyles.appFrameContainerStyle
@@ -46,7 +50,6 @@ class ResearchScreen(props: ResearchProps) :
         if (model.ctTypeToConfirm != null) {
           confirmationDialogOpen = true
         }
-        sessionClosed = model.sessionClosed
       }
     }
   }
@@ -77,7 +80,6 @@ class ResearchScreen(props: ResearchProps) :
       open = state.showError,
       handleClose = { dispatch(ResearchView.Event.ErrorShown) }
     )
-    sessionClosedDialog()
     themeContext.Consumer { _ ->
       //container for drawers and main content
       styledDiv {
@@ -141,7 +143,9 @@ class ResearchScreen(props: ResearchProps) :
     mDialog(open, onClose = { _, _ -> closeAlertDialog() }, transitionComponent = null) {
       mDialogTitle("Подтвердите выбор ${ctTypeModel.name}")
       mDialogContent {
-        mTypography(text = ctTypeModel.description) {
+        mTypography(text = "Вы выбрали ${ctTypeModel.name}, поражение легких: ")
+        mTypography(text = "левое ${state.leftPercent} ")
+        mTypography(text = "правое ${state.rightPercent} ") {
           css {
             marginBottom = 3.spacingUnits
           }
@@ -157,34 +161,10 @@ class ResearchScreen(props: ResearchProps) :
           variant = MButtonVariant.contained,
           caption = "Подтвердить",
           color = MColor.primary,
-          onClick = { closeAlertDialog() })
-      }
-    }
-  }
-
-  private fun RBuilder.sessionClosedDialog() {
-    mDialog(
-      state.sessionClosed,
-      onClose = { _, _ ->
-        dispatch(ResearchView.Event.Clear)
-        props.onClose()
-      },
-      transitionComponent = null
-    ) {
-      mDialogTitle("Сессия истекла")
-      mDialogContent {
-        //        mTypography(text = "") {
-//          css {
-//            marginBottom = 3.spacingUnits
-//          }
-//        }
-      }
-      mDialogActions {
-        mButton(
-          variant = MButtonVariant.contained,
-          caption = "Ок",
-          color = MColor.primary,
-          onClick = { props.onClose() })
+          onClick = {
+            dispatch(ResearchView.Event.ConfirmCtType(ctTypeModel, state.leftPercent, state.rightPercent))
+            closeAlertDialog()
+          })
       }
     }
   }
@@ -240,11 +220,6 @@ class ResearchScreen(props: ResearchProps) :
             onClick = { dispatch(ResearchView.Event.Back) }
           }
         }
-//        mListItemWithIcon(primaryText = "Закончить исследование", iconName = "done") {
-//          attrs {
-//            onClick = { dispatch(ResearchView.Event.Close) }
-//          }
-//        }
       }
     }
   }
@@ -264,7 +239,68 @@ class ResearchScreen(props: ResearchProps) :
           ctType = it.ctType
         )
       }
+      mInputLabel("Левое", htmlFor = "left-input")
+
+      // Method 1, using input props
+      val inputProps: RProps = jsObject { }
+      inputProps.asDynamic().name = "left"
+      inputProps.asDynamic().id = "left-input"
+      mTooltip(title = "Процент поражения левого легкого", placement = TooltipPlacement.left) {
+        mSelect(
+          state.leftPercent ?: 0,
+          name = "left",
+          variant = MFormControlVariant.outlined,
+          onChange = { event, _ -> handleLeft(event) }) {
+          attrs.inputProps = inputProps
+          mMenuItem("0%", value = "0")
+          mMenuItem("10%", value = "10")
+          mMenuItem("20%", value = "20")
+          mMenuItem("30%", value = "30")
+          mMenuItem("40%", value = "40")
+          mMenuItem("50%", value = "50")
+          mMenuItem("60%", value = "60")
+          mMenuItem("70%", value = "70")
+          mMenuItem("80%", value = "80")
+          mMenuItem("90%", value = "90")
+          mMenuItem("100%", value = "100")
+        }
+      }
+
+      mInputLabel("Правое", htmlFor = "right-input")
+      val inputProps2: RProps = jsObject { }
+      inputProps2.asDynamic().name = "right"
+      inputProps2.asDynamic().id = "right-input"
+      mTooltip(title = "Процент поражения правого легкого", placement = TooltipPlacement.left) {
+        mSelect(
+          state.rightPercent ?: 0,
+          name = "right",
+          variant = MFormControlVariant.outlined,
+          onChange = { event, _ -> handleRight(event) }) {
+          attrs.inputProps = inputProps2
+          mMenuItem("0%", value = "0")
+          mMenuItem("10%", value = "10")
+          mMenuItem("20%", value = "20")
+          mMenuItem("30%", value = "30")
+          mMenuItem("40%", value = "40")
+          mMenuItem("50%", value = "50")
+          mMenuItem("60%", value = "60")
+          mMenuItem("70%", value = "70")
+          mMenuItem("80%", value = "80")
+          mMenuItem("90%", value = "90")
+          mMenuItem("100%", value = "100")
+        }
+      }
     }
+  }
+
+  private fun handleRight(event: Event) {
+    val value = event.targetValue
+    setState { rightPercent = value.toString() }
+  }
+
+  private fun handleLeft(event: Event) {
+    val value = event.targetValue
+    setState { leftPercent = value.toString() }
   }
 
   private fun StyledDOMBuilder<DIV>.buttonWithPopover(
@@ -276,16 +312,15 @@ class ResearchScreen(props: ResearchProps) :
     styledDiv {
       css {
         height = 100.pct
+        backgroundColor = color
         padding(1.spacingUnits)
       }
       mTooltip(title = popoverText, placement = TooltipPlacement.left) {
         mButton(
           text,
-          color = MColor.default,
           onClick = { dispatch(ResearchView.Event.CTTypeChosen(ctType)) }) {
           css {
             height = 100.pct
-            backgroundColor = color
           }
         }
       }
@@ -363,7 +398,8 @@ class ResearchState : RState {
   var ctTypeToConfirm: CTType? = null
   var currentGrid: CutsGridType = CutsGridType.THREE
   var confirmationDialogOpen = false
-  var sessionClosed = false
+  var leftPercent: String = "0"
+  var rightPercent: String = "0"
 }
 
 

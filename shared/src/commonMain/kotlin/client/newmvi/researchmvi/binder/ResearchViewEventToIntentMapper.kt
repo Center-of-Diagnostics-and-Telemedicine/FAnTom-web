@@ -16,5 +16,10 @@ object ResearchViewEventToIntentMapper {
       ResearchView.Event.Back -> ResearchStore.Intent.CallBackToResearchList
 //      ResearchView.Event.Close -> ResearchStore.Intent.CallToCloseResearch
       is ResearchView.Event.CTTypeChosen -> ResearchStore.Intent.CTTypeChosen(event.ctType)
+      is ResearchView.Event.ConfirmCtType -> ResearchStore.Intent.ConfirmCTType(
+        event.ctType.ctType,
+        event.leftPercent.toInt(),
+        event.rightPercent.toInt()
+      )
     }
 }

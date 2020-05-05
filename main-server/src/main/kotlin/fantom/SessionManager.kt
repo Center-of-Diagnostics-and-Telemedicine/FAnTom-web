@@ -11,7 +11,7 @@ object SessionManager {
   private val ports: MutableList<Int> = mutableListOf(basePort)
 
   suspend fun getInstanceForUser(userId: Int, researchName: String): FantomLibrary? {
-    val existing = instances.firstOrNull { it.userId == userId }
+    val existing = instances.firstOrNull { it.userId == userId && it.researchName == researchName }
     return if (existing == null) {
 
       debugLog("create fantomLibrary")
@@ -28,10 +28,11 @@ object SessionManager {
         )
 
         instances.add(instance)
-        debugLog("instance created, going to delay")
 
         //Ставим delay, чтобы успела инициализироваться библиотека
+        debugLog("instance created")
         delay(2000)
+
         instance
       } else {
         return null
@@ -46,7 +47,10 @@ object SessionManager {
     instances
       .firstOrNull {
         it.userId == user.id
-      }?.let { closeSession(it.container) }
+      }
+      ?.let {
+        closeSession(it.container)
+      }
   }
 
   private fun closeSession(dockerContainer: DockerContainer) {
@@ -59,7 +63,7 @@ object SessionManager {
   }
 
   private fun getContainer(userId: Int, researchName: String): DockerContainer? {
-    val existing = containers.firstOrNull { it.userId == userId }
+    val existing = containers.firstOrNull { it.userId == userId && it.researchName == researchName }
     return if (existing == null) {
       debugLog("create container for researchName = $researchName")
       val researchDir = getResearchPath(researchName.replace(" ", "").trim(), data_store_paths)
@@ -72,7 +76,8 @@ object SessionManager {
         val container = DockerManager.create(
           userId = userId,
           port = port,
-          researchDir = researchDir
+          researchDir = researchDir,
+          researchName = researchName
         ) ?: return null
         containers.add(container)
         container

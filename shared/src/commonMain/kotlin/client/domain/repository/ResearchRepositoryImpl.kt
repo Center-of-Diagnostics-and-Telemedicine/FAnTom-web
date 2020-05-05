@@ -20,8 +20,13 @@ class ResearchRepositoryImpl(
     )
   }
 
-  override suspend fun closeResearch(researchId: Int) {
-    return remote.closeResearch(local.getToken(), researchId)
+  override suspend fun closeResearch(
+    ctType: CTType,
+    leftPercent: Int,
+    rightPercent: Int,
+    researchId: Int
+  ) {
+    return remote.closeResearch(local.getToken(), ConfirmCTTypeRequest(researchId, ctType.ordinal, leftPercent, rightPercent))
   }
 
   override suspend fun closeSession() {

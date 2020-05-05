@@ -6,11 +6,12 @@ import com.badoo.reaktive.single.Single
 import com.badoo.reaktive.single.map
 import com.badoo.reaktive.single.onErrorReturnValue
 import client.domain.repository.ResearchRepository
+import model.CTType
 
 interface CloseResearchProcessor {
 
   @EventsOnAnyScheduler
-  fun close(researchId: Int): Single<Result>
+  fun close(ctType: CTType, leftPercent: Int, rightPercent: Int, researchId: Int): Single<Result>
 
   sealed class Result {
     object Success : Result()
@@ -22,9 +23,9 @@ class CloseResearchProcessorImpl(
   val repository: ResearchRepository
 ) : CloseResearchProcessor {
 
-  override fun close(researchId: Int): Single<CloseResearchProcessor.Result> =
+  override fun close(ctType: CTType, leftPercent: Int, rightPercent: Int, researchId: Int): Single<CloseResearchProcessor.Result> =
     singleFromCoroutine {
-      repository.closeResearch(researchId)
+      repository.closeResearch(ctType, leftPercent, rightPercent, researchId)
     }
       .map { CloseResearchProcessor.Result.Success }
       .onErrorReturnValue(CloseResearchProcessor.Result.Error("Произошла ошибка"))

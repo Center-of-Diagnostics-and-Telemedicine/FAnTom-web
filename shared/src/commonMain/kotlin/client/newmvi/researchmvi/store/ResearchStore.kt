@@ -2,8 +2,6 @@ package client.newmvi.researchmvi.store
 
 import com.badoo.reaktive.disposable.Disposable
 import com.badoo.reaktive.observable.Observable
-import model.CTType
-import model.CutsGridType
 import model.*
 
 interface ResearchStore : Disposable {
@@ -20,13 +18,12 @@ interface ResearchStore : Disposable {
     val gridModel: GridModel,
     val studyCompleted: Boolean = false,
     val oldGridModel: GridModel? = null,
-    val ctTypeToConfirm: CTType? = null,
-    val sessionClosed: Boolean = false
+    val ctTypeToConfirm: CTType? = null
   )
 
   sealed class Intent {
     data class Init(val researchId: Int) : Intent()
-    object Clear: Intent()
+    object Clear : Intent()
     class DeleteMark(val areaId: Int) : Intent()
     object DeleteCalled : Intent()
     class SaveMark(val areaToSave: AreaToSave) : Intent()
@@ -35,6 +32,8 @@ interface ResearchStore : Disposable {
     class ChangeCutType(val newCutType: ChangeCutTypeModel) : Intent()
     class OpenCell(val cellModel: CellModel) : Intent()
     class CTTypeChosen(val ctType: CTType) : ResearchStore.Intent()
+    class ConfirmCTType(val ctType: CTType, val leftPercent: Int, val rightPercent: Int) : Intent()
+
     object CloseSession : ResearchStore.Intent()
 
     object CallToCloseResearch : Intent()

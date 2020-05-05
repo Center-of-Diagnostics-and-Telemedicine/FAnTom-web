@@ -1,9 +1,6 @@
 package client.domain.repository
 
-import model.AreaToSave
-import model.Research
-import model.ResearchSlicesSizesData
-import model.SelectedArea
+import model.*
 
 interface ResearchRepository : Repository {
 
@@ -25,6 +22,11 @@ interface ResearchRepository : Repository {
   suspend fun getMarks(researchId: Int): List<SelectedArea>
   suspend fun updateMark(selectedArea: SelectedArea): SelectedArea
   suspend fun getHounsfieldData(axialCoord: Int, frontalCoord: Int, sagittalCoord: Int): Double
-  suspend fun closeResearch(researchId: Int)
+  suspend fun closeResearch(
+    ctType: CTType,
+    leftPercent: Int,
+    rightPercent: Int,
+    researchId: Int
+  )
   suspend fun closeSession()
 }

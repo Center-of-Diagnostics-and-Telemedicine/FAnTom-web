@@ -12,7 +12,6 @@ object ResearchStateToViewModelMapper {
       data = state.data,
       gridModel = state.gridModel,
       studyCompleted = state.studyCompleted,
-      ctTypeToConfirm = state.ctTypeToConfirm,
-      sessionClosed = state.sessionClosed
+      ctTypeToConfirm = state.ctTypeToConfirm
     )
 }

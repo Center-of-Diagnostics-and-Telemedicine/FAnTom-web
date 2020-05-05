@@ -26,7 +26,7 @@ object DockerManager {
         .withConnectTimeout(20000)
     )
 
-  fun create(userId: Int, port: Int, researchDir: File): DockerContainer? {
+  fun create(userId: Int, port: Int, researchDir: File, researchName: String): DockerContainer? {
 
     //порт который будем открывать в контейнере
     val portInsideContainer = ExposedPort.tcp(fantomServerPort)
@@ -67,7 +67,8 @@ object DockerManager {
       containerId = createResponse.id,
       userId = userId,
       port = port,
-      dirName = researchDir.name
+      dirName = researchDir.name,
+      researchName = researchName
     )
     try {
       dockerClient.startContainerCmd(createResponse.id).exec()
@@ -93,5 +94,6 @@ data class DockerContainer(
   val containerId: String,
   val userId: Int,
   val port: Int,
-  val dirName: String
+  val dirName: String,
+  val researchName: String
 )
