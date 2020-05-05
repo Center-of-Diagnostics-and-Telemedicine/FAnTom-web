@@ -3,7 +3,7 @@ package client.newmvi.cut.binder
 import client.newmvi.cut.store.CutStore
 import client.newmvi.cut.view.CutView
 
-internal object CutStateToViewModelMapper {
+object CutStateToViewModelMapper {
 
   operator fun invoke(state: CutStore.State): CutView.CutViewModel =
     CutView.CutViewModel(

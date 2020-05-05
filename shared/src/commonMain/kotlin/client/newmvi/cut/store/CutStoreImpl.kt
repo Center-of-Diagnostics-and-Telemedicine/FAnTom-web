@@ -1,17 +1,14 @@
 package client.newmvi.cut.store
 
+import client.newmvi.cut.store.CutStore.Intent
+import client.newmvi.cut.store.CutStore.State
 import com.badoo.reaktive.disposable.CompositeDisposable
 import com.badoo.reaktive.disposable.Disposable
 import com.badoo.reaktive.observable.Observable
 import com.badoo.reaktive.scheduler.computationScheduler
 import com.badoo.reaktive.scheduler.mainScheduler
-import com.badoo.reaktive.single.map
-import com.badoo.reaktive.single.observeOn
-import com.badoo.reaktive.single.subscribe
+import com.badoo.reaktive.single.*
 import com.badoo.reaktive.subject.behavior.BehaviorSubject
-import client.newmvi.cut.store.CutStore.Intent
-import client.newmvi.cut.store.CutStore.State
-
 import model.SliceData
 import model.initialSliceData
 

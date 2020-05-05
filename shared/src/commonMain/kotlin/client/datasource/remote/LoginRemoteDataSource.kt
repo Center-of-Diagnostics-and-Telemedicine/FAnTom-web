@@ -11,30 +11,30 @@ import model.*
 
 class LoginRemoteDataSource : LoginRemote {
 
-    private val client: HttpClient = HttpClient {
-        install(JsonFeature) {
-            serializer = KotlinxSerializer()
-        }
+  private val client: HttpClient = HttpClient {
+    install(JsonFeature) {
+      serializer = KotlinxSerializer()
     }
+  }
 
-    override suspend fun auth(login: String, password: String): String {
-        return client.post<AuthorizationResponse> {
-            apiUrl(LOGIN_ROUTE)
-            body = "{ name:$login, password:$password }"
-        }.token
-    }
+  override suspend fun auth(login: String, password: String): String {
+    return client.post<AuthorizationResponse> {
+      apiUrl(LOGIN_ROUTE)
+      body = "{ name:$login, password:$password }"
+    }.token
+  }
 
-    override suspend fun tryToAuth(): String {
-        return client.post<AuthorizationResponse> {
-            apiUrl(AUTH_CHECK_ROUTE)
-        }.token
-    }
+  override suspend fun tryToAuth(): String {
+    return client.post<AuthorizationResponse> {
+      apiUrl(AUTH_CHECK_ROUTE)
+    }.token
+  }
 
-    private fun HttpRequestBuilder.apiUrl(path: String) {
-        url {
-            takeFrom(END_POINT)
-            encodedPath = path
-        }
+  private fun HttpRequestBuilder.apiUrl(path: String) {
+    url {
+      takeFrom(END_POINT)
+      encodedPath = path
     }
+  }
 
 }

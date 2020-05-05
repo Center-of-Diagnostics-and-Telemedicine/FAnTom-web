@@ -3,7 +3,7 @@ package client.newmvi.researchlist.binder
 import client.newmvi.researchlist.store.ResearchListStore
 import client.newmvi.researchlist.view.ResearchListView
 
-internal object ResearchListStateToViewModelMapper {
+object ResearchListStateToViewModelMapper {
 
   operator fun invoke(state: ResearchListStore.State): ResearchListView.ResearchListViewModel =
     ResearchListView.ResearchListViewModel(

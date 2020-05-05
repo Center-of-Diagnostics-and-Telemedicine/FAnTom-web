@@ -1,10 +1,10 @@
 package client.newmvi.login.binder
 
+import client.newmvi.login.store.LoginStore
+import client.newmvi.login.view.LoginView
 import com.badoo.reaktive.disposable.CompositeDisposable
 import com.badoo.reaktive.observable.map
 import com.badoo.reaktive.observable.subscribe
-import client.newmvi.login.store.LoginStore
-import client.newmvi.login.view.LoginView
 
 class LoginBinder(
   private val store: LoginStore
@@ -22,13 +22,15 @@ class LoginBinder(
       requireNotNull(view)
         .events
         .map(LoginViewEventToIntentMapper::invoke)
-        .subscribe( onNext = store::accept))
+        .subscribe(onNext = store::accept)
+    )
 
     disposables.add(
       store
         .states
         .map(LoginStateToViewModelMapper::invoke)
-        .subscribe( onNext = { requireNotNull(view).show(it) }))
+        .subscribe(onNext = { requireNotNull(view).show(it) })
+    )
   }
 
   fun onStop() {

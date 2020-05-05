@@ -17,4 +17,5 @@ interface ResearchRemote {
   ): Double
 
   suspend fun closeResearch(token: String, researchId: Int)
+  suspend fun closeSession(token: String)
 }

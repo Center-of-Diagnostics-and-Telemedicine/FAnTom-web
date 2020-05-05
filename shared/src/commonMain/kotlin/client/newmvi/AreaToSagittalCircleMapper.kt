@@ -2,7 +2,9 @@ package client.newmvi
 
 import model.CircleShape
 import model.SelectedArea
-import kotlin.math.*
+import kotlin.math.abs
+import kotlin.math.pow
+import kotlin.math.sqrt
 
 object AreaToSagittalCircleMapper {
 

@@ -9,7 +9,6 @@ import com.badoo.reaktive.subject.behavior.BehaviorSubject
 import client.newmvi.menu.mipmethod.store.MipMethodStore.Intent
 import client.newmvi.menu.mipmethod.store.MipMethodStore.State
 
-
 class MipMethodStoreImpl(
   private val mipMethodObservable: Subject<Int>
 ) : MipMethodStore {

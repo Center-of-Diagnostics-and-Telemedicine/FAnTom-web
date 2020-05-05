@@ -1,8 +1,8 @@
 package client.newmvi.menu.black.view
 
-import com.badoo.reaktive.subject.publish.PublishSubject
 import client.newmvi.researchmvi.BaseEvent
 import client.newmvi.researchmvi.BaseView
+import com.badoo.reaktive.subject.publish.PublishSubject
 import model.INITIAL_BLACK
 
 interface BlackView : BaseView<BlackView.Event> {
@@ -18,6 +18,6 @@ interface BlackView : BaseView<BlackView.Event> {
   )
 
   sealed class Event : BaseEvent {
-    class ChangeValue(val value: Double): Event()
+    class ChangeValue(val value: Double) : Event()
   }
 }

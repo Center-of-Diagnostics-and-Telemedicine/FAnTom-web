@@ -3,7 +3,7 @@ package client.newmvi.menu.black.binder
 import client.newmvi.menu.black.store.BlackStore
 import client.newmvi.menu.black.view.BlackView
 
-internal object BlackViewEventToIntentMapper {
+object BlackViewEventToIntentMapper {
 
   operator fun invoke(event: BlackView.Event): BlackStore.Intent =
     when (event) {

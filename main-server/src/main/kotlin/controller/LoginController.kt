@@ -1,22 +1,17 @@
 package controller
 
-import fantom.SessionManager
-import model.hash
-import util.debugLog
-import util.user
+import JwtConfig
 import createUser
-import getResearches
 import getUserByCredentials
-import model.AuthorizationResponse
-import model.RegistrationRequest
 import io.ktor.application.ApplicationCall
 import io.ktor.auth.UserPasswordCredential
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.receive
 import io.ktor.request.receiveOrNull
 import io.ktor.response.respond
-import model.UserRole
-import updateResearches
+import model.*
+import util.debugLog
+import util.user
 
 class LoginController {
 
@@ -33,7 +28,7 @@ class LoginController {
       } else {
         debugLog("user found")
         val token = JwtConfig.makeToken(user = user)
-        populateResearches(user.id)
+//        populateResearches(user.id)
         call.respond(AuthorizationResponse(token = token))
       }
     } catch (e: Throwable) {
@@ -58,8 +53,8 @@ class LoginController {
         if (exists) {
           call.respond(HttpStatusCode.Conflict, message = "пользователь с таким именем существует")
         } else {
-          val user = createUser(request.name, hash(request.password), request.role)
-          populateResearches(user)
+          createUser(request.name, hash(request.password), request.role)
+//          populateResearches(user)
           call.respond(HttpStatusCode.Created)
         }
       }
@@ -70,19 +65,19 @@ class LoginController {
 
   }
 
-  private suspend fun populateResearches(id: Int) {
-    debugLog("populateResearches")
-    val accessionNames = SessionManager.getInstanceForUser(id).getAccessionNames()
-    val researches = getResearches(id)
-    val researchesToUpdate: MutableList<String> = mutableListOf()
-    accessionNames.forEach { accessionName ->
-      val research = researches.firstOrNull { it.name == accessionName }
-      if (research == null) {
-        researchesToUpdate.add(accessionName)
-      }
-    }
-    if (researchesToUpdate.isNotEmpty()) {
-      updateResearches(researchesToUpdate)
-    }
-  }
+//  private suspend fun populateResearches(id: Int) {
+//    debugLog("populateResearches")
+//    val accessionNames = SessionManager.getInstanceForUser(id).getAccessionNames()
+//    val researches = getResearches(id)
+//    val researchesToUpdate: MutableList<String> = mutableListOf()
+//    accessionNames.forEach { accessionName ->
+//      val research = researches.firstOrNull { it.name == accessionName }
+//      if (research == null) {
+//        researchesToUpdate.add(accessionName)
+//      }
+//    }
+//    if (researchesToUpdate.isNotEmpty()) {
+//      updateResearches(researchesToUpdate)
+//    }
+//  }
 }

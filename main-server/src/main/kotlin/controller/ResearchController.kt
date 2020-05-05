@@ -1,31 +1,44 @@
 package controller
 
 import fantom.SessionManager
-import util.*
 import getResearch
 import getResearches
-import model.*
 import io.ktor.application.ApplicationCall
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.receive
 import io.ktor.response.respond
+import model.*
 import updateResearch
+import util.*
 
 class ResearchController {
 
   suspend fun init(call: ApplicationCall) {
-    val id = call.parameters[ID]
+    val id = call.parameters[ID_FIELD]
     if (id != null && id.isNotEmpty()) {
       debugLog("id is: $id")
       val userId = call.user.id
       val research = getResearch(parseInt(id), userId)
-      try {
-        val response = SessionManager.getInstanceForUser(userId = userId).initResearch(research.name)
-        updateResearch(research.copy(seen = true), userId = userId)
-        call.respond(response)
-      } catch (e: Exception) {
-        e.printStackTrace()
-        respondError(call)
+      if (research == null) {
+        call.respond(HttpStatusCode.NotFound)
+      } else {
+        try {
+          val researchName = research.name
+          debugLog("calling init in backend with researchName = $researchName")
+          val instance = SessionManager.getInstanceForUser(
+            userId = userId, researchName = researchName
+          )
+          if (instance == null) {
+            respondError(call)
+          } else {
+            val initResearch = instance.initResearch(researchName)
+            updateResearch(research.copy(seen = true), userId = userId)
+            call.respond(initResearch)
+          }
+        } catch (e: Exception) {
+          e.printStackTrace()
+          respondError(call)
+        }
       }
     } else {
       call.respond(HttpStatusCode.NotFound)
@@ -39,15 +52,20 @@ class ResearchController {
   suspend fun getSlice(call: ApplicationCall) {
     val id = call.parameters[ID_FIELD]
     if (id != null && id.isNotEmpty()) {
-//      debugLog("researchId is: $id")
-      val request = call.receive<SliceRequest>()
-      val slice = SessionManager
-        .getInstanceForUser(call.user.id)
-        .getSlice(sliceRequest = request, researchId = id)
-      if (slice != null) {
-        call.respond(slice)
+      val research = getResearch(parseInt(id), call.user.id)
+      if (research == null) {
+        call.respond(HttpStatusCode.NotFound)
       } else {
-        respondError(call)
+        val request = call.receive<SliceRequest>()
+        val instanceForUser = SessionManager
+          .getInstanceForUser(call.user.id, researchName = research.name)
+        if (instanceForUser != null) {
+          val slice = instanceForUser
+            .getSlice(sliceRequest = request, researchName = research.name)
+            call.respond(slice)
+        } else {
+          respondError(call)
+        }
       }
     }
   }
@@ -60,15 +78,20 @@ class ResearchController {
 
     debugLog("axial = $axialCoord, frontal = $frontalCoord, sagital = $sagittalCoord")
 
-    val value = SessionManager
-      .getInstanceForUser(call.user.id)
-      .getHounsfield(
-        axialCoord,
-        frontalCoord,
-        sagittalCoord
-      )
+    val instanceForUser = SessionManager
+      .getInstanceForUser(call.user.id, "")
+    if (instanceForUser != null) {
+      val value = instanceForUser
+        .getHounsfield(
+          axialCoord,
+          frontalCoord,
+          sagittalCoord
+        )
 
-    call.respond(HounsfieldResponse(value))
+      call.respond(HounsfieldResponse(value))
+    } else {
+      respondError(call)
+    }
   }
 
   suspend fun close(call: ApplicationCall) {
@@ -76,12 +99,16 @@ class ResearchController {
     if (id != null && id.isNotEmpty()) {
       debugLog("id is: $id")
       val research = getResearch(parseInt(id), call.user.id)
-      try {
-        updateResearch(research.copy(done = true), userId = call.user.id)
-        call.respond(HttpStatusCode.OK)
-      } catch (e: Exception) {
-        e.printStackTrace()
-        respondError(call)
+      if (research == null) {
+        call.respond(HttpStatusCode.NotFound)
+      } else {
+        try {
+          updateResearch(research.copy(done = true), userId = call.user.id)
+          call.respond(HttpStatusCode.OK)
+        } catch (e: Exception) {
+          e.printStackTrace()
+          respondError(call)
+        }
       }
     } else {
       call.respond(HttpStatusCode.NotFound)

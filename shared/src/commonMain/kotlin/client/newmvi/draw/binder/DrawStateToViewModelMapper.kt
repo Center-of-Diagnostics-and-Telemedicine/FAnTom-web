@@ -4,7 +4,7 @@ import client.newmvi.draw.store.DrawStore
 import client.newmvi.draw.view.DrawView
 import model.Circle
 
-internal object DrawStateToViewModelMapper {
+object DrawStateToViewModelMapper {
 
   operator fun invoke(state: DrawStore.State): DrawView.DrawViewModel {
     return if (state.radius != .0) {

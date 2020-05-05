@@ -1,29 +1,31 @@
 package fantom
 
-import util.debugLog
 import com.badoo.reaktive.observable.debounce
 import com.badoo.reaktive.observable.subscribe
 import com.badoo.reaktive.scheduler.computationScheduler
 import com.badoo.reaktive.subject.publish.PublishSubject
-import model.*
 import io.ktor.client.HttpClient
+import io.ktor.client.features.HttpTimeout
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.serializer.KotlinxSerializer
 import io.ktor.client.request.*
 import io.ktor.http.takeFrom
 import kotlinx.serialization.json.Json
+import model.*
+import util.debugLog
 
 interface FantomLibrary {
 
   val userId: Int
   val endPoint: String
   val container: DockerContainer
+  val researchName: String
 
-  val onClose: (DockerContainer)  -> Unit
+  val onClose: (DockerContainer) -> Unit
 
   suspend fun getAccessionNames(): List<String>
-  suspend fun initResearch(researchId: String): ResearchInitResponse
-  suspend fun getSlice(sliceRequest: SliceRequest, researchId: String): String
+  suspend fun initResearch(researchName: String): ResearchInitResponse
+  suspend fun getSlice(sliceRequest: SliceRequest, researchName: String): String
   suspend fun getHounsfield(axialCoord: Int, frontalCoord: Int, sagittalCoord: Int): Double
 }
 
@@ -31,6 +33,7 @@ class FantomLibraryImpl(
   override val userId: Int,
   override val endPoint: String,
   override val container: DockerContainer,
+  override val researchName: String,
   override val onClose: (DockerContainer) -> Unit
 ) : FantomLibrary {
 
@@ -38,7 +41,7 @@ class FantomLibraryImpl(
 
   init {
     sessionDebounceSubject
-      .debounce(30000, computationScheduler)
+      .debounce(100000, computationScheduler)
       .subscribe { container ->
         debugLog("going to close container")
         onClose(container)
@@ -51,26 +54,27 @@ class FantomLibraryImpl(
     install(JsonFeature) {
       serializer = KotlinxSerializer()
     }
+    install(HttpTimeout)
   }
 
   override suspend fun getAccessionNames(): List<String> {
     return client.get<AccessionNamesResponse> {
       apiUrl("$RESEARCH_ROUTE/$LIST_ROUTE")
-    }?.let {
-      debugLog("size of accessions = ${it.accessionNames.size}, ${it.accessionNames.toString()}")
+    }.let {
+      debugLog("size of accessions = ${it.accessionNames.size}, ${it.accessionNames}")
       it.accessionNames
     }
   }
 
-  override suspend fun initResearch(researchId: String): ResearchInitResponse {
+  override suspend fun initResearch(researchName: String): ResearchInitResponse {
     return client.get {
-      apiUrl("$RESEARCH_ROUTE/$INIT_ROUTE/$researchId")
+      apiUrl("$RESEARCH_ROUTE/$INIT_ROUTE?id=$researchName")
     }
   }
 
-  override suspend fun getSlice(sliceRequest: SliceRequest, researchId: String): String {
+  override suspend fun getSlice(sliceRequest: SliceRequest, researchName: String): String {
     return client.post {
-      apiUrl(researchId)
+      apiUrl(researchName)
       body = Json.stringify(SliceRequest.serializer(), sliceRequest)
     }
   }

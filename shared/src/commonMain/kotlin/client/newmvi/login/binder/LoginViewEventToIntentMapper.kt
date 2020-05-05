@@ -4,7 +4,7 @@ import client.newmvi.login.store.LoginStore
 import client.newmvi.login.view.LoginView
 
 
-internal object LoginViewEventToIntentMapper {
+object LoginViewEventToIntentMapper {
 
   operator fun invoke(event: LoginView.Event): LoginStore.Intent =
     when (event) {

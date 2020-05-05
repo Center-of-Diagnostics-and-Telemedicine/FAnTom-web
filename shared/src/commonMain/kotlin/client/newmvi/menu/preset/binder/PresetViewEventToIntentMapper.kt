@@ -1,12 +1,10 @@
 package client.newmvi.menu.preset.binder
 
-import client.*
+import model.*
 import client.newmvi.menu.preset.store.PresetStore
 import client.newmvi.menu.preset.view.PresetView
-import model.Preset
-import model.*
 
-internal object PresetViewEventToIntentMapper {
+object PresetViewEventToIntentMapper {
 
   operator fun invoke(event: PresetView.Event): PresetStore.Intent =
     when (event) {

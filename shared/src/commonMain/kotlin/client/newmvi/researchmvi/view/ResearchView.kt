@@ -5,9 +5,7 @@ import model.CTType
 import model.CutsGridType
 import client.newmvi.researchmvi.BaseEvent
 import client.newmvi.researchmvi.BaseView
-import model.CellModel
-import model.GridModel
-import model.ResearchSlicesSizesData
+import model.*
 
 interface ResearchView : BaseView<ResearchView.Event> {
 
@@ -21,7 +19,8 @@ interface ResearchView : BaseView<ResearchView.Event> {
     val data: ResearchSlicesSizesData?,
     val gridModel: GridModel,
     val studyCompleted: Boolean,
-    val ctTypeToConfirm: CTType?
+    val ctTypeToConfirm: CTType?,
+    val sessionClosed: Boolean
   )
 
   sealed class Event : BaseEvent {
@@ -32,8 +31,8 @@ interface ResearchView : BaseView<ResearchView.Event> {
 
     object ErrorShown : Event()
     object Delete : Event()
-    object Close : Event()
-    object Clear: Event()
+//    object Close : Event()
+    object Clear : Event()
     object Back : Event()
   }
 }

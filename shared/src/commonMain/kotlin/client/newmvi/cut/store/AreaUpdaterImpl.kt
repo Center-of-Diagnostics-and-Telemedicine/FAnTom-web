@@ -1,10 +1,9 @@
 package client.newmvi.cut.store
 
+import client.domain.repository.ResearchRepository
 import com.badoo.reaktive.coroutinesinterop.singleFromCoroutine
 import com.badoo.reaktive.scheduler.ioScheduler
-import client.domain.repository.ResearchRepository
 import com.badoo.reaktive.single.*
-
 import model.SelectedArea
 
 class AreaUpdaterImpl(

@@ -1,14 +1,18 @@
 package presentation.screen
 
 import client.ctTypes
-import model.CTType
-import model.CutsGridType
 import client.newmvi.researchmvi.view.ResearchView
 import com.badoo.reaktive.subject.publish.PublishSubject
 import com.ccfraser.muirwik.components.*
 import com.ccfraser.muirwik.components.button.*
 import com.ccfraser.muirwik.components.dialog.*
 import com.ccfraser.muirwik.components.list.mListItemWithIcon
+import kotlinext.js.jsObject
+import kotlinx.css.*
+import kotlinx.css.Position
+import kotlinx.html.DIV
+import model.*
+import org.w3c.dom.events.KeyboardEvent
 import presentation.di.injectNewResearch
 import presentation.screen.ComponentStyles.appFrameContainerStyle
 import presentation.screen.ComponentStyles.columnOfRowsStyle
@@ -16,13 +20,6 @@ import presentation.screen.ComponentStyles.leftDrawerHeaderStyle
 import presentation.screen.ComponentStyles.mainContentContainerStyle
 import presentation.screen.research.menu.leftMenu
 import presentation.screen.viewcomponents.*
-import model.*
-import kotlinext.js.jsObject
-import kotlinx.css.*
-import kotlinx.css.Position
-import kotlinx.html.DIV
-import org.w3c.dom.Node
-import org.w3c.dom.events.KeyboardEvent
 import react.*
 import styled.*
 import kotlin.browser.window
@@ -33,11 +30,6 @@ class ResearchScreen(props: ResearchProps) :
   private val drawerWidth = 300
   private val binder = injectNewResearch()
   override val events: PublishSubject<ResearchView.Event> = PublishSubject()
-
-  private var open: Boolean = false
-  private var anchorRef: MPopoverAnchorRef = MPopoverAnchorRef.anchorEl
-  private var buttonRef: Node? = null
-  private var mPopoverText: String = ""
 
   override fun show(model: ResearchView.ResearchViewModel) {
     if (model.studyCompleted) {
@@ -54,6 +46,7 @@ class ResearchScreen(props: ResearchProps) :
         if (model.ctTypeToConfirm != null) {
           confirmationDialogOpen = true
         }
+        sessionClosed = model.sessionClosed
       }
     }
   }
@@ -71,14 +64,20 @@ class ResearchScreen(props: ResearchProps) :
       if (keyboardEvent.keyCode == 46)
         dispatch(ResearchView.Event.Delete)
     })
+
+    window.addEventListener(type = "beforeunload", callback = {
+      dispatch(ResearchView.Event.Back)
+    })
   }
 
   override fun RBuilder.render() {
+    mCssBaseline()
     alert(
       message = state.error,
       open = state.showError,
-      handleClose = { dispatch(ResearchView.Event.ErrorShown) })
-    mCssBaseline()
+      handleClose = { dispatch(ResearchView.Event.ErrorShown) }
+    )
+    sessionClosedDialog()
     themeContext.Consumer { _ ->
       //container for drawers and main content
       styledDiv {
@@ -163,6 +162,33 @@ class ResearchScreen(props: ResearchProps) :
     }
   }
 
+  private fun RBuilder.sessionClosedDialog() {
+    mDialog(
+      state.sessionClosed,
+      onClose = { _, _ ->
+        dispatch(ResearchView.Event.Clear)
+        props.onClose()
+      },
+      transitionComponent = null
+    ) {
+      mDialogTitle("Сессия истекла")
+      mDialogContent {
+        //        mTypography(text = "") {
+//          css {
+//            marginBottom = 3.spacingUnits
+//          }
+//        }
+      }
+      mDialogActions {
+        mButton(
+          variant = MButtonVariant.contained,
+          caption = "Ок",
+          color = MColor.primary,
+          onClick = { props.onClose() })
+      }
+    }
+  }
+
   private fun StyledDOMBuilder<DIV>.leftDrawer() {
     val pp: MPaperProps = jsObject { }
     pp.asDynamic().style = kotlinext.js.js {
@@ -214,11 +240,11 @@ class ResearchScreen(props: ResearchProps) :
             onClick = { dispatch(ResearchView.Event.Back) }
           }
         }
-        mListItemWithIcon(primaryText = "Закончить исследование", iconName = "done") {
-          attrs {
-            onClick = { dispatch(ResearchView.Event.Close) }
-          }
-        }
+//        mListItemWithIcon(primaryText = "Закончить исследование", iconName = "done") {
+//          attrs {
+//            onClick = { dispatch(ResearchView.Event.Close) }
+//          }
+//        }
       }
     }
   }
@@ -337,6 +363,7 @@ class ResearchState : RState {
   var ctTypeToConfirm: CTType? = null
   var currentGrid: CutsGridType = CutsGridType.THREE
   var confirmationDialogOpen = false
+  var sessionClosed = false
 }
 
 

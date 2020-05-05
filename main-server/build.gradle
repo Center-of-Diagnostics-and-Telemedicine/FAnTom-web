@@ -25,7 +25,7 @@ def ktor_version = '1.3.2'
 def logback_version = '1.2.3'
 def kotlinx_serialization_version = '0.20.0'
 def reaktive_version = '1.1.12'
-def main_class_name = 'ServerKt'
+def main_class_name = 'MainServerKt'
 
 shadowJar {
     manifest {

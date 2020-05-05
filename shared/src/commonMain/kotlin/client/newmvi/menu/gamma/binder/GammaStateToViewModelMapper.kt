@@ -3,7 +3,7 @@ package client.newmvi.menu.gamma.binder
 import client.newmvi.menu.gamma.store.GammaStore
 import client.newmvi.menu.gamma.view.GammaView
 
-internal object GammaStateToViewModelMapper {
+object GammaStateToViewModelMapper {
 
   operator fun invoke(state: GammaStore.State): GammaView.GammaViewModel =
     GammaView.GammaViewModel(

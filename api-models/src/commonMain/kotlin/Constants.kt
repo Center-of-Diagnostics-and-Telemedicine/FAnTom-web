@@ -1,7 +1,7 @@
 package model
 
 const val TOKEN = "api_token"
-const val END_POINT: String = "http://127.0.0.1:8080"
+const val END_POINT: String = "https://fantom.npcmr.ru"
 //const val END_POINT: String = "http://10.2.20.44:8080"
 const val LOGIN_ROUTE: String = "login"
 const val RESEARCH_ROUTE: String = "research"
@@ -10,8 +10,8 @@ const val INIT_ROUTE: String = "init"
 const val LIST_ROUTE: String = "list"
 const val HOUNSFIELD_ROUTE: String = "hounsfield"
 const val AUTH_CHECK_ROUTE: String = "check"
-const val CLOSE_RESEARCH_ROUTE: String = "close"
-const val ID = "id"
+const val CLOSE_ROUTE: String = "close"
+const val SESSION_ROUTE: String = "session"
 
 const val TYPE_AXIAL = "AXIAL"
 const val TYPE_FRONTAL = "FRONTAL"

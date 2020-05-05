@@ -3,7 +3,7 @@ package client.newmvi.cut.binder
 import client.newmvi.cut.store.CutStore
 import client.newmvi.cut.view.CutView
 
-internal object CutViewEventToIntentMapper {
+object CutViewEventToIntentMapper {
 
   operator fun invoke(event: CutView.Event): CutStore.Intent =
     when (event) {

@@ -28,7 +28,11 @@ kotlin {
     *  https://kotlinlang.org/docs/reference/building-mpp-with-gradle.html#setting-up-targets */
 
     js {
-        browser{}
+        browser{
+            dceTask {
+                keep("ktor-ktor-io.\$\$importsForInline\$\$.ktor-ktor-io.io.ktor.utils.io")
+            }
+        }
     }
     jvm {}
 
@@ -51,6 +55,7 @@ kotlin {
             dependencies {
                 implementation kotlin('stdlib-js')
                 implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:$kotlinx_serialization_version"
+                implementation npm("source-map-loader", "0.2.4")
             }
         }
 

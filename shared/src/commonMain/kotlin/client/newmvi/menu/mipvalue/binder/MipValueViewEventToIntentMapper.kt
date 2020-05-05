@@ -3,7 +3,7 @@ package client.newmvi.menu.mipvalue.binder
 import client.newmvi.menu.mipvalue.store.MipValueStore
 import client.newmvi.menu.mipvalue.view.MipValueView
 
-internal object MipValueViewEventToIntentMapper {
+object MipValueViewEventToIntentMapper {
 
   operator fun invoke(event: MipValueView.Event): MipValueStore.Intent =
     when (event) {

@@ -3,7 +3,7 @@ package client.newmvi.shapes.binder
 import client.newmvi.shapes.store.ShapesStore
 import client.newmvi.shapes.view.ShapesView
 
-internal object ShapesStateToViewModelMapper {
+object ShapesStateToViewModelMapper {
 
   operator fun invoke(state: ShapesStore.State): ShapesView.ShapesViewModel {
     return ShapesView.ShapesViewModel(

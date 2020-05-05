@@ -5,10 +5,9 @@ import com.badoo.reaktive.disposable.Disposable
 import com.badoo.reaktive.observable.Observable
 import com.badoo.reaktive.subject.Subject
 import com.badoo.reaktive.subject.behavior.BehaviorSubject
+import model.INITIAL_BLACK
 import client.newmvi.menu.black.store.BlackStore.Intent
 import client.newmvi.menu.black.store.BlackStore.State
-import model.INITIAL_BLACK
-
 
 class BlackStoreImpl(
   private val blackListener: Subject<Double>

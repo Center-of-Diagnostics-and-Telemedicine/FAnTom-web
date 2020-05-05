@@ -2,9 +2,10 @@ package client.newmvi.draw.binder
 
 import client.newmvi.draw.store.DrawStore
 import client.newmvi.draw.view.DrawView
-import model.*
+import model.LEFT_MOUSE_BUTTON
+import model.MIDDLE_MOUSE_BUTTON
 
-internal object DrawViewEventToIntentMapper {
+object DrawViewEventToIntentMapper {
 
   operator fun invoke(event: DrawView.Event): DrawStore.Intent =
     when (event) {

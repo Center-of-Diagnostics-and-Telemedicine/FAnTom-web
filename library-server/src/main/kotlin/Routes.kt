@@ -1,6 +1,3 @@
-package com.marktomogram.backend
-
-import com.marktomogram.*
 import controller.ResearchController
 import io.ktor.application.Application
 import io.ktor.application.call
@@ -25,7 +22,7 @@ fun Application.processRequests(researchController: ResearchController) {
     }
 
     route(RESEARCH_ROUTE) {
-      get("$INIT_ROUTE/{id}") {
+      get(INIT_ROUTE) {
         researchController.init(call)
       }
       get(LIST_ROUTE) {

@@ -1,3 +1,5 @@
 package util
 
-val data_store_path = "/data/Dicom"
+const val ID_FIELD = "id"
+
+val data_store_path = "/app/dicom"

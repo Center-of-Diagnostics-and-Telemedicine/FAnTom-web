@@ -3,7 +3,7 @@ package client.newmvi.researchlist.binder
 import client.newmvi.researchlist.store.ResearchListStore
 import client.newmvi.researchlist.view.ResearchListView
 
-internal object ResearchListViewEventToIntentMapper {
+object ResearchListViewEventToIntentMapper {
 
   operator fun invoke(event: ResearchListView.Event): ResearchListStore.Intent =
     when (event) {

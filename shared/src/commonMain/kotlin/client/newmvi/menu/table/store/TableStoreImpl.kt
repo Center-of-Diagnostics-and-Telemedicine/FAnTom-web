@@ -7,11 +7,10 @@ import com.badoo.reaktive.subject.Subject
 import com.badoo.reaktive.subject.behavior.BehaviorSubject
 import client.newmvi.menu.table.store.TableStore.Intent
 import client.newmvi.menu.table.store.TableStore.State
-
 import model.SelectedArea
 import model.UpdateMarkModel
 
-internal class TableStoreImpl(
+class TableStoreImpl(
   private val selectAreaListener: Subject<Int>,
   private val deleteAreaListener: Subject<Int>,
   private val updateMarkListener: Subject<UpdateMarkModel>

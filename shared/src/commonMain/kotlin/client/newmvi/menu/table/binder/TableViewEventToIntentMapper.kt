@@ -4,7 +4,8 @@ import model.AreaType
 import client.newmvi.menu.table.store.TableStore
 import client.newmvi.menu.table.view.TableView
 
-internal object TableViewEventToIntentMapper {
+
+object TableViewEventToIntentMapper {
 
   operator fun invoke(event: TableView.Event): TableStore.Intent =
     when (event) {

@@ -3,7 +3,7 @@ package client.newmvi.shapes.binder
 import client.newmvi.shapes.store.ShapesStore
 import client.newmvi.shapes.view.ShapesView
 
-internal object ShapesViewEventToIntentMapper {
+object ShapesViewEventToIntentMapper {
 
   operator fun invoke(event: ShapesView.Event): ShapesStore.Intent =
     when (event) {

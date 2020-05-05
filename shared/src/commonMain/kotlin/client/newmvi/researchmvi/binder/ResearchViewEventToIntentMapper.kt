@@ -3,7 +3,7 @@ package client.newmvi.researchmvi.binder
 import client.newmvi.researchmvi.store.ResearchStore
 import client.newmvi.researchmvi.view.ResearchView
 
-internal object ResearchViewEventToIntentMapper {
+object ResearchViewEventToIntentMapper {
 
   operator fun invoke(event: ResearchView.Event): ResearchStore.Intent =
     when (event) {
@@ -14,7 +14,7 @@ internal object ResearchViewEventToIntentMapper {
       ResearchView.Event.Clear -> ResearchStore.Intent.Clear
       is ResearchView.Event.CellFullMode -> ResearchStore.Intent.OpenCell(event.cellModel)
       ResearchView.Event.Back -> ResearchStore.Intent.CallBackToResearchList
-      ResearchView.Event.Close -> ResearchStore.Intent.CallToCloseResearch
+//      ResearchView.Event.Close -> ResearchStore.Intent.CallToCloseResearch
       is ResearchView.Event.CTTypeChosen -> ResearchStore.Intent.CTTypeChosen(event.ctType)
     }
 }

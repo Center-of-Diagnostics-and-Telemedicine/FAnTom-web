@@ -3,7 +3,7 @@ package client.newmvi.menu.gamma.binder
 import client.newmvi.menu.gamma.store.GammaStore
 import client.newmvi.menu.gamma.view.GammaView
 
-internal object GammaViewEventToIntentMapper {
+object GammaViewEventToIntentMapper {
 
   operator fun invoke(event: GammaView.Event): GammaStore.Intent =
     when (event) {

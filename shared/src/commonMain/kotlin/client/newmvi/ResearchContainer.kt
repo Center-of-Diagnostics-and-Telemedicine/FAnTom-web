@@ -1,11 +1,13 @@
 package client.newmvi
 
+import client.addOrReplace
+import client.debugLog
 import com.badoo.reaktive.observable.*
 import com.badoo.reaktive.scheduler.computationScheduler
 import com.badoo.reaktive.subject.behavior.BehaviorSubject
 import com.badoo.reaktive.subject.publish.PublishSubject
 import model.*
-import client.*
+import model.*
 import kotlin.math.*
 
 object ResearchContainer {

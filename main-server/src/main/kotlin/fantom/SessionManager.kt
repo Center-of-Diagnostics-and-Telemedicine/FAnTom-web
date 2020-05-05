@@ -1,51 +1,82 @@
 package fantom
 
-import util.basePort
-import util.debugLog
 import kotlinx.coroutines.delay
+import model.User
+import util.*
 
 object SessionManager {
 
   private val instances: MutableList<FantomLibrary> = mutableListOf()
   private val containers: MutableList<DockerContainer> = mutableListOf()
+  private val ports: MutableList<Int> = mutableListOf(basePort)
 
-  suspend fun getInstanceForUser(userId: Int): FantomLibrary {
+  suspend fun getInstanceForUser(userId: Int, researchName: String): FantomLibrary? {
     val existing = instances.firstOrNull { it.userId == userId }
     return if (existing == null) {
 
       debugLog("create fantomLibrary")
-      val instance = FantomLibraryImpl(
-        userId = userId,
-        endPoint = "http://127.0.0.1",
-        container = getContainer(userId),
-        onClose = { container ->
-          DockerManager.close(container = container)
-          containers.remove(container)
-          instances.remove(
-            instances.firstOrNull {
-              it.container.containerId == container.containerId
-            })
-        }
-      )
+      val container = getContainer(userId, researchName)
+      if (container != null) {
+        val instance = FantomLibraryImpl(
+          userId = userId,
+          endPoint = "http://127.0.0.1",
+          container = container,
+          researchName = researchName,
+          onClose = { dockerContainer ->
+            closeSession(dockerContainer)
+          }
+        )
 
-      instances.add(instance)
+        instances.add(instance)
+        debugLog("instance created, going to delay")
 
-      //Ставим delay, чтобы успела инициализироваться библиотека
-      delay(2000)
-      instance
+        //Ставим delay, чтобы успела инициализироваться библиотека
+        delay(2000)
+        instance
+      } else {
+        return null
+      }
     } else {
       debugLog("using existing instance")
       existing
     }
   }
 
-  private fun getContainer(userId: Int): DockerContainer {
+  fun closeSession(user: User) {
+    instances
+      .firstOrNull {
+        it.userId == user.id
+      }?.let { closeSession(it.container) }
+  }
+
+  private fun closeSession(dockerContainer: DockerContainer) {
+    DockerManager.close(container = dockerContainer)
+    containers.remove(dockerContainer)
+    instances.remove(
+      instances.firstOrNull {
+        it.container.containerId == dockerContainer.containerId
+      })
+  }
+
+  private fun getContainer(userId: Int, researchName: String): DockerContainer? {
     val existing = containers.firstOrNull { it.userId == userId }
     return if (existing == null) {
-      debugLog("create container")
-      val container = DockerManager.create(userId, basePort + containers.size + 1)
-      containers.add(container)
-      container
+      debugLog("create container for researchName = $researchName")
+      val researchDir = getResearchPath(researchName.replace(" ", "").trim(), data_store_paths)
+      if (researchDir == null) {
+        throw NoSuchElementException("path for research = $researchName not found")
+      } else {
+        val port = ports.size + 1
+        ports.add(port)
+        debugLog("path found, path for research = ${researchDir.name}, port to add = $port")
+        val container = DockerManager.create(
+          userId = userId,
+          port = port,
+          researchDir = researchDir
+        ) ?: return null
+        containers.add(container)
+        container
+      }
     } else {
       debugLog("using existing container")
       existing

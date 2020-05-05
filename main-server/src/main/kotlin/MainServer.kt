@@ -1,6 +1,5 @@
 import controller.LoginController
 import controller.ResearchController
-import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.auth.Authentication
@@ -16,15 +15,16 @@ import org.apache.http.auth.AuthenticationException
 import org.jetbrains.exposed.sql.Database
 import org.slf4j.event.Level
 
+
 fun main() {
-  embeddedServer(Netty, 8080) {
+  embeddedServer(Netty, 80) {
 
     // Database
     Database.connect(
       url = "jdbc:mysql://localhost:3306/mark_tomogram?characterEncoding=utf8&useUnicode=true",
       driver = "com.mysql.jdbc.Driver",
       user = "root",
-      password = ""
+      password = "vfrcbv16"
     )
 
     // Serialize json
@@ -93,5 +93,7 @@ fun main() {
   }.start(wait = true)
 
 }
+
+
 
 

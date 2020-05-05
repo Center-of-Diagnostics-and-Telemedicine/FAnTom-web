@@ -1,15 +1,10 @@
 package client.newmvi.researchmvi.binder
 
-import com.badoo.reaktive.disposable.CompositeDisposable
-import com.badoo.reaktive.observable.Observable
-import com.badoo.reaktive.observable.map
-import com.badoo.reaktive.observable.subscribe
 import client.newmvi.researchmvi.store.ResearchStore
 import client.newmvi.researchmvi.view.ResearchView
-import model.AreaToSave
-import model.ChangeCutTypeModel
-import model.CloseCommands
-import model.SelectedArea
+import com.badoo.reaktive.disposable.CompositeDisposable
+import com.badoo.reaktive.observable.*
+import model.*
 
 class ResearchBinder(
   private val store: ResearchStore,

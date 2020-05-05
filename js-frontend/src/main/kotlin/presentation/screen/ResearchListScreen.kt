@@ -81,7 +81,7 @@ class ResearchListScreen(props: ResearchListProps) :
                   color = MColor.inherit,
                   onClick = { setState { slideOutDrawerOpen = true } })
               }
-              mToolbarTitle("MarkTomogramm")
+              mToolbarTitle("Fantom")
             }
           }
 

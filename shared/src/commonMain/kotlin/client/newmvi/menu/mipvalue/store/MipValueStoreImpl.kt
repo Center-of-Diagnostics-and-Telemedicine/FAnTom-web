@@ -1,13 +1,13 @@
 package client.newmvi.menu.mipvalue.store
 
-import client.newmvi.menu.mipvalue.store.MipValueStore.Intent
-import client.newmvi.menu.mipvalue.store.MipValueStore.State
 import com.badoo.reaktive.disposable.CompositeDisposable
 import com.badoo.reaktive.disposable.Disposable
 import com.badoo.reaktive.observable.Observable
 import com.badoo.reaktive.subject.Subject
 import com.badoo.reaktive.subject.behavior.BehaviorSubject
 import model.INITIAL_MIP_VALUE
+import client.newmvi.menu.mipvalue.store.MipValueStore.Intent
+import client.newmvi.menu.mipvalue.store.MipValueStore.State
 
 class MipValueStoreImpl(
   private val mipValueObservable: Subject<Int>
@@ -55,8 +55,8 @@ class MipValueStoreImpl(
 
   private sealed class Effect {
     data class Value(val value: Int) : Effect()
-    object Enable : Effect()
-    object Disable : Effect()
+    object Enable: Effect()
+    object Disable: Effect()
   }
 
   private object Reducer {

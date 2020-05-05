@@ -1,6 +1,6 @@
 package client.newmvi.researchmvi.store
 
-import client.*
+import model.*
 import model.*
 
 interface GridProcessor {

@@ -1,6 +1,5 @@
 package client.newmvi.shapes.store
 
-import model.LineType
 import com.badoo.reaktive.disposable.CompositeDisposable
 import com.badoo.reaktive.disposable.Disposable
 import com.badoo.reaktive.observable.Observable
@@ -11,6 +10,7 @@ import com.badoo.reaktive.single.observeOn
 import com.badoo.reaktive.single.subscribe
 import com.badoo.reaktive.subject.behavior.BehaviorSubject
 import com.badoo.reaktive.subject.publish.PublishSubject
+import model.LineType
 import client.newmvi.shapes.store.ShapesStore.Intent
 import client.newmvi.shapes.store.ShapesStore.State
 import model.*
