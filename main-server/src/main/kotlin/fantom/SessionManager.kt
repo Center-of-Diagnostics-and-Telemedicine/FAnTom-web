@@ -1,7 +1,7 @@
 package fantom
 
 import kotlinx.coroutines.delay
-import model.User
+import model.UserModel
 import util.*
 
 object SessionManager {
@@ -43,10 +43,10 @@ object SessionManager {
     }
   }
 
-  fun closeSession(user: User) {
+  fun closeSession(userModel: UserModel) {
     instances
       .firstOrNull {
-        it.userId == user.id
+        it.userId == userModel.id
       }
       ?.let {
         closeSession(it.container)

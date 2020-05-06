@@ -40,7 +40,7 @@ object UserResearchVos : Table("user_research") {
   override val primaryKey = PrimaryKey(userId, researchId, name = "UserResearchPKConstraintName")
 }
 
-object UserMarkVos : Table(MARKS_TABLE) {
+object MarkVos : Table(MARKS_TABLE) {
   val userId: Column<Int> = integer("user_$ID_FIELD")
   val researchId: Column<Int> = integer("research_$ID_FIELD")
   val ctType: Column<Int> = integer(CT_TYPE_FIELD)

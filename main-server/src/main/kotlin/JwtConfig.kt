@@ -3,7 +3,7 @@
 import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
-import model.User
+import model.UserModel
 import util.AUTHENTICATION
 import util.ID_FIELD
 import util.NAME_FIELD
@@ -25,13 +25,13 @@ object JwtConfig {
     /**
      * Produce a token for this combination of User and Account
      */
-    fun makeToken(user: User): String {
+    fun makeToken(userModel: UserModel): String {
         return JWT.create()
                 .withSubject(AUTHENTICATION)
                 .withIssuer(issuer)
-                .withClaim(ID_FIELD, user.id)
-                .withClaim(NAME_FIELD, user.name)
-                .withClaim(PASSWORD_FIELD, user.password)
+                .withClaim(ID_FIELD, userModel.id)
+                .withClaim(NAME_FIELD, userModel.name)
+                .withClaim(PASSWORD_FIELD, userModel.password)
                 .withExpiresAt(getExpiration())
                 .sign(algorithm)
     }

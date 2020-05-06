@@ -11,7 +11,7 @@ fun init() {
       UserVos,
       ResearchVos,
       UserResearchVos,
-      UserMarkVos
+      MarkVos
     )
     val login = "admin"
     val pass = hash("vfrcbv16")
@@ -92,13 +92,13 @@ fun createUser(login: String, pass: String, userRole: Int): Int = transaction {
   } get UserVos.id
 }
 
-fun getUser(id: Int): User = transaction {
+fun getUser(id: Int): UserModel = transaction {
   UserVos.select {
     UserVos.id eq id
   }.first()
 }.toUser()
 
-fun getUserByCredentials(credentials: UserPasswordCredential): User? {
+fun getUserByCredentials(credentials: UserPasswordCredential): UserModel? {
   return transaction {
     UserVos.select {
       UserVos.name eq credentials.name and (UserVos.password eq hash(credentials.password))
@@ -189,7 +189,7 @@ fun updateResearch(research: Research, userId: Int) = transaction {
 
 
 fun saveCtTypeConfirmation(request: ConfirmCTTypeRequest, userrId: Int) = transaction {
-  UserMarkVos.insertIgnore {
+  MarkVos.insertIgnore {
     it[userId] = userrId
     it[researchId] = request.researchId
     it[ctType] = request.ctType

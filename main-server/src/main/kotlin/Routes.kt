@@ -37,7 +37,7 @@ fun Application.processRequests(
       }
     }
 
-    post("/login") {
+    post("/useCases") {
       loginController.login(call)
     }
 

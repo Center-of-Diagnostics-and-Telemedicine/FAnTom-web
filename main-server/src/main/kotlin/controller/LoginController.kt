@@ -27,7 +27,7 @@ class LoginController {
         call.respond(HttpStatusCode.Forbidden)
       } else {
         debugLog("user found")
-        val token = JwtConfig.makeToken(user = user)
+        val token = JwtConfig.makeToken(userModel = user)
 //        populateResearches(user.id)
         call.respond(AuthorizationResponse(token = token))
       }

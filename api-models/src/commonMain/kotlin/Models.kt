@@ -64,8 +64,7 @@ data class ResearchesResponse(
 
 @Serializable
 data class BaseResponse(
-  val status: String,
-  val error: String
+  val errorCode: Int
 )
 
 @Serializable

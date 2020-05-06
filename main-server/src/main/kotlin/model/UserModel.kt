@@ -14,7 +14,7 @@ fun hash(password: String): String {
   return hex(hmac.doFinal(password.toByteArray(Charsets.UTF_8)))
 }
 
-data class User(
+data class UserModel(
   val id: Int,
   val name: String,
   val password: String,

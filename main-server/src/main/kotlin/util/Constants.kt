@@ -1,6 +1,6 @@
 package util
 
-import model.User
+import model.UserModel
 import io.ktor.application.ApplicationCall
 import io.ktor.auth.authentication
 import java.io.File
@@ -51,4 +51,4 @@ const val csv_store_path = "/data/2020_covid"
 const val basePort = 8080
 const val fantomServerPort = 8081
 
-val ApplicationCall.user get() = authentication.principal<User>()!!
+val ApplicationCall.user get() = authentication.principal<UserModel>()!!
