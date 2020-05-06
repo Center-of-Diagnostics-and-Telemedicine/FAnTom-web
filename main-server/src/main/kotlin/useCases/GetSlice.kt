@@ -8,7 +8,8 @@ import io.ktor.routing.Route
 import model.*
 import repository.ResearchRepository
 import repository.SessionRepository
-import util.*
+import util.GetSlice
+import util.user
 
 fun Route.getSlice(
   researchRepository: ResearchRepository,
@@ -18,7 +19,7 @@ fun Route.getSlice(
   post<GetSlice> {
 
     suspend fun respondError(errorCode: ErrorStringCode) {
-      call.respond(BaseResponse(errorCode.value))
+      call.respond(ApiResponse.ErrorResponse(errorCode.value))
     }
 
     val userId = call.user.id
@@ -29,11 +30,11 @@ fun Route.getSlice(
       request.sliceNumber < 0 -> respondError(ErrorStringCode.INCORRECT_SLICE_NUMBER)
     }
 
-    val existingSession = sessionRepository.getSession(userId, research!!.accessionNumber)
+    val existingSession = sessionRepository.getSession(userId)
     if (existingSession == null) respondError(ErrorStringCode.SESSION_EXPIRED)
 
     try {
-      call.respond(existingSession!!.getSlice(request))
+      call.respond(existingSession!!.getSlice(request, research!!.accessionNumber))
     } catch (e: Exception) {
       application.log.error("Failed to get slice", e)
       respondError(ErrorStringCode.GET_SLICE_FAILED)

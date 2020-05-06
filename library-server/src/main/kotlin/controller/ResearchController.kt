@@ -1,13 +1,12 @@
 package controller
 
-import lib.MarkTomogrammObject
-import util.ID_FIELD
-import util.debugLog
-import model.*
 import io.ktor.application.ApplicationCall
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.receive
 import io.ktor.response.respond
+import lib.MarkTomogrammObject
+import model.*
+import util.debugLog
 import java.util.*
 
 interface ResearchController {
@@ -81,7 +80,7 @@ class ResearchControllerImpl : ResearchController {
       sagittalCoord
     )
 
-    call.respond(HounsfieldResponse(value))
+    call.respond(ApiResponse.HounsfieldResponse(value))
   }
 
   private suspend fun respondError(call: ApplicationCall, message: String = "") {
@@ -91,8 +90,8 @@ class ResearchControllerImpl : ResearchController {
     )
   }
 
-  private fun initSlicesData(): ResearchInitResponse {
-    return ResearchInitResponse(
+  private fun initSlicesData(): ApiResponse.ResearchInitResponse {
+    return ApiResponse.ResearchInitResponse(
       axialReal = MarkTomogrammObject.getRealValue(SLYCE_TYPE_AXIAL),
       axialInterpolated = MarkTomogrammObject.getInterpolatedValue(SLYCE_TYPE_AXIAL),
       frontalReal = MarkTomogrammObject.getRealValue(SLYCE_TYPE_FRONTAL),

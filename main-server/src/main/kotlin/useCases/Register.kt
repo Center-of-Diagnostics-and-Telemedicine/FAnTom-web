@@ -14,7 +14,7 @@ fun Route.register(repository: UserRepository) {
 
   post<Register> {
     suspend fun respondError(errorCode: ErrorStringCode) {
-      call.respond(BaseResponse(errorCode.value))
+      call.respond(ApiResponse.ErrorResponse(errorCode.value))
     }
 
     //регистрировать имеет право только админ

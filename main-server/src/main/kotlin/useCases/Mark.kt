@@ -16,7 +16,7 @@ fun Route.mark(
 
   post<Mark> {
     suspend fun respondError(errorCode: ErrorStringCode) {
-      call.respond(BaseResponse(errorCode.value))
+      call.respond(ApiResponse.ErrorResponse(errorCode.value))
     }
 
     val user = call.user

@@ -89,7 +89,7 @@ class ResearchController {
           sagittalCoord
         )
 
-      call.respond(HounsfieldResponse(value))
+      call.respond(ApiResponse.HounsfieldResponse(value))
     } else {
       respondError(call)
     }

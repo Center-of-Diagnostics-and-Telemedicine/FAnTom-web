@@ -13,7 +13,7 @@ fun Route.hounsfield(sessionRepository: SessionRepository) {
   get<Hounsfield> {
 
     suspend fun respondError(errorCode: ErrorStringCode) {
-      call.respond(BaseResponse(errorCode.value))
+      call.respond(ApiResponse.ErrorResponse(errorCode.value))
     }
 
     val userId = call.user.id
@@ -30,7 +30,7 @@ fun Route.hounsfield(sessionRepository: SessionRepository) {
       sagittalCoord == null || sagittalCoord < 0 -> respondError(ErrorStringCode.INCORRECT_SAGITTAL_COORD)
     }
 
-    val existingSession = sessionRepository.getSession(userId, it.name)
+    val existingSession = sessionRepository.getSession(userId)
     if (existingSession == null) respondError(ErrorStringCode.SESSION_EXPIRED)
 
     try {

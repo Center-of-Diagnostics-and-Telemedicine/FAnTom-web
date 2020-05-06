@@ -2,6 +2,7 @@ package model
 
 const val TOKEN = "api_token"
 const val END_POINT: String = "https://fantom.npcmr.ru"
+const val LOCALHOST = "http://127.0.0.1"
 //const val END_POINT: String = "http://10.2.20.44:8080"
 const val LOGIN_ROUTE: String = "login"
 const val RESEARCH_ROUTE: String = "research"
@@ -16,6 +17,11 @@ const val SESSION_ROUTE: String = "session"
 const val TYPE_AXIAL = "AXIAL"
 const val TYPE_FRONTAL = "FRONTAL"
 const val TYPE_SAGITTAL = "SAGITTAL"
+
+const val data_store_path = "/app/dicom"
+const val ID_FIELD = "id"
+
+const val tenMinutes: Long = 600000
 
 /**
 Типы срезов
@@ -141,5 +147,6 @@ enum class ErrorStringCode(val value: Int) {
     HOUNSFIELD_ERROR(18),
     SESSION_CLOSE_FAILED(19),
     GET_SLICE_FAILED(20),
-    CREATE_MARK_FAILED(21)
+    CREATE_MARK_FAILED(21),
+    NOT_INITIALIZED_YET(22)
 }

@@ -23,5 +23,6 @@ fun getErrorMessageByCode(errorCode: ErrorStringCode): String {
     ErrorStringCode.SESSION_CLOSE_FAILED -> SESSION_CLOSE_FAILED
     ErrorStringCode.GET_SLICE_FAILED -> GET_SLICE_FAILED
     ErrorStringCode.CREATE_MARK_FAILED -> CREATE_MARK_FAILED
+    ErrorStringCode.NOT_INITIALIZED_YET -> NOT_INITIALIZED_YET
   }
 }

@@ -4,11 +4,12 @@ import io.ktor.application.*
 import io.ktor.locations.get
 import io.ktor.response.respond
 import io.ktor.routing.Route
-import model.BaseResponse
+import model.ApiResponse
 import model.ErrorStringCode
 import repository.ResearchRepository
 import repository.SessionRepository
-import util.*
+import util.InitResearch
+import util.user
 
 fun Route.initResearch(
   researchRepository: ResearchRepository,
@@ -18,31 +19,24 @@ fun Route.initResearch(
   get<InitResearch> {
 
     suspend fun respondError(errorCode: ErrorStringCode) {
-      call.respond(BaseResponse(errorCode.value))
+      call.respond(ApiResponse.ErrorResponse(errorCode.value))
     }
 
     val userId = call.user.id
     val research = researchRepository.getResearch(it.id)
     if (research == null) respondError(ErrorStringCode.RESEARCH_NOT_FOUND)
 
-    val existingSession = sessionRepository.getSession(userId, research!!.accessionNumber)
-    if (existingSession != null) {
-      sessionRepository.deleteSession(userId, research.accessionNumber)
-    }
-    val session = sessionRepository.createSession(userId, research.accessionNumber)
-
+    val sessionToClose = sessionRepository.getSession(userId)
     try {
-      session.initResearch(research.accessionNumber)
+      if (sessionToClose != null) {
+        sessionRepository.deleteSession(userId, research!!.accessionNumber)
+      }
+
+      val session = sessionRepository.createSession(userId, research!!.accessionNumber)
+      call.respond(session.initResearch(research.accessionNumber))
     } catch (e: Exception) {
       application.log.error("Failed to init research", e)
       e.printStackTrace()
-      respondError(ErrorStringCode.RESEARCH_INITIALIZATION_FAILED)
-    }
-
-    try {
-      call.respond(session.getResearchData(research.accessionNumber))
-    } catch (e: Exception) {
-      application.log.error("Failed to getResearchData", e)
       respondError(ErrorStringCode.RESEARCH_INITIALIZATION_FAILED)
     }
   }

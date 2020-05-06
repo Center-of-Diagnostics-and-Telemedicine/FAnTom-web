@@ -1,3 +1,4 @@
+import model.ID_FIELD
 import model.UserRole
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table

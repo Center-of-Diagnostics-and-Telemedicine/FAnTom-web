@@ -14,49 +14,36 @@ import kotlinx.serialization.json.Json
 import model.*
 import util.debugLog
 
-interface FantomLibrary {
-
-  val userId: Int
+interface FantomLibraryDataSource {
   val endPoint: String
-  val container: DockerContainer
-  val researchName: String
-
-  val onClose: (DockerContainer) -> Unit
+  val onClose: () -> Unit
 
   suspend fun getAccessionNames(): List<String>
-  suspend fun initResearch(researchName: String): ApiResponse.ResearchInitResponse
-  suspend fun getSlice(sliceRequest: SliceRequest, researchName: String): String
-  suspend fun getHounsfield(axialCoord: Int, frontalCoord: Int, sagittalCoord: Int): Double
+  suspend fun initResearch(accessionNumber: String): ApiResponse
+  suspend fun getSlice(sliceRequest: SliceRequest, researchName: String): ApiResponse
+  suspend fun getHounsfield(axialCoord: Int, frontalCoord: Int, sagittalCoord: Int): ApiResponse
 }
 
-class FantomLibraryImpl(
-  override val userId: Int,
+class FantomLibraryDataSourceImpl(
   override val endPoint: String,
-  override val container: DockerContainer,
-  override val researchName: String,
-  override val onClose: (DockerContainer) -> Unit
-) : FantomLibrary {
+  override val onClose: () -> Unit
+) : FantomLibraryDataSource {
 
-  private val sessionDebounceSubject = PublishSubject<DockerContainer>()
-
-  init {
-    sessionDebounceSubject
-      .debounce(600000, computationScheduler)
-      .subscribe { container ->
-        debugLog("going to close container")
-        onClose(container)
-      }
-  }
-
-  private val resultUrl = "$endPoint:${container.port}"
+  private val sessionDebounceSubject = PublishSubject<Boolean>()
 
   private val client: HttpClient = HttpClient {
     install(JsonFeature) {
       serializer = KotlinxSerializer()
     }
-    install(HttpTimeout) {
-      requestTimeoutMillis = 60000
-    }
+  }
+
+  init {
+    sessionDebounceSubject
+      .debounce(tenMinutes, computationScheduler)
+      .subscribe { container ->
+        debugLog("going to close container")
+        onClose()
+      }
   }
 
   override suspend fun getAccessionNames(): List<String> {
@@ -68,13 +55,13 @@ class FantomLibraryImpl(
     }
   }
 
-  override suspend fun initResearch(researchName: String): ApiResponse.ResearchInitResponse {
+  override suspend fun initResearch(accessionNumber: String): ApiResponse {
     return client.get {
-      apiUrl("$RESEARCH_ROUTE/$INIT_ROUTE?id=$researchName")
+      apiUrl("$RESEARCH_ROUTE/$INIT_ROUTE?id=$accessionNumber")
     }
   }
 
-  override suspend fun getSlice(sliceRequest: SliceRequest, researchName: String): String {
+  override suspend fun getSlice(sliceRequest: SliceRequest, researchName: String): ApiResponse {
     return client.post {
       apiUrl(researchName)
       body = Json.stringify(SliceRequest.serializer(), sliceRequest)
@@ -85,16 +72,16 @@ class FantomLibraryImpl(
     axialCoord: Int,
     frontalCoord: Int,
     sagittalCoord: Int
-  ): Double {
+  ): ApiResponse {
     return client.get<ApiResponse.HounsfieldResponse> {
       apiUrl("$RESEARCH_ROUTE/$HOUNSFIELD_ROUTE?$TYPE_AXIAL=${axialCoord}&$TYPE_FRONTAL=${frontalCoord}&$TYPE_SAGITTAL=${sagittalCoord}")
-    }.huValue
+    }
   }
 
   private fun HttpRequestBuilder.apiUrl(path: String) {
-    sessionDebounceSubject.onNext(container)
+    sessionDebounceSubject.onNext(true)
     url {
-      takeFrom(resultUrl)
+      takeFrom(endPoint)
       encodedPath = path
     }
   }

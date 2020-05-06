@@ -6,7 +6,6 @@ import io.ktor.auth.authentication
 import java.io.File
 
 const val AUTHENTICATION = "Authentication"
-const val ID_FIELD = "id"
 const val NAME_FIELD = "name"
 const val PASSWORD_FIELD = "password"
 const val ROLE_FIELD = "role"

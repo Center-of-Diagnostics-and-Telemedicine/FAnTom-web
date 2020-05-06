@@ -3,18 +3,6 @@ package model
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ResearchInitResponse(
-  val axialReal: Int,
-  val axialInterpolated: Int,
-  val frontalReal: Int,
-  val frontalInterpolated: Int,
-  val sagittalReal: Int,
-  val sagittalInterpolated: Int,
-  val pixelLength: Double,
-  val reversed: Boolean
-)
-
-@Serializable
 data class ResearchSlicesSizesData(
   val axial: SliceSizeData,
   val frontal: SliceSizeData,
@@ -63,9 +51,30 @@ data class ResearchesResponse(
 )
 
 @Serializable
-data class BaseResponse(
-  val errorCode: Int
-)
+sealed class ApiResponse(val errorCode: Int? = null) {
+
+  @Serializable
+  data class ErrorResponse(val error: Int) : ApiResponse(error)
+
+  @Serializable
+  data class ResearchInitResponse(
+    val axialReal: Int,
+    val axialInterpolated: Int,
+    val frontalReal: Int,
+    val frontalInterpolated: Int,
+    val sagittalReal: Int,
+    val sagittalInterpolated: Int,
+    val pixelLength: Double,
+    val reversed: Boolean
+  ) : ApiResponse()
+
+  @Serializable
+  data class SliceResponse(val image: String): ApiResponse()
+
+  @Serializable
+  data class HounsfieldResponse(val huValue: Double): ApiResponse()
+
+}
 
 @Serializable
 data class MarksResponse(
@@ -103,11 +112,6 @@ data class AreaToSave(
   val z: Double,
   val radius: Double,
   val size: Double
-)
-
-@Serializable
-data class HounsfieldResponse(
-  val huValue: Double
 )
 
 @Serializable

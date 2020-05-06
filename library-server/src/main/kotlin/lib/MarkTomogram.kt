@@ -1,10 +1,10 @@
 package lib
 
-import util.data_store_path
 import util.debugLog
 import com.sun.jna.Native
 import com.sun.jna.Pointer
 import com.sun.jna.ptr.*
+import model.data_store_path
 import java.util.regex.Pattern
 
 object MarkTomogrammObject {

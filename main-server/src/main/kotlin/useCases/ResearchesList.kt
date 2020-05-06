@@ -37,7 +37,7 @@ fun Route.researchesList(
       call.respond(ResearchesResponse(userResearches))
     } catch (e: Exception) {
       application.log.error("Failed to get research list", e)
-      call.respond(BaseResponse(ErrorStringCode.USER_RESEARCHES_LIST_FAILED.value))
+      call.respond(ApiResponse.ErrorResponse(ErrorStringCode.USER_RESEARCHES_LIST_FAILED.value))
     }
   }
 
