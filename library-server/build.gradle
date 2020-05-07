@@ -26,6 +26,7 @@ shadowJar {
     manifest {
         attributes 'Main-Class': main_class_name
     }
+    archiveBaseName = "backend"
 }
 
 dependencies {

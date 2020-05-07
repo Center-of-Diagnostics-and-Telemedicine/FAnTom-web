@@ -15,7 +15,7 @@ fun <T> database(statement: Transaction.() -> T): T {
     url = "jdbc:mysql://localhost:3306/mark_tomogram?characterEncoding=utf8&useUnicode=true",
     driver = "com.mysql.jdbc.Driver",
     user = "root",
-    password = ""
+    password = "vfrcbv16"
   )
 
   return transaction {
