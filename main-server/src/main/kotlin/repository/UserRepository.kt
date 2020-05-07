@@ -1,7 +1,8 @@
 package repository
 
 import dao.UserDaoFacade
-import model.*
+import model.UserModel
+import model.UserRole
 
 interface UserRepository {
   suspend fun getUser(login: String, hashedPassword: String): UserModel?
@@ -29,7 +30,12 @@ class UserRepositoryImpl(private val userDaoFacade: UserDaoFacade) : UserReposit
     userDaoFacade.deleteUser(userId)
   }
 
-  override suspend fun updateUser(userId: Int, login: String, hashedPassword: String, role: UserRole) {
+  override suspend fun updateUser(
+    userId: Int,
+    login: String,
+    hashedPassword: String,
+    role: UserRole
+  ) {
     checkUserExistence(userId)
     userDaoFacade.updateUser(userId, login, hashedPassword, role.value)
   }

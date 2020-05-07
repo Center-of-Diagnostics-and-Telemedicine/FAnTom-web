@@ -29,7 +29,7 @@ object MarkTomogrammObject {
     }
   }
 
-  fun loadNewCtByAccessionNumber(accessionNumber: String) {
+  suspend fun loadNewCtByAccessionNumber(accessionNumber: String) {
     when (state) {
       is LibraryState.ReadyToInitResearch -> {
         state = LibraryState.InitResearchProcess

@@ -3,6 +3,7 @@ import io.ktor.features.*
 import io.ktor.gson.GsonConverter
 import io.ktor.gson.gson
 import io.ktor.http.ContentType
+import io.ktor.locations.Locations
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
@@ -24,6 +25,7 @@ fun main() {
     install(DefaultHeaders)
     install(CallLogging)
     install(ConditionalHeaders)
+    install(Locations)
 
     val researchRepository = ResearchRepositoryImpl(MarkTomogrammObject)
 

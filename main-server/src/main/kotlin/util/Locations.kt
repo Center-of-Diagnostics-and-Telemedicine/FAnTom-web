@@ -4,10 +4,10 @@ import io.ktor.locations.Location
 import model.*
 
 @Location(ROOT)
-class Index
+class Index()
 
 @Location("/$LOGIN_ROUTE")
-class Login
+class Login()
 
 @Location("/register")
 class Register

@@ -71,7 +71,7 @@ data class Research(
 sealed class ApiResponse(val errorCode: Int? = null) {
 
   @Serializable
-  data class ErrorResponse(val error: Int) : ApiResponse(error)
+  data class ErrorResponse(val error: Int, val message: String = "") : ApiResponse(error)
 
   @Serializable
   data class ResearchInitResponse(

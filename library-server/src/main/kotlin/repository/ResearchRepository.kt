@@ -24,15 +24,15 @@ class ResearchRepositoryImpl(private val markTomogramm: MarkTomogrammObject) : R
 
       is LibraryState.ReadyToInitLib -> {
         GlobalScope.launch { markTomogramm.init(data_store_path) }
-        throw NotInitializedYetException()
+        throw NotInitializedYetException("markTomogram.init called in suspend")
       }
-      LibraryState.InitLibProcess -> throw NotInitializedYetException()
+      LibraryState.InitLibProcess -> throw NotInitializedYetException("not ready, lib initialization continues")
 
       LibraryState.ReadyToInitResearch -> {
         GlobalScope.launch { markTomogramm.loadNewCtByAccessionNumber(accessionName) }
-        throw NotInitializedYetException()
+        throw NotInitializedYetException("markTomogram.loadNewCtByAccessionNumber called in suspend")
       }
-      LibraryState.InitResearchProcess -> throw NotInitializedYetException()
+      LibraryState.InitResearchProcess -> throw NotInitializedYetException("not ready, research initialization continues")
 
       LibraryState.ResearchInitialized -> {
         return ApiResponse.ResearchInitResponse(
@@ -77,7 +77,8 @@ class ResearchRepositoryImpl(private val markTomogramm: MarkTomogrammObject) : R
         markTomogramm.getPointHU(
           axialCoord = axialCoord,
           frontalCoord = frontalCoord,
-          sagittalCoord = sagittalCoord)
+          sagittalCoord = sagittalCoord
+        )
       }
       else -> throw NotInitializedException()
     }

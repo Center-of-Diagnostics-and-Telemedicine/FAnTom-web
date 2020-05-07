@@ -16,15 +16,18 @@ fun Route.initResearch(
 
   get<InitResearch> {
 
-    suspend fun respondError(errorCode: ErrorStringCode) {
-      call.respond(ApiResponse.ErrorResponse(errorCode.value))
+    suspend fun respondError(errorCode: ErrorStringCode, message: String = "") {
+      call.respond(ApiResponse.ErrorResponse(errorCode.value, message))
     }
 
     try {
       call.respond(researchRepository.initResearch(it.accessionName))
     } catch (e: Exception) {
       when (e) {
-        is NotInitializedYetException -> respondError(ErrorStringCode.NOT_INITIALIZED_YET)
+        is NotInitializedYetException -> respondError(
+          ErrorStringCode.NOT_INITIALIZED_YET,
+          e.myMessage
+        )
         else -> respondError(ErrorStringCode.RESEARCH_INITIALIZATION_FAILED)
       }
     }

@@ -3,6 +3,7 @@ package repository
 import fantom.FantomLibraryDataSource
 import kotlinx.coroutines.delay
 import model.*
+import util.debugLog
 
 interface RemoteLibraryRepository {
   val libraryContainerId: String
@@ -19,12 +20,15 @@ class RemoteLibraryRepositoryImpl(
   override suspend fun initResearch(accessionNumber: String): ApiResponse.ResearchInitResponse {
     return when (val response = remoteDataSource.initResearch(accessionNumber)) {
       is ApiResponse.ResearchInitResponse -> {
+        debugLog("ResearchInitResponse income")
         return response
       }
       is ApiResponse.ErrorResponse -> {
         when (response.error) {
           ErrorStringCode.NOT_INITIALIZED_YET.value -> {
+            debugLog("not initialized yet income")
             delay(1000)
+            debugLog("calling to initialize again")
             initResearch(accessionNumber)
           }
           ErrorStringCode.RESEARCH_INITIALIZATION_FAILED.value -> {

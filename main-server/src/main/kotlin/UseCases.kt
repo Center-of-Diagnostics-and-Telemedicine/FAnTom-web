@@ -3,10 +3,11 @@ import model.*
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import util.csv_store_path
+import util.database
 import java.io.*
 
 fun init() {
-  transaction {
+  database {
     SchemaUtils.create(
       UserVos,
       ResearchVos,
@@ -85,128 +86,19 @@ fun init() {
 //  }
 }
 
-fun createUser(login: String, pass: String, userRole: Int): Int = transaction {
-  UserVos.insert {
-    it[name] = login
-    it[password] = pass
-    it[role] = userRole
-  } get UserVos.id
-}
-
-fun getUser(id: Int): UserModel = transaction {
+fun getUser(id: Int): UserModel = database {
   UserVos.select {
     UserVos.id eq id
   }.first()
 }.toUser()
 
 fun getUserByCredentials(credentials: UserPasswordCredential): UserModel? {
-  return transaction {
+  return database {
     UserVos.select {
       UserVos.name eq credentials.name and (UserVos.password eq hash(credentials.password))
     }.firstOrNull()
   }?.toUser()
 }
-
-fun getResearches(userId: Int): List<Research> {
-  return transaction {
-    UserResearchVos.select {
-      UserResearchVos.userId eq userId
-    }
-      .map {
-        val id = it[UserResearchVos.researchId]
-        val seen = it[UserResearchVos.seen]
-        val done = it[UserResearchVos.done]
-
-        Research(
-          id = id,
-          name =
-          ResearchVos.select { ResearchVos.id eq id }.first().let { result -> result[ResearchVos.accessionNumber] },
-          seen = seen == 1,
-          done = done == 1,
-          marked = isMarked(userId, id)
-        )
-      }
-  }
-}
-
-fun getResearch(researchId: Int, userId: Int): Research? = transaction {
-  ResearchVos.select {
-    ResearchVos.id eq researchId
-  }
-    .firstOrNull()
-    ?.let { researchResultRow ->
-      UserResearchVos.select {
-        (UserResearchVos.userId eq userId) and (UserResearchVos.researchId eq researchId)
-      }
-        .firstOrNull()
-        ?.let { userResearchResultRow ->
-          researchResultRow to userResearchResultRow
-        }
-    }
-    ?.let { researchResultRowToUserResearchResultRow ->
-      Research(
-        id = researchResultRowToUserResearchResultRow.first[ResearchVos.id],
-        name = researchResultRowToUserResearchResultRow.first[ResearchVos.accessionNumber],
-        seen = researchResultRowToUserResearchResultRow.second[UserResearchVos.seen] == 1,
-        done = researchResultRowToUserResearchResultRow.second[UserResearchVos.done] == 1,
-        marked = isMarked(userId, researchId)
-      )
-    }
-}
-
-fun updateResearches(accessionNumbers: List<String>) {
-  transaction {
-    accessionNumbers.forEach { accessionNumber ->
-      ResearchVos.insertIgnore {
-        it[this.accessionNumber] = accessionNumber
-      }
-    }
-    val users = UserVos.selectAll().map { row -> row.toUser() }
-    val researches = ResearchVos.selectAll().map { resultRow -> resultRow[ResearchVos.id] }
-    users.forEach { user ->
-      researches.forEach { resId ->
-        UserResearchVos.insertIgnore {
-          it[userId] = user.id
-          it[researchId] = resId
-        }
-
-      }
-    }
-  }
-}
-
-fun updateResearch(research: Research, userId: Int) = transaction {
-  ResearchVos
-    .update(where = { ResearchVos.id eq research.id }) {
-      it[accessionNumber] = research.name
-    }
-  UserResearchVos
-    .update(where = { UserResearchVos.userId eq userId and (UserResearchVos.researchId eq research.id) }) {
-      it[seen] = if (research.seen) 1 else 0
-      it[done] = if (research.done) 1 else 0
-    }
-//  getResearch(researchId = research.id, userId = userId)
-}
-
-
-fun saveCtTypeConfirmation(request: ConfirmCTTypeRequest, userrId: Int) = transaction {
-  MarkVos.insertIgnore {
-    it[userId] = userrId
-    it[researchId] = request.researchId
-    it[ctType] = request.ctType
-    it[leftPercent] = request.leftPercent
-    it[rightPercent] = request.rightPercent
-  }
-}
-
-
-fun isMarked(userrId: Int, researchhId: Int): Boolean = transaction {
-  false
-//  MarkVos.select {
-//    MarkVos.userId eq userrId and (MarkVos.researchId eq researchhId)
-//  }.firstOrNull() != null
-}
-
 
 fun parseResearches(): List<ResearchCSV> {
   val csvFile = "$csv_store_path/keys_db.txt"
@@ -251,7 +143,7 @@ fun parseResearches(): List<ResearchCSV> {
   return resultList
 }
 
-fun createResearches(researchesCsv: List<ResearchCSV>): List<Int> = transaction {
+fun createResearches(researchesCsv: List<ResearchCSV>): List<Int> = database {
   ResearchVos.batchInsert(data = researchesCsv, ignore = true) { researchCsv ->
     this[ResearchVos.accessionNumber] = researchCsv.accessionNumber
     this[ResearchVos.studyInstanceUID] = researchCsv.studyInstanceUID
@@ -306,7 +198,7 @@ fun updateResearchUser(
   docResearchesCSV: List<DoctorResearchesCSV>,
   doctorNumber: Int
 ) {
-  transaction {
+  database {
     UserVos.select {
       UserVos.name eq "Expert${doctorNumber}"
     }

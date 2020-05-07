@@ -1,5 +1,3 @@
-import controller.LoginController
-import controller.ResearchController
 import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.auth.Authentication
@@ -10,12 +8,17 @@ import io.ktor.gson.GsonConverter
 import io.ktor.gson.gson
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
+import io.ktor.http.content.*
+import io.ktor.locations.Locations
 import io.ktor.response.respond
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
+import model.ID_FIELD
 import org.apache.http.auth.AuthenticationException
+import org.slf4j.event.Level
 import useCases.*
+import util.*
 
 
 fun main() {
@@ -36,14 +39,17 @@ fun main() {
       }
     }
     install(DefaultHeaders)
-    install(CallLogging)
+    install(CallLogging) {
+      level = Level.DEBUG
+    }
     install(ConditionalHeaders)
+    install(Locations)
     install(Authentication) {
       jwt(jwt) {
         verifier(JwtConfig.verifier)
         realm = "ktor.io"
         validate {
-          it.payload.getClaim("id").asInt()?.let(::getUser)
+          it.payload.getClaim(ID_FIELD).asInt()?.let(::getUser)
         }
       }
     }
@@ -52,6 +58,15 @@ fun main() {
     init()
 
     routing {
+      static {
+        resource(ROOT, RESOURCE_INDEX)
+        resource(ROOT, RESOURCE_JS)
+
+        static(STATIC_ROUTE) {
+          resources(RESOURCE_STATIC)
+        }
+      }
+
       login(userRepository)
 
       authenticate(jwt) {

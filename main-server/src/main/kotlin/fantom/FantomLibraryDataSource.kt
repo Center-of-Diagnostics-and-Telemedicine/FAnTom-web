@@ -5,7 +5,6 @@ import com.badoo.reaktive.observable.subscribe
 import com.badoo.reaktive.scheduler.computationScheduler
 import com.badoo.reaktive.subject.publish.PublishSubject
 import io.ktor.client.HttpClient
-import io.ktor.client.features.HttpTimeout
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.serializer.KotlinxSerializer
 import io.ktor.client.request.*
@@ -57,7 +56,8 @@ class FantomLibraryDataSourceImpl(
 
   override suspend fun initResearch(accessionNumber: String): ApiResponse {
     return client.get {
-      apiUrl("$RESEARCH_ROUTE/$INIT_ROUTE?id=$accessionNumber")
+      apiUrl("$RESEARCH_ROUTE/$INIT_ROUTE")
+      parameter(ID_FIELD, accessionNumber)
     }
   }
 
@@ -74,7 +74,10 @@ class FantomLibraryDataSourceImpl(
     sagittalCoord: Int
   ): ApiResponse {
     return client.get<ApiResponse.HounsfieldResponse> {
-      apiUrl("$RESEARCH_ROUTE/$HOUNSFIELD_ROUTE?$TYPE_AXIAL=${axialCoord}&$TYPE_FRONTAL=${frontalCoord}&$TYPE_SAGITTAL=${sagittalCoord}")
+      apiUrl("$RESEARCH_ROUTE/$HOUNSFIELD_ROUTE")
+      parameter(TYPE_AXIAL, axialCoord)
+      parameter(TYPE_FRONTAL, frontalCoord)
+      parameter(TYPE_SAGITTAL, sagittalCoord)
     }
   }
 

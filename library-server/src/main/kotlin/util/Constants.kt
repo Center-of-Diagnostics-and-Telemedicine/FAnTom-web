@@ -1,7 +1,7 @@
 package util
 
-class NotInitializedYetException() : Exception()
-class NotInitializedException(): Exception()
+class NotInitializedYetException(val myMessage: String = "") : Exception()
+class NotInitializedException(val myMessage: String = ""): Exception()
 
 sealed class LibraryState {
 

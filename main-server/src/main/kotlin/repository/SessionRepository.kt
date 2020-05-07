@@ -3,6 +3,7 @@ package repository
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import util.data_store_paths
+import util.debugLog
 
 interface SessionRepository {
   suspend fun getSession(userId: Int): RemoteLibraryRepository?
@@ -29,7 +30,6 @@ class SessionRepositoryImpl(
     val researchDir = researchDirFinder.getResearchPath(accessionNumber, data_store_paths)
     val port = portsCounter + 1
 
-
     val library = creator
       .createLibrary(
         userId = userId,
@@ -37,12 +37,15 @@ class SessionRepositoryImpl(
         port = port,
         researchDir = researchDir,
         onClose = {
-          GlobalScope.launch { deleteSession(userId, accessionNumber) }
+          GlobalScope.launch {
+            debugLog("call deleteSession")
+            deleteSession(userId, accessionNumber)
+          }
         }
       )
     sessions[userId] = library
-    return library
 
+    return library
   }
 
   override suspend fun deleteSession(userId: Int, accessionNumber: String) {
