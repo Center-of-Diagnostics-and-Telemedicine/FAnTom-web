@@ -1,101 +1,94 @@
 package lib
 
-import util.debugLog
 import com.sun.jna.Native
 import com.sun.jna.Pointer
 import com.sun.jna.ptr.*
-import model.data_store_path
+import util.*
 import java.util.regex.Pattern
 
 object MarkTomogrammObject {
 
-  private var currentAccessionName: String = ""
-  private var initialized = false
+  var state: LibraryState = LibraryState.ReadyToInitLib
 
   private val instance: MarkTomogramm = Native.loadLibrary(
     "FantomLibrary",
     MarkTomogramm::class.java
   )
 
-  private fun getInstance(): MarkTomogramm {
-    if (!initialized) {
-      debugLog("going to init")
-      init()
-    }
-    return instance
-  }
-
-  private fun init() {
-    val a: Int? = instance.InitFantom_J(data_store_path)
-    if(a != null){
-      debugLog("library initialized")
-    }
-    initialized = true
-  }
-
-  fun getAccNames(): Array<String> {
-    val a: Array<String> = arrayOf()
-    debugLog("getAccNames")
-    try {
-      val ptrRef = PointerByReference()
-      val length = IntByReference()
-
-      getInstance().GetStudiesIDs_J(ptrRef, length).apply {
-        val pointer: Pointer? = ptrRef.value
-        val result = pointer?.getByteArray(0, length.value)
-        if (result != null) {
-          return Pattern.compile("\t").split(String(result))
-        }
+  suspend fun init(dataStorePath: String) {
+    when (state) {
+      is LibraryState.ReadyToInitLib -> {
+        state = LibraryState.InitLibProcess
+        instance.InitFantom_J(dataStorePath)
+        debugLog("library initialized")
+        state = LibraryState.ReadyToInitResearch
       }
-    } catch (e: Exception) {
-      e.printStackTrace()
+      else -> {
+        throw NotInitializedYetException()
+      }
     }
-    return a
   }
 
   fun loadNewCtByAccessionNumber(accessionNumber: String) {
-    if (currentAccessionName != accessionNumber) {
-      currentAccessionName = accessionNumber
-      debugLog("loadNewCtByAccessionNumber")
-      getInstance().LoadCTbyAccession_J(accessionNumber)
-      debugLog("LoadNewCTbyAccession_J load success")
+    when (state) {
+      is LibraryState.ReadyToInitResearch -> {
+        state = LibraryState.InitResearchProcess
+        instance.LoadCTbyAccession_J(accessionNumber)
+        debugLog("research initialized")
+        state = LibraryState.ResearchInitialized
+      }
+      else -> {
+        throw NotInitializedYetException()
+      }
     }
   }
 
   fun getRealValue(slyceType: Int): Int {
-    return try {
-      val result = IntByReference()
-      getInstance().GetTomogramDimension_J(result, slyceType)
-      result.value
-    } catch (e: Exception) {
-      e.printStackTrace()
-      -1
+    return when (state) {
+      is LibraryState.ResearchInitialized -> {
+        val result = IntByReference()
+        instance.GetTomogramDimension_J(
+          result = result,
+          sliceType = slyceType
+        )
+        result.value
+      }
+      else -> {
+        throw NotInitializedException()
+      }
     }
   }
 
   fun getInterpolatedValue(slyceType: Int): Int {
-    return try {
-      val result = IntByReference()
-      getInstance().GetScreenDimension_J(result, slyceType)
-      result.value
-    } catch (e: Exception) {
-      e.printStackTrace()
-      -1
+    return when (state) {
+      is LibraryState.ResearchInitialized -> {
+        val result = IntByReference()
+        instance.GetScreenDimension_J(
+          result = result,
+          sliceType = slyceType
+        )
+        result.value
+      }
+      else -> {
+        throw NotInitializedException()
+      }
     }
   }
 
   fun getCoordinateNative(sliceType: Int, nativeSlicePosition: Int): Double {
-    return try {
-      val result = DoubleByReference()
-      getInstance().GetMillimeterCoordinateFromTomogramPosition_J(
-        result,
-        sliceType,
-        nativeSlicePosition
-      )
-      result.value
-    } catch (e: Exception) {
-      e.printStackTrace()
-      -1.0
+    return when (state) {
+      is LibraryState.ResearchInitialized -> {
+        val result = DoubleByReference()
+        instance.GetMillimeterCoordinateFromTomogramPosition_J(
+          resultCoord = result,
+          sliceType = sliceType,
+          nativeSlicePosition = nativeSlicePosition
+        )
+        result.value
+      }
+      else -> {
+        throw NotInitializedException()
+      }
     }
   }
 
@@ -103,13 +96,19 @@ object MarkTomogrammObject {
     sliceType: Int,
     rescaledSliceNo: Int
   ): Double {
-    return try {
-      val result = DoubleByReference()
-      getInstance().GetDatabaseCoordinateFromScreenPosition_J(result, sliceType, rescaledSliceNo)
-      result.value
-    } catch (e: Exception) {
-      e.printStackTrace()
-      -1.0
+    return when (state) {
+      is LibraryState.ResearchInitialized -> {
+        val result = DoubleByReference()
+        instance.GetDatabaseCoordinateFromScreenPosition_J(
+          resultCoord = result,
+          sliceType = sliceType,
+          rescaledSliceNo = rescaledSliceNo
+        )
+        result.value
+      }
+      else -> {
+        throw NotInitializedException()
+      }
     }
   }
 
@@ -118,18 +117,20 @@ object MarkTomogrammObject {
     rescaledSliceNo: Int,
     interpolateZ: Boolean
   ): Int {
-    return try {
-      val result = IntByReference()
-      getInstance().GetTomogramLocationFromScreenCoordinate_J(
-        result,
-        sliceType,
-        rescaledSliceNo,
-        interpolateZ
-      )
-      result.value
-    } catch (e: Exception) {
-      e.printStackTrace()
-      -1
+    return when (state) {
+      is LibraryState.ResearchInitialized -> {
+        val result = IntByReference()
+        instance.GetTomogramLocationFromScreenCoordinate_J(
+          resultPixelCoord = result,
+          sliceType = sliceType,
+          rescaledSliceNo = rescaledSliceNo,
+          interpolateZ = interpolateZ
+        )
+        result.value
+      }
+      else -> {
+        throw NotInitializedException()
+      }
     }
   }
 
@@ -138,13 +139,20 @@ object MarkTomogrammObject {
     frontalCoord: Int,
     sagittalCoord: Int
   ): Double {
-    return try {
-      val result = DoubleByReference()
-      getInstance().GetPointHU_J(result, axialCoord, frontalCoord, sagittalCoord)
-      result.value
-    } catch (e: Exception) {
-      e.printStackTrace()
-      -1.0
+    return when (state) {
+      is LibraryState.ResearchInitialized -> {
+        val result = DoubleByReference()
+        instance.GetPointHU_J(
+          resultValue = result,
+          axialCoord = axialCoord,
+          frontalCoord = frontalCoord,
+          sagittalCoord = sagittalCoord
+        )
+        result.value
+      }
+      else -> {
+        throw NotInitializedException()
+      }
     }
   }
 
@@ -152,31 +160,55 @@ object MarkTomogrammObject {
     sliceType: Int,
     originalSliceNumber: Int
   ): Int {
-    return try {
-      val result = IntByReference()
-      getInstance().GetScreenCoordinateFromTomogramLocation_J(
-        result,
-        sliceType,
-        originalSliceNumber
-      )
-      result.value
-    } catch (e: Exception) {
-      e.printStackTrace()
-      -1
+    return when (state) {
+      is LibraryState.ResearchInitialized -> {
+        val result = IntByReference()
+        instance.GetScreenCoordinateFromTomogramLocation_J(
+          resultRescaledPixelCoord = result,
+          sliceType = sliceType,
+          originalSLiceNumber = originalSliceNumber
+        )
+        result.value
+      }
+      else -> {
+        throw NotInitializedException()
+      }
     }
   }
 
   fun getPixelLengthCoef(): Double {
-    return try {
-      val result = DoubleByReference()
-      getInstance().GetPixelLengthCoefficient_J(result)
-      result.value
-    } catch (e: Exception) {
-      e.printStackTrace()
-      -1.0
+    return when (state) {
+      is LibraryState.ResearchInitialized -> {
+        val result = DoubleByReference()
+        instance.GetPixelLengthCoefficient_J(result)
+        result.value
+      }
+      else -> {
+        throw NotInitializedException()
+      }
     }
   }
 
+  fun getAccNames(): Array<String> {
+    return when (state) {
+      is LibraryState.ResearchInitialized -> {
+        val ptrRef = PointerByReference()
+        val length = IntByReference()
+
+        instance.GetStudiesIDs_J(ptrRef, length)
+        val pointer: Pointer? = ptrRef.value
+        val result = pointer?.getByteArray(0, length.value)
+        if (result != null) {
+          Pattern.compile("\t").split(String(result))
+        } else {
+          arrayOf()
+        }
+      }
+      else -> {
+        throw NotInitializedException()
+      }
+    }
+  }
 
   fun getSlice(
     black: Double,
@@ -188,28 +220,28 @@ object MarkTomogrammObject {
     aproxSize: Int
   ): ByteArray? {
 
-    debugLog("getSlice, type = $sliceType")
-    try {
-      val length = IntByReference()
-      val ptrRef = PointerByReference()
+    return when (state) {
+      is LibraryState.ResearchInitialized -> {
+        val length = IntByReference()
+        val ptrRef = PointerByReference()
 
-      getInstance().GetSlice_J(
-        ptrRef,
-        length,
-        sliceType,
-        sliceNumber,
-        black,
-        white,
-        gamma,
-        aproxSize,
-        mipMethod
-      ).apply {
+        instance.GetSlice_J(
+          result = ptrRef,
+          length = length,
+          sliceType = sliceType,
+          rescaledSliceNo = sliceNumber,
+          black = black,
+          white = white,
+          gamma = gamma,
+          aproxSize = aproxSize,
+          mipMethod = mipMethod
+        )
         val pointer: Pointer? = ptrRef.value
-        return pointer?.getByteArray(0, length.value)
+        pointer?.getByteArray(0, length.value)
       }
-    } catch (e: Exception) {
-      e.printStackTrace()
+      else -> {
+        throw NotInitializedException()
+      }
     }
-    return ByteArray(0)
   }
 }

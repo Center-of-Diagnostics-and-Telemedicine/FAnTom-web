@@ -17,6 +17,7 @@ fun init() {
     val pass = hash("vfrcbv16")
     val userByCredentials = getUserByCredentials(UserPasswordCredential(login, pass))
     if (userByCredentials == null) {
+
       UserVos.insertIgnore {
         it[name] = login
         it[password] = pass

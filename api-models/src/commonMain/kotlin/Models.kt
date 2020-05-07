@@ -69,7 +69,23 @@ sealed class ApiResponse(val errorCode: Int? = null) {
   ) : ApiResponse()
 
   @Serializable
-  data class SliceResponse(val image: String): ApiResponse()
+  data class SliceResponse(val image: ByteArray): ApiResponse() {
+
+    override fun equals(other: Any?): Boolean {
+      if (this === other) return true
+      if (other == null || this::class != other::class) return false
+
+      other as SliceResponse
+
+      if (!image.contentEquals(other.image)) return false
+
+      return true
+    }
+
+    override fun hashCode(): Int {
+      return image.contentHashCode()
+    }
+  }
 
   @Serializable
   data class HounsfieldResponse(val huValue: Double): ApiResponse()

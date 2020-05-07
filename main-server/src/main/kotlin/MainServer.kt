@@ -3,6 +3,7 @@ import controller.ResearchController
 import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.auth.Authentication
+import io.ktor.auth.authenticate
 import io.ktor.auth.jwt.jwt
 import io.ktor.features.*
 import io.ktor.gson.GsonConverter
@@ -14,20 +15,13 @@ import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import org.apache.http.auth.AuthenticationException
-import org.jetbrains.exposed.sql.Database
 import useCases.*
 
 
 fun main() {
-  embeddedServer(Netty, 80) {
+  val jwt = "jwt"
 
-    // Database
-    Database.connect(
-      url = "jdbc:mysql://localhost:3306/mark_tomogram?characterEncoding=utf8&useUnicode=true",
-      driver = "com.mysql.jdbc.Driver",
-      user = "root",
-      password = "vfrcbv16"
-    )
+  embeddedServer(Netty, 80) {
 
     // Serialize json
     install(ContentNegotiation) {
@@ -42,11 +36,10 @@ fun main() {
       }
     }
     install(DefaultHeaders)
-    install(ConditionalHeaders)
     install(CallLogging)
     install(ConditionalHeaders)
     install(Authentication) {
-      jwt("jwt") {
+      jwt(jwt) {
         verifier(JwtConfig.verifier)
         realm = "ktor.io"
         validate {
@@ -60,19 +53,20 @@ fun main() {
 
     routing {
       login(userRepository)
-      register(userRepository)
-      researchesList(researchRepository, userResearchRepository, marksRepository)
-      initResearch(researchRepository, sessionRepository)
-      getSlice(researchRepository, sessionRepository)
-      hounsfield(sessionRepository)
-      mark(marksRepository)
-      closeSession(researchRepository, sessionRepository)
+
+      authenticate(jwt) {
+        register(userRepository)
+        researchesList(researchRepository, userResearchRepository, marksRepository)
+        initResearch(researchRepository, sessionRepository)
+        getSlice(researchRepository, sessionRepository)
+        hounsfield(sessionRepository)
+        mark(marksRepository)
+        closeSession(researchRepository, sessionRepository)
+      }
+
     }
 
 //    DBMigration.migrate()
-
-    // Modules
-    main(LoginController(), ResearchController())
   }.start(wait = true)
 
 }

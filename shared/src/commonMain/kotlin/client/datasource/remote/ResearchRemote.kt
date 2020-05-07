@@ -4,7 +4,7 @@ import model.*
 
 interface ResearchRemote {
   suspend fun getResearches(token: String): List<Research>
-  suspend fun initResearch(token: String, researchId: Int): ResearchInitResponse
+  suspend fun initResearch(token: String, researchId: Int): ApiResponse.ResearchInitResponse
   suspend fun getSlice(token: String, request: SliceRequest, researchId: Int): String
   suspend fun createMark(token: String, request: NewMarkRequest): SelectedArea
   suspend fun deleteMark(selectedArea: SelectedArea, token: String)

@@ -7,7 +7,7 @@ import model.*
 interface RemoteLibraryRepository {
   val libraryContainerId: String
   suspend fun initResearch(accessionNumber: String): ApiResponse.ResearchInitResponse
-  suspend fun getSlice(request: SliceRequest, researchName: String): String
+  suspend fun getSlice(request: SliceRequest, researchName: String): ByteArray
   suspend fun hounsfield(axialCoord: Int, frontalCoord: Int, sagittalCoord: Int)
 }
 
@@ -37,7 +37,7 @@ class RemoteLibraryRepositoryImpl(
     }
   }
 
-  override suspend fun getSlice(request: SliceRequest, researchName: String): String {
+  override suspend fun getSlice(request: SliceRequest, researchName: String): ByteArray {
     return when (val response = remoteDataSource.getSlice(request, researchName)) {
       is ApiResponse.SliceResponse -> response.image
       is ApiResponse.ErrorResponse -> throw IllegalStateException("RemoteLibraryRepositoryImpl getSlice errorCode ${response.error}")

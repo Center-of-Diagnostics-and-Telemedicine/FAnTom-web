@@ -27,7 +27,7 @@ class ResearchRemoteDataSource : ResearchRemote {
     }.researches
   }
 
-  override suspend fun initResearch(token: String, researchId: Int): ResearchInitResponse {
+  override suspend fun initResearch(token: String, researchId: Int): ApiResponse.ResearchInitResponse {
     return client.get {
       authHeader(token)
       apiUrl("$RESEARCH_ROUTE/$INIT_ROUTE/$researchId")
@@ -87,7 +87,7 @@ class ResearchRemoteDataSource : ResearchRemote {
     token: String,
     request: HounsfieldRequest
   ): Double {
-    return client.get<HounsfieldResponse> {
+    return client.get<ApiResponse.HounsfieldResponse> {
       authHeader(token)
       apiUrl("$RESEARCH_ROUTE/$HOUNSFIELD_ROUTE?$TYPE_AXIAL=${request.axialCoord}&$TYPE_FRONTAL=${request.frontalCoord}&$TYPE_SAGITTAL=${request.sagittalCoord}")
     }.huValue
