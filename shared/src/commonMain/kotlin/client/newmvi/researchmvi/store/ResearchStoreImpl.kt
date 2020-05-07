@@ -1,7 +1,6 @@
 package client.newmvi.researchmvi.store
 
 import client.debugLog
-import client.newmvi.cut.store.*
 import client.newmvi.researchmvi.store.ResearchStore.Intent
 import client.newmvi.researchmvi.store.ResearchStore.State
 import com.badoo.reaktive.disposable.CompositeDisposable
@@ -16,19 +15,14 @@ import model.*
 
 class ResearchStoreImpl(
   private val researchDataLoader: ResearchDataLoader,
-  private val researchMarksLoader: ResearchMarksLoader,
   private val slicesSizesDataListener: Subject<ResearchSlicesSizesData>,
-  private val marksListener: Subject<List<SelectedArea>>,
-  private val areaDeleter: AreaDeleter,
   private val areaDeletedListener: Subject<Int>,
-  private val areaSaver: AreaSaver,
   private val areaSavedListener: Subject<SelectedArea>,
-  private val areaUpdater: AreaUpdater,
   private val deleteClickObservable: Subject<Boolean>,
   private val gridProcessor: GridProcessor,
   private val callToCloseResearchListener: Subject<Boolean>,
   private val callBackToResearchListListener: Subject<Boolean>,
-  private val closeResearchProcessor: CloseResearchProcessor,
+  private val confirmMarkProcessor: ConfirmCtTypeForResearchResearchProcessor,
   private val closeSessionProcessor: CloseSessionProcessor
 ) : ResearchStore {
 
@@ -57,9 +51,6 @@ class ResearchStoreImpl(
       is Intent.Init -> {
         loadData(intent.researchId)
       }
-      is Intent.DeleteMark -> delete(intent.areaId)
-      is Intent.SaveMark -> save(intent.areaToSave)
-      is Intent.UpdateMark -> update(intent.areaToUpdate)
       is Intent.DeleteCalled -> {
         deleteClickObservable.onNext(true)
         null
@@ -144,15 +135,17 @@ class ResearchStoreImpl(
   //todo(использовать как метод сохранения отметок)
   private fun close(ctType: CTType, leftPercent: Int, rightPercent: Int): Disposable? {
     onResult(Effect.LoadingStarted)
-    return closeResearchProcessor
-      .close(ctType, leftPercent, rightPercent, state.researchId)
+    return confirmMarkProcessor
+      .confirm(ctType, leftPercent, rightPercent, state.researchId)
       .observeOn(computationScheduler)
       .map {
         when (it) {
-          is CloseResearchProcessor.Result.Success -> {
+          is ConfirmCtTypeForResearchResearchProcessor.Result.Success -> {
             Effect.Close
           }
-          is CloseResearchProcessor.Result.Error -> Effect.LoadingFailed(it.message)
+          is ConfirmCtTypeForResearchResearchProcessor.Result.Error -> Effect.LoadingFailed(it.message)
+          is ConfirmCtTypeForResearchResearchProcessor.Result.SessionExpired ->
+            Effect.LoadingFailed(SESSION_EXPIRED)
         }
       }
       .observeOn(mainScheduler)
@@ -176,60 +169,13 @@ class ResearchStoreImpl(
 //              loadMarks(researchId)
               Effect.DataLoaded(it.researchData, gridModel = gridProcessor.init(it.researchData))
             }
+            is ResearchDataLoader.Result.SessionExpired -> Effect.LoadingFailed(SESSION_EXPIRED)
             is ResearchDataLoader.Result.Error -> Effect.LoadingFailed(it.message)
           }
         }
         .observeOn(mainScheduler)
         .subscribe(onSuccess = ::onResult)
     }
-
-  private fun save(areaToSave: AreaToSave): Disposable? =
-    areaSaver
-      .save(areaToSave, state.researchId)
-      .observeOn(computationScheduler)
-      .map {
-        when (it) {
-          is AreaSaver.Result.Success -> {
-            areaSavedListener.onNext(it.areaWithId)
-            Effect.AreaSaved
-          }
-          is AreaSaver.Result.Error -> Effect.AreaSaveError(it.message)
-        }
-      }
-      .observeOn(mainScheduler)
-      .subscribe(onSuccess = ::onResult)
-
-  private fun update(areaToUpdate: SelectedArea): Disposable? =
-    areaUpdater
-      .update(areaToUpdate)
-      .observeOn(computationScheduler)
-      .map {
-        when (it) {
-          is AreaUpdater.Result.Success -> {
-            areaSavedListener.onNext(it.area)
-            Effect.AreaUpdated
-          }
-          is AreaUpdater.Result.Error -> Effect.AreaDeleteError(it.message)
-        }
-      }
-      .observeOn(mainScheduler)
-      .subscribe(onSuccess = ::onResult)
-
-  private fun delete(areaId: Int): Disposable? =
-    areaDeleter
-      .delete(areaId)
-      .observeOn(computationScheduler)
-      .map {
-        when (it) {
-          is AreaDeleter.Result.Success -> {
-            areaDeletedListener.onNext(it.deletedAreaId)
-            Effect.AreaDeleted
-          }
-          is AreaDeleter.Result.Error -> Effect.AreaDeleteError(it.message)
-        }
-      }
-      .observeOn(mainScheduler)
-      .subscribe(onSuccess = ::onResult)
 
   private fun closeSession(): Disposable? {
     onResult(Effect.LoadingStarted)
@@ -242,6 +188,7 @@ class ResearchStoreImpl(
             Effect.Close
           }
           is CloseSessionProcessor.Result.Error -> Effect.LoadingFailed(it.message)
+          CloseSessionProcessor.Result.SessionExpired -> Effect.LoadingFailed(SESSION_EXPIRED)
         }
       }
       .observeOn(mainScheduler)

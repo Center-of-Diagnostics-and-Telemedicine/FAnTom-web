@@ -8,9 +8,6 @@ import model.*
 
 class ResearchBinder(
   private val store: ResearchStore,
-  private val deleteAreaObservable: Observable<Int>,
-  private val newAreaObservable: Observable<AreaToSave>,
-  private val areaToUpdateObservable: Observable<SelectedArea>,
   private val changeCutTypeModelObservable: Observable<ChangeCutTypeModel>,
   private val closeResearchObservable: Observable<CloseCommands>
 ) {
@@ -36,21 +33,6 @@ class ResearchBinder(
         .map(ResearchStateToViewModelMapper::invoke)
         .subscribe(onNext = { requireNotNull(view).show(it) })
     )
-
-    disposables.add(
-      deleteAreaObservable
-        .map { ResearchStore.Intent.DeleteMark(it) }
-        .subscribe(onNext = store::accept))
-
-    disposables.add(
-      newAreaObservable
-        .map { ResearchStore.Intent.SaveMark(it) }
-        .subscribe(onNext = store::accept))
-
-    disposables.add(
-      areaToUpdateObservable
-        .map { ResearchStore.Intent.UpdateMark(it) }
-        .subscribe(onNext = store::accept))
 
     disposables.add(
       changeCutTypeModelObservable

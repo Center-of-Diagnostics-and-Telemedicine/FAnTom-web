@@ -1,13 +1,27 @@
 package client.newmvi.cut.store
 
-import com.badoo.reaktive.coroutinesinterop.singleFromCoroutine
-import com.badoo.reaktive.scheduler.ioScheduler
-import com.badoo.reaktive.single.Single
-import com.badoo.reaktive.single.map
-import com.badoo.reaktive.single.onErrorReturnValue
-import com.badoo.reaktive.single.subscribeOn
+import client.ResearchApiExceptions
 import client.domain.repository.ResearchRepository
+import com.badoo.reaktive.annotations.EventsOnAnyScheduler
+import com.badoo.reaktive.coroutinesinterop.singleFromCoroutine
+import com.badoo.reaktive.scheduler.computationScheduler
+import com.badoo.reaktive.single.*
+import model.GET_SLICE_FAILED
 import model.SliceData
+
+interface CutLoader {
+
+  @EventsOnAnyScheduler
+  fun load(
+    sliceData: SliceData
+  ): Single<Result>
+
+  sealed class Result {
+    data class Error(val message: String) : Result()
+    class Success(val url: ByteArray) : Result()
+    object SessionExpired : Result()
+  }
+}
 
 class CutLoaderImpl(
   private val repository: ResearchRepository
@@ -27,6 +41,15 @@ class CutLoaderImpl(
       )
     }
       .map(CutLoader.Result::Success)
-      .subscribeOn(ioScheduler)
-      .onErrorReturnValue(CutLoader.Result.Error("Произошла ошибка"))
+      .onErrorResumeNext {
+        when (it) {
+          is ResearchApiExceptions.ResearchListFetchException -> CutLoader.Result.Error(it.error).toSingle()
+          is ResearchApiExceptions.ResearchNotFoundException ->
+            CutLoader.Result.Error(it.error).toSingle()
+
+          is ResearchApiExceptions.SessionExpiredException -> CutLoader.Result.SessionExpired.toSingle()
+          else -> CutLoader.Result.Error(GET_SLICE_FAILED).toSingle()
+        }
+      }
+      .subscribeOn(computationScheduler)
 }

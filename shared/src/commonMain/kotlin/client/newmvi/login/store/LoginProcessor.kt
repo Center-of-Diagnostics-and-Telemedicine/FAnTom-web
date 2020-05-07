@@ -1,13 +1,14 @@
 package client.newmvi.login.store
 
+import client.ResearchApiExceptions
+import client.domain.repository.LoginRepository
 import com.badoo.reaktive.annotations.EventsOnAnyScheduler
 import com.badoo.reaktive.coroutinesinterop.singleFromCoroutine
-import com.badoo.reaktive.single.Single
-import com.badoo.reaktive.single.map
-import com.badoo.reaktive.single.onErrorReturnValue
-import client.domain.repository.LoginRepository
+import com.badoo.reaktive.single.*
+import model.AUTH_FAILED
 
 interface LoginProcessor {
+
   @EventsOnAnyScheduler
   fun auth(login: String, password: String): Single<Result>
 
@@ -17,6 +18,7 @@ interface LoginProcessor {
   sealed class Result {
     object Success : Result()
     data class Error(val message: String) : Result()
+    object InvalidCredentials : Result()
   }
 }
 
@@ -29,7 +31,13 @@ class LoginProcessorImpl(
       repository.auth(login, password)
     }
       .map { LoginProcessor.Result.Success }
-      .onErrorReturnValue(LoginProcessor.Result.Error("Произошла ошибка при авторизации"))
+      .onErrorResumeNext {
+        when (it) {
+          is ResearchApiExceptions.AuthFailedException -> LoginProcessor.Result.Error(it.error).toSingle()
+          is ResearchApiExceptions.InvalidAuthCredentials -> LoginProcessor.Result.InvalidCredentials.toSingle()
+          else -> LoginProcessor.Result.Error(AUTH_FAILED).toSingle()
+        }
+      }
 
   override fun tryToAuth(): Single<LoginProcessor.Result> =
     singleFromCoroutine {

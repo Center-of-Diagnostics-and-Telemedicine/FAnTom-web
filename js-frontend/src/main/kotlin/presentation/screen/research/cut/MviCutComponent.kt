@@ -17,7 +17,7 @@ class MviCutComponent(props: MviCutProps) : RComponent<MviCutProps, MviCutState>
   private lateinit var binder: CutBinder
 
   override fun MviCutState.init(props: MviCutProps) {
-    src = ""
+    src = byteArrayOf()
     loading = false
     error = ""
     binder = injectCut(props.cutType)
@@ -80,7 +80,7 @@ interface MviCutProps : RProps {
 }
 
 interface MviCutState : RState {
-  var src: String
+  var src: ByteArray
   var loading: Boolean
   var error: String
 }

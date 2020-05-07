@@ -3,19 +3,14 @@ package client.datasource.remote
 import model.*
 
 interface ResearchRemote {
-  suspend fun getResearches(token: String): List<Research>
-  suspend fun initResearch(token: String, researchId: Int): ApiResponse.ResearchInitResponse
-  suspend fun getSlice(token: String, request: SliceRequest, researchId: Int): String
-  suspend fun createMark(token: String, request: NewMarkRequest): SelectedArea
-  suspend fun deleteMark(selectedArea: SelectedArea, token: String)
-  suspend fun deleteMark(areaId: Int, token: String)
-  suspend fun getMarks(researchId: Int, token: String): List<SelectedArea>
-  suspend fun updateMark(selectedArea: SelectedArea, token: String): SelectedArea
+  suspend fun getResearches(token: String): ApiResponse
+  suspend fun initResearch(token: String, researchId: Int): ApiResponse
+  suspend fun getSlice(token: String, request: SliceRequest, researchId: Int): ApiResponse
   suspend fun getHounsfieldData(
     token: String,
     request: HounsfieldRequest
-  ): Double
+  ): ApiResponse
 
-  suspend fun closeResearch(token: String, request: ConfirmCTTypeRequest)
-  suspend fun closeSession(token: String)
+  suspend fun confirmCtTypeForResearch(token: String, request: ConfirmCTTypeRequest): ApiResponse
+  suspend fun closeSession(token: String): ApiResponse
 }

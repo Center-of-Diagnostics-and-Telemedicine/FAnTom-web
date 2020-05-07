@@ -12,7 +12,9 @@ interface LoginStore : Disposable {
   data class State(
     val isLoading: Boolean = false,
     val error: String = "",
-    val authorized: Boolean = false
+    val authorized: Boolean = false,
+    val loginError: Boolean = false,
+    val passwordError: Boolean = false
   )
 
   sealed class Intent {

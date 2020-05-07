@@ -13,7 +13,9 @@ interface LoginView : BaseView<LoginView.Event> {
   data class LoginViewModel(
     val isLoading: Boolean,
     val error: String,
-    val authorized: Boolean
+    val authorized: Boolean,
+    val loginError: Boolean = false,
+    val passwordError: Boolean = false
   )
 
   sealed class Event : BaseEvent {

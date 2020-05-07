@@ -9,6 +9,8 @@ object LoginStateToViewModelMapper {
     LoginView.LoginViewModel(
       isLoading = state.isLoading,
       error = state.error,
-      authorized = state.authorized
+      authorized = state.authorized,
+      loginError = state.loginError,
+      passwordError = state.passwordError
     )
 }

@@ -21,6 +21,28 @@ fun initialResearchSlicesSizesData(): ResearchSlicesSizesData {
   )
 }
 
+fun ApiResponse.ResearchInitResponse.toResearchSlicesSizesData(): ResearchSlicesSizesData {
+  return ResearchSlicesSizesData(
+    axial = SliceSizeData(
+      maxFramesSize = axialReal,
+      height = frontalInterpolated,
+      pixelLength = pixelLength
+    ),
+    frontal = SliceSizeData(
+      maxFramesSize = frontalReal,
+      height = axialInterpolated,
+      pixelLength = pixelLength
+    ),
+    sagittal = SliceSizeData(
+      maxFramesSize = sagittalReal,
+      height = axialInterpolated,
+      pixelLength = pixelLength
+    ),
+    pixelLength = pixelLength,
+    reversed = reversed
+  )
+}
+
 fun initialSlicesSizeData(): SliceSizeData {
   return SliceSizeData(
     maxFramesSize = 0,
@@ -46,11 +68,6 @@ data class Research(
 )
 
 @Serializable
-data class ResearchesResponse(
-  val researches: List<Research>
-)
-
-@Serializable
 sealed class ApiResponse(val errorCode: Int? = null) {
 
   @Serializable
@@ -69,7 +86,7 @@ sealed class ApiResponse(val errorCode: Int? = null) {
   ) : ApiResponse()
 
   @Serializable
-  data class SliceResponse(val image: ByteArray): ApiResponse() {
+  data class SliceResponse(val image: ByteArray) : ApiResponse() {
 
     override fun equals(other: Any?): Boolean {
       if (this === other) return true
@@ -88,7 +105,16 @@ sealed class ApiResponse(val errorCode: Int? = null) {
   }
 
   @Serializable
-  data class HounsfieldResponse(val huValue: Double): ApiResponse()
+  data class HounsfieldResponse(val huValue: Double) : ApiResponse()
+
+  @Serializable
+  data class ResearchesResponse(val researches: List<Research>) : ApiResponse()
+
+  @Serializable
+  object OK : ApiResponse(0)
+
+  @Serializable
+  data class AuthorizationResponse(val token: String) : ApiResponse()
 
 }
 
@@ -152,9 +178,6 @@ data class SliceRequest(
   val sliceNumber: Int,
   val mipValue: Int
 )
-
-@Serializable
-data class AuthorizationResponse(val token: String)
 
 @Serializable
 data class AuthorizationRequest(val name: String, val password: String)

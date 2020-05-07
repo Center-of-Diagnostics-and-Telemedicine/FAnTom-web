@@ -12,6 +12,7 @@ import com.badoo.reaktive.subject.behavior.BehaviorSubject
 import client.newmvi.researchlist.store.ResearchListStore.Intent
 import client.newmvi.researchlist.store.ResearchListStore.State
 import model.Research
+import model.SESSION_EXPIRED
 
 class ResearchListStoreImpl(
   private val researchListLoader: ResearchListLoader
@@ -54,7 +55,8 @@ class ResearchListStoreImpl(
         .map {
           when (it) {
             is ResearchListLoader.Result.Success -> Effect.LoadResearchesSuccess(it.data)
-            is ResearchListLoader.Result.Error -> Effect.AuthorizationFailed(it.message)
+            is ResearchListLoader.Result.Error -> Effect.Error(it.message)
+            ResearchListLoader.Result.SessionExpired -> Effect.Error(SESSION_EXPIRED)
           }
         }
         .observeOn(mainScheduler)
@@ -68,7 +70,7 @@ class ResearchListStoreImpl(
   private sealed class Effect {
     object LoadingStarted : Effect()
     data class LoadResearchesSuccess(val researches: List<Research>) : Effect()
-    data class AuthorizationFailed(val error: String) : Effect()
+    data class Error(val error: String) : Effect()
     object DismissErrorRequested : Effect()
   }
 
@@ -81,7 +83,7 @@ class ResearchListStoreImpl(
           error = "",
           data = effect.researches
         )
-        is Effect.AuthorizationFailed -> state.copy(isLoading = false, error = effect.error)
+        is Effect.Error -> state.copy(isLoading = false, error = effect.error)
         is Effect.DismissErrorRequested -> state.copy(error = "")
       }
   }

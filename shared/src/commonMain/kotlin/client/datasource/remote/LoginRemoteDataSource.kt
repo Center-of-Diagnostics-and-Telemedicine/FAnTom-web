@@ -6,8 +6,12 @@ import io.ktor.client.features.json.serializer.KotlinxSerializer
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.post
 import io.ktor.http.takeFrom
-import model.AuthorizationResponse
 import model.*
+
+interface LoginRemote {
+  suspend fun auth(login: String, password: String): ApiResponse
+  suspend fun tryToAuth(): ApiResponse
+}
 
 class LoginRemoteDataSource : LoginRemote {
 
@@ -17,17 +21,17 @@ class LoginRemoteDataSource : LoginRemote {
     }
   }
 
-  override suspend fun auth(login: String, password: String): String {
-    return client.post<AuthorizationResponse> {
+  override suspend fun auth(login: String, password: String): ApiResponse {
+    return client.post {
       apiUrl(LOGIN_ROUTE)
       body = "{ name:$login, password:$password }"
-    }.token
+    }
   }
 
-  override suspend fun tryToAuth(): String {
-    return client.post<AuthorizationResponse> {
+  override suspend fun tryToAuth(): ApiResponse {
+    return client.post {
       apiUrl(AUTH_CHECK_ROUTE)
-    }.token
+    }
   }
 
   private fun HttpRequestBuilder.apiUrl(path: String) {

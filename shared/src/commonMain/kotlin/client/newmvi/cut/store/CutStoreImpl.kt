@@ -9,15 +9,19 @@ import com.badoo.reaktive.scheduler.computationScheduler
 import com.badoo.reaktive.scheduler.mainScheduler
 import com.badoo.reaktive.single.*
 import com.badoo.reaktive.subject.behavior.BehaviorSubject
-import model.SliceData
-import model.initialSliceData
+import model.*
 
 class CutStoreImpl(
   private val loader: CutLoader,
   cutType: Int
 ) : CutStore {
 
-  private val _states = BehaviorSubject(State(url = "", sliceData = initialSliceData(cutType)))
+  private val _states = BehaviorSubject(
+    State(
+      url = byteArrayOf(),
+      sliceData = initialSliceData(cutType)
+    )
+  )
   override val states: Observable<State> = _states
   private val state: State get() = _states.value
 
@@ -62,6 +66,9 @@ class CutStoreImpl(
             is CutLoader.Result.Error -> {
               Effect.LoadingFailed(it.message)
             }
+            is CutLoader.Result.SessionExpired -> {
+              Effect.LoadingFailed(SESSION_EXPIRED)
+            }
           }
         }
         .observeOn(mainScheduler)
@@ -74,7 +81,7 @@ class CutStoreImpl(
 
   private sealed class Effect {
     object LoadingStarted : Effect()
-    class Loaded(val url: String) : Effect()
+    class Loaded(val url: ByteArray) : Effect()
     data class LoadingFailed(val error: String) : Effect()
 
     class UpdateSliceData(val sliceData: SliceData) : CutStoreImpl.Effect()

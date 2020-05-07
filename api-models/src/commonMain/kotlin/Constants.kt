@@ -148,5 +148,6 @@ enum class ErrorStringCode(val value: Int) {
     SESSION_CLOSE_FAILED(19),
     GET_SLICE_FAILED(20),
     CREATE_MARK_FAILED(21),
-    NOT_INITIALIZED_YET(22)
+    NOT_INITIALIZED_YET(22),
+    AUTH_FAILED(23)
 }

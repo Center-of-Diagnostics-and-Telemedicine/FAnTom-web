@@ -97,6 +97,10 @@ class ShapesStoreImpl(
           when (it) {
             is HounsfieldDataLoader.Result.Success -> Effect.UpdateHounsfield(it.huValue)
             is HounsfieldDataLoader.Result.Error -> Effect.HounsfieldLoadFailed(it.message)
+            is HounsfieldDataLoader.Result.AxialValueError -> Effect.Error
+            is HounsfieldDataLoader.Result.FrontalValueError -> Effect.Error
+            is HounsfieldDataLoader.Result.SagittalValueError -> Effect.Error
+            HounsfieldDataLoader.Result.SessionExpired -> Effect.Error
           }
         }
         .observeOn(mainScheduler)
@@ -115,6 +119,8 @@ class ShapesStoreImpl(
     class UpdateMoveRects(val moveRects: List<MoveRect>) : Effect()
     class UpdateHounsfield(val huValue: Double) : Effect()
     class HounsfieldLoadFailed(val message: String) : Effect()
+
+    object Error: Effect()
 
     object LoadingStarted : Effect()
     object RemovePositionData : Effect()
@@ -136,6 +142,7 @@ class ShapesStoreImpl(
         is Effect.UpdateHounsfield -> state.copy(huValue = effect.huValue, isLoading = false)
         is Effect.HounsfieldLoadFailed -> state.copy(isLoading = false)
         Effect.LoadingStarted -> state.copy(isLoading = true)
+        Effect.Error -> state
       }
   }
 }

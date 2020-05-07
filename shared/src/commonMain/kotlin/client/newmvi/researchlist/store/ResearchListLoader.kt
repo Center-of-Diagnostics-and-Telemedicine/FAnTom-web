@@ -1,11 +1,10 @@
 package client.newmvi.researchlist.store
 
+import client.ResearchApiExceptions
+import client.domain.repository.ResearchRepository
 import com.badoo.reaktive.annotations.EventsOnAnyScheduler
 import com.badoo.reaktive.coroutinesinterop.singleFromCoroutine
-import com.badoo.reaktive.single.Single
-import com.badoo.reaktive.single.map
-import com.badoo.reaktive.single.onErrorReturnValue
-import client.domain.repository.ResearchRepository
+import com.badoo.reaktive.single.*
 import model.Research
 
 interface ResearchListLoader {
@@ -15,6 +14,7 @@ interface ResearchListLoader {
 
   sealed class Result {
     data class Success(val data: List<Research>) : Result()
+    object SessionExpired : Result()
     data class Error(val message: String) : Result()
   }
 }
@@ -28,6 +28,15 @@ class ResearchListLoaderImpl(
       repository.getResearches()
     }
       .map { ResearchListLoader.Result.Success(it) }
-      .onErrorReturnValue(ResearchListLoader.Result.Error("Произошла ошибка"))
+      .onErrorResumeNext {
+        when (it) {
+          is ResearchApiExceptions.ResearchListFetchException ->
+            ResearchListLoader.Result.Error(it.error).toSingle()
 
+          is ResearchApiExceptions.SessionExpiredException ->
+            ResearchListLoader.Result.SessionExpired.toSingle()
+
+          else -> ResearchListLoader.Result.Error("Произошла ошибка").toSingle()
+        }
+      }
 }

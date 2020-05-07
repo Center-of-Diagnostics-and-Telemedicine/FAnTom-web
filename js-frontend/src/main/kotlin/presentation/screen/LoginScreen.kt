@@ -6,21 +6,28 @@ import com.ccfraser.muirwik.components.*
 import com.ccfraser.muirwik.components.button.*
 import com.ccfraser.muirwik.components.form.MFormControlMargin
 import com.ccfraser.muirwik.components.form.MFormControlVariant
-import presentation.di.injectLogin
+import debugLog
 import kotlinx.css.*
 import kotlinx.html.InputType
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.events.Event
+import presentation.di.injectLogin
+import presentation.screen.viewcomponents.alert
 import react.*
 import styled.*
 
 class LoginScreen(props: LoginProps) :
   RComponent<LoginProps, LoginState>(props), LoginView {
 
+  init {
+    state = LoginState()
+  }
+
   private val binder = injectLogin()
   override val events: PublishSubject<LoginView.Event> = PublishSubject()
 
   override fun show(model: LoginView.LoginViewModel) {
+    if (model.error.isNotEmpty()) debugLog(model.error)
     if (model.authorized) {
       props.authorized()
     } else {
@@ -39,6 +46,11 @@ class LoginScreen(props: LoginProps) :
 
   override fun RBuilder.render() {
     themeContext.Consumer { theme ->
+      alert(
+        message = state.error,
+        open = state.error.isNotEmpty(),
+        handleClose = { dispatch(LoginView.Event.ErrorShown) }
+      )
       mContainer {
         attrs {
           component = "main"
@@ -82,6 +94,7 @@ class LoginScreen(props: LoginProps) :
               name = "login",
               autoComplete = "login",
               autoFocus = true,
+              error = state.loginError,
               fullWidth = true
             ) {
               attrs {
@@ -90,6 +103,7 @@ class LoginScreen(props: LoginProps) :
                 inputLabelProps = object : RProps {
                   val shrink = true
                 }
+                onFocus = ::onFocus
               }
             }
             mTextField(
@@ -100,6 +114,7 @@ class LoginScreen(props: LoginProps) :
               name = "password",
               autoComplete = "current-password",
               type = InputType.password,
+              error = state.passwordError,
               fullWidth = true
             ) {
               attrs {
@@ -142,34 +157,6 @@ class LoginScreen(props: LoginProps) :
                 }
               }
             }
-
-//            mGridContainer {
-//              attrs {
-//                container = true
-//                alignItems = MGridAlignItems.stretch
-//                justify = MGridJustify.spaceBetween
-//              }
-//              mGridItem {
-//                attrs {
-//                  xs
-//                }
-//                mLink {
-//                  attrs {
-//                    variant = MTypographyVariant.body2
-//                  }
-//                  +"Забыли пароль?"
-//                }
-//              }
-//              mGridItem {
-//
-//                mLink {
-//                  attrs {
-//                    variant = MTypographyVariant.body2
-//                  }
-//                  +"Регистрация"
-//                }
-//              }
-//            }
           }
         }
       }
@@ -192,6 +179,12 @@ class LoginScreen(props: LoginProps) :
     }
   }
 
+  private fun onFocus(event: Event) {
+    if (state.loginError || state.passwordError) {
+      dispatch(LoginView.Event.ErrorShown)
+    }
+  }
+
   override fun componentWillUnmount() {
     binder.detachView()
     binder.onStop()
@@ -209,6 +202,8 @@ class LoginState : RState {
   var error: String = ""
   var login: String = ""
   var password: String = ""
+  var loginError: Boolean = false
+  var passwordError: Boolean = false
 }
 
 

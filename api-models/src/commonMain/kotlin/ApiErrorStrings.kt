@@ -2,6 +2,7 @@ package model
 
 const val BASE_ERROR = "Произошла ошибка сервера. Пожалуйста, попробуйте снова"
 const val INVALID_AUTH_CREDENTIALS = "Неверный логин или пароль"
+const val AUTH_FAILED = "Не удалось авторизоваться"
 const val INVALID_REGISTER_LOGIN = "Неверный логин (3 и более символов)"
 const val INVALID_REGISTER_PASSWORD = "Неверный пароль (4 и более символов)"
 const val INVALID_REGISTER_LOGIN_SIMBOLS = "Использованы запрещенные символы для логина"
@@ -17,7 +18,7 @@ const val INCORRECT_SLICE_NUMBER = "Некорректный номер срез
 const val INCORRECT_AXIAL_COORD = "Некорректная координата по аксиальному срезу"
 const val INCORRECT_FRONTAL_COORD = "Некорректный координата по фронтальному срезу"
 const val INCORRECT_SAGITTAL_COORD = "Некорректный координата по сагиттальному срезу"
-const val HOUNSFIELD_ERROR = "Не удалось получить единицы Хаунсфилда"
+const val HOUNSFIELD_FETCH_ERROR = "Не удалось получить единицы Хаунсфилда"
 const val SESSION_CLOSE_FAILED = "Не удалось закончить сессию"
 const val GET_SLICE_FAILED = "Не удалось получить срез"
 const val CREATE_MARK_FAILED = "Не удалось создать отметку"

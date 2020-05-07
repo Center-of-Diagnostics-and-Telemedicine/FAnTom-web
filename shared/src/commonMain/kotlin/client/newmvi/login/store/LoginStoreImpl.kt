@@ -1,16 +1,15 @@
 package client.newmvi.login.store
 
+import client.newmvi.login.store.LoginStore.Intent
+import client.newmvi.login.store.LoginStore.State
 import com.badoo.reaktive.disposable.CompositeDisposable
 import com.badoo.reaktive.disposable.Disposable
 import com.badoo.reaktive.observable.Observable
 import com.badoo.reaktive.scheduler.computationScheduler
 import com.badoo.reaktive.scheduler.mainScheduler
-import com.badoo.reaktive.single.map
-import com.badoo.reaktive.single.observeOn
-import com.badoo.reaktive.single.subscribe
+import com.badoo.reaktive.single.*
 import com.badoo.reaktive.subject.behavior.BehaviorSubject
-import client.newmvi.login.store.LoginStore.Intent
-import client.newmvi.login.store.LoginStore.State
+import model.INVALID_AUTH_CREDENTIALS
 
 class LoginStoreImpl(
   private val loginProcessor: LoginProcessor
@@ -38,7 +37,7 @@ class LoginStoreImpl(
         onResult(Effect.DismissErrorRequested)
         null
       }
-      is Intent.Init -> checkAuth()
+      is Intent.Init -> null//checkAuth()
 
       is Intent.Auth -> auth(intent.login, intent.password)
     }
@@ -56,6 +55,7 @@ class LoginStoreImpl(
           when (it) {
             is LoginProcessor.Result.Success -> Effect.Authorized
             is LoginProcessor.Result.Error -> Effect.AuthorizationFailed(it.message)
+            is LoginProcessor.Result.InvalidCredentials -> Effect.InvalidCredentials
           }
         }
         .observeOn(mainScheduler)
@@ -75,6 +75,7 @@ class LoginStoreImpl(
           when (it) {
             is LoginProcessor.Result.Success -> Effect.Authorized
             is LoginProcessor.Result.Error -> Effect.AuthorizationFailed(it.message)
+            is LoginProcessor.Result.InvalidCredentials -> Effect.InvalidCredentials
           }
         }
         .observeOn(mainScheduler)
@@ -90,6 +91,7 @@ class LoginStoreImpl(
     object Authorized : Effect()
     data class AuthorizationFailed(val error: String) : Effect()
     object DismissErrorRequested : Effect()
+    object InvalidCredentials : Effect()
   }
 
   private object Reducer {
@@ -98,7 +100,17 @@ class LoginStoreImpl(
         is Effect.LoadingStarted -> state.copy(isLoading = true, error = "")
         is Effect.Authorized -> state.copy(isLoading = false, error = "", authorized = true)
         is Effect.AuthorizationFailed -> state.copy(isLoading = false, error = effect.error)
-        is Effect.DismissErrorRequested -> state.copy(error = "")
+        is Effect.DismissErrorRequested -> state.copy(
+          error = "",
+          loginError = false,
+          passwordError = false
+        )
+        is Effect.InvalidCredentials -> state.copy(
+          isLoading = false,
+          error = INVALID_AUTH_CREDENTIALS,
+          loginError = true,
+          passwordError = true
+        )
       }
   }
 }

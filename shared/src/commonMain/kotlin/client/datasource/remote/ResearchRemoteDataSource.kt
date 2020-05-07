@@ -20,14 +20,17 @@ class ResearchRemoteDataSource : ResearchRemote {
     }
   }
 
-  override suspend fun getResearches(token: String): List<Research> {
-    return client.get<ResearchesResponse> {
+  override suspend fun getResearches(token: String): ApiResponse {
+    return client.get<ApiResponse/*ResearchesResponse*/> {
       authHeader(token)
       apiUrl("$RESEARCH_ROUTE/$LIST_ROUTE")
-    }.researches
+    }
   }
 
-  override suspend fun initResearch(token: String, researchId: Int): ApiResponse.ResearchInitResponse {
+  override suspend fun initResearch(
+    token: String,
+    researchId: Int
+  ): ApiResponse {
     return client.get {
       authHeader(token)
       apiUrl("$RESEARCH_ROUTE/$INIT_ROUTE/$researchId")
@@ -38,7 +41,7 @@ class ResearchRemoteDataSource : ResearchRemote {
     token: String,
     request: SliceRequest,
     researchId: Int
-  ): String {
+  ): ApiResponse {
     return client.post {
       authHeader(token)
       apiUrl("$RESEARCH_ROUTE/$researchId")
@@ -46,62 +49,28 @@ class ResearchRemoteDataSource : ResearchRemote {
     }
   }
 
-  override suspend fun createMark(token: String, request: NewMarkRequest): SelectedArea {
-    return client.post {
-      authHeader(token)
-      apiUrl(MARK_ROUTE)
-      body = Json.stringify(NewMarkRequest.serializer(), request)
-    }
-  }
-
-  override suspend fun deleteMark(selectedArea: SelectedArea, token: String) {
-    return client.delete {
-      authHeader(token)
-      apiUrl("$MARK_ROUTE/${selectedArea.id}")
-    }
-  }
-
-  override suspend fun deleteMark(areaId: Int, token: String) {
-    return client.delete {
-      authHeader(token)
-      apiUrl("$MARK_ROUTE/${areaId}")
-    }
-  }
-
-  override suspend fun getMarks(researchId: Int, token: String): List<SelectedArea> {
-    return client.get<MarksResponse> {
-      authHeader(token)
-      apiUrl("$MARK_ROUTE?research_id=$researchId")
-    }.marks
-  }
-
-  override suspend fun updateMark(selectedArea: SelectedArea, token: String): SelectedArea {
-    return client.put {
-      authHeader(token)
-      apiUrl("$MARK_ROUTE/${selectedArea.id}")
-      body = Json.stringify(SelectedArea.serializer(), selectedArea)
-    }
-  }
-
   override suspend fun getHounsfieldData(
     token: String,
     request: HounsfieldRequest
-  ): Double {
-    return client.get<ApiResponse.HounsfieldResponse> {
+  ): ApiResponse {
+    return client.get {
       authHeader(token)
       apiUrl("$RESEARCH_ROUTE/$HOUNSFIELD_ROUTE?$TYPE_AXIAL=${request.axialCoord}&$TYPE_FRONTAL=${request.frontalCoord}&$TYPE_SAGITTAL=${request.sagittalCoord}")
-    }.huValue
+    }
   }
 
-  override suspend fun closeResearch(token: String, request: ConfirmCTTypeRequest) {
+  override suspend fun confirmCtTypeForResearch(
+    token: String,
+    request: ConfirmCTTypeRequest
+  ): ApiResponse {
     return client.post {
       authHeader(token)
-      apiUrl("$RESEARCH_ROUTE/$CLOSE_ROUTE/${request.researchId}")
+      apiUrl("$RESEARCH_ROUTE/${request.researchId}/$MARK_ROUTE")
       body = Json.stringify(ConfirmCTTypeRequest.serializer(), request)
     }
   }
 
-  override suspend fun closeSession(token: String) {
+  override suspend fun closeSession(token: String): ApiResponse {
     return client.get {
       authHeader(token)
       apiUrl("$SESSION_ROUTE/$CLOSE_ROUTE")

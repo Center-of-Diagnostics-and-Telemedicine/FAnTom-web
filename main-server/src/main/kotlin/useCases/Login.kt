@@ -27,7 +27,7 @@ fun Route.login(repository: UserRepository) {
       call.respond(ApiResponse.ErrorResponse(ErrorStringCode.INVALID_AUTH_CREDENTIALS.value))
     } else {
       val token = JwtConfig.makeToken(userModel = user)
-      call.respond(AuthorizationResponse(token = token))
+      call.respond(ApiResponse.AuthorizationResponse(token = token))
     }
   }
 }

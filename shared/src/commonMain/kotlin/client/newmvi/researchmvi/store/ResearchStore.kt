@@ -24,10 +24,7 @@ interface ResearchStore : Disposable {
   sealed class Intent {
     data class Init(val researchId: Int) : Intent()
     object Clear : Intent()
-    class DeleteMark(val areaId: Int) : Intent()
     object DeleteCalled : Intent()
-    class SaveMark(val areaToSave: AreaToSave) : Intent()
-    class UpdateMark(val areaToUpdate: SelectedArea) : Intent()
     class ChangeGrid(val type: CutsGridType) : Intent()
     class ChangeCutType(val newCutType: ChangeCutTypeModel) : Intent()
     class OpenCell(val cellModel: CellModel) : Intent()
