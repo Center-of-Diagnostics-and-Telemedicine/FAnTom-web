@@ -19,9 +19,10 @@ class LoginRepositoryImpl(
 
   override suspend fun auth(login: String, password: String) {
     debugLog("repository:    name: $login password:$password")
-    return when (val response = remote.auth(login, password)) {
-      is ApiResponse.AuthorizationResponse -> local.saveToken(token = response.token)
-      is ApiResponse.ErrorResponse -> handleErrorResponse(response)
+    val response = remote.auth(login, password)
+    return when {
+      response.response != null -> local.saveToken(token = response.response!!.token)
+      response.error != null -> handleErrorResponse(response.error!!)
       else -> throw ResearchApiExceptions.AuthFailedException
     }
 
@@ -36,8 +37,8 @@ class LoginRepositoryImpl(
     }
   }
 
-  private fun <T : Any> handleErrorResponse(response: ApiResponse.ErrorResponse): T {
-    when (response.errorCode) {
+  private fun <T : Any> handleErrorResponse(errorModel: ErrorModel): T {
+    when (errorModel.error) {
       ErrorStringCode.AUTH_FAILED.value -> throw ResearchApiExceptions.AuthFailedException
       ErrorStringCode.INVALID_AUTH_CREDENTIALS.value -> throw ResearchApiExceptions.InvalidAuthCredentials
       else -> throw Exception(BASE_ERROR)

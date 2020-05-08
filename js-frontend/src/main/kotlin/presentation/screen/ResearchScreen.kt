@@ -154,7 +154,7 @@ class ResearchScreen(props: ResearchProps) :
       mDialogActions {
         mButton(
           variant = MButtonVariant.contained,
-          caption = "Отмента",
+          caption = "Отмена",
           color = MColor.primary,
           onClick = { closeAlertDialog() })
         mButton(

@@ -3,6 +3,25 @@ package model
 import kotlinx.serialization.Serializable
 
 @Serializable
+data class ErrorModel(val error: Int, val message: String = "")
+
+@Serializable
+data class AuthorizationResponse(
+  val response: AuthorizationModel? = null,
+  val error: ErrorModel? = null
+)
+
+@Serializable
+data class AuthorizationModel(val token: String)
+
+@Serializable
+data class ResearchInitResponse(
+  val response: ResearchInitModel? = null,
+  val error: ErrorModel? = null
+)
+
+
+@Serializable
 data class ResearchSlicesSizesData(
   val axial: SliceSizeData,
   val frontal: SliceSizeData,
@@ -21,7 +40,7 @@ fun initialResearchSlicesSizesData(): ResearchSlicesSizesData {
   )
 }
 
-fun ApiResponse.ResearchInitResponse.toResearchSlicesSizesData(): ResearchSlicesSizesData {
+fun ResearchInitModel.toResearchSlicesSizesData(): ResearchSlicesSizesData {
   return ResearchSlicesSizesData(
     axial = SliceSizeData(
       maxFramesSize = axialReal,
@@ -67,56 +86,72 @@ data class Research(
   val marked: Boolean
 )
 
+
 @Serializable
-sealed class ApiResponse(val errorCode: Int? = null) {
+data class ResearchInitModel(
+  val axialReal: Int,
+  val axialInterpolated: Int,
+  val frontalReal: Int,
+  val frontalInterpolated: Int,
+  val sagittalReal: Int,
+  val sagittalInterpolated: Int,
+  val pixelLength: Double,
+  val reversed: Boolean
+)
 
-  @Serializable
-  data class ErrorResponse(val error: Int, val message: String = "") : ApiResponse(error)
+@Serializable
+data class SliceResponse(
+  val response: SliceModel? = null,
+  val error: ErrorModel? = null
+)
 
-  @Serializable
-  data class ResearchInitResponse(
-    val axialReal: Int,
-    val axialInterpolated: Int,
-    val frontalReal: Int,
-    val frontalInterpolated: Int,
-    val sagittalReal: Int,
-    val sagittalInterpolated: Int,
-    val pixelLength: Double,
-    val reversed: Boolean
-  ) : ApiResponse()
+@Serializable
+data class SliceModel(val image: ByteArray) {
 
-  @Serializable
-  data class SliceResponse(val image: ByteArray) : ApiResponse() {
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (other == null || this::class != other::class) return false
 
-    override fun equals(other: Any?): Boolean {
-      if (this === other) return true
-      if (other == null || this::class != other::class) return false
+    other as SliceModel
 
-      other as SliceResponse
+    if (!image.contentEquals(other.image)) return false
 
-      if (!image.contentEquals(other.image)) return false
-
-      return true
-    }
-
-    override fun hashCode(): Int {
-      return image.contentHashCode()
-    }
+    return true
   }
 
-  @Serializable
-  data class HounsfieldResponse(val huValue: Double) : ApiResponse()
-
-  @Serializable
-  data class ResearchesResponse(val researches: List<Research>) : ApiResponse()
-
-  @Serializable
-  object OK : ApiResponse(0)
-
-  @Serializable
-  data class AuthorizationResponse(val token: String) : ApiResponse()
+  override fun hashCode(): Int {
+    return image.contentHashCode()
+  }
 
 }
+
+@Serializable
+data class HounsfieldResponse(
+  val response: HounsfieldModel? = null,
+  val error: ErrorModel? = null
+)
+
+@Serializable
+data class HounsfieldModel(val huValue: Double)
+
+
+@Serializable
+data class ResearchesResponse(
+  val response: ResearchesModel? = null,
+  val error: ErrorModel? = null
+)
+
+@Serializable
+data class ResearchesModel(val researches: List<Research>)
+
+@Serializable
+data class BaseResponse(
+  val response: OK? = null,
+  val error: ErrorModel? = null
+)
+
+@Serializable
+data class OK(val status: String = "ok")
 
 @Serializable
 data class MarksResponse(
@@ -140,7 +175,7 @@ data class SelectedArea(
   val x: Double,
   val y: Double,
   val z: Double,
-  val type: AreaType,
+  val areaType: AreaType,
   val radius: Double,
   val size: Double,
   val id: Int,
@@ -173,7 +208,7 @@ data class SliceRequest(
   val black: Double,
   val white: Double,
   val gamma: Double,
-  val type: Int,
+  val sliceType: Int,
   val mipMethod: Int,
   val sliceNumber: Int,
   val mipValue: Int

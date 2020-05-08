@@ -7,9 +7,9 @@ import util.debugLog
 
 interface RemoteLibraryRepository {
   val libraryContainerId: String
-  suspend fun initResearch(accessionNumber: String): ApiResponse.ResearchInitResponse
+  suspend fun initResearch(accessionNumber: String): ResearchInitModel
   suspend fun getSlice(request: SliceRequest, researchName: String): ByteArray
-  suspend fun hounsfield(axialCoord: Int, frontalCoord: Int, sagittalCoord: Int)
+  suspend fun hounsfield(axialCoord: Int, frontalCoord: Int, sagittalCoord: Int): Double
 }
 
 class RemoteLibraryRepositoryImpl(
@@ -17,14 +17,24 @@ class RemoteLibraryRepositoryImpl(
   override val libraryContainerId: String
 ) : RemoteLibraryRepository {
 
-  override suspend fun initResearch(accessionNumber: String): ApiResponse.ResearchInitResponse {
-    return when (val response = remoteDataSource.initResearch(accessionNumber)) {
-      is ApiResponse.ResearchInitResponse -> {
+  override suspend fun initResearch(accessionNumber: String): ResearchInitModel {
+    val response = try {
+      remoteDataSource.initResearch(accessionNumber)
+    } catch (e: Exception) {
+      debugLog("maybe not initialized")
+      delay(1000)
+      debugLog("calling to initialize again")
+      return initResearch(accessionNumber)
+    }
+
+    debugLog(response.toString())
+    return when {
+      response.response != null -> {
         debugLog("ResearchInitResponse income")
-        return response
+        return response.response!!
       }
-      is ApiResponse.ErrorResponse -> {
-        when (response.error) {
+      response.error != null -> {
+        when (response.error!!.error) {
           ErrorStringCode.NOT_INITIALIZED_YET.value -> {
             debugLog("not initialized yet income")
             delay(1000)
@@ -42,17 +52,19 @@ class RemoteLibraryRepositoryImpl(
   }
 
   override suspend fun getSlice(request: SliceRequest, researchName: String): ByteArray {
-    return when (val response = remoteDataSource.getSlice(request, researchName)) {
-      is ApiResponse.SliceResponse -> response.image
-      is ApiResponse.ErrorResponse -> throw IllegalStateException("RemoteLibraryRepositoryImpl getSlice errorCode ${response.error}")
+    val response = remoteDataSource.getSlice(request, researchName)
+    return when {
+      response.response != null -> response.response!!.image
+      response.error != null -> throw IllegalStateException("RemoteLibraryRepositoryImpl getSlice errorCode ${response.error?.error}")
       else -> throw IllegalStateException("RemoteLibraryRepositoryImpl getSlice unrecognized response")
     }
   }
 
-  override suspend fun hounsfield(axialCoord: Int, frontalCoord: Int, sagittalCoord: Int) {
-    when (val response = remoteDataSource.getHounsfield(axialCoord, frontalCoord, sagittalCoord)) {
-      is ApiResponse.HounsfieldResponse -> response.huValue
-      is ApiResponse.ErrorResponse -> throw IllegalStateException("RemoteLibraryRepositoryImpl hounsfield errorCode ${response.error}")
+  override suspend fun hounsfield(axialCoord: Int, frontalCoord: Int, sagittalCoord: Int): Double {
+    val response = remoteDataSource.getHounsfield(axialCoord, frontalCoord, sagittalCoord)
+    return when {
+      response.response != null -> response.response!!.huValue
+      response.error != null -> throw IllegalStateException("RemoteLibraryRepositoryImpl hounsfield errorCode ${response.error?.error}")
       else -> throw IllegalStateException("RemoteLibraryRepositoryImpl hounsfield unrecognized response")
     }
   }

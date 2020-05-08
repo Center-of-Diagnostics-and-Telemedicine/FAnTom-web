@@ -3,11 +3,10 @@ import model.*
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import util.csv_store_path
-import util.database
 import java.io.*
 
 fun init() {
-  database {
+  transaction {
     SchemaUtils.create(
       UserVos,
       ResearchVos,
@@ -86,14 +85,14 @@ fun init() {
 //  }
 }
 
-fun getUser(id: Int): UserModel = database {
+fun getUser(id: Int): UserModel = transaction {
   UserVos.select {
     UserVos.id eq id
   }.first()
 }.toUser()
 
 fun getUserByCredentials(credentials: UserPasswordCredential): UserModel? {
-  return database {
+  return transaction {
     UserVos.select {
       UserVos.name eq credentials.name and (UserVos.password eq hash(credentials.password))
     }.firstOrNull()
@@ -143,7 +142,7 @@ fun parseResearches(): List<ResearchCSV> {
   return resultList
 }
 
-fun createResearches(researchesCsv: List<ResearchCSV>): List<Int> = database {
+fun createResearches(researchesCsv: List<ResearchCSV>): List<Int> = transaction {
   ResearchVos.batchInsert(data = researchesCsv, ignore = true) { researchCsv ->
     this[ResearchVos.accessionNumber] = researchCsv.accessionNumber
     this[ResearchVos.studyInstanceUID] = researchCsv.studyInstanceUID
@@ -198,7 +197,7 @@ fun updateResearchUser(
   docResearchesCSV: List<DoctorResearchesCSV>,
   doctorNumber: Int
 ) {
-  database {
+  transaction {
     UserVos.select {
       UserVos.name eq "Expert${doctorNumber}"
     }

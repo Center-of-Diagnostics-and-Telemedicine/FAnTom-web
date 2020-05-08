@@ -4,11 +4,10 @@ import io.ktor.application.call
 import io.ktor.locations.get
 import io.ktor.response.respond
 import io.ktor.routing.Route
-import model.ApiResponse
-import model.ErrorStringCode
+import lib.MarkTomogrammObject
+import model.*
 import repository.ResearchRepository
-import util.InitResearch
-import util.NotInitializedYetException
+import util.*
 
 fun Route.initResearch(
   researchRepository: ResearchRepository
@@ -17,11 +16,30 @@ fun Route.initResearch(
   get<InitResearch> {
 
     suspend fun respondError(errorCode: ErrorStringCode, message: String = "") {
-      call.respond(ApiResponse.ErrorResponse(errorCode.value, message))
+      call.respond(ResearchInitResponse(error = ErrorModel(errorCode.value, message)))
     }
 
     try {
-      call.respond(researchRepository.initResearch(it.accessionName))
+      when (MarkTomogrammObject.state) {
+        LibraryState.ReadyToInitLib -> {
+          researchRepository.initLib(data_store_path)
+          researchRepository.initResearch(it.name)
+          call.respond(ResearchInitResponse(researchRepository.getInitialData()))
+        }
+        LibraryState.ReadyToInitResearch -> {
+          researchRepository.initResearch(it.name)
+          call.respond(ResearchInitResponse(researchRepository.getInitialData()))
+        }
+        LibraryState.ResearchInitialized -> {
+          call.respond(ResearchInitResponse(researchRepository.getInitialData()))
+        }
+        LibraryState.InitLibProcess -> {
+          respondError(ErrorStringCode.NOT_INITIALIZED_YET, "init lib started")
+        }
+        LibraryState.InitResearchProcess -> {
+          respondError(ErrorStringCode.NOT_INITIALIZED_YET, "init study in process")
+        }
+      }
     } catch (e: Exception) {
       when (e) {
         is NotInitializedYetException -> respondError(

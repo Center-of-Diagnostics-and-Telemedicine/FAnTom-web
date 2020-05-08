@@ -15,7 +15,7 @@ fun Route.hounsfield(
   post<Hounsfield> {
 
     suspend fun respondError(errorCode: ErrorStringCode) {
-      call.respond(ApiResponse.ErrorResponse(errorCode.value))
+      call.respond(HounsfieldResponse(error = ErrorModel(errorCode.value)))
     }
 
     val params = call.request.queryParameters
@@ -32,7 +32,7 @@ fun Route.hounsfield(
 
     try {
       val huValue = researchRepository.hounsfield(axialCoord!!, frontalCoord!!, sagittalCoord!!)
-      call.respond(ApiResponse.HounsfieldResponse(huValue))
+      call.respond(HounsfieldResponse(HounsfieldModel(huValue)))
     } catch (e: Exception) {
       respondError(ErrorStringCode.GET_SLICE_FAILED)
     }

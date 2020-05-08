@@ -44,8 +44,9 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-html:0.6.12"
 
     implementation "io.ktor:ktor-client-js:$ktor_version"
-    implementation "io.ktor:ktor-client-serialization-js:$ktor_version"
     implementation "io.ktor:ktor-client-json-js:$ktor_version"
+    implementation "io.ktor:ktor-client-serialization-js:$ktor_version"
+    implementation "io.ktor:ktor-serialization:$ktor_version"
 
     implementation "org.jetbrains:kotlin-react:$kotlin_react_version"
     implementation "org.jetbrains:kotlin-react-dom:$kotlin_react_version"

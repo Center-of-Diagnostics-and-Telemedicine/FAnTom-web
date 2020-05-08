@@ -19,6 +19,7 @@ interface ResearchRepository : Repository {
     slyceNumber: Int,
     aproxSize: Int
   ): ByteArray
+
   suspend fun getHounsfieldData(axialCoord: Int, frontalCoord: Int, sagittalCoord: Int): Double
   suspend fun confirmCtTypeForResearch(
     ctType: CTType,
@@ -36,9 +37,10 @@ class ResearchRepositoryImpl(
 ) : ResearchRepository {
 
   override suspend fun getResearches(): List<Research> {
-    return when (val response = remote.getResearches(local.getToken())) {
-      is ApiResponse.ResearchesResponse -> response.researches
-      is ApiResponse.ErrorResponse -> handleErrorResponse(response)
+    val response = remote.getResearches(local.getToken())
+    return when {
+      response.response != null -> response.response!!.researches
+      response.error != null -> handleErrorResponse(response.error!!)
       else -> throw ResearchListFetchException
     }
   }
@@ -48,9 +50,9 @@ class ResearchRepositoryImpl(
       token = local.getToken(),
       researchId = researchId
     )
-    return when (response) {
-      is ApiResponse.ResearchInitResponse -> response.toResearchSlicesSizesData()
-      is ApiResponse.ErrorResponse -> handleErrorResponse(response)
+    return when {
+      response.response != null -> response.response!!.toResearchSlicesSizesData()
+      response.error != null -> handleErrorResponse(response.error!!)
       else -> throw ResearchInitializationException
     }
   }
@@ -71,16 +73,16 @@ class ResearchRepositoryImpl(
         black = black,
         white = white,
         gamma = gamma,
-        type = type,
+        sliceType = type,
         mipMethod = mipMethod,
         sliceNumber = slyceNumber,
         mipValue = aproxSize
       ),
       researchId = researchId
     )
-    return when (response) {
-      is ApiResponse.SliceResponse -> response.image
-      is ApiResponse.ErrorResponse -> handleErrorResponse(response)
+    return when {
+      response.response != null -> response.response!!.image
+      response.error != null -> handleErrorResponse(response.error!!)
       else -> throw SliceFetchException
     }
   }
@@ -94,9 +96,9 @@ class ResearchRepositoryImpl(
       local.getToken(),
       HounsfieldRequest(axialCoord, frontalCoord, sagittalCoord)
     )
-    return when (response) {
-      is ApiResponse.HounsfieldResponse -> response.huValue
-      is ApiResponse.ErrorResponse -> handleErrorResponse(response)
+    return when {
+      response.response != null -> response.response!!.huValue
+      response.error != null -> handleErrorResponse(response.error!!)
       else -> throw HounsfieldFetchError
     }
   }
@@ -111,23 +113,24 @@ class ResearchRepositoryImpl(
       local.getToken(),
       ConfirmCTTypeRequest(researchId, ctType.ordinal, leftPercent, rightPercent)
     )
-    when (response) {
-      is ApiResponse.OK -> return
-      is ApiResponse.ErrorResponse -> handleErrorResponse<Boolean>(response)
+    when {
+      response.response != null -> return
+      response.error != null -> handleErrorResponse<Boolean>(response.error!!)
       else -> throw ConfirmCtTypeForResearchException
     }
   }
 
   override suspend fun closeSession() {
-    when (val response = remote.closeSession(local.getToken())) {
-      is ApiResponse.OK -> return
-      is ApiResponse.ErrorResponse -> handleErrorResponse<Boolean>(response)
+    val response = remote.closeSession(local.getToken())
+    when {
+      response.response != null -> return
+      response.error != null -> handleErrorResponse<Boolean>(response.error!!)
       else -> throw CloseSessionException
     }
   }
 
-  private fun <T : Any> handleErrorResponse(response: ApiResponse.ErrorResponse): T {
-    when (response.errorCode) {
+  private fun <T : Any> handleErrorResponse(response: ErrorModel): T {
+    when (response.error) {
       ErrorStringCode.USER_RESEARCHES_LIST_FAILED.value -> throw ResearchListFetchException
 
       ErrorStringCode.RESEARCH_NOT_FOUND.value -> throw ResearchNotFoundException

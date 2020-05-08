@@ -19,7 +19,7 @@ fun Route.getSlice(
   post<GetSlice> {
 
     suspend fun respondError(errorCode: ErrorStringCode) {
-      call.respond(ApiResponse.ErrorResponse(errorCode.value))
+      call.respond(SliceResponse(error = ErrorModel(errorCode.value)))
     }
 
     val userId = call.user.id
@@ -34,7 +34,9 @@ fun Route.getSlice(
     if (existingSession == null) respondError(ErrorStringCode.SESSION_EXPIRED)
 
     try {
-      call.respond(existingSession!!.getSlice(request, research!!.accessionNumber))
+      call.respond(
+        SliceResponse(SliceModel(existingSession!!.getSlice(request, research!!.accessionNumber)))
+      )
     } catch (e: Exception) {
       application.log.error("Failed to get slice", e)
       respondError(ErrorStringCode.GET_SLICE_FAILED)

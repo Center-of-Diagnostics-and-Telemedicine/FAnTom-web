@@ -8,8 +8,8 @@ import model.RESEARCH_ROUTE
 @Location("/hello")
 class HelloWorld
 
-@Location("/$RESEARCH_ROUTE/$INIT_ROUTE/{accessionName}")
-class InitResearch(val accessionName: String)
+@Location("/$RESEARCH_ROUTE/$INIT_ROUTE/{name}")
+class InitResearch(val name: String)
 
 @Location("/$RESEARCH_ROUTE/{id}")
 class GetSlice(val id: Int)

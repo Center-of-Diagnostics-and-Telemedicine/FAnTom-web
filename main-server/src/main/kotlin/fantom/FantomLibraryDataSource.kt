@@ -5,6 +5,7 @@ import com.badoo.reaktive.observable.subscribe
 import com.badoo.reaktive.scheduler.computationScheduler
 import com.badoo.reaktive.subject.publish.PublishSubject
 import io.ktor.client.HttpClient
+import io.ktor.client.features.HttpTimeout
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.serializer.KotlinxSerializer
 import io.ktor.client.request.*
@@ -18,9 +19,13 @@ interface FantomLibraryDataSource {
   val onClose: () -> Unit
 
   suspend fun getAccessionNames(): List<String>
-  suspend fun initResearch(accessionNumber: String): ApiResponse
-  suspend fun getSlice(sliceRequest: SliceRequest, researchName: String): ApiResponse
-  suspend fun getHounsfield(axialCoord: Int, frontalCoord: Int, sagittalCoord: Int): ApiResponse
+  suspend fun initResearch(accessionNumber: String): ResearchInitResponse
+  suspend fun getSlice(sliceRequest: SliceRequest, researchName: String): SliceResponse
+  suspend fun getHounsfield(
+    axialCoord: Int,
+    frontalCoord: Int,
+    sagittalCoord: Int
+  ): HounsfieldResponse
 }
 
 class FantomLibraryDataSourceImpl(
@@ -33,6 +38,9 @@ class FantomLibraryDataSourceImpl(
   private val client: HttpClient = HttpClient {
     install(JsonFeature) {
       serializer = KotlinxSerializer()
+    }
+    install(HttpTimeout) {
+      requestTimeoutMillis = 60000
     }
   }
 
@@ -54,16 +62,18 @@ class FantomLibraryDataSourceImpl(
     }
   }
 
-  override suspend fun initResearch(accessionNumber: String): ApiResponse {
+  override suspend fun initResearch(accessionNumber: String): ResearchInitResponse {
     return client.get {
-      apiUrl("$RESEARCH_ROUTE/$INIT_ROUTE")
-      parameter(ID_FIELD, accessionNumber)
+      apiUrl("$RESEARCH_ROUTE/$INIT_ROUTE/$accessionNumber")
     }
   }
 
-  override suspend fun getSlice(sliceRequest: SliceRequest, researchName: String): ApiResponse {
+  override suspend fun getSlice(
+    sliceRequest: SliceRequest,
+    researchName: String
+  ): SliceResponse {
     return client.post {
-      apiUrl(researchName)
+      apiUrl("/$RESEARCH_ROUTE/$researchName")
       body = Json.stringify(SliceRequest.serializer(), sliceRequest)
     }
   }
@@ -72,8 +82,8 @@ class FantomLibraryDataSourceImpl(
     axialCoord: Int,
     frontalCoord: Int,
     sagittalCoord: Int
-  ): ApiResponse {
-    return client.get<ApiResponse.HounsfieldResponse> {
+  ): HounsfieldResponse {
+    return client.get {
       apiUrl("$RESEARCH_ROUTE/$HOUNSFIELD_ROUTE")
       parameter(TYPE_AXIAL, axialCoord)
       parameter(TYPE_FRONTAL, frontalCoord)

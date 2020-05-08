@@ -1,6 +1,7 @@
 package client.newmvi.login.store
 
 import client.ResearchApiExceptions
+import client.debugLog
 import client.domain.repository.LoginRepository
 import com.badoo.reaktive.annotations.EventsOnAnyScheduler
 import com.badoo.reaktive.coroutinesinterop.singleFromCoroutine
@@ -33,9 +34,18 @@ class LoginProcessorImpl(
       .map { LoginProcessor.Result.Success }
       .onErrorResumeNext {
         when (it) {
-          is ResearchApiExceptions.AuthFailedException -> LoginProcessor.Result.Error(it.error).toSingle()
-          is ResearchApiExceptions.InvalidAuthCredentials -> LoginProcessor.Result.InvalidCredentials.toSingle()
-          else -> LoginProcessor.Result.Error(AUTH_FAILED).toSingle()
+          is ResearchApiExceptions.AuthFailedException -> {
+            debugLog("AuthFailedException, ${it.error}")
+            LoginProcessor.Result.Error(it.error).toSingle()
+          }
+          is ResearchApiExceptions.InvalidAuthCredentials -> {
+            debugLog("InvalidCredentials, ${it.error}")
+            LoginProcessor.Result.InvalidCredentials.toSingle()
+          }
+          else -> {
+            debugLog("other exception ${it.message}")
+            LoginProcessor.Result.Error(AUTH_FAILED).toSingle()
+          }
         }
       }
 

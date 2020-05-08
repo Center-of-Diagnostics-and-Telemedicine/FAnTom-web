@@ -15,7 +15,7 @@ object MarkTomogrammObject {
     MarkTomogramm::class.java
   )
 
-  suspend fun init(dataStorePath: String) {
+  fun init(dataStorePath: String) {
     when (state) {
       is LibraryState.ReadyToInitLib -> {
         state = LibraryState.InitLibProcess
@@ -29,7 +29,7 @@ object MarkTomogrammObject {
     }
   }
 
-  suspend fun loadNewCtByAccessionNumber(accessionNumber: String) {
+  fun loadNewCtByAccessionNumber(accessionNumber: String) {
     when (state) {
       is LibraryState.ReadyToInitResearch -> {
         state = LibraryState.InitResearchProcess
@@ -37,8 +37,11 @@ object MarkTomogrammObject {
         debugLog("research initialized")
         state = LibraryState.ResearchInitialized
       }
-      else -> {
+      is LibraryState.InitResearchProcess -> {
         throw NotInitializedYetException()
+      }
+      else -> {
+        throw NotInitializedException()
       }
     }
   }

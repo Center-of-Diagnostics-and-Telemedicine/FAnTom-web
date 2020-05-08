@@ -3,9 +3,8 @@ package dao
 import ResearchVos
 import model.ResearchModel
 import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.transactions.transaction
 import toResearch
-import util.database
 
 interface ResearchDaoFacade {
   suspend fun getResearchById(researchId: Int): ResearchModel?
@@ -17,23 +16,26 @@ interface ResearchDaoFacade {
 
 class ResearchDao() : ResearchDaoFacade {
   override suspend fun getResearchById(researchId: Int): ResearchModel? {
-    return database {
-      ResearchVos.select { ResearchVos.id eq researchId }
+    return transaction {
+      ResearchVos
+        .select { ResearchVos.id eq researchId }
+        .firstOrNull()
+        ?.toResearch()
     }
-      .firstOrNull()
-      ?.toResearch()
   }
 
   override suspend fun getResearchByAccessionName(accessionNumber: String): ResearchModel? {
-    return database {
-      ResearchVos.select { ResearchVos.accessionNumber eq accessionNumber }
+    return transaction {
+      ResearchVos
+        .select { ResearchVos.accessionNumber eq accessionNumber }
+        .firstOrNull()
+        ?.toResearch()
     }
-      .firstOrNull()
-      ?.toResearch()
+
   }
 
   override suspend fun createResearch(researchModel: ResearchModel) {
-    return database {
+    return transaction {
       ResearchVos.insert {
         it[accessionNumber] = researchModel.accessionNumber
         it[studyInstanceUID] = researchModel.studyInstanceUID
@@ -50,14 +52,14 @@ class ResearchDao() : ResearchDaoFacade {
   }
 
   override suspend fun deleteResearch(researchId: Int) {
-    database {
+    transaction {
       ResearchVos.deleteWhere { ResearchVos.id eq researchId }
     }
   }
 
   override suspend fun updateResearch(researchModel: ResearchModel) {
-    return database {
-      ResearchVos.update(where = {ResearchVos.id eq researchModel.id}){
+    return transaction {
+      ResearchVos.update(where = { ResearchVos.id eq researchModel.id }) {
         it[accessionNumber] = researchModel.accessionNumber
         it[studyInstanceUID] = researchModel.studyInstanceUID
         it[studyID] = researchModel.studyID

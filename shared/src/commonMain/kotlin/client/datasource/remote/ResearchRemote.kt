@@ -3,14 +3,23 @@ package client.datasource.remote
 import model.*
 
 interface ResearchRemote {
-  suspend fun getResearches(token: String): ApiResponse
-  suspend fun initResearch(token: String, researchId: Int): ApiResponse
-  suspend fun getSlice(token: String, request: SliceRequest, researchId: Int): ApiResponse
+  suspend fun getResearches(token: String): ResearchesResponse
+  suspend fun initResearch(token: String, researchId: Int): ResearchInitResponse
+  suspend fun getSlice(
+    token: String,
+    request: SliceRequest,
+    researchId: Int
+  ): SliceResponse
+
   suspend fun getHounsfieldData(
     token: String,
     request: HounsfieldRequest
-  ): ApiResponse
+  ): HounsfieldResponse
 
-  suspend fun confirmCtTypeForResearch(token: String, request: ConfirmCTTypeRequest): ApiResponse
-  suspend fun closeSession(token: String): ApiResponse
+  suspend fun confirmCtTypeForResearch(
+    token: String,
+    request: ConfirmCTTypeRequest
+  ): BaseResponse
+
+  suspend fun closeSession(token: String): BaseResponse
 }

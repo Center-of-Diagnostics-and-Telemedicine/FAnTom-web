@@ -34,10 +34,12 @@ fun Route.researchesList(
             null
           }
         }
-      call.respond(ApiResponse.ResearchesResponse(userResearches))
+      call.respond(ResearchesResponse(ResearchesModel(userResearches)))
     } catch (e: Exception) {
       application.log.error("Failed to get research list", e)
-      call.respond(ApiResponse.ErrorResponse(ErrorStringCode.USER_RESEARCHES_LIST_FAILED.value))
+      call.respond(
+        ResearchesResponse(error = ErrorModel(ErrorStringCode.USER_RESEARCHES_LIST_FAILED.value))
+      )
     }
   }
 

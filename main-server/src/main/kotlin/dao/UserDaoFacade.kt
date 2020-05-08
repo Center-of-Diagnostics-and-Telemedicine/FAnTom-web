@@ -3,8 +3,8 @@ package dao
 import UserVos
 import model.UserModel
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.transactions.transaction
 import toUser
-import util.database
 
 interface UserDaoFacade {
   suspend fun getUserByCredentials(login: String, hashedPassword: String): UserModel?
@@ -18,7 +18,7 @@ interface UserDaoFacade {
 class UserDao() : UserDaoFacade {
 
   override suspend fun getUserByCredentials(login: String, hashedPassword: String): UserModel? {
-    return database {
+    return transaction {
       UserVos
         .select { UserVos.name eq login and (UserVos.password eq hashedPassword) }
         .firstOrNull()
@@ -27,7 +27,7 @@ class UserDao() : UserDaoFacade {
   }
 
   override suspend fun getUserByLogin(login: String): UserModel? {
-    return database {
+    return transaction {
       UserVos
         .select { UserVos.name eq login }
         .firstOrNull()
@@ -36,7 +36,7 @@ class UserDao() : UserDaoFacade {
   }
 
   override suspend fun getUserById(userId: Int): UserModel? {
-    return database {
+    return transaction {
       UserVos
         .select { UserVos.id eq userId }
         .firstOrNull()
@@ -45,7 +45,7 @@ class UserDao() : UserDaoFacade {
   }
 
   override suspend fun createUser(login: String, hashedPassword: String, userRole: Int) {
-    return database {
+    return transaction {
       UserVos.insert {
         it[name] = login
         it[password] = hashedPassword
@@ -55,7 +55,7 @@ class UserDao() : UserDaoFacade {
   }
 
   override suspend fun deleteUser(userId: Int) {
-    database {
+    transaction {
       UserVos.deleteWhere { UserVos.id eq userId }
     }
   }
@@ -66,7 +66,7 @@ class UserDao() : UserDaoFacade {
     hashedPassword: String,
     userRole: Int
   ) {
-    database {
+    transaction {
       UserVos.update(where = { UserVos.id eq userId }) {
         it[name] = login
         it[password] = hashedPassword

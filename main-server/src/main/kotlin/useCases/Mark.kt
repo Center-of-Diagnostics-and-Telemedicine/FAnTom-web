@@ -7,8 +7,7 @@ import io.ktor.response.respond
 import io.ktor.routing.Route
 import model.*
 import repository.MarkRepository
-import util.Mark
-import util.user
+import util.*
 
 fun Route.mark(
   markRepository: MarkRepository
@@ -16,14 +15,14 @@ fun Route.mark(
 
   post<Mark> {
     suspend fun respondError(errorCode: ErrorStringCode) {
-      call.respond(ApiResponse.ErrorResponse(errorCode.value))
+      call.respond(ErrorModel(errorCode.value))
     }
 
     val user = call.user
     val markModel = call.receive<ConfirmCTTypeRequest>().toMarkModel(user.id)
     try {
       markRepository.createMark(markModel)
-      call.respond(ApiResponse.OK)
+      call.respond(OK)
     } catch (e: Exception) {
       application.log.error("Failed to createMark", e)
       respondError(ErrorStringCode.CREATE_MARK_FAILED)

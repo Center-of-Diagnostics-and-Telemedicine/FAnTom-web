@@ -1,16 +1,17 @@
 package repository
 
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import lib.MarkTomogrammObject
 import model.*
-import util.*
+import util.LibraryState
+import util.NotInitializedException
 import java.util.*
 
 interface ResearchRepository {
-  suspend fun initResearch(accessionName: String): ApiResponse.ResearchInitResponse
-  suspend fun getSlice(params: SliceRequest): ByteArray
-  suspend fun hounsfield(
+  fun initLib(dataStorePath: String)
+  fun initResearch(accessionName: String)
+  fun getInitialData(): ResearchInitModel
+  fun getSlice(params: SliceRequest): ByteArray
+  fun hounsfield(
     axialCoord: Int,
     frontalCoord: Int,
     sagittalCoord: Int
@@ -19,44 +20,22 @@ interface ResearchRepository {
 
 class ResearchRepositoryImpl(private val markTomogramm: MarkTomogrammObject) : ResearchRepository {
 
-  override suspend fun initResearch(accessionName: String): ApiResponse.ResearchInitResponse {
-    when (markTomogramm.state) {
-
-      is LibraryState.ReadyToInitLib -> {
-        GlobalScope.launch { markTomogramm.init(data_store_path) }
-        throw NotInitializedYetException("markTomogram.init called in suspend")
-      }
-      LibraryState.InitLibProcess -> throw NotInitializedYetException("not ready, lib initialization continues")
-
-      LibraryState.ReadyToInitResearch -> {
-        GlobalScope.launch { markTomogramm.loadNewCtByAccessionNumber(accessionName) }
-        throw NotInitializedYetException("markTomogram.loadNewCtByAccessionNumber called in suspend")
-      }
-      LibraryState.InitResearchProcess -> throw NotInitializedYetException("not ready, research initialization continues")
-
-      LibraryState.ResearchInitialized -> {
-        return ApiResponse.ResearchInitResponse(
-          axialReal = markTomogramm.getRealValue(SLYCE_TYPE_AXIAL),
-          axialInterpolated = markTomogramm.getInterpolatedValue(SLYCE_TYPE_AXIAL),
-          frontalReal = markTomogramm.getRealValue(SLYCE_TYPE_FRONTAL),
-          frontalInterpolated = markTomogramm.getInterpolatedValue(SLYCE_TYPE_FRONTAL),
-          sagittalReal = markTomogramm.getRealValue(SLYCE_TYPE_SAGITTAL),
-          sagittalInterpolated = markTomogramm.getInterpolatedValue(SLYCE_TYPE_SAGITTAL),
-          pixelLength = markTomogramm.getPixelLengthCoef(),
-          reversed = markTomogramm.getOriginalPixelCoordinate(SLYCE_TYPE_AXIAL, 0, true) > 0
-        )
-      }
-    }
+  override fun initLib(dataStorePath: String) {
+    return markTomogramm.init(dataStorePath)
   }
 
-  override suspend fun getSlice(params: SliceRequest): ByteArray {
+  override fun initResearch(accessionName: String) {
+    markTomogramm.loadNewCtByAccessionNumber(accessionName)
+  }
+
+  override fun getSlice(params: SliceRequest): ByteArray {
     return when (markTomogramm.state) {
       is LibraryState.ResearchInitialized -> {
         val slice = markTomogramm.getSlice(
           black = params.black,
           white = params.white,
           gamma = params.gamma,
-          sliceType = params.type,
+          sliceType = params.sliceType,
           mipMethod = params.mipMethod,
           sliceNumber = params.sliceNumber,
           aproxSize = params.mipValue
@@ -67,7 +46,7 @@ class ResearchRepositoryImpl(private val markTomogramm: MarkTomogrammObject) : R
     }
   }
 
-  override suspend fun hounsfield(
+  override fun hounsfield(
     axialCoord: Int,
     frontalCoord: Int,
     sagittalCoord: Int
@@ -82,6 +61,20 @@ class ResearchRepositoryImpl(private val markTomogramm: MarkTomogrammObject) : R
       }
       else -> throw NotInitializedException()
     }
+  }
+
+  override fun getInitialData(): ResearchInitModel {
+    return ResearchInitModel(
+      axialReal = markTomogramm.getRealValue(SLYCE_TYPE_AXIAL),
+      axialInterpolated = markTomogramm.getInterpolatedValue(SLYCE_TYPE_AXIAL),
+      frontalReal = markTomogramm.getRealValue(SLYCE_TYPE_FRONTAL),
+      frontalInterpolated = markTomogramm.getInterpolatedValue(SLYCE_TYPE_FRONTAL),
+      sagittalReal = markTomogramm.getRealValue(SLYCE_TYPE_SAGITTAL),
+      sagittalInterpolated = markTomogramm.getInterpolatedValue(SLYCE_TYPE_SAGITTAL),
+      pixelLength = markTomogramm.getPixelLengthCoef(),
+      reversed =
+      markTomogramm.getOriginalPixelCoordinate(SLYCE_TYPE_AXIAL, 0, true) > 0
+    )
   }
 
 }

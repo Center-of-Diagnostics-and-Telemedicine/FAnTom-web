@@ -3,8 +3,8 @@ package dao
 import UserResearchVos
 import model.UserResearchModel
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.transactions.transaction
 import toUserResearch
-import util.database
 
 interface UserResearchDaoFacade {
   suspend fun getUserResearch(userId: Int, researchId: Int): UserResearchModel?
@@ -18,7 +18,7 @@ interface UserResearchDaoFacade {
 class UserResearchDao() : UserResearchDaoFacade {
 
   override suspend fun getUserResearch(userId: Int, researchId: Int): UserResearchModel? {
-    return database {
+    return transaction {
       UserResearchVos
         .select { UserResearchVos.userId eq userId and (UserResearchVos.researchId eq researchId) }
         .firstOrNull()
@@ -27,25 +27,25 @@ class UserResearchDao() : UserResearchDaoFacade {
   }
 
   override suspend fun getResearchesForUser(userId: Int): List<UserResearchModel> {
-    return database {
+    return transaction {
       UserResearchVos
         .select { UserResearchVos.userId eq userId }
-        .map { it.toUserResearch() }
         .toList()
+        .map { it.toUserResearch() }
     }
   }
 
   override suspend fun getUsersForResearch(researchId: Int): List<UserResearchModel> {
-    return database {
+    return transaction {
       UserResearchVos
         .select { UserResearchVos.researchId eq researchId }
-        .map { it.toUserResearch() }
         .toList()
+        .map { it.toUserResearch() }
     }
   }
 
   override suspend fun createUserResearch(userResearchModel: UserResearchModel) {
-    return database {
+    return transaction {
       UserResearchVos.insert {
         it[userId] = userResearchModel.userId
         it[researchId] = userResearchModel.researchId
@@ -56,7 +56,7 @@ class UserResearchDao() : UserResearchDaoFacade {
   }
 
   override suspend fun updateUserResearch(userResearchModel: UserResearchModel) {
-    return database {
+    return transaction {
       UserResearchVos.update(where = { UserResearchVos.userId eq userResearchModel.userId and (UserResearchVos.researchId eq userResearchModel.researchId) }) {
         it[seen] = if (userResearchModel.seen) 1 else 0
         it[done] = if (userResearchModel.done) 1 else 0
@@ -65,7 +65,7 @@ class UserResearchDao() : UserResearchDaoFacade {
   }
 
   override suspend fun deleteUserResearch(userId: Int, researchId: Int) {
-    return database {
+    return transaction {
       UserResearchVos
         .deleteWhere { UserResearchVos.researchId eq researchId and (UserResearchVos.userId eq userId) }
     }

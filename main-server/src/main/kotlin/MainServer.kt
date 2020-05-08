@@ -16,6 +16,7 @@ import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import model.ID_FIELD
 import org.apache.http.auth.AuthenticationException
+import org.jetbrains.exposed.sql.Database
 import org.slf4j.event.Level
 import useCases.*
 import util.*
@@ -25,6 +26,13 @@ fun main() {
   val jwt = "jwt"
 
   embeddedServer(Netty, 80) {
+
+    Database.connect(
+      url = "jdbc:mysql://localhost:3306/mark_tomogram?characterEncoding=utf8&useUnicode=true",
+      driver = "com.mysql.jdbc.Driver",
+      user = "root",
+      password = "vfrcbv16"
+    )
 
     // Serialize json
     install(ContentNegotiation) {

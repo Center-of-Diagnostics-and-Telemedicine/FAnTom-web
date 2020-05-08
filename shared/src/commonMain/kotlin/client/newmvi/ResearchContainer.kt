@@ -7,7 +7,6 @@ import com.badoo.reaktive.scheduler.computationScheduler
 import com.badoo.reaktive.subject.behavior.BehaviorSubject
 import com.badoo.reaktive.subject.publish.PublishSubject
 import model.*
-import model.*
 import kotlin.math.*
 
 object ResearchContainer {
@@ -189,7 +188,7 @@ object ResearchContainer {
               x = newArea.x ?: it.x,
               y = newArea.y ?: it.y,
               z = newArea.z ?: it.z,
-              type = newArea.type ?: it.type,
+              areaType = newArea.type ?: it.areaType,
               radius = newArea.radius ?: it.radius,
               size = newArea.size ?: it.size,
               comment = newArea.comment ?: it.comment
@@ -824,7 +823,7 @@ object ResearchContainer {
     callToCloseResearchListener
       .subscribe {
         if (areasObservable.value.isNotEmpty()) {
-          areasObservable.value.firstOrNull { it.type == AreaType.NO_TYPE_NODULE }.let {
+          areasObservable.value.firstOrNull { it.areaType == AreaType.NO_TYPE_NODULE }.let {
             debugLog(it.toString())
             if (it != null) {
               debugLog("ReadyToClose")

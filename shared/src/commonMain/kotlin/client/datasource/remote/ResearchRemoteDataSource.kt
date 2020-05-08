@@ -16,12 +16,12 @@ class ResearchRemoteDataSource : ResearchRemote {
       serializer = KotlinxSerializer()
     }
     install(HttpTimeout) {
-      requestTimeoutMillis = 60000
+      requestTimeoutMillis = 600000
     }
   }
 
-  override suspend fun getResearches(token: String): ApiResponse {
-    return client.get<ApiResponse/*ResearchesResponse*/> {
+  override suspend fun getResearches(token: String): ResearchesResponse {
+    return client.get {
       authHeader(token)
       apiUrl("$RESEARCH_ROUTE/$LIST_ROUTE")
     }
@@ -30,7 +30,7 @@ class ResearchRemoteDataSource : ResearchRemote {
   override suspend fun initResearch(
     token: String,
     researchId: Int
-  ): ApiResponse {
+  ): ResearchInitResponse {
     return client.get {
       authHeader(token)
       apiUrl("$RESEARCH_ROUTE/$INIT_ROUTE/$researchId")
@@ -41,7 +41,7 @@ class ResearchRemoteDataSource : ResearchRemote {
     token: String,
     request: SliceRequest,
     researchId: Int
-  ): ApiResponse {
+  ): SliceResponse {
     return client.post {
       authHeader(token)
       apiUrl("$RESEARCH_ROUTE/$researchId")
@@ -52,7 +52,7 @@ class ResearchRemoteDataSource : ResearchRemote {
   override suspend fun getHounsfieldData(
     token: String,
     request: HounsfieldRequest
-  ): ApiResponse {
+  ): HounsfieldResponse {
     return client.get {
       authHeader(token)
       apiUrl("$RESEARCH_ROUTE/$HOUNSFIELD_ROUTE?$TYPE_AXIAL=${request.axialCoord}&$TYPE_FRONTAL=${request.frontalCoord}&$TYPE_SAGITTAL=${request.sagittalCoord}")
@@ -62,7 +62,7 @@ class ResearchRemoteDataSource : ResearchRemote {
   override suspend fun confirmCtTypeForResearch(
     token: String,
     request: ConfirmCTTypeRequest
-  ): ApiResponse {
+  ): BaseResponse {
     return client.post {
       authHeader(token)
       apiUrl("$RESEARCH_ROUTE/${request.researchId}/$MARK_ROUTE")
@@ -70,7 +70,7 @@ class ResearchRemoteDataSource : ResearchRemote {
     }
   }
 
-  override suspend fun closeSession(token: String): ApiResponse {
+  override suspend fun closeSession(token: String): BaseResponse {
     return client.get {
       authHeader(token)
       apiUrl("$SESSION_ROUTE/$CLOSE_ROUTE")

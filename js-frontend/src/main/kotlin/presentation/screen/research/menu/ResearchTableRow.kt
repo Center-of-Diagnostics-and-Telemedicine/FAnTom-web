@@ -53,7 +53,7 @@ class ResearchTableRow(props: ResearchTableRowProps) :
         mTableCell(align = MTableCellAlign.center) { +"${round(area.size)}" }
         mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) {
           mButton(
-            getNodeTypeString(area.type),
+            getNodeTypeString(area.areaType),
             onClick = { handleShowMenuClick(it, area.id) }
           )
           mMenu(

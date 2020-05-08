@@ -66,6 +66,7 @@ kotlin {
                 implementation "io.ktor:ktor-client-core:$ktor_version"
                 implementation "io.ktor:ktor-client-json:$ktor_version"
                 implementation "io.ktor:ktor-client-serialization:$ktor_version"
+
             }
         }
         commonTest {
@@ -86,6 +87,8 @@ kotlin {
 
                 implementation "io.ktor:ktor-client-serialization-jvm:$ktor_version"
                 implementation("io.ktor:ktor-client-json-jvm:$ktor_version")
+                implementation "io.ktor:ktor-client-serialization:$ktor_version"
+                implementation "io.ktor:ktor-serialization:$ktor_version"
 
                 implementation "org.jetbrains:kotlin-css-jvm:1.0.0-$kotlin_version"
 

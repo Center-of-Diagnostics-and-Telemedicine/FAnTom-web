@@ -24,10 +24,19 @@ fun Route.login(repository: UserRepository) {
     }
 
     if (user == null) {
-      call.respond(ApiResponse.ErrorResponse(ErrorStringCode.INVALID_AUTH_CREDENTIALS.value))
+
+      call.respond(
+        AuthorizationResponse(
+          error = ErrorModel(ErrorStringCode.INVALID_AUTH_CREDENTIALS.value)
+        )
+      )
     } else {
       val token = JwtConfig.makeToken(userModel = user)
-      call.respond(ApiResponse.AuthorizationResponse(token = token))
+      call.respond(
+        AuthorizationResponse(
+          response = AuthorizationModel(token = token)
+        )
+      )
     }
   }
 }

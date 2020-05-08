@@ -16,13 +16,13 @@ fun Route.getSlice(
   post<GetSlice> {
 
     suspend fun respondError(errorCode: ErrorStringCode) {
-      call.respond(ApiResponse.ErrorResponse(errorCode.value))
+      call.respond(ErrorModel(errorCode.value))
     }
 
     try {
       val params = call.receive<SliceRequest>()
       val byteArray = researchRepository.getSlice(params)
-      call.respond(ApiResponse.SliceResponse(byteArray))
+      call.respond(SliceModel(byteArray))
     } catch (e: Exception) {
       respondError(ErrorStringCode.GET_SLICE_FAILED)
     }

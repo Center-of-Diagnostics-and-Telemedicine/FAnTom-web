@@ -6,14 +6,15 @@ import io.ktor.response.respond
 import io.ktor.routing.Route
 import model.*
 import repository.SessionRepository
-import util.*
+import util.Hounsfield
+import util.user
 
 fun Route.hounsfield(sessionRepository: SessionRepository) {
 
   get<Hounsfield> {
 
     suspend fun respondError(errorCode: ErrorStringCode) {
-      call.respond(ApiResponse.ErrorResponse(errorCode.value))
+      call.respond(HounsfieldResponse(error = ErrorModel(errorCode.value)))
     }
 
     val userId = call.user.id
@@ -34,7 +35,17 @@ fun Route.hounsfield(sessionRepository: SessionRepository) {
     if (existingSession == null) respondError(ErrorStringCode.SESSION_EXPIRED)
 
     try {
-      call.respond(existingSession!!.hounsfield(axialCoord!!, frontalCoord!!, sagittalCoord!!))
+      call.respond(
+        HounsfieldResponse(
+          HounsfieldModel(
+            existingSession!!.hounsfield(
+              axialCoord!!,
+              frontalCoord!!,
+              sagittalCoord!!
+            )
+          )
+        )
+      )
     } catch (e: Exception) {
       application.log.error("Failed to get hounsfield", e)
       respondError(ErrorStringCode.HOUNSFIELD_ERROR)

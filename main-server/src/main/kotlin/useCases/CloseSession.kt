@@ -4,8 +4,7 @@ import io.ktor.application.*
 import io.ktor.locations.get
 import io.ktor.response.respond
 import io.ktor.routing.Route
-import model.ApiResponse
-import model.ErrorStringCode
+import model.*
 import repository.ResearchRepository
 import repository.SessionRepository
 import util.CloseSession
@@ -19,7 +18,7 @@ fun Route.closeSession(
   get<CloseSession> {
 
     suspend fun respondError(errorCode: ErrorStringCode) {
-      call.respond(ApiResponse.ErrorResponse(errorCode.value))
+      call.respond(BaseResponse(error = ErrorModel(errorCode.value)))
     }
 
     val userId = call.user.id
@@ -32,6 +31,7 @@ fun Route.closeSession(
 
     try {
       sessionRepository.deleteSession(userId, research!!.accessionNumber)
+      call.respond(BaseResponse(response = OK()))
     } catch (e: Exception) {
       application.log.error("Failed to close session", e)
       respondError(ErrorStringCode.SESSION_CLOSE_FAILED)

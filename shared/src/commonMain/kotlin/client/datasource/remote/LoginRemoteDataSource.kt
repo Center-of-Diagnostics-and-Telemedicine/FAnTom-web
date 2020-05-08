@@ -9,8 +9,8 @@ import io.ktor.http.takeFrom
 import model.*
 
 interface LoginRemote {
-  suspend fun auth(login: String, password: String): ApiResponse
-  suspend fun tryToAuth(): ApiResponse
+  suspend fun auth(login: String, password: String): AuthorizationResponse
+  suspend fun tryToAuth(): AuthorizationResponse
 }
 
 class LoginRemoteDataSource : LoginRemote {
@@ -21,14 +21,14 @@ class LoginRemoteDataSource : LoginRemote {
     }
   }
 
-  override suspend fun auth(login: String, password: String): ApiResponse {
+  override suspend fun auth(login: String, password: String): AuthorizationResponse {
     return client.post {
       apiUrl(LOGIN_ROUTE)
       body = "{ name:$login, password:$password }"
     }
   }
 
-  override suspend fun tryToAuth(): ApiResponse {
+  override suspend fun tryToAuth(): AuthorizationResponse {
     return client.post {
       apiUrl(AUTH_CHECK_ROUTE)
     }

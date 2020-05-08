@@ -51,7 +51,10 @@ class LibraryCreatorImpl() : LibraryCreator {
   ): RemoteLibraryRepository {
 
     val createResponse = createContainerRequest(port, researchDir).exec()
+    debugLog("call start container cmd")
     dockerClient.startContainerCmd(createResponse.id).exec()
+    debugLog("call wait container cmd")
+    dockerClient.waitContainerCmd(createResponse.id)
     return RemoteLibraryRepositoryImpl(
       remoteDataSource = FantomLibraryDataSourceImpl(
         endPoint = "$LOCALHOST:${port}",
@@ -73,6 +76,7 @@ class LibraryCreatorImpl() : LibraryCreator {
     portBindings.bind(portInsideContainer, portOutsideContainer)
 
     val dirWithResearchInsideContainer = Volume("$data_store_path/${researchDir.name}")
+    debugLog("research path = ${researchDir.path}, dirWithResearchInsideContainer = $dirWithResearchInsideContainer")
 
     val bindDir = Bind(researchDir.path, dirWithResearchInsideContainer)
     return dockerClient
@@ -89,7 +93,7 @@ class LibraryCreatorImpl() : LibraryCreator {
         "-XX:MaxGCPauseMillis=100",
         "-XX:+UseStringDeduplication",
         "-jar",
-        "backend.jar",
+        "backend-all.jar",
         "$port"
       )
       .withExposedPorts(portInsideContainer)

@@ -3,8 +3,8 @@ package dao
 import MarkVos
 import model.MarkModel
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.transactions.transaction
 import toMark
-import util.database
 
 interface MarkDaoFacade {
   suspend fun getMark(userId: Int, researchId: Int): MarkModel?
@@ -15,15 +15,15 @@ interface MarkDaoFacade {
 
 class MarkDao() : MarkDaoFacade {
   override suspend fun getMark(userId: Int, researchId: Int): MarkModel? {
-    return database {
+    return transaction {
       MarkVos.select { MarkVos.researchId eq researchId and (MarkVos.userId eq userId) }
-    }
       .firstOrNull()
       ?.toMark()
+    }
   }
 
   override suspend fun createMark(markModel: MarkModel) {
-    return database {
+    return transaction {
       MarkVos.insert {
         it[userId] = markModel.userId
         it[researchId] = markModel.researchId
@@ -35,13 +35,13 @@ class MarkDao() : MarkDaoFacade {
   }
 
   override suspend fun deleteMark(researchId: Int, userId: Int) {
-    database {
+    transaction {
       MarkVos.deleteWhere { MarkVos.researchId eq researchId and (MarkVos.userId eq userId) }
     }
   }
 
   override suspend fun updateMark(markModel: MarkModel) {
-    return database {
+    return transaction {
       MarkVos.update(where = { MarkVos.researchId eq markModel.researchId and (MarkVos.userId eq markModel.userId) }) {
         it[userId] = markModel.userId
         it[researchId] = markModel.researchId
