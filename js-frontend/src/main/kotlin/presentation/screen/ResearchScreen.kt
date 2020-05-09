@@ -260,11 +260,11 @@ class ResearchScreen(props: ResearchProps) :
       styledDiv {
         css(leftDrawerHeaderStyle)
         if (state.leftDrawerOpen) {
-          cutsGrid(cutsGridClickListener = {
-            if (state.currentGrid != it) {
-              dispatch(ResearchView.Event.GridChanged(it))
-            }
-          })
+//          cutsGrid(cutsGridClickListener = {
+//            if (state.currentGrid != it) {
+//              dispatch(ResearchView.Event.GridChanged(it))
+//            }
+//          })
           mIconButton(
             "chevron_left",
             onClick = { setState { leftDrawerOpen = false } }
