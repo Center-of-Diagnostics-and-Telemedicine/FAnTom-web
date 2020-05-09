@@ -1,9 +1,7 @@
 package util
 
 import io.ktor.locations.Location
-import model.HOUNSFIELD_ROUTE
-import model.INIT_ROUTE
-import model.RESEARCH_ROUTE
+import model.*
 
 @Location("/hello")
 class HelloWorld
@@ -11,8 +9,8 @@ class HelloWorld
 @Location("/$RESEARCH_ROUTE/$INIT_ROUTE/{name}")
 class InitResearch(val name: String)
 
-@Location("/$RESEARCH_ROUTE/{id}")
-class GetSlice(val id: Int)
+@Location("/$RESEARCH_ROUTE")
+class GetSlice
 
-@Location("/$RESEARCH_ROUTE/{name}/$HOUNSFIELD_ROUTE")
-class Hounsfield(val name: String)
+@Location("/$RESEARCH_ROUTE/$HOUNSFIELD_ROUTE")
+class Hounsfield

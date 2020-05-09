@@ -10,7 +10,7 @@ interface ResearchRepository {
   fun initLib(dataStorePath: String)
   fun initResearch(accessionName: String)
   fun getInitialData(): ResearchInitModel
-  fun getSlice(params: SliceRequest): ByteArray
+  fun getSlice(params: SliceRequest): String
   fun hounsfield(
     axialCoord: Int,
     frontalCoord: Int,
@@ -18,6 +18,7 @@ interface ResearchRepository {
   ): Double
 }
 
+@ExperimentalStdlibApi
 class ResearchRepositoryImpl(private val markTomogramm: MarkTomogrammObject) : ResearchRepository {
 
   override fun initLib(dataStorePath: String) {
@@ -28,7 +29,7 @@ class ResearchRepositoryImpl(private val markTomogramm: MarkTomogrammObject) : R
     markTomogramm.loadNewCtByAccessionNumber(accessionName)
   }
 
-  override fun getSlice(params: SliceRequest): ByteArray {
+  override fun getSlice(params: SliceRequest): String {
     return when (markTomogramm.state) {
       is LibraryState.ResearchInitialized -> {
         val slice = markTomogramm.getSlice(
@@ -40,7 +41,7 @@ class ResearchRepositoryImpl(private val markTomogramm: MarkTomogrammObject) : R
           sliceNumber = params.sliceNumber,
           aproxSize = params.mipValue
         )
-        Base64.getEncoder().encode(slice)
+        Base64.getEncoder().encode(slice).decodeToString()
       }
       else -> throw NotInitializedException()
     }

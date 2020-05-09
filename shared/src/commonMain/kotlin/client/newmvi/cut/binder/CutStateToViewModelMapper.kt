@@ -9,6 +9,6 @@ object CutStateToViewModelMapper {
     CutView.CutViewModel(
       isLoading = state.isLoading,
       error = state.error,
-      url = state.url
+      img = state.img
     )
 }

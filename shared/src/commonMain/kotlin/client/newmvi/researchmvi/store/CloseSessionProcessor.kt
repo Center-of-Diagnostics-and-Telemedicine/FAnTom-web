@@ -5,7 +5,7 @@ import client.domain.repository.ResearchRepository
 import com.badoo.reaktive.annotations.EventsOnAnyScheduler
 import com.badoo.reaktive.coroutinesinterop.singleFromCoroutine
 import com.badoo.reaktive.single.*
-import model.HOUNSFIELD_FETCH_ERROR
+import model.SESSION_CLOSE_FAILED
 
 interface CloseSessionProcessor {
 
@@ -25,7 +25,7 @@ class CloseSessionProcessorImpl(
 
   override fun close(researchId: Int): Single<CloseSessionProcessor.Result> =
     singleFromCoroutine {
-      repository.closeSession()
+      repository.closeSession(researchId)
     }
       .map { CloseSessionProcessor.Result.Success }
       .onErrorResumeNext {
@@ -39,7 +39,7 @@ class CloseSessionProcessorImpl(
           is ResearchApiExceptions.SessionExpiredException ->
             CloseSessionProcessor.Result.SessionExpired.toSingle()
 
-          else -> CloseSessionProcessor.Result.Error(HOUNSFIELD_FETCH_ERROR).toSingle()
+          else -> CloseSessionProcessor.Result.Error(SESSION_CLOSE_FAILED).toSingle()
         }
       }
 

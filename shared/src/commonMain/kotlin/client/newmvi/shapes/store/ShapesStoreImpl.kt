@@ -1,18 +1,15 @@
 package client.newmvi.shapes.store
 
+import client.newmvi.shapes.store.ShapesStore.Intent
+import client.newmvi.shapes.store.ShapesStore.State
 import com.badoo.reaktive.disposable.CompositeDisposable
 import com.badoo.reaktive.disposable.Disposable
 import com.badoo.reaktive.observable.Observable
 import com.badoo.reaktive.scheduler.computationScheduler
 import com.badoo.reaktive.scheduler.mainScheduler
-import com.badoo.reaktive.single.map
-import com.badoo.reaktive.single.observeOn
-import com.badoo.reaktive.single.subscribe
+import com.badoo.reaktive.single.*
 import com.badoo.reaktive.subject.behavior.BehaviorSubject
 import com.badoo.reaktive.subject.publish.PublishSubject
-import model.LineType
-import client.newmvi.shapes.store.ShapesStore.Intent
-import client.newmvi.shapes.store.ShapesStore.State
 import model.*
 
 class ShapesStoreImpl(
@@ -88,8 +85,6 @@ class ShapesStoreImpl(
     if (state.isLoading) {
       null
     } else {
-      onResult(Effect.LoadingStarted)
-
       hounsfieldDataLoader
         .load(positionData.z, positionData.y, positionData.x)
         .observeOn(computationScheduler)
@@ -120,7 +115,7 @@ class ShapesStoreImpl(
     class UpdateHounsfield(val huValue: Double) : Effect()
     class HounsfieldLoadFailed(val message: String) : Effect()
 
-    object Error: Effect()
+    object Error : Effect()
 
     object LoadingStarted : Effect()
     object RemovePositionData : Effect()
@@ -142,7 +137,7 @@ class ShapesStoreImpl(
         is Effect.UpdateHounsfield -> state.copy(huValue = effect.huValue, isLoading = false)
         is Effect.HounsfieldLoadFailed -> state.copy(isLoading = false)
         Effect.LoadingStarted -> state.copy(isLoading = true)
-        Effect.Error -> state
+        Effect.Error -> state.copy(isLoading = false)
       }
   }
 }

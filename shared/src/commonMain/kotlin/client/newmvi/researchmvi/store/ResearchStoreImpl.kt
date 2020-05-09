@@ -128,22 +128,19 @@ class ResearchStoreImpl(
       }
       is Intent.ConfirmCTType -> {
         debugLog("Intent.ConfirmCTType income, left = ${intent.leftPercent}, right = ${intent.rightPercent}, cttype = ${intent.ctType.ordinal}")
-        close(intent.ctType, intent.leftPercent, intent.rightPercent)
+        confirmCtType(intent.ctType, intent.leftPercent, intent.rightPercent)
       }
     }
 
-  //todo(использовать как метод сохранения отметок)
-  private fun close(ctType: CTType, leftPercent: Int, rightPercent: Int): Disposable? {
+  private fun confirmCtType(ctType: CTType, leftPercent: Int, rightPercent: Int): Disposable? {
     onResult(Effect.LoadingStarted)
     return confirmMarkProcessor
       .confirm(ctType, leftPercent, rightPercent, state.researchId)
       .observeOn(computationScheduler)
       .map {
         when (it) {
-          is ConfirmCtTypeForResearchResearchProcessor.Result.Success -> {
-            Effect.Close
-          }
-          is ConfirmCtTypeForResearchResearchProcessor.Result.Error -> Effect.LoadingFailed(it.message)
+          is ConfirmCtTypeForResearchResearchProcessor.Result.Success -> Effect.Close
+          is ConfirmCtTypeForResearchResearchProcessor.Result.Error -> Effect.ConfirmCTTypeFailed(it.message)
           is ConfirmCtTypeForResearchResearchProcessor.Result.SessionExpired ->
             Effect.LoadingFailed(SESSION_EXPIRED)
         }
@@ -166,7 +163,6 @@ class ResearchStoreImpl(
           when (it) {
             is ResearchDataLoader.Result.Success -> {
               slicesSizesDataListener.onNext(it.researchData)
-//              loadMarks(researchId)
               Effect.DataLoaded(it.researchData, gridModel = gridProcessor.init(it.researchData))
             }
             is ResearchDataLoader.Result.SessionExpired -> Effect.LoadingFailed(SESSION_EXPIRED)
@@ -182,15 +178,7 @@ class ResearchStoreImpl(
     return closeSessionProcessor
       .close(state.researchId)
       .observeOn(computationScheduler)
-      .map {
-        when (it) {
-          is CloseSessionProcessor.Result.Success -> {
-            Effect.Close
-          }
-          is CloseSessionProcessor.Result.Error -> Effect.LoadingFailed(it.message)
-          CloseSessionProcessor.Result.SessionExpired -> Effect.LoadingFailed(SESSION_EXPIRED)
-        }
-      }
+      .map { Effect.Close }
       .observeOn(mainScheduler)
       .subscribe(onSuccess = ::onResult)
   }
@@ -224,6 +212,8 @@ class ResearchStoreImpl(
     class CloseCutFullMode(val gridModel: GridModel) : Effect()
 
     class ConfirmCTType(val ctType: CTType) : Effect()
+    class ConfirmCTTypeFailed(val error: String) : Effect()
+    class SessionExpired(val error: String) : Effect()
   }
 
   private object Reducer {
@@ -256,6 +246,16 @@ class ResearchStoreImpl(
         is Effect.AreasNotFullError -> state.copy(studyCompleted = false, error = effect.message)
         Effect.ClearOldData -> State(data = null, gridModel = initialGridModel())
         is Effect.ConfirmCTType -> state.copy(ctTypeToConfirm = effect.ctType)
+        is Effect.ConfirmCTTypeFailed -> state.copy(
+          ctTypeToConfirm = null,
+          isLoading = false,
+          error = effect.error
+        )
+        is Effect.SessionExpired -> state.copy(
+          ctTypeToConfirm = null,
+          error = effect.error,
+          isLoading = false
+        )
       }
   }
 }

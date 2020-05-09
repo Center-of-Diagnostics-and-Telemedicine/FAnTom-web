@@ -5,10 +5,9 @@ import client.domain.repository.ResearchRepository
 import com.badoo.reaktive.annotations.EventsOnAnyScheduler
 import com.badoo.reaktive.coroutinesinterop.singleFromCoroutine
 import com.badoo.reaktive.scheduler.computationScheduler
-import com.badoo.reaktive.scheduler.ioScheduler
 import com.badoo.reaktive.single.*
+import model.CREATE_MARK_FAILED
 import model.CTType
-import model.HOUNSFIELD_FETCH_ERROR
 
 interface ConfirmCtTypeForResearchResearchProcessor {
 
@@ -48,7 +47,7 @@ class ConfirmCtTypeForResearchResearchProcessorImpl(
             ConfirmCtTypeForResearchResearchProcessor.Result.SessionExpired.toSingle()
 
           else ->
-            ConfirmCtTypeForResearchResearchProcessor.Result.Error(HOUNSFIELD_FETCH_ERROR).toSingle()
+            ConfirmCtTypeForResearchResearchProcessor.Result.Error(CREATE_MARK_FAILED).toSingle()
         }
       }
       .subscribeOn(computationScheduler)

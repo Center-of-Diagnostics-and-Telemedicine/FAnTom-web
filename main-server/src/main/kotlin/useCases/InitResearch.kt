@@ -6,13 +6,13 @@ import io.ktor.response.respond
 import io.ktor.routing.Route
 import kotlinx.coroutines.delay
 import model.*
-import repository.ResearchRepository
-import repository.SessionRepository
+import repository.*
 import util.*
 
 fun Route.initResearch(
   researchRepository: ResearchRepository,
-  sessionRepository: SessionRepository
+  sessionRepository: SessionRepository,
+  userResearchRepository: UserResearchRepository
 ) {
 
   get<InitResearch> {
@@ -26,17 +26,19 @@ fun Route.initResearch(
     if (research == null) respondError(ErrorStringCode.RESEARCH_NOT_FOUND)
     debugLog("research found")
 
+    userResearchRepository.markSeen(userId, research!!.id)
+
     val sessionToClose = sessionRepository.getSession(userId)
     debugLog("session == null : ${sessionToClose == null}")
     if (sessionToClose != null) {
       debugLog("found existing session for user, going to close it")
       try {
-        sessionRepository.deleteSession(userId, research!!.accessionNumber)
+        sessionRepository.deleteSession(userId, research.accessionNumber)
       } catch (e: Exception) {
       }
     }
     try {
-      val session = sessionRepository.createSession(userId, research!!.accessionNumber)
+      val session = sessionRepository.createSession(userId, research.accessionNumber)
       debugLog("session created")
       debugLog("delaying for 2secs")
       delay(2000)

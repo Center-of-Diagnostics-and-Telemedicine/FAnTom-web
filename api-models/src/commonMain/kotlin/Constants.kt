@@ -123,7 +123,8 @@ enum class CTType {
     LIGHT,
     MIDDLE,
     HIGH,
-    CRITICAL
+    CRITICAL,
+    NON_RELEVANT
 }
 
 enum class ErrorStringCode(val value: Int) {

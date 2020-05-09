@@ -17,7 +17,7 @@ class SessionRepositoryImpl(
 ) : SessionRepository {
 
   private val sessions: MutableMap<Int, RemoteLibraryRepository> = mutableMapOf()
-  private val portsCounter: Int = 0
+  private var portsCounter: Int = 30000
 
   override suspend fun getSession(userId: Int): RemoteLibraryRepository? {
     return sessions[userId]
@@ -28,13 +28,13 @@ class SessionRepositoryImpl(
     accessionNumber: String
   ): RemoteLibraryRepository {
     val researchDir = researchDirFinder.getResearchPath(accessionNumber, data_store_paths)
-    val port = portsCounter + 1
+    portsCounter += 1
 
     val library = creator
       .createLibrary(
         userId = userId,
         accessionNumber = accessionNumber,
-        port = port,
+        port = portsCounter,
         researchDir = researchDir,
         onClose = {
           GlobalScope.launch {

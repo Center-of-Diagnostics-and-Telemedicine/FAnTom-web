@@ -21,8 +21,8 @@ class InitResearch(val id: Int)
 @Location("/$RESEARCH_ROUTE/{id}")
 class GetSlice(val id: Int)
 
-@Location("/$RESEARCH_ROUTE/{name}/$HOUNSFIELD_ROUTE")
-class Hounsfield(val name: String)
+@Location("/$RESEARCH_ROUTE/$HOUNSFIELD_ROUTE")
+class Hounsfield()
 
 @Location("/$RESEARCH_ROUTE/{id}/$CLOSE_ROUTE")
 class CloseSession(val id: Int)

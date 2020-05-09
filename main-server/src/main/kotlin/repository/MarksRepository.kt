@@ -10,31 +10,30 @@ interface MarkRepository {
   suspend fun deleteMark(userId: Int, researchId: Int)
 }
 
-class MarkRepositoryImpl(private val MarkDaoFacade: MarkDaoFacade) :
+class MarkRepositoryImpl(private val markDaoFacade: MarkDaoFacade) :
   MarkRepository {
 
   override suspend fun getMark(userId: Int, researchId: Int): MarkModel? {
-    return MarkDaoFacade.getMark(userId, researchId)
+    return markDaoFacade.getMark(userId, researchId)
   }
 
   override suspend fun createMark(markModel: MarkModel) {
-    checkMarkExistence(userId = markModel.userId, researchId = markModel.researchId)
-    MarkDaoFacade.createMark(markModel)
+    markDaoFacade.createMark(markModel)
   }
 
   override suspend fun updateMark(markModel: MarkModel) {
     checkMarkExistence(userId = markModel.userId, researchId = markModel.researchId)
-    MarkDaoFacade.updateMark(markModel)
+    markDaoFacade.updateMark(markModel)
   }
 
   override suspend fun deleteMark(userId: Int, researchId: Int) {
     checkMarkExistence(userId = userId, researchId = researchId)
-    MarkDaoFacade.deleteMark(userId, researchId)
+    markDaoFacade.deleteMark(userId, researchId)
 
   }
 
   private suspend fun checkMarkExistence(userId: Int, researchId: Int) =
-    MarkDaoFacade.getMark(userId = userId, researchId = researchId)
+    markDaoFacade.getMark(userId = userId, researchId = researchId)
       ?: throw IllegalStateException("mark not found")
 
 }

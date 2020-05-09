@@ -13,6 +13,7 @@ interface UserResearchDaoFacade {
   suspend fun createUserResearch(userResearchModel: UserResearchModel)
   suspend fun updateUserResearch(userResearchModel: UserResearchModel)
   suspend fun deleteUserResearch(userId: Int, researchId: Int)
+  suspend fun markSeen(userId: Int, researchId: Int)
 }
 
 class UserResearchDao() : UserResearchDaoFacade {
@@ -68,6 +69,14 @@ class UserResearchDao() : UserResearchDaoFacade {
     return transaction {
       UserResearchVos
         .deleteWhere { UserResearchVos.researchId eq researchId and (UserResearchVos.userId eq userId) }
+    }
+  }
+
+  override suspend fun markSeen(userId: Int, researchId: Int) {
+    return transaction {
+      UserResearchVos.update(where = { UserResearchVos.userId eq userId and (UserResearchVos.researchId eq researchId) }) {
+        it[seen] = 1
+      }
     }
   }
 }

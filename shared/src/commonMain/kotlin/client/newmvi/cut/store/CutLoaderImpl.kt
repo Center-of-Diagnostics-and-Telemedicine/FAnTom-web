@@ -18,7 +18,7 @@ interface CutLoader {
 
   sealed class Result {
     data class Error(val message: String) : Result()
-    class Success(val url: ByteArray) : Result()
+    class Success(val img: String) : Result()
     object SessionExpired : Result()
   }
 }

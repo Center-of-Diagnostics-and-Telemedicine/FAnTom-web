@@ -73,7 +73,7 @@ class FantomLibraryDataSourceImpl(
     researchName: String
   ): SliceResponse {
     return client.post {
-      apiUrl("/$RESEARCH_ROUTE/$researchName")
+      apiUrl("/$RESEARCH_ROUTE")
       body = Json.stringify(SliceRequest.serializer(), sliceRequest)
     }
   }

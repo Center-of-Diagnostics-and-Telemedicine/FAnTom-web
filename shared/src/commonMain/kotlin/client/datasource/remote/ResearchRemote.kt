@@ -21,5 +21,5 @@ interface ResearchRemote {
     request: ConfirmCTTypeRequest
   ): BaseResponse
 
-  suspend fun closeSession(token: String): BaseResponse
+  suspend fun closeSession(token: String, researchId: Int): BaseResponse
 }

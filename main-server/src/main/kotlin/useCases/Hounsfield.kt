@@ -2,6 +2,7 @@ package useCases
 
 import io.ktor.application.*
 import io.ktor.locations.get
+import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.Route
 import model.*
@@ -18,17 +19,12 @@ fun Route.hounsfield(sessionRepository: SessionRepository) {
     }
 
     val userId = call.user.id
-
-    val params = call.request.queryParameters
-    val axialCoord = params[TYPE_AXIAL]?.toInt()
-    val frontalCoord = params[TYPE_FRONTAL]?.toInt()
-    val sagittalCoord = params[TYPE_SAGITTAL]?.toInt()
+    val params = call.receive<HounsfieldRequest>()
 
     when {
-      it.name.isEmpty() -> respondError(ErrorStringCode.RESEARCH_NOT_FOUND)
-      axialCoord == null || axialCoord < 0 -> respondError(ErrorStringCode.INCORRECT_AXIAL_COORD)
-      frontalCoord == null || frontalCoord < 0 -> respondError(ErrorStringCode.INCORRECT_FRONTAL_COORD)
-      sagittalCoord == null || sagittalCoord < 0 -> respondError(ErrorStringCode.INCORRECT_SAGITTAL_COORD)
+      params.axialCoord < 0 -> respondError(ErrorStringCode.INCORRECT_AXIAL_COORD)
+      params.frontalCoord < 0 -> respondError(ErrorStringCode.INCORRECT_FRONTAL_COORD)
+      params.sagittalCoord < 0 -> respondError(ErrorStringCode.INCORRECT_SAGITTAL_COORD)
     }
 
     val existingSession = sessionRepository.getSession(userId)
@@ -39,9 +35,9 @@ fun Route.hounsfield(sessionRepository: SessionRepository) {
         HounsfieldResponse(
           HounsfieldModel(
             existingSession!!.hounsfield(
-              axialCoord!!,
-              frontalCoord!!,
-              sagittalCoord!!
+              params.axialCoord,
+              params.frontalCoord,
+              params.sagittalCoord
             )
           )
         )

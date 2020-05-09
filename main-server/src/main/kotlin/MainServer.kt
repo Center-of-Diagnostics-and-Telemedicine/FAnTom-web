@@ -28,7 +28,7 @@ fun main() {
   embeddedServer(Netty, 80) {
 
     Database.connect(
-      url = "jdbc:mysql://localhost:3306/mark_tomogram?characterEncoding=utf8&useUnicode=true",
+      url = "jdbc:mysql://localhost:3306/mark_tomogram?characterEncoding=utf8&useUnicode=true&useSSL=false",
       driver = "com.mysql.jdbc.Driver",
       user = "root",
       password = "vfrcbv16"
@@ -80,7 +80,7 @@ fun main() {
       authenticate(jwt) {
         register(userRepository)
         researchesList(researchRepository, userResearchRepository, marksRepository)
-        initResearch(researchRepository, sessionRepository)
+        initResearch(researchRepository, sessionRepository, userResearchRepository)
         getSlice(researchRepository, sessionRepository)
         hounsfield(sessionRepository)
         mark(marksRepository)

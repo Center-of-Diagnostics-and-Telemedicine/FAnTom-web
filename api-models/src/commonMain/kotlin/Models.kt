@@ -106,24 +106,7 @@ data class SliceResponse(
 )
 
 @Serializable
-data class SliceModel(val image: ByteArray) {
-
-  override fun equals(other: Any?): Boolean {
-    if (this === other) return true
-    if (other == null || this::class != other::class) return false
-
-    other as SliceModel
-
-    if (!image.contentEquals(other.image)) return false
-
-    return true
-  }
-
-  override fun hashCode(): Int {
-    return image.contentHashCode()
-  }
-
-}
+data class SliceModel(val image: String)
 
 @Serializable
 data class HounsfieldResponse(

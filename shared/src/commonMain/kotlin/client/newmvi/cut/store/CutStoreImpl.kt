@@ -16,12 +16,7 @@ class CutStoreImpl(
   cutType: Int
 ) : CutStore {
 
-  private val _states = BehaviorSubject(
-    State(
-      url = byteArrayOf(),
-      sliceData = initialSliceData(cutType)
-    )
-  )
+  private val _states = BehaviorSubject(State(img = "", sliceData = initialSliceData(cutType)))
   override val states: Observable<State> = _states
   private val state: State get() = _states.value
 
@@ -61,7 +56,7 @@ class CutStoreImpl(
         .map {
           when (it) {
             is CutLoader.Result.Success -> {
-              Effect.Loaded(it.url)
+              Effect.Loaded(it.img)
             }
             is CutLoader.Result.Error -> {
               Effect.LoadingFailed(it.message)
@@ -81,7 +76,7 @@ class CutStoreImpl(
 
   private sealed class Effect {
     object LoadingStarted : Effect()
-    class Loaded(val url: ByteArray) : Effect()
+    class Loaded(val img: String) : Effect()
     data class LoadingFailed(val error: String) : Effect()
 
     class UpdateSliceData(val sliceData: SliceData) : CutStoreImpl.Effect()
@@ -92,7 +87,7 @@ class CutStoreImpl(
     operator fun invoke(effect: Effect, state: State): State =
       when (effect) {
         is Effect.LoadingStarted -> state.copy(isLoading = true, error = "")
-        is Effect.Loaded -> state.copy(isLoading = false, error = "", url = effect.url)
+        is Effect.Loaded -> state.copy(isLoading = false, error = "", img = effect.img)
         is Effect.LoadingFailed -> state.copy(isLoading = false, error = effect.error)
         is Effect.DismissErrorRequested -> state.copy(error = "")
         is Effect.UpdateSliceData -> state.copy(sliceData = effect.sliceData)

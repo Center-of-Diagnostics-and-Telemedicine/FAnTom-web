@@ -1,17 +1,11 @@
 package client.newmvi.shapes.binder
 
-import com.badoo.reaktive.disposable.CompositeDisposable
-import com.badoo.reaktive.observable.Observable
-import com.badoo.reaktive.observable.debounce
-import com.badoo.reaktive.observable.map
-import com.badoo.reaktive.observable.subscribe
-import com.badoo.reaktive.scheduler.mainScheduler
 import client.newmvi.shapes.store.ShapesStore
 import client.newmvi.shapes.view.ShapesView
-import model.CircleShape
-import model.Lines
-import model.MoveRect
-import model.PositionData
+import com.badoo.reaktive.disposable.CompositeDisposable
+import com.badoo.reaktive.observable.*
+import com.badoo.reaktive.scheduler.mainScheduler
+import model.*
 
 class ShapesBinder(
   private val store: ShapesStore,
@@ -37,13 +31,6 @@ class ShapesBinder(
         .subscribe(onNext = store::accept)
     )
 
-//    disposables.add(
-//      areasObservable
-//        .map {
-//          ShapesStore.Intent.AreasIncome(it)
-//        }
-//        .subscribe(onNext = store::accept))
-
     disposables.add(
       linesObservable
         .map { ShapesStore.Intent.UpdateLines(it) }
@@ -56,7 +43,7 @@ class ShapesBinder(
 
     disposables.add(
       mouseDataObservable
-        .debounce(30, mainScheduler)
+        .debounce(60, mainScheduler)
         .map {
           ShapesStore.Intent.GetHounsfield(it)
         }

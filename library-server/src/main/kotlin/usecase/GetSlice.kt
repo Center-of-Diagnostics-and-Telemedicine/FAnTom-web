@@ -9,6 +9,7 @@ import model.*
 import repository.ResearchRepository
 import util.GetSlice
 
+@ExperimentalStdlibApi
 fun Route.getSlice(
   researchRepository: ResearchRepository
 ) {
@@ -21,8 +22,7 @@ fun Route.getSlice(
 
     try {
       val params = call.receive<SliceRequest>()
-      val byteArray = researchRepository.getSlice(params)
-      call.respond(SliceModel(byteArray))
+      call.respond(SliceResponse(SliceModel(researchRepository.getSlice(params))))
     } catch (e: Exception) {
       respondError(ErrorStringCode.GET_SLICE_FAILED)
     }

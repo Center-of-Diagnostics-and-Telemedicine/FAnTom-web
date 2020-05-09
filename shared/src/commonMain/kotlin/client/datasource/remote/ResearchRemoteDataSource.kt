@@ -55,7 +55,8 @@ class ResearchRemoteDataSource : ResearchRemote {
   ): HounsfieldResponse {
     return client.get {
       authHeader(token)
-      apiUrl("$RESEARCH_ROUTE/$HOUNSFIELD_ROUTE?$TYPE_AXIAL=${request.axialCoord}&$TYPE_FRONTAL=${request.frontalCoord}&$TYPE_SAGITTAL=${request.sagittalCoord}")
+      apiUrl("$RESEARCH_ROUTE/$HOUNSFIELD_ROUTE")
+      body = Json.stringify(HounsfieldRequest.serializer(), request)
     }
   }
 
@@ -70,10 +71,10 @@ class ResearchRemoteDataSource : ResearchRemote {
     }
   }
 
-  override suspend fun closeSession(token: String): BaseResponse {
+  override suspend fun closeSession(token: String, researchId: Int): BaseResponse {
     return client.get {
       authHeader(token)
-      apiUrl("$SESSION_ROUTE/$CLOSE_ROUTE")
+      apiUrl("$RESEARCH_ROUTE/$researchId/$CLOSE_ROUTE")
     }
   }
 

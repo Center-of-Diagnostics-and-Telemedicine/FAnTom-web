@@ -8,7 +8,7 @@ import util.debugLog
 interface RemoteLibraryRepository {
   val libraryContainerId: String
   suspend fun initResearch(accessionNumber: String): ResearchInitModel
-  suspend fun getSlice(request: SliceRequest, researchName: String): ByteArray
+  suspend fun getSlice(request: SliceRequest, researchName: String): String
   suspend fun hounsfield(axialCoord: Int, frontalCoord: Int, sagittalCoord: Int): Double
 }
 
@@ -51,7 +51,7 @@ class RemoteLibraryRepositoryImpl(
     }
   }
 
-  override suspend fun getSlice(request: SliceRequest, researchName: String): ByteArray {
+  override suspend fun getSlice(request: SliceRequest, researchName: String): String {
     val response = remoteDataSource.getSlice(request, researchName)
     return when {
       response.response != null -> response.response!!.image

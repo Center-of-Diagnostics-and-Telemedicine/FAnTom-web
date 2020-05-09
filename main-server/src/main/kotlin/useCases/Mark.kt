@@ -15,14 +15,19 @@ fun Route.mark(
 
   post<Mark> {
     suspend fun respondError(errorCode: ErrorStringCode) {
-      call.respond(ErrorModel(errorCode.value))
+      call.respond(BaseResponse(error = ErrorModel(errorCode.value)))
     }
 
     val user = call.user
     val markModel = call.receive<ConfirmCTTypeRequest>().toMarkModel(user.id)
     try {
-      markRepository.createMark(markModel)
-      call.respond(OK)
+      val existing = markRepository.getMark(userId = user.id, researchId = markModel.researchId)
+      if (existing == null) {
+        markRepository.createMark(markModel)
+      } else {
+        markRepository.updateMark(markModel)
+      }
+      call.respond(BaseResponse(response = OK()))
     } catch (e: Exception) {
       application.log.error("Failed to createMark", e)
       respondError(ErrorStringCode.CREATE_MARK_FAILED)

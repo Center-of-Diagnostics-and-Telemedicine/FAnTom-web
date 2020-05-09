@@ -17,7 +17,7 @@ class MviCutComponent(props: MviCutProps) : RComponent<MviCutProps, MviCutState>
   private lateinit var binder: CutBinder
 
   override fun MviCutState.init(props: MviCutProps) {
-    src = byteArrayOf()
+    src = ""
     loading = false
     error = ""
     binder = injectCut(props.cutType)
@@ -44,7 +44,7 @@ class MviCutComponent(props: MviCutProps) : RComponent<MviCutProps, MviCutState>
   override fun show(model: CutView.CutViewModel) {
     setState {
       loading = model.isLoading
-      src = model.url
+      src = model.img
       error = model.error
     }
   }
@@ -80,7 +80,7 @@ interface MviCutProps : RProps {
 }
 
 interface MviCutState : RState {
-  var src: ByteArray
+  var src: String
   var loading: Boolean
   var error: String
 }

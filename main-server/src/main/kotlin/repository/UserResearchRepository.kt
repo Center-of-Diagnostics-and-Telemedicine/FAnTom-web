@@ -9,6 +9,7 @@ interface UserResearchRepository {
   suspend fun createUserResearch(userResearchModel: UserResearchModel)
   suspend fun updateUserResearch(userResearchModel: UserResearchModel)
   suspend fun deleteUserResearch(userId: Int, researchId: Int)
+  suspend fun markSeen(userId: Int, researchId: Int)
 }
 
 class UserResearchRepositoryImpl(private val userResearchDaoFacade: UserResearchDaoFacade) :
@@ -42,6 +43,10 @@ class UserResearchRepositoryImpl(private val userResearchDaoFacade: UserResearch
     checkUserResearchExistence(userId = userId, researchId = researchId)
     userResearchDaoFacade.deleteUserResearch(userId, researchId)
 
+  }
+
+  override suspend fun markSeen(userId: Int, researchId: Int) {
+    userResearchDaoFacade.markSeen(userId, researchId)
   }
 
   private suspend fun checkUserResearchExistence(userId: Int, researchId: Int) =

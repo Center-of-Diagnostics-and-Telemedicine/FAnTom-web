@@ -27,7 +27,7 @@ fun Route.researchesList(
               id = it.researchId,
               name = research.accessionNumber,
               seen = it.seen,
-              done = it.done,
+              done = marked,
               marked = marked
             )
           } else {

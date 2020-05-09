@@ -18,7 +18,7 @@ interface ResearchRepository : Repository {
     mipMethod: Int,
     slyceNumber: Int,
     aproxSize: Int
-  ): ByteArray
+  ): String
 
   suspend fun getHounsfieldData(axialCoord: Int, frontalCoord: Int, sagittalCoord: Int): Double
   suspend fun confirmCtTypeForResearch(
@@ -28,7 +28,7 @@ interface ResearchRepository : Repository {
     researchId: Int
   )
 
-  suspend fun closeSession()
+  suspend fun closeSession(researchId: Int)
 }
 
 class ResearchRepositoryImpl(
@@ -66,7 +66,7 @@ class ResearchRepositoryImpl(
     mipMethod: Int,
     slyceNumber: Int,
     aproxSize: Int
-  ): ByteArray {
+  ): String {
     val response = remote.getSlice(
       token = local.getToken(),
       request = SliceRequest(
@@ -81,7 +81,7 @@ class ResearchRepositoryImpl(
       researchId = researchId
     )
     return when {
-      response.response != null -> response.response!!.image
+      response.response != null -> response.response!!.image.removeSuffix("\\u003d")
       response.error != null -> handleErrorResponse(response.error!!)
       else -> throw SliceFetchException
     }
@@ -120,8 +120,8 @@ class ResearchRepositoryImpl(
     }
   }
 
-  override suspend fun closeSession() {
-    val response = remote.closeSession(local.getToken())
+  override suspend fun closeSession(researchId: Int) {
+    val response = remote.closeSession(local.getToken(), researchId)
     when {
       response.response != null -> return
       response.error != null -> handleErrorResponse<Boolean>(response.error!!)

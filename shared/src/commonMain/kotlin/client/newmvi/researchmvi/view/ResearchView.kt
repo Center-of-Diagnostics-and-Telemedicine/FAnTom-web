@@ -26,7 +26,7 @@ interface ResearchView : BaseView<ResearchView.Event> {
     class CellFullMode(val cellModel: CellModel) : Event()
     class CTTypeChosen(val ctType: CTType) : Event()
     class ConfirmCtType(
-      val ctType: CTTypeModel,
+      val ctType: CTType,
       val leftPercent: String,
       val rightPercent: String
     ) : Event()

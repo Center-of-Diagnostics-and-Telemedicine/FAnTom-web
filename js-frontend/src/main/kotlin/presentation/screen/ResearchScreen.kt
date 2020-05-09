@@ -35,6 +35,24 @@ class ResearchScreen(props: ResearchProps) :
   private val binder = injectNewResearch()
   override val events: PublishSubject<ResearchView.Event> = PublishSubject()
 
+  init {
+    state = ResearchState(
+      loading = true,
+      showError = false,
+      error = "",
+      data = null,
+      leftDrawerOpen = false,
+      rightDrawerOpen = false,
+      gridModel = null,
+      ctTypeToConfirm = null,
+      currentGrid = CutsGridType.THREE,
+      confirmationDialogOpen = false,
+      leftPercent = "",
+      rightPercent = "",
+      nonRelevant = false
+    )
+  }
+
   override fun show(model: ResearchView.ResearchViewModel) {
     if (model.studyCompleted) {
       dispatch(ResearchView.Event.Clear)
@@ -66,10 +84,6 @@ class ResearchScreen(props: ResearchProps) :
       val keyboardEvent = it as KeyboardEvent
       if (keyboardEvent.keyCode == 46)
         dispatch(ResearchView.Event.Delete)
-    })
-
-    window.addEventListener(type = "beforeunload", callback = {
-      dispatch(ResearchView.Event.Back)
     })
   }
 
@@ -128,24 +142,24 @@ class ResearchScreen(props: ResearchProps) :
         ctTypes.firstOrNull { it.ctType == state.ctTypeToConfirm }?.let {
           confirmationDialog(state.confirmationDialogOpen, it)
         }
+        nonRelevantDialog()
       }
     }
   }
 
-  private fun RBuilder.confirmationDialog(
-    open: Boolean,
-    ctTypeModel: CTTypeModel
-  ) {
+  private fun RBuilder.nonRelevantDialog() {
     fun closeAlertDialog() {
-      setState { confirmationDialogOpen = false }
+      setState { nonRelevant = false }
     }
 
-    mDialog(open, onClose = { _, _ -> closeAlertDialog() }, transitionComponent = null) {
-      mDialogTitle("Подтвердите выбор ${ctTypeModel.name}")
+    mDialog(
+      state.nonRelevant,
+      onClose = { _, _ -> closeAlertDialog() },
+      transitionComponent = null
+    ) {
+      mDialogTitle("Подтвердите выбор")
       mDialogContent {
-        mTypography(text = "Вы выбрали ${ctTypeModel.name}, поражение легких: ")
-        mTypography(text = "левое ${state.leftPercent} ")
-        mTypography(text = "правое ${state.rightPercent} ") {
+        mTypography(text = "Вы выбрали 'Нерелевантная серия'") {
           css {
             marginBottom = 3.spacingUnits
           }
@@ -162,9 +176,62 @@ class ResearchScreen(props: ResearchProps) :
           caption = "Подтвердить",
           color = MColor.primary,
           onClick = {
-            dispatch(ResearchView.Event.ConfirmCtType(ctTypeModel, state.leftPercent, state.rightPercent))
+            dispatch(
+              ResearchView.Event.ConfirmCtType(
+                ctType = CTType.NON_RELEVANT,
+                leftPercent = "0",
+                rightPercent = "0"
+              )
+            )
             closeAlertDialog()
           })
+      }
+    }
+  }
+
+  private fun RBuilder.confirmationDialog(
+    open: Boolean,
+    ctTypeModel: CTTypeModel
+  ) {
+    fun closeAlertDialog() {
+      setState { confirmationDialogOpen = false }
+    }
+
+    val noPercentEntered = state.leftPercent.isEmpty() || state.rightPercent.isEmpty()
+
+    mDialog(open, onClose = { _, _ -> closeAlertDialog() }, transitionComponent = null) {
+      mDialogTitle("Подтвердите выбор ${ctTypeModel.name}")
+      mDialogContent {
+        mTypography(text = "Вы выбрали ${ctTypeModel.name}, поражение легких: ")
+        if (noPercentEntered) {
+          mTypography(text = "Пожалуйста, введите проценты поражения легких")
+        } else {
+          mTypography(text = "Левое ${state.leftPercent}%")
+          mTypography(text = "Правое ${state.rightPercent}%")
+        }
+      }
+      mDialogActions {
+        mButton(
+          variant = MButtonVariant.contained,
+          caption = "Отмена",
+          color = MColor.primary,
+          onClick = { closeAlertDialog() })
+        if (!noPercentEntered) {
+          mButton(
+            variant = MButtonVariant.contained,
+            caption = "Подтвердить",
+            color = MColor.primary,
+            onClick = {
+              dispatch(
+                ResearchView.Event.ConfirmCtType(
+                  ctTypeModel.ctType,
+                  state.leftPercent,
+                  state.rightPercent
+                )
+              )
+              closeAlertDialog()
+            })
+        }
       }
     }
   }
@@ -229,29 +296,33 @@ class ResearchScreen(props: ResearchProps) :
       css {
         display = Display.flex
         flexDirection = FlexDirection.column
-        width = 10.spacingUnits
+        width = 16.spacingUnits
+        padding(1.spacingUnits)
       }
       ctTypes.forEach {
         buttonWithPopover(
           text = it.name,
-          color = Color(it.color),
+          color = it.color,
           popoverText = it.description,
           ctType = it.ctType
         )
       }
-      mInputLabel("Левое", htmlFor = "left-input")
-
-      // Method 1, using input props
+      mInputLabel("Левое", htmlFor = "left-input") {
+        css {
+          marginTop = 1.spacingUnits
+        }
+      }
       val inputProps: RProps = jsObject { }
       inputProps.asDynamic().name = "left"
       inputProps.asDynamic().id = "left-input"
       mTooltip(title = "Процент поражения левого легкого", placement = TooltipPlacement.left) {
         mSelect(
-          state.leftPercent ?: 0,
+          state.leftPercent ?: "",
           name = "left",
           variant = MFormControlVariant.outlined,
           onChange = { event, _ -> handleLeft(event) }) {
           attrs.inputProps = inputProps
+          mMenuItem("Выберите", value = "")
           mMenuItem("0%", value = "0")
           mMenuItem("10%", value = "10")
           mMenuItem("20%", value = "20")
@@ -266,17 +337,23 @@ class ResearchScreen(props: ResearchProps) :
         }
       }
 
-      mInputLabel("Правое", htmlFor = "right-input")
+
+      mInputLabel("Правое", htmlFor = "right-input") {
+        css {
+          marginTop = 1.spacingUnits
+        }
+      }
       val inputProps2: RProps = jsObject { }
       inputProps2.asDynamic().name = "right"
       inputProps2.asDynamic().id = "right-input"
       mTooltip(title = "Процент поражения правого легкого", placement = TooltipPlacement.left) {
         mSelect(
-          state.rightPercent ?: 0,
+          state.rightPercent ?: "",
           name = "right",
           variant = MFormControlVariant.outlined,
           onChange = { event, _ -> handleRight(event) }) {
           attrs.inputProps = inputProps2
+          mMenuItem("Выберите", value = "")
           mMenuItem("0%", value = "0")
           mMenuItem("10%", value = "10")
           mMenuItem("20%", value = "20")
@@ -288,6 +365,18 @@ class ResearchScreen(props: ResearchProps) :
           mMenuItem("80%", value = "80")
           mMenuItem("90%", value = "90")
           mMenuItem("100%", value = "100")
+        }
+        css {
+          marginBottom = 1.spacingUnits
+        }
+      }
+      mButton(
+        "Нерелеван. серия",
+        variant = MButtonVariant.contained,
+        color = MColor.primary,
+        onClick = { setState { nonRelevant = true } }) {
+        css {
+          height = 100.pct
         }
       }
     }
@@ -305,22 +394,28 @@ class ResearchScreen(props: ResearchProps) :
 
   private fun StyledDOMBuilder<DIV>.buttonWithPopover(
     text: String,
-    color: Color,
+    color: String,
     popoverText: String,
     ctType: CTType
   ) {
+    val disabled = state.leftPercent?.isNullOrEmpty() || state.rightPercent?.isNullOrEmpty()
     styledDiv {
       css {
         height = 100.pct
-        backgroundColor = color
         padding(1.spacingUnits)
       }
       mTooltip(title = popoverText, placement = TooltipPlacement.left) {
         mButton(
           text,
-          onClick = { dispatch(ResearchView.Event.CTTypeChosen(ctType)) }) {
+          disabled = disabled,
+          onClick = { dispatch(ResearchView.Event.CTTypeChosen(ctType)) }
+        ) {
+          attrs {
+            fullWidth = true
+          }
           css {
             height = 100.pct
+            background = "linear-gradient(45deg, $color 100%, $color 100%)"
           }
         }
       }
@@ -387,20 +482,21 @@ object ComponentStyles : StyleSheet("ComponentStyles", isStatic = true) {
   }
 }
 
-class ResearchState : RState {
-  var loading: Boolean = true
-  var showError: Boolean = false
-  var error: String = ""
-  var data: ResearchSlicesSizesData? = null
-  var leftDrawerOpen: Boolean = false
-  var rightDrawerOpen: Boolean = false
-  var gridModel: GridModel? = null
-  var ctTypeToConfirm: CTType? = null
-  var currentGrid: CutsGridType = CutsGridType.THREE
-  var confirmationDialogOpen = false
-  var leftPercent: String = "0"
-  var rightPercent: String = "0"
-}
+class ResearchState(
+  var loading: Boolean = true,
+  var showError: Boolean = false,
+  var error: String = "",
+  var data: ResearchSlicesSizesData? = null,
+  var leftDrawerOpen: Boolean = false,
+  var rightDrawerOpen: Boolean = false,
+  var gridModel: GridModel? = null,
+  var ctTypeToConfirm: CTType? = null,
+  var currentGrid: CutsGridType = CutsGridType.THREE,
+  var confirmationDialogOpen: Boolean = false,
+  var leftPercent: String = "",
+  var rightPercent: String = "",
+  var nonRelevant: Boolean = false
+) : RState
 
 
 interface ResearchProps : RProps {
