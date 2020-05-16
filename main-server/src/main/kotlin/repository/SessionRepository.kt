@@ -1,7 +1,9 @@
 package repository
 
+import fantom.FantomLibraryDataSourceImpl
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import model.LOCALHOST
 import util.data_store_paths
 import util.debugLog
 
@@ -12,7 +14,7 @@ interface SessionRepository {
 }
 
 class SessionRepositoryImpl(
-  private val creator: LibraryCreator,
+  private val creator: ContainerCreator,
   private val researchDirFinder: ResearchDirFinder
 ) : SessionRepository {
 
@@ -30,8 +32,8 @@ class SessionRepositoryImpl(
     val researchDir = researchDirFinder.getResearchPath(accessionNumber, data_store_paths)
     portsCounter += 1
 
-    val library = creator
-      .createLibrary(
+    val containerId = creator
+      .createContainer(
         userId = userId,
         accessionNumber = accessionNumber,
         port = portsCounter,
@@ -43,6 +45,20 @@ class SessionRepositoryImpl(
           }
         }
       )
+
+    val library = RemoteLibraryRepositoryImpl(
+      remoteDataSource = FantomLibraryDataSourceImpl(
+        endPoint = "$LOCALHOST:${portsCounter}",
+        onClose = {
+          GlobalScope.launch {
+            debugLog("call deleteSession")
+            deleteSession(userId, accessionNumber)
+          }
+        }
+      ),
+      libraryContainerId = containerId
+    )
+
     sessions[userId] = library
 
     return library

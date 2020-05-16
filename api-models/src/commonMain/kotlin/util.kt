@@ -1,10 +1,5 @@
 package model
 
-import kotlinx.serialization.PolymorphicSerializer
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonConfiguration
-import kotlinx.serialization.modules.SerializersModule
-
 fun getErrorMessageByCode(errorCode: ErrorStringCode): String {
   return when (errorCode) {
     ErrorStringCode.BASE_ERROR -> BASE_ERROR

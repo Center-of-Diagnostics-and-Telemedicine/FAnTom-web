@@ -3,6 +3,7 @@ package model
 const val TOKEN = "api_token"
 const val END_POINT: String = "https://fantom.npcmr.ru"
 const val LOCALHOST = "http://127.0.0.1"
+
 //const val END_POINT: String = "http://10.2.20.44:8080"
 const val LOGIN_ROUTE: String = "login"
 const val RESEARCH_ROUTE: String = "research"
@@ -72,12 +73,16 @@ enum class LineType {
 enum class AreaType(val value: Int) {
     //нет типа
     NO_TYPE_NODULE(-1),
+
     //солидный
     SOLID_NODULE(0),
+
     //полусолидный
     PART_SOLID_NODULE(1),
+
     //матовое стекло
     PURE_SUBSOLID_NODULE(2),
+
     //не онкология
     NOT_ONKO(3),
 }
@@ -96,6 +101,12 @@ const val blue = "#00ffff"
 const val LEFT_MOUSE_BUTTON: Short = 0
 const val MIDDLE_MOUSE_BUTTON: Short = 1
 const val RIGHT_MOUSE_BUTTON: Short = 2
+
+enum class Environment {
+    DEBUG,
+    PRODUCTION
+}
+
 
 enum class CutsGridType {
     SINGLE,

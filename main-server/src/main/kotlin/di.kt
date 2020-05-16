@@ -13,6 +13,6 @@ val userResearchRepository = UserResearchRepositoryImpl(userResearchDao)
 val marksDao = MarkDao()
 val marksRepository = MarkRepositoryImpl(marksDao)
 
-val creator = LibraryCreatorImpl()
+val creator = ContainerCreatorImpl()
 val researchDirFinder = ResearchDirFinderImpl()
 val sessionRepository = SessionRepositoryImpl(creator, researchDirFinder)

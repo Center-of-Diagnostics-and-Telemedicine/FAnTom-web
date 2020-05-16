@@ -7,26 +7,24 @@ import com.github.dockerjava.api.model.*
 import com.github.dockerjava.core.DefaultDockerClientConfig
 import com.github.dockerjava.core.DockerClientImpl
 import com.github.dockerjava.jaxrs.JerseyDockerCmdExecFactory
-import fantom.FantomLibraryDataSourceImpl
-import model.LOCALHOST
 import model.data_store_path
 import util.debugLog
 import util.fantomServerPort
 import java.io.File
 
-interface LibraryCreator {
-  suspend fun createLibrary(
+interface ContainerCreator {
+  suspend fun createContainer(
     userId: Int,
     accessionNumber: String,
     port: Int,
     researchDir: File,
     onClose: () -> Unit
-  ): RemoteLibraryRepository
+  ): String
 
   suspend fun deleteLibrary(containerId: String)
 }
 
-class LibraryCreatorImpl() : LibraryCreator {
+class ContainerCreatorImpl() : ContainerCreator {
 
   private val config = DefaultDockerClientConfig.createDefaultConfigBuilder()
     .withDockerHost("unix:///var/run/docker.sock")
@@ -42,26 +40,20 @@ class LibraryCreatorImpl() : LibraryCreator {
     .getInstance(config)
     .withDockerCmdExecFactory(execFactory)
 
-  override suspend fun createLibrary(
+  override suspend fun createContainer(
     userId: Int,
     accessionNumber: String,
     port: Int,
     researchDir: File,
     onClose: () -> Unit
-  ): RemoteLibraryRepository {
+  ): String {
 
     val createResponse = createContainerRequest(port, researchDir).exec()
     debugLog("call start container cmd")
     dockerClient.startContainerCmd(createResponse.id).exec()
     debugLog("call wait container cmd")
     dockerClient.waitContainerCmd(createResponse.id)
-    return RemoteLibraryRepositoryImpl(
-      remoteDataSource = FantomLibraryDataSourceImpl(
-        endPoint = "$LOCALHOST:${port}",
-        onClose = onClose
-      ),
-      libraryContainerId = createResponse.id
-    )
+    return createResponse.id
 
   }
 
