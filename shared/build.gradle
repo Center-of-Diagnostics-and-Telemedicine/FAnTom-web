@@ -3,24 +3,6 @@ plugins {
     id 'kotlinx-serialization'
 }
 
-repositories {
-    maven { url 'https://dl.bintray.com/kotlin/kotlin-dev' }
-    maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
-    jcenter()
-    maven { url "https://dl.bintray.com/kotlin/ktor" }
-    maven { url "https://dl.bintray.com/kotlin/kotlin-js-wrappers" }
-    maven { url "https://dl.bintray.com/kotlin/kotlinx" }
-    maven { url "https://dl.bintray.com/kotlin/exposed" }
-    maven { url "https://dl.bintray.com/badoo/maven" }
-    mavenCentral()
-}
-
-def kotlin_version = 'pre.94-kotlin-1.3.70' // for kotlin-wrappers
-def ktor_version = '1.3.2'
-def kotlinx_serialization_version = '0.20.0'
-def logback_version = '1.2.3'
-def reaktive_version = '1.1.12'
-
 kotlin {
     jvm()
     js {
@@ -55,7 +37,6 @@ kotlin {
                 implementation kotlin('stdlib-common')
                 api(project(":api-models"))
 
-                implementation "org.jetbrains:kotlin-css:1.0.0-$kotlin_version"
                 implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$kotlinx_serialization_version"
 
                 implementation "com.badoo.reaktive:reaktive:$reaktive_version"
@@ -66,6 +47,13 @@ kotlin {
                 implementation "io.ktor:ktor-client-core:$ktor_version"
                 implementation "io.ktor:ktor-client-json:$ktor_version"
                 implementation "io.ktor:ktor-client-serialization:$ktor_version"
+
+                implementation "com.arkivanov.mvikotlin:mvikotlin:2.0.0-beta4"
+//                implementation "com.arkivanov.mvikotlin:mvikotlin:2.0.0-beta4"
+//                implementation "com.arkivanov.mvikotlin:mvikotlin:2.0.0-beta4"
+//                implementation "com.arkivanov.mvikotlin:mvikotlin:2.0.0-beta4"
+//                implementation "com.arkivanov.mvikotlin:mvikotlin:2.0.0-beta4"
+//                implementation "com.arkivanov.mvikotlin:mvikotlin:2.0.0-beta4"
 
             }
         }
@@ -89,8 +77,6 @@ kotlin {
                 implementation("io.ktor:ktor-client-json-jvm:$ktor_version")
                 implementation "io.ktor:ktor-client-serialization:$ktor_version"
                 implementation "io.ktor:ktor-serialization:$ktor_version"
-
-                implementation "org.jetbrains:kotlin-css-jvm:1.0.0-$kotlin_version"
 
                 implementation "com.badoo.reaktive:reaktive-jvm:$reaktive_version"
 

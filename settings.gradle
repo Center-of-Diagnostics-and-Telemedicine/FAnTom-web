@@ -6,16 +6,8 @@ pluginManagement {
             }
         }
     }
-
-    repositories {
-        maven { url 'https://dl.bintray.com/kotlin/kotlin-dev' }
-        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
-        mavenCentral()
-        maven { url 'https://plugins.gradle.org/m2/' }
-        maven { url "https://dl.bintray.com/badoo/maven" }
-        maven { url "https://dl.bintray.com/kotlin/ktor" }
-    }
 }
+
 rootProject.name = 'FantomWeb'
 
 enableFeaturePreview('GRADLE_METADATA')

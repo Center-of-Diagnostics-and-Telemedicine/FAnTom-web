@@ -3,14 +3,6 @@ plugins {
     id 'kotlinx-serialization'
 }
 
-repositories {
-    maven { url 'https://dl.bintray.com/kotlin/kotlin-dev' }
-    maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
-    maven { url "https://dl.bintray.com/kotlin/kotlinx" }
-    jcenter()
-    mavenCentral()
-}
-
 //version '0.1.1'
 
 sourceCompatibility = 1.8
@@ -18,9 +10,6 @@ sourceCompatibility = 1.8
 repositories {
     mavenCentral()
 }
-
-def kotlinx_serialization_version = '0.20.0'
-
 
 kotlin {
     /* Targets configuration omitted. 
