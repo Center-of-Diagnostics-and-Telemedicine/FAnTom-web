@@ -49,12 +49,9 @@ kotlin {
                 implementation "io.ktor:ktor-client-serialization:$ktor_version"
 
                 implementation "com.arkivanov.mvikotlin:mvikotlin:2.0.0-beta4"
-//                implementation "com.arkivanov.mvikotlin:mvikotlin:2.0.0-beta4"
-//                implementation "com.arkivanov.mvikotlin:mvikotlin:2.0.0-beta4"
-//                implementation "com.arkivanov.mvikotlin:mvikotlin:2.0.0-beta4"
-//                implementation "com.arkivanov.mvikotlin:mvikotlin:2.0.0-beta4"
-//                implementation "com.arkivanov.mvikotlin:mvikotlin:2.0.0-beta4"
-
+                implementation "com.arkivanov.mvikotlin:mvikotlin:2.0.0-beta4"
+                implementation "com.arkivanov.mvikotlin:mvikotlin-main:2.0.0-beta4"
+                implementation "com.arkivanov.mvikotlin:mvikotlin-extensions-reaktive:2.0.0-beta4"
             }
         }
         commonTest {
@@ -102,6 +99,11 @@ kotlin {
                 implementation "com.badoo.reaktive:reaktive-annotations-js:$reaktive_version"
                 implementation "com.badoo.reaktive:coroutines-interop-js:$reaktive_version"
                 implementation "com.badoo.reaktive:utils-js:$reaktive_version"
+
+                implementation "com.arkivanov.mvikotlin:mvikotlin:2.0.0-beta4"
+                implementation "com.arkivanov.mvikotlin:mvikotlin:2.0.0-beta4"
+                implementation "com.arkivanov.mvikotlin:mvikotlin-main:2.0.0-beta4"
+                implementation "com.arkivanov.mvikotlin:mvikotlin-extensions-reaktive:2.0.0-beta4"
 
                 implementation npm("text-encoding", "0.7.0")
                 implementation npm("source-map-loader", "0.2.4")

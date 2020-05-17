@@ -1,11 +1,18 @@
 package presentation.app
 
+import client.domain.repository.LoginRepository
+import client.newmvi.newlogin.controller.LoginController
+import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
+import com.arkivanov.mvikotlin.core.store.StoreFactory
+import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.ccfraser.muirwik.components.*
 import com.ccfraser.muirwik.components.styles.ThemeOptions
 import com.ccfraser.muirwik.components.styles.createMuiTheme
 import debugLog
 import presentation.navigator.Screen
-import presentation.screen.*
+import presentation.screen.newLogin.newLogin
+import presentation.screen.research
+import presentation.screen.researchList
 import react.*
 
 abstract class App : RComponent<RProps, AppState>() {
@@ -26,7 +33,7 @@ abstract class App : RComponent<RProps, AppState>() {
     mThemeProvider(createMuiTheme(themeOptions)) {
       debugLog("state: ${state.screen}")
       when (state.screen) {
-        Screen.AUTH -> login {
+        Screen.AUTH -> newLogin {
           setState { screen = Screen.RESEARCH_LIST }
         }
         Screen.RESEARCH_LIST -> researchList {

@@ -45,6 +45,11 @@ dependencies {
     implementation "com.badoo.reaktive:coroutines-interop-js:$reaktive_version"
     implementation "com.badoo.reaktive:utils-js:$reaktive_version"
 
+    implementation "com.arkivanov.mvikotlin:mvikotlin:2.0.0-beta4"
+    implementation "com.arkivanov.mvikotlin:mvikotlin:2.0.0-beta4"
+    implementation "com.arkivanov.mvikotlin:mvikotlin-main:2.0.0-beta4"
+    implementation "com.arkivanov.mvikotlin:mvikotlin-extensions-reaktive:2.0.0-beta4"
+
     implementation(npm("core-js", "2.6.5"))
     implementation(npm("svg-inline-loader", "0.8.0"))
     implementation(npm("abort-controller"))
