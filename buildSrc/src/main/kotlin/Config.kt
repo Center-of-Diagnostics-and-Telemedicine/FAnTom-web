@@ -93,7 +93,12 @@ fun Project.setupMultiplatform() {
         doIfBuildTargetAvailable<BuildTarget.Js> {
             js {
                 nodejs()
-                browser()
+                browser {
+                    dceTask {
+                        dceOptions.devMode = true
+                        keep("ktor-ktor-io.\$\$importsForInline\$\$.ktor-ktor-io.io.ktor.utils.io")
+                    }
+                }
 
                 compilations.all {
                     compileKotlinTask.kotlinOptions {
@@ -153,8 +158,8 @@ fun Project.setupMultiplatform() {
             jvmMain.dependsOn(jvmCommonMain)
             jvmTest.dependsOn(jvmCommonTest)
 
-            androidMain.dependsOn(jvmCommonMain)
-            androidTest.dependsOn(jvmCommonTest)
+//            androidMain.dependsOn(jvmCommonMain)
+//            androidTest.dependsOn(jvmCommonTest)
 
             jsMain {
                 dependsOn(jsNativeCommonMain)
@@ -173,23 +178,23 @@ fun Project.setupMultiplatform() {
                 }
             }
 
-            nativeCommonMain.dependsOn(jsNativeCommonMain)
-            nativeCommonTest.dependsOn(jsNativeCommonTest)
-
-            linuxX64Main.dependsOn(nativeCommonMain)
-            linuxX64Test.dependsOn(nativeCommonTest)
-
-            darwinCommonMain.dependsOn(nativeCommonMain)
-            darwinCommonTest.dependsOn(nativeCommonTest)
-
-            iosCommonMain.dependsOn(darwinCommonMain)
-            iosCommonTest.dependsOn(darwinCommonTest)
-
-            iosX64Main.dependsOn(iosCommonMain)
-            iosX64Test.dependsOn(iosCommonTest)
-
-            iosArm64Main.dependsOn(iosCommonMain)
-            iosArm64Test.dependsOn(iosCommonTest)
+//            nativeCommonMain.dependsOn(jsNativeCommonMain)
+//            nativeCommonTest.dependsOn(jsNativeCommonTest)
+//
+//            linuxX64Main.dependsOn(nativeCommonMain)
+//            linuxX64Test.dependsOn(nativeCommonTest)
+//
+//            darwinCommonMain.dependsOn(nativeCommonMain)
+//            darwinCommonTest.dependsOn(nativeCommonTest)
+//
+//            iosCommonMain.dependsOn(darwinCommonMain)
+//            iosCommonTest.dependsOn(darwinCommonTest)
+//
+//            iosX64Main.dependsOn(iosCommonMain)
+//            iosX64Test.dependsOn(iosCommonTest)
+//
+//            iosArm64Main.dependsOn(iosCommonMain)
+//            iosArm64Test.dependsOn(iosCommonTest)
         }
     }
 }

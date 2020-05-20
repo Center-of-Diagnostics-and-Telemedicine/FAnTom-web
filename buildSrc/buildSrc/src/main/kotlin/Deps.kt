@@ -55,12 +55,27 @@ object Deps {
         object Runtime {
           object Core :
             Dependency(group = Kotlinx, name = "kotlinx-serialization-runtime", version = version)
+
           object Common :
-            Dependency(group = Kotlinx, name = "kotlinx-serialization-runtime-common", version = version)
+            Dependency(
+              group = Kotlinx,
+              name = "kotlinx-serialization-runtime-common",
+              version = version
+            )
+
           object Native :
-            Dependency(group = Kotlinx, name = "kotlinx-serialization-runtime-native", version = version)
+            Dependency(
+              group = Kotlinx,
+              name = "kotlinx-serialization-runtime-native",
+              version = version
+            )
+
           object Js :
-            Dependency(group = Kotlinx, name = "kotlinx-serialization-runtime-js", version = version)
+            Dependency(
+              group = Kotlinx,
+              name = "kotlinx-serialization-runtime-js",
+              version = version
+            )
         }
       }
     }
@@ -107,17 +122,59 @@ object Deps {
 
   object Badoo {
     object Reaktive : Group(name = "com.badoo.reaktive") {
-      private const val version = "1.1.12"
+      private const val version = "1.1.13"
 
       object Reaktive : Dependency(group = Badoo.Reaktive, name = "reaktive", version = version)
       object ReaktiveAnnotations :
         Dependency(group = Badoo.Reaktive, name = "reaktive-annotations", version = version)
+
+      object CoroutinesInterop :
+        Dependency(group = Badoo.Reaktive, name = "coroutines-interop", version = version)
 
       object ReaktiveTesting :
         Dependency(group = Badoo.Reaktive, name = "reaktive-testing", version = version)
 
       object Utils : Dependency(group = Badoo.Reaktive, name = "utils", version = version)
     }
+  }
+
+  object Ktor : Group(name = "io.ktor") {
+    private const val version = "1.3.2"
+
+    object Client {
+
+      object Common : Dependency(group = Ktor, name = "ktor-client-core", version = version)
+      object Js : Dependency(group = Ktor, name = "ktor-client-js", version = version)
+
+      object Json {
+        object Common : Dependency(group = Ktor, name = "ktor-client-json", version = version)
+        object Jvm : Dependency(group = Ktor, name = "ktor-client-json-jvm", version = version)
+        object Js : Dependency(group = Ktor, name = "ktor-client-json-js", version = version)
+      }
+
+      object Serialization {
+        object Common :
+          Dependency(group = Ktor, name = "ktor-client-serialization", version = version)
+
+        object Jvm :
+          Dependency(group = Ktor, name = "ktor-client-serialization-jvm", version = version)
+
+        object Js :
+          Dependency(group = Ktor, name = "ktor-client-serialization-js", version = version)
+      }
+    }
+  }
+
+  object MVIKotlin : Group(name = "com.arkivanov.mvikotlin") {
+    private const val version = "2.0.0-beta5"
+
+    object Core : Dependency(group = MVIKotlin, name = "mvikotlin", version = version)
+    object Main : Dependency(group = MVIKotlin, name = "mvikotlin-main", version = version)
+    object TimeTravel : Dependency(group = MVIKotlin, name = "mvikotlin-timetravel", version = version)
+    object Logging : Dependency(group = MVIKotlin, name = "mvikotlin-logging", version = version)
+    object Rx : Dependency(group = MVIKotlin, name = "rx", version = version)
+    object Reaktive :
+      Dependency(group = MVIKotlin, name = "mvikotlin-extensions-reaktive", version = version)
   }
 
   object TouchLab : Group(name = "co.touchlab") {

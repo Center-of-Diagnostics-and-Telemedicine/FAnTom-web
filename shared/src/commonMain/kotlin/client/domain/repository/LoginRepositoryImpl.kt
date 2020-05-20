@@ -1,6 +1,5 @@
 package client.domain.repository
 
-import client.ResearchApiExceptions
 import client.datasource.local.LocalDataSource
 import client.datasource.remote.LoginRemote
 import client.debugLog
