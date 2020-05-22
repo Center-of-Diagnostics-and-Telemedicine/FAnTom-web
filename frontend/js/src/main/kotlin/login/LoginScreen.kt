@@ -8,6 +8,7 @@ import com.ccfraser.muirwik.components.button.MButtonVariant
 import com.ccfraser.muirwik.components.button.mButton
 import com.ccfraser.muirwik.components.form.MFormControlMargin
 import com.ccfraser.muirwik.components.form.MFormControlVariant
+import components.alert
 import controller.LoginController
 import controller.LoginControllerImpl
 import kotlinx.css.*
@@ -60,6 +61,14 @@ class LoginScreen(
 
   override fun RBuilder.render() {
     val model = state.model
+
+    val error = state.model.error
+    alert(
+      message = error,
+      open = error.isNotEmpty(),
+      handleClose = { viewDelegate.dispatchEvent(LoginView.Event.DismissError) }
+    )
+
     themeContext.Consumer { theme ->
       mContainer {
         attrs {
@@ -80,13 +89,11 @@ class LoginScreen(
             }
             mIcon("lock_open")
           }
-          mTypography {
-            attrs {
-              component = "h1"
-              variant = MTypographyVariant.h5
-            }
-            +"Авторизация"
-          }
+          mTypography(
+            text = "Авторизация",
+            component = "h1",
+            variant = MTypographyVariant.h5
+          )
           styledForm {
             css {
               width = 100.pct
@@ -111,7 +118,6 @@ class LoginScreen(
                 inputLabelProps = object : RProps {
                   val shrink = true
                 }
-                onFocus = ::onFocus
               }
             }
             mTextField(
@@ -175,17 +181,13 @@ class LoginScreen(
   private fun onPasswordChanged(event: Event) {
     val target = event.target as HTMLInputElement
     val searchTerm = target.value
-    viewDelegate.dispatchEvent(LoginView.Event.LoginChanged(searchTerm))
+    viewDelegate.dispatchEvent(LoginView.Event.PasswordChanged(searchTerm))
   }
 
   private fun onLoginChanged(event: Event) {
     val target = event.target as HTMLInputElement
     val searchTerm = target.value
-    viewDelegate.dispatchEvent(LoginView.Event.PasswordChanged(searchTerm))
-  }
-
-  private fun onFocus(event: Event) {
-    viewDelegate.dispatchEvent(LoginView.Event.DismissError)
+    viewDelegate.dispatchEvent(LoginView.Event.LoginChanged(searchTerm))
   }
 
   override fun componentWillUnmount() {

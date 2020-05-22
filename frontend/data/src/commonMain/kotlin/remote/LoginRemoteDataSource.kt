@@ -11,38 +11,34 @@ import model.AUTH_CHECK_ROUTE
 import model.AuthorizationRequest
 import model.AuthorizationResponse
 import model.LOGIN_ROUTE
+import repository.LoginRemote
 
-interface LoginRemote {
-    suspend fun auth(request: AuthorizationRequest): AuthorizationResponse
-    suspend fun tryToAuth(): AuthorizationResponse
-}
+object LoginRemoteDataSource : LoginRemote {
 
-class LoginRemoteDataSource: LoginRemote{
-
-    private val client: HttpClient = HttpClient {
-        install(JsonFeature) {
-            serializer = KotlinxSerializer()
-        }
+  private val client: HttpClient = HttpClient {
+    install(JsonFeature) {
+      serializer = KotlinxSerializer()
     }
+  }
 
-    override suspend fun auth(request: AuthorizationRequest): AuthorizationResponse {
-        return client.post {
-            apiUrl(LOGIN_ROUTE)
-            body = Json.stringify(AuthorizationRequest.serializer(), request)
-        }
+  override suspend fun auth(request: AuthorizationRequest): AuthorizationResponse {
+    return client.post {
+      apiUrl(LOGIN_ROUTE)
+      body = Json.stringify(AuthorizationRequest.serializer(), request)
     }
+  }
 
-    override suspend fun tryToAuth(): AuthorizationResponse {
-        return client.post {
-            apiUrl(AUTH_CHECK_ROUTE)
-        }
+  override suspend fun tryToAuth(): AuthorizationResponse {
+    return client.post {
+      apiUrl(AUTH_CHECK_ROUTE)
     }
+  }
 
-    private fun HttpRequestBuilder.apiUrl(path: String) {
-        url {
-            takeFrom(model.END_POINT)
-            encodedPath = path
-        }
+  private fun HttpRequestBuilder.apiUrl(path: String) {
+    url {
+      takeFrom(model.LOCALHOST)
+      encodedPath = path
     }
+  }
 
 }

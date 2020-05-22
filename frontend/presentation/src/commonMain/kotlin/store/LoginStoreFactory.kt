@@ -23,7 +23,7 @@ internal class LoginStoreFactory(
 
   override fun createExecutor(): Executor<Intent, Nothing, State, Result, Label> = ExecutorImpl()
 
-  private inner class ExecutorImpl : ReaktiveExecutor<Intent, Nothing, State, Result, Nothing>() {
+  private inner class ExecutorImpl : ReaktiveExecutor<Intent, Nothing, State, Result, Label>() {
 
     override fun executeIntent(intent: Intent, getState: () -> State) {
       when (intent) {
@@ -45,7 +45,10 @@ internal class LoginStoreFactory(
           .observeOn(mainScheduler)
           .subscribeScoped(
             isThreadLocal = true,
-            onSuccess = { Result.Authorized },
+            onSuccess = {
+              publish(Label.Authorized)
+              dispatch(Result.Authorized)
+            },
             onError = ::handleError
           )
       }
@@ -60,7 +63,7 @@ internal class LoginStoreFactory(
     }
 
     private fun handleError(error: Throwable) {
-      when (error) {
+      val result = when (error) {
         is AuthFailedException -> Result.Error(error.error)
         is InvalidAuthCredentials -> Result.Error(error.error)
         else -> {
@@ -68,6 +71,7 @@ internal class LoginStoreFactory(
           Result.Error(AUTH_FAILED)
         }
       }
+      dispatch(result)
     }
 
   }

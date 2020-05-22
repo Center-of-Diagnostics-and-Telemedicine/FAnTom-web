@@ -3,18 +3,6 @@ package model
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ErrorModel(val error: Int, val message: String = "")
-
-@Serializable
-data class AuthorizationResponse(
-  val response: AuthorizationModel? = null,
-  val error: ErrorModel? = null
-)
-
-@Serializable
-data class AuthorizationModel(val token: String)
-
-@Serializable
 data class ResearchInitResponse(
   val response: ResearchInitModel? = null,
   val error: ErrorModel? = null
@@ -196,12 +184,6 @@ data class SliceRequest(
   val sliceNumber: Int,
   val mipValue: Int
 )
-
-@Serializable
-data class AuthorizationRequest(val name: String, val password: String)
-
-@Serializable
-data class RegistrationRequest(val name: String, val password: String, val role: Int)
 
 @Serializable
 data class User(

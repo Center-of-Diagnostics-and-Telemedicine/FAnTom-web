@@ -7,15 +7,16 @@ import com.ccfraser.muirwik.components.mThemeProvider
 import com.ccfraser.muirwik.components.spacingUnits
 import com.ccfraser.muirwik.components.styles.ThemeOptions
 import com.ccfraser.muirwik.components.styles.createMuiTheme
+import controller.ListController
 import controller.LoginController
 import kotlinx.css.*
+import list.ListScreen
+import list.list
 import login.LoginScreen
 import login.login
-import react.RBuilder
-import react.RComponent
-import react.RProps
-import react.RState
+import react.*
 import repository.LoginRepository
+import repository.ResearchRepository
 import styled.StyleSheet
 
 abstract class App : RComponent<AppProps, AppState>() {
@@ -23,7 +24,10 @@ abstract class App : RComponent<AppProps, AppState>() {
   private var themeColor = "light"
 
   init {
-    state = AppState(screen = ScreenType.AUTH)
+    state = AppState(
+      screen = ScreenType.AUTH,
+      currentResearchAccessionName = ""
+    )
   }
 
   override fun RBuilder.render() {
@@ -32,7 +36,6 @@ abstract class App : RComponent<AppProps, AppState>() {
     val themeOptions: ThemeOptions =
       js("({palette: {primary: {light: '#757ce8',main: '#3f50b5',dark: '#002884',contrastText:'#fff',},secondary: {light: '#ff7961',main: '#f44336',dark:'#ba000d',contrastText: '#000',},}})")
     themeOptions.palette?.type = themeColor
-    themeOptions.palette?.primary.main = "#e91e63"
     themeOptions.typography?.fontSize = 12
     themeOptions.spacing = 1
 
@@ -43,17 +46,30 @@ abstract class App : RComponent<AppProps, AppState>() {
             override val output: (LoginController.Output) -> Unit = ::loginOutput
           }
         )
-        ScreenType.LIST -> {
-        }
+        ScreenType.LIST -> list(
+          dependencies = object : ListScreen.Dependencies, Dependencies by props.dependecies {
+            override val output: (ListController.Output) -> Unit = ::listOutput
+          }
+        )
         ScreenType.RESEARCH -> {
         }
       }
     }
   }
 
+  private fun listOutput(output: ListController.Output) {
+    when (output) {
+      is ListController.Output.ItemSelected ->
+        setState {
+          debugLog("output in app")
+          currentResearchAccessionName = output.id
+        }
+    }
+  }
+
   private fun loginOutput(output: LoginController.Output) {
-    when(output){
-      LoginController.Output.Authorized -> debugLog("Authorized")
+    when (output) {
+      LoginController.Output.Authorized -> setState { screen = ScreenType.LIST }
     }
   }
 
@@ -96,11 +112,13 @@ abstract class App : RComponent<AppProps, AppState>() {
   interface Dependencies {
     val storeFactory: StoreFactory
     val loginRepository: LoginRepository
+    val researchRepository: ResearchRepository
   }
 }
 
 class AppState(
-  var screen: ScreenType
+  var screen: ScreenType,
+  var currentResearchAccessionName: String
 ) : RState
 
 interface AppProps : RProps {

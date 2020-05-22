@@ -8,7 +8,9 @@ import io.ktor.gson.GsonConverter
 import io.ktor.gson.gson
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
-import io.ktor.http.content.*
+import io.ktor.http.content.resource
+import io.ktor.http.content.resources
+import io.ktor.http.content.static
 import io.ktor.locations.Locations
 import io.ktor.response.respond
 import io.ktor.routing.routing
@@ -25,13 +27,13 @@ import util.*
 fun main() {
   val jwt = "jwt"
 
-  embeddedServer(Netty, 80) {
+  embeddedServer(Netty, 8081) {
 
     Database.connect(
       url = "jdbc:mysql://localhost:3306/mark_tomogram?characterEncoding=utf8&useUnicode=true&useSSL=false",
       driver = "com.mysql.jdbc.Driver",
       user = "root",
-      password = "vfrcbv16"
+      password = ""
     )
 
     // Serialize json
@@ -40,6 +42,9 @@ fun main() {
       register(ContentType("*", "*"), GsonConverter())
       register(ContentType("text", "plain"), GsonConverter())
       gson {}
+    }
+    install(CORS){
+      host("localhost:8080")
     }
     install(StatusPages) {
       exception<AuthenticationException> {
@@ -88,8 +93,6 @@ fun main() {
       }
 
     }
-
-//    DBMigration.migrate()
   }.start(wait = true)
 
 }

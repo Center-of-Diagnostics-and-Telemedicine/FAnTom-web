@@ -7,6 +7,7 @@ import org.gradle.kotlin.dsl.getByType
 import org.jetbrains.kotlin.gradle.dsl.Kotlin2JsProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
+import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalDceDsl
 
 enum class BuildType {
     ALL, METADATA, NON_NATIVE, LINUX, IOS
@@ -79,15 +80,10 @@ inline fun <reified T : BuildTarget> ExtensionAware.doIfBuildTargetAvailable(blo
     }
 }
 
+@ExperimentalDceDsl
 fun Project.setupMultiplatform() {
     plugins.apply("kotlin-multiplatform")
     plugins.apply("kotlinx-serialization")
-
-//    doIfBuildTargetAvailable<BuildTarget.Android> {
-//        plugins.apply("com.android.library")
-//
-//        setupAndroidSdkVersions()
-//    }
 
     kotlin {
         doIfBuildTargetAvailable<BuildTarget.Js> {
@@ -115,10 +111,6 @@ fun Project.setupMultiplatform() {
         doIfBuildTargetAvailable<BuildTarget.Jvm> {
             jvm()
         }
-
-//        doIfBuildTargetAvailable<BuildTarget.LinuxX64> {
-//            linuxX64()
-//        }
 
         sourceSets {
             commonMain {
@@ -158,9 +150,6 @@ fun Project.setupMultiplatform() {
             jvmMain.dependsOn(jvmCommonMain)
             jvmTest.dependsOn(jvmCommonTest)
 
-//            androidMain.dependsOn(jvmCommonMain)
-//            androidTest.dependsOn(jvmCommonTest)
-
             jsMain {
                 dependsOn(jsNativeCommonMain)
 
@@ -177,24 +166,6 @@ fun Project.setupMultiplatform() {
                     implementation(Deps.Jetbrains.Kotlin.Test.Js)
                 }
             }
-
-//            nativeCommonMain.dependsOn(jsNativeCommonMain)
-//            nativeCommonTest.dependsOn(jsNativeCommonTest)
-//
-//            linuxX64Main.dependsOn(nativeCommonMain)
-//            linuxX64Test.dependsOn(nativeCommonTest)
-//
-//            darwinCommonMain.dependsOn(nativeCommonMain)
-//            darwinCommonTest.dependsOn(nativeCommonTest)
-//
-//            iosCommonMain.dependsOn(darwinCommonMain)
-//            iosCommonTest.dependsOn(darwinCommonTest)
-//
-//            iosX64Main.dependsOn(iosCommonMain)
-//            iosX64Test.dependsOn(iosCommonTest)
-//
-//            iosArm64Main.dependsOn(iosCommonMain)
-//            iosArm64Test.dependsOn(iosCommonTest)
         }
     }
 }

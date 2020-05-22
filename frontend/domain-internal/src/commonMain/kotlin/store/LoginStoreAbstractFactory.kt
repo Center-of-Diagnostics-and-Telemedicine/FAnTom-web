@@ -33,7 +33,7 @@ abstract class LoginStoreAbstractFactory(
         object Loading : Result()
         object Authorized : Result()
 
-        class Error(val error: String) : Result()
+        data class Error(val error: String) : Result()
         object DismissErrorRequested : Result()
     }
 

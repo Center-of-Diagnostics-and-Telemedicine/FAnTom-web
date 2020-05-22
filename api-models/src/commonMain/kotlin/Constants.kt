@@ -2,7 +2,7 @@ package model
 
 const val TOKEN = "api_token"
 const val END_POINT: String = "https://fantom.npcmr.ru"
-const val LOCALHOST = "http://127.0.0.1"
+const val LOCALHOST = "http://localhost:8081"
 
 //const val END_POINT: String = "http://10.2.20.44:8080"
 const val LOGIN_ROUTE: String = "login"
