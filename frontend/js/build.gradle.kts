@@ -36,5 +36,4 @@ dependencies {
 }
 
 kotlin.target.useCommonJs()
-kotlin.target.produceExecutable()
 kotlin.target.browser()
