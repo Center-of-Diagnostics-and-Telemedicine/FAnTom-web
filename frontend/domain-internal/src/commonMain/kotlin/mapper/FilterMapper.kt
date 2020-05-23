@@ -5,7 +5,7 @@ import store.FilterStore.State
 import view.FilterView.Event
 import view.FilterView.Model
 
-val filterStateToFilterModel: State.() -> Model? = { Model(items = listOf()) }
+val filterStateToFilterModel: State.() -> Model? = { Model(items = list) }
 
 val addEventToAddIntent: Event.() -> Intent? =
   {

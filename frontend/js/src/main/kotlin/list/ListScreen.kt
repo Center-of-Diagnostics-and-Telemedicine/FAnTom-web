@@ -3,24 +3,19 @@ package list
 import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.ccfraser.muirwik.components.*
-import com.ccfraser.muirwik.components.button.mIconButton
 import com.ccfraser.muirwik.components.card.mCard
 import com.ccfraser.muirwik.components.card.mCardActionArea
 import com.ccfraser.muirwik.components.card.mCardContent
 import com.ccfraser.muirwik.components.card.mCardHeader
-import com.ccfraser.muirwik.components.list.mList
-import com.ccfraser.muirwik.components.list.mListItemWithIcon
 import com.ccfraser.muirwik.components.styles.Breakpoint
 import controller.ListController
 import controller.ListControllerImpl
-import kotlinext.js.jsObject
 import kotlinx.css.*
-import kotlinx.html.role
+import list.ListScreen.ListStyles.appFrameCss
 import react.*
-import react.dom.div
-import react.dom.jsStyle
 import repository.ResearchRepository
 import root.LifecycleWrapper
+import styled.StyleSheet
 import styled.css
 import styled.styledDiv
 import view.FilterView
@@ -40,7 +35,7 @@ class ListScreen(props: ListProps) :
 
   init {
     state = ListState(
-      slideOutDrawerOpen = false,
+      drawerOpen = false,
       listModel = initialListModel(),
       filtersModel = initialFilterModel()
     )
@@ -89,81 +84,31 @@ class ListScreen(props: ListProps) :
 
         styledDiv {
           // App Frame
-          css {
-            overflow = Overflow.hidden
-            position = Position.relative
-            display = Display.flex
-            height = 100.pct
-            width = 100.pct
-          }
+          css(appFrameCss)
 
-          mAppBar(position = MAppBarPosition.absolute) {
-            attrs.asDynamic().style = kotlinext.js.js {
-              zIndex = theme.zIndex.drawer + 1
-            }
-            mToolbar(disableGutters = !state.slideOutDrawerOpen) {
-              if (!state.slideOutDrawerOpen) {
-                mIconButton(
-                  "menu",
-                  color = MColor.inherit,
-                  onClick = { setState { slideOutDrawerOpen = true } })
-              }
-              mToolbarTitle("Fantom")
-            }
-          }
+          appBar(onClick = ::openDrawer)
 
-          val pp: MPaperProps = jsObject { }
-          pp.asDynamic().style = kotlinext.js.js {
-            position = "relative"
-            transition = "width 195ms cubic-bezier(0.4, 0, 0.2, 1) 0ms"
-            height = "100%"
-            minHeight = "100vh"
-            if (!state.slideOutDrawerOpen) {
-              overflowX = "hidden"
-              width = 7.spacingUnits.value
-            } else {
-              width = drawerWidth + 1
-            }
-          }
-          mDrawer(
-            state.slideOutDrawerOpen,
-            MDrawerAnchor.left,
-            MDrawerVariant.permanent,
-            paperProps = pp
+          drawer(
+            open = state.drawerOpen,
+            openDrawer = ::openDrawer,
+            closeDrawer = ::closeDrawer,
+            drawerWidth = drawerWidth
           ) {
-            attrs.onMouseEnter = { setState { slideOutDrawerOpen = true } }
-            attrs.onMouseLeave = { setState { slideOutDrawerOpen = false } }
-            div {
-              attrs.jsStyle = kotlinext.js.js {
-                display = "flex"; alignItems = "center"; justifyContent = "flex-end"; height = 64
-              }
-            }
-            mDivider()
-            div {
-              attrs {
-                role = "button"
-              }
-            }
-            mList {
-              css {
-                backgroundColor = Color(theme.palette.background.paper)
-                width = if (state.slideOutDrawerOpen) LinearDimension.auto else drawerWidth.px
-              }
-              mListItemWithIcon("search", "Просмотренные", divider = false)
-              mListItemWithIcon("done", "Оконченные", divider = false)
-            }
+            filters(
+              open = state.drawerOpen,
+              drawerWidth = drawerWidth,
+              filters = state.filtersModel.items
+            )
           }
 
-          div {
-            attrs.jsStyle = kotlinext.js.js {
-              flexGrow = 1
-            }
+          styledDiv {
+            css { flexGrow = 1.0 }
+
+            //toolbarSpacer
             styledDiv {
-              css {
-                toolbarJsCssToPartialCss(theme.mixins.toolbar)
-              }
+              css { toolbarJsCssToPartialCss(theme.mixins.toolbar) }
             }
-            mDivider { }
+            //mainContainer
             styledDiv {
               css {
                 padding(16.px)
@@ -172,6 +117,7 @@ class ListScreen(props: ListProps) :
                 flexGrow = 1.0
                 minWidth = 0.px
               }
+              //mainContent
               mGridContainer(MGridSpacing.spacing2) {
                 val breakpoints = MGridBreakpoints(MGridSize.cells6)
                   .up(Breakpoint.lg, MGridSize.cells4)
@@ -181,7 +127,7 @@ class ListScreen(props: ListProps) :
                   for (research in researches) {
                     mGridItem(breakpoints) {
                       mCardActionArea(onClick = {
-                        listViewDelegate.dispatchEvent(
+                        listViewDelegate.dispatch(
                           ListView.Event.ItemClick(
                             research.name
                           )
@@ -216,6 +162,33 @@ class ListScreen(props: ListProps) :
 
   }
 
+
+  private fun closeDrawer() {
+    setState { drawerOpen = false }
+  }
+
+  private fun openDrawer() {
+    setState { drawerOpen = true }
+  }
+
+  object ListStyles : StyleSheet("ListScreenStyles", isStatic = true) {
+
+    val appFrameCss by ListStyles.css {
+      overflow = Overflow.hidden
+      position = Position.relative
+      display = Display.flex
+      height = 100.pct
+      width = 100.pct
+    }
+
+    val appBarSpacerCss by ListStyles.css {
+      display = Display.flex
+      alignItems = Align.center
+      justifyContent = JustifyContent.flexEnd
+      height = 64.px
+    }
+  }
+
   interface Dependencies {
     val output: (ListController.Output) -> Unit
     val storeFactory: StoreFactory
@@ -226,7 +199,7 @@ class ListScreen(props: ListProps) :
 class ListState(
   var listModel: ListView.Model,
   var filtersModel: FilterView.Model,
-  var slideOutDrawerOpen: Boolean = false
+  var drawerOpen: Boolean = false
 ) : RState
 
 

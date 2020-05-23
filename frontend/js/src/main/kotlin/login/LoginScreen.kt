@@ -66,7 +66,7 @@ class LoginScreen(
     alert(
       message = error,
       open = error.isNotEmpty(),
-      handleClose = { viewDelegate.dispatchEvent(LoginView.Event.DismissError) }
+      handleClose = { viewDelegate.dispatch(LoginView.Event.DismissError) }
     )
 
     themeContext.Consumer { theme ->
@@ -175,19 +175,19 @@ class LoginScreen(
   }
 
   private fun auth(mouseEvent: MouseEvent) {
-    viewDelegate.dispatchEvent(LoginView.Event.Auth)
+    viewDelegate.dispatch(LoginView.Event.Auth)
   }
 
   private fun onPasswordChanged(event: Event) {
     val target = event.target as HTMLInputElement
     val searchTerm = target.value
-    viewDelegate.dispatchEvent(LoginView.Event.PasswordChanged(searchTerm))
+    viewDelegate.dispatch(LoginView.Event.PasswordChanged(searchTerm))
   }
 
   private fun onLoginChanged(event: Event) {
     val target = event.target as HTMLInputElement
     val searchTerm = target.value
-    viewDelegate.dispatchEvent(LoginView.Event.LoginChanged(searchTerm))
+    viewDelegate.dispatch(LoginView.Event.LoginChanged(searchTerm))
   }
 
   override fun componentWillUnmount() {

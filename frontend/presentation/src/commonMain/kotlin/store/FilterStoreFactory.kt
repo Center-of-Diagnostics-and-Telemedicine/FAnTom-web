@@ -25,7 +25,7 @@ internal class FilterStoreFactory(
     ReaktiveExecutor<Intent, Unit, State, Result, Label>() {
     override fun executeAction(action: Unit, getState: () -> State) {
       singleFromCoroutine {
-        listOf(Filter.All, Filter.NotSeen, Filter.Done, Filter.Seen)
+        listOf(Filter.All, Filter.NotSeen, Filter.Seen, Filter.Done)
       }
         .subscribeOn(ioScheduler)
         .map { Result.Loaded(it) }

@@ -13,7 +13,7 @@ class ListViewProxy(
     updateState(model)
   }
 
-  fun dispatchEvent(event: Event) {
+  public override fun dispatch(event: Event) {
     super.dispatch(event)
   }
 }

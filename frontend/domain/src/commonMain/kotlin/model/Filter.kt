@@ -6,21 +6,21 @@ sealed class Filter(
 ) {
   object All : Filter(
     name = "Все исследования",
-    icon = "view_list"
+    icon = "all_inbox"
   )
 
   object NotSeen : Filter(
     name = "Непросмотренные",
-    icon = "rate_review"
+    icon = "visibility_off"
   )
 
   object Seen : Filter(
     name = "Просмотренные",
-    icon = "search"
+    icon = "done"
   )
 
   object Done : Filter(
     name = "Оконченные",
-    icon = "done"
+    icon = "done_all"
   )
 }
