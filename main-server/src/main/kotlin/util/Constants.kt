@@ -1,9 +1,8 @@
 package util
 
-import model.UserModel
 import io.ktor.application.ApplicationCall
 import io.ktor.auth.authentication
-import java.io.File
+import model.UserModel
 
 const val AUTHENTICATION = "Authentication"
 const val NAME_FIELD = "name"
@@ -38,16 +37,5 @@ const val STATIC_ROUTE = "/static"
 const val RESOURCE_STATIC = "static/static"
 const val RESOURCE_INDEX = "index.html"
 const val RESOURCE_JS = "js-frontend.js"
-
-
-const val data_store_root_path = "/data/Dicom/CT"
-val data_store_paths = listOf(
-  File("${data_store_root_path}/ChestCT"),
-  File("${data_store_root_path}/ChestHCT"),
-  File("$data_store_root_path/ChestHCT2")
-)
-const val csv_store_path = "/data/2020_covid"
-const val basePort = 8080
-const val fantomServerPort = 8081
 
 val ApplicationCall.user get() = authentication.principal<UserModel>()!!

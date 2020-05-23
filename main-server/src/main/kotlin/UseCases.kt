@@ -1,9 +1,13 @@
+
 import io.ktor.auth.UserPasswordCredential
-import model.*
-import org.jetbrains.exposed.sql.*
+import model.UserModel
+import model.UserRole
+import model.hash
+import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.insertIgnore
+import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
-import util.csv_store_path
-import java.io.*
 
 fun init() {
   transaction {
@@ -76,13 +80,6 @@ fun init() {
       }
     }
   }
-
-//  val researchesCsv = parseResearches()
-//  createResearches(researchesCsv)
-//  for (i in 0..9) {
-//    val docResearchCSV = parseDoctorResearches(i)
-//    updateResearchUser(docResearchCSV, i + 1)
-//  }
 }
 
 fun getUser(id: Int): UserModel = transaction {
@@ -97,125 +94,4 @@ fun getUserByCredentials(credentials: UserPasswordCredential): UserModel? {
       UserVos.name eq credentials.name and (UserVos.password eq hash(credentials.password))
     }.firstOrNull()
   }?.toUser()
-}
-
-fun parseResearches(): List<ResearchCSV> {
-  val csvFile = "$csv_store_path/keys_db.txt"
-  var br: BufferedReader? = null
-  var line = ""
-  val resultList = mutableListOf<ResearchCSV>()
-
-  try {
-    br = BufferedReader(FileReader(csvFile))
-    while (br.readLine()?.also { line = it } != null) { // use comma as separator
-      if (line.isNotEmpty() && line != "\u0000") {
-        val fields = line.split(' ', '\t').toTypedArray()
-        resultList.add(
-          ResearchCSV(
-            accessionNumber = fields[0].replace("яю", ""),
-            studyInstanceUID = fields[1],
-            studyID = fields[2],
-            protocol = fields[3],
-            accessionNumber_base = fields[4],
-            accessionNumber_lastDigit = fields[5],
-            json_name = fields[6],
-            doctor1 = fields[7],
-            doctor2 = fields[8],
-            pos_in_block = fields[9]
-          )
-        )
-      }
-    }
-  } catch (e: FileNotFoundException) {
-    e.printStackTrace()
-  } catch (e: IOException) {
-    e.printStackTrace()
-  } finally {
-    if (br != null) {
-      try {
-        br.close()
-      } catch (e: IOException) {
-        e.printStackTrace()
-      }
-    }
-  }
-  return resultList
-}
-
-fun createResearches(researchesCsv: List<ResearchCSV>): List<Int> = transaction {
-  ResearchVos.batchInsert(data = researchesCsv, ignore = true) { researchCsv ->
-    this[ResearchVos.accessionNumber] = researchCsv.accessionNumber
-    this[ResearchVos.studyInstanceUID] = researchCsv.studyInstanceUID
-    this[ResearchVos.studyID] = researchCsv.studyID
-    this[ResearchVos.protocol] = researchCsv.protocol
-    this[ResearchVos.accessionNumber_base] = researchCsv.accessionNumber_base
-    this[ResearchVos.accessionNumber_lastDigit] = researchCsv.accessionNumber_lastDigit
-    this[ResearchVos.json_name] = researchCsv.json_name
-    this[ResearchVos.doctor1] = researchCsv.doctor1
-    this[ResearchVos.doctor2] = researchCsv.doctor2
-    this[ResearchVos.pos_in_block] = researchCsv.pos_in_block
-  }.map { it[ResearchVos.id] }
-}
-
-fun parseDoctorResearches(number: Int): List<DoctorResearchesCSV> {
-  val csvFile = "$csv_store_path/list_doctor_$number.txt"
-  var br: BufferedReader? = null
-  var line = ""
-  val resultList = mutableListOf<DoctorResearchesCSV>()
-
-  try {
-    br = BufferedReader(FileReader(csvFile))
-    while (br.readLine()?.also { line = it } != null) { // use comma as separator
-      if (line.isNotEmpty() && line != "\u0000") {
-        val fields = line.split(' ', '\t').toTypedArray()
-        resultList.add(
-          DoctorResearchesCSV(
-            accessionNumber = fields[0].replace("яю", ""),
-            studyInstanceUID = fields[1],
-            studyID = fields[2]
-          )
-        )
-      }
-    }
-  } catch (e: FileNotFoundException) {
-    e.printStackTrace()
-  } catch (e: IOException) {
-    e.printStackTrace()
-  } finally {
-    if (br != null) {
-      try {
-        br.close()
-      } catch (e: IOException) {
-        e.printStackTrace()
-      }
-    }
-  }
-  return resultList
-}
-
-fun updateResearchUser(
-  docResearchesCSV: List<DoctorResearchesCSV>,
-  doctorNumber: Int
-) {
-  transaction {
-    UserVos.select {
-      UserVos.name eq "Expert${doctorNumber}"
-    }
-      .firstOrNull()
-      ?.toUser()
-      ?.let { user ->
-        docResearchesCSV.forEach { docResearchCSV ->
-          ResearchVos.select {
-            (ResearchVos.accessionNumber eq docResearchCSV.accessionNumber) and (ResearchVos.studyID eq docResearchCSV.studyID) and (ResearchVos.studyInstanceUID eq docResearchCSV.studyInstanceUID)
-          }.toList().forEach { row ->
-            UserResearchVos.insertIgnore {
-              it[userId] = user.id
-              it[researchId] = row[ResearchVos.id]
-              it[seen] = 0
-              it[done] = 0
-            }
-          }
-        }
-      }
-  }
 }

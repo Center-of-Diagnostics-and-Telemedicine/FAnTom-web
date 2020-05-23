@@ -5,9 +5,14 @@ import io.ktor.locations.get
 import io.ktor.response.respond
 import io.ktor.routing.Route
 import lib.MarkTomogrammObject
-import model.*
+import model.ErrorModel
+import model.ErrorStringCode
+import model.ResearchInitResponse
+import model.localDataStorePath
 import repository.ResearchRepository
-import util.*
+import util.InitResearch
+import util.LibraryState
+import util.NotInitializedYetException
 
 fun Route.initResearch(
   researchRepository: ResearchRepository
@@ -22,7 +27,7 @@ fun Route.initResearch(
     try {
       when (MarkTomogrammObject.state) {
         LibraryState.ReadyToInitLib -> {
-          researchRepository.initLib(data_store_path)
+          researchRepository.initLib("$localDataStorePath\\+AGFA000000015851_AGFA000000015807")
           researchRepository.initResearch(it.name)
           call.respond(ResearchInitResponse(researchRepository.getInitialData()))
         }

@@ -19,15 +19,23 @@ const val TYPE_AXIAL = "AXIAL"
 const val TYPE_FRONTAL = "FRONTAL"
 const val TYPE_SAGITTAL = "SAGITTAL"
 
-const val data_store_path = "/app/dicom"
+const val localDataStorePath = "C:\\dicom"
+const val dockerDataStorePath = "/app/dicom"
+
 const val ID_FIELD = "id"
 
 const val tenMinutes: Long = 600000
 
+const val libraryServerPort: Int = 8082
+const val libraryServerSchema: String = "http://"
+const val libraryServerDomain: String = "localhost"
+
+
 /**
 Типы срезов
  */
-const val SLYCE_TYPE_AXIAL: Int = 0
+const
+val SLYCE_TYPE_AXIAL: Int = 0
 const val SLYCE_TYPE_FRONTAL: Int = 1
 const val SLYCE_TYPE_SAGITTAL: Int = 2
 
@@ -49,11 +57,11 @@ const val INITIAL_MIP_VALUE = 0
 
 
 enum class Preset(val value: Int) {
-    PRESET_SOFT_TISSUE(0),
-    PRESET_VESSELS(1),
-    PRESET_BONES(2),
-    PRESET_BRAIN(3),
-    PRESET_LUNGS(4),
+  PRESET_SOFT_TISSUE(0),
+  PRESET_VESSELS(1),
+  PRESET_BONES(2),
+  PRESET_BRAIN(3),
+  PRESET_LUNGS(4),
 }
 
 const val SOFT_TISSUE = "soft_tisue"
@@ -63,35 +71,35 @@ const val BRAIN = "brain"
 const val LUNGS = "lungs"
 
 enum class LineType {
-    HORIZONTAL,
-    VERTICAL
+  HORIZONTAL,
+  VERTICAL
 }
 
 /**
 Типы очагов
  */
 enum class AreaType(val value: Int) {
-    //нет типа
-    NO_TYPE_NODULE(-1),
+  //нет типа
+  NO_TYPE_NODULE(-1),
 
-    //солидный
-    SOLID_NODULE(0),
+  //солидный
+  SOLID_NODULE(0),
 
-    //полусолидный
-    PART_SOLID_NODULE(1),
+  //полусолидный
+  PART_SOLID_NODULE(1),
 
-    //матовое стекло
-    PURE_SUBSOLID_NODULE(2),
+  //матовое стекло
+  PURE_SUBSOLID_NODULE(2),
 
-    //не онкология
-    NOT_ONKO(3),
+  //не онкология
+  NOT_ONKO(3),
 }
 
 enum class MoveRectType {
-    TOP,
-    LEFT,
-    RIGHT,
-    BOTTOM
+  TOP,
+  LEFT,
+  RIGHT,
+  BOTTOM
 }
 
 const val yellow = "#ffff00"
@@ -103,63 +111,63 @@ const val MIDDLE_MOUSE_BUTTON: Short = 1
 const val RIGHT_MOUSE_BUTTON: Short = 2
 
 enum class Environment {
-    DEBUG,
-    PRODUCTION
+  DEBUG,
+  PRODUCTION
 }
 
 
 enum class CutsGridType {
-    SINGLE,
-    TWO_VERTICAL,
-    TWO_HORIZONTAL,
-    THREE,
-    FOUR
+  SINGLE,
+  TWO_VERTICAL,
+  TWO_HORIZONTAL,
+  THREE,
+  FOUR
 }
 
 enum class Position {
-    LEFT_TOP,
-    RIGHT_TOP,
-    LEFT_BOTTOM,
-    RIGHT_BOTTOM
+  LEFT_TOP,
+  RIGHT_TOP,
+  LEFT_BOTTOM,
+  RIGHT_BOTTOM
 }
 
 enum class UserRole(val value: Int) {
-    ADMIN(0),
-    DOCTOR(1),
-    EXPERT(2)
+  ADMIN(0),
+  DOCTOR(1),
+  EXPERT(2)
 }
 
 enum class CTType {
-    ZERO,
-    LIGHT,
-    MIDDLE,
-    HIGH,
-    CRITICAL,
-    NON_RELEVANT
+  ZERO,
+  LIGHT,
+  MIDDLE,
+  HIGH,
+  CRITICAL,
+  NON_RELEVANT
 }
 
 enum class ErrorStringCode(val value: Int) {
-    BASE_ERROR(1),
-    USER_EXIST_ERROR(2),
-    INVALID_AUTH_CREDENTIALS(3),
-    INVALID_REGISTER_LOGIN(4),
-    INVALID_REGISTER_ROLE(5),
-    INVALID_REGISTER_PASSWORD(6),
-    INVALID_REGISTER_LOGIN_SIMBOLS(7),
-    REGISTER_FAILED(8),
-    USER_RESEARCHES_LIST_FAILED(9),
-    RESEARCH_NOT_FOUND(10),
-    RESEARCH_INITIALIZATION_FAILED(11),
-    RESEARCH_DATA_FETCH_FAILED(12),
-    SESSION_EXPIRED(13),
-    INCORRECT_SLICE_NUMBER(14),
-    INCORRECT_AXIAL_COORD(15),
-    INCORRECT_FRONTAL_COORD(16),
-    INCORRECT_SAGITTAL_COORD(17),
-    HOUNSFIELD_ERROR(18),
-    SESSION_CLOSE_FAILED(19),
-    GET_SLICE_FAILED(20),
-    CREATE_MARK_FAILED(21),
-    NOT_INITIALIZED_YET(22),
-    AUTH_FAILED(23)
+  BASE_ERROR(1),
+  USER_EXIST_ERROR(2),
+  INVALID_AUTH_CREDENTIALS(3),
+  INVALID_REGISTER_LOGIN(4),
+  INVALID_REGISTER_ROLE(5),
+  INVALID_REGISTER_PASSWORD(6),
+  INVALID_REGISTER_LOGIN_SIMBOLS(7),
+  REGISTER_FAILED(8),
+  USER_RESEARCHES_LIST_FAILED(9),
+  RESEARCH_NOT_FOUND(10),
+  RESEARCH_INITIALIZATION_FAILED(11),
+  RESEARCH_DATA_FETCH_FAILED(12),
+  SESSION_EXPIRED(13),
+  INCORRECT_SLICE_NUMBER(14),
+  INCORRECT_AXIAL_COORD(15),
+  INCORRECT_FRONTAL_COORD(16),
+  INCORRECT_SAGITTAL_COORD(17),
+  HOUNSFIELD_ERROR(18),
+  SESSION_CLOSE_FAILED(19),
+  GET_SLICE_FAILED(20),
+  CREATE_MARK_FAILED(21),
+  NOT_INITIALIZED_YET(22),
+  AUTH_FAILED(23)
 }

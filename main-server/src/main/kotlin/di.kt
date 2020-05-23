@@ -1,4 +1,8 @@
-import dao.*
+import dao.MarkDao
+import dao.ResearchDao
+import dao.UserDao
+import dao.UserResearchDao
+import kotlinx.coroutines.GlobalScope
 import repository.*
 
 val userDao = UserDao()
@@ -15,4 +19,8 @@ val marksRepository = MarkRepositoryImpl(marksDao)
 
 val creator = ContainerCreatorImpl()
 val researchDirFinder = ResearchDirFinderImpl()
-val sessionRepository = SessionRepositoryImpl(creator, researchDirFinder)
+val sessionRepository = SessionRepositoryImpl(
+  creator,
+  researchDirFinder,
+  GlobalScope.coroutineContext
+)

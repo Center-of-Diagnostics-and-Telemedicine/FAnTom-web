@@ -7,6 +7,8 @@ import io.ktor.features.*
 import io.ktor.gson.GsonConverter
 import io.ktor.gson.gson
 import io.ktor.http.ContentType
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.resource
 import io.ktor.http.content.resources
@@ -23,8 +25,13 @@ import org.slf4j.event.Level
 import useCases.*
 import util.*
 
+lateinit var config: Config
 
-fun main() {
+
+fun main(args: Array<String>) {
+
+  config = parseConfig(args)
+
   val jwt = "jwt"
 
   embeddedServer(Netty, 8081) {
@@ -43,8 +50,19 @@ fun main() {
       register(ContentType("text", "plain"), GsonConverter())
       gson {}
     }
-    install(CORS){
-      host("localhost:8080")
+    install(CORS) {
+      method(HttpMethod.Options)
+      method(HttpMethod.Get)
+      method(HttpMethod.Post)
+      method(HttpMethod.Put)
+      method(HttpMethod.Delete)
+      method(HttpMethod.Patch)
+      header(HttpHeaders.AccessControlAllowHeaders)
+      header(HttpHeaders.ContentType)
+      header(HttpHeaders.AccessControlAllowOrigin)
+      header(HttpHeaders.Authorization)
+      anyHost()
+      allowCredentials = true
     }
     install(StatusPages) {
       exception<AuthenticationException> {
@@ -53,7 +71,7 @@ fun main() {
     }
     install(DefaultHeaders)
     install(CallLogging) {
-      level = Level.DEBUG
+      level = Level.INFO
     }
     install(ConditionalHeaders)
     install(Locations)

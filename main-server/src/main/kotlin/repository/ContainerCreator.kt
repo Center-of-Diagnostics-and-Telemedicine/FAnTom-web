@@ -3,13 +3,16 @@ package repository
 import com.github.dockerjava.api.DockerClient
 import com.github.dockerjava.api.command.CreateContainerCmd
 import com.github.dockerjava.api.command.WaitContainerResultCallback
-import com.github.dockerjava.api.model.*
+import com.github.dockerjava.api.model.Bind
+import com.github.dockerjava.api.model.ExposedPort
+import com.github.dockerjava.api.model.Ports
+import com.github.dockerjava.api.model.Volume
 import com.github.dockerjava.core.DefaultDockerClientConfig
 import com.github.dockerjava.core.DockerClientImpl
 import com.github.dockerjava.jaxrs.JerseyDockerCmdExecFactory
-import model.data_store_path
+import model.dockerDataStorePath
+import model.libraryServerPort
 import util.debugLog
-import util.fantomServerPort
 import java.io.File
 
 interface ContainerCreator {
@@ -27,9 +30,9 @@ interface ContainerCreator {
 class ContainerCreatorImpl() : ContainerCreator {
 
   private val config = DefaultDockerClientConfig.createDefaultConfigBuilder()
-    .withDockerHost("unix:///var/run/docker.sock")
-    .withRegistryUsername("m.gusev")
-    .withRegistryPassword("8vkWq8%T")
+    .withDockerHost("tcp://localhost:2375")
+//    .withRegistryUsername("m.gusev")
+//    .withRegistryPassword("8vkWq8%T")
     .build()
 
   private val execFactory = JerseyDockerCmdExecFactory()
@@ -63,11 +66,11 @@ class ContainerCreatorImpl() : ContainerCreator {
   ): CreateContainerCmd {
 
     val portBindings = Ports()
-    val portInsideContainer = ExposedPort.tcp(fantomServerPort)
+    val portInsideContainer = ExposedPort.tcp(libraryServerPort)
     val portOutsideContainer = Ports.Binding("0.0.0.0", port.toString())
     portBindings.bind(portInsideContainer, portOutsideContainer)
 
-    val dirWithResearchInsideContainer = Volume("$data_store_path/${researchDir.name}")
+    val dirWithResearchInsideContainer = Volume("${dockerDataStorePath}/${researchDir.name}")
     debugLog("research path = ${researchDir.path}, dirWithResearchInsideContainer = $dirWithResearchInsideContainer")
 
     val bindDir = Bind(researchDir.path, dirWithResearchInsideContainer)
