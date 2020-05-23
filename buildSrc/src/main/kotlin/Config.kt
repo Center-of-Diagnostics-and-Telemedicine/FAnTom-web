@@ -85,7 +85,7 @@ fun Project.setupMultiplatform() {
     plugins.apply("kotlin-multiplatform")
     plugins.apply("kotlinx-serialization")
 
-    kotlin {
+    kotlinProject {
         doIfBuildTargetAvailable<BuildTarget.Js> {
             js {
                 nodejs()
@@ -178,18 +178,9 @@ fun Project.js(block: Kotlin2JsProjectExtension.() -> Unit) {
     extensions.getByType<Kotlin2JsProjectExtension>().block()
 }
 
-fun Project.kotlin(block: KotlinMultiplatformExtension.() -> Unit) {
+fun Project.kotlinProject(block: KotlinMultiplatformExtension.() -> Unit) {
     extensions.getByType<KotlinMultiplatformExtension>().block()
 }
-
-//fun Project.setupXcodeSync() {
-//    plugins.apply("co.touchlab.kotlinxcodesync")
-//
-//    extensions.getByType<SyncExtension>().run {
-//        projectPath = "../todo-app-ios/todo-app-ios.xcodeproj"
-//        target = "todo-app-ios"
-//    }
-//}
 
 typealias SourceSets = NamedDomainObjectContainer<KotlinSourceSet>
 

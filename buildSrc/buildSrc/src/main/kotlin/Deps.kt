@@ -2,7 +2,7 @@ object Deps {
 
   object Jetbrains {
     object Kotlin : Group(name = "org.jetbrains.kotlin") {
-      private const val version = "1.3.72"
+      private const val version = "1.4-M1"
 
       object Plugin {
         object Gradle : Dependency(group = Kotlin, name = "kotlin-gradle-plugin", version = version)
@@ -31,7 +31,7 @@ object Deps {
 
     object Kotlinx : Group(name = "org.jetbrains.kotlinx") {
       object Coroutines {
-        private const val version = "1.3.5"
+        private const val version = "1.3.5-1.4-M1"
 
         object Core :
           Dependency(group = Kotlinx, name = "kotlinx-coroutines-core", version = version) {
@@ -50,7 +50,7 @@ object Deps {
       }
 
       object Serialization {
-        private const val version = "0.20.0"
+        private const val version = "0.20.0-1.4-M1"
 
         object Runtime {
           object Core :
@@ -139,7 +139,7 @@ object Deps {
   }
 
   object Ktor : Group(name = "io.ktor") {
-    private const val version = "1.3.2"
+    private const val version = "1.3.2-1.4-M1"
 
     object Client {
 

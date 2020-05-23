@@ -1,6 +1,6 @@
 plugins {
-  `kotlin-dsl`
-  kotlin("plugin.serialization") version "1.3.72"
+  kotlin("multiplatform")
+  kotlin("plugin.serialization") version "1.4-M1"
 }
 
 allprojects {
