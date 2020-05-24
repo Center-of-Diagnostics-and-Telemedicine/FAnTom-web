@@ -2,16 +2,15 @@ package list
 
 import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.store.StoreFactory
-import com.ccfraser.muirwik.components.*
-import com.ccfraser.muirwik.components.card.mCard
-import com.ccfraser.muirwik.components.card.mCardActionArea
-import com.ccfraser.muirwik.components.card.mCardContent
-import com.ccfraser.muirwik.components.card.mCardHeader
-import com.ccfraser.muirwik.components.styles.Breakpoint
+import com.ccfraser.muirwik.components.themeContext
+import com.ccfraser.muirwik.components.toolbarJsCssToPartialCss
 import controller.ListController
 import controller.ListControllerImpl
 import kotlinx.css.*
 import list.ListScreen.ListStyles.appFrameCss
+import list.ListScreen.ListStyles.mainContainerCss
+import list.ListScreen.ListStyles.screenContainerCss
+import model.Filter
 import react.*
 import repository.ResearchRepository
 import root.LifecycleWrapper
@@ -72,15 +71,8 @@ class ListScreen(props: ListProps) :
   override fun RBuilder.render() {
     themeContext.Consumer { theme ->
       styledDiv {
-        css {
-          flexGrow = 1.0
-          width = 100.pct
-          zIndex = 0
-          overflow = Overflow.hidden
-          position = Position.relative
-          display = Display.flex
-          backgroundColor = Color(theme.palette.background.default)
-        }
+        css(screenContainerCss)
+        css { backgroundColor = Color(theme.palette.background.default) }
 
         styledDiv {
           // App Frame
@@ -97,7 +89,9 @@ class ListScreen(props: ListProps) :
             filters(
               open = state.drawerOpen,
               drawerWidth = drawerWidth,
-              filters = state.filtersModel.items
+              filters = state.filtersModel.items,
+              currentFilter = state.filtersModel.current,
+              onClick = ::onFilterClick
             )
           }
 
@@ -110,50 +104,13 @@ class ListScreen(props: ListProps) :
             }
             //mainContainer
             styledDiv {
-              css {
-                padding(16.px)
-                height = 100.pct
-                width = 100.pct
-                flexGrow = 1.0
-                minWidth = 0.px
-              }
+              css(mainContainerCss)
+
               //mainContent
-              mGridContainer(MGridSpacing.spacing2) {
-                val breakpoints = MGridBreakpoints(MGridSize.cells6)
-                  .up(Breakpoint.lg, MGridSize.cells4)
-                  .down(Breakpoint.sm, MGridSize.cells12)
-                val researches = state.listModel.items
-                if (researches.isNotEmpty()) {
-                  for (research in researches) {
-                    mGridItem(breakpoints) {
-                      mCardActionArea(onClick = {
-                        listViewDelegate.dispatch(
-                          ListView.Event.ItemClick(
-                            research.name
-                          )
-                        )
-                      }) {
-                        mCard {
-                          css {
-                            if (research.seen) {
-                              borderStyle = BorderStyle.solid
-                              borderColor = Color.yellow
-                            }
-                            if (research.done) {
-                              borderStyle = BorderStyle.solid
-                              borderColor = Color.green
-                            }
-                          }
-                          mCardHeader(title = research.name)
-                          mCardContent {
-                            mTypography(text = research.id.toString())
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
+              researchList(
+                items = state.listModel.items,
+                onClick = ::onListItemClick
+              )
             }
           }
         }
@@ -162,6 +119,13 @@ class ListScreen(props: ListProps) :
 
   }
 
+  private fun onFilterClick(filter: Filter) {
+    filtersViewDelegate.dispatch(FilterView.Event.ItemClick(filter))
+  }
+
+  private fun onListItemClick(name: String) {
+    listViewDelegate.dispatch(ListView.Event.ItemClick(name))
+  }
 
   private fun closeDrawer() {
     setState { drawerOpen = false }
@@ -172,6 +136,15 @@ class ListScreen(props: ListProps) :
   }
 
   object ListStyles : StyleSheet("ListScreenStyles", isStatic = true) {
+
+    val screenContainerCss by ListStyles.css {
+      flexGrow = 1.0
+      width = 100.pct
+      zIndex = 0
+      overflow = Overflow.hidden
+      position = Position.relative
+      display = Display.flex
+    }
 
     val appFrameCss by ListStyles.css {
       overflow = Overflow.hidden
@@ -186,6 +159,14 @@ class ListScreen(props: ListProps) :
       alignItems = Align.center
       justifyContent = JustifyContent.flexEnd
       height = 64.px
+    }
+
+    val mainContainerCss by ListStyles.css {
+      padding(16.px)
+      height = 100.pct
+      width = 100.pct
+      flexGrow = 1.0
+      minWidth = 0.px
     }
   }
 

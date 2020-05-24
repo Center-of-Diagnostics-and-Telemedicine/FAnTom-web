@@ -2,13 +2,19 @@ package lib
 
 import com.sun.jna.Native
 import com.sun.jna.Pointer
-import com.sun.jna.ptr.*
-import util.*
+import com.sun.jna.ptr.DoubleByReference
+import com.sun.jna.ptr.IntByReference
+import com.sun.jna.ptr.PointerByReference
+import util.LibraryState
+import util.NotInitializedException
+import util.NotInitializedYetException
+import util.debugLog
 import java.util.regex.Pattern
 
 object MarkTomogrammObject {
 
   var state: LibraryState = LibraryState.ReadyToInitLib
+  var currentAccessionNumber: String = ""
 
   private val instance: MarkTomogramm = Native.loadLibrary(
     "FantomLibrary",

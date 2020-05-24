@@ -16,7 +16,11 @@ class ResearchRepositoryImpl(
     }
     val response = remote.getAll(token())
     return when {
-      response.response != null -> response.response!!.researches
+      response.response != null -> {
+        val researches = response.response!!.researches
+        local.saveList(researches)
+        researches
+      }
       response.error != null -> handleErrorResponse(response.error!!)
       else -> throw ResearchListFetchException
     }

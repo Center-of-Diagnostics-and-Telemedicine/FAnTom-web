@@ -12,7 +12,9 @@ import styled.css
 fun RBuilder.filters(
   open: Boolean,
   drawerWidth: Int,
-  filters: List<Filter>
+  filters: List<Filter>,
+  onClick: (Filter) -> Unit,
+  currentFilter: Filter
 ) {
   themeContext.Consumer { theme ->
     mList {
@@ -25,7 +27,9 @@ fun RBuilder.filters(
         mListItemWithIcon(
           iconName = filter.icon,
           primaryText = filter.name,
-          divider = false
+          divider = false,
+          selected = currentFilter == filter,
+          onClick = { onClick(filter) }
         )
       }
     }

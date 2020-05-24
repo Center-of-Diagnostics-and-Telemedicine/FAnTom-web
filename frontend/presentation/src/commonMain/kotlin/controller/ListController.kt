@@ -5,6 +5,7 @@ import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.lifecycle.doOnDestroy
 import com.arkivanov.mvikotlin.extensions.reaktive.bind
 import com.arkivanov.mvikotlin.extensions.reaktive.events
+import com.arkivanov.mvikotlin.extensions.reaktive.labels
 import com.arkivanov.mvikotlin.extensions.reaktive.states
 import com.badoo.reaktive.observable.mapNotNull
 import mapper.*
@@ -27,6 +28,10 @@ class ListControllerImpl(dependencies: ListController.Dependencies) : ListContro
     ).create()
 
   init {
+    bind(dependencies.lifecycle, BinderLifecycleMode.CREATE_DESTROY) {
+      filterStore.labels.mapNotNull(filterLabelToListIntent) bindTo listStore
+    }
+
     dependencies.lifecycle.doOnDestroy {
       listStore.dispose()
       filterStore.dispose()

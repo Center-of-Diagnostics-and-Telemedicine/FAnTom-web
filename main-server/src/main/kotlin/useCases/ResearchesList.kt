@@ -1,11 +1,15 @@
 package useCases
 
-import io.ktor.application.*
+import io.ktor.application.application
+import io.ktor.application.call
+import io.ktor.application.log
 import io.ktor.locations.get
 import io.ktor.response.respond
 import io.ktor.routing.Route
 import model.*
-import repository.*
+import repository.MarkRepository
+import repository.ResearchRepository
+import repository.UserResearchRepository
 import util.ResearchesList
 import util.user
 
@@ -27,7 +31,7 @@ fun Route.researchesList(
               id = it.researchId,
               name = research.accessionNumber,
               seen = it.seen,
-              done = marked,
+              done = it.done,
               marked = marked
             )
           } else {

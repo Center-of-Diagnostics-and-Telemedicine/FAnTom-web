@@ -8,14 +8,16 @@ import view.FilterView.Model
 interface FilterView : MviView<Model, Event> {
 
   data class Model(
-    val items: List<Filter>
+    val items: List<Filter>,
+    val current: Filter
   )
 
   sealed class Event {
-    data class ItemClick(val filter: Filter): Event()
+    data class ItemClick(val filter: Filter) : Event()
   }
 }
 
 fun initialFilterModel(): Model = Model(
-  items = listOf()
+  items = listOf(),
+  current = Filter.All
 )

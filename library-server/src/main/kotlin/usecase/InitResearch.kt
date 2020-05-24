@@ -27,8 +27,11 @@ fun Route.initResearch(
     try {
       when (MarkTomogrammObject.state) {
         LibraryState.ReadyToInitLib -> {
-          researchRepository.initLib("$localDataStorePath\\+AGFA000000015851_AGFA000000015807")
-          researchRepository.initResearch(it.name)
+          if (MarkTomogrammObject.currentAccessionNumber.isEmpty()) {
+            researchRepository.initLib("$localDataStorePath\\+AGFA000000015851_AGFA000000015807")
+            researchRepository.initResearch(it.name)
+            MarkTomogrammObject.currentAccessionNumber = "AGFA000000015851"
+          }
           call.respond(ResearchInitResponse(researchRepository.getInitialData()))
         }
         LibraryState.ReadyToInitResearch -> {

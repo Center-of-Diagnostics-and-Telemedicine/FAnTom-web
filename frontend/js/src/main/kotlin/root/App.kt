@@ -42,12 +42,12 @@ abstract class App : RComponent<AppProps, AppState>() {
     mThemeProvider(createMuiTheme(themeOptions)) {
       when (state.screen) {
         ScreenType.AUTH -> login(
-          dependencies = object : LoginScreen.Dependencies, Dependencies by props.dependecies {
+          dependencies = object : LoginScreen.Dependencies, Dependencies by props.dependencies {
             override val output: (LoginController.Output) -> Unit = ::loginOutput
           }
         )
         ScreenType.LIST -> list(
-          dependencies = object : ListScreen.Dependencies, Dependencies by props.dependecies {
+          dependencies = object : ListScreen.Dependencies, Dependencies by props.dependencies {
             override val output: (ListController.Output) -> Unit = ::listOutput
           }
         )
@@ -122,9 +122,9 @@ class AppState(
 ) : RState
 
 interface AppProps : RProps {
-  var dependecies: App.Dependencies
+  var dependencies: App.Dependencies
 }
 
 fun RBuilder.app(dependencies: App.Dependencies) = child(App::class) {
-  attrs.dependecies = dependencies
+  attrs.dependencies = dependencies
 }

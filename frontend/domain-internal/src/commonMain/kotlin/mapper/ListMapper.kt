@@ -1,7 +1,7 @@
 package mapper
 
-import controller.ListController.Input
 import controller.ListController.Output
+import store.FilterStore.Label
 import store.ListStore.Intent
 import store.ListStore.State
 import view.ListView.Event
@@ -31,8 +31,9 @@ val listEventToOutput: Event.() -> Output? = {
   }
 }
 
-val inputToListIntent: Input.() -> Intent? = {
-  when (this) {
-    is Input.FilterChanged -> Intent.HandleFilterChanged(filter = filter)
+val filterLabelToListIntent: Label.() -> Intent? =
+  {
+    when (this) {
+      is Label.FilterChanged -> Intent.HandleFilterChanged(item)
+    }
   }
-}
