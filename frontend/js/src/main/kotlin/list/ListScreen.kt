@@ -40,14 +40,6 @@ class ListScreen(props: ListProps) :
     )
   }
 
-  private fun updateState(newModel: ListView.Model) {
-    setState { listModel = newModel }
-  }
-
-  private fun updateState(newModel: FilterView.Model) {
-    setState { filtersModel = newModel }
-  }
-
   override fun componentDidMount() {
     lifecycleWrapper.start()
     controller = createController()
@@ -123,17 +115,15 @@ class ListScreen(props: ListProps) :
     filtersViewDelegate.dispatch(FilterView.Event.ItemClick(filter))
   }
 
-  private fun onListItemClick(name: String) {
-    listViewDelegate.dispatch(ListView.Event.ItemClick(name))
+  private fun onListItemClick(id: Int) {
+    listViewDelegate.dispatch(ListView.Event.ItemClick(id))
   }
 
-  private fun closeDrawer() {
-    setState { drawerOpen = false }
-  }
+  private fun closeDrawer() = setState { drawerOpen = false }
+  private fun openDrawer() = setState { drawerOpen = true }
 
-  private fun openDrawer() {
-    setState { drawerOpen = true }
-  }
+  private fun updateState(newModel: ListView.Model) = setState { listModel = newModel }
+  private fun updateState(newModel: FilterView.Model) = setState { filtersModel = newModel }
 
   object ListStyles : StyleSheet("ListScreenStyles", isStatic = true) {
 

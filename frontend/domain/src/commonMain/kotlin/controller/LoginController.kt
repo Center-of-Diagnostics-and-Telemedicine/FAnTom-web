@@ -7,19 +7,19 @@ import view.LoginView
 
 interface LoginController {
 
-    fun onViewCreated(
-        loginView: LoginView,
-        viewLifecycle: Lifecycle,
-        output: (Output) -> Unit
-    )
+  fun onViewCreated(
+      loginView: LoginView,
+      viewLifecycle: Lifecycle,
+      output: (Output) -> Unit
+  )
 
-    interface Dependencies {
-        val storeFactory: StoreFactory
-        val lifecycle: Lifecycle
-        val loginRepository: LoginRepository
-    }
+  interface Dependencies {
+    val storeFactory: StoreFactory
+    val lifecycle: Lifecycle
+    val loginRepository: LoginRepository
+  }
 
-    sealed class Output {
-        object Authorized : Output()
-    }
+  sealed class Output {
+    object Authorized : Output()
+  }
 }

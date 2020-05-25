@@ -6,7 +6,8 @@ import com.ccfraser.muirwik.components.card.mCardActionArea
 import com.ccfraser.muirwik.components.card.mCardContent
 import com.ccfraser.muirwik.components.card.mCardHeader
 import com.ccfraser.muirwik.components.styles.Breakpoint
-import kotlinx.css.*
+import kotlinx.css.Color
+import kotlinx.css.backgroundColor
 import model.Research
 import react.RBuilder
 import styled.StyledElementBuilder
@@ -17,7 +18,7 @@ private val breakpoints =
     .up(Breakpoint.lg, MGridSize.cells4)
     .down(Breakpoint.sm, MGridSize.cells12)
 
-fun RBuilder.researchList(items: List<Research>, onClick: (String) -> Unit) {
+fun RBuilder.researchList(items: List<Research>, onClick: (Int) -> Unit) {
   mGridContainer(MGridSpacing.spacing2) {
     if (items.isNotEmpty()) {
       for (research in items) {
@@ -29,11 +30,11 @@ fun RBuilder.researchList(items: List<Research>, onClick: (String) -> Unit) {
 
 private fun StyledElementBuilder<MGridProps>.researchCard(
   breakpoints: MGridBreakpoints,
-  onClick: (String) -> Unit,
+  onClick: (Int) -> Unit,
   research: Research
 ) {
   mGridItem(breakpoints) {
-    mCardActionArea(onClick = { onClick(research.name) }) {
+    mCardActionArea(onClick = { onClick(research.id) }) {
       mCard {
         css {
           if (research.seen) {

@@ -64,7 +64,7 @@ enum class Preset(val value: Int) {
   PRESET_LUNGS(4),
 }
 
-const val SOFT_TISSUE = "soft_tisue"
+const val SOFT_TISSUE = "soft_tissue"
 const val VESSELS = "vessels"
 const val BONES = "bones"
 const val BRAIN = "brain"

@@ -3,12 +3,12 @@ package store
 import com.arkivanov.mvikotlin.core.store.Executor
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
-import model.Filter
-import store.FilterStore.*
+import model.Mip
+import store.MipStore.*
 
-internal class FilterStoreFactory(
+internal class MipStoreFactory(
   storeFactory: StoreFactory
-) : FilterStoreAbstractFactory(
+) : MipStoreAbstractFactory(
   storeFactory = storeFactory
 ) {
 
@@ -17,13 +17,19 @@ internal class FilterStoreFactory(
 
       override fun executeIntent(intent: Intent, getState: () -> State) {
         when (intent) {
-          is Intent.HandleFilterClick -> changeFilter(intent.filter)
+          is Intent.HandleMipClick -> changeMip(intent.mip)
+          is Intent.HandleMipValueChanged -> changeMipValue(intent.value)
         }.let {}
       }
 
-      private fun changeFilter(filter: Filter) {
-        dispatch(Result.FilterChanged(filter))
-        publish(Label.FilterChanged(filter))
+      private fun changeMip(mip: Mip) {
+        dispatch(Result.MipMethodChanged(mip))
+        publish(Label.MipMethodChanged(mip))
+      }
+
+      private fun changeMipValue(value: Int) {
+        dispatch(Result.MipValueChanged(value))
+        publish(Label.MipValueChanged(value))
       }
     }
 }

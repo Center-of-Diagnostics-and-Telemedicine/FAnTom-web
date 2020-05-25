@@ -4,12 +4,10 @@ import ScreenType
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.ccfraser.muirwik.components.mCssBaseline
 import com.ccfraser.muirwik.components.mThemeProvider
-import com.ccfraser.muirwik.components.spacingUnits
 import com.ccfraser.muirwik.components.styles.ThemeOptions
 import com.ccfraser.muirwik.components.styles.createMuiTheme
 import controller.ListController
 import controller.LoginController
-import kotlinx.css.*
 import list.ListScreen
 import list.list
 import login.LoginScreen
@@ -17,7 +15,8 @@ import login.login
 import react.*
 import repository.LoginRepository
 import repository.ResearchRepository
-import styled.StyleSheet
+import research.ResearchScreen
+import research.research
 
 abstract class App : RComponent<AppProps, AppState>() {
 
@@ -26,7 +25,7 @@ abstract class App : RComponent<AppProps, AppState>() {
   init {
     state = AppState(
       screen = ScreenType.AUTH,
-      currentResearchAccessionName = ""
+      researchId = -1
     )
   }
 
@@ -51,8 +50,11 @@ abstract class App : RComponent<AppProps, AppState>() {
             override val output: (ListController.Output) -> Unit = ::listOutput
           }
         )
-        ScreenType.RESEARCH -> {
-        }
+        ScreenType.RESEARCH -> research(
+          dependencies = object : ResearchScreen.Dependencies, Dependencies by props.dependencies {
+            override val researchId: Int = state.researchId
+          }
+        )
       }
     }
   }
@@ -62,7 +64,8 @@ abstract class App : RComponent<AppProps, AppState>() {
       is ListController.Output.ItemSelected ->
         setState {
           debugLog("output in app")
-          currentResearchAccessionName = output.id
+          researchId = output.id
+          screen = ScreenType.RESEARCH
         }
     }
   }
@@ -70,42 +73,6 @@ abstract class App : RComponent<AppProps, AppState>() {
   private fun loginOutput(output: LoginController.Output) {
     when (output) {
       LoginController.Output.Authorized -> setState { screen = ScreenType.LIST }
-    }
-  }
-
-  object TodoStyles : StyleSheet("TodoStyles", isStatic = true) {
-    val addCss by css {
-      display = Display.inlineFlex
-      width = 100.pct
-      padding(2.spacingUnits)
-    }
-
-    val listCss by css {
-      width = 100.pct
-    }
-
-    val columnCss by css {
-      display = Display.flex
-      flexDirection = FlexDirection.column
-      alignItems = Align.center
-    }
-
-    val headerMarginCss by css {
-      marginTop = 9.spacingUnits
-    }
-
-    val detailsButtonsCss by css {
-      display = Display.flex
-      flexDirection = FlexDirection.row
-      justifyContent = JustifyContent.spaceBetween
-      alignItems = Align.center
-      width = 100.pct
-      paddingLeft = 2.spacingUnits
-    }
-
-    val detailsInputCss by css {
-      width = 100.pct
-      padding(2.spacingUnits)
     }
   }
 
@@ -118,7 +85,7 @@ abstract class App : RComponent<AppProps, AppState>() {
 
 class AppState(
   var screen: ScreenType,
-  var currentResearchAccessionName: String
+  var researchId: Int
 ) : RState
 
 interface AppProps : RProps {

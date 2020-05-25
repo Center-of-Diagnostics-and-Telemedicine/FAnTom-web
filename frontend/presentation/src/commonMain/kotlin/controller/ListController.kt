@@ -46,7 +46,7 @@ class ListControllerImpl(dependencies: ListController.Dependencies) : ListContro
   ) {
     bind(viewLifecycle, BinderLifecycleMode.CREATE_DESTROY) {
       listView.events.mapNotNull(listEventToListIntent) bindTo listStore
-      filterView.events.mapNotNull(addEventToAddIntent) bindTo filterStore
+      filterView.events.mapNotNull(filterEventToFilterIntent) bindTo filterStore
     }
 
     bind(viewLifecycle, BinderLifecycleMode.START_STOP) {

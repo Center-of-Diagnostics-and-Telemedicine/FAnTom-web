@@ -3,12 +3,12 @@ package store
 import com.arkivanov.mvikotlin.core.store.Executor
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
-import model.Filter
-import store.FilterStore.*
+import model.Presets
+import store.PresetStore.*
 
-internal class FilterStoreFactory(
+internal class PresetStoreFactory(
   storeFactory: StoreFactory
-) : FilterStoreAbstractFactory(
+) : PresetStoreAbstractFactory(
   storeFactory = storeFactory
 ) {
 
@@ -17,13 +17,13 @@ internal class FilterStoreFactory(
 
       override fun executeIntent(intent: Intent, getState: () -> State) {
         when (intent) {
-          is Intent.HandleFilterClick -> changeFilter(intent.filter)
+          is Intent.HandlePresetClick -> changeFilter(intent.preset)
         }.let {}
       }
 
-      private fun changeFilter(filter: Filter) {
-        dispatch(Result.FilterChanged(filter))
-        publish(Label.FilterChanged(filter))
+      private fun changeFilter(preset: Presets) {
+        dispatch(Result.PresetChanged(preset))
+        publish(Label.PresetChanged(preset))
       }
     }
 }

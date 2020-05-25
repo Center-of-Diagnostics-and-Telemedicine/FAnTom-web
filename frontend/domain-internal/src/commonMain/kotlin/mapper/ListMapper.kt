@@ -27,7 +27,8 @@ val listEventToOutput: Event.() -> Output? = {
   when (this) {
     is Event.ItemClick -> Output.ItemSelected(id)
     is Event.Reload,
-    is Event.DismissError -> null
+    is Event.DismissError,
+    -> null
   }
 }
 
