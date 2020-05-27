@@ -37,8 +37,7 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
       ) {
         tools(dependencies = object : ToolsViewComponent.Dependencies,
           Dependencies by props.dependencies {
-          override val output: (ToolsController.Output) -> Unit
-            get() = TODO("Not yet implemented")
+          override val toolsOutput: (ToolsController.Output) -> Unit = ::toolsOutput
 
         })
       }
@@ -86,6 +85,19 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
     }
 
 
+  }
+
+  private fun toolsOutput(output: ToolsController.Output) {
+    when (output) {
+      is ToolsController.Output.ItemSelected -> TODO()
+      is ToolsController.Output.BlackChanged -> TODO()
+      is ToolsController.Output.WhiteChanged -> TODO()
+      is ToolsController.Output.GammaChanged -> TODO()
+      is ToolsController.Output.MipMethodChanged -> TODO()
+      is ToolsController.Output.MipValueChanged -> TODO()
+      is ToolsController.Output.PresetChanged -> TODO()
+      ToolsController.Output.Close -> TODO()
+    }
   }
 
   private fun closeTools() = setState { toolsOpen = false }

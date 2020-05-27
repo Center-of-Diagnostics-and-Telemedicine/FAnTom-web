@@ -14,7 +14,7 @@ import store.ListStoreFactory
 import view.FilterView
 import view.ListView
 
-class ListControllerImpl(dependencies: ListController.Dependencies) : ListController {
+class ListControllerImpl(val dependencies: ListController.Dependencies) : ListController {
 
   private val listStore =
     ListStoreFactory(
@@ -41,8 +41,7 @@ class ListControllerImpl(dependencies: ListController.Dependencies) : ListContro
   override fun onViewCreated(
     listView: ListView,
     filterView: FilterView,
-    viewLifecycle: Lifecycle,
-    output: (ListController.Output) -> Unit
+    viewLifecycle: Lifecycle
   ) {
     bind(viewLifecycle, BinderLifecycleMode.CREATE_DESTROY) {
       listView.events.mapNotNull(listEventToListIntent) bindTo listStore
@@ -52,7 +51,7 @@ class ListControllerImpl(dependencies: ListController.Dependencies) : ListContro
     bind(viewLifecycle, BinderLifecycleMode.START_STOP) {
       listStore.states.mapNotNull(listStateToListModel) bindTo listView
       filterStore.states.mapNotNull(filterStateToFilterModel) bindTo filterView
-      listView.events.mapNotNull(listEventToOutput) bindTo output
+      listView.events.mapNotNull(listEventToOutput) bindTo dependencies.listOutput
     }
   }
 }

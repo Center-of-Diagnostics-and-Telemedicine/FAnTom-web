@@ -47,7 +47,7 @@ abstract class MipStoreAbstractFactory(
   }
 
   private fun getInitialState(): State = State(
-    list = listOf(Mip.No, Mip.Average(0), Mip.Max(0)),
+    list = listOf(Mip.No, Mip.Average(), Mip.Max()),
     current = Mip.No,
     currentValue = null
   )

@@ -42,12 +42,12 @@ abstract class App : RComponent<AppProps, AppState>() {
       when (state.screen) {
         ScreenType.AUTH -> login(
           dependencies = object : LoginScreen.Dependencies, Dependencies by props.dependencies {
-            override val output: (LoginController.Output) -> Unit = ::loginOutput
+            override val loginOutput: (LoginController.Output) -> Unit = ::loginOutput
           }
         )
         ScreenType.LIST -> list(
           dependencies = object : ListScreen.Dependencies, Dependencies by props.dependencies {
-            override val output: (ListController.Output) -> Unit = ::listOutput
+            override val listOutput: (ListController.Output) -> Unit = ::listOutput
           }
         )
         ScreenType.RESEARCH -> research(

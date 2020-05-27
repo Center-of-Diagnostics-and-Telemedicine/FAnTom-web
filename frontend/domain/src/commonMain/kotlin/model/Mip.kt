@@ -14,12 +14,12 @@ sealed class Mip(
     valueName = NO_MIP
   )
 
-  data class Average(override val value: Int) : Mip(
+  data class Average(override val value: Int = 0) : Mip(
     name = "Среднее",
     valueName = AVERAGE
   ), HasIntValue
 
-  data class Max(override val value: Int) : Mip(
+  data class Max(override val value: Int = 0) : Mip(
     name = "Максимальное",
     valueName = MAXVALUE
   ), HasIntValue
@@ -28,8 +28,8 @@ sealed class Mip(
     fun build(valueName: String): Mip {
       return when (valueName) {
         NO_MIP -> No
-        AVERAGE -> Average(0)
-        MAXVALUE -> Max(0)
+        AVERAGE -> Average()
+        MAXVALUE -> Max()
         else -> throw NoSuchElementException("cant build Mip with valueName $valueName")
       }
     }

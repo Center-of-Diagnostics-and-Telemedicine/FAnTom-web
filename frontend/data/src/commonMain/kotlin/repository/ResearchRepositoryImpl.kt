@@ -4,8 +4,8 @@ import model.*
 import model.ResearchApiExceptions.*
 
 class ResearchRepositoryImpl(
-  override val local: ResearchLocal,
-  override val remote: ResearchRemote,
+  val local: ResearchLocal,
+  val remote: ResearchRemote,
   override val token: suspend () -> String
 ) : ResearchRepository {
 

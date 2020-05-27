@@ -1,6 +1,7 @@
 package research.tools
 
 import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
+import com.arkivanov.mvikotlin.core.lifecycle.LifecycleRegistry
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.ccfraser.muirwik.components.list.mList
 import com.ccfraser.muirwik.components.list.mListItemWithIcon
@@ -8,6 +9,7 @@ import com.ccfraser.muirwik.components.mDivider
 import com.ccfraser.muirwik.components.spacingUnits
 import controller.ToolsController
 import controller.ToolsControllerImpl
+import destroy
 import kotlinx.css.*
 import list.ListScreen
 import model.Tool
@@ -21,7 +23,7 @@ import research.tools.mip.MipViewProxy
 import research.tools.mip.renderMip
 import research.tools.preset.PresetViewProxy
 import research.tools.preset.renderPreset
-import root.LifecycleWrapper
+import resume
 import styled.StyleSheet
 import styled.css
 import styled.styledDiv
@@ -34,7 +36,7 @@ class ToolsViewComponent(prps: ToolsProps) : RComponent<ToolsProps, ToolsState>(
   private val brightnessViewDelegate = BrightnessViewProxy(::updateState)
   private val templatesViewDelegate = PresetViewProxy(::updateState)
   private val toolsViewDelegate = ToolsViewProxy(::updateState)
-  private val lifecycleWrapper = LifecycleWrapper()
+  private val lifecycleRegistry = LifecycleRegistry()
   private lateinit var controller: ToolsController
 
   init {
@@ -48,7 +50,7 @@ class ToolsViewComponent(prps: ToolsProps) : RComponent<ToolsProps, ToolsState>(
   }
 
   override fun componentDidMount() {
-    lifecycleWrapper.start()
+    lifecycleRegistry.resume()
     controller = createController()
     controller.onViewCreated(
       gridView = gridViewDelegate,
@@ -56,7 +58,7 @@ class ToolsViewComponent(prps: ToolsProps) : RComponent<ToolsProps, ToolsState>(
       brightnessView = brightnessViewDelegate,
       presetView = templatesViewDelegate,
       toolsView = toolsViewDelegate,
-      viewLifecycle = lifecycleWrapper.lifecycle
+      viewLifecycle = lifecycleRegistry
     )
   }
 
@@ -64,7 +66,7 @@ class ToolsViewComponent(prps: ToolsProps) : RComponent<ToolsProps, ToolsState>(
     val dependencies = props.dependencies
     val toolsControllerDependencies =
       object : ToolsController.Dependencies, Dependencies by dependencies {
-        override val lifecycle: Lifecycle = lifecycleWrapper.lifecycle
+        override val lifecycle: Lifecycle = lifecycleRegistry
       }
     return ToolsControllerImpl(toolsControllerDependencies)
   }
@@ -124,9 +126,13 @@ class ToolsViewComponent(prps: ToolsProps) : RComponent<ToolsProps, ToolsState>(
   private fun updateState(model: BrightnessView.Model) = setState { brightnessModel = model }
   private fun updateState(model: PresetView.Model) = setState { presetModel = model }
 
+  override fun componentWillUnmount() {
+    lifecycleRegistry.destroy()
+  }
+
   interface Dependencies {
-    val output: (ToolsController.Output) -> Unit
     val storeFactory: StoreFactory
+    val toolsOutput: (ToolsController.Output) -> Unit
   }
 
   object ToolsStyles : StyleSheet("ToolsStyles", isStatic = true) {

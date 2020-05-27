@@ -1,11 +1,13 @@
 package list
 
 import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
+import com.arkivanov.mvikotlin.core.lifecycle.LifecycleRegistry
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.ccfraser.muirwik.components.themeContext
 import com.ccfraser.muirwik.components.toolbarJsCssToPartialCss
 import controller.ListController
 import controller.ListControllerImpl
+import destroy
 import kotlinx.css.*
 import list.ListScreen.ListStyles.appFrameCss
 import list.ListScreen.ListStyles.mainContainerCss
@@ -13,7 +15,7 @@ import list.ListScreen.ListStyles.screenContainerCss
 import model.Filter
 import react.*
 import repository.ResearchRepository
-import root.LifecycleWrapper
+import resume
 import styled.StyleSheet
 import styled.css
 import styled.styledDiv
@@ -27,7 +29,7 @@ class ListScreen(props: ListProps) :
 
   private val listViewDelegate = ListViewProxy(updateState = ::updateState)
   private val filtersViewDelegate = FiltersViewProxy(updateState = ::updateState)
-  private val lifecycleWrapper = LifecycleWrapper()
+  private val lifecycleRegistry = LifecycleRegistry()
   private lateinit var controller: ListController
 
   private val drawerWidth = 240
@@ -41,13 +43,12 @@ class ListScreen(props: ListProps) :
   }
 
   override fun componentDidMount() {
-    lifecycleWrapper.start()
+    lifecycleRegistry.resume()
     controller = createController()
     controller.onViewCreated(
       listViewDelegate,
       filtersViewDelegate,
-      lifecycleWrapper.lifecycle,
-      props.dependencies.output
+      lifecycleRegistry
     )
   }
 
@@ -55,7 +56,7 @@ class ListScreen(props: ListProps) :
     val dependencies = props.dependencies
     val todoListControllerDependencies =
       object : ListController.Dependencies, Dependencies by dependencies {
-        override val lifecycle: Lifecycle = lifecycleWrapper.lifecycle
+        override val lifecycle: Lifecycle = lifecycleRegistry
       }
     return ListControllerImpl(todoListControllerDependencies)
   }
@@ -125,6 +126,10 @@ class ListScreen(props: ListProps) :
   private fun updateState(newModel: ListView.Model) = setState { listModel = newModel }
   private fun updateState(newModel: FilterView.Model) = setState { filtersModel = newModel }
 
+  override fun componentWillUnmount() {
+    lifecycleRegistry.destroy()
+  }
+
   object ListStyles : StyleSheet("ListScreenStyles", isStatic = true) {
 
     val screenContainerCss by ListStyles.css {
@@ -161,9 +166,9 @@ class ListScreen(props: ListProps) :
   }
 
   interface Dependencies {
-    val output: (ListController.Output) -> Unit
     val storeFactory: StoreFactory
     val researchRepository: ResearchRepository
+    val listOutput: (ListController.Output) -> Unit
   }
 }
 

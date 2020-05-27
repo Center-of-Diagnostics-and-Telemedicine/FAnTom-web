@@ -7,9 +7,6 @@ import model.ResearchSlicesSizesData
 
 interface ResearchRepository {
 
-  val local: ResearchLocal
-  val remote: ResearchRemote
-
   val token: suspend () -> String
 
   suspend fun getResearches(): List<Research>

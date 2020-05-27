@@ -11,7 +11,7 @@ import mapper.*
 import store.*
 import view.*
 
-class ToolsControllerImpl(dependencies: ToolsController.Dependencies) : ToolsController {
+class ToolsControllerImpl(val dependencies: ToolsController.Dependencies) : ToolsController {
 
   private val toolsStore = ToolsStoreFactory(storeFactory = dependencies.storeFactory).create()
   private val gridStore = GridStoreFactory(storeFactory = dependencies.storeFactory).create()
@@ -58,7 +58,7 @@ class ToolsControllerImpl(dependencies: ToolsController.Dependencies) : ToolsCon
       mipStore.states.mapNotNull(mipStateToMipModel) bindTo mipView
       brightnessStore.states.mapNotNull(brightnessStateToBrightnessModel) bindTo brightnessView
       presetStore.states.mapNotNull(presetStateToPresetModel) bindTo presetView
-//      listView.events.mapNotNull(listEventToOutput) bindTo output
+      toolsView.events.mapNotNull(toolsEventToToolsOutput) bindTo dependencies.toolsOutput
     }
   }
 }

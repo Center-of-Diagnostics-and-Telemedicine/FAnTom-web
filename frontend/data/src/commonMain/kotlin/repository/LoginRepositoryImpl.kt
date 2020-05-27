@@ -3,8 +3,8 @@ package repository
 import model.*
 
 class LoginRepositoryImpl(
-  override val local: LoginLocal,
-  override val remote: LoginRemote
+  val local: LoginLocal,
+  val remote: LoginRemote
 ) : LoginRepository {
 
   override suspend fun auth(login: String, password: String) {

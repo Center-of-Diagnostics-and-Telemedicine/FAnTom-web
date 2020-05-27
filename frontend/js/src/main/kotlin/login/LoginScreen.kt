@@ -1,6 +1,7 @@
 package login
 
 import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
+import com.arkivanov.mvikotlin.core.lifecycle.LifecycleRegistry
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.ccfraser.muirwik.components.*
 import com.ccfraser.muirwik.components.button.MButtonSize
@@ -11,6 +12,7 @@ import com.ccfraser.muirwik.components.form.MFormControlVariant
 import components.alert
 import controller.LoginController
 import controller.LoginControllerImpl
+import destroy
 import kotlinx.css.*
 import kotlinx.html.InputType
 import org.w3c.dom.HTMLInputElement
@@ -18,7 +20,7 @@ import org.w3c.dom.events.Event
 import org.w3c.dom.events.MouseEvent
 import react.*
 import repository.LoginRepository
-import root.LifecycleWrapper
+import resume
 import styled.css
 import styled.styledDiv
 import styled.styledForm
@@ -29,7 +31,7 @@ class LoginScreen(
 ) : RComponent<LoginScreenProps, LoginState>(prps) {
 
   private val viewDelegate = LoginViewProxy(updateState = ::updateState)
-  private val lifecycleWrapper = LifecycleWrapper()
+  private val lifecycleRegistry = LifecycleRegistry()
   private lateinit var controller: LoginController
 
   init {
@@ -37,20 +39,16 @@ class LoginScreen(
   }
 
   override fun componentDidMount() {
-    lifecycleWrapper.start()
+    lifecycleRegistry.resume()
     controller = createController()
-    controller.onViewCreated(
-      viewDelegate,
-      lifecycleWrapper.lifecycle,
-      props.dependencies.output
-    )
+    controller.onViewCreated(viewDelegate, lifecycleRegistry)
   }
 
   private fun createController(): LoginController {
     val dependencies = props.dependencies
     val todoListControllerDependencies =
       object : LoginController.Dependencies, Dependencies by dependencies {
-        override val lifecycle: Lifecycle = lifecycleWrapper.lifecycle
+        override val lifecycle: Lifecycle = lifecycleRegistry
       }
     return LoginControllerImpl(todoListControllerDependencies)
   }
@@ -191,13 +189,13 @@ class LoginScreen(
   }
 
   override fun componentWillUnmount() {
-    lifecycleWrapper.stop()
+    lifecycleRegistry.destroy()
   }
 
   interface Dependencies {
-    val output: (LoginController.Output) -> Unit
     val storeFactory: StoreFactory
     val loginRepository: LoginRepository
+    val loginOutput: (LoginController.Output) -> Unit
   }
 
 }

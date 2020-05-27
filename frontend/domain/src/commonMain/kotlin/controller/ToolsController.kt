@@ -20,6 +20,7 @@ interface ToolsController {
   interface Dependencies {
     val storeFactory: StoreFactory
     val lifecycle: Lifecycle
+    val toolsOutput: (Output) -> Unit
   }
 
   sealed class Output {

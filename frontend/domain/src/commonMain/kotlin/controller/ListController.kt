@@ -11,14 +11,14 @@ interface ListController {
   fun onViewCreated(
     listView: ListView,
     filterView: FilterView,
-    viewLifecycle: Lifecycle,
-    output: (Output) -> Unit
+    viewLifecycle: Lifecycle
   )
 
   interface Dependencies {
     val storeFactory: StoreFactory
     val lifecycle: Lifecycle
     val researchRepository: ResearchRepository
+    val listOutput: (Output) -> Unit
   }
 
   sealed class Output {
