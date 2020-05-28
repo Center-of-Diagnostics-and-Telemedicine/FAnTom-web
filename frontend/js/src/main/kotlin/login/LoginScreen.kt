@@ -46,11 +46,11 @@ class LoginScreen(
 
   private fun createController(): LoginController {
     val dependencies = props.dependencies
-    val todoListControllerDependencies =
+    val loginControllerDependencies =
       object : LoginController.Dependencies, Dependencies by dependencies {
         override val lifecycle: Lifecycle = lifecycleRegistry
       }
-    return LoginControllerImpl(todoListControllerDependencies)
+    return LoginControllerImpl(loginControllerDependencies)
   }
 
   private fun updateState(newModel: LoginView.Model) {

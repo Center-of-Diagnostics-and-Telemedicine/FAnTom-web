@@ -9,20 +9,19 @@ import com.badoo.reaktive.scheduler.mainScheduler
 import com.badoo.reaktive.single.map
 import com.badoo.reaktive.single.observeOn
 import com.badoo.reaktive.single.subscribeOn
-import model.Filter
-import model.RESEARCH_INITIALIZATION_FAILED
+import model.RESEARCH_DATA_FETCH_FAILED
 import model.ResearchApiExceptions
 import repository.ResearchRepository
-import store.ListStore.Intent
-import store.ListStore.State
+import store.ResearchStore.Intent
+import store.ResearchStore.State
 
-internal class ListStoreFactory(
+internal class ResearchStoreFactory(
   storeFactory: StoreFactory,
-  private val repository: ResearchRepository
-) : ListStoreAbstractFactory(
+  private val repository: ResearchRepository,
+  private val researchId: Int
+) : ResearchStoreAbstractFactory(
   storeFactory = storeFactory
 ) {
-
   override fun createExecutor(): Executor<Intent, Unit, State, Result, Nothing> = ExecutorImpl()
 
   private inner class ExecutorImpl : ReaktiveExecutor<Intent, Unit, State, Result, Nothing>() {
@@ -30,15 +29,15 @@ internal class ListStoreFactory(
 
     override fun executeIntent(intent: Intent, getState: () -> State) {
       when (intent) {
-        is Intent.HandleFilterChanged -> filterChanged(intent.filter)
         Intent.DismissError -> dispatch(Result.DismissErrorRequested)
         Intent.ReloadRequested -> load()
+        Intent.CloseRequested -> TODO()
       }.let {}
     }
 
-    private fun filterChanged(filter: Filter) {
+    private fun load() {
       singleFromCoroutine {
-        repository.getFiltered(filter)
+        repository.initResearch(researchId = researchId)
       }
         .subscribeOn(ioScheduler)
         .map(Result::Loaded)
@@ -50,27 +49,17 @@ internal class ListStoreFactory(
         )
     }
 
-    private fun load() {
-      singleFromCoroutine {
-        repository.getResearches()
-      }
-        .subscribeOn(ioScheduler)
-        .map(Result::Loaded)
-        .observeOn(mainScheduler)
-        .subscribeScoped(isThreadLocal = true, onSuccess = ::dispatch)
-    }
-
     private fun handleError(error: Throwable) {
       val result = when (error) {
-        is ResearchApiExceptions.ResearchListFetchException -> Result.Error(error.error)
-        is ResearchApiExceptions.ResearchDataFetchError -> Result.Error(error.error)
+        is ResearchApiExceptions.ResearchInitializationException -> Result.Error(error.error)
         is ResearchApiExceptions.ResearchNotFoundException -> Result.Error(error.error)
         else -> {
           println("login: other exception ${error.message}")
-          Result.Error(RESEARCH_INITIALIZATION_FAILED)
+          Result.Error(RESEARCH_DATA_FETCH_FAILED)
         }
       }
       dispatch(result)
     }
   }
+
 }

@@ -54,11 +54,11 @@ class ListScreen(props: ListProps) :
 
   private fun createController(): ListController {
     val dependencies = props.dependencies
-    val todoListControllerDependencies =
+    val listControllerDependencies =
       object : ListController.Dependencies, Dependencies by dependencies {
         override val lifecycle: Lifecycle = lifecycleRegistry
       }
-    return ListControllerImpl(todoListControllerDependencies)
+    return ListControllerImpl(listControllerDependencies)
   }
 
   override fun RBuilder.render() {

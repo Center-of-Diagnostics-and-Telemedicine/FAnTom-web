@@ -27,6 +27,7 @@ dependencies {
   implementation(Deps.MVIKotlin.Main)
   implementation(Deps.MVIKotlin.TimeTravel)
   implementation(Deps.MVIKotlin.Logging)
+  implementation(Deps.MVIKotlin.Rx)
   implementation(project(":frontend:data"))
   implementation(project(":frontend:presentation"))
 

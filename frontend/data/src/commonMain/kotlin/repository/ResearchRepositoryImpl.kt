@@ -127,6 +127,7 @@ class ResearchRepositoryImpl(
 
       ErrorStringCode.RESEARCH_NOT_FOUND.value -> throw ResearchNotFoundException
       ErrorStringCode.RESEARCH_INITIALIZATION_FAILED.value -> throw ResearchInitializationException
+      ErrorStringCode.RESEARCH_DATA_FETCH_FAILED.value -> throw ResearchDataFetchError
 
       ErrorStringCode.HOUNSFIELD_ERROR.value -> throw HounsfieldFetchError
       ErrorStringCode.INCORRECT_AXIAL_COORD.value -> throw IncorrectAxialValueException
