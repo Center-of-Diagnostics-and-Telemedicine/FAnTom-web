@@ -1,10 +1,10 @@
-package store
+package store.tools
 
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import model.Tool
-import store.ToolsStore.Intent
-import store.ToolsStore.State
+import store.tools.ToolsStore.Intent
+import store.tools.ToolsStore.State
 
 interface ToolsStore : Store<Intent, State, Nothing> {
 

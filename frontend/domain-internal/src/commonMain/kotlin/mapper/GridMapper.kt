@@ -1,7 +1,7 @@
 package mapper
 
-import store.GridStore.Intent
-import store.GridStore.State
+import store.tools.GridStore.Intent
+import store.tools.GridStore.State
 import  view.GridView.Event
 import  view.GridView.Model
 
@@ -15,6 +15,6 @@ val gridStateToGridModel: State.() -> Model? = {
 val gridEventToGridIntent: Event.() -> Intent? =
   {
     when (this) {
-      is Event.ItemClick -> Intent.HandleGridClick(grid)
+      is Event.ItemClick -> Intent.HandleGridClick(gridType)
     }
   }

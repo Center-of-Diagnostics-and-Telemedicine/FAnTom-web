@@ -8,6 +8,7 @@ import com.badoo.reaktive.utils.reaktiveUncaughtErrorHandler
 import com.badoo.reaktive.utils.resetReaktiveUncaughtErrorHandler
 import invalidLogin
 import invalidPassword
+import store.login.LoginStore
 import testLogin
 import testPassword
 import kotlin.test.*

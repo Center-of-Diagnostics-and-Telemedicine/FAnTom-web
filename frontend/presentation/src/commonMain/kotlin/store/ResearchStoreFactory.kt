@@ -12,8 +12,9 @@ import com.badoo.reaktive.single.subscribeOn
 import model.RESEARCH_DATA_FETCH_FAILED
 import model.ResearchApiExceptions
 import repository.ResearchRepository
-import store.ResearchStore.Intent
-import store.ResearchStore.State
+import store.research.ResearchStore.Intent
+import store.research.ResearchStore.State
+import store.research.ResearchStoreAbstractFactory
 
 internal class ResearchStoreFactory(
   storeFactory: StoreFactory,

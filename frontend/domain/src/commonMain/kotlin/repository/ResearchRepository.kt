@@ -14,12 +14,12 @@ interface ResearchRepository {
   suspend fun initResearch(researchId: Int): ResearchSlicesSizesData
   suspend fun getSlice(
     researchId: Int,
-    black: Double,
-    white: Double,
+    black: Int,
+    white: Int,
     gamma: Double,
     type: Int,
     mipMethod: Int,
-    slyceNumber: Int,
+    sliceNumber: Int,
     aproxSize: Int
   ): String
 

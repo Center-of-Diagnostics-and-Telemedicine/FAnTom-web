@@ -1,4 +1,4 @@
-package store
+package store.tools
 
 import com.arkivanov.mvikotlin.core.store.Executor
 import com.arkivanov.mvikotlin.core.store.Reducer
@@ -7,8 +7,8 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.badoo.reaktive.utils.ensureNeverFrozen
 import model.Tool
-import store.ToolsStore.Intent
-import store.ToolsStore.State
+import store.tools.ToolsStore.Intent
+import store.tools.ToolsStore.State
 
 abstract class ToolsStoreAbstractFactory(
   private val storeFactory: StoreFactory

@@ -30,7 +30,7 @@ class CutLoaderImpl(
   override fun load(sliceData: SliceData): Single<CutLoader.Result> =
     singleFromCoroutine {
       repository.getSlice(
-        black = sliceData.black,
+        black = sliceData.bl ack,
         white = sliceData.white,
         gamma = sliceData.gamma,
         researchId = sliceData.researchId,

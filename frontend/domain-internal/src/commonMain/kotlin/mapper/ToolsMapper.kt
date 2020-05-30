@@ -1,8 +1,8 @@
 package mapper
 
 import controller.ToolsController.Output
-import store.ToolsStore.Intent
-import store.ToolsStore.State
+import store.tools.ToolsStore.Intent
+import store.tools.ToolsStore.State
 import view.ToolsView.Event
 import view.ToolsView.Model
 

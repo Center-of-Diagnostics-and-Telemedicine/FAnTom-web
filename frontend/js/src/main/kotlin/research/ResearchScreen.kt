@@ -1,19 +1,26 @@
 package research
 
+import Disposable
 import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.lifecycle.LifecycleRegistry
 import com.arkivanov.mvikotlin.core.store.StoreFactory
+import com.arkivanov.mvikotlin.rx.Disposable
+import com.arkivanov.mvikotlin.rx.Observer
 import com.ccfraser.muirwik.components.spacingUnits
 import components.loading
+import controller.CutController
+import controller.GridContainerController
 import controller.ResearchController
 import controller.ResearchControllerImpl
-import controller.ToolsController
+import controller.ToolsController.Output
 import destroy
 import kotlinx.css.*
+import model.ResearchSlicesSizesData
 import react.*
 import repository.ResearchRepository
 import research.ResearchScreen.ResearchStyles.appFrameContainerStyle
-import research.ResearchScreen.ResearchStyles.mainContentContainerStyle
+import research.gridcontainer.GridContainerViewComponent
+import research.gridcontainer.cuts
 import research.tools.ToolsViewComponent
 import research.tools.tools
 import resume
@@ -30,7 +37,12 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
   private val researchViewDelegate = ResearchViewProxy(::updateState)
   private val lifecycleRegistry = LifecycleRegistry()
   private lateinit var controller: ResearchController
-//  private val listInput: (Observer<CutsController.Input>) -> Disposable = ::listInput
+
+  private var gridContainerInputObserver: Observer<GridContainerController.Input>? = null
+  private val gridContainerInput: (Observer<GridContainerController.Input>) -> Disposable = ::gridContainerInput
+
+  private var cutsInputObserver: Observer<CutController.Input>? = null
+  private val cutsInput: (Observer<CutController.Input>) -> Disposable = ::cutsInput
 
   init {
     state = ResearchState(false, initialResearchModel())
@@ -58,6 +70,7 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
       val model = state.researchModel
       if (model.data == null) {
         loading(model.loading)
+//        reload()
       } else {
 
         //leftDrawer
@@ -69,77 +82,67 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
         ) {
           tools(dependencies = object : ToolsViewComponent.Dependencies,
             Dependencies by props.dependencies {
-            override val toolsOutput: (ToolsController.Output) -> Unit = ::toolsOutput
+            override val toolsOutput: (Output) -> Unit = ::toolsOutput
           })
         }
 
-
-        //mainContent
-        styledDiv {
-          css(mainContentContainerStyle)
-          css {
-            marginLeft = if (state.toolsOpen) drawerWidth.px else 7.spacingUnits
-//            marginRight = if (state.rightDrawerOpen) 350.px else 7.spacingUnits
-          }
-
-          //TODO(тут остановился)
-
-//            cuts(dependencies = object : CutsViewComponent.Dependencies,
-//              Dependencies by props.dependencies {
-//              override val cutsInput: (Observer<CutController.Input>) -> Disposable = this@App.cutsInput
-//            })
-          //
-          //        val data = state.data
-          //        if (data != null && gridModel != null) {
-          //          styledDiv {
-          //            css(columnOfRowsStyle)
-          //            when (gridModel.type) {
-          //              CutsGridType.SINGLE -> singleCutContainer(
-          //                gridModel.cells[0],
-          //                cellDoubleClickListener
-          //              )
-          //              CutsGridType.TWO_VERTICAL -> twoVerticalCutsContainer(
-          //                gridModel.cells,
-          //                cellDoubleClickListener
-          //              )
-          //              CutsGridType.TWO_HORIZONTAL -> twoHorizontalCutsContainer(
-          //                gridModel.cells,
-          //                cellDoubleClickListener
-          //              )
-          //              CutsGridType.THREE -> threeCutsContainer(
-          //                gridModel.cells,
-          //                cellDoubleClickListener
-          //              )
-          //              CutsGridType.FOUR -> TODO()//fourCutsContainer()
-          //            }
-          //          }
-          //        }
+        mainContent(
+          margiLeft = if (state.toolsOpen) drawerWidth.px else 7.spacingUnits
+        ) {
+          cuts(dependencies = object : GridContainerViewComponent.Dependencies,
+            Dependencies by props.dependencies {
+            override val data: ResearchSlicesSizesData = model.data!!
+            override val gridContainerInputs: (Observer<GridContainerController.Input>) -> Disposable = this@ResearchScreen.gridContainerInput
+            override val cutsInput: (Observer<CutController.Input>) -> Disposable = this@ResearchScreen.cutsInput
+          })
+        }
 //      rightDrawer()
 //      ctTypes.firstOrNull { it.ctType == state.ctTypeToConfirm }?.let {
 //        confirmationDialog(state.confirmationDialogOpen, it)
 //      }
 //      nonRelevantDialog()
-        }
       }
     }
   }
 
-//  private fun listInput(observer: Observer<TodoListController.Input>): Disposable {
-//    listInputObserver = observer
-//
-//    return Disposable { listInputObserver = null }
-//  }
+  private fun gridContainerInput(observer: Observer<GridContainerController.Input>): Disposable {
+    gridContainerInputObserver = observer
 
-  private fun toolsOutput(output: ToolsController.Output) {
+    return Disposable { gridContainerInputObserver = null }
+  }
+
+  private fun cutsInput(observer: Observer<CutController.Input>): Disposable {
+    cutsInputObserver = observer
+
+    return Disposable { cutsInputObserver = null }
+  }
+
+  private fun toolsOutput(output: Output) {
     when (output) {
-      is ToolsController.Output.ItemSelected -> TODO()
-      is ToolsController.Output.BlackChanged -> TODO()
-      is ToolsController.Output.WhiteChanged -> TODO()
-      is ToolsController.Output.GammaChanged -> TODO()
-      is ToolsController.Output.MipMethodChanged -> TODO()
-      is ToolsController.Output.MipValueChanged -> TODO()
-      is ToolsController.Output.PresetChanged -> TODO()
-      is ToolsController.Output.Close -> researchViewDelegate.dispatch(ResearchView.Event.Close)
+      is Output.BlackChanged -> cutsInputObserver?.onNext(
+        CutController.Input.BlackChanged(
+          output.value
+        )
+      )
+      is Output.WhiteChanged -> cutsInputObserver?.onNext(
+        CutController.Input.WhiteChanged(
+          output.value
+        )
+      )
+      is Output.GammaChanged -> cutsInputObserver?.onNext(
+        CutController.Input.GammaChanged(
+          output.value
+        )
+      )
+      is Output.MipMethodChanged ->
+        cutsInputObserver?.onNext(CutController.Input.MipMethodChanged(output.mip))
+      is Output.MipValueChanged ->
+        cutsInputObserver?.onNext(CutController.Input.MipValueChanged(output.value))
+      is Output.PresetChanged ->
+        cutsInputObserver?.onNext(CutController.Input.PresetChanged(output.preset))
+      is Output.GridChanged ->
+        gridContainerInputObserver?.onNext(GridContainerController.Input.GridChanged(output.grid))
+      is Output.Close -> researchViewDelegate.dispatch(ResearchView.Event.Close)
     }
   }
 

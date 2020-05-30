@@ -13,8 +13,9 @@ import model.Filter
 import model.RESEARCH_INITIALIZATION_FAILED
 import model.ResearchApiExceptions
 import repository.ResearchRepository
-import store.ListStore.Intent
-import store.ListStore.State
+import store.list.ListStore.Intent
+import store.list.ListStore.State
+import store.list.ListStoreAbstractFactory
 
 internal class ListStoreFactory(
   storeFactory: StoreFactory,
@@ -66,7 +67,7 @@ internal class ListStoreFactory(
         is ResearchApiExceptions.ResearchDataFetchError -> Result.Error(error.error)
         is ResearchApiExceptions.ResearchNotFoundException -> Result.Error(error.error)
         else -> {
-          println("login: other exception ${error.message}")
+          println("list: other exception ${error.message}")
           Result.Error(RESEARCH_INITIALIZATION_FAILED)
         }
       }

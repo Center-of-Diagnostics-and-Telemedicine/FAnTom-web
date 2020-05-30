@@ -1,19 +1,19 @@
-package store
+package store.research
 
 import com.arkivanov.mvikotlin.core.store.*
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.badoo.reaktive.utils.ensureNeverFrozen
-import model.Research
-import store.ListStore.Intent
-import store.ListStore.State
+import model.ResearchSlicesSizesData
+import store.research.ResearchStore.Intent
+import store.research.ResearchStore.State
 
-abstract class ListStoreAbstractFactory(
+abstract class ResearchStoreAbstractFactory(
   private val storeFactory: StoreFactory
 ) {
 
-  fun create(): ListStore =
-    object : ListStore, Store<Intent, State, Nothing> by storeFactory.create(
-      name = "ListStore",
+  fun create(): ResearchStore =
+    object : ResearchStore, Store<Intent, State, Nothing> by storeFactory.create(
+      name = "ResearchStore",
       initialState = State(),
       bootstrapper = SimpleBootstrapper(Unit),
       executorFactory = ::createExecutor,
@@ -28,7 +28,7 @@ abstract class ListStoreAbstractFactory(
 
   protected sealed class Result : JvmSerializable {
     object Loading : Result()
-    data class Loaded(val list: List<Research>) : Result()
+    data class Loaded(val data: ResearchSlicesSizesData) : Result()
     data class Error(val error: String) : Result()
 
     object DismissErrorRequested : Result()
@@ -38,7 +38,7 @@ abstract class ListStoreAbstractFactory(
     override fun State.reduce(result: Result): State =
       when (result) {
         is Result.Loading -> copy(loading = true)
-        is Result.Loaded -> copy(list = result.list, loading = false)
+        is Result.Loaded -> copy(data = result.data, loading = false)
         is Result.Error -> copy(error = result.error, loading = false)
         is Result.DismissErrorRequested -> copy(error = "")
       }

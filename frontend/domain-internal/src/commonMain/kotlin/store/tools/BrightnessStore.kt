@@ -1,8 +1,8 @@
-package store
+package store.tools
 
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
-import store.BrightnessStore.*
+import store.tools.BrightnessStore.*
 
 interface BrightnessStore : Store<Intent, State, Label> {
 

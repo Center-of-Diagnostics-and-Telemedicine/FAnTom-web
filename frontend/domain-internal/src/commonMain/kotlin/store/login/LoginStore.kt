@@ -1,8 +1,8 @@
-package store
+package store.login
 
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
-import store.LoginStore.*
+import store.login.LoginStore.*
 
 interface LoginStore : Store<Intent, State, Label> {
 

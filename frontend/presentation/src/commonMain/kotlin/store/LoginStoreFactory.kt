@@ -12,7 +12,8 @@ import model.AUTH_FAILED
 import model.ResearchApiExceptions.AuthFailedException
 import model.ResearchApiExceptions.InvalidAuthCredentials
 import repository.LoginRepository
-import store.LoginStore.*
+import store.login.LoginStore.*
+import store.login.LoginStoreAbstractFactory
 
 internal class LoginStoreFactory(
   storeFactory: StoreFactory,

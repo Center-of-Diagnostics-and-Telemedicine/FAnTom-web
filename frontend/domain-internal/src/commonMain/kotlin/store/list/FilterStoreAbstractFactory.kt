@@ -1,4 +1,4 @@
-package store
+package store.list
 
 import com.arkivanov.mvikotlin.core.store.Executor
 import com.arkivanov.mvikotlin.core.store.Reducer
@@ -6,18 +6,22 @@ import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.badoo.reaktive.utils.ensureNeverFrozen
-import model.Presets
-import store.PresetStore.*
+import model.Filter
+import store.list.FilterStore.*
 
-
-abstract class PresetStoreAbstractFactory(
+abstract class FilterStoreAbstractFactory(
   private val storeFactory: StoreFactory
 ) {
 
-  fun create(): PresetStore =
-    object : PresetStore, Store<Intent, State, Label> by storeFactory.create(
-      name = "PresetStore",
-      initialState = getInitialState(),
+  val initialState: State = State(
+    list = listOf(Filter.All, Filter.NotSeen, Filter.Seen, Filter.Done),
+    current = Filter.All
+  )
+
+  fun create(): FilterStore =
+    object : FilterStore, Store<Intent, State, Label> by storeFactory.create(
+      name = "FilterStore",
+      initialState = initialState,
       executorFactory = ::createExecutor,
       reducer = ReducerImpl
     ) {
@@ -27,26 +31,15 @@ abstract class PresetStoreAbstractFactory(
     }
 
   protected abstract fun createExecutor(): Executor<Intent, Nothing, State, Result, Label>
-
   protected sealed class Result : JvmSerializable {
-    data class PresetChanged(val preset: Presets) : Result()
-  }
+    data class FilterChanged(val filter: Filter) : Result()
 
+  }
   private object ReducerImpl : Reducer<State, Result> {
     override fun State.reduce(result: Result): State =
       when (result) {
-        is Result.PresetChanged -> copy(current = result.preset)
+        is Result.FilterChanged -> copy(current = result.filter)
       }
-  }
 
-  private fun getInitialState(): State = State(
-    list = listOf(
-      Presets.SoftTissue,
-      Presets.Vessels,
-      Presets.Bones,
-      Presets.Brain,
-      Presets.Lungs,
-    ),
-    current = Presets.getInitialPreset()
-  )
+  }
 }

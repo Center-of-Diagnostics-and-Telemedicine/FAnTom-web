@@ -33,8 +33,8 @@ class ResearchRepositoryImpl(private val markTomogramm: MarkTomogrammObject) : R
     return when (markTomogramm.state) {
       is LibraryState.ResearchInitialized -> {
         val slice = markTomogramm.getSlice(
-          black = params.black,
-          white = params.white,
+          black = params.black.toDouble(),
+          white = params.white.toDouble(),
           gamma = params.gamma,
           sliceType = params.sliceType,
           mipMethod = params.mipMethod,

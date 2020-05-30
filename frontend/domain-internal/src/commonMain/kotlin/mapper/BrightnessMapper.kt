@@ -1,7 +1,7 @@
 package mapper
 
-import store.BrightnessStore.Intent
-import store.BrightnessStore.State
+import store.tools.BrightnessStore.Intent
+import store.tools.BrightnessStore.State
 import view.BrightnessView.Event
 import view.BrightnessView.Model
 

@@ -9,6 +9,7 @@ import kotlinx.html.js.onClickFunction
 import kotlinx.html.js.onMouseOutFunction
 import kotlinx.html.js.onMouseOverFunction
 import model.Grid
+import model.GridType
 import react.*
 import react.dom.div
 import research.tools.grid.CutsGridComponent.GridStyles.squareCss
@@ -45,12 +46,12 @@ class CutsGridComponent : RComponent<CutsGridProps, CutsGridState>() {
               mGridContainer {
                 gridItem(
                   predicate = state.firstHover,
-                  onClick = { handleClick(Grid.Single) },
+                  onClick = { handleClick(GridType.Single) },
                   onMouseOver = { setState { firstHover = true } }
                 )
                 gridItem(
                   predicate = state.secondHover,
-                  onClick = { handleClick(Grid.TwoHorizontal) },
+                  onClick = { handleClick(GridType.TwoHorizontal) },
                   onMouseOver = {
                     setState {
                       secondHover = true
@@ -63,7 +64,7 @@ class CutsGridComponent : RComponent<CutsGridProps, CutsGridState>() {
               mGridContainer {
                 gridItem(
                   predicate = state.thirdHover,
-                  onClick = { handleClick(Grid.TwoVertical) },
+                  onClick = { handleClick(GridType.TwoVertical) },
                   onMouseOver = {
                     setState {
                       thirdHover = true
@@ -72,7 +73,7 @@ class CutsGridComponent : RComponent<CutsGridProps, CutsGridState>() {
                   })
                 gridItem(
                   predicate = state.fourthHover,
-                  onClick = { handleClick(Grid.Four) },
+                  onClick = { handleClick(GridType.Four) },
                   onMouseOver = {
                     setState {
                       firstHover = true
@@ -89,7 +90,7 @@ class CutsGridComponent : RComponent<CutsGridProps, CutsGridState>() {
     }
   }
 
-  private fun handleClick(grid: Grid) {
+  private fun handleClick(grid: GridType) {
     props.onClick(grid)
   }
 
@@ -137,7 +138,7 @@ class CutsGridComponent : RComponent<CutsGridProps, CutsGridState>() {
 
 interface CutsGridProps : RProps {
   var current: Grid
-  var onClick: (Grid) -> Unit
+  var onClick: (GridType) -> Unit
 }
 
 class CutsGridState(
@@ -149,7 +150,7 @@ class CutsGridState(
 
 fun RBuilder.grid(
   current: Grid,
-  onClick: (Grid) -> Unit
+  onClick: (GridType) -> Unit
 ) = child(CutsGridComponent::class) {
   attrs.onClick = onClick
   attrs.current = current

@@ -1,11 +1,11 @@
-package store
+package store.list
 
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import model.Filter
 import model.Research
-import store.ListStore.Intent
-import store.ListStore.State
+import store.list.ListStore.Intent
+import store.list.ListStore.State
 
 interface ListStore : Store<Intent, State, Nothing> {
 

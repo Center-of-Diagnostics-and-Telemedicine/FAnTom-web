@@ -3,7 +3,8 @@ package store
 import com.arkivanov.mvikotlin.core.store.Executor
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
-import store.BrightnessStore.*
+import store.tools.BrightnessStore.*
+import store.tools.BrightnessStoreAbstractFactory
 
 internal class BrightnessStoreFactory(
   storeFactory: StoreFactory

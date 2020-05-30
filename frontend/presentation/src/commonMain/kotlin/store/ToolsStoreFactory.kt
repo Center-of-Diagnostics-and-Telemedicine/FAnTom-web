@@ -3,8 +3,9 @@ package store
 import com.arkivanov.mvikotlin.core.store.Executor
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
-import store.ToolsStore.Intent
-import store.ToolsStore.State
+import store.tools.ToolsStore.Intent
+import store.tools.ToolsStore.State
+import store.tools.ToolsStoreAbstractFactory
 
 internal class ToolsStoreFactory(
   storeFactory: StoreFactory

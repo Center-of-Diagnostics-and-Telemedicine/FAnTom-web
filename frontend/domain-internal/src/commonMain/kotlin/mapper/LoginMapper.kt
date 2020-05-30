@@ -1,7 +1,7 @@
 package mapper
 
 import controller.LoginController.Output
-import store.LoginStore.*
+import store.login.LoginStore.*
 import view.LoginView.Event
 import view.LoginView.Model
 

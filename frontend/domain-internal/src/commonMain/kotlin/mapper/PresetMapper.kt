@@ -1,7 +1,7 @@
 package mapper
 
-import store.PresetStore.Intent
-import store.PresetStore.State
+import store.tools.PresetStore.Intent
+import store.tools.PresetStore.State
 import  view.PresetView.Event
 import  view.PresetView.Model
 

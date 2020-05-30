@@ -1,9 +1,9 @@
-package store
+package store.tools
 
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import model.Presets
-import store.PresetStore.*
+import store.tools.PresetStore.*
 
 interface PresetStore : Store<Intent, State, Label> {
 

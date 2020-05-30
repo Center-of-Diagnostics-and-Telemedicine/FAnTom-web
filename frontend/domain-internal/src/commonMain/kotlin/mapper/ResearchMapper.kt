@@ -1,6 +1,6 @@
 package mapper
 
-import store.ResearchStore.*
+import store.research.ResearchStore.*
 import view.ResearchView.Event
 import view.ResearchView.Model
 

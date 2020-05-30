@@ -1,9 +1,9 @@
 package mapper
 
 import controller.ListController.Output
-import store.FilterStore.Label
-import store.ListStore.Intent
-import store.ListStore.State
+import store.list.FilterStore.Label
+import store.list.ListStore.Intent
+import store.list.ListStore.State
 import view.ListView.Event
 import view.ListView.Model
 

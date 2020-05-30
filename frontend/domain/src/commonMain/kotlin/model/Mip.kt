@@ -7,21 +7,25 @@ interface HasIntValue {
 
 sealed class Mip(
   val name: String,
-  val valueName: String
+  val valueName: String,
+  val intValue: Int
 ) {
   object No : Mip(
     name = "Без",
-    valueName = NO_MIP
+    valueName = NO_MIP,
+    intValue = 2
   )
 
   data class Average(override val value: Int = 0) : Mip(
     name = "Среднее",
-    valueName = AVERAGE
+    valueName = AVERAGE,
+    intValue = 0
   ), HasIntValue
 
   data class Max(override val value: Int = 0) : Mip(
     name = "Максимальное",
-    valueName = MAXVALUE
+    valueName = MAXVALUE,
+    intValue = 1
   ), HasIntValue
 
   companion object {

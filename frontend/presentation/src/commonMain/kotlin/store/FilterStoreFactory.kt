@@ -4,7 +4,8 @@ import com.arkivanov.mvikotlin.core.store.Executor
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
 import model.Filter
-import store.FilterStore.*
+import store.list.FilterStore.*
+import store.list.FilterStoreAbstractFactory
 
 internal class FilterStoreFactory(
   storeFactory: StoreFactory

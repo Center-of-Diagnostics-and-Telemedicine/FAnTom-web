@@ -1,7 +1,7 @@
 package mapper
 
-import store.FilterStore.Intent
-import store.FilterStore.State
+import store.list.FilterStore.Intent
+import store.list.FilterStore.State
 import view.FilterView.Event
 import view.FilterView.Model
 

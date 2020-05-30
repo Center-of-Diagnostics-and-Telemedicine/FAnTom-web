@@ -4,7 +4,8 @@ import com.arkivanov.mvikotlin.core.store.Executor
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
 import model.Mip
-import store.MipStore.*
+import store.tools.MipStore.*
+import store.tools.MipStoreAbstractFactory
 
 internal class MipStoreFactory(
   storeFactory: StoreFactory

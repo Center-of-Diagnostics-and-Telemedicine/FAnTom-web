@@ -51,12 +51,12 @@ class ResearchRepositoryImpl(
 
   override suspend fun getSlice(
     researchId: Int,
-    black: Double,
-    white: Double,
+    black: Int,
+    white: Int,
     gamma: Double,
     type: Int,
     mipMethod: Int,
-    slyceNumber: Int,
+    sliceNumber: Int,
     aproxSize: Int
   ): String {
     val response = remote.getSlice(
@@ -67,7 +67,7 @@ class ResearchRepositoryImpl(
         gamma = gamma,
         sliceType = type,
         mipMethod = mipMethod,
-        sliceNumber = slyceNumber,
+        sliceNumber = sliceNumber,
         mipValue = aproxSize
       ),
       researchId = researchId

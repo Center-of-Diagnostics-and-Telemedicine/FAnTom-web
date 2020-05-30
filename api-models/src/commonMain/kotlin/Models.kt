@@ -176,8 +176,8 @@ data class AccessionNamesResponse(
 
 @Serializable
 data class SliceRequest(
-  val black: Double,
-  val white: Double,
+  val black: Int,
+  val white: Int,
   val gamma: Double,
   val sliceType: Int,
   val mipMethod: Int,

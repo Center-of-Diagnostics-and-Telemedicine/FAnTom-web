@@ -4,7 +4,8 @@ import com.arkivanov.mvikotlin.core.store.Executor
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
 import model.Presets
-import store.PresetStore.*
+import store.tools.PresetStore.*
+import store.tools.PresetStoreAbstractFactory
 
 internal class PresetStoreFactory(
   storeFactory: StoreFactory

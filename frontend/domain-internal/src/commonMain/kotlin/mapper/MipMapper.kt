@@ -1,7 +1,7 @@
 package mapper
 
-import store.MipStore.Intent
-import store.MipStore.State
+import store.tools.MipStore.Intent
+import store.tools.MipStore.State
 import  view.MipView.Event
 import  view.MipView.Model
 

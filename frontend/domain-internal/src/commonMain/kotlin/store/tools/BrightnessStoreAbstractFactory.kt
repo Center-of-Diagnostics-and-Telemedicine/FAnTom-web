@@ -1,4 +1,4 @@
-package store
+package store.tools
 
 import com.arkivanov.mvikotlin.core.store.Executor
 import com.arkivanov.mvikotlin.core.store.Reducer
@@ -7,16 +7,22 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.badoo.reaktive.utils.ensureNeverFrozen
 import model.INITIAL_GAMMA
-import store.BrightnessStore.*
+import store.tools.BrightnessStore.*
 
 abstract class BrightnessStoreAbstractFactory(
   private val storeFactory: StoreFactory
 ) {
 
+  val initialState: State = State(
+    blackValue = -1150,
+    whiteValue = 350,
+    gammaValue = INITIAL_GAMMA
+  )
+
   fun create(): BrightnessStore =
     object : BrightnessStore, Store<Intent, State, Label> by storeFactory.create(
       name = "BrightnessStore",
-      initialState = initialState(),
+      initialState = initialState,
       executorFactory = ::createExecutor,
       reducer = ReducerImpl
     ) {
@@ -42,9 +48,5 @@ abstract class BrightnessStoreAbstractFactory(
       }
   }
 
-  private fun initialState(): State = State(
-    blackValue = -1150,
-    whiteValue = 350,
-    gammaValue = INITIAL_GAMMA
-  )
+
 }

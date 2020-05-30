@@ -1,4 +1,4 @@
-package store
+package store.tools
 
 import com.arkivanov.mvikotlin.core.store.Executor
 import com.arkivanov.mvikotlin.core.store.Reducer
@@ -8,7 +8,7 @@ import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.badoo.reaktive.utils.ensureNeverFrozen
 import model.HasIntValue
 import model.Mip
-import store.MipStore.*
+import store.tools.MipStore.*
 
 abstract class MipStoreAbstractFactory(
   private val storeFactory: StoreFactory

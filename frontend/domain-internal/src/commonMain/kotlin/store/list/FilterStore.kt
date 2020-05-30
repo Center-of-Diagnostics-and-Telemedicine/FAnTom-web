@@ -1,9 +1,9 @@
-package store
+package store.list
 
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import model.Filter
-import store.FilterStore.*
+import store.list.FilterStore.*
 
 interface FilterStore : Store<Intent, State, Label> {
 

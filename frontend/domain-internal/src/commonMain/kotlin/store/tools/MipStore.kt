@@ -1,9 +1,9 @@
-package store
+package store.tools
 
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import model.Mip
-import store.MipStore.*
+import store.tools.MipStore.*
 
 interface MipStore : Store<Intent, State, Label> {
 

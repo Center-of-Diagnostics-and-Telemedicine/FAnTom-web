@@ -2,6 +2,7 @@ package controller
 
 import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.store.StoreFactory
+import model.Grid
 import model.Mip
 import model.Presets
 import view.*
@@ -24,12 +25,12 @@ interface ToolsController {
   }
 
   sealed class Output {
-    data class ItemSelected(val id: String) : Output()
-    data class BlackChanged(val value: Double) : Output()
-    data class WhiteChanged(val value: Double) : Output()
+    data class GridChanged(val grid: Grid) : Output()
+    data class BlackChanged(val value: Int) : Output()
+    data class WhiteChanged(val value: Int) : Output()
     data class GammaChanged(val value: Double) : Output()
     data class MipMethodChanged(val mip: Mip) : Output()
-    data class MipValueChanged(val value: Mip) : Output()
+    data class MipValueChanged(val value: Int) : Output()
     data class PresetChanged(val preset: Presets) : Output()
     object Close : Output()
   }
