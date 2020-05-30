@@ -5,6 +5,7 @@ import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.lifecycle.doOnDestroy
 import com.arkivanov.mvikotlin.extensions.reaktive.bind
 import com.arkivanov.mvikotlin.extensions.reaktive.events
+import com.arkivanov.mvikotlin.extensions.reaktive.labels
 import com.arkivanov.mvikotlin.extensions.reaktive.states
 import com.badoo.reaktive.observable.mapNotNull
 import mapper.*
@@ -20,12 +21,6 @@ class ToolsControllerImpl(val dependencies: ToolsController.Dependencies) : Tool
   private val presetStore = PresetStoreFactory(storeFactory = dependencies.storeFactory).create()
 
   init {
-//    bind(dependencies.lifecycle, BinderLifecycleMode.CREATE_DESTROY) {
-//      gridStore.labels.mapNotNull(filterLabelToListIntent) bindTo toolsStore
-//      mipStore.labels.mapNotNull(filterLabelToListIntent) bindTo toolsStore
-//      brightnessStore.labels.mapNotNull(filterLabelToListIntent) bindTo toolsStore
-//      presetStore.labels.mapNotNull(filterLabelToListIntent) bindTo toolsStore
-//    }
 
     dependencies.lifecycle.doOnDestroy {
       toolsStore.dispose()
@@ -59,6 +54,12 @@ class ToolsControllerImpl(val dependencies: ToolsController.Dependencies) : Tool
       brightnessStore.states.mapNotNull(brightnessStateToBrightnessModel) bindTo brightnessView
       presetStore.states.mapNotNull(presetStateToPresetModel) bindTo presetView
       toolsView.events.mapNotNull(toolsEventToToolsOutput) bindTo dependencies.toolsOutput
+
+      gridStore.labels.mapNotNull(gridLabelToToolsOutput) bindTo dependencies.toolsOutput
+      mipStore.labels.mapNotNull(mipLabelToToolsOutput) bindTo dependencies.toolsOutput
+      brightnessStore.labels.mapNotNull(brightnessLabelToToolsOutput) bindTo dependencies.toolsOutput
+      presetStore.labels.mapNotNull(presetLabelToToolsOutput) bindTo dependencies.toolsOutput
+
     }
   }
 }

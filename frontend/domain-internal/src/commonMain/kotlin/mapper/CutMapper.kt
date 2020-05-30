@@ -3,6 +3,7 @@ package mapper
 import controller.CutController.Input
 import store.cut.CutStore.Intent
 import store.cut.CutStore.State
+import store.cut.SliderStore.Label
 import view.CutView.Model
 
 val cutStateToCutModel: State.() -> Model? = {
@@ -23,3 +24,10 @@ val inputToCutIntent: Input.() -> Intent = {
     is Input.SliceNumberChanged -> Intent.HandleSliceNumberChange(sliceNumber = sliceNumber)
   }
 }
+
+val sliderLabelToCutIntent: Label.() -> Intent? =
+  {
+    when (this) {
+      is Label.SliceNumberChanged -> Intent.HandleSliceNumberChange(sliceNumber = sliceNumber)
+    }
+  }

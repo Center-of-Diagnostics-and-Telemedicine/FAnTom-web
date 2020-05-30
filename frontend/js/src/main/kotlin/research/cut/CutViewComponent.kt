@@ -16,8 +16,6 @@ fun RBuilder.cut(src: String, w: Int, h: Int) {
       height = h.px
       objectFit = ObjectFit.contain
     }
-    if (src.isNotEmpty()) {
-      attrs.src = "data:image/bmp;base64,${src}"
-    }
+    attrs.src = "data:image/png;base64,${src}"
   }
 }

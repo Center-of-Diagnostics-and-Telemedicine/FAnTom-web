@@ -22,7 +22,7 @@ abstract class CutStoreAbstractFactory(
     mipMethod = Mip.No,
     mipValue = INITIAL_MIP_VALUE,
     loading = false,
-    error = "",
+    error = ""
   )
 
   fun create(): CutStore =

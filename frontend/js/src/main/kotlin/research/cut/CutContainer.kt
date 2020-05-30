@@ -26,6 +26,7 @@ import styled.styledDiv
 import view.CutView
 import view.SliderView
 import view.initialCutModel
+import view.initialSliderModel
 import kotlin.browser.window
 
 class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
@@ -39,7 +40,7 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
   private lateinit var controller: CutController
 
   init {
-    state = CutContainerState(initialCutModel())
+    state = CutContainerState(initialCutModel(), initialSliderModel())
   }
 
   override fun componentDidMount() {
@@ -106,9 +107,9 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
             position = Position.relative
           }
           slider(
-            sliceNumber = 1,//state.sliderModel.currentValue,
-            defaultValue = 1,//state.sliderModel.defaultValue,
-            maxValue = 512,//state.sliderModel.maxValue,
+            sliceNumber = state.sliderModel.currentValue,
+            defaultValue = state.sliderModel.defaultValue,
+            maxValue = state.sliderModel.maxValue,
             onChange = ::handleChangeSliceNumber
           )
         }
@@ -139,7 +140,7 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
   }
 
   private fun updateState(model: CutView.Model) = setState { cutModel = model }
-  private fun updateState(model: SliderView.Model) = setState { /*sliderModel = model*/ }
+  private fun updateState(model: SliderView.Model) = setState { sliderModel = model }
 
   interface Dependencies {
     val storeFactory: StoreFactory
@@ -185,7 +186,7 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
 
 class CutContainerState(
   var cutModel: CutView.Model,
-//  var sliderModel: SliderView.Model
+  var sliderModel: SliderView.Model
 ) : RState
 
 interface CutContainerProps : RProps {

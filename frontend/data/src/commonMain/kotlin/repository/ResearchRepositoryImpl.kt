@@ -56,7 +56,7 @@ class ResearchRepositoryImpl(
     gamma: Double,
     type: Int,
     mipMethod: Int,
-    sliceNumber: Int,
+    slyceNumber: Int,
     aproxSize: Int
   ): String {
     val response = remote.getSlice(
@@ -67,7 +67,7 @@ class ResearchRepositoryImpl(
         gamma = gamma,
         sliceType = type,
         mipMethod = mipMethod,
-        sliceNumber = sliceNumber,
+        sliceNumber = slyceNumber,
         mipValue = aproxSize
       ),
       researchId = researchId

@@ -120,19 +120,13 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
   private fun toolsOutput(output: Output) {
     when (output) {
       is Output.BlackChanged -> cutsInputObserver?.onNext(
-        CutController.Input.BlackChanged(
-          output.value
-        )
+        CutController.Input.BlackChanged(output.value)
       )
       is Output.WhiteChanged -> cutsInputObserver?.onNext(
-        CutController.Input.WhiteChanged(
-          output.value
-        )
+        CutController.Input.WhiteChanged(output.value)
       )
       is Output.GammaChanged -> cutsInputObserver?.onNext(
-        CutController.Input.GammaChanged(
-          output.value
-        )
+        CutController.Input.GammaChanged(output.value)
       )
       is Output.MipMethodChanged ->
         cutsInputObserver?.onNext(CutController.Input.MipMethodChanged(output.mip))

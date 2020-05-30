@@ -35,39 +35,62 @@ internal class CutStoreFactory(
 
     override fun executeIntent(intent: Intent, getState: () -> State) {
       when (intent) {
-        is Intent.HandleSliceNumberChange -> dispatch(Result.SliceNumberChanged(intent.sliceNumber))
-        is Intent.HandleBlackChanged -> dispatch(Result.BlackChanged(intent.blackValue))
-        is Intent.HandleWhiteChanged -> dispatch(Result.WhiteChanged(intent.whiteValue))
-        is Intent.HandleGammaChanged -> dispatch(Result.GammaChanged(intent.gammaValue))
-        is Intent.HandleMipChanged -> dispatch(Result.MipChanged(intent.mip))
-        is Intent.HandleMipValueChanged -> dispatch(Result.MipValueChanged(intent.mipValue))
-        is Intent.HandlePresetChanged ->
+        is Intent.HandleBlackChanged -> {
+          dispatch(Result.BlackChanged(blackValue = intent.blackValue))
+          load(getState)
+        }
+        is Intent.HandleSliceNumberChange -> {
+          dispatch(Result.SliceNumberChanged(sliceNumber = intent.sliceNumber))
+          load(getState)
+        }
+        is Intent.HandleWhiteChanged -> {
+          dispatch(Result.WhiteChanged(whiteValue = intent.whiteValue))
+          load(getState)
+        }
+        is Intent.HandleGammaChanged -> {
+          dispatch(Result.GammaChanged(gammaValue = intent.gammaValue))
+          load(getState)
+        }
+        is Intent.HandleMipChanged -> {
+          dispatch(Result.MipChanged(mip = intent.mip))
+          load(getState)
+        }
+        is Intent.HandleMipValueChanged -> {
+          dispatch(Result.MipValueChanged(mipValue = intent.mipValue))
+          load(getState)
+        }
+        is Intent.HandlePresetChanged -> {
           dispatch(Result.PresetChanged(black = intent.presets.black, white = intent.presets.white))
+          load(getState)
+        }
       }.let {}
     }
 
     private fun load(getState: () -> State) {
-      singleFromCoroutine {
-        val state = getState()
-        repository.getSlice(
-          researchId = researchId,
-          black = state.black,
-          white = state.white,
-          gamma = state.gamma,
-          type = cut.type.intType,
-          mipMethod = state.mipMethod.intValue,
-          sliceNumber = state.sliceNumber,
-          aproxSize = state.mipValue
-        )
+      val state = getState()
+      if (state.loading.not()) {
+        dispatch(Result.Loading)
+        singleFromCoroutine {
+          repository.getSlice(
+            researchId = researchId,
+            type = cut.type.intType,
+            black = state.black,
+            white = state.white,
+            gamma = state.gamma,
+            mipMethod = state.mipMethod.intValue,
+            sliceNumber = state.sliceNumber,
+            aproxSize = state.mipValue
+          )
+        }
+          .subscribeOn(ioScheduler)
+          .map(Result::Loaded)
+          .observeOn(mainScheduler)
+          .subscribeScoped(
+            isThreadLocal = true,
+            onSuccess = ::dispatch,
+            onError = ::handleError
+          )
       }
-        .subscribeOn(ioScheduler)
-        .map(Result::Loaded)
-        .observeOn(mainScheduler)
-        .subscribeScoped(
-          isThreadLocal = true,
-          onSuccess = ::dispatch,
-          onError = ::handleError
-        )
     }
 
     private fun handleError(error: Throwable) {

@@ -8,10 +8,7 @@ import com.badoo.reaktive.scheduler.overrideSchedulers
 import com.badoo.reaktive.test.scheduler.TestScheduler
 import com.badoo.reaktive.utils.reaktiveUncaughtErrorHandler
 import com.badoo.reaktive.utils.resetReaktiveUncaughtErrorHandler
-import model.Grid
-import model.Mip
-import model.Presets
-import model.Tool
+import model.*
 import resume
 import testGrids
 import testMips
@@ -92,39 +89,39 @@ class ToolsControllerTest {
   fun shows_FourGrid_WHEN_created() {
     createController()
 
-    assertEquals(Grid.Four, gridView.model.current)
+    assertEquals(initialFourGrid(), gridView.model.current)
   }
 
   @Test
   fun shows_SingleGrid_WHEN_SingleGrid_Clicked() {
     createController()
-    gridView.dispatch(GridView.Event.ItemClick(Grid.Single))
+    gridView.dispatch(GridView.Event.ItemClick(GridType.Single))
 
-    assertEquals(Grid.Single, gridView.model.current)
+    assertEquals(initialSingleGrid(), gridView.model.current)
   }
 
   @Test
   fun shows_TwoVerticalGrid_WHEN_TwoVerticalGrid_Clicked() {
     createController()
-    gridView.dispatch(GridView.Event.ItemClick(Grid.TwoVertical))
+    gridView.dispatch(GridView.Event.ItemClick(GridType.TwoVertical))
 
-    assertEquals(Grid.TwoVertical, gridView.model.current)
+    assertEquals(initialTwoVerticalGrid(), gridView.model.current)
   }
 
   @Test
   fun shows_TwoHorizontalGrid_WHEN_TwoHorizontalGrid_Clicked() {
     createController()
-    gridView.dispatch(GridView.Event.ItemClick(Grid.TwoHorizontal))
+    gridView.dispatch(GridView.Event.ItemClick(GridType.TwoHorizontal))
 
-    assertEquals(Grid.TwoHorizontal, gridView.model.current)
+    assertEquals(initialTwoHorizontalGrid(), gridView.model.current)
   }
 
   @Test
   fun shows_FourGrid_WHEN_FourGrid_Clicked() {
     createController()
-    gridView.dispatch(GridView.Event.ItemClick(Grid.Four))
+    gridView.dispatch(GridView.Event.ItemClick(GridType.Four))
 
-    assertEquals(Grid.Four, gridView.model.current)
+    assertEquals(initialFourGrid(), gridView.model.current)
   }
 
   @Test
