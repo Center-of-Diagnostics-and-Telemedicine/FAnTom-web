@@ -1,9 +1,9 @@
 package client.domain.repository
 
-import client.ResearchApiExceptions.*
 import client.datasource.local.LocalDataSource
 import client.datasource.remote.ResearchRemote
 import model.*
+import model.ResearchApiExceptions.*
 
 interface ResearchRepository : Repository {
 
@@ -70,8 +70,8 @@ class ResearchRepositoryImpl(
     val response = remote.getSlice(
       token = local.getToken(),
       request = SliceRequest(
-        black = black,
-        white = white,
+        black = black.toInt(),
+        white = white.toInt(),
         gamma = gamma,
         sliceType = type,
         mipMethod = mipMethod,

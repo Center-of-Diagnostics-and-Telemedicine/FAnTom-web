@@ -7,6 +7,9 @@ import com.badoo.reaktive.observable.subscribe
 import com.badoo.reaktive.subject.publish.PublishSubject
 import controller.CutController
 import controller.SliderController
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.css.*
 import model.Cut
 import org.w3c.dom.Element
@@ -48,10 +51,11 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
   }
 
   private fun callToRenderContent() {
-    testRef?.let {
-      debugLog("size = it.clientHeight = ${it.clientHeight}, it.clientWidth = ${it.clientWidth}")
-      debugLog("size = it.getBoundingClientRect().height = ${it.getBoundingClientRect().height}, it.clientWidth = ${it.getBoundingClientRect().width}")
-      renderContent(it.clientHeight, it.clientWidth)
+    GlobalScope.launch {
+      delay(100)
+      testRef?.let {
+        renderContent(it.clientHeight, it.clientWidth)
+      }
     }
   }
 
