@@ -28,6 +28,7 @@ dependencies {
   implementation(Deps.MVIKotlin.TimeTravel)
   implementation(Deps.MVIKotlin.Logging)
   implementation(Deps.MVIKotlin.Rx)
+  implementation(Deps.Badoo.Reaktive.Reaktive)
   implementation(project(":frontend:data"))
   implementation(project(":frontend:presentation"))
 

@@ -1,11 +1,10 @@
 package research
 
-import Disposable
 import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.lifecycle.LifecycleRegistry
 import com.arkivanov.mvikotlin.core.store.StoreFactory
-import com.arkivanov.mvikotlin.rx.Disposable
-import com.arkivanov.mvikotlin.rx.Observer
+import com.badoo.reaktive.observable.Observable
+import com.badoo.reaktive.subject.publish.PublishSubject
 import com.ccfraser.muirwik.components.spacingUnits
 import components.loading
 import controller.CutController
@@ -38,11 +37,14 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
   private val lifecycleRegistry = LifecycleRegistry()
   private lateinit var controller: ResearchController
 
-  private var gridContainerInputObserver: Observer<GridContainerController.Input>? = null
-  private val gridContainerInput: (Observer<GridContainerController.Input>) -> Disposable = ::gridContainerInput
+  private val gridContainerInputObservable = PublishSubject<GridContainerController.Input>()
+  private val cutsInputObservable = PublishSubject<CutController.Input>()
 
-  private var cutsInputObserver: Observer<CutController.Input>? = null
-  private val cutsInput: (Observer<CutController.Input>) -> Disposable = ::cutsInput
+//  private var gridContainerInputObserver: Observer<GridContainerController.Input>? = null
+//  private val gridContainerInput: (Observer<GridContainerController.Input>) -> Disposable = ::gridContainerInput
+
+//  private var cutsInputObserver: Observer<CutController.Input>? = null
+//  private val cutsInput: (Observer<CutController.Input>) -> Disposable = ::cutsInput
 
   init {
     state = ResearchState(false, initialResearchModel())
@@ -92,8 +94,8 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
           cuts(dependencies = object : GridContainerViewComponent.Dependencies,
             Dependencies by props.dependencies {
             override val data: ResearchSlicesSizesData = model.data!!
-            override val gridContainerInputs: (Observer<GridContainerController.Input>) -> Disposable = this@ResearchScreen.gridContainerInput
-            override val cutsInput: (Observer<CutController.Input>) -> Disposable = this@ResearchScreen.cutsInput
+            override val gridContainerInputs: Observable<GridContainerController.Input> = this@ResearchScreen.gridContainerInputObservable
+            override val cutsInput: Observable<CutController.Input> = this@ResearchScreen.cutsInputObservable
           })
         }
 //      rightDrawer()
@@ -105,37 +107,37 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
     }
   }
 
-  private fun gridContainerInput(observer: Observer<GridContainerController.Input>): Disposable {
-    gridContainerInputObserver = observer
+//  private fun gridContainerInput(observer: Observer<GridContainerController.Input>): Disposable {
+//    gridContainerInputObserver = observer
+//
+//    return Disposable { gridContainerInputObserver = null }
+//  }
 
-    return Disposable { gridContainerInputObserver = null }
-  }
-
-  private fun cutsInput(observer: Observer<CutController.Input>): Disposable {
-    cutsInputObserver = observer
-
-    return Disposable { cutsInputObserver = null }
-  }
+//  private fun cutsInput(observer: Observer<CutController.Input>): Disposable {
+//    cutsInputObserver = observer
+//
+//    return Disposable { cutsInputObserver = null }
+//  }
 
   private fun toolsOutput(output: Output) {
     when (output) {
-      is Output.BlackChanged -> cutsInputObserver?.onNext(
+      is Output.BlackChanged -> cutsInputObservable.onNext(
         CutController.Input.BlackChanged(output.value)
       )
-      is Output.WhiteChanged -> cutsInputObserver?.onNext(
+      is Output.WhiteChanged -> cutsInputObservable.onNext(
         CutController.Input.WhiteChanged(output.value)
       )
-      is Output.GammaChanged -> cutsInputObserver?.onNext(
+      is Output.GammaChanged -> cutsInputObservable.onNext(
         CutController.Input.GammaChanged(output.value)
       )
       is Output.MipMethodChanged ->
-        cutsInputObserver?.onNext(CutController.Input.MipMethodChanged(output.mip))
+        cutsInputObservable.onNext(CutController.Input.MipMethodChanged(output.mip))
       is Output.MipValueChanged ->
-        cutsInputObserver?.onNext(CutController.Input.MipValueChanged(output.value))
+        cutsInputObservable.onNext(CutController.Input.MipValueChanged(output.value))
       is Output.PresetChanged ->
-        cutsInputObserver?.onNext(CutController.Input.PresetChanged(output.preset))
+        cutsInputObservable.onNext(CutController.Input.PresetChanged(output.preset))
       is Output.GridChanged ->
-        gridContainerInputObserver?.onNext(GridContainerController.Input.GridChanged(output.grid))
+        gridContainerInputObservable.onNext(GridContainerController.Input.GridChanged(output.grid))
       is Output.Close -> researchViewDelegate.dispatch(ResearchView.Event.Close)
     }
   }

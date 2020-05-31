@@ -3,8 +3,9 @@ package research.gridcontainer
 import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.lifecycle.LifecycleRegistry
 import com.arkivanov.mvikotlin.core.store.StoreFactory
-import com.arkivanov.mvikotlin.rx.Disposable
-import com.arkivanov.mvikotlin.rx.Observer
+import com.badoo.reaktive.disposable.CompositeDisposable
+import com.badoo.reaktive.observable.Observable
+import com.badoo.reaktive.observable.subscribe
 import controller.CutController
 import controller.GridContainerController
 import controller.GridContainerControllerImpl
@@ -32,6 +33,7 @@ class GridContainerViewComponent(prps: GridContainerProps) :
   private val cutsViewDelegate = GridContainerViewProxy(::updateState)
   private val lifecycleRegistry = LifecycleRegistry()
   private lateinit var controller: GridContainerController
+  private val disposable = CompositeDisposable()
 
   init {
     state = GridContainerState(initialGridContainerModel())
@@ -40,6 +42,8 @@ class GridContainerViewComponent(prps: GridContainerProps) :
   override fun componentDidMount() {
     lifecycleRegistry.resume()
     controller = createController()
+    val dependencies = props.dependencies
+    disposable.add(dependencies.gridContainerInputs.subscribe { controller.input(it) })
     controller.onViewCreated(cutsViewDelegate, lifecycleRegistry)
   }
 
@@ -149,14 +153,15 @@ class GridContainerViewComponent(prps: GridContainerProps) :
   private fun updateState(model: GridContainerView.Model) = setState { cutsModel = model }
 
   override fun componentWillUnmount() {
+    disposable.dispose()
     lifecycleRegistry.destroy()
   }
 
   interface Dependencies {
     val storeFactory: StoreFactory
     val data: ResearchSlicesSizesData
-    val gridContainerInputs: (Observer<GridContainerController.Input>) -> Disposable
-    val cutsInput: (Observer<CutController.Input>) -> Disposable
+    val gridContainerInputs: Observable<GridContainerController.Input>
+    val cutsInput: Observable<CutController.Input>
     val researchRepository: ResearchRepository
     val researchId: Int
   }

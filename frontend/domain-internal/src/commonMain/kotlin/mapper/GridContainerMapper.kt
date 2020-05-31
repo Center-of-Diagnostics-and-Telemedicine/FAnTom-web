@@ -1,8 +1,8 @@
 package mapper
 
 import controller.GridContainerController.Input
-import store.GridContainerStore.Intent
-import store.GridContainerStore.State
+import store.gridcontainer.GridContainerStore.Intent
+import store.gridcontainer.GridContainerStore.State
 import view.GridContainerView.Model
 
 val gridContainerStateToGridContainerModel: State.() -> Model? = {

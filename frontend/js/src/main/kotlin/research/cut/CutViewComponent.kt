@@ -7,15 +7,3 @@ import react.RBuilder
 import styled.css
 import styled.styledImg
 
-fun RBuilder.cut(src: String, w: Int, h: Int) {
-  styledImg {
-    css {
-      transform.scaleY(-1)
-      1.spacingUnits
-      width = w.px
-      height = h.px
-      objectFit = ObjectFit.contain
-    }
-    attrs.src = "data:image/png;base64,${src}"
-  }
-}

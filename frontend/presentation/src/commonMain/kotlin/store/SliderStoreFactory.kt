@@ -25,8 +25,8 @@ internal class SliderStoreFactory(
     override fun executeIntent(intent: Intent, getState: () -> State) {
       when (intent) {
         is Intent.HandleChange -> {
-          publish(Label.SliceNumberChanged(intent.value))
           dispatch(Result.ValueChanged(intent.value))
+          publish(Label.SliceNumberChanged(intent.value))
         }
       }.let {}
     }

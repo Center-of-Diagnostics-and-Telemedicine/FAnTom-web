@@ -1,14 +1,12 @@
 package research.cut
 
-import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
-import com.arkivanov.mvikotlin.core.lifecycle.LifecycleRegistry
-import com.arkivanov.mvikotlin.core.lifecycle.doOnDestroy
 import com.arkivanov.mvikotlin.core.store.StoreFactory
-import com.arkivanov.mvikotlin.rx.Disposable
-import com.arkivanov.mvikotlin.rx.Observer
-import com.arkivanov.mvikotlin.rx.observer
+import com.badoo.reaktive.disposable.CompositeDisposable
+import com.badoo.reaktive.observable.Observable
+import com.badoo.reaktive.observable.subscribe
+import com.badoo.reaktive.subject.publish.PublishSubject
 import controller.CutController
-import controller.CutControllerImpl
+import controller.SliderController
 import kotlinx.css.*
 import model.Cut
 import org.w3c.dom.Element
@@ -16,52 +14,29 @@ import react.*
 import react.dom.findDOMNode
 import repository.ResearchRepository
 import research.cut.CutContainer.CutContainerStyles.blackContainerStyle
-import research.cut.CutContainer.CutContainerStyles.canvasContainerStyle
 import research.cut.CutContainer.CutContainerStyles.cutContainerStyle
 import research.cut.CutContainer.CutContainerStyles.cutStyle
-import resume
+import root.debugLog
 import styled.StyleSheet
 import styled.css
 import styled.styledDiv
-import view.CutView
-import view.SliderView
-import view.initialCutModel
-import view.initialSliderModel
 import kotlin.browser.window
 
 class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
 
   private var testRef: Element? = null
-  private val rBuilder = RBuilder()
-
-  private val cutViewDelegate = CutViewProxy(::updateState)
-  private val sliderViewDelegate = SliderViewProxy(::updateState)
-  private val lifecycleRegistry = LifecycleRegistry()
-  private lateinit var controller: CutController
+  private val cutsInput = PublishSubject<CutController.Input>()
+  private val disposable = CompositeDisposable()
 
   init {
-    state = CutContainerState(initialCutModel(), initialSliderModel())
+    state = CutContainerState(width = 0, height = 0)
   }
 
   override fun componentDidMount() {
+    disposable.add(props.dependencies.cutsInput.subscribe(onNext = cutsInput::onNext))
     window.addEventListener(type = "resize", callback = {
       callToRenderContent()
     })
-    lifecycleRegistry.resume()
-    controller = createController()
-    val dependencies = props.dependencies
-    val disposable = dependencies.cutsInput(observer(onNext = controller.input))
-    lifecycleRegistry.doOnDestroy(disposable::dispose)
-    controller.onViewCreated(cutViewDelegate, sliderViewDelegate, lifecycleRegistry)
-  }
-
-  private fun createController(): CutController {
-    val dependencies = props.dependencies
-    val cutControllerDependencies =
-      object : CutController.Dependencies, Dependencies by dependencies {
-        override val lifecycle: Lifecycle = lifecycleRegistry
-      }
-    return CutControllerImpl(cutControllerDependencies)
   }
 
   override fun componentDidUpdate(
@@ -73,24 +48,18 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
   }
 
   private fun callToRenderContent() {
-    testRef?.let { renderContent(it.clientHeight, it.clientWidth) }
+    testRef?.let {
+      debugLog("size = it.clientHeight = ${it.clientHeight}, it.clientWidth = ${it.clientWidth}")
+      debugLog("size = it.getBoundingClientRect().height = ${it.getBoundingClientRect().height}, it.clientWidth = ${it.getBoundingClientRect().width}")
+      renderContent(it.clientHeight, it.clientWidth)
+    }
   }
 
   override fun RBuilder.render() {
     styledDiv {
       css(cutContainerStyle)
-
-//      attrs {
-//        onDoubleClickFunction = { props.doubleClickListener(cellModel) }
-//      }
-
-      //внутренний контейнер с фоном
-      //тут лежит и слайдер
       styledDiv {
         css(blackContainerStyle)
-//        css {
-//          border = "4px solid ${Color(getColorByCutType(cellModel.cutType)).withAlpha(0.7)}"
-//        }
         styledDiv {
           css(cutStyle)
 
@@ -106,27 +75,37 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
             width = 100.pct
             position = Position.relative
           }
-          slider(
-            sliceNumber = state.sliderModel.currentValue,
-            defaultValue = state.sliderModel.defaultValue,
-            maxValue = state.sliderModel.maxValue,
-            onChange = ::handleChangeSliceNumber
+          sliderView(
+            dependencies = object : SliderComponent.Dependencies,
+              Dependencies by props.dependencies {
+              override val sliderOutput: (SliderController.Output) -> Unit = ::sliderOutput
+            }
           )
         }
       }
     }
   }
 
+  private fun sliderOutput(output: SliderController.Output) {
+    when (output) {
+      is SliderController.Output.SliceNumberChanged ->
+        cutsInput.onNext(CutController.Input.SliceNumberChanged(output.sliceNumber))
+    }
+  }
+
   private fun renderContent(clientHeight: Int, clientWidth: Int) {
     react.dom.render(
-      element = rBuilder
+      element = RBuilder()
         //контейнер канвасов
         .styledDiv {
-          css(canvasContainerStyle)
-          cut(
-            state.cutModel.slice,
-            h = clientHeight,
-            w = clientWidth
+          css(CutContainerStyles.canvasContainerStyle)
+          cutView(
+            dependencies = object : CutComponent.Dependencies,
+              Dependencies by props.dependencies {
+              override val cutsInput: Observable<CutController.Input> = this@CutContainer.cutsInput
+              override val height: Int = clientHeight
+              override val width: Int = clientWidth
+            }
           )
 //          shapesCanvas(clientHeight, clientWidth, cellModel)
 //          drawCanvas(cellModel.cutType, clientHeight, clientWidth, cellModel.sliceSizeData)
@@ -135,17 +114,12 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
     )
   }
 
-  private fun handleChangeSliceNumber(sliceNumber: Int) {
-    sliderViewDelegate.dispatch(SliderView.Event.HandleOnChange(sliceNumber))
-  }
-
-  private fun updateState(model: CutView.Model) = setState { cutModel = model }
-  private fun updateState(model: SliderView.Model) = setState { sliderModel = model }
+  override fun componentWillUnmount() = disposable.dispose()
 
   interface Dependencies {
     val storeFactory: StoreFactory
     val cut: Cut
-    val cutsInput: (Observer<CutController.Input>) -> Disposable
+    val cutsInput: Observable<CutController.Input>
     val cutOutput: (CutController.Output) -> Unit
     val researchRepository: ResearchRepository
     val researchId: Int
@@ -185,8 +159,8 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
 }
 
 class CutContainerState(
-  var cutModel: CutView.Model,
-  var sliderModel: SliderView.Model
+  var height: Int,
+  var width: Int
 ) : RState
 
 interface CutContainerProps : RProps {

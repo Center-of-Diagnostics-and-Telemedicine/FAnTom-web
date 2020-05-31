@@ -12,8 +12,9 @@ import model.Cut
 import model.CutType
 import model.ResearchSlicesSizesData
 import model.initialFourGrid
-import store.GridContainerStore.Intent
-import store.GridContainerStore.State
+import store.gridcontainer.GridContainerStore.Intent
+import store.gridcontainer.GridContainerStore.State
+import store.gridcontainer.GridContainerStoreAbstractFactory
 
 internal class GridContainerStoreFactory(
   storeFactory: StoreFactory,

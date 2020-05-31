@@ -1,11 +1,11 @@
-package store
+package store.gridcontainer
 
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import model.Cut
 import model.Grid
-import store.GridContainerStore.Intent
-import store.GridContainerStore.State
+import store.gridcontainer.GridContainerStore.Intent
+import store.gridcontainer.GridContainerStore.State
 
 interface GridContainerStore : Store<Intent, State, Nothing> {
 

@@ -1,4 +1,4 @@
-package store
+package store.gridcontainer
 
 import com.arkivanov.mvikotlin.core.store.*
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
@@ -6,8 +6,8 @@ import com.badoo.reaktive.utils.ensureNeverFrozen
 import model.Cut
 import model.Grid
 import model.initialFourGrid
-import store.GridContainerStore.Intent
-import store.GridContainerStore.State
+import store.gridcontainer.GridContainerStore.Intent
+import store.gridcontainer.GridContainerStore.State
 
 abstract class GridContainerStoreAbstractFactory(
   private val storeFactory: StoreFactory

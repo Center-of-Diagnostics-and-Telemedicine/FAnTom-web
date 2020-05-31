@@ -7,7 +7,6 @@ import model.Mip
 import model.Presets
 import repository.ResearchRepository
 import view.CutView
-import view.SliderView
 
 interface CutController {
 
@@ -15,7 +14,6 @@ interface CutController {
 
   fun onViewCreated(
     cutView: CutView,
-    sliderView: SliderView,
     viewLifecycle: Lifecycle
   )
 
