@@ -6,9 +6,11 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.disposable.CompositeDisposable
 import com.badoo.reaktive.observable.Observable
 import com.badoo.reaktive.observable.subscribe
+import com.badoo.reaktive.subject.publish.PublishSubject
 import controller.CutController
 import controller.GridContainerController
 import controller.GridContainerControllerImpl
+import controller.ShapesController
 import destroy
 import kotlinx.css.*
 import model.Cut
@@ -33,6 +35,7 @@ class GridContainerViewComponent(prps: GridContainerProps) :
   private val cutsViewDelegate = GridContainerViewProxy(::updateState)
   private val lifecycleRegistry = LifecycleRegistry()
   private lateinit var controller: GridContainerController
+  private val shapesInputObservable = PublishSubject<ShapesController.Input>()
   private val disposable = CompositeDisposable()
 
   init {
@@ -140,10 +143,19 @@ class GridContainerViewComponent(prps: GridContainerProps) :
   private fun dependencies(cut: Cut): CutContainer.Dependencies =
     object : CutContainer.Dependencies, Dependencies by props.dependencies {
       override val cut: Cut = cut
-      override val cutOutput: (CutController.Output) -> Unit = ::cutContainerOutput
+      override val cutOutput: (CutController.Output) -> Unit = ::cutOutput
+      override val shapesOutput: (ShapesController.Output) -> Unit = ::shapesOutput
+      override val shapesInput: Observable<ShapesController.Input> = this@GridContainerViewComponent.shapesInputObservable
     }
 
-  private fun cutContainerOutput(output: CutController.Output) {
+  private fun cutOutput(output: CutController.Output) {
+//    when (output) {
+//      is CutController.Output.SliceNumberChanged -> TODO()
+//      is CutController.Output.BrightnessChanged -> TODO()
+//    }
+  }
+
+  private fun shapesOutput(output: ShapesController.Output) {
 //    when (output) {
 //      is CutController.Output.SliceNumberChanged -> TODO()
 //      is CutController.Output.BrightnessChanged -> TODO()

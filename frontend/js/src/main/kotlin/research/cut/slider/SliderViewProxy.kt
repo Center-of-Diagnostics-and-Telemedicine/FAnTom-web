@@ -1,4 +1,4 @@
-package research.cut
+package research.cut.slider
 
 import com.arkivanov.mvikotlin.core.view.BaseMviView
 import view.SliderView

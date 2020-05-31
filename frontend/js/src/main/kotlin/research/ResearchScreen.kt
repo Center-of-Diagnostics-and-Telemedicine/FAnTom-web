@@ -66,15 +66,13 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
   }
 
   override fun RBuilder.render() {
+    val model = state.researchModel
+    loading(model.loading)
     styledDiv {
       css(appFrameContainerStyle)
 
-      val model = state.researchModel
-      if (model.data == null) {
-        loading(model.loading)
-//        reload()
-      } else {
 
+      if (model.data != null) {
         //leftDrawer
         toolsDrawer(
           open = state.toolsOpen,
@@ -106,18 +104,6 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
       }
     }
   }
-
-//  private fun gridContainerInput(observer: Observer<GridContainerController.Input>): Disposable {
-//    gridContainerInputObserver = observer
-//
-//    return Disposable { gridContainerInputObserver = null }
-//  }
-
-//  private fun cutsInput(observer: Observer<CutController.Input>): Disposable {
-//    cutsInputObserver = observer
-//
-//    return Disposable { cutsInputObserver = null }
-//  }
 
   private fun toolsOutput(output: Output) {
     when (output) {

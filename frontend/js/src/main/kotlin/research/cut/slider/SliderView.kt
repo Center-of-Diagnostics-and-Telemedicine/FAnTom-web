@@ -1,4 +1,4 @@
-package research.cut
+package research.cut.slider
 
 import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.lifecycle.LifecycleRegistry

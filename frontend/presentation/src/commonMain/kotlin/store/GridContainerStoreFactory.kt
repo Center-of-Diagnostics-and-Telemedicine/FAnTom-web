@@ -8,10 +8,7 @@ import com.badoo.reaktive.scheduler.mainScheduler
 import com.badoo.reaktive.single.observeOn
 import com.badoo.reaktive.single.singleFromFunction
 import com.badoo.reaktive.single.subscribeOn
-import model.Cut
-import model.CutType
-import model.ResearchSlicesSizesData
-import model.initialFourGrid
+import model.*
 import store.gridcontainer.GridContainerStore.Intent
 import store.gridcontainer.GridContainerStore.State
 import store.gridcontainer.GridContainerStoreAbstractFactory
@@ -58,11 +55,29 @@ internal class GridContainerStoreFactory(
       }
 
     private fun buildCut(type: CutType): Cut = when (type) {
-      CutType.Frontal -> Cut(type = type, data = data.frontal)
-      CutType.Sagittal -> Cut(type = type, data = data.sagittal)
+      CutType.Frontal -> Cut(
+        type = type,
+        data = data.frontal,
+        color = pink,
+        verticalLineColor = blue,
+        horizontalLineColor = yellow
+      )
+      CutType.Sagittal -> Cut(
+        type = type,
+        data = data.sagittal,
+        color = blue,
+        verticalLineColor = pink,
+        horizontalLineColor = yellow
+      )
       CutType.Empty,
       CutType.Axial
-      -> Cut(type = type, data = data.axial)
+      -> Cut(
+        type = type,
+        data = data.axial,
+        color = yellow,
+        verticalLineColor = blue,
+        horizontalLineColor = pink
+      )
     }
   }
 

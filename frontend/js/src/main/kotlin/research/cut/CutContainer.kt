@@ -6,6 +6,7 @@ import com.badoo.reaktive.observable.Observable
 import com.badoo.reaktive.observable.subscribe
 import com.badoo.reaktive.subject.publish.PublishSubject
 import controller.CutController
+import controller.ShapesController
 import controller.SliderController
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -19,7 +20,10 @@ import repository.ResearchRepository
 import research.cut.CutContainer.CutContainerStyles.blackContainerStyle
 import research.cut.CutContainer.CutContainerStyles.cutContainerStyle
 import research.cut.CutContainer.CutContainerStyles.cutStyle
-import root.debugLog
+import research.cut.shapes.ShapesComponent
+import research.cut.shapes.shapesView
+import research.cut.slider.SliderComponent
+import research.cut.slider.sliderView
 import styled.StyleSheet
 import styled.css
 import styled.styledDiv
@@ -29,6 +33,7 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
 
   private var testRef: Element? = null
   private val cutsInput = PublishSubject<CutController.Input>()
+  private val shapesInput = PublishSubject<ShapesController.Input>()
   private val disposable = CompositeDisposable()
 
   init {
@@ -37,6 +42,7 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
 
   override fun componentDidMount() {
     disposable.add(props.dependencies.cutsInput.subscribe(onNext = cutsInput::onNext))
+    disposable.add(props.dependencies.shapesInput.subscribe(onNext = shapesInput::onNext))
     window.addEventListener(type = "resize", callback = {
       callToRenderContent()
     })
@@ -111,7 +117,13 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
               override val width: Int = clientWidth
             }
           )
-//          shapesCanvas(clientHeight, clientWidth, cellModel)
+          shapesView(
+            dependencies = object : ShapesComponent.Dependencies,
+              Dependencies by props.dependencies {
+              override val height: Int = clientHeight
+              override val width: Int = clientWidth
+            }
+          )
 //          drawCanvas(cellModel.cutType, clientHeight, clientWidth, cellModel.sliceSizeData)
         }.asElementOrNull(),
       container = testRef
@@ -124,7 +136,9 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
     val storeFactory: StoreFactory
     val cut: Cut
     val cutsInput: Observable<CutController.Input>
+    val shapesInput: Observable<ShapesController.Input>
     val cutOutput: (CutController.Output) -> Unit
+    val shapesOutput: (ShapesController.Output) -> Unit
     val researchRepository: ResearchRepository
     val researchId: Int
   }
