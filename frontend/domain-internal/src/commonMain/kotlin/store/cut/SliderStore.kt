@@ -1,9 +1,10 @@
 package store.cut
 
 import com.arkivanov.mvikotlin.core.store.Store
-import store.cut.SliderStore.*
+import store.cut.SliderStore.Intent
+import store.cut.SliderStore.State
 
-interface SliderStore : Store<Intent, State, Label> {
+interface SliderStore : Store<Intent, State, Nothing> {
 
   data class State(
     val currentValue: Int,
@@ -13,9 +14,5 @@ interface SliderStore : Store<Intent, State, Label> {
 
   sealed class Intent {
     data class HandleChange(val value: Int) : Intent()
-  }
-
-  sealed class Label{
-    data class SliceNumberChanged(val sliceNumber: Int): Label()
   }
 }

@@ -13,8 +13,7 @@ import model.Cut
 import model.GET_SLICE_FAILED
 import model.ResearchApiExceptions
 import repository.ResearchRepository
-import store.cut.CutStore.Intent
-import store.cut.CutStore.State
+import store.cut.CutStore.*
 import store.cut.CutStoreAbstractFactory
 
 internal class CutStoreFactory(
@@ -27,9 +26,9 @@ internal class CutStoreFactory(
   cut = cut,
   researchId = researchId
 ) {
-  override fun createExecutor(): Executor<Intent, Unit, State, Result, Nothing> = ExecutorImpl()
+  override fun createExecutor(): Executor<Intent, Unit, State, Result, Label> = ExecutorImpl()
 
-  private inner class ExecutorImpl : ReaktiveExecutor<Intent, Unit, State, Result, Nothing>() {
+  private inner class ExecutorImpl : ReaktiveExecutor<Intent, Unit, State, Result, Label>() {
 
     override fun executeAction(action: Unit, getState: () -> State) = load(getState)
 
@@ -40,6 +39,9 @@ internal class CutStoreFactory(
           load(getState)
         }
         is Intent.HandleSliceNumberChange -> {
+          publish(
+            Label.SliceNumberChanged(sliceNumber = intent.sliceNumber, cut = cut)
+          )
           dispatch(Result.SliceNumberChanged(sliceNumber = intent.sliceNumber))
           load(getState)
         }

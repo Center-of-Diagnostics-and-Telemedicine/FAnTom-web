@@ -4,7 +4,8 @@ import com.arkivanov.mvikotlin.core.store.Executor
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
 import model.Cut
-import store.cut.SliderStore.*
+import store.cut.SliderStore.Intent
+import store.cut.SliderStore.State
 import store.cut.SliderStoreAbstractFactory
 
 internal class SliderStoreFactory(
@@ -17,17 +18,14 @@ internal class SliderStoreFactory(
   researchId = researchId
 ) {
 
-  override fun createExecutor(): Executor<Intent, Nothing, State, Result, Label> = ExecutorImpl()
+  override fun createExecutor(): Executor<Intent, Nothing, State, Result, Nothing> = ExecutorImpl()
 
   private inner class ExecutorImpl :
-    ReaktiveExecutor<Intent, Nothing, State, Result, Label>() {
+    ReaktiveExecutor<Intent, Nothing, State, Result, Nothing>() {
 
     override fun executeIntent(intent: Intent, getState: () -> State) {
       when (intent) {
-        is Intent.HandleChange -> {
-          dispatch(Result.ValueChanged(intent.value))
-          publish(Label.SliceNumberChanged(intent.value))
-        }
+        is Intent.HandleChange -> dispatch(Result.ValueChanged(intent.value))
       }.let {}
     }
   }

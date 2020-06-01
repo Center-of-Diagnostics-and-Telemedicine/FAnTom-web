@@ -9,22 +9,21 @@ import view.ShapesView.Model
 
 val inputToShapesIntent: Input.() -> Intent = {
   when (this) {
-    is Input.HorizontalLineChange -> Intent.HandleHorizontalLineChanged(line)
-    is Input.VerticalLineChange -> Intent.HandleVerticalLineChanged(line)
     is Input.SliceNumberChanged -> Intent.HandleSliceNumberChange(sliceNumber)
+    is Input.ExternalSliceNumberChanged -> Intent.HandleExternalSliceNumberChanged(sliceNumber, cut)
   }
 }
 
 val shapesEventToShapesIntent: Event.() -> Intent = {
   when (this) {
-    is Event.HandleOnChange -> TODO()
+    is Event.CutTypeOnChange -> TODO()
   }
 }
 
 val sliderStateToShapesModel: State.() -> Model = {
   Model(
-    vertical = verticalLine,
-    horizontal = horizontalLine,
+    verticalCoefficient = verticalCoefficient,
+    horizontalCoefficient = horizontalCoefficient,
     sliceNumber = sliceNumber,
     huValue = null
   )
@@ -32,6 +31,6 @@ val sliderStateToShapesModel: State.() -> Model = {
 
 val shapesEventToOutput: Event.() -> Output = {
   when (this) {
-    is Event.HandleOnChange -> TODO()
+    is Event.CutTypeOnChange -> TODO()
   }
 }

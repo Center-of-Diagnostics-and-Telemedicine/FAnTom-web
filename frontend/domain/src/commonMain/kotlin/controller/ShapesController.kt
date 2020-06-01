@@ -3,7 +3,6 @@ package controller
 import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import model.Cut
-import model.CutType
 import repository.ResearchRepository
 import view.ShapesView
 
@@ -26,12 +25,11 @@ interface ShapesController {
   }
 
   sealed class Input {
-    data class HorizontalLineChange(val line: Int) : Input()
-    data class VerticalLineChange(val line: Int) : Input()
     data class SliceNumberChanged(val sliceNumber: Int) : Input()
+    class ExternalSliceNumberChanged(val sliceNumber: Int, val cut: Cut) : Input()
   }
 
   sealed class Output {
-    data class ChangeCutType(val type: CutType) : Output()
+//    data class ChangeCutType(val type: CutType) : Output()
   }
 }

@@ -16,7 +16,7 @@ fun RBuilder.renderPreset(model: PresetView.Model, onChange: (Presets) -> Unit) 
   val altBuilder = RBuilder()
   mFormControl(component = MFormControlComponent.fieldSet) {
     mRadioGroup(
-      value = model.current.name,
+      value = model.current.valueName,
       onChange = { _, value -> onChange(Presets.build(value)) }) {
       css { display = Display.inlineFlex }
       model.items.forEach { preset ->

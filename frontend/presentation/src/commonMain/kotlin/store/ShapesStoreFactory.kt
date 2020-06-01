@@ -27,9 +27,41 @@ internal class ShapesStoreFactory(
     override fun executeIntent(intent: Intent, getState: () -> State) {
       when (intent) {
         is Intent.HandleSliceNumberChange -> dispatch(Result.SliceNumberChanged(intent.sliceNumber))
-        is Intent.HandleHorizontalLineChanged -> dispatch(Result.HorizontalLineChanged(intent.line))
-        is Intent.HandleVerticalLineChanged -> dispatch(Result.VerticalLineChanged(intent.line))
+        is Intent.HandleExternalSliceNumberChanged ->
+          handleExternalSliceNumberChanged(intent.sliceNumber, intent.cut)
       }.let {}
+    }
+
+    private fun handleExternalSliceNumberChanged(
+      sliceNumber: Int,
+      externalCut: Cut
+    ) {
+      when {
+        cut.horizontalCutData.type == externalCut.type ->
+          updateHorizontalLine(sliceNumber, externalCut)
+        cut.verticalCutData.type == externalCut.type ->
+          updateVerticalLine(sliceNumber, externalCut)
+      }
+    }
+
+    private fun updateHorizontalLine(
+      sliceNumber: Int,
+      externalCut: Cut
+    ) {
+      val coefficient = sliceNumber.toDouble() / externalCut.data!!.maxFramesSize
+      dispatch(Result.HorizontalLineChanged(coefficient))
+    }
+
+    private fun updateVerticalLine(
+      sliceNumber: Int,
+      externalCut: Cut
+    ) {
+      println("sliceNumber = $sliceNumber")
+      println("external -> externalCut = ${externalCut.type.intType}, externalMaxFrameSize = ${externalCut.data!!.maxFramesSize}, externalHeight = ${externalCut.data!!.height}")
+      println("cut -> cut = ${cut.type.intType}, maxFramesSize = ${cut.data!!.maxFramesSize}, height = ${cut.data!!.height}")
+      val coefficient = sliceNumber.toDouble() / externalCut.data!!.maxFramesSize
+      println("coefficient = $coefficient cut = ${cut.type.intType}")
+      dispatch(Result.VerticalLineChanged(coefficient))
     }
   }
 

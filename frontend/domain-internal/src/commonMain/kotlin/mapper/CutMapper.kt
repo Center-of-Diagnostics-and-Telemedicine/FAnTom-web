@@ -1,9 +1,8 @@
 package mapper
 
 import controller.CutController.Input
-import store.cut.CutStore.Intent
-import store.cut.CutStore.State
-import store.cut.SliderStore.Label
+import controller.CutController.Output
+import store.cut.CutStore.*
 import view.CutView.Model
 
 val cutStateToCutModel: State.() -> Model? = {
@@ -25,9 +24,8 @@ val inputToCutIntent: Input.() -> Intent = {
   }
 }
 
-val sliderLabelToCutIntent: Label.() -> Intent? =
-  {
-    when (this) {
-      is Label.SliceNumberChanged -> Intent.HandleSliceNumberChange(sliceNumber = sliceNumber)
-    }
+val cutLabelToCutOutput: Label.() -> Output = {
+  when (this) {
+    is Label.SliceNumberChanged -> Output.SliceNumberChanged(sliceNumber, cut)
   }
+}

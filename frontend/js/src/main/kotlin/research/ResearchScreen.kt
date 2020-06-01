@@ -100,7 +100,6 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
 //      ctTypes.firstOrNull { it.ctType == state.ctTypeToConfirm }?.let {
 //        confirmationDialog(state.confirmationDialogOpen, it)
 //      }
-//      nonRelevantDialog()
       }
     }
   }

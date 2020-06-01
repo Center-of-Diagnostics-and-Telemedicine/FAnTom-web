@@ -38,7 +38,7 @@ class GridContainerControllerImpl(val dependencies: GridContainerController.Depe
 
   override fun onViewCreated(gridContainerView: GridContainerView, viewLifecycle: Lifecycle) {
 //    bind(viewLifecycle, BinderLifecycleMode.CREATE_DESTROY) {
-//      gridContainerView.events.mapNotNull(gridEventToGridIntent) bindTo gridContainerStore
+//      gridContainerView.events.mapNotNull(gridContainerEventToGridIntent) bindTo gridContainerStore
 //    }
 
     bind(viewLifecycle, BinderLifecycleMode.START_STOP) {

@@ -26,13 +26,13 @@ import resume
 import styled.StyleSheet
 import styled.css
 import styled.styledDiv
-import view.GridContainerView
+import view.GridContainerView.Model
 import view.initialGridContainerModel
 
 class GridContainerViewComponent(prps: GridContainerProps) :
   RComponent<GridContainerProps, GridContainerState>(prps) {
 
-  private val cutsViewDelegate = GridContainerViewProxy(::updateState)
+  private val gridViewDelegate = GridContainerViewProxy(::updateState)
   private val lifecycleRegistry = LifecycleRegistry()
   private lateinit var controller: GridContainerController
   private val shapesInputObservable = PublishSubject<ShapesController.Input>()
@@ -47,7 +47,7 @@ class GridContainerViewComponent(prps: GridContainerProps) :
     controller = createController()
     val dependencies = props.dependencies
     disposable.add(dependencies.gridContainerInputs.subscribe { controller.input(it) })
-    controller.onViewCreated(cutsViewDelegate, lifecycleRegistry)
+    controller.onViewCreated(gridViewDelegate, lifecycleRegistry)
   }
 
   private fun createController(): GridContainerController {
@@ -149,10 +149,12 @@ class GridContainerViewComponent(prps: GridContainerProps) :
     }
 
   private fun cutOutput(output: CutController.Output) {
-//    when (output) {
-//      is CutController.Output.SliceNumberChanged -> TODO()
+    when (output) {
+      is CutController.Output.SliceNumberChanged -> shapesInputObservable.onNext(
+        ShapesController.Input.ExternalSliceNumberChanged(output.sliceNumber, output.cut)
+      )
 //      is CutController.Output.BrightnessChanged -> TODO()
-//    }
+    }
   }
 
   private fun shapesOutput(output: ShapesController.Output) {
@@ -162,7 +164,7 @@ class GridContainerViewComponent(prps: GridContainerProps) :
 //    }
   }
 
-  private fun updateState(model: GridContainerView.Model) = setState { cutsModel = model }
+  private fun updateState(model: Model) = setState { cutsModel = model }
 
   override fun componentWillUnmount() {
     disposable.dispose()
@@ -195,7 +197,7 @@ class GridContainerViewComponent(prps: GridContainerProps) :
 }
 
 class GridContainerState(
-  var cutsModel: GridContainerView.Model
+  var cutsModel: Model
 ) : RState
 
 interface GridContainerProps : RProps {

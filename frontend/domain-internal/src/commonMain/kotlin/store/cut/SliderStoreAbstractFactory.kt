@@ -7,7 +7,8 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.badoo.reaktive.utils.ensureNeverFrozen
 import model.Cut
-import store.cut.SliderStore.*
+import store.cut.SliderStore.Intent
+import store.cut.SliderStore.State
 
 abstract class SliderStoreAbstractFactory(
   private val storeFactory: StoreFactory,
@@ -22,7 +23,7 @@ abstract class SliderStoreAbstractFactory(
   )
 
   fun create(): SliderStore =
-    object : SliderStore, Store<Intent, State, Label> by storeFactory.create(
+    object : SliderStore, Store<Intent, State, Nothing> by storeFactory.create(
       name = "SliderStoreType${cut.type.intType}Id${researchId}",
       initialState = initialState,
       executorFactory = ::createExecutor,
@@ -33,7 +34,7 @@ abstract class SliderStoreAbstractFactory(
       }
     }
 
-  protected abstract fun createExecutor(): Executor<Intent, Nothing, State, Result, Label>
+  protected abstract fun createExecutor(): Executor<Intent, Nothing, State, Result, Nothing>
 
   protected sealed class Result : JvmSerializable {
     data class ValueChanged(val value: Int) : Result()

@@ -21,6 +21,7 @@ import org.w3c.dom.get
 import react.*
 import repository.ResearchRepository
 import resume
+import root.debugLog
 import styled.css
 import styled.styledCanvas
 import styled.styledDiv
@@ -33,6 +34,8 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
   private val shapesViewDelegate = ShapesViewProxy(::updateState)
   private val lifecycleRegistry = LifecycleRegistry()
   private lateinit var controller: ShapesController
+  private var resultWidth: Int = 0
+  private var resultHeight: Int = 0
 
   init {
     state = ShapesState(initialShapesModel())
@@ -49,6 +52,7 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
   }
 
   override fun componentDidUpdate(prevProps: ShapesProps, prevState: ShapesState, snapshot: Any) {
+
     updateCanvas()
   }
 
@@ -69,30 +73,31 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
         clearCanvas(canvas, context)
 //        state.areas?.let { drawCircles(it, context) }
 //        state.moveRects?.let { drawRects(it, context) }
-        drawLines(state.shapesModel.horizontal, state.shapesModel.vertical, canvas, context)
+        debugLog("width = ${props.dependencies.width}")
+        drawLines(
+          horizontal = state.shapesModel.horizontalCoefficient * resultHeight,
+          vertical = state.shapesModel.verticalCoefficient * resultWidth,
+          canvas = canvas,
+          context = context
+        )
       }
     }
   }
 
   override fun RBuilder.render() {
-    val dicomHeight = props.dependencies.cut.data!!.height
-    val parentContainerWidth = props.dependencies.width
-    val parentContainerHeight = props.dependencies.height
     themeContext.Consumer { theme ->
 
-      val ri = 512.0 / dicomHeight
-      val rs = parentContainerWidth.toDouble() / parentContainerHeight
-      val resultWidth: Int
-      val resultHeight: Int
+      val ri = 512.0 / props.dependencies.cut.data!!.height
+      val rs = props.dependencies.width.toDouble() / props.dependencies.height
       if (rs > ri) {
-        resultWidth = 512 * parentContainerHeight / dicomHeight
-        resultHeight = parentContainerHeight
+        resultWidth = 512 * props.dependencies.height / props.dependencies.cut.data!!.height
+        resultHeight = props.dependencies.height
       } else {
-        resultWidth = parentContainerWidth
-        resultHeight = dicomHeight * parentContainerWidth / 512
+        resultWidth = props.dependencies.width
+        resultHeight = props.dependencies.cut.data!!.height * props.dependencies.width / 512
       }
-      val resultTop = (parentContainerHeight - resultHeight) / 2
-      val resultLeft = (parentContainerWidth - resultWidth) / 2
+      val resultTop = (props.dependencies.height - resultHeight) / 2
+      val resultLeft = (props.dependencies.width - resultWidth) / 2
       styledDiv {
         css {
           position = Position.absolute
@@ -102,7 +107,7 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
         }
         styledCanvas {
           attrs {
-            classes += "lines_canvas lines_canvas_${props.dependencies.cut.type.intType}"
+            classes += "lines_canvas_${props.dependencies.cut.type.intType}"
             width = resultWidth.toString()
             height = resultHeight.toString()
           }
@@ -257,21 +262,33 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
 //  }
 
   private fun drawLines(
-    horizontal: Int,
-    vertical: Int,
+    horizontal: Double,
+    vertical: Double,
     canvas: HTMLCanvasElement,
     context: CanvasRenderingContext2D
   ) {
-    if (horizontal != 0 && vertical != 0) {
-      val height = canvas.height.toDouble()
-      val width = canvas.width.toDouble()
+//    if (horizontal != 0.0 && vertical != 0.0) {
+    val height = canvas.height.toDouble()
+    val width = canvas.width.toDouble()
 
-      val y = horizontal.toDouble()
-      drawLine(context, props.dependencies.cut.horizontalLineColor, 0.0, y, width, y)
+    drawLine(
+      context = context,
+      strokeColor = props.dependencies.cut.horizontalCutData.color,
+      moveToX = 0.0,
+      moveToY = horizontal,
+      lineToX = width,
+      lineToY = horizontal
+    )
 
-      val x = vertical.toDouble()
-      drawLine(context, props.dependencies.cut.verticalLineColor, x, 0.0, x, height)
-    }
+    drawLine(
+      context = context,
+      strokeColor = props.dependencies.cut.verticalCutData.color,
+      moveToX = vertical,
+      moveToY = 0.0,
+      lineToX = vertical,
+      lineToY = height
+    )
+//    }
   }
 
   private fun drawLine(
@@ -322,7 +339,7 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
 }
 
 class ShapesState(
-  var shapesModel: ShapesView.Model,
+  var shapesModel: ShapesView.Model
 ) : RState
 
 interface ShapesProps : RProps {

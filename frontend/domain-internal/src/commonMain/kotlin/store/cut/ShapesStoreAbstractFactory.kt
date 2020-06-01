@@ -17,8 +17,8 @@ abstract class ShapesStoreAbstractFactory(
 ) {
 
   val initialState: State = State(
-    horizontalLine = 0,
-    verticalLine = 0,
+    horizontalCoefficient = 0.0,
+    verticalCoefficient = 0.0,
     sliceNumber = 1
   )
 
@@ -39,16 +39,16 @@ abstract class ShapesStoreAbstractFactory(
 
   protected sealed class Result : JvmSerializable {
     data class SliceNumberChanged(val sliceNumber: Int) : Result()
-    class HorizontalLineChanged(val line: Int) : Result()
-    class VerticalLineChanged(val line: Int) : Result()
+    class HorizontalLineChanged(val coefficient: Double) : Result()
+    class VerticalLineChanged(val coefficient: Double) : Result()
   }
 
   private object ReducerImpl : Reducer<State, Result> {
     override fun State.reduce(result: Result): State =
       when (result) {
         is Result.SliceNumberChanged -> copy(sliceNumber = result.sliceNumber)
-        is Result.HorizontalLineChanged -> copy(horizontalLine = result.line)
-        is Result.VerticalLineChanged -> copy(verticalLine = result.line)
+        is Result.HorizontalLineChanged -> copy(horizontalCoefficient = result.coefficient)
+        is Result.VerticalLineChanged -> copy(verticalCoefficient = result.coefficient)
       }
   }
 }

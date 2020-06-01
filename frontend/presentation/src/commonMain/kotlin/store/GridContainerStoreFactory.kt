@@ -15,10 +15,44 @@ import store.gridcontainer.GridContainerStoreAbstractFactory
 
 internal class GridContainerStoreFactory(
   storeFactory: StoreFactory,
-  private val data: ResearchSlicesSizesData
+  data: ResearchSlicesSizesData
 ) : GridContainerStoreAbstractFactory(
   storeFactory = storeFactory
 ) {
+
+  private val axialCutData = CutData(CutType.Axial, data.axial, axialColor)
+  private val frontalCutData = CutData(
+    CutType.Frontal,
+    data.frontal,
+    frontalColor
+  )
+  private val sagittalCutData = CutData(
+    CutType.Sagittal,
+    data.sagittal,
+    sagittalColor
+  )
+  private val axialCut = Cut(
+    type = CutType.Axial,
+    data = data.axial,
+    color = axialColor,
+    horizontalCutData = frontalCutData,
+    verticalCutData = sagittalCutData
+  )
+  private val frontalCut = Cut(
+    type = CutType.Frontal,
+    data = data.frontal,
+    color = frontalColor,
+    horizontalCutData = axialCutData,
+    verticalCutData = sagittalCutData
+  )
+  private val sagittalCut = Cut(
+    type = CutType.Sagittal,
+    data = data.sagittal,
+    color = sagittalColor,
+    horizontalCutData = axialCutData,
+    verticalCutData = frontalCutData
+  )
+
   override fun createExecutor(): Executor<Intent, Unit, State, Result, Nothing> = ExecutorImpl()
 
   private inner class ExecutorImpl : ReaktiveExecutor<Intent, Unit, State, Result, Nothing>() {
@@ -40,12 +74,8 @@ internal class GridContainerStoreFactory(
 
     override fun executeIntent(intent: Intent, getState: () -> State) {
       when (intent) {
-        is Intent.HandleGridChanged -> dispatch(
-          Result.Loaded(
-            items = buildCuts(intent.grid.types),
-            grid = intent.grid
-          )
-        )
+        is Intent.HandleGridChanged ->
+          dispatch(Result.Loaded(items = buildCuts(intent.grid.types), grid = intent.grid))
       }.let {}
     }
 
@@ -54,30 +84,15 @@ internal class GridContainerStoreFactory(
         buildCut(it)
       }
 
-    private fun buildCut(type: CutType): Cut = when (type) {
-      CutType.Frontal -> Cut(
-        type = type,
-        data = data.frontal,
-        color = pink,
-        verticalLineColor = blue,
-        horizontalLineColor = yellow
-      )
-      CutType.Sagittal -> Cut(
-        type = type,
-        data = data.sagittal,
-        color = blue,
-        verticalLineColor = pink,
-        horizontalLineColor = yellow
-      )
-      CutType.Empty,
-      CutType.Axial
-      -> Cut(
-        type = type,
-        data = data.axial,
-        color = yellow,
-        verticalLineColor = blue,
-        horizontalLineColor = pink
-      )
+    private fun buildCut(type: CutType): Cut {
+
+      return when (type) {
+        CutType.Frontal -> frontalCut
+        CutType.Sagittal -> sagittalCut
+        CutType.Empty,
+        CutType.Axial
+        -> axialCut
+      }
     }
   }
 

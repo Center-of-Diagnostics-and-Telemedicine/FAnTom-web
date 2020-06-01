@@ -35,7 +35,6 @@ class SliderControllerImpl(val dependencies: Dependencies) :
     bind(viewLifecycle, BinderLifecycleMode.START_STOP) {
       sliderStore.states.mapNotNull(sliderStateToSliderModel) bindTo sliderView
       sliderView.events.mapNotNull(sliderEventToOutput) bindTo dependencies.sliderOutput
-//      sliderStore.states.mapNotNull(sliderStateToSliderModel) bindTo sliderView
     }
   }
 }

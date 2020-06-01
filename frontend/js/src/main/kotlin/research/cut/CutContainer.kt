@@ -6,6 +6,7 @@ import com.badoo.reaktive.observable.Observable
 import com.badoo.reaktive.observable.subscribe
 import com.badoo.reaktive.subject.publish.PublishSubject
 import controller.CutController
+import controller.CutController.Input
 import controller.ShapesController
 import controller.SliderController
 import kotlinx.coroutines.GlobalScope
@@ -32,7 +33,7 @@ import kotlin.browser.window
 class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
 
   private var testRef: Element? = null
-  private val cutsInput = PublishSubject<CutController.Input>()
+  private val cutsInput = PublishSubject<Input>()
   private val shapesInput = PublishSubject<ShapesController.Input>()
   private val disposable = CompositeDisposable()
 
@@ -99,7 +100,7 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
   private fun sliderOutput(output: SliderController.Output) {
     when (output) {
       is SliderController.Output.SliceNumberChanged ->
-        cutsInput.onNext(CutController.Input.SliceNumberChanged(output.sliceNumber))
+        cutsInput.onNext(Input.SliceNumberChanged(output.sliceNumber))
     }
   }
 
@@ -112,7 +113,7 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
           cutView(
             dependencies = object : CutComponent.Dependencies,
               Dependencies by props.dependencies {
-              override val cutsInput: Observable<CutController.Input> = this@CutContainer.cutsInput
+              override val cutsInput: Observable<Input> = this@CutContainer.cutsInput
               override val height: Int = clientHeight
               override val width: Int = clientWidth
             }
@@ -135,7 +136,7 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
   interface Dependencies {
     val storeFactory: StoreFactory
     val cut: Cut
-    val cutsInput: Observable<CutController.Input>
+    val cutsInput: Observable<Input>
     val shapesInput: Observable<ShapesController.Input>
     val cutOutput: (CutController.Output) -> Unit
     val shapesOutput: (ShapesController.Output) -> Unit

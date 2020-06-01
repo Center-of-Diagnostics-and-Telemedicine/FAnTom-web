@@ -4,8 +4,7 @@ import com.arkivanov.mvikotlin.core.store.*
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.badoo.reaktive.utils.ensureNeverFrozen
 import model.*
-import store.cut.CutStore.Intent
-import store.cut.CutStore.State
+import store.cut.CutStore.*
 
 abstract class CutStoreAbstractFactory(
   private val storeFactory: StoreFactory,
@@ -26,7 +25,7 @@ abstract class CutStoreAbstractFactory(
   )
 
   fun create(): CutStore =
-    object : CutStore, Store<Intent, State, Nothing> by storeFactory.create(
+    object : CutStore, Store<Intent, State, Label> by storeFactory.create(
       name = "CutStoreType${cut.type.intType}Id${researchId}",
       initialState = initialState,
       bootstrapper = SimpleBootstrapper(Unit),
@@ -38,7 +37,7 @@ abstract class CutStoreAbstractFactory(
       }
     }
 
-  protected abstract fun createExecutor(): Executor<Intent, Unit, State, Result, Nothing>
+  protected abstract fun createExecutor(): Executor<Intent, Unit, State, Result, Label>
 
   protected sealed class Result : JvmSerializable {
     object Loading : Result()

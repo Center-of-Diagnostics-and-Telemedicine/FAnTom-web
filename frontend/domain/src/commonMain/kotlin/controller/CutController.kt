@@ -21,6 +21,7 @@ interface CutController {
     val storeFactory: StoreFactory
     val lifecycle: Lifecycle
     val researchRepository: ResearchRepository
+    val cutOutput: (Output) -> Unit
     val cut: Cut
     val researchId: Int
   }
@@ -36,6 +37,6 @@ interface CutController {
   }
 
   sealed class Output {
-
+    data class SliceNumberChanged(val sliceNumber: Int, val cut: Cut): Output()
   }
 }
