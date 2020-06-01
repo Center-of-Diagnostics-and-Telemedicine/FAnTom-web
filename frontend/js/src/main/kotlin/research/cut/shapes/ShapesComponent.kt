@@ -34,8 +34,8 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
   private val shapesViewDelegate = ShapesViewProxy(::updateState)
   private val lifecycleRegistry = LifecycleRegistry()
   private lateinit var controller: ShapesController
-  private var resultWidth: Int = 0
-  private var resultHeight: Int = 0
+  var resultWidth: Int = 0
+  var resultHeight: Int = 0
 
   init {
     state = ShapesState(initialShapesModel())
@@ -86,18 +86,23 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
 
   override fun RBuilder.render() {
     themeContext.Consumer { theme ->
-
-      val ri = 512.0 / props.dependencies.cut.data!!.height
+      val dicomWidth = props.dependencies.cut.verticalCutData.data.maxFramesSize
+      val dicomHeight = props.dependencies.cut.data!!.height
+      val ri = dicomWidth.toDouble() / dicomHeight
       val rs = props.dependencies.width.toDouble() / props.dependencies.height
       if (rs > ri) {
-        resultWidth = 512 * props.dependencies.height / props.dependencies.cut.data!!.height
+        debugLog("rs > ri")
+        resultWidth = dicomWidth * props.dependencies.height / dicomHeight
         resultHeight = props.dependencies.height
       } else {
+        debugLog("rs <= ri")
         resultWidth = props.dependencies.width
-        resultHeight = props.dependencies.cut.data!!.height * props.dependencies.width / 512
+        resultHeight = dicomHeight * props.dependencies.width / dicomWidth
       }
-      val resultTop = (props.dependencies.height - resultHeight) / 2
-      val resultLeft = (props.dependencies.width - resultWidth) / 2
+      val mTop = props.dependencies.height - resultHeight
+      val mLeft = props.dependencies.width - resultWidth
+      val resultTop = if (mTop <= 0) 0 else mTop / 2
+      val resultLeft = if (mLeft <= 0) 0 else mLeft / 2
       styledDiv {
         css {
           position = Position.absolute
