@@ -3,11 +3,11 @@ package store
 import com.arkivanov.mvikotlin.core.store.Executor
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
-import model.Cut
+import model.*
 import repository.ResearchRepository
-import store.cut.ShapesStore.Intent
-import store.cut.ShapesStore.State
-import store.cut.ShapesStoreAbstractFactory
+import store.shapes.ShapesStore.Intent
+import store.shapes.ShapesStore.State
+import store.shapes.ShapesStoreAbstractFactory
 
 internal class ShapesStoreFactory(
   storeFactory: StoreFactory,
@@ -29,7 +29,18 @@ internal class ShapesStoreFactory(
         is Intent.HandleSliceNumberChange -> dispatch(Result.SliceNumberChanged(intent.sliceNumber))
         is Intent.HandleExternalSliceNumberChanged ->
           handleExternalSliceNumberChanged(intent.sliceNumber, intent.cut)
+        is Intent.HandleMousePosition -> handleMousePosition(
+          intent.dicomX,
+          intent.dicomY,
+          intent.cutType,
+          getState
+        )
+        is Intent.HandleDrawing -> handleDrawing(intent.circle, intent.cutType)
       }.let {}
+    }
+
+    private fun handleDrawing(circle: Circle, externalCutType: CutType) {
+      cut.buildCircle(circle, externalCutType)
     }
 
     private fun handleExternalSliceNumberChanged(
@@ -44,24 +55,37 @@ internal class ShapesStoreFactory(
       }
     }
 
+    private fun updateVerticalLine(
+      sliceNumber: Int,
+      externalCut: Cut
+    ) {
+      val coefficient = sliceNumber.toDouble() / externalCut.data!!.maxFramesSize
+      dispatch(Result.VerticalLineChanged(coefficient))
+    }
+
+    private fun handleMousePosition(
+      dicomX: Double,
+      dicomY: Double,
+      cutType: CutType,
+      getState: () -> State
+    ) {
+      if (cut.type == cutType) {
+        println("x = $dicomX,y = $dicomY, sliceNumber = ${getState().sliceNumber} ")
+        val position = cut.getPosition(
+          dicomX = dicomX,
+          dicomY = dicomY,
+          sliceNumber = getState().sliceNumber
+        )
+        dispatch(Result.PointPositionChanged(position = position))
+      }
+    }
+
     private fun updateHorizontalLine(
       sliceNumber: Int,
       externalCut: Cut
     ) {
       val coefficient = sliceNumber.toDouble() / externalCut.data!!.maxFramesSize
       dispatch(Result.HorizontalLineChanged(coefficient))
-    }
-
-    private fun updateVerticalLine(
-      sliceNumber: Int,
-      externalCut: Cut
-    ) {
-      println("sliceNumber = $sliceNumber")
-      println("external -> externalCut = ${externalCut.type.intType}, externalMaxFrameSize = ${externalCut.data!!.maxFramesSize}, externalHeight = ${externalCut.data!!.height}")
-      println("cut -> cut = ${cut.type.intType}, maxFramesSize = ${cut.data!!.maxFramesSize}, height = ${cut.data!!.height}")
-      val coefficient = sliceNumber.toDouble() / externalCut.data!!.maxFramesSize
-      println("coefficient = $coefficient cut = ${cut.type.intType}")
-      dispatch(Result.VerticalLineChanged(coefficient))
     }
   }
 

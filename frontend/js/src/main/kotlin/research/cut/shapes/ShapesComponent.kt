@@ -15,6 +15,9 @@ import destroy
 import kotlinx.css.*
 import kotlinx.html.classes
 import model.Cut
+import model.blue
+import model.pink
+import model.yellow
 import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLCanvasElement
 import org.w3c.dom.get
@@ -34,8 +37,8 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
   private val shapesViewDelegate = ShapesViewProxy(::updateState)
   private val lifecycleRegistry = LifecycleRegistry()
   private lateinit var controller: ShapesController
-  var resultWidth: Int = 0
-  var resultHeight: Int = 0
+  private var resultWidth: Int = 0
+  private var resultHeight: Int = 0
 
   init {
     state = ShapesState(initialShapesModel())
@@ -119,32 +122,26 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
         }
       }
 
-//      styledDiv {
-//        css {
-//          position = Position.absolute
-//          zIndex = 1
-//          bottom = 0.px
-//          left = 0.px
-//          padding(1.spacingUnits)
-//        }
-//        state.positionData?.let {
-//          mTypography(text = "Сагиттальный (x): ${it.x}") {
-//            css {
-//              color = Color(blue)
-//            }
-//          }
-//          mTypography(text = "Фронтальный (y): ${it.y}") {
-//            css {
-//              color = Color(pink)
-//            }
-//          }
-//          mTypography(text = " Аксиальный(z): ${it.z}") {
-//            css {
-//              color = Color(yellow)
-//            }
-//          }
-//        }
-//      }
+      styledDiv {
+        css {
+          position = Position.absolute
+          zIndex = 1
+          bottom = 0.px
+          left = 0.px
+          padding(1.spacingUnits)
+        }
+        state.shapesModel.position?.let {
+          mTypography(text = "Сагиттальный (x): ${it.x}") {
+            css { color = Color(blue) }
+          }
+          mTypography(text = "Фронтальный (y): ${it.y}") {
+            css { color = Color(pink) }
+          }
+          mTypography(text = "Аксиальный(z): ${it.z}") {
+            css { color = Color(yellow) }
+          }
+        }
+      }
 
 //      val cutTypeModelContainer = props.dependencies.cut.cutTypeModelContainer
 //      val otherTypes = cutTypeModelContainer.availableOtherTypesForCut
@@ -200,7 +197,9 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
           padding(1.spacingUnits)
         }
         if (state.shapesModel.sliceNumber != 0) {
-          mTypography(text = "Срез: ${state.shapesModel.sliceNumber}")
+          mTypography(text = "Срез: ${state.shapesModel.sliceNumber}") {
+            css { color = Color.white }
+          }
         }
       }
 

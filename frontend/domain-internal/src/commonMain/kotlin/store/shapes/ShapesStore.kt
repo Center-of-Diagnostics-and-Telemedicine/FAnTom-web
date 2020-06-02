@@ -1,21 +1,29 @@
-package store.cut
+package store.shapes
 
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
+import model.Circle
 import model.Cut
-import store.cut.ShapesStore.Intent
-import store.cut.ShapesStore.State
+import model.CutType
+import model.PointPosition
+import store.shapes.ShapesStore.Intent
+import store.shapes.ShapesStore.State
 
 interface ShapesStore : Store<Intent, State, Nothing> {
 
   sealed class Intent : JvmSerializable {
     data class HandleSliceNumberChange(val sliceNumber: Int) : Intent()
     data class HandleExternalSliceNumberChanged(val sliceNumber: Int, val cut: Cut) : Intent()
+    data class HandleMousePosition(val dicomX: Double, val dicomY: Double, val cutType: CutType) :
+      Intent()
+
+    class HandleDrawing(val circle: Circle, val cutType: CutType) : Intent()
   }
 
   data class State(
     val horizontalCoefficient: Double,
     val verticalCoefficient: Double,
-    val sliceNumber: Int
+    val sliceNumber: Int,
+    val position: PointPosition?
   ) : JvmSerializable
 }

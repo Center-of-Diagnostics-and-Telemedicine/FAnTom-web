@@ -1,8 +1,8 @@
-package store.cut
+package store.slider
 
 import com.arkivanov.mvikotlin.core.store.Store
-import store.cut.SliderStore.Intent
-import store.cut.SliderStore.State
+import store.slider.SliderStore.Intent
+import store.slider.SliderStore.State
 
 interface SliderStore : Store<Intent, State, Nothing> {
 

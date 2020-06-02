@@ -7,10 +7,7 @@ import com.badoo.reaktive.disposable.CompositeDisposable
 import com.badoo.reaktive.observable.Observable
 import com.badoo.reaktive.observable.subscribe
 import com.badoo.reaktive.subject.publish.PublishSubject
-import controller.CutController
-import controller.GridContainerController
-import controller.GridContainerControllerImpl
-import controller.ShapesController
+import controller.*
 import destroy
 import kotlinx.css.*
 import model.Cut
@@ -145,6 +142,7 @@ class GridContainerViewComponent(prps: GridContainerProps) :
       override val cut: Cut = cut
       override val cutOutput: (CutController.Output) -> Unit = ::cutOutput
       override val shapesOutput: (ShapesController.Output) -> Unit = ::shapesOutput
+      override val drawOutput: (DrawController.Output) -> Unit = ::drawOutput
       override val shapesInput: Observable<ShapesController.Input> = this@GridContainerViewComponent.shapesInputObservable
     }
 
@@ -162,6 +160,20 @@ class GridContainerViewComponent(prps: GridContainerProps) :
 //      is CutController.Output.SliceNumberChanged -> TODO()
 //      is CutController.Output.BrightnessChanged -> TODO()
 //    }
+  }
+
+  private fun drawOutput(output: DrawController.Output) {
+    when (output) {
+      is DrawController.Output.OnClick -> TODO()
+      is DrawController.Output.ChangeContrastBrightness -> TODO()
+      is DrawController.Output.Drawing ->
+        shapesInputObservable.onNext(ShapesController.Input.Drawing(output.circle, output.cutType))
+      is DrawController.Output.StartMoving -> TODO()
+      is DrawController.Output.MousePosition ->
+        shapesInputObservable.onNext(ShapesController.Input.MousePosition(output.dicomX, output.dicomY, output.cutType))
+      is DrawController.Output.Drawn -> TODO()
+      is DrawController.Output.ChangeSlice -> TODO()
+    }
   }
 
   private fun updateState(model: Model) = setState { cutsModel = model }

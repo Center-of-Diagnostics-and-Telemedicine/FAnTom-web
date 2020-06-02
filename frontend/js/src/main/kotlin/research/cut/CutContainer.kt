@@ -7,6 +7,7 @@ import com.badoo.reaktive.observable.subscribe
 import com.badoo.reaktive.subject.publish.PublishSubject
 import controller.CutController
 import controller.CutController.Input
+import controller.DrawController
 import controller.ShapesController
 import controller.SliderController
 import kotlinx.coroutines.GlobalScope
@@ -21,6 +22,8 @@ import repository.ResearchRepository
 import research.cut.CutContainer.CutContainerStyles.blackContainerStyle
 import research.cut.CutContainer.CutContainerStyles.cutContainerStyle
 import research.cut.CutContainer.CutContainerStyles.cutStyle
+import research.cut.draw.DrawComponent
+import research.cut.draw.drawView
 import research.cut.shapes.ShapesComponent
 import research.cut.shapes.shapesView
 import research.cut.slider.SliderComponent
@@ -97,13 +100,6 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
     }
   }
 
-  private fun sliderOutput(output: SliderController.Output) {
-    when (output) {
-      is SliderController.Output.SliceNumberChanged ->
-        cutsInput.onNext(Input.SliceNumberChanged(output.sliceNumber))
-    }
-  }
-
   private fun renderContent(clientHeight: Int, clientWidth: Int) {
     react.dom.render(
       element = RBuilder()
@@ -114,6 +110,7 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
             dependencies = object : CutComponent.Dependencies,
               Dependencies by props.dependencies {
               override val cutsInput: Observable<Input> = this@CutContainer.cutsInput
+              override val cutOutput: (CutController.Output) -> Unit = ::cutOutput
               override val height: Int = clientHeight
               override val width: Int = clientWidth
             }
@@ -123,12 +120,35 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
               Dependencies by props.dependencies {
               override val height: Int = clientHeight
               override val width: Int = clientWidth
+              override val shapesInput: Observable<ShapesController.Input> = this@CutContainer.shapesInput
             }
           )
-//          drawCanvas(cellModel.cutType, clientHeight, clientWidth, cellModel.sliceSizeData)
+          drawView(
+            dependencies = object : DrawComponent.Dependencies,
+              Dependencies by props.dependencies {
+              override val height: Int = clientHeight
+              override val width: Int = clientWidth
+            }
+          )
         }.asElementOrNull(),
       container = testRef
     )
+  }
+
+  private fun cutOutput(output: CutController.Output) {
+    when (output) {
+      is CutController.Output.SliceNumberChanged -> {
+        shapesInput.onNext(ShapesController.Input.SliceNumberChanged(output.sliceNumber))
+      }
+    }
+    props.dependencies.cutOutput(output)
+  }
+
+  private fun sliderOutput(output: SliderController.Output) {
+    when (output) {
+      is SliderController.Output.SliceNumberChanged ->
+        cutsInput.onNext(Input.SliceNumberChanged(output.sliceNumber))
+    }
   }
 
   override fun componentWillUnmount() = disposable.dispose()
@@ -140,6 +160,7 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
     val shapesInput: Observable<ShapesController.Input>
     val cutOutput: (CutController.Output) -> Unit
     val shapesOutput: (ShapesController.Output) -> Unit
+    val drawOutput: (DrawController.Output) -> Unit
     val researchRepository: ResearchRepository
     val researchId: Int
   }

@@ -1,8 +1,8 @@
 package mapper
 
 import controller.SliderController.Output
-import store.cut.SliderStore.Intent
-import store.cut.SliderStore.State
+import store.slider.SliderStore.Intent
+import store.slider.SliderStore.State
 import view.SliderView.Event
 import view.SliderView.Model
 

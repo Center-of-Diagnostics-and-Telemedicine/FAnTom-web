@@ -4,9 +4,9 @@ import com.arkivanov.mvikotlin.core.store.Executor
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
 import model.Cut
-import store.cut.SliderStore.Intent
-import store.cut.SliderStore.State
-import store.cut.SliderStoreAbstractFactory
+import store.slider.SliderStore.Intent
+import store.slider.SliderStore.State
+import store.slider.SliderStoreAbstractFactory
 
 internal class SliderStoreFactory(
   storeFactory: StoreFactory,

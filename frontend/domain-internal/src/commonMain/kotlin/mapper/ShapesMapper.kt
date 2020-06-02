@@ -2,8 +2,8 @@ package mapper
 
 import controller.ShapesController.Input
 import controller.ShapesController.Output
-import store.cut.ShapesStore.Intent
-import store.cut.ShapesStore.State
+import store.shapes.ShapesStore.Intent
+import store.shapes.ShapesStore.State
 import view.ShapesView.Event
 import view.ShapesView.Model
 
@@ -11,6 +11,10 @@ val inputToShapesIntent: Input.() -> Intent = {
   when (this) {
     is Input.SliceNumberChanged -> Intent.HandleSliceNumberChange(sliceNumber)
     is Input.ExternalSliceNumberChanged -> Intent.HandleExternalSliceNumberChanged(sliceNumber, cut)
+    is Input.MousePosition ->
+      Intent.HandleMousePosition(dicomX = dicomX, dicomY = dicomY, cutType = cutType)
+    is Input.Drawing ->
+      Intent.HandleDrawing(circle = circle, cutType = cutType)
   }
 }
 
@@ -20,12 +24,13 @@ val shapesEventToShapesIntent: Event.() -> Intent = {
   }
 }
 
-val sliderStateToShapesModel: State.() -> Model = {
+val shapesStateToShapesModel: State.() -> Model = {
   Model(
     verticalCoefficient = verticalCoefficient,
     horizontalCoefficient = horizontalCoefficient,
     sliceNumber = sliceNumber,
-    huValue = null
+    huValue = null,
+    position = position
   )
 }
 

@@ -2,7 +2,9 @@ package controller
 
 import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.store.StoreFactory
+import model.Circle
 import model.Cut
+import model.CutType
 import repository.ResearchRepository
 import view.ShapesView
 
@@ -27,6 +29,10 @@ interface ShapesController {
   sealed class Input {
     data class SliceNumberChanged(val sliceNumber: Int) : Input()
     class ExternalSliceNumberChanged(val sliceNumber: Int, val cut: Cut) : Input()
+    class MousePosition(val dicomX: Double, val dicomY: Double, val cutType: CutType) :
+      Input()
+
+    class Drawing(val circle: Circle, val cutType: CutType) : Input()
   }
 
   sealed class Output {

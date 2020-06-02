@@ -35,3 +35,49 @@ fun getColorByCutType(cutType: CutType): String {
     CutType.Sagittal -> blue
   }
 }
+
+fun Cut.getPosition(dicomX: Double, dicomY: Double, sliceNumber: Int): PointPosition? {
+  if (dicomX < 0.0 || dicomY < 0.0) {
+    return null
+  } else {
+    return when (this.type) {
+      CutType.Empty -> TODO()
+      CutType.Axial -> {
+        val horizontalRatio = horizontalCutData.data.maxFramesSize.toDouble() / data!!.height
+        val verticalRatio = verticalCutData.data.maxFramesSize.toDouble() / data.height
+        PointPosition(
+          x = dicomX * verticalRatio,
+          y = dicomY * horizontalRatio,
+          z = sliceNumber.toDouble()
+        )
+      }
+      CutType.Frontal -> {
+        val horizontalRatio = horizontalCutData.data.maxFramesSize.toDouble() / data!!.height
+        val verticalRatio = verticalCutData.data.maxFramesSize.toDouble() / data.maxFramesSize
+        PointPosition(
+          x = dicomX * verticalRatio,
+          y = sliceNumber.toDouble(),
+          z = dicomY * horizontalRatio
+        )
+      }
+      CutType.Sagittal -> {
+        val horizontalRatio = horizontalCutData.data.maxFramesSize.toDouble() / data!!.height
+        val verticalRatio = verticalCutData.data.maxFramesSize.toDouble() / data.maxFramesSize
+        PointPosition(
+          x = sliceNumber.toDouble(),
+          y = dicomX * verticalRatio,
+          z = dicomY * horizontalRatio
+        )
+      }
+    }
+  }
+}
+
+fun Cut.buildCircle(circle: Circle, externalCutType: CutType): Circle {
+  return when (externalCutType) {
+    type -> circle
+    verticalCutData.type -> circle
+    horizontalCutData.type -> circle
+    else -> circle
+  }
+}

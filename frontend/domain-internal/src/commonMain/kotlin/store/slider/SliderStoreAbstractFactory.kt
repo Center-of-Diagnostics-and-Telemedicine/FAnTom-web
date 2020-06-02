@@ -1,4 +1,4 @@
-package store.cut
+package store.slider
 
 import com.arkivanov.mvikotlin.core.store.Executor
 import com.arkivanov.mvikotlin.core.store.Reducer
@@ -7,8 +7,8 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.badoo.reaktive.utils.ensureNeverFrozen
 import model.Cut
-import store.cut.SliderStore.Intent
-import store.cut.SliderStore.State
+import store.slider.SliderStore.Intent
+import store.slider.SliderStore.State
 
 abstract class SliderStoreAbstractFactory(
   private val storeFactory: StoreFactory,

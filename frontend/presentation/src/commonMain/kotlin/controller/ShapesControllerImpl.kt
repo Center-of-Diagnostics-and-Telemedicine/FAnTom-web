@@ -12,7 +12,7 @@ import com.badoo.reaktive.subject.publish.PublishSubject
 import mapper.inputToShapesIntent
 import mapper.shapesEventToOutput
 import mapper.shapesEventToShapesIntent
-import mapper.sliderStateToShapesModel
+import mapper.shapesStateToShapesModel
 import store.ShapesStoreFactory
 import view.ShapesView
 
@@ -43,9 +43,8 @@ class ShapesControllerImpl(val dependencies: ShapesController.Dependencies) :
     }
 
     bind(viewLifecycle, BinderLifecycleMode.START_STOP) {
-      shapesStore.states.mapNotNull(sliderStateToShapesModel) bindTo shapesView
+      shapesStore.states.mapNotNull(shapesStateToShapesModel) bindTo shapesView
       shapesView.events.mapNotNull(shapesEventToOutput) bindTo dependencies.shapesOutput
-//      sliderStore.states.mapNotNull(sliderStateToShapesModel) bindTo sliderView
     }
   }
 }
