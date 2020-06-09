@@ -70,7 +70,10 @@ internal class DrawStoreFactory(
     private fun handleMouseUp(getState: () -> State) {
       val state = getState()
       when {
-        state.isDrawing -> publish(Label.Drawn(circle = state.circle(), cutType = cut.type))
+        state.isDrawing -> {
+          dispatch(Result.Idle)
+          publish(Label.Drawn(circle = state.circle(), cutType = cut.type))
+        }
       }
     }
 

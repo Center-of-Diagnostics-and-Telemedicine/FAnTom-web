@@ -52,5 +52,4 @@ class UserResearchRepositoryImpl(private val userResearchDaoFacade: UserResearch
   private suspend fun checkUserResearchExistence(userId: Int, researchId: Int) =
     userResearchDaoFacade.getUserResearch(userId = userId, researchId = researchId)
       ?: throw IllegalStateException("user not found")
-
 }

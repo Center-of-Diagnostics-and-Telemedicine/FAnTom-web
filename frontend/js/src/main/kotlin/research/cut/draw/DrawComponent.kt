@@ -34,8 +34,10 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
   private val drawViewDelegate = DrawViewProxy(::updateState)
   private val lifecycleRegistry = LifecycleRegistry()
   private lateinit var controller: DrawController
-  var resultWidth: Int = 0
-  var resultHeight: Int = 0
+  private var resultWidth: Int = 0
+  private var resultHeight: Int = 0
+  private var horizontalRatio: Double = 0.0
+  private var verticalRatio: Double = 0.0
 
   init {
     state = DrawState(initialDrawModel())
@@ -89,8 +91,8 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
       val mLeft = props.dependencies.width - resultWidth
       val resultTop = if (mTop <= 0) 0 else mTop / 2
       val resultLeft = if (mLeft <= 0) 0 else mLeft / 2
-      val horizontalRatio: Double = dicomHeight.toDouble() / resultHeight
-      val verticalRatio: Double = dicomWidth.toDouble() / resultWidth
+      horizontalRatio = dicomHeight.toDouble() / resultHeight
+      verticalRatio = dicomWidth.toDouble() / resultWidth
       styledDiv {
         css {
           position = Position.absolute
@@ -100,7 +102,7 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
         }
         styledCanvas {
           attrs {
-            classes += "shape_canvas_${props.dependencies.cut.type.intType}"
+            classes += "draw_canvas_${props.dependencies.cut.type.intType}"
             width = resultWidth.toString()
             height = resultHeight.toString()
             onMouseDownFunction = { event ->
@@ -164,7 +166,7 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
 
   private fun draw(circle: Circle?) {
     circle?.let {
-      val canvas = document.getElementsByClassName("shape_canvas_${props.dependencies.cut.type.intType}")[0] as HTMLCanvasElement
+      val canvas = document.getElementsByClassName("draw_canvas_${props.dependencies.cut.type.intType}")[0] as HTMLCanvasElement
       val context = canvas.getContext("2d") as CanvasRenderingContext2D
       context.clearRect(
         0.0,
@@ -175,8 +177,8 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
       context.strokeStyle = "#00ff00"
       context.beginPath()
       context.arc(
-        circle.dicomCenterX,
-        circle.dicomCenterY,
+        circle.dicomCenterX / verticalRatio,
+        circle.dicomCenterY / horizontalRatio,
         circle.dicomRadius,
         0.0,
         2 * PI,
@@ -189,7 +191,7 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
 
 
   private fun clearCanvas() {
-    val canvas = document.getElementsByClassName("shape_canvas_${props.dependencies.cut.type.intType}")[0] as HTMLCanvasElement
+    val canvas = document.getElementsByClassName("draw_canvas_${props.dependencies.cut.type.intType}")[0] as HTMLCanvasElement
     val context = canvas.getContext("2d") as CanvasRenderingContext2D
     context.clearRect(
       0.0,

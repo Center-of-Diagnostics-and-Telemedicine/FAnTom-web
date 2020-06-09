@@ -1,4 +1,3 @@
-
 import io.ktor.auth.UserPasswordCredential
 import model.UserModel
 import model.UserRole

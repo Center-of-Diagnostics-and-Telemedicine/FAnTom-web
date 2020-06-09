@@ -31,6 +31,7 @@ import styled.styledDiv
 import view.ShapesView
 import view.initialShapesModel
 import kotlin.browser.document
+import kotlin.math.roundToInt
 
 class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(prps) {
 
@@ -69,7 +70,7 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
   }
 
   private fun updateCanvas() {
-    val canvas = document.getElementsByClassName("lines_canvas_${props.dependencies.cut.type.intType}")[0] as? HTMLCanvasElement
+    val canvas = document.getElementsByClassName("shape_canvas_${props.dependencies.cut.type.intType}")[0] as? HTMLCanvasElement
     canvas?.let { _ ->
       val context = canvas.getContext("2d") as? CanvasRenderingContext2D
       context?.let { _ ->
@@ -115,7 +116,7 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
         }
         styledCanvas {
           attrs {
-            classes += "lines_canvas_${props.dependencies.cut.type.intType}"
+            classes += "shape_canvas_${props.dependencies.cut.type.intType}"
             width = resultWidth.toString()
             height = resultHeight.toString()
           }
@@ -131,13 +132,13 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
           padding(1.spacingUnits)
         }
         state.shapesModel.position?.let {
-          mTypography(text = "Сагиттальный (x): ${it.x}") {
+          mTypography(text = "Сагиттальный (x): ${it.x.roundToInt()}") {
             css { color = Color(blue) }
           }
-          mTypography(text = "Фронтальный (y): ${it.y}") {
+          mTypography(text = "Фронтальный (y): ${it.y.roundToInt()}") {
             css { color = Color(pink) }
           }
-          mTypography(text = "Аксиальный(z): ${it.z}") {
+          mTypography(text = "Аксиальный(z): ${it.z.roundToInt()}") {
             css { color = Color(yellow) }
           }
         }
