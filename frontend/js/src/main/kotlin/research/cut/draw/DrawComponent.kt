@@ -28,6 +28,8 @@ import view.DrawView
 import view.initialDrawModel
 import kotlin.browser.document
 import kotlin.math.PI
+import kotlin.math.pow
+import kotlin.math.sqrt
 
 class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
 
@@ -38,6 +40,7 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
   private var resultHeight: Int = 0
   private var horizontalRatio: Double = 0.0
   private var verticalRatio: Double = 0.0
+  private var radiusRatio: Double = 0.0
 
   init {
     state = DrawState(initialDrawModel())
@@ -73,6 +76,7 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
   }
 
   override fun RBuilder.render() {
+    val altBuilder = RBuilder()
     themeContext.Consumer { theme ->
       val dicomWidth = props.dependencies.cut.verticalCutData.data.maxFramesSize
       val dicomHeight = props.dependencies.cut.data!!.height
@@ -93,11 +97,16 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
       val resultLeft = if (mLeft <= 0) 0 else mLeft / 2
       horizontalRatio = dicomHeight.toDouble() / resultHeight
       verticalRatio = dicomWidth.toDouble() / resultWidth
+      val dicomRadius = sqrt(dicomHeight.toDouble().pow(2) + dicomWidth.toDouble().pow(2))
+      val screenRadius = sqrt(resultHeight.toDouble().pow(2) + resultWidth.toDouble().pow(2))
+      radiusRatio = dicomRadius / screenRadius
       styledDiv {
         css {
           position = Position.absolute
           top = resultTop.px
           left = resultLeft.px
+          width = resultWidth.px
+          height = resultHeight.px
           zIndex = 3
         }
         styledCanvas {
@@ -118,6 +127,7 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
                 )
               )
             }
+
             onMouseMoveFunction = { event ->
               val mouseEvent = event.asDynamic().nativeEvent as MouseEvent
               val rect = (mouseEvent.target as HTMLCanvasElement).getBoundingClientRect()
@@ -128,6 +138,7 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
                 )
               )
             }
+
             onMouseUpFunction = {
               val mouseEvent = castEvent(it)
               val rect = (mouseEvent.target as HTMLCanvasElement).getBoundingClientRect()
@@ -138,6 +149,7 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
                 )
               )
             }
+
             onMouseOutFunction = {
               drawViewDelegate.dispatch(DrawView.Event.MouseOut)
             }
@@ -154,6 +166,7 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
                 )
               )
             }
+
             onWheelFunction = {
               val wheelEvent = it.asDynamic().nativeEvent as WheelEvent
               drawViewDelegate.dispatch(DrawView.Event.MouseWheel(wheelEvent.deltaY))
@@ -179,7 +192,7 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
       context.arc(
         circle.dicomCenterX / verticalRatio,
         circle.dicomCenterY / horizontalRatio,
-        circle.dicomRadius,
+        circle.dicomRadius / radiusRatio,
         0.0,
         2 * PI,
         false

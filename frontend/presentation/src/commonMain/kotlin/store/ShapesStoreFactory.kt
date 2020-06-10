@@ -55,12 +55,14 @@ internal class ShapesStoreFactory(
       }
     }
 
-    private fun updateVerticalLine(
-      sliceNumber: Int,
-      externalCut: Cut
-    ) {
+    private fun updateVerticalLine(sliceNumber: Int, externalCut: Cut) {
       val coefficient = sliceNumber.toDouble() / externalCut.data!!.maxFramesSize
       dispatch(Result.VerticalLineChanged(coefficient))
+    }
+
+    private fun updateHorizontalLine(sliceNumber: Int, externalCut: Cut) {
+      val coefficient = sliceNumber.toDouble() / externalCut.data!!.maxFramesSize
+      dispatch(Result.HorizontalLineChanged(coefficient))
     }
 
     private fun handleMousePosition(
@@ -78,14 +80,6 @@ internal class ShapesStoreFactory(
         )
         dispatch(Result.PointPositionChanged(position = position))
       }
-    }
-
-    private fun updateHorizontalLine(
-      sliceNumber: Int,
-      externalCut: Cut
-    ) {
-      val coefficient = sliceNumber.toDouble() / externalCut.data!!.maxFramesSize
-      dispatch(Result.HorizontalLineChanged(coefficient))
     }
   }
 
