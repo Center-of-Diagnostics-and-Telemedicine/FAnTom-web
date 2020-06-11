@@ -1,17 +1,8 @@
 package research.cut.shapes
 
-import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
-import com.arkivanov.mvikotlin.core.lifecycle.LifecycleRegistry
-import com.arkivanov.mvikotlin.core.lifecycle.doOnDestroy
-import com.arkivanov.mvikotlin.core.store.StoreFactory
-import com.badoo.reaktive.observable.Observable
-import com.badoo.reaktive.observable.subscribe
 import com.ccfraser.muirwik.components.mTypography
 import com.ccfraser.muirwik.components.spacingUnits
 import com.ccfraser.muirwik.components.themeContext
-import controller.ShapesController
-import controller.ShapesControllerImpl
-import destroy
 import kotlinx.css.*
 import kotlinx.html.classes
 import model.Cut
@@ -21,66 +12,42 @@ import model.yellow
 import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLCanvasElement
 import org.w3c.dom.get
-import react.*
-import repository.ResearchRepository
-import resume
+import react.RBuilder
+import react.RComponent
+import react.RProps
+import react.RState
 import root.debugLog
 import styled.css
 import styled.styledCanvas
 import styled.styledDiv
 import view.ShapesView
-import view.initialShapesModel
 import kotlin.browser.document
 import kotlin.math.roundToInt
 
 class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(prps) {
 
-  private val shapesViewDelegate = ShapesViewProxy(::updateState)
-  private val lifecycleRegistry = LifecycleRegistry()
-  private lateinit var controller: ShapesController
   private var resultWidth: Int = 0
   private var resultHeight: Int = 0
 
-  init {
-    state = ShapesState(initialShapesModel())
-  }
-
   override fun componentDidMount() {
-    lifecycleRegistry.resume()
-    controller = createController()
-    val dependencies = props.dependencies
-    val disposable = dependencies.shapesInput.subscribe { controller.input(it) }
-    lifecycleRegistry.doOnDestroy(disposable::dispose)
-    controller.onViewCreated(shapesViewDelegate, lifecycleRegistry)
     updateCanvas()
   }
 
   override fun componentDidUpdate(prevProps: ShapesProps, prevState: ShapesState, snapshot: Any) {
-
     updateCanvas()
   }
 
-  private fun createController(): ShapesController {
-    val dependencies = props.dependencies
-    val cutControllerDependencies =
-      object : ShapesController.Dependencies, Dependencies by dependencies {
-        override val lifecycle: Lifecycle = lifecycleRegistry
-      }
-    return ShapesControllerImpl(cutControllerDependencies)
-  }
-
   private fun updateCanvas() {
-    val canvas = document.getElementsByClassName("shape_canvas_${props.dependencies.cut.type.intType}")[0] as? HTMLCanvasElement
+    val canvas = document.getElementsByClassName("shape_canvas_${props.cut.type.intType}")[0] as? HTMLCanvasElement
     canvas?.let { _ ->
       val context = canvas.getContext("2d") as? CanvasRenderingContext2D
       context?.let { _ ->
         clearCanvas(canvas, context)
 //        state.areas?.let { drawCircles(it, context) }
 //        state.moveRects?.let { drawRects(it, context) }
-        debugLog("width = ${props.dependencies.width}")
         drawLines(
-          horizontal = state.shapesModel.horizontalCoefficient * resultHeight,
-          vertical = state.shapesModel.verticalCoefficient * resultWidth,
+          horizontal = props.shapesModel.horizontalCoefficient * resultHeight,
+          vertical = props.shapesModel.verticalCoefficient * resultWidth,
           canvas = canvas,
           context = context
         )
@@ -90,21 +57,21 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
 
   override fun RBuilder.render() {
     themeContext.Consumer { theme ->
-      val dicomWidth = props.dependencies.cut.verticalCutData.data.maxFramesSize
-      val dicomHeight = props.dependencies.cut.data!!.height
+      val dicomWidth = props.cut.verticalCutData.data.maxFramesSize
+      val dicomHeight = props.cut.data!!.height
       val ri = dicomWidth.toDouble() / dicomHeight
-      val rs = props.dependencies.width.toDouble() / props.dependencies.height
+      val rs = props.width.toDouble() / props.height
       if (rs > ri) {
         debugLog("rs > ri")
-        resultWidth = dicomWidth * props.dependencies.height / dicomHeight
-        resultHeight = props.dependencies.height
+        resultWidth = dicomWidth * props.height / dicomHeight
+        resultHeight = props.height
       } else {
         debugLog("rs <= ri")
-        resultWidth = props.dependencies.width
-        resultHeight = dicomHeight * props.dependencies.width / dicomWidth
+        resultWidth = props.width
+        resultHeight = dicomHeight * props.width / dicomWidth
       }
-      val mTop = props.dependencies.height - resultHeight
-      val mLeft = props.dependencies.width - resultWidth
+      val mTop = props.height - resultHeight
+      val mLeft = props.width - resultWidth
       val resultTop = if (mTop <= 0) 0 else mTop / 2
       val resultLeft = if (mLeft <= 0) 0 else mLeft / 2
       styledDiv {
@@ -116,7 +83,7 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
         }
         styledCanvas {
           attrs {
-            classes += "shape_canvas_${props.dependencies.cut.type.intType}"
+            classes += "shape_canvas_${props.cut.type.intType}"
             width = resultWidth.toString()
             height = resultHeight.toString()
           }
@@ -131,7 +98,7 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
           left = 0.px
           padding(1.spacingUnits)
         }
-        state.shapesModel.position?.let {
+        props.shapesModel.position?.let {
           mTypography(text = "Сагиттальный (x): ${it.x.roundToInt()}") {
             css { color = Color(blue) }
           }
@@ -144,7 +111,7 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
         }
       }
 
-//      val cutTypeModelContainer = props.dependencies.cut.cutTypeModelContainer
+//      val cutTypeModelContainer = props.cut.cutTypeModelContainer
 //      val otherTypes = cutTypeModelContainer.availableOtherTypesForCut
 //
 //      styledDiv {
@@ -197,14 +164,14 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
           right = 0.px
           padding(1.spacingUnits)
         }
-        if (state.shapesModel.sliceNumber != 0) {
-          mTypography(text = "Срез: ${state.shapesModel.sliceNumber}") {
+        if (props.shapesModel.sliceNumber != 0) {
+          mTypography(text = "Срез: ${props.shapesModel.sliceNumber}") {
             css { color = Color.white }
           }
         }
       }
 
-      state.shapesModel.huValue?.let {
+      props.shapesModel.huValue?.let {
         styledDiv {
           css {
             position = Position.absolute
@@ -278,7 +245,7 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
 
     drawLine(
       context = context,
-      strokeColor = props.dependencies.cut.horizontalCutData.color,
+      strokeColor = props.cut.horizontalCutData.color,
       moveToX = 0.0,
       moveToY = horizontal,
       lineToX = width,
@@ -287,7 +254,7 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
 
     drawLine(
       context = context,
-      strokeColor = props.dependencies.cut.verticalCutData.color,
+      strokeColor = props.cut.verticalCutData.color,
       moveToX = vertical,
       moveToY = 0.0,
       lineToX = vertical,
@@ -316,43 +283,32 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
     canvas: HTMLCanvasElement,
     context: CanvasRenderingContext2D
   ) {
-    context.clearRect(
-      0.0,
-      0.0,
-      canvas.width.toDouble(),
-      canvas.height.toDouble()
-    )
-  }
-
-  private fun updateState(model: ShapesView.Model) = setState { shapesModel = model }
-
-  override fun componentWillUnmount() {
-    lifecycleRegistry.destroy()
-  }
-
-  interface Dependencies {
-    val storeFactory: StoreFactory
-    val researchRepository: ResearchRepository
-    val cut: Cut
-    val shapesOutput: (ShapesController.Output) -> Unit
-    val shapesInput: Observable<ShapesController.Input>
-    val researchId: Int
-    val height: Int
-    val width: Int
+    context.clearRect(0.0, 0.0, canvas.width.toDouble(), canvas.height.toDouble())
   }
 
 }
 
 class ShapesState(
-  var shapesModel: ShapesView.Model
 ) : RState
 
 interface ShapesProps : RProps {
-  var dependencies: ShapesComponent.Dependencies
+  var cut: Cut
+  var width: Int
+  var height: Int
+  var shapesModel: ShapesView.Model
+  var eventOutput: (ShapesView.Event) -> Unit
 }
 
 fun RBuilder.shapesView(
-  dependencies: ShapesComponent.Dependencies,
+  cut: Cut,
+  width: Int,
+  height: Int,
+  shapesModel: ShapesView.Model,
+  eventOutput: (ShapesView.Event) -> Unit
 ) = child(ShapesComponent::class) {
-  attrs.dependencies = dependencies
+  attrs.cut = cut
+  attrs.width = width
+  attrs.height = height
+  attrs.shapesModel = shapesModel
+  attrs.eventOutput = eventOutput
 }

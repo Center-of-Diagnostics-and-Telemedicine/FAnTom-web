@@ -6,10 +6,10 @@ import com.badoo.reaktive.utils.ensureNeverFrozen
 import model.Cut
 import model.Grid
 import model.initialFourGrid
-import store.gridcontainer.GridContainerStore.Intent
-import store.gridcontainer.GridContainerStore.State
+import store.gridcontainer.CutsContainerStore.Intent
+import store.gridcontainer.CutsContainerStore.State
 
-abstract class GridContainerStoreAbstractFactory(
+abstract class CutsContainerStoreAbstractFactory(
   private val storeFactory: StoreFactory
 ) {
 
@@ -18,8 +18,8 @@ abstract class GridContainerStoreAbstractFactory(
     grid = initialFourGrid()
   )
 
-  fun create(): GridContainerStore =
-    object : GridContainerStore, Store<Intent, State, Nothing> by storeFactory.create(
+  fun create(): CutsContainerStore =
+    object : CutsContainerStore, Store<Intent, State, Nothing> by storeFactory.create(
       name = "GridContainerStore",
       initialState = initialState,
       bootstrapper = SimpleBootstrapper(Unit),

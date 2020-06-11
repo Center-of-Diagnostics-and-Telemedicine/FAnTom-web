@@ -7,6 +7,8 @@ import model.Mip
 import model.Presets
 import repository.ResearchRepository
 import view.CutView
+import view.DrawView
+import view.ShapesView
 
 interface CutController {
 
@@ -14,6 +16,8 @@ interface CutController {
 
   fun onViewCreated(
     cutView: CutView,
+    shapesView: ShapesView,
+    drawView: DrawView,
     viewLifecycle: Lifecycle
   )
 
@@ -34,9 +38,10 @@ interface CutController {
     data class MipValueChanged(val value: Int) : Input()
     data class PresetChanged(val preset: Presets) : Input()
     data class SliceNumberChanged(val sliceNumber: Int) : Input()
+    data class ExternalSliceNumberChanged(val sliceNumber: Int, val cut: Cut) : Input()
   }
 
   sealed class Output {
-    data class SliceNumberChanged(val sliceNumber: Int, val cut: Cut): Output()
+    data class SliceNumberChanged(val sliceNumber: Int, val cut: Cut) : Output()
   }
 }

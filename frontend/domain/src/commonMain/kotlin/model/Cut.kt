@@ -73,11 +73,41 @@ fun Cut.getPosition(dicomX: Double, dicomY: Double, sliceNumber: Int): PointPosi
   }
 }
 
-fun Cut.buildCircle(circle: Circle, externalCutType: CutType): Circle {
-  return when (externalCutType) {
-    type -> circle
-    verticalCutData.type -> circle
-    horizontalCutData.type -> circle
-    else -> circle
+fun Cut.getAreaToSave(circle: Circle, sliceNumber: Int): AreaToSave? {
+  if (circle.dicomCenterX < 0.0 || circle.dicomCenterY < 0.0) {
+    return null
+  } else {
+    return when (this.type) {
+      CutType.Empty -> TODO()
+      CutType.Axial -> {TODO()
+//        val horizontalRatio = horizontalCutData.data.maxFramesSize.toDouble() / data!!.height
+//        val verticalRatio = verticalCutData.data.maxFramesSize.toDouble() / data.height
+//        AreaToSave(
+//          x = circle.dicomCenterX * verticalRatio,
+//          y = circle.dicomCenterY * horizontalRatio,
+//          z = sliceNumber.toDouble(),
+//          radius = circle.dicomRadius,
+//          size = 0.0
+//        )
+      }
+      CutType.Frontal -> {TODO()
+//        val horizontalRatio = horizontalCutData.data.maxFramesSize.toDouble() / data!!.height
+//        val verticalRatio = verticalCutData.data.maxFramesSize.toDouble() / data.maxFramesSize
+//        AreaToSave(
+//          x = dicomX * verticalRatio,
+//          y = sliceNumber.toDouble(),
+//          z = dicomY * horizontalRatio
+//        )
+      }
+      CutType.Sagittal -> {TODO()
+//        val horizontalRatio = horizontalCutData.data.maxFramesSize.toDouble() / data!!.height
+//        val verticalRatio = verticalCutData.data.maxFramesSize.toDouble() / data.maxFramesSize
+//        AreaToSave(
+//          x = sliceNumber.toDouble(),
+//          y = dicomX * verticalRatio,
+//          z = dicomY * horizontalRatio
+//        )
+      }
+    }
   }
 }

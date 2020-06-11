@@ -1,6 +1,5 @@
 package mapper
 
-import controller.DrawController.Output
 import model.Circle
 import model.LEFT_MOUSE_BUTTON
 import model.MIDDLE_MOUSE_BUTTON
@@ -39,26 +38,26 @@ val drawStateToDrawModel: State.() -> Model = {
 
 }
 
-val drawLabelToOutput: Label.() -> Output = {
-  when (this) {
-    is Label.StartMove -> Output.StartMoving(
-      startDicomX = startDicomX,
-      startDicomY = startDicomY,
-      cutType = cutType
-    )
-    is Label.Drawing -> Output.Drawing(circle = circle, cutType = cutType)
-    is Label.ChangeContrastBrightness -> Output.ChangeContrastBrightness(
-      deltaX = deltaX,
-      deltaY = deltaY
-    )
-    is Label.MouseMove -> Output.MousePosition(dicomX = dicomX, dicomY = dicomY, cutType = cutType)
-    is Label.Drawn -> Output.Drawn(circle = circle, cutType = cutType)
-    is Label.OnClick -> Output.OnClick(
-      dicomX = dicomX,
-      dicomY = dicomY,
-      altKeyPressed = altKey,
-      cutType = type,
-    )
-    is Label.ChangeSlice -> Output.ChangeSlice(deltaY = deltaDicomY, type = cutType)
-  }
-}
+//val drawLabelToOutput: Label.() -> Output = {
+//  when (this) {
+//    is Label.StartMove -> Output.StartMoving(
+//      startDicomX = startDicomX,
+//      startDicomY = startDicomY
+//    )
+//    is Label.ChangeContrastBrightness -> Output.ChangeContrastBrightness(
+//      deltaX = deltaX,
+//      deltaY = deltaY
+//    )
+//    is Label.MouseMove -> Output.MousePosition(dicomX = dicomX, dicomY = dicomY, cutType = cutType)
+//    is Label.Drawn -> Output.Drawn(circle = circle, cutType = cutType)
+//    is Label.OnClick -> Output.OnClick(
+//      dicomX = dicomX,
+//      dicomY = dicomY,
+//      altKeyPressed = altKey,
+//      cutType = type,
+//    )
+//    is Label.ChangeSlice -> Output.ChangeSlice(deltaY = deltaDicomY, type = cutType)
+//  }
+//}
+
+

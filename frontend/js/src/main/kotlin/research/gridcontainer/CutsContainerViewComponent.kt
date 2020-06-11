@@ -7,7 +7,10 @@ import com.badoo.reaktive.disposable.CompositeDisposable
 import com.badoo.reaktive.observable.Observable
 import com.badoo.reaktive.observable.subscribe
 import com.badoo.reaktive.subject.publish.PublishSubject
-import controller.*
+import controller.CutController
+import controller.CutsContainerController
+import controller.CutsContainerControllerImpl
+import controller.ShapesController
 import destroy
 import kotlinx.css.*
 import model.Cut
@@ -17,43 +20,44 @@ import react.*
 import repository.ResearchRepository
 import research.cut.CutContainer
 import research.cut.cutContainer
-import research.gridcontainer.GridContainerViewComponent.GridContainerStyles.columnOfRowsStyle
-import research.gridcontainer.GridContainerViewComponent.GridContainerStyles.rowOfColumnsStyle
+import research.gridcontainer.CutsContainerViewComponent.GridContainerStyles.columnOfRowsStyle
+import research.gridcontainer.CutsContainerViewComponent.GridContainerStyles.rowOfColumnsStyle
 import resume
 import styled.StyleSheet
 import styled.css
 import styled.styledDiv
-import view.GridContainerView.Model
-import view.initialGridContainerModel
+import view.CutsContainerView.Model
+import view.initialCutsContainerModel
 
-class GridContainerViewComponent(prps: GridContainerProps) :
-  RComponent<GridContainerProps, GridContainerState>(prps) {
+class CutsContainerViewComponent(prps: CutsContainerProps) :
+  RComponent<CutsContainerProps, CutsContainerState>(prps) {
 
-  private val gridViewDelegate = GridContainerViewProxy(::updateState)
+  private val gridViewDelegate = CutsContainerViewProxy(::updateState)
   private val lifecycleRegistry = LifecycleRegistry()
-  private lateinit var controller: GridContainerController
-  private val shapesInputObservable = PublishSubject<ShapesController.Input>()
+  private val cutsInputObservable = PublishSubject<CutController.Input>()
+  private lateinit var controller: CutsContainerController
   private val disposable = CompositeDisposable()
 
   init {
-    state = GridContainerState(initialGridContainerModel())
+    state = CutsContainerState(initialCutsContainerModel())
   }
 
   override fun componentDidMount() {
     lifecycleRegistry.resume()
     controller = createController()
     val dependencies = props.dependencies
-    disposable.add(dependencies.gridContainerInputs.subscribe { controller.input(it) })
+    disposable.add(dependencies.cutsContainerInputs.subscribe { controller::input })
+    disposable.add(dependencies.cutsInput.subscribe { cutsInputObservable::onNext })
     controller.onViewCreated(gridViewDelegate, lifecycleRegistry)
   }
 
-  private fun createController(): GridContainerController {
+  private fun createController(): CutsContainerController {
     val dependencies = props.dependencies
     val researchControllerDependencies =
-      object : GridContainerController.Dependencies, Dependencies by dependencies {
+      object : CutsContainerController.Dependencies, Dependencies by dependencies {
         override val lifecycle: Lifecycle = lifecycleRegistry
       }
-    return GridContainerControllerImpl(researchControllerDependencies)
+    return CutsContainerControllerImpl(researchControllerDependencies)
   }
 
   override fun RBuilder.render() {
@@ -141,38 +145,16 @@ class GridContainerViewComponent(prps: GridContainerProps) :
     object : CutContainer.Dependencies, Dependencies by props.dependencies {
       override val cut: Cut = cut
       override val cutOutput: (CutController.Output) -> Unit = ::cutOutput
-      override val shapesOutput: (ShapesController.Output) -> Unit = ::shapesOutput
-      override val drawOutput: (DrawController.Output) -> Unit = ::drawOutput
-      override val shapesInput: Observable<ShapesController.Input> = this@GridContainerViewComponent.shapesInputObservable
     }
 
   private fun cutOutput(output: CutController.Output) {
     when (output) {
-      is CutController.Output.SliceNumberChanged -> shapesInputObservable.onNext(
-        ShapesController.Input.ExternalSliceNumberChanged(output.sliceNumber, output.cut)
-      )
-//      is CutController.Output.BrightnessChanged -> TODO()
-    }
-  }
-
-  private fun shapesOutput(output: ShapesController.Output) {
-//    when (output) {
-//      is CutController.Output.SliceNumberChanged -> TODO()
-//      is CutController.Output.BrightnessChanged -> TODO()
-//    }
-  }
-
-  private fun drawOutput(output: DrawController.Output) {
-    when (output) {
-      is DrawController.Output.OnClick -> TODO()
-      is DrawController.Output.ChangeContrastBrightness -> TODO()
-      is DrawController.Output.Drawing ->
-        shapesInputObservable.onNext(ShapesController.Input.Drawing(output.circle, output.cutType))
-      is DrawController.Output.StartMoving -> TODO()
-      is DrawController.Output.MousePosition ->
-        shapesInputObservable.onNext(ShapesController.Input.MousePosition(output.dicomX, output.dicomY, output.cutType))
-      is DrawController.Output.Drawn -> TODO()
-      is DrawController.Output.ChangeSlice -> TODO()
+      is CutController.Output.SliceNumberChanged -> {
+        //notify other cuts
+        cutsInputObservable.onNext(
+          CutController.Input.ExternalSliceNumberChanged(output.sliceNumber, output.cut)
+        )
+      }
     }
   }
 
@@ -186,7 +168,8 @@ class GridContainerViewComponent(prps: GridContainerProps) :
   interface Dependencies {
     val storeFactory: StoreFactory
     val data: ResearchSlicesSizesData
-    val gridContainerInputs: Observable<GridContainerController.Input>
+    val cutsContainerInputs: Observable<CutsContainerController.Input>
+    val cutsContainerOutput: (CutsContainerController.Output) -> Unit
     val cutsInput: Observable<CutController.Input>
     val researchRepository: ResearchRepository
     val researchId: Int
@@ -208,16 +191,16 @@ class GridContainerViewComponent(prps: GridContainerProps) :
   }
 }
 
-class GridContainerState(
+class CutsContainerState(
   var cutsModel: Model
 ) : RState
 
-interface GridContainerProps : RProps {
-  var dependencies: GridContainerViewComponent.Dependencies
+interface CutsContainerProps : RProps {
+  var dependencies: CutsContainerViewComponent.Dependencies
 }
 
-fun RBuilder.cuts(dependencies: GridContainerViewComponent.Dependencies) = child(
-  GridContainerViewComponent::class
+fun RBuilder.cuts(dependencies: CutsContainerViewComponent.Dependencies) = child(
+  CutsContainerViewComponent::class
 ) {
   attrs.dependencies = dependencies
 }

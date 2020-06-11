@@ -8,7 +8,7 @@ import com.badoo.reaktive.subject.publish.PublishSubject
 import com.ccfraser.muirwik.components.spacingUnits
 import components.loading
 import controller.CutController
-import controller.GridContainerController
+import controller.CutsContainerController
 import controller.ResearchController
 import controller.ResearchControllerImpl
 import controller.ToolsController.Output
@@ -18,7 +18,7 @@ import model.ResearchSlicesSizesData
 import react.*
 import repository.ResearchRepository
 import research.ResearchScreen.ResearchStyles.appFrameContainerStyle
-import research.gridcontainer.GridContainerViewComponent
+import research.gridcontainer.CutsContainerViewComponent
 import research.gridcontainer.cuts
 import research.tools.ToolsViewComponent
 import research.tools.tools
@@ -37,7 +37,7 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
   private val lifecycleRegistry = LifecycleRegistry()
   private lateinit var controller: ResearchController
 
-  private val gridContainerInputObservable = PublishSubject<GridContainerController.Input>()
+  private val cutsContainerInputObservable = PublishSubject<CutsContainerController.Input>()
   private val cutsInputObservable = PublishSubject<CutController.Input>()
 
 //  private var gridContainerInputObserver: Observer<GridContainerController.Input>? = null
@@ -89,10 +89,11 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
         mainContent(
           margiLeft = if (state.toolsOpen) drawerWidth.px else 7.spacingUnits
         ) {
-          cuts(dependencies = object : GridContainerViewComponent.Dependencies,
+          cuts(dependencies = object : CutsContainerViewComponent.Dependencies,
             Dependencies by props.dependencies {
             override val data: ResearchSlicesSizesData = model.data!!
-            override val gridContainerInputs: Observable<GridContainerController.Input> = this@ResearchScreen.gridContainerInputObservable
+            override val cutsContainerInputs: Observable<CutsContainerController.Input> = this@ResearchScreen.cutsContainerInputObservable
+            override val cutsContainerOutput: (CutsContainerController.Output) -> Unit = ::gridOutput
             override val cutsInput: Observable<CutController.Input> = this@ResearchScreen.cutsInputObservable
           })
         }
@@ -122,8 +123,20 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
       is Output.PresetChanged ->
         cutsInputObservable.onNext(CutController.Input.PresetChanged(output.preset))
       is Output.GridChanged ->
-        gridContainerInputObservable.onNext(GridContainerController.Input.GridChanged(output.grid))
+        cutsContainerInputObservable.onNext(CutsContainerController.Input.GridChanged(output.grid))
       is Output.Close -> researchViewDelegate.dispatch(ResearchView.Event.Close)
+    }
+  }
+
+  private fun gridOutput(output: CutsContainerController.Output) {
+    when (output) {
+      is CutsContainerController.Output.OpenFullCut -> TODO()
+      is CutsContainerController.Output.CloseFullCut -> TODO()
+      is CutsContainerController.Output.HandleNewArea -> {
+        researchViewDelegate.dispatch(
+          ResearchView.Event.NewArea(output.circle, output.sliceNumber, output.cut)
+        )
+      }
     }
   }
 

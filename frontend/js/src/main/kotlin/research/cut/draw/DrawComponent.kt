@@ -1,12 +1,6 @@
 package research.cut.draw
 
-import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
-import com.arkivanov.mvikotlin.core.lifecycle.LifecycleRegistry
-import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.ccfraser.muirwik.components.themeContext
-import controller.DrawController
-import controller.DrawControllerImpl
-import destroy
 import kotlinx.css.*
 import kotlinx.html.classes
 import kotlinx.html.js.*
@@ -18,14 +12,15 @@ import org.w3c.dom.events.Event
 import org.w3c.dom.events.MouseEvent
 import org.w3c.dom.events.WheelEvent
 import org.w3c.dom.get
-import react.*
-import resume
+import react.RBuilder
+import react.RComponent
+import react.RProps
+import react.RState
 import root.debugLog
 import styled.css
 import styled.styledCanvas
 import styled.styledDiv
 import view.DrawView
-import view.initialDrawModel
 import kotlin.browser.document
 import kotlin.math.PI
 import kotlin.math.pow
@@ -33,23 +28,13 @@ import kotlin.math.sqrt
 
 class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
 
-  private val drawViewDelegate = DrawViewProxy(::updateState)
-  private val lifecycleRegistry = LifecycleRegistry()
-  private lateinit var controller: DrawController
   private var resultWidth: Int = 0
   private var resultHeight: Int = 0
   private var horizontalRatio: Double = 0.0
   private var verticalRatio: Double = 0.0
   private var radiusRatio: Double = 0.0
 
-  init {
-    state = DrawState(initialDrawModel())
-  }
-
   override fun componentDidMount() {
-    lifecycleRegistry.resume()
-    controller = createController()
-    controller.onViewCreated(drawViewDelegate, lifecycleRegistry)
     updateCanvas()
   }
 
@@ -57,17 +42,8 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
     updateCanvas()
   }
 
-  private fun createController(): DrawController {
-    val dependencies = props.dependencies
-    val cutControllerDependencies =
-      object : DrawController.Dependencies, Dependencies by dependencies {
-        override val lifecycle: Lifecycle = lifecycleRegistry
-      }
-    return DrawControllerImpl(cutControllerDependencies)
-  }
-
   private fun updateCanvas() {
-    val circle = state.drawModel.circle
+    val circle = props.drawModel.circle
     if (circle != null) {
       draw(circle)
     } else {
@@ -76,23 +52,22 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
   }
 
   override fun RBuilder.render() {
-    val altBuilder = RBuilder()
     themeContext.Consumer { theme ->
-      val dicomWidth = props.dependencies.cut.verticalCutData.data.maxFramesSize
-      val dicomHeight = props.dependencies.cut.data!!.height
+      val dicomWidth = props.cut.verticalCutData.data.maxFramesSize
+      val dicomHeight = props.cut.data!!.height
       val ri = dicomWidth.toDouble() / dicomHeight
-      val rs = props.dependencies.width.toDouble() / props.dependencies.height
+      val rs = props.width.toDouble() / props.height
       if (rs > ri) {
         debugLog("rs > ri")
-        resultWidth = dicomWidth * props.dependencies.height / dicomHeight
-        resultHeight = props.dependencies.height
+        resultWidth = dicomWidth * props.height / dicomHeight
+        resultHeight = props.height
       } else {
         debugLog("rs <= ri")
-        resultWidth = props.dependencies.width
-        resultHeight = dicomHeight * props.dependencies.width / dicomWidth
+        resultWidth = props.width
+        resultHeight = dicomHeight * props.width / dicomWidth
       }
-      val mTop = props.dependencies.height - resultHeight
-      val mLeft = props.dependencies.width - resultWidth
+      val mTop = props.height - resultHeight
+      val mLeft = props.width - resultWidth
       val resultTop = if (mTop <= 0) 0 else mTop / 2
       val resultLeft = if (mLeft <= 0) 0 else mLeft / 2
       horizontalRatio = dicomHeight.toDouble() / resultHeight
@@ -111,13 +86,13 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
         }
         styledCanvas {
           attrs {
-            classes += "draw_canvas_${props.dependencies.cut.type.intType}"
+            classes += "draw_canvas_${props.cut.type.intType}"
             width = resultWidth.toString()
             height = resultHeight.toString()
             onMouseDownFunction = { event ->
               val mouseEvent = event.asDynamic().nativeEvent as MouseEvent
               val rect = (mouseEvent.target as HTMLCanvasElement).getBoundingClientRect()
-              drawViewDelegate.dispatch(
+              props.eventOutput(
                 DrawView.Event.MouseDown(
                   x = (mouseEvent.clientX - rect.left) * verticalRatio,
                   y = (mouseEvent.clientY - rect.top) * horizontalRatio,
@@ -131,7 +106,7 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
             onMouseMoveFunction = { event ->
               val mouseEvent = event.asDynamic().nativeEvent as MouseEvent
               val rect = (mouseEvent.target as HTMLCanvasElement).getBoundingClientRect()
-              drawViewDelegate.dispatch(
+              props.eventOutput(
                 DrawView.Event.MouseMove(
                   x = (mouseEvent.clientX - rect.left) * verticalRatio,
                   y = (mouseEvent.clientY - rect.top) * horizontalRatio
@@ -142,7 +117,7 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
             onMouseUpFunction = {
               val mouseEvent = castEvent(it)
               val rect = (mouseEvent.target as HTMLCanvasElement).getBoundingClientRect()
-              drawViewDelegate.dispatch(
+              props.eventOutput(
                 DrawView.Event.MouseUp(
                   x = (mouseEvent.clientX - rect.left) * verticalRatio,
                   y = (mouseEvent.clientY - rect.top) * horizontalRatio
@@ -151,13 +126,13 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
             }
 
             onMouseOutFunction = {
-              drawViewDelegate.dispatch(DrawView.Event.MouseOut)
+              props.eventOutput(DrawView.Event.MouseOut)
             }
 
             onClickFunction = {
               val mouseEvent = castEvent(it)
               val rect = (mouseEvent.target as HTMLCanvasElement).getBoundingClientRect()
-              drawViewDelegate.dispatch(
+              props.eventOutput(
                 DrawView.Event.MouseClick(
                   x = (mouseEvent.clientX - rect.left) * verticalRatio,
                   y = (mouseEvent.clientY - rect.top) * horizontalRatio,
@@ -169,7 +144,7 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
 
             onWheelFunction = {
               val wheelEvent = it.asDynamic().nativeEvent as WheelEvent
-              drawViewDelegate.dispatch(DrawView.Event.MouseWheel(wheelEvent.deltaY))
+              props.eventOutput(DrawView.Event.MouseWheel(wheelEvent.deltaY))
             }
           }
         }
@@ -179,7 +154,8 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
 
   private fun draw(circle: Circle?) {
     circle?.let {
-      val canvas = document.getElementsByClassName("draw_canvas_${props.dependencies.cut.type.intType}")[0] as HTMLCanvasElement
+      debugLog("circle = $circle")
+      val canvas = document.getElementsByClassName("draw_canvas_${props.cut.type.intType}")[0] as HTMLCanvasElement
       val context = canvas.getContext("2d") as CanvasRenderingContext2D
       context.clearRect(
         0.0,
@@ -204,7 +180,7 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
 
 
   private fun clearCanvas() {
-    val canvas = document.getElementsByClassName("draw_canvas_${props.dependencies.cut.type.intType}")[0] as HTMLCanvasElement
+    val canvas = document.getElementsByClassName("draw_canvas_${props.cut.type.intType}")[0] as HTMLCanvasElement
     val context = canvas.getContext("2d") as CanvasRenderingContext2D
     context.clearRect(
       0.0,
@@ -214,31 +190,31 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
     )
   }
 
-  private fun updateState(model: DrawView.Model) = setState { drawModel = model }
   private fun castEvent(it: Event): MouseEvent = it.asDynamic().nativeEvent as MouseEvent
-  override fun componentWillUnmount() = lifecycleRegistry.destroy()
-
-  interface Dependencies {
-    val storeFactory: StoreFactory
-    val cut: Cut
-    val drawOutput: (DrawController.Output) -> Unit
-    val researchId: Int
-    val height: Int
-    val width: Int
-  }
 
 }
 
 class DrawState(
-  var drawModel: DrawView.Model
 ) : RState
 
 interface DrawProps : RProps {
-  var dependencies: DrawComponent.Dependencies
+  var cut: Cut
+  var width: Int
+  var height: Int
+  var drawModel: DrawView.Model
+  var eventOutput: (DrawView.Event) -> Unit
 }
 
 fun RBuilder.drawView(
-  dependencies: DrawComponent.Dependencies,
+  cut: Cut,
+  width: Int,
+  height: Int,
+  drawModel: DrawView.Model,
+  eventOutput: (DrawView.Event) -> Unit
 ) = child(DrawComponent::class) {
-  attrs.dependencies = dependencies
+  attrs.cut = cut
+  attrs.width = width
+  attrs.height = height
+  attrs.drawModel = drawModel
+  attrs.eventOutput = eventOutput
 }

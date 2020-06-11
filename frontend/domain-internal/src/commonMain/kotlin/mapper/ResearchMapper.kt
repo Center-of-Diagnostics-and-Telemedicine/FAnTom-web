@@ -17,6 +17,7 @@ val researchEventToResearchIntent: Event.() -> Intent? = {
     Event.DismissError -> Intent.DismissError
     Event.Reload -> Intent.ReloadRequested
     Event.Close -> null
+    is Event.NewArea -> Intent.HandleNewArea(circle, sliceNumber, cut)
   }
 }
 
@@ -25,6 +26,7 @@ val researchEventToOutput: Event.() -> Output? = {
     is Event.Close -> Output.Close
     is Event.Reload,
     is Event.DismissError,
+    is Event.NewArea
     -> null
   }
 }

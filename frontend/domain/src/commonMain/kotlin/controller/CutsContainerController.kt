@@ -2,17 +2,18 @@ package controller
 
 import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.store.StoreFactory
+import model.Circle
 import model.Cut
 import model.Grid
 import model.ResearchSlicesSizesData
-import view.GridContainerView
+import view.CutsContainerView
 
-interface GridContainerController {
+interface CutsContainerController {
 
   val input: (Input) -> Unit
 
   fun onViewCreated(
-    gridContainerView: GridContainerView,
+    cutsContainerView: CutsContainerView,
     viewLifecycle: Lifecycle
   )
 
@@ -29,5 +30,6 @@ interface GridContainerController {
   sealed class Output {
     data class OpenFullCut(val cut: Cut) : Output()
     data class CloseFullCut(val cut: Cut) : Output()
+    data class HandleNewArea(val circle: Circle, val sliceNumber: Int, val cut: Cut) : Output()
   }
 }

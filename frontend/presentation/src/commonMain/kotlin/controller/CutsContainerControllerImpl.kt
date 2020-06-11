@@ -8,26 +8,26 @@ import com.arkivanov.mvikotlin.extensions.reaktive.states
 import com.badoo.reaktive.observable.mapNotNull
 import com.badoo.reaktive.subject.Relay
 import com.badoo.reaktive.subject.publish.PublishSubject
-import mapper.gridContainerStateToGridContainerModel
-import mapper.inputToGridContainerIntent
-import store.GridContainerStoreFactory
-import view.GridContainerView
+import mapper.CutsContainerStateToCutsContainerModel
+import mapper.inputToCutsContainerIntent
+import store.CutsContainerStoreFactory
+import view.CutsContainerView
 
-class GridContainerControllerImpl(val dependencies: GridContainerController.Dependencies) :
-  GridContainerController {
+class CutsContainerControllerImpl(val dependencies: CutsContainerController.Dependencies) :
+  CutsContainerController {
 
-  private val inputRelay: Relay<GridContainerController.Input> = PublishSubject()
-  override val input: (GridContainerController.Input) -> Unit = inputRelay::onNext
+  private val inputRelay: Relay<CutsContainerController.Input> = PublishSubject()
+  override val input: (CutsContainerController.Input) -> Unit = inputRelay::onNext
 
   private val gridContainerStore =
-    GridContainerStoreFactory(
+    CutsContainerStoreFactory(
       storeFactory = dependencies.storeFactory,
       data = dependencies.data
     ).create()
 
   init {
     bind(dependencies.lifecycle, BinderLifecycleMode.CREATE_DESTROY) {
-      inputRelay.mapNotNull(inputToGridContainerIntent) bindTo gridContainerStore
+      inputRelay.mapNotNull(inputToCutsContainerIntent) bindTo gridContainerStore
     }
 
 
@@ -36,13 +36,13 @@ class GridContainerControllerImpl(val dependencies: GridContainerController.Depe
     }
   }
 
-  override fun onViewCreated(gridContainerView: GridContainerView, viewLifecycle: Lifecycle) {
+  override fun onViewCreated(cutsContainerView: CutsContainerView, viewLifecycle: Lifecycle) {
 //    bind(viewLifecycle, BinderLifecycleMode.CREATE_DESTROY) {
 //      gridContainerView.events.mapNotNull(gridContainerEventToGridIntent) bindTo gridContainerStore
 //    }
 
     bind(viewLifecycle, BinderLifecycleMode.START_STOP) {
-      gridContainerStore.states.mapNotNull(gridContainerStateToGridContainerModel) bindTo gridContainerView
+      gridContainerStore.states.mapNotNull(CutsContainerStateToCutsContainerModel) bindTo cutsContainerView
     }
   }
 }

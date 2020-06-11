@@ -4,9 +4,9 @@ import com.arkivanov.mvikotlin.core.view.MviView
 import model.Cut
 import model.Grid
 import model.initialFourGrid
-import view.GridContainerView.Model
+import view.CutsContainerView.Model
 
-interface GridContainerView : MviView<Model, Nothing> {
+interface CutsContainerView : MviView<Model, Nothing> {
 
   data class Model(
     val items: List<Cut>,
@@ -14,7 +14,7 @@ interface GridContainerView : MviView<Model, Nothing> {
   )
 }
 
-fun initialGridContainerModel(): Model = Model(
+fun initialCutsContainerModel(): Model = Model(
   items = listOf(),
   grid = initialFourGrid()
 )

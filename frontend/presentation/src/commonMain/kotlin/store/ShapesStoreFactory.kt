@@ -3,10 +3,10 @@ package store
 import com.arkivanov.mvikotlin.core.store.Executor
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
-import model.*
+import model.Cut
+import model.getPosition
 import repository.ResearchRepository
-import store.shapes.ShapesStore.Intent
-import store.shapes.ShapesStore.State
+import store.shapes.ShapesStore.*
 import store.shapes.ShapesStoreAbstractFactory
 
 internal class ShapesStoreFactory(
@@ -19,7 +19,7 @@ internal class ShapesStoreFactory(
   cut = cut,
   researchId = researchId
 ) {
-  override fun createExecutor(): Executor<Intent, Nothing, State, Result, Nothing> = ExecutorImpl()
+  override fun createExecutor(): Executor<Intent, Nothing, State, Result, Label> = ExecutorImpl()
 
   private inner class ExecutorImpl :
     ReaktiveExecutor<Intent, Nothing, State, Result, Nothing>() {
@@ -32,15 +32,9 @@ internal class ShapesStoreFactory(
         is Intent.HandleMousePosition -> handleMousePosition(
           intent.dicomX,
           intent.dicomY,
-          intent.cutType,
           getState
         )
-        is Intent.HandleDrawing -> handleDrawing(intent.circle, intent.cutType)
       }.let {}
-    }
-
-    private fun handleDrawing(circle: Circle, externalCutType: CutType) {
-      cut.buildCircle(circle, externalCutType)
     }
 
     private fun handleExternalSliceNumberChanged(
@@ -68,18 +62,15 @@ internal class ShapesStoreFactory(
     private fun handleMousePosition(
       dicomX: Double,
       dicomY: Double,
-      cutType: CutType,
       getState: () -> State
     ) {
-      if (cut.type == cutType) {
-        println("x = $dicomX,y = $dicomY, sliceNumber = ${getState().sliceNumber} ")
-        val position = cut.getPosition(
-          dicomX = dicomX,
-          dicomY = dicomY,
-          sliceNumber = getState().sliceNumber
-        )
-        dispatch(Result.PointPositionChanged(position = position))
-      }
+      println("x = $dicomX,y = $dicomY, sliceNumber = ${getState().sliceNumber} ")
+      val position = cut.getPosition(
+        dicomX = dicomX,
+        dicomY = dicomY,
+        sliceNumber = getState().sliceNumber
+      )
+      dispatch(Result.PointPositionChanged(position = position))
     }
   }
 

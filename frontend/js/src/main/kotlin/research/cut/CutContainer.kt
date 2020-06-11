@@ -7,8 +7,6 @@ import com.badoo.reaktive.observable.subscribe
 import com.badoo.reaktive.subject.publish.PublishSubject
 import controller.CutController
 import controller.CutController.Input
-import controller.DrawController
-import controller.ShapesController
 import controller.SliderController
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -22,10 +20,6 @@ import repository.ResearchRepository
 import research.cut.CutContainer.CutContainerStyles.blackContainerStyle
 import research.cut.CutContainer.CutContainerStyles.cutContainerStyle
 import research.cut.CutContainer.CutContainerStyles.cutStyle
-import research.cut.draw.DrawComponent
-import research.cut.draw.drawView
-import research.cut.shapes.ShapesComponent
-import research.cut.shapes.shapesView
 import research.cut.slider.SliderComponent
 import research.cut.slider.sliderView
 import styled.StyleSheet
@@ -37,7 +31,6 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
 
   private var testRef: Element? = null
   private val cutsInput = PublishSubject<Input>()
-  private val shapesInput = PublishSubject<ShapesController.Input>()
   private val disposable = CompositeDisposable()
 
   init {
@@ -45,11 +38,8 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
   }
 
   override fun componentDidMount() {
-    disposable.add(props.dependencies.cutsInput.subscribe(onNext = cutsInput::onNext))
-    disposable.add(props.dependencies.shapesInput.subscribe(onNext = shapesInput::onNext))
-    window.addEventListener(type = "resize", callback = {
-      callToRenderContent()
-    })
+    disposable.add(props.dependencies.cutsInput.subscribe { cutsInput::onNext })
+    window.addEventListener(type = "resize", callback = { callToRenderContent() })
   }
 
   override fun componentDidUpdate(
@@ -102,46 +92,16 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
 
   private fun renderContent(clientHeight: Int, clientWidth: Int) {
     react.dom.render(
-      element = RBuilder()
-        //контейнер канвасов
-        .styledDiv {
-          css(CutContainerStyles.canvasContainerStyle)
-          cutView(
-            dependencies = object : CutComponent.Dependencies,
-              Dependencies by props.dependencies {
-              override val cutsInput: Observable<Input> = this@CutContainer.cutsInput
-              override val cutOutput: (CutController.Output) -> Unit = ::cutOutput
-              override val height: Int = clientHeight
-              override val width: Int = clientWidth
-            }
-          )
-          shapesView(
-            dependencies = object : ShapesComponent.Dependencies,
-              Dependencies by props.dependencies {
-              override val height: Int = clientHeight
-              override val width: Int = clientWidth
-              override val shapesInput: Observable<ShapesController.Input> = this@CutContainer.shapesInput
-            }
-          )
-          drawView(
-            dependencies = object : DrawComponent.Dependencies,
-              Dependencies by props.dependencies {
-              override val height: Int = clientHeight
-              override val width: Int = clientWidth
-            }
-          )
-        }.asElementOrNull(),
+      RBuilder().cut(
+        dependencies = object : CutParentComponent.Dependencies,
+          Dependencies by props.dependencies {
+          override val cutsInput: Observable<Input> = this@CutContainer.cutsInput
+          override val height: Int = clientHeight
+          override val width: Int = clientWidth
+        }
+      ).asElementOrNull(),
       container = testRef
     )
-  }
-
-  private fun cutOutput(output: CutController.Output) {
-    when (output) {
-      is CutController.Output.SliceNumberChanged -> {
-        shapesInput.onNext(ShapesController.Input.SliceNumberChanged(output.sliceNumber))
-      }
-    }
-    props.dependencies.cutOutput(output)
   }
 
   private fun sliderOutput(output: SliderController.Output) {
@@ -157,10 +117,7 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
     val storeFactory: StoreFactory
     val cut: Cut
     val cutsInput: Observable<Input>
-    val shapesInput: Observable<ShapesController.Input>
     val cutOutput: (CutController.Output) -> Unit
-    val shapesOutput: (ShapesController.Output) -> Unit
-    val drawOutput: (DrawController.Output) -> Unit
     val researchRepository: ResearchRepository
     val researchId: Int
   }
@@ -180,13 +137,6 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
       background = "#000"
       textAlign = TextAlign.center
       position = Position.relative
-    }
-
-    val canvasContainerStyle by css {
-      position = Position.absolute
-      top = 0.px
-      left = 0.px
-      display = Display.flex
     }
     val cutStyle by css {
       flex(1.0)

@@ -4,10 +4,10 @@ import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import model.Cut
 import model.Grid
-import store.gridcontainer.GridContainerStore.Intent
-import store.gridcontainer.GridContainerStore.State
+import store.gridcontainer.CutsContainerStore.Intent
+import store.gridcontainer.CutsContainerStore.State
 
-interface GridContainerStore : Store<Intent, State, Nothing> {
+interface CutsContainerStore : Store<Intent, State, Nothing> {
 
   sealed class Intent : JvmSerializable {
     data class HandleGridChanged(val grid: Grid) : Intent()

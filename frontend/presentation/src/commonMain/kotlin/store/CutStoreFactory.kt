@@ -65,6 +65,10 @@ internal class CutStoreFactory(
           dispatch(Result.PresetChanged(black = intent.presets.black, white = intent.presets.white))
           load(getState)
         }
+        is Intent.HandleCircleDrawn -> TODO()
+        is Intent.HandleExternalSliceNumberChanged -> {
+          publish(Label.ExternalSliceNumberChanged(intent.externalCut, intent.sliceNumber))
+        }
       }.let {}
     }
 

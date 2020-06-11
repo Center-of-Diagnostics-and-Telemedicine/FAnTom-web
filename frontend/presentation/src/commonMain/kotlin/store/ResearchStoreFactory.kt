@@ -9,6 +9,8 @@ import com.badoo.reaktive.scheduler.mainScheduler
 import com.badoo.reaktive.single.map
 import com.badoo.reaktive.single.observeOn
 import com.badoo.reaktive.single.subscribeOn
+import model.Circle
+import model.Cut
 import model.RESEARCH_DATA_FETCH_FAILED
 import model.ResearchApiExceptions
 import repository.ResearchRepository
@@ -33,7 +35,23 @@ internal class ResearchStoreFactory(
         Intent.DismissError -> dispatch(Result.DismissErrorRequested)
         Intent.ReloadRequested -> load()
         Intent.CloseRequested -> TODO()
+        is Intent.HandleNewArea -> handleNewArea(intent.circle, intent.sliceNumber, intent.cut)
       }.let {}
+    }
+
+    private fun handleNewArea(circle: Circle, sliceNumber: Int, cut: Cut) {
+//      val areaToSave = circle.toArea()
+//      singleFromCoroutine {
+//        repository.(researchId = researchId)
+//      }
+//        .subscribeOn(ioScheduler)
+//        .map(Result::Loaded)
+//        .observeOn(mainScheduler)
+//        .subscribeScoped(
+//          isThreadLocal = true,
+//          onSuccess = ::dispatch,
+//          onError = ::handleError
+//        )
     }
 
     private fun load() {

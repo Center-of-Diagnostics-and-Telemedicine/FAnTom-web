@@ -2,6 +2,7 @@ package store.cut
 
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
+import model.Circle
 import model.Cut
 import model.Mip
 import model.Presets
@@ -17,6 +18,9 @@ interface CutStore : Store<Intent, State, Label> {
     data class HandleMipChanged(val mip: Mip) : Intent()
     data class HandleMipValueChanged(val mipValue: Int) : Intent()
     data class HandlePresetChanged(val presets: Presets) : Intent()
+    data class HandleCircleDrawn(val circle: Circle) : Intent()
+    data class HandleExternalSliceNumberChanged(val externalCut: Cut, val sliceNumber: Int) :
+      Intent()
   }
 
   data class State(
@@ -33,5 +37,6 @@ interface CutStore : Store<Intent, State, Label> {
 
   sealed class Label {
     data class SliceNumberChanged(val sliceNumber: Int, val cut: Cut) : Label()
+    data class ExternalSliceNumberChanged(val externalCut: Cut, val sliceNumber: Int) : Label()
   }
 }

@@ -3,6 +3,8 @@ package mapper
 import controller.CutController.Input
 import controller.CutController.Output
 import store.cut.CutStore.*
+import store.draw.DrawStore
+import store.shapes.ShapesStore
 import view.CutView.Model
 
 val cutStateToCutModel: State.() -> Model? = {
@@ -21,11 +23,31 @@ val inputToCutIntent: Input.() -> Intent = {
     is Input.MipValueChanged -> Intent.HandleMipValueChanged(mipValue = value)
     is Input.PresetChanged -> Intent.HandlePresetChanged(presets = preset)
     is Input.SliceNumberChanged -> Intent.HandleSliceNumberChange(sliceNumber = sliceNumber)
+    is Input.ExternalSliceNumberChanged ->
+      Intent.HandleExternalSliceNumberChanged(externalCut = cut, sliceNumber = sliceNumber)
   }
 }
 
-val cutLabelToCutOutput: Label.() -> Output = {
+val cutLabelToCutOutput: Label.() -> Output? = {
   when (this) {
     is Label.SliceNumberChanged -> Output.SliceNumberChanged(sliceNumber, cut)
+    is Label.ExternalSliceNumberChanged -> null
+  }
+}
+
+val drawLabelToCutIntent: DrawStore.Label.() -> Intent? = {
+  when (this) {
+    is DrawStore.Label.Drawn -> Intent.HandleCircleDrawn(circle = circle)
+    is DrawStore.Label.StartMove -> null
+    is DrawStore.Label.ChangeContrastBrightness -> null
+    is DrawStore.Label.MouseMove -> null
+    is DrawStore.Label.OnClick -> null
+    is DrawStore.Label.ChangeSlice -> null
+  }
+}
+
+val shapesLabelToCutIntent: ShapesStore.Label.() -> Intent? = {
+  when (this) {
+
   }
 }

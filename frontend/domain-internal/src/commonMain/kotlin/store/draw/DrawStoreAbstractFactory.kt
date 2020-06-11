@@ -44,6 +44,7 @@ abstract class DrawStoreAbstractFactory(
   protected sealed class Result : JvmSerializable {
     class StartDraw(val startDicomX: Double, val startDicomY: Double) : Result()
     class Drawing(val newDicomX: Double, val newDicomY: Double) : Result()
+    class ExternalDrawing(val dicomX: Double, val dicomY: Double) : Result()
     class StartContrastBrightness(val startDicomX: Double, val startDicomY: Double) : Result()
     class ContrastBrightness(val dicomX: Double, val dicomY: Double) : Result()
     class StartMove(val startDicomX: Double, val startDicomY: Double) : Result()
@@ -90,6 +91,9 @@ abstract class DrawStoreAbstractFactory(
           isContrastBrightness = false,
           isMoving = false
         )
+        is Result.ExternalDrawing -> {
+          copy(dicomRadius = sqrt((result.dicomX).pow(2) + (result.dicomY).pow(2)))
+        }
       }
   }
 }

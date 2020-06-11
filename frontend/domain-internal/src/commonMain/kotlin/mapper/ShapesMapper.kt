@@ -1,22 +1,20 @@
 package mapper
 
-import controller.ShapesController.Input
-import controller.ShapesController.Output
+import store.cut.CutStore
+import store.draw.DrawStore
 import store.shapes.ShapesStore.Intent
 import store.shapes.ShapesStore.State
 import view.ShapesView.Event
 import view.ShapesView.Model
 
-val inputToShapesIntent: Input.() -> Intent = {
-  when (this) {
-    is Input.SliceNumberChanged -> Intent.HandleSliceNumberChange(sliceNumber)
-    is Input.ExternalSliceNumberChanged -> Intent.HandleExternalSliceNumberChanged(sliceNumber, cut)
-    is Input.MousePosition ->
-      Intent.HandleMousePosition(dicomX = dicomX, dicomY = dicomY, cutType = cutType)
-    is Input.Drawing ->
-      Intent.HandleDrawing(circle = circle, cutType = cutType)
-  }
-}
+//val inputToShapesIntent: Input.() -> Intent = {
+//  when (this) {
+//    is Input.SliceNumberChanged -> Intent.HandleSliceNumberChange(sliceNumber)
+//    is Input.ExternalSliceNumberChanged -> Intent.HandleExternalSliceNumberChanged(sliceNumber, cut)
+//    is Input.MousePosition ->
+//      Intent.HandleMousePosition(dicomX = dicomX, dicomY = dicomY, cutType = cutType)
+//  }
+//}
 
 val shapesEventToShapesIntent: Event.() -> Intent = {
   when (this) {
@@ -34,8 +32,28 @@ val shapesStateToShapesModel: State.() -> Model = {
   )
 }
 
-val shapesEventToOutput: Event.() -> Output = {
+//val shapesEventToOutput: Event.() -> Output = {
+//  when (this) {
+//    is Event.CutTypeOnChange -> TODO()
+//  }
+//}
+
+val drawLabelToShapesIntent: DrawStore.Label.() -> Intent? = {
   when (this) {
-    is Event.CutTypeOnChange -> TODO()
+    is DrawStore.Label.MouseMove -> Intent.HandleMousePosition(dicomX, dicomY)
+    is DrawStore.Label.StartMove -> null
+    is DrawStore.Label.ChangeContrastBrightness -> TODO()
+    is DrawStore.Label.Drawn -> TODO()
+    is DrawStore.Label.OnClick -> TODO()
+    is DrawStore.Label.ChangeSlice -> TODO()
+  }
+}
+
+val cutLabelToShapesIntent: CutStore.Label.() -> Intent? = {
+  when (this) {
+    is CutStore.Label.SliceNumberChanged -> Intent.HandleSliceNumberChange(sliceNumber)
+    is CutStore.Label.ExternalSliceNumberChanged -> {
+      Intent.HandleExternalSliceNumberChanged(sliceNumber, externalCut)
+    }
   }
 }

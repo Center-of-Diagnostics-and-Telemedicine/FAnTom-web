@@ -10,6 +10,7 @@ import model.Cut
 import model.PointPosition
 import store.shapes.ShapesStore.Intent
 import store.shapes.ShapesStore.State
+import store.shapes.ShapesStore.Label
 
 abstract class ShapesStoreAbstractFactory(
   private val storeFactory: StoreFactory,
@@ -26,7 +27,7 @@ abstract class ShapesStoreAbstractFactory(
 
   fun create(): ShapesStore =
     object : ShapesStore,
-      Store<Intent, State, Nothing> by storeFactory.create(
+      Store<Intent, State, Label> by storeFactory.create(
         name = "ShapesStoreType${cut.type.intType}Id${researchId}",
         initialState = initialState,
         executorFactory = ::createExecutor,
@@ -37,7 +38,7 @@ abstract class ShapesStoreAbstractFactory(
       }
     }
 
-  protected abstract fun createExecutor(): Executor<Intent, Nothing, State, Result, Nothing>
+  protected abstract fun createExecutor(): Executor<Intent, Nothing, State, Result, Label>
 
   protected sealed class Result : JvmSerializable {
     data class SliceNumberChanged(val sliceNumber: Int) : Result()

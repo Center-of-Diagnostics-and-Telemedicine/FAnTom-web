@@ -9,14 +9,14 @@ import com.badoo.reaktive.single.observeOn
 import com.badoo.reaktive.single.singleFromFunction
 import com.badoo.reaktive.single.subscribeOn
 import model.*
-import store.gridcontainer.GridContainerStore.Intent
-import store.gridcontainer.GridContainerStore.State
-import store.gridcontainer.GridContainerStoreAbstractFactory
+import store.gridcontainer.CutsContainerStore.Intent
+import store.gridcontainer.CutsContainerStore.State
+import store.gridcontainer.CutsContainerStoreAbstractFactory
 
-internal class GridContainerStoreFactory(
+internal class CutsContainerStoreFactory(
   storeFactory: StoreFactory,
   data: ResearchSlicesSizesData
-) : GridContainerStoreAbstractFactory(
+) : CutsContainerStoreAbstractFactory(
   storeFactory = storeFactory
 ) {
 

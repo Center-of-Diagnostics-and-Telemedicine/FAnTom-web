@@ -35,23 +35,16 @@ internal class DrawStoreFactory(
           Label.OnClick(
             dicomX = intent.dicomX,
             dicomY = intent.dicomY,
-            altKey = intent.altKey,
-            type = cut.type
+            altKey = intent.altKey
           )
         )
-        is Intent.MouseWheel -> publish(Label.ChangeSlice(intent.deltaDicomY, cutType = cut.type))
+        is Intent.MouseWheel -> publish(Label.ChangeSlice(intent.deltaDicomY))
       }.let {}
     }
 
     private fun handleStartMove(startDicomX: Double, startDicomY: Double) {
       dispatch(Result.StartMove(startDicomX = startDicomX, startDicomY = startDicomY))
-      publish(
-        Label.StartMove(
-          startDicomX = startDicomX,
-          startDicomY = startDicomY,
-          cutType = cut.type
-        )
-      )
+      publish(Label.StartMove(startDicomX = startDicomX, startDicomY = startDicomY))
     }
 
     private fun handleStartContrastBrightness(startDicomX: Double, startDicomY: Double) {
@@ -64,7 +57,7 @@ internal class DrawStoreFactory(
 
     private fun handleMouseOut() {
       dispatch(Result.Idle)
-      publish(Label.MouseMove(-1.0, -1.0, cutType = cut.type))
+      publish(Label.MouseMove(-1.0, -1.0))
     }
 
     private fun handleMouseUp(getState: () -> State) {
@@ -72,7 +65,7 @@ internal class DrawStoreFactory(
       when {
         state.isDrawing -> {
           dispatch(Result.Idle)
-          publish(Label.Drawn(circle = state.circle(), cutType = cut.type))
+          publish(Label.Drawn(circle = state.circle()))
         }
       }
     }
@@ -82,7 +75,6 @@ internal class DrawStoreFactory(
       when {
         state.isDrawing -> {
           dispatch(Result.Drawing(dicomX, dicomY))
-          publish(Label.Drawing(getState().circle(), cutType = cut.type))
         }
         state.isContrastBrightness -> {
           dispatch(Result.ContrastBrightness(dicomX, dicomY))
@@ -95,7 +87,7 @@ internal class DrawStoreFactory(
         }
         else -> {
           dispatch(Result.MouseMove(dicomX, dicomY))
-          publish(Label.MouseMove(dicomX, dicomY, cutType = cut.type))
+          publish(Label.MouseMove(dicomX, dicomY))
         }
       }
     }
