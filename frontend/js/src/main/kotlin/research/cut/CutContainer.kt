@@ -30,7 +30,7 @@ import kotlin.browser.window
 class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
 
   private var testRef: Element? = null
-  private val cutsInput = PublishSubject<Input>()
+  private val cutInput = PublishSubject<Input>()
   private val disposable = CompositeDisposable()
 
   init {
@@ -38,7 +38,7 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
   }
 
   override fun componentDidMount() {
-    disposable.add(props.dependencies.cutsInput.subscribe { cutsInput::onNext })
+    disposable.add(props.dependencies.cutsInput.subscribe { cutInput.onNext(it) })
     window.addEventListener(type = "resize", callback = { callToRenderContent() })
   }
 
@@ -95,7 +95,7 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
       RBuilder().cut(
         dependencies = object : CutParentComponent.Dependencies,
           Dependencies by props.dependencies {
-          override val cutsInput: Observable<Input> = this@CutContainer.cutsInput
+          override val cutsInput: Observable<Input> = this@CutContainer.cutInput
           override val height: Int = clientHeight
           override val width: Int = clientWidth
         }
@@ -107,7 +107,7 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
   private fun sliderOutput(output: SliderController.Output) {
     when (output) {
       is SliderController.Output.SliceNumberChanged ->
-        cutsInput.onNext(Input.SliceNumberChanged(output.sliceNumber))
+        cutInput.onNext(Input.SliceNumberChanged(output.sliceNumber))
     }
   }
 

@@ -10,7 +10,6 @@ import com.badoo.reaktive.subject.publish.PublishSubject
 import controller.CutController
 import controller.CutsContainerController
 import controller.CutsContainerControllerImpl
-import controller.ShapesController
 import destroy
 import kotlinx.css.*
 import model.Cut
@@ -23,6 +22,7 @@ import research.cut.cutContainer
 import research.gridcontainer.CutsContainerViewComponent.GridContainerStyles.columnOfRowsStyle
 import research.gridcontainer.CutsContainerViewComponent.GridContainerStyles.rowOfColumnsStyle
 import resume
+import root.debugLog
 import styled.StyleSheet
 import styled.css
 import styled.styledDiv
@@ -46,8 +46,8 @@ class CutsContainerViewComponent(prps: CutsContainerProps) :
     lifecycleRegistry.resume()
     controller = createController()
     val dependencies = props.dependencies
-    disposable.add(dependencies.cutsContainerInputs.subscribe { controller::input })
-    disposable.add(dependencies.cutsInput.subscribe { cutsInputObservable::onNext })
+    disposable.add(dependencies.cutsContainerInputs.subscribe { controller.input(it) })
+    disposable.add(dependencies.cutsInput.subscribe { cutsInputObservable.onNext(it) })
     controller.onViewCreated(gridViewDelegate, lifecycleRegistry)
   }
 
@@ -145,9 +145,11 @@ class CutsContainerViewComponent(prps: CutsContainerProps) :
     object : CutContainer.Dependencies, Dependencies by props.dependencies {
       override val cut: Cut = cut
       override val cutOutput: (CutController.Output) -> Unit = ::cutOutput
+      override val cutsInput: Observable<CutController.Input> = this@CutsContainerViewComponent.cutsInputObservable
     }
 
   private fun cutOutput(output: CutController.Output) {
+    debugLog("cutOutputIncome $output")
     when (output) {
       is CutController.Output.SliceNumberChanged -> {
         //notify other cuts

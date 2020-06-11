@@ -39,9 +39,7 @@ internal class CutStoreFactory(
           load(getState)
         }
         is Intent.HandleSliceNumberChange -> {
-          publish(
-            Label.SliceNumberChanged(sliceNumber = intent.sliceNumber, cut = cut)
-          )
+          publish(Label.SliceNumberChanged(sliceNumber = intent.sliceNumber, cut = cut))
           dispatch(Result.SliceNumberChanged(sliceNumber = intent.sliceNumber))
           load(getState)
         }
