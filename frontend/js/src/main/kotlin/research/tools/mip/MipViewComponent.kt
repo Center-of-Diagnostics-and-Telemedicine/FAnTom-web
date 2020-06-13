@@ -12,7 +12,7 @@ import kotlinx.css.Display
 import kotlinx.css.display
 import model.Mip
 import react.RBuilder
-import research.tools.ToolsViewComponent
+import research.tools.ToolsComponent
 import styled.css
 import view.MipView
 
@@ -24,7 +24,7 @@ fun RBuilder.renderMip(
   onChange: (Int) -> Unit
 ) {
   mCollapse(show = true) {
-    css(ToolsViewComponent.ToolsStyles.nested)
+    css(ToolsComponent.ToolsStyles.nested)
     mList {
       mListItem {
         mip(

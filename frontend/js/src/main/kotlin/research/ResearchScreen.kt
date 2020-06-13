@@ -20,7 +20,7 @@ import repository.ResearchRepository
 import research.ResearchScreen.ResearchStyles.appFrameContainerStyle
 import research.gridcontainer.CutsContainerViewComponent
 import research.gridcontainer.cuts
-import research.tools.ToolsViewComponent
+import research.tools.ToolsComponent
 import research.tools.tools
 import resume
 import styled.StyleSheet
@@ -47,7 +47,11 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
 //  private val cutsInput: (Observer<CutController.Input>) -> Disposable = ::cutsInput
 
   init {
-    state = ResearchState(false, initialResearchModel())
+    state = ResearchState(
+      toolsOpen = false,
+      marksOpen = false,
+      researchModel = initialResearchModel()
+    )
   }
 
   override fun componentDidMount() {
@@ -74,21 +78,19 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
 
       if (model.data != null) {
         //leftDrawer
-        toolsDrawer(
+        leftDrawer(
           open = state.toolsOpen,
           drawerWidth = drawerWidth,
           onOpen = ::openTools,
           onClose = ::closeTools
         ) {
-          tools(dependencies = object : ToolsViewComponent.Dependencies,
+          tools(dependencies = object : ToolsComponent.Dependencies,
             Dependencies by props.dependencies {
             override val toolsOutput: (Output) -> Unit = ::toolsOutput
           })
         }
 
-        mainContent(
-          margiLeft = if (state.toolsOpen) drawerWidth.px else 7.spacingUnits
-        ) {
+        mainContent(margiLeft = if (state.toolsOpen) drawerWidth.px else 7.spacingUnits) {
           cuts(dependencies = object : CutsContainerViewComponent.Dependencies,
             Dependencies by props.dependencies {
             override val data: ResearchSlicesSizesData = model.data!!
@@ -97,10 +99,15 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
             override val cutsInput: Observable<CutController.Input> = this@ResearchScreen.cutsInputObservable
           })
         }
-//      rightDrawer()
-//      ctTypes.firstOrNull { it.ctType == state.ctTypeToConfirm }?.let {
-//        confirmationDialog(state.confirmationDialogOpen, it)
-//      }
+
+        rightDrawer(
+          open = state.marksOpen,
+          drawerWidth = drawerWidth,
+          onOpen = ::openTools,
+          onClose = ::closeTools
+        ) {
+
+        }
       }
     }
   }
@@ -176,6 +183,7 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
 
 class ResearchState(
   var toolsOpen: Boolean,
+  var marksOpen: Boolean,
   var researchModel: ResearchView.Model
 ) : RState
 

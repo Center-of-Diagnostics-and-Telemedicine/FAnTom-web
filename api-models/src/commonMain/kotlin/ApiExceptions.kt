@@ -18,6 +18,8 @@ sealed class ResearchApiExceptions(val error: String) : Throwable() {
     object IncorrectFrontalValueException : ResearchApiExceptions(INCORRECT_FRONTAL_COORD)
     object IncorrectSagittalValueException : ResearchApiExceptions(INCORRECT_SAGITTAL_COORD)
 
+    object MarksFetchException: ResearchApiExceptions(MARKS_FETCH_EXCEPTION)
+
     object ConfirmCtTypeForResearchException : ResearchApiExceptions(CREATE_MARK_FAILED)
 
     object CloseSessionException : ResearchApiExceptions(SESSION_CLOSE_FAILED)

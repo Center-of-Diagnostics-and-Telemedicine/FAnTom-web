@@ -16,7 +16,6 @@ import react.RBuilder
 import react.RComponent
 import react.RProps
 import react.RState
-import root.debugLog
 import styled.css
 import styled.styledCanvas
 import styled.styledDiv
@@ -58,11 +57,9 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
       val ri = dicomWidth.toDouble() / dicomHeight
       val rs = props.width.toDouble() / props.height
       if (rs > ri) {
-        debugLog("rs > ri")
         resultWidth = dicomWidth * props.height / dicomHeight
         resultHeight = props.height
       } else {
-        debugLog("rs <= ri")
         resultWidth = props.width
         resultHeight = dicomHeight * props.width / dicomWidth
       }
@@ -154,7 +151,6 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
 
   private fun draw(circle: Circle?) {
     circle?.let {
-      debugLog("circle = $circle")
       val canvas = document.getElementsByClassName("draw_canvas_${props.cut.type.intType}")[0] as HTMLCanvasElement
       val context = canvas.getContext("2d") as CanvasRenderingContext2D
       context.clearRect(

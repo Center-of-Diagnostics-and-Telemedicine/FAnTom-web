@@ -7,7 +7,7 @@ import com.ccfraser.muirwik.components.targetInputValue
 import com.ccfraser.muirwik.components.transitions.mCollapse
 import kotlinx.html.InputType
 import react.RBuilder
-import research.tools.ToolsViewComponent
+import research.tools.ToolsComponent
 import styled.css
 import view.BrightnessView
 
@@ -19,7 +19,7 @@ fun RBuilder.renderBrightness(
 ) {
   mCollapse(show = true) {
     mList {
-      css(ToolsViewComponent.ToolsStyles.nested)
+      css(ToolsComponent.ToolsStyles.nested)
       mListItem {
         white(model.whiteValue, onWhiteChange)
       }

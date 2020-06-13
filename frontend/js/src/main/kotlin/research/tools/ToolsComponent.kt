@@ -14,7 +14,7 @@ import kotlinx.css.*
 import list.ListScreen
 import model.Tool
 import react.*
-import research.tools.ToolsViewComponent.ToolsStyles.headerStyle
+import research.tools.ToolsComponent.ToolsStyles.headerStyle
 import research.tools.brightness.BrightnessViewProxy
 import research.tools.brightness.renderBrightness
 import research.tools.grid.GridViewProxy
@@ -29,7 +29,7 @@ import styled.css
 import styled.styledDiv
 import view.*
 
-class ToolsViewComponent(prps: ToolsProps) : RComponent<ToolsProps, ToolsState>(prps) {
+class ToolsComponent(prps: ToolsProps) : RComponent<ToolsProps, ToolsState>(prps) {
 
   private val gridViewDelegate = GridViewProxy(::updateState)
   private val mipViewDelegate = MipViewProxy(::updateState)
@@ -158,9 +158,9 @@ class ToolsState(
 ) : RState
 
 interface ToolsProps : RProps {
-  var dependencies: ToolsViewComponent.Dependencies
+  var dependencies: ToolsComponent.Dependencies
 }
 
-fun RBuilder.tools(dependencies: ToolsViewComponent.Dependencies) = child(ToolsViewComponent::class) {
+fun RBuilder.tools(dependencies: ToolsComponent.Dependencies) = child(ToolsComponent::class) {
   attrs.dependencies = dependencies
 }

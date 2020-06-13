@@ -23,4 +23,5 @@ const val SESSION_CLOSE_FAILED = "Не удалось закончить сес�
 const val GET_SLICE_FAILED = "Не удалось получить срез"
 const val CREATE_MARK_FAILED = "Не удалось создать отметку"
 const val NOT_INITIALIZED_YET = "Not initialized yet"
+const val MARKS_FETCH_EXCEPTION = "Не удалось получить отметки"
 

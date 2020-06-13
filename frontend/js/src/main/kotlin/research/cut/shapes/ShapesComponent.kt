@@ -16,7 +16,6 @@ import react.RBuilder
 import react.RComponent
 import react.RProps
 import react.RState
-import root.debugLog
 import styled.css
 import styled.styledCanvas
 import styled.styledDiv
@@ -62,11 +61,9 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
       val ri = dicomWidth.toDouble() / dicomHeight
       val rs = props.width.toDouble() / props.height
       if (rs > ri) {
-        debugLog("rs > ri")
         resultWidth = dicomWidth * props.height / dicomHeight
         resultHeight = props.height
       } else {
-        debugLog("rs <= ri")
         resultWidth = props.width
         resultHeight = dicomHeight * props.width / dicomWidth
       }
