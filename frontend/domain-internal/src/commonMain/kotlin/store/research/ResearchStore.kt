@@ -12,8 +12,6 @@ import store.research.ResearchStore.State
 interface ResearchStore : Store<Intent, State, Nothing> {
 
   sealed class Intent : JvmSerializable {
-    data class HandleNewArea(val circle: Circle, val sliceNumber: Int, val cut: Cut) : Intent()
-
     object DismissError : Intent()
     object ReloadRequested : Intent()
     object CloseRequested : Intent()

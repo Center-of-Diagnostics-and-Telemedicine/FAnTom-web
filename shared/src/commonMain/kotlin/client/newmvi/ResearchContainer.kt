@@ -61,12 +61,12 @@ object ResearchContainer {
   val sagittalNewCircleObservable: PublishSubject<Circle> = PublishSubject()
   //newAreaToSaveNotifier
   val newAreaToSaveObservable: PublishSubject<AreaToSave> = PublishSubject()
-  val areaToUpdateObservable = PublishSubject<SelectedArea>()
+  val areaToUpdateObservable = PublishSubject<Mark>()
 
   //listener for new SeletedArea
-  val newAreaObservable: PublishSubject<SelectedArea> = PublishSubject()
+  val newAreaObservable: PublishSubject<Mark> = PublishSubject()
   //selectedAreasContainer
-  val areasObservable = BehaviorSubject<List<SelectedArea>>(listOf())
+  val areasObservable = BehaviorSubject<List<Mark>>(listOf())
 
   val selectAreaObservable = PublishSubject<Int>()
   val deleteAreaObservable = PublishSubject<Int>()

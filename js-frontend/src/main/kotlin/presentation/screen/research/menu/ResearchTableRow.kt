@@ -11,7 +11,7 @@ import com.ccfraser.muirwik.components.menu.mMenu
 import com.ccfraser.muirwik.components.menu.mMenuItem
 import com.ccfraser.muirwik.components.table.*
 import com.ccfraser.muirwik.components.themeContext
-import model.SelectedArea
+import model.Mark
 import debugLog
 import kotlinx.css.Color
 import kotlinx.css.backgroundColor
@@ -159,7 +159,7 @@ class ResearchTableRow(props: ResearchTableRowProps) :
 interface ResearchTableRowProps : RProps {
   var onCommentChanged: (String) -> Unit
   var selected: Boolean
-  var area: SelectedArea
+  var area: Mark
   var select: () -> Unit
   var changeType: (Int) -> Unit
   var delete: () -> Unit
@@ -173,7 +173,7 @@ data class ResearchTableRowState(
 
 fun RBuilder.researchTableRow(
   selected: Boolean,
-  area: SelectedArea,
+  area: Mark,
   select: () -> Unit,
   changeType: (Int) -> Unit,
   delete: () -> Unit,

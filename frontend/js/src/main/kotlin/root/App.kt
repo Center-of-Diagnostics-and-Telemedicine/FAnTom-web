@@ -14,6 +14,7 @@ import login.LoginScreen
 import login.login
 import react.*
 import repository.LoginRepository
+import repository.MarksRepository
 import repository.ResearchRepository
 import research.ResearchScreen
 import research.research
@@ -80,6 +81,7 @@ abstract class App : RComponent<AppProps, AppState>() {
     val storeFactory: StoreFactory
     val loginRepository: LoginRepository
     val researchRepository: ResearchRepository
+    val marksRepository: MarksRepository
   }
 }
 

@@ -7,7 +7,7 @@ import com.badoo.reaktive.subject.Subject
 import com.badoo.reaktive.subject.behavior.BehaviorSubject
 import client.newmvi.menu.table.store.TableStore.Intent
 import client.newmvi.menu.table.store.TableStore.State
-import model.SelectedArea
+import model.Mark
 import model.UpdateMarkModel
 
 class TableStoreImpl(
@@ -65,7 +65,7 @@ class TableStoreImpl(
   }
 
   private sealed class Effect {
-    data class Value(val selectedAreas: List<SelectedArea>) : Effect()
+    data class Value(val selectedAreas: List<Mark>) : Effect()
     class Select(val areaId: Int) : Effect()
   }
 

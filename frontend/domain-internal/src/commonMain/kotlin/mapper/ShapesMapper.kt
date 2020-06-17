@@ -28,7 +28,8 @@ val shapesStateToShapesModel: State.() -> Model = {
     horizontalCoefficient = horizontalCoefficient,
     sliceNumber = sliceNumber,
     huValue = null,
-    position = position
+    position = position,
+    marks = marks
   )
 }
 
@@ -41,11 +42,11 @@ val shapesStateToShapesModel: State.() -> Model = {
 val drawLabelToShapesIntent: DrawStore.Label.() -> Intent? = {
   when (this) {
     is DrawStore.Label.MouseMove -> Intent.HandleMousePosition(dicomX, dicomY)
+    is DrawStore.Label.ChangeContrastBrightness -> null
+    is DrawStore.Label.OnClick -> null
+    is DrawStore.Label.ChangeSlice -> null
+    is DrawStore.Label.Drawn -> null
     is DrawStore.Label.StartMove -> null
-    is DrawStore.Label.ChangeContrastBrightness -> TODO()
-    is DrawStore.Label.Drawn -> TODO()
-    is DrawStore.Label.OnClick -> TODO()
-    is DrawStore.Label.ChangeSlice -> TODO()
   }
 }
 
@@ -55,5 +56,7 @@ val cutLabelToShapesIntent: CutStore.Label.() -> Intent? = {
     is CutStore.Label.ExternalSliceNumberChanged -> {
       Intent.HandleExternalSliceNumberChanged(sliceNumber, externalCut)
     }
+    is CutStore.Label.Marks -> Intent.HandleMarks(list)
+    is CutStore.Label.CircleDrawn -> null
   }
 }

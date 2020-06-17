@@ -6,14 +6,15 @@ import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.Route
 import model.*
-import repository.MarkRepository
+import repository.CovidMarkRepository
 import util.*
+import util.CovidMark
 
 fun Route.mark(
-  markRepository: MarkRepository
+  covidMarkRepository: CovidMarkRepository
 ) {
 
-  post<Mark> {
+  post<CovidMark> {
     suspend fun respondError(errorCode: ErrorStringCode) {
       call.respond(BaseResponse(error = ErrorModel(errorCode.value)))
     }
@@ -21,11 +22,11 @@ fun Route.mark(
     val user = call.user
     val markModel = call.receive<ConfirmCTTypeRequest>().toMarkModel(user.id)
     try {
-      val existing = markRepository.getMark(userId = user.id, researchId = markModel.researchId)
+      val existing = covidMarkRepository.getMark(userId = user.id, researchId = markModel.researchId)
       if (existing == null) {
-        markRepository.createMark(markModel)
+        covidMarkRepository.createMark(markModel)
       } else {
-        markRepository.updateMark(markModel)
+        covidMarkRepository.updateMark(markModel)
       }
       call.respond(BaseResponse(response = OK()))
     } catch (e: Exception) {

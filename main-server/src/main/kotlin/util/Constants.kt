@@ -30,7 +30,17 @@ const val POS_IN_BLOCK_FIELD = "pos_in_block"
 
 const val USER_TABLE = "user"
 const val RESEARCH_TABLE = "research"
+const val COVID_MARKS_TABLE = "covid_marks"
+
 const val MARKS_TABLE = "marks"
+const val X_FIELD = "x"
+const val Y_FIELD = "y"
+const val Z_FIELD = "z"
+const val RADIUS_FIELD = "radius"
+const val SIZE_FIELD = "size"
+const val MARK_TYPE_FILED = "type"
+const val COMMENT_FILED = "comment"
+
 
 const val ROOT = "/"
 const val STATIC_ROUTE = "/static"

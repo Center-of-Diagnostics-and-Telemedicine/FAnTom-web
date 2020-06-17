@@ -1,7 +1,4 @@
-import dao.MarkDao
-import dao.ResearchDao
-import dao.UserDao
-import dao.UserResearchDao
+import dao.*
 import kotlinx.coroutines.GlobalScope
 import repository.*
 
@@ -14,8 +11,11 @@ val researchRepository = ResearchRepositoryImpl(researchDao)
 val userResearchDao = UserResearchDao()
 val userResearchRepository = UserResearchRepositoryImpl(userResearchDao)
 
-val marksDao = MarkDao()
-val marksRepository = MarkRepositoryImpl(marksDao)
+val covidMarksDao = CovidCovidMarkDao()
+val covidMarksRepository = CovidCovidMarkRepositoryImpl(covidMarksDao)
+
+val marksDao = MarksDao()
+val marksRepository = MarksRepositoryImpl(marksDao)
 
 val creator = ContainerCreatorImpl()
 val researchDirFinder = ResearchDirFinderImpl()

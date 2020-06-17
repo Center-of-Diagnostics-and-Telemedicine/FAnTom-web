@@ -17,8 +17,6 @@ interface ResearchView : MviView<Model, Event> {
   )
 
   sealed class Event {
-    data class NewArea(val circle: Circle, val sliceNumber: Int, val cut: Cut) : Event()
-
     object Reload : Event()
     object DismissError : Event()
     object Close : Event()

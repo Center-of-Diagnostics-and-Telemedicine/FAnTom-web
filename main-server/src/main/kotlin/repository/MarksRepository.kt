@@ -1,39 +1,49 @@
 package repository
 
-import dao.MarkDaoFacade
-import model.MarkModel
+import dao.MarksDaoFacade
+import model.MarkData
+import model.MarkDomain
 
-interface MarkRepository {
-  suspend fun getMark(userId: Int, researchId: Int): MarkModel?
-  suspend fun createMark(markModel: MarkModel)
-  suspend fun updateMark(markModel: MarkModel)
-  suspend fun deleteMark(userId: Int, researchId: Int)
+interface MarksRepository {
+  suspend fun get(id: Int): MarkDomain?
+  suspend fun getAll(userId: Int, researchId: Int): List<MarkDomain>
+  suspend fun create(mark: MarkData, userId: Int, researchId: Int): MarkDomain?
+  suspend fun update(mark: MarkDomain)
+  suspend fun delete(id: Int)
 }
 
-class MarkRepositoryImpl(private val markDaoFacade: MarkDaoFacade) :
-  MarkRepository {
+class MarksRepositoryImpl(
+  private val marksDaoFacade: MarksDaoFacade
+) : MarksRepository {
 
-  override suspend fun getMark(userId: Int, researchId: Int): MarkModel? {
-    return markDaoFacade.getMark(userId, researchId)
+  override suspend fun get(id: Int): MarkDomain? {
+    return marksDaoFacade.get(id)
   }
 
-  override suspend fun createMark(markModel: MarkModel) {
-    markDaoFacade.createMark(markModel)
+  override suspend fun getAll(userId: Int, researchId: Int): List<MarkDomain> {
+    return marksDaoFacade.getAll(userId, researchId)
   }
 
-  override suspend fun updateMark(markModel: MarkModel) {
-    checkMarkExistence(userId = markModel.userId, researchId = markModel.researchId)
-    markDaoFacade.updateMark(markModel)
+  override suspend fun create(mark: MarkData, userId: Int, researchId: Int): MarkDomain? {
+    return marksDaoFacade
+      .save(mark, userId, researchId)
+      .let { id ->
+        marksDaoFacade.get(id)
+      }
   }
 
-  override suspend fun deleteMark(userId: Int, researchId: Int) {
-    checkMarkExistence(userId = userId, researchId = researchId)
-    markDaoFacade.deleteMark(userId, researchId)
-
+  override suspend fun update(mark: MarkDomain) {
+    checkMarkExistence(mark.id)
+    marksDaoFacade.update(mark)
   }
 
-  private suspend fun checkMarkExistence(userId: Int, researchId: Int) =
-    markDaoFacade.getMark(userId = userId, researchId = researchId)
+  override suspend fun delete(id: Int) {
+    checkMarkExistence(id)
+    marksDaoFacade.delete(id)
+  }
+
+  private suspend fun checkMarkExistence(id: Int) =
+    marksDaoFacade.get(id)
       ?: throw IllegalStateException("mark not found")
 
 }

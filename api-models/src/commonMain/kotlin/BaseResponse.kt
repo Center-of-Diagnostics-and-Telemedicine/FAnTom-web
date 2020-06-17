@@ -6,10 +6,7 @@ import kotlinx.serialization.Serializable
 data class ErrorModel(val error: Int, val message: String = "")
 
 @Serializable
-data class AuthorizationModel(val token: String)
-
-@Serializable
-data class AuthorizationResponse(
-  val response: AuthorizationModel? = null,
+data class BaseResponse(
+  val response: OK? = null,
   val error: ErrorModel? = null
 )

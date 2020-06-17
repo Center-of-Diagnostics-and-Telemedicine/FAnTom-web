@@ -1,4 +1,5 @@
 import model.ID_FIELD
+import model.MarkType
 import model.UserRole
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
@@ -41,11 +42,26 @@ object UserResearchVos : Table("user_research") {
   override val primaryKey = PrimaryKey(userId, researchId, name = "UserResearchPKConstraintName")
 }
 
-object MarkVos : Table(MARKS_TABLE) {
+object CovidMarksVos : Table(COVID_MARKS_TABLE) {
   val userId: Column<Int> = integer("user_$ID_FIELD")
   val researchId: Column<Int> = integer("research_$ID_FIELD")
   val ctType: Column<Int> = integer(CT_TYPE_FIELD)
   val leftPercent: Column<Int> = integer(LEFT_PERCENT_FIELD)
   val rightPercent: Column<Int> = integer(RIGHT_PERCENT_FIELD)
-  override val primaryKey = PrimaryKey(userId, researchId, name = "UserMarkPKConstraintName")
+  override val primaryKey = PrimaryKey(userId, researchId, name = "CovidMarkPKConstraintName")
+}
+
+object MarksVos : Table(MARKS_TABLE) {
+  val id: Column<Int> = integer(name = ID_FIELD).autoIncrement()
+  val userId: Column<Int> = integer("user_$ID_FIELD")
+  val researchId: Column<Int> = integer("research_$ID_FIELD")
+  val x: Column<Int> = integer(X_FIELD)
+  val y: Column<Int> = integer(Y_FIELD)
+  val z: Column<Int> = integer(Z_FIELD)
+  val radius: Column<Double> = double(RADIUS_FIELD)
+  val size: Column<Double> = double(SIZE_FIELD)
+  val type: Column<Int> = integer(MARK_TYPE_FILED).default(MarkType.NoTypeNodule.intValue)
+  val comment: Column<String> = varchar(name = COMMENT_FILED, length = 200).default("")
+  override val primaryKey = PrimaryKey(id, name = "MarkPKConstraintName")
+
 }

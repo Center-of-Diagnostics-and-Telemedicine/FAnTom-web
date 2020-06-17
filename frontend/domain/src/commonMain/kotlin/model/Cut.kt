@@ -1,6 +1,7 @@
 package model
 
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
+import kotlin.math.roundToInt
 
 data class Cut(
   val type: CutType,
@@ -73,40 +74,44 @@ fun Cut.getPosition(dicomX: Double, dicomY: Double, sliceNumber: Int): PointPosi
   }
 }
 
-fun Cut.getAreaToSave(circle: Circle, sliceNumber: Int): AreaToSave? {
-  if (circle.dicomCenterX < 0.0 || circle.dicomCenterY < 0.0) {
-    return null
+fun Cut.getMarkToSave(circle: Circle, sliceNumber: Int): MarkData? {
+  return if (circle.dicomCenterX < 0.0 || circle.dicomCenterY < 0.0) {
+    null
   } else {
-    return when (this.type) {
-      CutType.Empty -> TODO()
-      CutType.Axial -> {TODO()
-//        val horizontalRatio = horizontalCutData.data.maxFramesSize.toDouble() / data!!.height
-//        val verticalRatio = verticalCutData.data.maxFramesSize.toDouble() / data.height
-//        AreaToSave(
-//          x = circle.dicomCenterX * verticalRatio,
-//          y = circle.dicomCenterY * horizontalRatio,
-//          z = sliceNumber.toDouble(),
-//          radius = circle.dicomRadius,
-//          size = 0.0
-//        )
+    when (this.type) {
+      CutType.Empty -> null
+      CutType.Axial -> {
+        val horizontalRatio = horizontalCutData.data.maxFramesSize.toDouble() / data!!.height
+        val verticalRatio = verticalCutData.data.maxFramesSize.toDouble() / data.height
+        MarkData(
+          x = (circle.dicomCenterX * verticalRatio).roundToInt(),
+          y = (circle.dicomCenterY * horizontalRatio).roundToInt(),
+          z = sliceNumber,
+          radius = circle.dicomRadius,
+          size = 0.0
+        )
       }
-      CutType.Frontal -> {TODO()
-//        val horizontalRatio = horizontalCutData.data.maxFramesSize.toDouble() / data!!.height
-//        val verticalRatio = verticalCutData.data.maxFramesSize.toDouble() / data.maxFramesSize
-//        AreaToSave(
-//          x = dicomX * verticalRatio,
-//          y = sliceNumber.toDouble(),
-//          z = dicomY * horizontalRatio
-//        )
+      CutType.Frontal -> {
+        val horizontalRatio = horizontalCutData.data.maxFramesSize.toDouble() / data!!.height
+        val verticalRatio = verticalCutData.data.maxFramesSize.toDouble() / data.maxFramesSize
+        MarkData(
+          x = (circle.dicomCenterX * verticalRatio).roundToInt(),
+          y = sliceNumber,
+          z = (circle.dicomCenterY * horizontalRatio).roundToInt(),
+          radius = circle.dicomRadius,
+          size = 0.0
+        )
       }
-      CutType.Sagittal -> {TODO()
-//        val horizontalRatio = horizontalCutData.data.maxFramesSize.toDouble() / data!!.height
-//        val verticalRatio = verticalCutData.data.maxFramesSize.toDouble() / data.maxFramesSize
-//        AreaToSave(
-//          x = sliceNumber.toDouble(),
-//          y = dicomX * verticalRatio,
-//          z = dicomY * horizontalRatio
-//        )
+      CutType.Sagittal -> {
+        val horizontalRatio = horizontalCutData.data.maxFramesSize.toDouble() / data!!.height
+        val verticalRatio = verticalCutData.data.maxFramesSize.toDouble() / data.maxFramesSize
+        MarkData(
+          x = sliceNumber,
+          y = (circle.dicomCenterX * verticalRatio).roundToInt(),
+          z = (circle.dicomCenterY * horizontalRatio).roundToInt(),
+          radius = circle.dicomRadius,
+          size = 0.0
+        )
       }
     }
   }

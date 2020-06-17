@@ -7,11 +7,11 @@ import com.badoo.reaktive.observable.subscribe
 import com.badoo.reaktive.subject.behavior.BehaviorSubject
 import client.newmvi.menu.table.store.TableStore
 import client.newmvi.menu.table.view.TableView
-import model.SelectedArea
+import model.Mark
 
 class TableBinder(
   private val store: TableStore,
-  private val areaObservable: BehaviorSubject<List<SelectedArea>>,
+  private val areaObservable: BehaviorSubject<List<Mark>>,
   private val selectedAreaObservable: Observable<Int>
 ) {
 

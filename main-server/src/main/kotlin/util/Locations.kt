@@ -27,5 +27,17 @@ class Hounsfield()
 @Location("/$RESEARCH_ROUTE/{id}/$CLOSE_ROUTE")
 class CloseSession(val id: Int)
 
+@Location("/$RESEARCH_ROUTE/{id}/$COVID_MARK_ROUTE")
+class CovidMark(val id: Int)
+
 @Location("/$RESEARCH_ROUTE/{id}/$MARK_ROUTE")
-class Mark(val id: Int)
+class CreateMark(val id: Int)
+
+@Location("$RESEARCH_ROUTE/{id}/$MARK_ROUTE/$LIST_ROUTE")
+class GetMarks(val id: Int)
+
+@Location("$RESEARCH_ROUTE/$MARK_ROUTE")
+class UpdateMark
+
+@Location("$RESEARCH_ROUTE/$MARK_ROUTE/{id}")
+class DeleteMark(val id: Int)

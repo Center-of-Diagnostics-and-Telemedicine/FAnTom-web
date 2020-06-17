@@ -1,11 +1,14 @@
 package repository
 
-import model.Mark
-import model.MarkToSave
+import model.MarkData
+import model.MarkDomain
 
 interface MarksRepository {
-  suspend fun getMarks(): List<Mark>
-  suspend fun saveMark(markToSave: MarkToSave)
-  suspend fun updateMark(mark: Mark)
+
+  val token: suspend () -> String
+
+  suspend fun getMarks(researchId: Int): List<MarkDomain>
+  suspend fun saveMark(markToSave: MarkData, researchId: Int)
+  suspend fun updateMark(mark: MarkDomain)
   suspend fun deleteMark(id: Int)
 }

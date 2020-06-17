@@ -2,9 +2,7 @@ package controller
 
 import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.store.StoreFactory
-import model.Cut
-import model.Mip
-import model.Presets
+import model.*
 import repository.ResearchRepository
 import view.CutView
 import view.DrawView
@@ -39,9 +37,11 @@ interface CutController {
     data class PresetChanged(val preset: Presets) : Input()
     data class SliceNumberChanged(val sliceNumber: Int) : Input()
     data class ExternalSliceNumberChanged(val sliceNumber: Int, val cut: Cut) : Input()
+    data class Marks(val list: List<MarkDomain>) : Input()
   }
 
   sealed class Output {
     data class SliceNumberChanged(val sliceNumber: Int, val cut: Cut) : Output()
+    data class CircleDrawn(val circle: Circle, val sliceNumber: Int, val cut: Cut) : Output()
   }
 }

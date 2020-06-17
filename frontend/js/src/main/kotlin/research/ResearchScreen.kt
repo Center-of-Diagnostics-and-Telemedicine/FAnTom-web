@@ -7,19 +7,19 @@ import com.badoo.reaktive.observable.Observable
 import com.badoo.reaktive.subject.publish.PublishSubject
 import com.ccfraser.muirwik.components.spacingUnits
 import components.loading
-import controller.CutController
-import controller.CutsContainerController
-import controller.ResearchController
-import controller.ResearchControllerImpl
+import controller.*
 import controller.ToolsController.Output
 import destroy
 import kotlinx.css.*
 import model.ResearchSlicesSizesData
 import react.*
+import repository.MarksRepository
 import repository.ResearchRepository
 import research.ResearchScreen.ResearchStyles.appFrameContainerStyle
 import research.gridcontainer.CutsContainerViewComponent
 import research.gridcontainer.cuts
+import research.marks.MarksComponent
+import research.marks.marks
 import research.tools.ToolsComponent
 import research.tools.tools
 import resume
@@ -39,6 +39,7 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
 
   private val cutsContainerInputObservable = PublishSubject<CutsContainerController.Input>()
   private val cutsInputObservable = PublishSubject<CutController.Input>()
+  private val marksInputObservable = PublishSubject<MarksController.Input>()
 
 //  private var gridContainerInputObserver: Observer<GridContainerController.Input>? = null
 //  private val gridContainerInput: (Observer<GridContainerController.Input>) -> Disposable = ::gridContainerInput
@@ -103,10 +104,14 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
         rightDrawer(
           open = state.marksOpen,
           drawerWidth = drawerWidth,
-          onOpen = ::openTools,
-          onClose = ::closeTools
+          onOpen = { },
+          onClose = { }
         ) {
-
+          marks(dependencies = object : MarksComponent.Dependencies,
+            Dependencies by props.dependencies {
+            override val marksOutput: (MarksController.Output) -> Unit = ::marksOutput
+            override val marksInput: Observable<MarksController.Input> = this@ResearchScreen.marksInputObservable
+          })
         }
       }
     }
@@ -139,11 +144,16 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
     when (output) {
       is CutsContainerController.Output.OpenFullCut -> TODO()
       is CutsContainerController.Output.CloseFullCut -> TODO()
-      is CutsContainerController.Output.HandleNewArea -> {
-        researchViewDelegate.dispatch(
-          ResearchView.Event.NewArea(output.circle, output.sliceNumber, output.cut)
-        )
-      }
+      is CutsContainerController.Output.CircleDrawn -> marksInputObservable.onNext(
+        MarksController.Input.AddNewMark(output.circle, output.sliceNumber, output.cut)
+      )
+    }
+  }
+
+  private fun marksOutput(output: MarksController.Output) {
+    when (output) {
+      is MarksController.Output.Marks ->
+        cutsInputObservable.onNext(CutController.Input.Marks(output.list))
     }
   }
 
@@ -153,12 +163,6 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
 
   override fun componentWillUnmount() {
     lifecycleRegistry.destroy()
-  }
-
-  interface Dependencies {
-    val storeFactory: StoreFactory
-    val researchRepository: ResearchRepository
-    val researchId: Int
   }
 
   object ResearchStyles : StyleSheet("ResearchStyles", isStatic = true) {
@@ -177,6 +181,13 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
       minHeight = 100.vh
     }
 
+  }
+
+  interface Dependencies {
+    val storeFactory: StoreFactory
+    val researchRepository: ResearchRepository
+    val marksRepository: MarksRepository
+    val researchId: Int
   }
 
 }

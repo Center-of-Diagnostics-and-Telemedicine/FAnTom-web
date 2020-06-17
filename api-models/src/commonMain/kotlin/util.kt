@@ -25,5 +25,8 @@ fun getErrorMessageByCode(errorCode: ErrorStringCode): String {
     ErrorStringCode.CREATE_MARK_FAILED -> CREATE_MARK_FAILED
     ErrorStringCode.NOT_INITIALIZED_YET -> NOT_INITIALIZED_YET
     ErrorStringCode.AUTH_FAILED -> AUTH_FAILED
+    ErrorStringCode.UPDATE_MARK_FAILED -> MARK_UPDATE_EXCEPTION
+    ErrorStringCode.GET_MARKS_FAILED -> MARKS_FETCH_EXCEPTION
+    ErrorStringCode.DELETE_MARK_FAILED -> MARK_DELETE_EXCEPTION
   }
 }

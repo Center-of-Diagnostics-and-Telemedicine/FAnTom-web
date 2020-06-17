@@ -2,6 +2,7 @@ package view
 
 import com.arkivanov.mvikotlin.core.view.MviView
 import model.CutType
+import model.MarkDomain
 import model.PointPosition
 import view.ShapesView.Event
 import view.ShapesView.Model
@@ -13,7 +14,8 @@ interface ShapesView : MviView<Model, Event> {
     val horizontalCoefficient: Double,
     val sliceNumber: Int,
     val huValue: Int?,
-    val position: PointPosition?
+    val position: PointPosition?,
+    val marks: List<MarkDomain>
   )
 
   sealed class Event {
@@ -26,5 +28,6 @@ fun initialShapesModel(): Model = Model(
   horizontalCoefficient = 0.0,
   sliceNumber = 1,
   huValue = null,
-  position = null
+  position = null,
+  marks = listOf()
 )

@@ -8,6 +8,7 @@ const val LOCALHOST = "http://localhost:8081"
 const val LOGIN_ROUTE: String = "login"
 const val RESEARCH_ROUTE: String = "research"
 const val MARK_ROUTE: String = "mark"
+const val COVID_MARK_ROUTE: String = "covid_mark"
 const val INIT_ROUTE: String = "init"
 const val LIST_ROUTE: String = "list"
 const val HOUNSFIELD_ROUTE: String = "hounsfield"
@@ -169,5 +170,8 @@ enum class ErrorStringCode(val value: Int) {
   GET_SLICE_FAILED(20),
   CREATE_MARK_FAILED(21),
   NOT_INITIALIZED_YET(22),
-  AUTH_FAILED(23)
+  AUTH_FAILED(23),
+  UPDATE_MARK_FAILED(24),
+  GET_MARKS_FAILED(25),
+  DELETE_MARK_FAILED(24),
 }

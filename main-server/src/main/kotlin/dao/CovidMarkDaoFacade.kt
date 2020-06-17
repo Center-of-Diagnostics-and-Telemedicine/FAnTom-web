@@ -1,30 +1,30 @@
 package dao
 
-import MarkVos
+import CovidMarksVos
 import model.MarkModel
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
-import toMark
+import toCovidMark
 
-interface MarkDaoFacade {
+interface CovidMarkDaoFacade {
   suspend fun getMark(userId: Int, researchId: Int): MarkModel?
   suspend fun createMark(markModel: MarkModel)
   suspend fun deleteMark(researchId: Int, userId: Int)
   suspend fun updateMark(markModel: MarkModel)
 }
 
-class MarkDao() : MarkDaoFacade {
+class CovidCovidMarkDao : CovidMarkDaoFacade {
   override suspend fun getMark(userId: Int, researchId: Int): MarkModel? {
     return transaction {
-      MarkVos.select { MarkVos.researchId eq researchId and (MarkVos.userId eq userId) }
+      CovidMarksVos.select { CovidMarksVos.researchId eq researchId and (CovidMarksVos.userId eq userId) }
       .firstOrNull()
-      ?.toMark()
+      ?.toCovidMark()
     }
   }
 
   override suspend fun createMark(markModel: MarkModel) {
     return transaction {
-      MarkVos.insert {
+      CovidMarksVos.insert {
         it[userId] = markModel.userId
         it[researchId] = markModel.researchId
         it[ctType] = markModel.ctType
@@ -36,13 +36,13 @@ class MarkDao() : MarkDaoFacade {
 
   override suspend fun deleteMark(researchId: Int, userId: Int) {
     transaction {
-      MarkVos.deleteWhere { MarkVos.researchId eq researchId and (MarkVos.userId eq userId) }
+      CovidMarksVos.deleteWhere { CovidMarksVos.researchId eq researchId and (CovidMarksVos.userId eq userId) }
     }
   }
 
   override suspend fun updateMark(markModel: MarkModel) {
     return transaction {
-      MarkVos.update(where = { MarkVos.researchId eq markModel.researchId and (MarkVos.userId eq markModel.userId) }) {
+      CovidMarksVos.update(where = { CovidMarksVos.researchId eq markModel.researchId and (CovidMarksVos.userId eq markModel.userId) }) {
         it[userId] = markModel.userId
         it[researchId] = markModel.researchId
         it[ctType] = markModel.ctType

@@ -7,10 +7,9 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.badoo.reaktive.utils.ensureNeverFrozen
 import model.Cut
+import model.MarkDomain
 import model.PointPosition
-import store.shapes.ShapesStore.Intent
-import store.shapes.ShapesStore.State
-import store.shapes.ShapesStore.Label
+import store.shapes.ShapesStore.*
 
 abstract class ShapesStoreAbstractFactory(
   private val storeFactory: StoreFactory,
@@ -22,7 +21,8 @@ abstract class ShapesStoreAbstractFactory(
     horizontalCoefficient = 0.5,
     verticalCoefficient = 0.5,
     sliceNumber = cut.data!!.maxFramesSize / 2,
-    position = null
+    position = null,
+    marks = listOf()
   )
 
   fun create(): ShapesStore =
@@ -45,6 +45,7 @@ abstract class ShapesStoreAbstractFactory(
     class HorizontalLineChanged(val coefficient: Double) : Result()
     class VerticalLineChanged(val coefficient: Double) : Result()
     class PointPositionChanged(val position: PointPosition?) : Result()
+    class Marks(val list: List<MarkDomain>) : Result()
   }
 
   private object ReducerImpl : Reducer<State, Result> {
@@ -54,6 +55,7 @@ abstract class ShapesStoreAbstractFactory(
         is Result.HorizontalLineChanged -> copy(horizontalCoefficient = result.coefficient)
         is Result.VerticalLineChanged -> copy(verticalCoefficient = result.coefficient)
         is Result.PointPositionChanged -> copy(position = result.position)
+        is Result.Marks -> copy(marks = result.list)
       }
   }
 }

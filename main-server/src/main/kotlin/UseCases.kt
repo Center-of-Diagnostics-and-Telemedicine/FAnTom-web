@@ -14,7 +14,8 @@ fun init() {
       UserVos,
       ResearchVos,
       UserResearchVos,
-      MarkVos
+      CovidMarksVos,
+      MarksVos
     )
     val login = "admin"
     val pass = hash("vfrcbv16")

@@ -157,7 +157,16 @@ class CutsContainerViewComponent(prps: CutsContainerProps) :
           CutController.Input.ExternalSliceNumberChanged(output.sliceNumber, output.cut)
         )
       }
-    }
+      is CutController.Output.CircleDrawn -> {
+        props.dependencies.cutsContainerOutput(
+          CutsContainerController.Output.CircleDrawn(
+            output.circle,
+            output.sliceNumber,
+            output.cut
+          )
+        )
+      }
+    }.let { }
   }
 
   private fun updateState(model: Model) = setState { cutsModel = model }

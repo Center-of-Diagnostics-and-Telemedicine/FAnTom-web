@@ -17,7 +17,7 @@ class ResearchStoreImpl(
   private val researchDataLoader: ResearchDataLoader,
   private val slicesSizesDataListener: Subject<ResearchSlicesSizesData>,
   private val areaDeletedListener: Subject<Int>,
-  private val areaSavedListener: Subject<SelectedArea>,
+  private val areaSavedListener: Subject<Mark>,
   private val deleteClickObservable: Subject<Boolean>,
   private val gridProcessor: GridProcessor,
   private val callToCloseResearchListener: Subject<Boolean>,

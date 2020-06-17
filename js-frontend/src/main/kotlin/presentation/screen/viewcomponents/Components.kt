@@ -4,7 +4,7 @@ import com.ccfraser.muirwik.components.*
 import com.ccfraser.muirwik.components.button.mIconButton
 import com.ccfraser.muirwik.components.list.mList
 import com.ccfraser.muirwik.components.list.mListItemWithIcon
-import model.SelectedArea
+import model.Mark
 import kotlinx.css.*
 import kotlinx.html.Tag
 import kotlinx.html.classes
@@ -55,8 +55,8 @@ object EmptyElement : ReactElement {
 }
 
 fun RDOMBuilder<Tag>.selectedArea(
-  deleteListener: (area: SelectedArea) -> Unit,
-  data: SelectedArea
+  deleteListener: (area: Mark) -> Unit,
+  data: Mark
 ) {
   tr {
     td { +round(data.x).toString() }

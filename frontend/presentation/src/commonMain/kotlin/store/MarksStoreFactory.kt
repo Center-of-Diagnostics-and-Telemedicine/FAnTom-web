@@ -9,8 +9,7 @@ import com.badoo.reaktive.scheduler.mainScheduler
 import com.badoo.reaktive.single.map
 import com.badoo.reaktive.single.observeOn
 import com.badoo.reaktive.single.subscribeOn
-import model.MARKS_FETCH_EXCEPTION
-import model.ResearchApiExceptions
+import model.*
 import repository.MarksRepository
 import store.marks.MarksStore.*
 import store.marks.MarksStoreAbstractFactory
@@ -29,23 +28,50 @@ internal class MarksStoreFactory(
 
     override fun executeAction(action: Unit, getState: () -> State) {
       singleFromCoroutine {
-        repository.getMarks()
+        repository.getMarks(researchId)
       }
         .subscribeOn(ioScheduler)
         .map(Result::Loaded)
         .observeOn(mainScheduler)
-        .subscribeScoped(isThreadLocal = true, onSuccess = ::dispatch)
+        .subscribeScoped(
+          isThreadLocal = true,
+          onSuccess = {
+            dispatch(it)
+            publish(Label.MarksLoaded(it.marks))
+          },
+          onError = ::handleError
+        )
     }
 
     override fun executeIntent(intent: Intent, getState: () -> State) {
       when (intent) {
-        is Intent.HandleNewMark -> TODO()
+        is Intent.HandleNewMark -> handleNewMark(intent.circle, intent.sliceNumber, intent.cut)
         Intent.DismissError -> TODO()
         Intent.ReloadRequested -> TODO()
       }.let {}
     }
 
+    private fun handleNewMark(circle: Circle, sliceNumber: Int, cut: Cut) {
+      singleFromCoroutine {
+        val markToSave = cut.getMarkToSave(circle, sliceNumber)
+        repository.saveMark(markToSave!!, researchId)
+        repository.getMarks(researchId)
+      }
+        .subscribeOn(ioScheduler)
+        .map(Result::Loaded)
+        .observeOn(mainScheduler)
+        .subscribeScoped(
+          isThreadLocal = true,
+          onSuccess = {
+            dispatch(it)
+            publish(Label.MarksLoaded(it.marks))
+          },
+          onError = ::handleError
+        )
+    }
+
     private fun handleError(error: Throwable) {
+      println("MarksStore" + error.message)
       val result = when (error) {
         is ResearchApiExceptions.MarksFetchException -> Result.Error(error.error)
         is ResearchApiExceptions.ResearchNotFoundException -> Result.Error(error.error)

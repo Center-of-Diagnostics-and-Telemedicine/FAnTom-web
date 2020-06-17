@@ -102,12 +102,17 @@ fun main(args: Array<String>) {
 
       authenticate(jwt) {
         register(userRepository)
-        researchesList(researchRepository, userResearchRepository, marksRepository)
+        researchesList(researchRepository, userResearchRepository, covidMarksRepository)
         initResearch(researchRepository, sessionRepository, userResearchRepository)
         getSlice(researchRepository, sessionRepository)
         hounsfield(sessionRepository)
-        mark(marksRepository)
+        mark(covidMarksRepository)
         closeSession(researchRepository, sessionRepository)
+
+        getMarks(marksRepository)
+        createMark(marksRepository)
+        deleteMark(marksRepository)
+        updateMark(marksRepository)
       }
 
     }

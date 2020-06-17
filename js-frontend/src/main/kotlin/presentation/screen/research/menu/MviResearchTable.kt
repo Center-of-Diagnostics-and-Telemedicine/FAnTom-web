@@ -5,7 +5,7 @@ import com.badoo.reaktive.subject.publish.PublishSubject
 import com.ccfraser.muirwik.components.mPaper
 import com.ccfraser.muirwik.components.table.*
 import com.ccfraser.muirwik.components.themeContext
-import model.SelectedArea
+import model.Mark
 import org.w3c.dom.Node
 import react.*
 
@@ -83,7 +83,7 @@ class MviResearchTableComponent(props: MviResearchTableProps) :
 interface MviResearchTableProps : RProps
 
 class MviResearchTableState(
-  var areas: List<SelectedArea>,
+  var areas: List<Mark>,
   var selectedAreaId: Int,
   var selectedMenuIndex: Int
 ) : RState

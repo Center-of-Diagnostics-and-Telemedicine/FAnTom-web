@@ -4,11 +4,9 @@ import com.ccfraser.muirwik.components.mTypography
 import com.ccfraser.muirwik.components.spacingUnits
 import com.ccfraser.muirwik.components.themeContext
 import kotlinx.css.*
+import kotlinx.css.Position
 import kotlinx.html.classes
-import model.Cut
-import model.blue
-import model.pink
-import model.yellow
+import model.*
 import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLCanvasElement
 import org.w3c.dom.get
@@ -21,6 +19,7 @@ import styled.styledCanvas
 import styled.styledDiv
 import view.ShapesView
 import kotlin.browser.document
+import kotlin.math.PI
 import kotlin.math.roundToInt
 
 class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(prps) {
@@ -42,7 +41,7 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
       val context = canvas.getContext("2d") as? CanvasRenderingContext2D
       context?.let { _ ->
         clearCanvas(canvas, context)
-//        state.areas?.let { drawCircles(it, context) }
+        props.shapesModel.marks?.let { drawCircles(it, context) }
 //        state.moveRects?.let { drawRects(it, context) }
         drawLines(
           horizontal = props.shapesModel.horizontalCoefficient * resultHeight,
@@ -183,12 +182,12 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
     }
   }
 
-//  private fun drawRects(
-//    moveRects: List<MoveRect>,
+//  private fun drawMarks(
+//    moveRects: List<MarkDomain>,
 //    context: CanvasRenderingContext2D
 //  ) {
 //    moveRects.forEach { rect ->
-//      context.fillStyle = rect.color
+////      context.fillStyle = rect.color
 //      context.fillRect(
 //        rect.left,
 //        rect.top,
@@ -197,12 +196,12 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
 //      )
 //    }
 //  }
-//
-//  private fun drawCircles(
-//    models: List<CircleShape>,
-//    context: CanvasRenderingContext2D
-//  ) {
-//    models.forEach { model ->
+
+  private fun drawCircles(
+    models: List<MarkDomain>,
+    context: CanvasRenderingContext2D
+  ) {
+    models.forEach { model ->
 //      if (model.highlight) {
 //        context.strokeStyle = "#18a0fb"
 //        context.lineWidth = 1.0
@@ -212,23 +211,23 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
 ////        }
 //
 //      } else {
-//        context.lineWidth = 1.0
-//        context.strokeStyle = "#00ff00"
+      context.lineWidth = 1.0
+      context.strokeStyle = "#00ff00"
 //      }
-//
-//      context.beginPath()
-//      context.arc(
-//        model.x,
-//        model.y,
-//        model.radius,
-//        0.0,
-//        2 * PI,
-//        false
-//      )
-//      context.stroke()
-//      context.closePath()
-//    }
-//  }
+
+      context.beginPath()
+      context.arc(
+        model.markData.x * props.shapesModel.verticalCoefficient,
+        model.markData.y * props.shapesModel.horizontalCoefficient,
+        model.markData.radius,
+        0.0,
+        2 * PI,
+        false
+      )
+      context.stroke()
+      context.closePath()
+    }
+  }
 
   private fun drawLines(
     horizontal: Double,

@@ -4,6 +4,7 @@ import com.arkivanov.mvikotlin.core.store.Executor
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
 import model.Cut
+import model.MarkDomain
 import model.getPosition
 import repository.ResearchRepository
 import store.shapes.ShapesStore.*
@@ -34,6 +35,7 @@ internal class ShapesStoreFactory(
           intent.dicomY,
           getState
         )
+        is Intent.HandleMarks -> dispatch(Result.Marks(intent.list))
       }.let {}
     }
 

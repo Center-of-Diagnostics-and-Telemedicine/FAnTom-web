@@ -1,20 +1,20 @@
 package view
 
 import com.arkivanov.mvikotlin.core.view.MviView
-import model.Tool
+import model.MarkDomain
 import view.MarksView.Event
 import view.MarksView.Model
 
 interface MarksView : MviView<Model, Event> {
 
   data class Model(
-    val items: List<Tool>,
-    val current: Tool?
+    val items: List<MarkDomain>,
+    val current: MarkDomain?
   )
 
   sealed class Event {
-    data class ItemClick(val tool: Tool) : Event()
-    object CloseClick : Event()
+    data class ItemClick(val mark: MarkDomain) : Event()
+    data class DeleteClick(val mark: MarkDomain) : Event()
   }
 }
 

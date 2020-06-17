@@ -30,6 +30,6 @@ interface CutsContainerController {
   sealed class Output {
     data class OpenFullCut(val cut: Cut) : Output()
     data class CloseFullCut(val cut: Cut) : Output()
-    data class HandleNewArea(val circle: Circle, val sliceNumber: Int, val cut: Cut) : Output()
+    data class CircleDrawn(val circle: Circle, val sliceNumber: Int, val cut: Cut) : Output()
   }
 }

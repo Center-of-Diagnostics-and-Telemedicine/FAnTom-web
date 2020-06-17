@@ -2,12 +2,6 @@ package model
 
 import kotlinx.serialization.Serializable
 
-@Serializable
-data class ResearchInitResponse(
-  val response: ResearchInitModel? = null,
-  val error: ErrorModel? = null
-)
-
 
 @Serializable
 data class ResearchSlicesSizesData(
@@ -74,64 +68,17 @@ data class Research(
   val marked: Boolean
 )
 
-
-@Serializable
-data class ResearchInitModel(
-  val axialReal: Int,
-  val axialInterpolated: Int,
-  val frontalReal: Int,
-  val frontalInterpolated: Int,
-  val sagittalReal: Int,
-  val sagittalInterpolated: Int,
-  val pixelLength: Double,
-  val reversed: Boolean
-)
-
-@Serializable
-data class SliceResponse(
-  val response: SliceModel? = null,
-  val error: ErrorModel? = null
-)
-
-@Serializable
-data class SliceModel(val image: String)
-
-@Serializable
-data class HounsfieldResponse(
-  val response: HounsfieldModel? = null,
-  val error: ErrorModel? = null
-)
-
-@Serializable
-data class HounsfieldModel(val huValue: Double)
-
-
-@Serializable
-data class ResearchesResponse(
-  val response: ResearchesModel? = null,
-  val error: ErrorModel? = null
-)
-
-@Serializable
-data class ResearchesModel(val researches: List<Research>)
-
-@Serializable
-data class BaseResponse(
-  val response: OK? = null,
-  val error: ErrorModel? = null
-)
-
 @Serializable
 data class OK(val status: String = "ok")
 
 @Serializable
 data class MarksResponse(
-  val marks: List<SelectedArea>
+  val marks: List<Mark>
 )
 
 @Serializable
 data class MarkRequest(
-  val mark: SelectedArea,
+  val mark: Mark,
   val researchId: Int
 )
 
@@ -142,7 +89,7 @@ data class NewMarkRequest(
 )
 
 @Serializable
-data class SelectedArea(
+data class Mark(
   val x: Double,
   val y: Double,
   val z: Double,
@@ -163,39 +110,15 @@ data class AreaToSave(
 )
 
 @Serializable
-data class HounsfieldRequest(
-  val axialCoord: Int,
-  val frontalCoord: Int,
-  val sagittalCoord: Int
-)
-
-@Serializable
 data class AccessionNamesResponse(
   val accessionNames: List<String>
 )
 
-@Serializable
-data class SliceRequest(
-  val black: Int,
-  val white: Int,
-  val gamma: Double,
-  val sliceType: Int,
-  val mipMethod: Int,
-  val sliceNumber: Int,
-  val mipValue: Int
-)
+
 
 @Serializable
 data class User(
   val id: Int,
   val name: String,
   val password: String
-)
-
-@Serializable
-data class ConfirmCTTypeRequest(
-  val researchId: Int,
-  val ctType: Int,
-  val leftPercent: Int,
-  val rightPercent: Int
 )

@@ -29,10 +29,23 @@ fun ResultRow.toUserResearch(): UserResearchModel = UserResearchModel(
   done = this[UserResearchVos.done] == 1
 )
 
-fun ResultRow.toMark(): MarkModel = MarkModel(
-  userId = this[MarkVos.userId],
-  researchId = this[MarkVos.researchId],
-  ctType = this[MarkVos.ctType],
-  leftPercent = this[MarkVos.leftPercent],
-  rightPercent = this[MarkVos.rightPercent]
+fun ResultRow.toCovidMark(): MarkModel = MarkModel(
+  userId = this[CovidMarksVos.userId],
+  researchId = this[CovidMarksVos.researchId],
+  ctType = this[CovidMarksVos.ctType],
+  leftPercent = this[CovidMarksVos.leftPercent],
+  rightPercent = this[CovidMarksVos.rightPercent]
+)
+
+fun ResultRow.toMark(): MarkDomain = MarkDomain(
+  id = this[MarksVos.id],
+  markData = MarkData(
+    x = this[MarksVos.x],
+    y = this[MarksVos.y],
+    z = this[MarksVos.z],
+    radius = this[MarksVos.radius],
+    size = this[MarksVos.size]
+  ),
+  type = MarkType.build(this[MarksVos.type]),
+  comment = this[MarksVos.comment],
 )

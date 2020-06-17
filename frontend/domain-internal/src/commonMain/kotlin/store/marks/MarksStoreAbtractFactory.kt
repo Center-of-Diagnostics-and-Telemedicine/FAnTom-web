@@ -3,8 +3,7 @@ package store.marks
 import com.arkivanov.mvikotlin.core.store.*
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.badoo.reaktive.utils.ensureNeverFrozen
-import model.Mark
-import model.Research
+import model.MarkDomain
 import store.marks.MarksStore.Intent
 import store.marks.MarksStore.State
 import store.marks.MarksStore.Label
@@ -30,7 +29,7 @@ abstract class MarksStoreAbstractFactory(
 
   protected sealed class Result : JvmSerializable {
     object Loading : Result()
-    data class Loaded(val marks: List<Mark>) : Result()
+    data class Loaded(val marks: List<MarkDomain>) : Result()
     data class Error(val error: String) : Result()
 
     object DismissErrorRequested : Result()

@@ -1,7 +1,7 @@
 package client.newmvi
 
 import model.CircleShape
-import model.SelectedArea
+import model.Mark
 import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -10,7 +10,7 @@ object AreaToFrontalCircleMapper {
 
   fun invoke(
     sliceNumber: Int,
-    area: SelectedArea,
+    area: Mark,
     coefficient: Double,
     selectedAreaId: Int,
     cutToScreenCoefficient: Double,

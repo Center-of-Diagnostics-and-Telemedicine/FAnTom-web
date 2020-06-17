@@ -3,7 +3,7 @@ package client.newmvi.menu.table.view
 import com.badoo.reaktive.subject.publish.PublishSubject
 import client.newmvi.researchmvi.BaseEvent
 import client.newmvi.researchmvi.BaseView
-import model.SelectedArea
+import model.Mark
 
 interface TableView : BaseView<TableView.Event> {
 
@@ -14,13 +14,13 @@ interface TableView : BaseView<TableView.Event> {
   data class TableViewModel(
     val isLoading: Boolean,
     val error: String,
-    val areas: List<SelectedArea> = listOf(),
+    val areas: List<Mark> = listOf(),
     val selectedAreaId: Int
   )
 
   sealed class Event : BaseEvent {
-    class Delete(val value: SelectedArea) : Event()
-    class Select(val area: SelectedArea): Event()
+    class Delete(val value: Mark) : Event()
+    class Select(val area: Mark): Event()
     class ChangeMarkType(val id: Int,val type: Int) : Event()
     class ChangeComment(val id: Int, val comment: String) : Event()
   }

@@ -25,13 +25,16 @@ val inputToCutIntent: Input.() -> Intent = {
     is Input.SliceNumberChanged -> Intent.HandleSliceNumberChange(sliceNumber = sliceNumber)
     is Input.ExternalSliceNumberChanged ->
       Intent.HandleExternalSliceNumberChanged(externalCut = cut, sliceNumber = sliceNumber)
+    is Input.Marks -> Intent.HandleMarks(list)
   }
 }
 
 val cutLabelToCutOutput: Label.() -> Output? = {
   when (this) {
     is Label.SliceNumberChanged -> Output.SliceNumberChanged(sliceNumber, cut)
+    is Label.CircleDrawn -> Output.CircleDrawn(circle, sliceNumber, cut)
     is Label.ExternalSliceNumberChanged -> null
+    is Label.Marks -> null
   }
 }
 

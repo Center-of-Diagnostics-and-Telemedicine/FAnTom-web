@@ -24,4 +24,7 @@ const val GET_SLICE_FAILED = "Не удалось получить срез"
 const val CREATE_MARK_FAILED = "Не удалось создать отметку"
 const val NOT_INITIALIZED_YET = "Not initialized yet"
 const val MARKS_FETCH_EXCEPTION = "Не удалось получить отметки"
+const val MARK_CREATE_EXCEPTION = "Не удалось создать отметку"
+const val MARK_UPDATE_EXCEPTION = "Не удалось изменить отметку"
+const val MARK_DELETE_EXCEPTION = "Не удалось удалить отметку"
 

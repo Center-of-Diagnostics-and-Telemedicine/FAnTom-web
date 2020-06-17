@@ -7,7 +7,7 @@ import io.ktor.locations.get
 import io.ktor.response.respond
 import io.ktor.routing.Route
 import model.*
-import repository.MarkRepository
+import repository.CovidMarkRepository
 import repository.ResearchRepository
 import repository.UserResearchRepository
 import util.ResearchesList
@@ -16,7 +16,7 @@ import util.user
 fun Route.researchesList(
   researchRepository: ResearchRepository,
   userResearchRepository: UserResearchRepository,
-  marksRepository: MarkRepository
+  marksRepositoryCovid: CovidMarkRepository
 ) {
 
   get<ResearchesList> {
@@ -24,7 +24,7 @@ fun Route.researchesList(
       val userResearches = userResearchRepository
         .getResearchesForUser(call.user.id)
         .mapNotNull {
-          val marked = marksRepository.getMark(call.user.id, it.researchId) != null
+          val marked = marksRepositoryCovid.getMark(call.user.id, it.researchId) != null
           val research = researchRepository.getResearch(it.researchId)
           if (research != null) {
             Research(
