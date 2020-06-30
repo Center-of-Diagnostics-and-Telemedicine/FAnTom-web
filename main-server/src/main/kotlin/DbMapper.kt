@@ -46,6 +46,9 @@ fun ResultRow.toMark(): MarkDomain = MarkDomain(
     radius = this[MarksVos.radius],
     size = this[MarksVos.size]
   ),
-  type = MarkType.build(this[MarksVos.type]),
+  type = MarkType
+    .values()
+    .firstOrNull { it.intValue == this[MarksVos.type] }
+    ?: MarkType.NoTypeNodule,
   comment = this[MarksVos.comment],
 )

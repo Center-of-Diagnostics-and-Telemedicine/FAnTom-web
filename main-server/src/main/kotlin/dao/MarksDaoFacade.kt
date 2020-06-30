@@ -35,7 +35,7 @@ class MarksDao : MarksDaoFacade {
 
   override suspend fun save(mark: MarkData, userrId: Int, researchhId: Int): Int {
     return transaction {
-      MarksVos.insert  {
+      MarksVos.insert {
         it[userId] = userrId
         it[researchId] = researchhId
         it[x] = mark.x

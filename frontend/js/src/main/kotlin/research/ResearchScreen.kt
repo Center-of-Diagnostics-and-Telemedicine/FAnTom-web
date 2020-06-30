@@ -91,7 +91,10 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
           })
         }
 
-        mainContent(margiLeft = if (state.toolsOpen) drawerWidth.px else 7.spacingUnits) {
+        mainContent(
+          marginnLeft = if (state.toolsOpen) drawerWidth.px else 7.spacingUnits,
+          marginnRight = if (state.marksOpen) drawerWidth.px else 7.spacingUnits
+        ) {
           cuts(dependencies = object : CutsContainerViewComponent.Dependencies,
             Dependencies by props.dependencies {
             override val data: ResearchSlicesSizesData = model.data!!

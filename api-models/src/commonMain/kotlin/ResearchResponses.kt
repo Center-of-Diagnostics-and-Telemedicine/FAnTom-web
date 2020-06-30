@@ -20,6 +20,28 @@ data class ResearchInitResponse(
   val error: ErrorModel? = null
 )
 
+@Serializable
+data class ResearchInitResponseNew(
+  val response: ResearchInitModelNew,
+  val error: ErrorModel? = null
+)
+
+@Serializable
+data class ResearchInitModelNew(
+  val ct: CTInitModel? = null
+)
+
+@Serializable
+data class CTInitModel(
+  val axialReal: Int,
+  val axialInterpolated: Int,
+  val frontalReal: Int,
+  val frontalInterpolated: Int,
+  val sagittalReal: Int,
+  val sagittalInterpolated: Int,
+  val pixelLength: Double,
+  val reversed: Boolean
+)
 
 @Serializable
 data class ResearchesModel(val researches: List<Research>)

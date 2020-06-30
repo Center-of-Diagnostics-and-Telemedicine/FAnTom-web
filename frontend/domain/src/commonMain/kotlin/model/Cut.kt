@@ -11,11 +11,11 @@ data class Cut(
   val horizontalCutData: CutData
 ) : JvmSerializable
 
-sealed class CutType(val intType: Int) {
-  object Empty : CutType(-1)
-  object Axial : CutType(SLYCE_TYPE_AXIAL)
-  object Frontal : CutType(SLYCE_TYPE_FRONTAL)
-  object Sagittal : CutType(SLYCE_TYPE_SAGITTAL)
+enum class CutType(val intType: Int) {
+  Empty(-1),
+  Axial(SLYCE_TYPE_AXIAL),
+  Frontal(SLYCE_TYPE_FRONTAL),
+  Sagittal(SLYCE_TYPE_SAGITTAL)
 }
 
 data class CutData(
