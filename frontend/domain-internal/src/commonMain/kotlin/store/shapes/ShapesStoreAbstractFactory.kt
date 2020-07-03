@@ -22,7 +22,8 @@ abstract class ShapesStoreAbstractFactory(
     verticalCoefficient = 0.5,
     sliceNumber = cut.data!!.maxFramesSize / 2,
     position = null,
-    marks = listOf()
+    marks = listOf(),
+    hounsfield = null
   )
 
   fun create(): ShapesStore =
@@ -45,6 +46,7 @@ abstract class ShapesStoreAbstractFactory(
     class HorizontalLineChanged(val coefficient: Double) : Result()
     class VerticalLineChanged(val coefficient: Double) : Result()
     class PointPositionChanged(val position: PointPosition?) : Result()
+    class HounsfieldChanged(val hu: Double): Result()
     class Marks(val list: List<MarkDomain>) : Result()
   }
 
@@ -56,6 +58,7 @@ abstract class ShapesStoreAbstractFactory(
         is Result.VerticalLineChanged -> copy(verticalCoefficient = result.coefficient)
         is Result.PointPositionChanged -> copy(position = result.position)
         is Result.Marks -> copy(marks = result.list)
+        is Result.HounsfieldChanged -> copy(hounsfield = result.hu.toInt())
       }
   }
 }

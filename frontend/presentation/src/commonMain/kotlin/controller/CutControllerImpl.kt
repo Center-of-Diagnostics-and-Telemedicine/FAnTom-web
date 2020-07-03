@@ -53,7 +53,6 @@ class CutControllerImpl(val dependencies: CutController.Dependencies) :
       drawStore.labels.mapNotNull(drawLabelToShapesIntent) bindTo shapesStore
       shapesStore.labels.mapNotNull(shapesLabelToCutIntent) bindTo cutStore
       cutStore.labels.mapNotNull(cutLabelToShapesIntent) bindTo shapesStore
-
     }
 
     dependencies.lifecycle.doOnDestroy(cutStore::dispose)

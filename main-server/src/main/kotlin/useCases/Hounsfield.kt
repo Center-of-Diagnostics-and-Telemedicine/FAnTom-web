@@ -1,7 +1,9 @@
 package useCases
 
-import io.ktor.application.*
-import io.ktor.locations.get
+import io.ktor.application.application
+import io.ktor.application.call
+import io.ktor.application.log
+import io.ktor.locations.post
 import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.Route
@@ -12,7 +14,7 @@ import util.user
 
 fun Route.hounsfield(sessionRepository: SessionRepository) {
 
-  get<Hounsfield> {
+  post<Hounsfield> {
 
     suspend fun respondError(errorCode: ErrorStringCode) {
       call.respond(HounsfieldResponse(error = ErrorModel(errorCode.value)))

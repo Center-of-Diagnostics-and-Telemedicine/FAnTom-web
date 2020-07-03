@@ -27,7 +27,7 @@ val shapesStateToShapesModel: State.() -> Model = {
     verticalCoefficient = verticalCoefficient,
     horizontalCoefficient = horizontalCoefficient,
     sliceNumber = sliceNumber,
-    huValue = null,
+    huValue = hounsfield,
     position = position,
     marks = marks
   )
@@ -42,11 +42,7 @@ val shapesStateToShapesModel: State.() -> Model = {
 val drawLabelToShapesIntent: DrawStore.Label.() -> Intent? = {
   when (this) {
     is DrawStore.Label.MouseMove -> Intent.HandleMousePosition(dicomX, dicomY)
-    is DrawStore.Label.ChangeContrastBrightness -> null
-    is DrawStore.Label.OnClick -> null
-    is DrawStore.Label.ChangeSlice -> null
-    is DrawStore.Label.Drawn -> null
-    is DrawStore.Label.StartMove -> null
+    else -> null
   }
 }
 

@@ -6,7 +6,6 @@ import com.ccfraser.muirwik.components.themeContext
 import kotlinx.css.*
 import model.Filter
 import react.RBuilder
-import root.debugLog
 import styled.css
 
 fun RBuilder.filters(
@@ -22,7 +21,6 @@ fun RBuilder.filters(
         backgroundColor = Color(theme.palette.background.paper)
         width = if (open) LinearDimension.auto else drawerWidth.px
       }
-      debugLog("filters size = ${filters.size}")
       filters.forEach { filter ->
         mListItemWithIcon(
           iconName = filter.icon,

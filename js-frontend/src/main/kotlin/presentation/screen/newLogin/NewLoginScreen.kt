@@ -12,7 +12,6 @@ import com.ccfraser.muirwik.components.button.MButtonVariant
 import com.ccfraser.muirwik.components.button.mButton
 import com.ccfraser.muirwik.components.form.MFormControlMargin
 import com.ccfraser.muirwik.components.form.MFormControlVariant
-import debugLog
 import kotlinx.css.*
 import kotlinx.html.InputType
 import kotlinx.html.js.onSubmitFunction
@@ -57,7 +56,6 @@ class NewLoginScreen(props: NewLoginProps) :
     val model = state.model
 
     if (model.authorized) {
-      debugLog("authorized")
       props.authorized()
       return
     }

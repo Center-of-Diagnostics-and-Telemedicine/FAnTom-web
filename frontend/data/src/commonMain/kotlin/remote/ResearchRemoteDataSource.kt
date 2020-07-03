@@ -57,7 +57,7 @@ object ResearchRemoteDataSource : ResearchRemote {
     token: String,
     request: HounsfieldRequest
   ): HounsfieldResponse {
-    return client.get {
+    return client.post {
       authHeader(token)
       apiUrl("$RESEARCH_ROUTE/$HOUNSFIELD_ROUTE")
       body = Json.stringify(HounsfieldRequest.serializer(), request)

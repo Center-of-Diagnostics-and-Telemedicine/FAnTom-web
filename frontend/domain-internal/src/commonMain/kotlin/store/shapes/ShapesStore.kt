@@ -21,7 +21,8 @@ interface ShapesStore : Store<Intent, State, Label> {
     val verticalCoefficient: Double,
     val sliceNumber: Int,
     val position: PointPosition?,
-    val marks: List<MarkDomain>
+    val marks: List<MarkDomain>,
+    val hounsfield: Int?
   ) : JvmSerializable
 
   sealed class Label {

@@ -64,7 +64,6 @@ abstract class App : RComponent<AppProps, AppState>() {
     when (output) {
       is ListController.Output.ItemSelected ->
         setState {
-          debugLog("output in app")
           researchId = output.id
           screen = ScreenType.RESEARCH
         }

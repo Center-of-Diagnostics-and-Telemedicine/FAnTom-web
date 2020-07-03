@@ -23,7 +23,7 @@ interface ResearchRepository {
     aproxSize: Int
   ): String
 
-  suspend fun getHounsfieldData(axialCoord: Int, frontalCoord: Int, sagittalCoord: Int): Double
+  suspend fun getHounsfieldData(sliceNumber: Int, type: Int, mipMethod: Int, mipValue: Int, horizontal: Int, vertical: Int): Double
   suspend fun confirmCtTypeForResearch(
     ctType: CTType,
     leftPercent: Int,

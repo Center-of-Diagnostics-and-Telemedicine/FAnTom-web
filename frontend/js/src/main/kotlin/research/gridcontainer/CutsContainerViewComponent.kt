@@ -22,7 +22,6 @@ import research.cut.cutContainer
 import research.gridcontainer.CutsContainerViewComponent.GridContainerStyles.columnOfRowsStyle
 import research.gridcontainer.CutsContainerViewComponent.GridContainerStyles.rowOfColumnsStyle
 import resume
-import root.debugLog
 import styled.StyleSheet
 import styled.css
 import styled.styledDiv
@@ -149,7 +148,6 @@ class CutsContainerViewComponent(prps: CutsContainerProps) :
     }
 
   private fun cutOutput(output: CutController.Output) {
-    debugLog("cutOutputIncome $output")
     when (output) {
       is CutController.Output.SliceNumberChanged -> {
         //notify other cuts

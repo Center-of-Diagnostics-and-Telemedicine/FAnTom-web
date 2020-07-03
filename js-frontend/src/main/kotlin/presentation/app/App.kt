@@ -31,7 +31,6 @@ abstract class App : RComponent<RProps, AppState>() {
     themeOptions.palette?.primary.main = Colors.Pink.shade500.toString()
     themeOptions.spacing = 1
     mThemeProvider(createMuiTheme(themeOptions)) {
-      debugLog("state: ${state.screen}")
       when (state.screen) {
         Screen.AUTH -> newLogin {
           setState { screen = Screen.RESEARCH_LIST }

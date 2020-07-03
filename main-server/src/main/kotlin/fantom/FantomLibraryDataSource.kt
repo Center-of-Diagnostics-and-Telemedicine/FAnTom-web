@@ -78,7 +78,6 @@ class FantomLibraryDataSourceImpl(
     return client.post {
       apiUrl("/$RESEARCH_ROUTE/$SLICE_ROUTE")
       val stringify = Json.stringify(SliceRequestNew.serializer(), sliceRequest)
-      debugLog(stringify)
       body = stringify
     }
   }
