@@ -10,6 +10,7 @@ const val RESEARCH_ROUTE: String = "research"
 const val MARK_ROUTE: String = "mark"
 const val COVID_MARK_ROUTE: String = "covid_mark"
 const val INIT_ROUTE: String = "init"
+const val SLICE_ROUTE: String = "slice"
 const val LIST_ROUTE: String = "list"
 const val HOUNSFIELD_ROUTE: String = "hounsfield"
 const val AUTH_CHECK_ROUTE: String = "check"
@@ -46,6 +47,7 @@ MIP методы
 const val MIP_METHOD_TYPE_AVERAGE: Int = 0
 const val MIP_METHOD_TYPE_MAXVALUE: Int = 1
 const val MIP_METHOD_TYPE_NO_MIP: Int = 2
+const val MIP_METHOD_TYPE_MINVALUE: Int = 3
 
 const val AVERAGE = "average"
 const val MAXVALUE = "maxvalue"

@@ -1,5 +1,6 @@
 package model
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -27,3 +28,49 @@ data class ConfirmCTTypeRequest(
   val leftPercent: Int,
   val rightPercent: Int
 )
+
+@Serializable
+data class SliceRequestNew(
+  val image: ImageModel,
+  val brightness: BrightnessModel
+)
+
+@Serializable
+data class ImageModel(
+  val modality: String,
+  val type: String,
+  val number: Int,
+  val mip: MipModel
+)
+
+@Serializable
+data class MipModel(
+  val mip_method: String,
+  val mip_value: Int
+)
+
+@Serializable
+data class BrightnessModel(
+  val black: Int,
+  val white: Int,
+  val gamma: Double
+)
+
+fun getModalityStringType(type: Int): String {
+  return when (type) {
+    SLYCE_TYPE_AXIAL -> "ct_axial"
+    SLYCE_TYPE_FRONTAL -> "ct_frontal"
+    SLYCE_TYPE_SAGITTAL -> "ct_sagittal"
+    else -> throw NotImplementedError("Not implemented sliceType for type $type")
+  }
+}
+
+fun getMipMethodStringType(type: Int): String {
+  return when (type) {
+    MIP_METHOD_TYPE_NO_MIP -> "mip_no_mip"
+    MIP_METHOD_TYPE_AVERAGE -> "mip_average"
+    MIP_METHOD_TYPE_MAXVALUE -> "mip_maxvalue"
+    MIP_METHOD_TYPE_MINVALUE -> "mip_minvalue"
+    else -> throw NotImplementedError("Not mipmethod implemented for type $type")
+  }
+}

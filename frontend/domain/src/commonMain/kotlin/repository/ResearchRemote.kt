@@ -7,7 +7,7 @@ interface ResearchRemote {
   suspend fun init(token: String, id: Int): ResearchInitResponseNew
   suspend fun getSlice(
     token: String,
-    request: SliceRequest,
+    request: SliceRequestNew,
     researchId: Int
   ): SliceResponse
 

@@ -56,20 +56,36 @@ class ResearchRepositoryImpl(
     gamma: Double,
     type: Int,
     mipMethod: Int,
-    slyceNumber: Int,
+    sliceNumber: Int,
     aproxSize: Int
   ): String {
     val response = remote.getSlice(
       token = token(),
-      request = SliceRequest(
-        black = black,
-        white = white,
-        gamma = gamma,
-        sliceType = type,
-        mipMethod = mipMethod,
-        sliceNumber = slyceNumber,
-        mipValue = aproxSize
+      request = SliceRequestNew(
+        image = ImageModel(
+          modality = "CT", //TODO(remove this),
+          type = getModalityStringType(type),
+          number = sliceNumber,
+          mip = MipModel(
+            mip_method = getMipMethodStringType(mipMethod),
+            mip_value = aproxSize
+          )
+        ),
+        brightness = BrightnessModel(
+          black = black,
+          white = white,
+          gamma = gamma
+        )
       ),
+//      request = SliceRequest(
+//        black = black,
+//        white = white,
+//        gamma = gamma,
+//        sliceType = type,
+//        mipMethod = mipMethod,
+//        sliceNumber = slyceNumber,
+//        mipValue = aproxSize
+//      ),
       researchId = researchId
     )
     return when {

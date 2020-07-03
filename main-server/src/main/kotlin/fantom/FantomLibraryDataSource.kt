@@ -23,7 +23,7 @@ interface FantomLibraryDataSource {
 
   suspend fun getAccessionNames(): List<String>
   suspend fun initResearch(accessionNumber: String): ResearchInitResponseNew
-  suspend fun getSlice(sliceRequest: SliceRequest, researchName: String): SliceResponse
+  suspend fun getSlice(sliceRequest: SliceRequestNew, researchName: String): SliceResponse
   suspend fun getHounsfield(
     axialCoord: Int,
     frontalCoord: Int,
@@ -72,12 +72,14 @@ class FantomLibraryDataSourceImpl(
   }
 
   override suspend fun getSlice(
-    sliceRequest: SliceRequest,
+    sliceRequest: SliceRequestNew,
     researchName: String
   ): SliceResponse {
     return client.post {
-      apiUrl("/$RESEARCH_ROUTE")
-      body = Json.stringify(SliceRequest.serializer(), sliceRequest)
+      apiUrl("/$RESEARCH_ROUTE/$SLICE_ROUTE")
+      val stringify = Json.stringify(SliceRequestNew.serializer(), sliceRequest)
+      debugLog(stringify)
+      body = stringify
     }
   }
 

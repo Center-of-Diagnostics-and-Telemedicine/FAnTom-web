@@ -43,13 +43,13 @@ object ResearchRemoteDataSource : ResearchRemote {
 
   override suspend fun getSlice(
     token: String,
-    request: SliceRequest,
+    request: SliceRequestNew,
     researchId: Int
   ): SliceResponse {
     return client.post {
       authHeader(token)
       apiUrl("$RESEARCH_ROUTE/$researchId")
-      body = Json.stringify(SliceRequest.serializer(), request)
+      body = Json.stringify(SliceRequestNew.serializer(), request)
     }
   }
 

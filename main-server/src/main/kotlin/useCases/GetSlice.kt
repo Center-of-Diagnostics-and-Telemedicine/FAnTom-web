@@ -23,11 +23,11 @@ fun Route.getSlice(
     }
 
     val userId = call.user.id
-    val request = call.receive<SliceRequest>()
+    val request = call.receive<SliceRequestNew>()
     val research = researchRepository.getResearch(it.id)
     when {
       research == null -> respondError(ErrorStringCode.RESEARCH_NOT_FOUND)
-      request.sliceNumber < 0 -> respondError(ErrorStringCode.INCORRECT_SLICE_NUMBER)
+      request.image.number < 0 -> respondError(ErrorStringCode.INCORRECT_SLICE_NUMBER)
     }
 
     val existingSession = sessionRepository.getSession(userId)

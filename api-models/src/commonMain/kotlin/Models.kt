@@ -27,17 +27,20 @@ fun ResearchInitModel.toResearchSlicesSizesData(): ResearchSlicesSizesData {
     axial = SliceSizeData(
       maxFramesSize = axialReal,
       height = frontalInterpolated,
-      pixelLength = pixelLength
+      pixelLength = pixelLength,
+      reversed = reversed
     ),
     frontal = SliceSizeData(
       maxFramesSize = frontalReal,
       height = axialInterpolated,
-      pixelLength = pixelLength
+      pixelLength = pixelLength,
+      reversed = reversed
     ),
     sagittal = SliceSizeData(
       maxFramesSize = sagittalReal,
       height = axialInterpolated,
-      pixelLength = pixelLength
+      pixelLength = pixelLength,
+      reversed = reversed
     ),
     pixelLength = pixelLength,
     reversed = reversed
@@ -49,17 +52,20 @@ fun ResearchInitModelNew.toResearchSlicesSizesData(): ResearchSlicesSizesData {
     axial = SliceSizeData(
       maxFramesSize = CT!!.axialTomogram,
       height = CT.frontalScreen,
-      pixelLength = CT.pixelLength
+      pixelLength = CT.pixelLength,
+      reversed = CT.reversed
     ),
     frontal = SliceSizeData(
       maxFramesSize = CT.frontalTomogram,
       height = CT.axialScreen,
-      pixelLength = CT.pixelLength
+      pixelLength = CT.pixelLength,
+      reversed = CT.reversed
     ),
     sagittal = SliceSizeData(
       maxFramesSize = CT.sagittalTomogram ?: 512,
       height = CT.axialScreen,
-      pixelLength = CT.pixelLength
+      pixelLength = CT.pixelLength,
+      reversed = CT.reversed
     ),
     pixelLength = CT.pixelLength,
     reversed = CT.reversed
@@ -70,7 +76,8 @@ fun initialSlicesSizeData(): SliceSizeData {
   return SliceSizeData(
     maxFramesSize = 0,
     height = 0,
-    pixelLength = 0.0
+    pixelLength = 0.0,
+    reversed = false
   )
 }
 
@@ -78,7 +85,8 @@ fun initialSlicesSizeData(): SliceSizeData {
 data class SliceSizeData(
   val maxFramesSize: Int,
   val height: Int,
-  val pixelLength: Double
+  val pixelLength: Double,
+  val reversed: Boolean
 )
 
 @Serializable

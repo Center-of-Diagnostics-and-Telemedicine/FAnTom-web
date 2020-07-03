@@ -7,10 +7,10 @@ import react.RBuilder
 import styled.css
 import styled.styledImg
 
-fun RBuilder.cutView(w: Int, h: Int, slice: String) {
+fun RBuilder.cutView(w: Int, h: Int, slice: String, reversed: Boolean? = false) {
   styledImg {
     css {
-      transform.scaleY(-1)
+      if (reversed == true) transform.scaleY(-1)
       1.spacingUnits
       width = w.px
       height = h.px

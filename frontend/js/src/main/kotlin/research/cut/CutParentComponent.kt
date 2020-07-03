@@ -74,7 +74,8 @@ class CutParentComponent(prps: CutParentProps) : RComponent<CutParentProps, CutS
       cutView(
         w = containerWidth,
         h = containerHeight,
-        slice = state.cutModel.slice
+        slice = state.cutModel.slice,
+        reversed = props.dependencies.cut.data?.reversed
       )
       shapesView(
         cut = props.dependencies.cut,
