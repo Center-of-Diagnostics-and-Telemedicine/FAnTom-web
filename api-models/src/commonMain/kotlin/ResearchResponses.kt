@@ -1,5 +1,6 @@
 package model
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -22,23 +23,23 @@ data class ResearchInitResponse(
 
 @Serializable
 data class ResearchInitResponseNew(
-  val response: ResearchInitModelNew,
+  val response: ResearchInitModelNew? = null,
   val error: ErrorModel? = null
 )
 
 @Serializable
 data class ResearchInitModelNew(
-  val ct: CTInitModel? = null
+  val CT: CTInitModel? = null
 )
 
 @Serializable
 data class CTInitModel(
-  val axialReal: Int,
-  val axialInterpolated: Int,
-  val frontalReal: Int,
-  val frontalInterpolated: Int,
-  val sagittalReal: Int,
-  val sagittalInterpolated: Int,
+  val axialTomogram: Int,
+  val axialScreen: Int,
+  val frontalTomogram: Int,
+  val frontalScreen: Int,
+  val sagittalTomogram: Int? = 512,
+  val sagittalScreen: Int,
   val pixelLength: Double,
   val reversed: Boolean
 )

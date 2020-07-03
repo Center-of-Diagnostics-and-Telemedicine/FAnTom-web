@@ -7,7 +7,7 @@ import util.debugLog
 
 interface RemoteLibraryRepository {
   val libraryContainerId: String
-  suspend fun initResearch(accessionNumber: String): ResearchInitModel
+  suspend fun initResearch(accessionNumber: String): ResearchInitModelNew
   suspend fun getSlice(request: SliceRequest, researchName: String): String
   suspend fun hounsfield(axialCoord: Int, frontalCoord: Int, sagittalCoord: Int): Double
 }
@@ -17,7 +17,7 @@ class RemoteLibraryRepositoryImpl(
   override val libraryContainerId: String
 ) : RemoteLibraryRepository {
 
-  override suspend fun initResearch(accessionNumber: String): ResearchInitModel {
+  override suspend fun initResearch(accessionNumber: String): ResearchInitModelNew {
     val response = try {
       remoteDataSource.initResearch(accessionNumber)
     } catch (e: Exception) {

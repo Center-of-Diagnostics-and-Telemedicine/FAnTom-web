@@ -34,7 +34,7 @@ object ResearchRemoteDataSource : ResearchRemote {
   override suspend fun init(
     token: String,
     id: Int
-  ): ResearchInitResponse {
+  ): ResearchInitResponseNew {
     return client.get {
       authHeader(token)
       apiUrl("$RESEARCH_ROUTE/$INIT_ROUTE/$id")

@@ -10,6 +10,7 @@ import kotlinx.coroutines.delay
 import model.ErrorModel
 import model.ErrorStringCode
 import model.ResearchInitResponse
+import model.ResearchInitResponseNew
 import repository.ResearchRepository
 import repository.SessionRepository
 import repository.UserResearchRepository
@@ -52,7 +53,7 @@ fun Route.initResearch(
       debugLog("delaying for 2secs")
       delay(2000)
       val response = session.initResearch(research.accessionNumber)
-      call.respond(ResearchInitResponse(response = response))
+      call.respond(ResearchInitResponseNew(response = response))
     } catch (e: Exception) {
       application.log.error("Failed to init research", e)
       e.printStackTrace()

@@ -22,7 +22,7 @@ interface FantomLibraryDataSource {
   val onClose: () -> Unit
 
   suspend fun getAccessionNames(): List<String>
-  suspend fun initResearch(accessionNumber: String): ResearchInitResponse
+  suspend fun initResearch(accessionNumber: String): ResearchInitResponseNew
   suspend fun getSlice(sliceRequest: SliceRequest, researchName: String): SliceResponse
   suspend fun getHounsfield(
     axialCoord: Int,
@@ -65,9 +65,9 @@ class FantomLibraryDataSourceImpl(
     }
   }
 
-  override suspend fun initResearch(accessionNumber: String): ResearchInitResponse {
+  override suspend fun initResearch(accessionNumber: String): ResearchInitResponseNew {
     return client.get {
-      apiUrl("$RESEARCH_ROUTE/$INIT_ROUTE/$accessionNumber")
+      apiUrl("$RESEARCH_ROUTE/$INIT_ROUTE")
     }
   }
 

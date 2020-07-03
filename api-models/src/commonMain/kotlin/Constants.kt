@@ -20,14 +20,14 @@ const val TYPE_AXIAL = "AXIAL"
 const val TYPE_FRONTAL = "FRONTAL"
 const val TYPE_SAGITTAL = "SAGITTAL"
 
-const val localDataStorePath = "C:\\dicom"
+const val localDataStorePath = "d:\\dicom"
 const val dockerDataStorePath = "/app/dicom"
 
 const val ID_FIELD = "id"
 
 const val tenMinutes: Long = 600000
 
-const val libraryServerPort: Int = 8082
+const val libraryServerPort: Int = 5555
 const val libraryServerSchema: String = "http://"
 const val libraryServerDomain: String = "localhost"
 

@@ -4,7 +4,7 @@ import model.*
 
 interface ResearchRemote {
   suspend fun getAll(token: String): ResearchesResponse
-  suspend fun init(token: String, id: Int): ResearchInitResponse
+  suspend fun init(token: String, id: Int): ResearchInitResponseNew
   suspend fun getSlice(
     token: String,
     request: SliceRequest,

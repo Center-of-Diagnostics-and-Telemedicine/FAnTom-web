@@ -44,6 +44,28 @@ fun ResearchInitModel.toResearchSlicesSizesData(): ResearchSlicesSizesData {
   )
 }
 
+fun ResearchInitModelNew.toResearchSlicesSizesData(): ResearchSlicesSizesData {
+  return ResearchSlicesSizesData(
+    axial = SliceSizeData(
+      maxFramesSize = CT!!.axialTomogram,
+      height = CT.frontalScreen,
+      pixelLength = CT.pixelLength
+    ),
+    frontal = SliceSizeData(
+      maxFramesSize = CT.frontalTomogram,
+      height = CT.axialScreen,
+      pixelLength = CT.pixelLength
+    ),
+    sagittal = SliceSizeData(
+      maxFramesSize = CT.sagittalTomogram ?: 512,
+      height = CT.axialScreen,
+      pixelLength = CT.pixelLength
+    ),
+    pixelLength = CT.pixelLength,
+    reversed = CT.reversed
+  )
+}
+
 fun initialSlicesSizeData(): SliceSizeData {
   return SliceSizeData(
     maxFramesSize = 0,
@@ -113,7 +135,6 @@ data class AreaToSave(
 data class AccessionNamesResponse(
   val accessionNames: List<String>
 )
-
 
 
 @Serializable
