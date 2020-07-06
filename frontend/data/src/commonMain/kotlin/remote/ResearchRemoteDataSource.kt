@@ -55,12 +55,12 @@ object ResearchRemoteDataSource : ResearchRemote {
 
   override suspend fun hounsfield(
     token: String,
-    request: HounsfieldRequest
+    request: HounsfieldRequestNew
   ): HounsfieldResponse {
     return client.post {
       authHeader(token)
       apiUrl("$RESEARCH_ROUTE/$HOUNSFIELD_ROUTE")
-      body = Json.stringify(HounsfieldRequest.serializer(), request)
+      body = Json.stringify(HounsfieldRequestNew.serializer(), request)
     }
   }
 

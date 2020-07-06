@@ -22,7 +22,8 @@ actual object ResearchLocalDataSource : ResearchLocal {
           name = research.name,
           seen = research.seen,
           done = research.done,
-          marked = research.marked
+          marked = research.marked,
+          modality = research.modality
         )
       )
     }

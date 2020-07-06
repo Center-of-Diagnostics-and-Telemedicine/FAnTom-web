@@ -11,5 +11,6 @@ data class ResearchModel(
   val jsonName: String,
   val doctor1: String,
   val doctor2: String,
-  val posInBlock: String
+  val posInBlock: String,
+  val modality: String
 )

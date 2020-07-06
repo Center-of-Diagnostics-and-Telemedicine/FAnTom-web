@@ -176,7 +176,9 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
             right = 0.px
             padding(1.spacingUnits)
           }
-          mTypography(text = "HU: $it")
+          mTypography(text = "HU: $it") {
+            css { color = Color.white }
+          }
         }
       }
     }

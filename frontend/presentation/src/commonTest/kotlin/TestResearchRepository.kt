@@ -27,21 +27,24 @@ class TestResearchRepository : ResearchRepository {
 
   override suspend fun getSlice(
     researchId: Int,
-    black: Double,
-    white: Double,
+    black: Int,
+    white: Int,
     gamma: Double,
     type: Int,
     mipMethod: Int,
-    slyceNumber: Int,
+    sliceNumber: Int,
     aproxSize: Int
   ): String {
     TODO("Not yet implemented")
   }
 
   override suspend fun getHounsfieldData(
-    axialCoord: Int,
-    frontalCoord: Int,
-    sagittalCoord: Int
+    sliceNumber: Int,
+    type: Int,
+    mipMethod: Int,
+    mipValue: Int,
+    horizontal: Int,
+    vertical: Int
   ): Double {
     TODO("Not yet implemented")
   }

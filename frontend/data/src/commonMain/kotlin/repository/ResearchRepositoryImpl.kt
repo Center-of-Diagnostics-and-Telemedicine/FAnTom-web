@@ -96,13 +96,30 @@ class ResearchRepositoryImpl(
   }
 
   override suspend fun getHounsfieldData(
-    axialCoord: Int,
-    frontalCoord: Int,
-    sagittalCoord: Int
+    sliceNumber: Int,
+    type: Int,
+    mipMethod: Int,
+    mipValue: Int,
+    horizontal: Int,
+    vertical: Int
   ): Double {
     val response = remote.hounsfield(
-      token(),
-      HounsfieldRequest(axialCoord, frontalCoord, sagittalCoord)
+      token = token(),
+      request = HounsfieldRequestNew(
+        image = ImageModel(
+          modality = "CT", //TODO(remove this),
+          type = getModalityStringType(type),
+          number = sliceNumber,
+          mip = MipModel(
+            mip_method = getMipMethodStringType(mipMethod),
+            mip_value = mipValue
+          )
+        ),
+        point = PointModel(
+          vertical = vertical,
+          horizontal = horizontal
+        )
+      )
     )
     return when {
       response.response != null -> response.response!!.huValue

@@ -47,6 +47,7 @@ class ResearchDao() : ResearchDaoFacade {
         it[doctor1] = researchModel.doctor1
         it[doctor2] = researchModel.doctor2
         it[pos_in_block] = researchModel.posInBlock
+        it[modality] = researchModel.modality
       }
     }
   }
@@ -70,6 +71,7 @@ class ResearchDao() : ResearchDaoFacade {
         it[doctor1] = researchModel.doctor1
         it[doctor2] = researchModel.doctor2
         it[pos_in_block] = researchModel.posInBlock
+        it[modality] = researchModel.modality
       }
     }
   }

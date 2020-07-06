@@ -19,7 +19,8 @@ fun ResultRow.toResearch(): ResearchModel = ResearchModel(
   jsonName = this[ResearchVos.json_name],
   doctor1 = this[ResearchVos.doctor1],
   doctor2 = this[ResearchVos.doctor2],
-  posInBlock = this[ResearchVos.pos_in_block]
+  posInBlock = this[ResearchVos.pos_in_block],
+  modality = this[ResearchVos.modality]
 )
 
 fun ResultRow.toUserResearch(): UserResearchModel = UserResearchModel(

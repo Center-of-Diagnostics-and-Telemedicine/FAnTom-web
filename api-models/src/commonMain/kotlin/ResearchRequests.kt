@@ -22,6 +22,12 @@ data class HounsfieldRequest(
 )
 
 @Serializable
+data class HounsfieldRequestNew(
+  val image: ImageModel,
+  val point: PointModel
+)
+
+@Serializable
 data class ConfirmCTTypeRequest(
   val researchId: Int,
   val ctType: Int,
@@ -54,6 +60,12 @@ data class BrightnessModel(
   val black: Int,
   val white: Int,
   val gamma: Double
+)
+
+@Serializable
+data class PointModel(
+  val vertical: Int,
+  val horizontal: Int
 )
 
 fun getModalityStringType(type: Int): String {

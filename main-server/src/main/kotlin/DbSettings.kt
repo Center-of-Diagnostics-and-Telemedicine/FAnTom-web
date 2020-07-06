@@ -31,6 +31,7 @@ object ResearchVos : Table(name = RESEARCH_TABLE) {
   val doctor1: Column<String> = varchar(name = DOCTOR_1_FIELD, length = 200)
   val doctor2: Column<String> = varchar(name = DOCTOR_2_FIELD, length = 200)
   val pos_in_block: Column<String> = varchar(name = POS_IN_BLOCK_FIELD, length = 200)
+  val modality: Column<String> = varchar(name = MODALITY_FIELD, length = 200)
   override val primaryKey = PrimaryKey(id, name = "ResearchPKConstraintName")
 }
 

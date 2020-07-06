@@ -7,7 +7,9 @@ import com.arkivanov.mvikotlin.extensions.reaktive.bind
 import com.arkivanov.mvikotlin.extensions.reaktive.events
 import com.arkivanov.mvikotlin.extensions.reaktive.labels
 import com.arkivanov.mvikotlin.extensions.reaktive.states
+import com.badoo.reaktive.observable.debounce
 import com.badoo.reaktive.observable.mapNotNull
+import com.badoo.reaktive.scheduler.mainScheduler
 import com.badoo.reaktive.subject.Relay
 import com.badoo.reaktive.subject.publish.PublishSubject
 import controller.CutController.Input
@@ -50,9 +52,11 @@ class CutControllerImpl(val dependencies: CutController.Dependencies) :
     bind(dependencies.lifecycle, BinderLifecycleMode.CREATE_DESTROY) {
       inputRelay.mapNotNull(inputToCutIntent) bindTo cutStore
       drawStore.labels.mapNotNull(drawLabelToCutIntent) bindTo cutStore
-      drawStore.labels.mapNotNull(drawLabelToShapesIntent) bindTo shapesStore
       shapesStore.labels.mapNotNull(shapesLabelToCutIntent) bindTo cutStore
       cutStore.labels.mapNotNull(cutLabelToShapesIntent) bindTo shapesStore
+      drawStore.labels
+        .debounce(60, mainScheduler)
+        .mapNotNull(drawLabelToShapesIntent) bindTo shapesStore
     }
 
     dependencies.lifecycle.doOnDestroy(cutStore::dispose)

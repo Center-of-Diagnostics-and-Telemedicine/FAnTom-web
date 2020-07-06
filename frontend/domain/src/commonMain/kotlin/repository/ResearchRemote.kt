@@ -13,7 +13,7 @@ interface ResearchRemote {
 
   suspend fun hounsfield(
     token: String,
-    request: HounsfieldRequest
+    request: HounsfieldRequestNew
   ): HounsfieldResponse
 
   suspend fun confirmCtTypeForResearch(

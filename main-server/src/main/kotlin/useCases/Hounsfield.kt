@@ -21,29 +21,13 @@ fun Route.hounsfield(sessionRepository: SessionRepository) {
     }
 
     val userId = call.user.id
-    val params = call.receive<HounsfieldRequest>()
-
-    when {
-      params.axialCoord < 0 -> respondError(ErrorStringCode.INCORRECT_AXIAL_COORD)
-      params.frontalCoord < 0 -> respondError(ErrorStringCode.INCORRECT_FRONTAL_COORD)
-      params.sagittalCoord < 0 -> respondError(ErrorStringCode.INCORRECT_SAGITTAL_COORD)
-    }
+    val params = call.receive<HounsfieldRequestNew>()
 
     val existingSession = sessionRepository.getSession(userId)
     if (existingSession == null) respondError(ErrorStringCode.SESSION_EXPIRED)
 
     try {
-      call.respond(
-        HounsfieldResponse(
-          HounsfieldModel(
-            existingSession!!.hounsfield(
-              params.axialCoord,
-              params.frontalCoord,
-              params.sagittalCoord
-            )
-          )
-        )
-      )
+      call.respond(HounsfieldResponse(HounsfieldModel(existingSession!!.hounsfield(params))))
     } catch (e: Exception) {
       application.log.error("Failed to get hounsfield", e)
       respondError(ErrorStringCode.HOUNSFIELD_ERROR)

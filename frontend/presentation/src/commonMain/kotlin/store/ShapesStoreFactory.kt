@@ -10,6 +10,7 @@ import com.badoo.reaktive.single.map
 import com.badoo.reaktive.single.observeOn
 import com.badoo.reaktive.single.subscribeOn
 import model.Cut
+import model.MIP_METHOD_TYPE_NO_MIP
 import model.getPosition
 import repository.ResearchRepository
 import store.shapes.ShapesStore.*
@@ -78,12 +79,23 @@ internal class ShapesStoreFactory(
         sliceNumber = getState().sliceNumber
       )
       dispatch(Result.PointPositionChanged(position = position))
-      hounsfield(dicomX, dicomY)
+      hounsfield(dicomX, dicomY, getState)
     }
 
-    private fun hounsfield(position: Double, dicomY: Double) {
+    private fun hounsfield(
+      dicomX: Double,
+      dicomY: Double,
+      state: () -> State
+    ) {
       singleFromCoroutine {
-        repository.getHounsfieldData(position.toInt(), dicomY.toInt(), position.z.toInt())
+        repository.getHounsfieldData(
+          horizontal = dicomX.toInt(),
+          vertical = dicomY.toInt(),
+          sliceNumber = state().sliceNumber,
+          type = cut.type.intType,
+          mipMethod = MIP_METHOD_TYPE_NO_MIP,
+          mipValue = 0
+        )
       }
         .subscribeOn(ioScheduler)
         .map(Result::HounsfieldChanged)

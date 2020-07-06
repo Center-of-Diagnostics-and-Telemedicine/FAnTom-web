@@ -9,7 +9,7 @@ interface RemoteLibraryRepository {
   val libraryContainerId: String
   suspend fun initResearch(accessionNumber: String): ResearchInitModelNew
   suspend fun getSlice(request: SliceRequestNew, researchName: String): String
-  suspend fun hounsfield(axialCoord: Int, frontalCoord: Int, sagittalCoord: Int): Double
+  suspend fun hounsfield(request: HounsfieldRequestNew): Double
 }
 
 class RemoteLibraryRepositoryImpl(
@@ -60,8 +60,8 @@ class RemoteLibraryRepositoryImpl(
     }
   }
 
-  override suspend fun hounsfield(axialCoord: Int, frontalCoord: Int, sagittalCoord: Int): Double {
-    val response = remoteDataSource.getHounsfield(axialCoord, frontalCoord, sagittalCoord)
+  override suspend fun hounsfield(request: HounsfieldRequestNew): Double {
+    val response = remoteDataSource.getHounsfield(request)
     return when {
       response.response != null -> response.response!!.huValue
       response.error != null -> throw IllegalStateException("RemoteLibraryRepositoryImpl hounsfield errorCode ${response.error?.error}")

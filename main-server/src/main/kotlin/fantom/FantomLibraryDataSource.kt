@@ -24,11 +24,7 @@ interface FantomLibraryDataSource {
   suspend fun getAccessionNames(): List<String>
   suspend fun initResearch(accessionNumber: String): ResearchInitResponseNew
   suspend fun getSlice(sliceRequest: SliceRequestNew, researchName: String): SliceResponse
-  suspend fun getHounsfield(
-    axialCoord: Int,
-    frontalCoord: Int,
-    sagittalCoord: Int
-  ): HounsfieldResponse
+  suspend fun getHounsfield(request: HounsfieldRequestNew): HounsfieldResponse
 }
 
 class FantomLibraryDataSourceImpl(
@@ -83,15 +79,11 @@ class FantomLibraryDataSourceImpl(
   }
 
   override suspend fun getHounsfield(
-    axialCoord: Int,
-    frontalCoord: Int,
-    sagittalCoord: Int
+    request: HounsfieldRequestNew
   ): HounsfieldResponse {
-    return client.get {
-      apiUrl("$RESEARCH_ROUTE/$HOUNSFIELD_ROUTE")
-      parameter(TYPE_AXIAL, axialCoord)
-      parameter(TYPE_FRONTAL, frontalCoord)
-      parameter(TYPE_SAGITTAL, sagittalCoord)
+    return client.post {
+      apiUrl("$RESEARCH_ROUTE/$BRIGHTNESS_ROUTE")
+      body = Json.stringify(HounsfieldRequestNew.serializer(), request)
     }
   }
 
