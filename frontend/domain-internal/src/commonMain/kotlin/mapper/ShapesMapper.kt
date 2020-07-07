@@ -29,7 +29,7 @@ val shapesStateToShapesModel: State.() -> Model = {
     sliceNumber = sliceNumber,
     huValue = hounsfield,
     position = position,
-    marks = marks
+    circles = circles
   )
 }
 

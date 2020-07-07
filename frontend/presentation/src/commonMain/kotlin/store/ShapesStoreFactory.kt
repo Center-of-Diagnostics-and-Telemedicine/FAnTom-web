@@ -9,9 +9,7 @@ import com.badoo.reaktive.scheduler.mainScheduler
 import com.badoo.reaktive.single.map
 import com.badoo.reaktive.single.observeOn
 import com.badoo.reaktive.single.subscribeOn
-import model.Cut
-import model.MIP_METHOD_TYPE_NO_MIP
-import model.getPosition
+import model.*
 import repository.ResearchRepository
 import store.shapes.ShapesStore.*
 import store.shapes.ShapesStoreAbstractFactory
@@ -35,19 +33,25 @@ internal class ShapesStoreFactory(
       when (intent) {
         is Intent.HandleSliceNumberChange -> dispatch(Result.SliceNumberChanged(intent.sliceNumber))
         is Intent.HandleExternalSliceNumberChanged ->
-          handleExternalSliceNumberChanged(intent.sliceNumber, intent.cut)
+          handleExternalSliceNumberChanged(intent.sliceNumber, intent.cut, getState)
         is Intent.HandleMousePosition -> handleMousePosition(
           intent.dicomX,
           intent.dicomY,
           getState
         )
-        is Intent.HandleMarks -> dispatch(Result.Marks(intent.list))
+        is Intent.HandleMarks -> handleMarks(intent.list, getState)
       }.let {}
+    }
+
+    private fun handleMarks(list: List<MarkDomain>, state: () -> State) {
+      dispatch(Result.Marks(list))
+      updateCircles(list, state)
     }
 
     private fun handleExternalSliceNumberChanged(
       sliceNumber: Int,
-      externalCut: Cut
+      externalCut: Cut,
+      getState: () -> State
     ) {
       when {
         cut.horizontalCutData.type == externalCut.type ->
@@ -55,6 +59,12 @@ internal class ShapesStoreFactory(
         cut.verticalCutData.type == externalCut.type ->
           updateVerticalLine(sliceNumber, externalCut)
       }
+      updateCircles(getState().marks, getState)
+    }
+
+    private fun updateCircles(list: List<MarkDomain>, state: () -> State) {
+      val circles = list.mapNotNull { it.toCircle(cut, state().sliceNumber) }
+      dispatch(Result.Circles(circles))
     }
 
     private fun updateVerticalLine(sliceNumber: Int, externalCut: Cut) {
@@ -79,7 +89,9 @@ internal class ShapesStoreFactory(
         sliceNumber = getState().sliceNumber
       )
       dispatch(Result.PointPositionChanged(position = position))
-      hounsfield(dicomX, dicomY, getState)
+      if (position != null) {
+        hounsfield(dicomX, dicomY, getState)
+      }
     }
 
     private fun hounsfield(

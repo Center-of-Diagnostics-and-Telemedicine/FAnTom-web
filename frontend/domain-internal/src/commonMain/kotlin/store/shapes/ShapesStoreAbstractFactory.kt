@@ -6,6 +6,7 @@ import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.badoo.reaktive.utils.ensureNeverFrozen
+import model.Circle
 import model.Cut
 import model.MarkDomain
 import model.PointPosition
@@ -22,8 +23,9 @@ abstract class ShapesStoreAbstractFactory(
     verticalCoefficient = 0.5,
     sliceNumber = cut.data!!.maxFramesSize / 2,
     position = null,
-    marks = listOf(),
-    hounsfield = null
+    circles = listOf(),
+    hounsfield = null,
+    marks = listOf()
   )
 
   fun create(): ShapesStore =
@@ -46,8 +48,9 @@ abstract class ShapesStoreAbstractFactory(
     class HorizontalLineChanged(val coefficient: Double) : Result()
     class VerticalLineChanged(val coefficient: Double) : Result()
     class PointPositionChanged(val position: PointPosition?) : Result()
-    class HounsfieldChanged(val hu: Double): Result()
-    class Marks(val list: List<MarkDomain>) : Result()
+    class HounsfieldChanged(val hu: Double) : Result()
+    class Marks(val marks: List<MarkDomain>) : Result()
+    class Circles(val list: List<Circle>) : Result()
   }
 
   private object ReducerImpl : Reducer<State, Result> {
@@ -57,8 +60,9 @@ abstract class ShapesStoreAbstractFactory(
         is Result.HorizontalLineChanged -> copy(horizontalCoefficient = result.coefficient)
         is Result.VerticalLineChanged -> copy(verticalCoefficient = result.coefficient)
         is Result.PointPositionChanged -> copy(position = result.position)
-        is Result.Marks -> copy(marks = result.list)
+        is Result.Circles -> copy(circles = result.list)
         is Result.HounsfieldChanged -> copy(hounsfield = result.hu.toInt())
+        is Result.Marks -> copy(marks = result.marks)
       }
   }
 }

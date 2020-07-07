@@ -14,18 +14,24 @@ import react.RBuilder
 import react.RComponent
 import react.RProps
 import react.RState
+import root.debugLog
 import styled.css
 import styled.styledCanvas
 import styled.styledDiv
 import view.ShapesView
 import kotlin.browser.document
 import kotlin.math.PI
+import kotlin.math.pow
 import kotlin.math.roundToInt
+import kotlin.math.sqrt
 
 class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(prps) {
 
   private var resultWidth: Int = 0
   private var resultHeight: Int = 0
+  private var horizontalRatio: Double = 0.0
+  private var verticalRatio: Double = 0.0
+  private var radiusRatio: Double = 0.0
 
   override fun componentDidMount() {
     updateCanvas()
@@ -41,7 +47,7 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
       val context = canvas.getContext("2d") as? CanvasRenderingContext2D
       context?.let { _ ->
         clearCanvas(canvas, context)
-        props.shapesModel.marks?.let { drawCircles(it, context) }
+        props.shapesModel.circles?.let { drawCircles(it, context) }
 //        state.moveRects?.let { drawRects(it, context) }
         drawLines(
           horizontal = props.shapesModel.horizontalCoefficient * resultHeight,
@@ -70,6 +76,11 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
       val mLeft = props.width - resultWidth
       val resultTop = if (mTop <= 0) 0 else mTop / 2
       val resultLeft = if (mLeft <= 0) 0 else mLeft / 2
+      horizontalRatio = dicomHeight.toDouble() / resultHeight
+      verticalRatio = dicomWidth.toDouble() / resultWidth
+      val dicomRadius = sqrt(dicomHeight.toDouble().pow(2) + dicomWidth.toDouble().pow(2))
+      val screenRadius = sqrt(resultHeight.toDouble().pow(2) + resultWidth.toDouble().pow(2))
+      radiusRatio = dicomRadius / screenRadius
       styledDiv {
         css {
           position = Position.absolute
@@ -200,15 +211,16 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
 //  }
 
   private fun drawCircles(
-    models: List<MarkDomain>,
+    models: List<Circle>,
     context: CanvasRenderingContext2D
   ) {
-    models.forEach { model ->
-//      if (model.highlight) {
+    models.forEach { circle ->
+      debugLog(circle.toString())
+//      if (circle.highlight) {
 //        context.strokeStyle = "#18a0fb"
 //        context.lineWidth = 1.0
 //
-////        if (model.hasContext) {
+////        if (circle.hasContext) {
 ////          context.lineWidth = 2.0
 ////        }
 //
@@ -219,9 +231,9 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
 
       context.beginPath()
       context.arc(
-        model.markData.x * props.shapesModel.verticalCoefficient,
-        model.markData.y * props.shapesModel.horizontalCoefficient,
-        model.markData.radius,
+        circle.dicomCenterX / verticalRatio,
+        circle.dicomCenterY / horizontalRatio,
+        circle.dicomRadius / radiusRatio,
         0.0,
         2 * PI,
         false
