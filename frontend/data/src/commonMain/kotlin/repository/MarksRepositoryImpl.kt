@@ -30,7 +30,7 @@ class MarksRepositoryImpl(
     when {
       response.response != null -> {
         val mark = response.response!!.mark
-        local.save(mark)
+        local.create(mark)
       }
       response.error != null -> handleErrorResponse(response.error!!)
     }
@@ -39,7 +39,7 @@ class MarksRepositoryImpl(
   override suspend fun updateMark(mark: MarkDomain) {
     val response = remote.update(mark, token())
     when{
-      response.response != null -> local.save(mark)
+      response.response != null -> local.create(mark)
       response.error != null -> handleErrorResponse(response.error!!)
     }
   }

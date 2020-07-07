@@ -50,6 +50,6 @@ fun ResultRow.toMark(): MarkDomain = MarkDomain(
   type = MarkType
     .values()
     .firstOrNull { it.intValue == this[MarksVos.type] }
-    ?: MarkType.NoTypeNodule,
+    ?: MarkType.NO_TYPE_NODULE,
   comment = this[MarksVos.comment],
 )

@@ -61,7 +61,7 @@ object MarksVos : Table(MARKS_TABLE) {
   val z: Column<Int> = integer(Z_FIELD)
   val radius: Column<Double> = double(RADIUS_FIELD)
   val size: Column<Double> = double(SIZE_FIELD)
-  val type: Column<Int> = integer(MARK_TYPE_FILED).default(MarkType.NoTypeNodule.intValue)
+  val type: Column<Int> = integer(MARK_TYPE_FILED).default(MarkType.NO_TYPE_NODULE.intValue)
   val comment: Column<String> = varchar(name = COMMENT_FILED, length = 200).default("")
   override val primaryKey = PrimaryKey(id, name = "MarkPKConstraintName")
 

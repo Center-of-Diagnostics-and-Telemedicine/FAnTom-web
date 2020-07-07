@@ -13,7 +13,12 @@ actual object MarksLocalDataSource : MarksLocal {
 
   override suspend fun getAll(): List<MarkDomain> = map.value.values.toList()
 
-  override suspend fun save(mark: MarkDomain) {
+  override suspend fun create(mark: MarkDomain) {
+    val id = mark.id
+    map.update { it.plus(id to mark) }
+  }
+
+  override suspend fun update(mark: MarkDomain) {
     val id = mark.id
     map.update {
       it.plus(
