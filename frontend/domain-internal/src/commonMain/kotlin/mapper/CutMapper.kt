@@ -37,6 +37,7 @@ val cutLabelToCutOutput: Label.() -> Output? = {
     is Label.SelectMark -> Output.SelectMark(mark)
     is Label.CenterMark -> Output.CenterMark(mark)
     is Label.UnselectMark -> Output.UnselectMark(mark)
+    is Label.ContrastBrightnessChanged -> Output.ContrastBrightnessChanged(black, white)
     is Label.ExternalSliceNumberChanged -> null
     is Label.Marks -> null
   }
@@ -45,9 +46,10 @@ val cutLabelToCutOutput: Label.() -> Output? = {
 val drawLabelToCutIntent: DrawStore.Label.() -> Intent? = {
   when (this) {
     is DrawStore.Label.Drawn -> Intent.HandleCircleDrawn(circle = circle)
+    is DrawStore.Label.ChangeContrastBrightness -> Intent.ChangeContrastBrightness(deltaX, deltaY)
+    DrawStore.Label.ContrastBrightnessChanged -> Intent.ContrasBrightnessChanged
     is DrawStore.Label.OnClick -> null
     is DrawStore.Label.StartMove -> null
-    is DrawStore.Label.ChangeContrastBrightness -> null
     is DrawStore.Label.MouseMove -> null
     is DrawStore.Label.ChangeSlice -> null
   }

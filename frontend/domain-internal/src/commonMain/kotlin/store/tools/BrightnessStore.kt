@@ -2,6 +2,7 @@ package store.tools
 
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
+import model.Presets
 import store.tools.BrightnessStore.*
 
 interface BrightnessStore : Store<Intent, State, Label> {
@@ -10,6 +11,8 @@ interface BrightnessStore : Store<Intent, State, Label> {
     data class HandleBlackChanged(val value: Int) : Intent()
     data class HandleWhiteValueChanged(val value: Int) : Intent()
     data class HandleGammaValueChanged(val value: Double) : Intent()
+    data class HandleContrastBrightnessChanged(val black: Int, val white: Int) : Intent()
+    data class PresetChanged(val item: Presets) : Intent()
   }
 
   data class State(

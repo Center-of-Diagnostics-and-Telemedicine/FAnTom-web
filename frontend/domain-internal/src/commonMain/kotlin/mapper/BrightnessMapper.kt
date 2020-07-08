@@ -21,3 +21,5 @@ val brightnessEventToBrightnessIntent: Event.() -> Intent? =
       is Event.GammaChanged -> Intent.HandleGammaValueChanged(value)
     }
   }
+
+

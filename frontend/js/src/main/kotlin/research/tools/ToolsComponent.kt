@@ -2,7 +2,10 @@ package research.tools
 
 import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.lifecycle.LifecycleRegistry
+import com.arkivanov.mvikotlin.core.lifecycle.doOnDestroy
 import com.arkivanov.mvikotlin.core.store.StoreFactory
+import com.badoo.reaktive.observable.Observable
+import com.badoo.reaktive.observable.subscribe
 import com.ccfraser.muirwik.components.list.mList
 import com.ccfraser.muirwik.components.list.mListItemWithIcon
 import com.ccfraser.muirwik.components.mDivider
@@ -52,6 +55,9 @@ class ToolsComponent(prps: ToolsProps) : RComponent<ToolsProps, ToolsState>(prps
   override fun componentDidMount() {
     lifecycleRegistry.resume()
     controller = createController()
+    val dependencies = props.dependencies
+    val disposable = dependencies.toolsInput.subscribe { controller.input(it) }
+    lifecycleRegistry.doOnDestroy(disposable::dispose)
     controller.onViewCreated(
       gridView = gridViewDelegate,
       mipView = mipViewDelegate,
@@ -133,6 +139,8 @@ class ToolsComponent(prps: ToolsProps) : RComponent<ToolsProps, ToolsState>(prps
   interface Dependencies {
     val storeFactory: StoreFactory
     val toolsOutput: (ToolsController.Output) -> Unit
+    val toolsInput: Observable<ToolsController.Input>
+
   }
 
   object ToolsStyles : StyleSheet("ToolsStyles", isStatic = true) {

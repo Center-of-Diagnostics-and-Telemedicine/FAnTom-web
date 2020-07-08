@@ -20,6 +20,14 @@ internal class BrightnessStoreFactory(
           is Intent.HandleBlackChanged -> handleBlackChanged(intent.value)
           is Intent.HandleWhiteValueChanged -> handleWhiteChanged(intent.value)
           is Intent.HandleGammaValueChanged -> handleGammaChanged(intent.value)
+          is Intent.HandleContrastBrightnessChanged -> {
+            handleBlackChanged(intent.black)
+            handleWhiteChanged(intent.white)
+          }
+          is Intent.PresetChanged -> {
+            dispatch(Result.BlackValueChanged(intent.item.black))
+            dispatch(Result.WhiteValueChanged(intent.item.white))
+          }
         }.let {}
       }
 

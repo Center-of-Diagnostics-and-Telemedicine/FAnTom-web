@@ -64,5 +64,6 @@ val cutLabelToShapesIntent: CutStore.Label.() -> Intent? = {
     is CutStore.Label.SelectMark -> null
     is CutStore.Label.CenterMark -> null
     is CutStore.Label.UnselectMark -> null
+    is CutStore.Label.ContrastBrightnessChanged -> null
   }
 }

@@ -83,6 +83,13 @@ internal class CutStoreFactory(
         is Intent.ChangeSliceNumberByMarkCenter -> {
           cut.getSliceNumberByMark(intent.mark)?.let { changeSliceNumber(it, getState) }
         }
+        is Intent.ChangeContrastBrightness -> {
+          handleContrastBrightness(intent.deltaX, intent.deltaY, getState)
+        }
+        Intent.ContrasBrightnessChanged -> {
+          val state = getState()
+          publish(Label.ContrastBrightnessChanged(state.black, state.white))
+        }
       }.let {}
     }
 
@@ -90,6 +97,20 @@ internal class CutStoreFactory(
       dispatch(Result.SliceNumberChanged(sliceNumber = sliceNumber))
       load(getState)
       publish(Label.SliceNumberChanged(sliceNumber = sliceNumber, cut = cut))
+    }
+
+    private fun handleContrastBrightness(
+      deltaX: Double,
+      deltaY: Double,
+      state: () -> State
+    ) {
+      val oldBlack = state().black
+      val oldWhite = state().white
+      val black = oldBlack - deltaY - deltaX
+      val white = oldWhite - deltaY + deltaX
+      dispatch(Result.BlackChanged(blackValue = black.toInt()))
+      dispatch(Result.WhiteChanged(whiteValue = white.toInt()))
+      load(state)
     }
 
     private fun load(getState: () -> State) {

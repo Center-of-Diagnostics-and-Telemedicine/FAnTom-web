@@ -67,6 +67,10 @@ internal class DrawStoreFactory(
           dispatch(Result.Idle)
           publish(Label.Drawn(circle = state.circle()))
         }
+        state.isContrastBrightness -> {
+          dispatch(Result.Idle)
+          publish(Label.ContrastBrightnessChanged)
+        }
       }
     }
 

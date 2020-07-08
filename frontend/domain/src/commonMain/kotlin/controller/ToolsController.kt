@@ -9,6 +9,8 @@ import view.*
 
 interface ToolsController {
 
+  val input: (Input) -> Unit
+
   fun onViewCreated(
     toolsView: ToolsView,
     gridView: GridView,
@@ -33,5 +35,9 @@ interface ToolsController {
     data class MipValueChanged(val value: Int) : Output()
     data class PresetChanged(val preset: Presets) : Output()
     object Close : Output()
+  }
+
+  sealed class Input {
+    data class ContrastBrightnessChanged(val black: Int, val white: Int) : Input()
   }
 }

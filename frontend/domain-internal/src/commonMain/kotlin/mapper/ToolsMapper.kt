@@ -1,5 +1,6 @@
 package mapper
 
+import controller.ToolsController
 import controller.ToolsController.Output
 import store.tools.BrightnessStore
 import store.tools.GridStore
@@ -56,5 +57,19 @@ val brightnessLabelToToolsOutput: BrightnessStore.Label.() -> Output? = {
 val presetLabelToToolsOutput: PresetStore.Label.() -> Output? = {
   when (this) {
     is PresetStore.Label.PresetChanged -> Output.PresetChanged(preset = item)
+  }
+}
+
+val presetLabelToBrightnessIntent: PresetStore.Label.() -> BrightnessStore.Intent? = {
+  when (this) {
+    is PresetStore.Label.PresetChanged ->
+      BrightnessStore.Intent.PresetChanged(item)
+  }
+}
+
+val toolsInputToBrightnessIntent: ToolsController.Input.() -> BrightnessStore.Intent? = {
+  when (this) {
+    is ToolsController.Input.ContrastBrightnessChanged ->
+      BrightnessStore.Intent.HandleContrastBrightnessChanged(black, white)
   }
 }

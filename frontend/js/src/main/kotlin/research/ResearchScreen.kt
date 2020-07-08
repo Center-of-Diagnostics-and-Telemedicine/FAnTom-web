@@ -40,6 +40,7 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
   private val cutsContainerInputObservable = PublishSubject<CutsContainerController.Input>()
   private val cutsInputObservable = PublishSubject<CutController.Input>()
   private val marksInputObservable = PublishSubject<MarksController.Input>()
+  private val toolsInputObservable = PublishSubject<ToolsController.Input>()
 
 //  private var gridContainerInputObserver: Observer<GridContainerController.Input>? = null
 //  private val gridContainerInput: (Observer<GridContainerController.Input>) -> Disposable = ::gridContainerInput
@@ -88,6 +89,7 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
           tools(dependencies = object : ToolsComponent.Dependencies,
             Dependencies by props.dependencies {
             override val toolsOutput: (Output) -> Unit = ::toolsOutput
+            override val toolsInput: Observable<ToolsController.Input> = this@ResearchScreen.toolsInputObservable
           })
         }
 
@@ -156,7 +158,10 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
       is CutsContainerController.Output.UnselectMark -> marksInputObservable.onNext(
         MarksController.Input.UnselectMark(output.mark)
       )
-    }.let {  }
+      is CutsContainerController.Output.ContrastBrightnessChanged -> toolsInputObservable.onNext(
+        ToolsController.Input.ContrastBrightnessChanged(output.black, output.white)
+      )
+    }.let { }
   }
 
   private fun marksOutput(output: MarksController.Output) {

@@ -47,5 +47,6 @@ interface CutController {
     data class SelectMark(val mark: MarkDomain) : Output()
     data class CenterMark(val mark: MarkDomain) : Output()
     data class UnselectMark(val mark: MarkDomain) : Output()
+    data class ContrastBrightnessChanged(val black: Int, val white: Int) : Output()
   }
 }

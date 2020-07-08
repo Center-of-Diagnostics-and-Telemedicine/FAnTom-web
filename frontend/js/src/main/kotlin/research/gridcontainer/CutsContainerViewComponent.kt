@@ -175,6 +175,11 @@ class CutsContainerViewComponent(prps: CutsContainerProps) :
           CutController.Input.ChangeSliceNumberByMarkCenter(output.mark)
         )
       }
+      is CutController.Output.ContrastBrightnessChanged -> {
+        props.dependencies.cutsContainerOutput(
+          CutsContainerController.Output.ContrastBrightnessChanged(output.black, output.white)
+        )
+      }
     }.let { }
   }
 

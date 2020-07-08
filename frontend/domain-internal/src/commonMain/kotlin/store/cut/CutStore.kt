@@ -8,6 +8,7 @@ import store.cut.CutStore.*
 interface CutStore : Store<Intent, State, Label> {
 
   sealed class Intent : JvmSerializable {
+
     data class HandleSliceNumberChange(val sliceNumber: Int) : Intent()
     data class HandleBlackChanged(val blackValue: Int) : Intent()
     data class HandleWhiteChanged(val whiteValue: Int) : Intent()
@@ -24,6 +25,9 @@ interface CutStore : Store<Intent, State, Label> {
     data class HandleMarkCenter(val mark: MarkDomain) : Intent()
     data class ChangeSliceNumberByMarkCenter(val mark: MarkDomain) : Intent()
     data class HandleMarkUnselect(val mark: MarkDomain) : Intent()
+
+    data class ChangeContrastBrightness(val deltaX: Double, val deltaY: Double) : Intent()
+    object ContrasBrightnessChanged : Intent()
   }
 
   data class State(
@@ -46,5 +50,6 @@ interface CutStore : Store<Intent, State, Label> {
     data class SelectMark(val mark: MarkDomain) : Label()
     data class CenterMark(val mark: MarkDomain) : Label()
     data class UnselectMark(val mark: MarkDomain) : Label()
+    data class ContrastBrightnessChanged(val black: Int, val white: Int) : Label()
   }
 }

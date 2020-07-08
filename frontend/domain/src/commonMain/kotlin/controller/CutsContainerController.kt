@@ -30,5 +30,6 @@ interface CutsContainerController {
     data class CircleDrawn(val circle: Circle, val sliceNumber: Int, val cut: Cut) : Output()
     data class SelectMark(val mark: MarkDomain) : Output()
     data class UnselectMark(val mark: MarkDomain) : Output()
+    data class ContrastBrightnessChanged(val black: Int, val white: Int) : Output()
   }
 }
