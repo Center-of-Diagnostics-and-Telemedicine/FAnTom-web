@@ -35,11 +35,15 @@ interface DrawStore : Store<Intent, State, Label> {
 
     data class StartMove(val startDicomX: Double, val startDicomY: Double) : Label()
     data class MouseMove(val dicomX: Double, val dicomY: Double) : Label()
+    data class MoveInClick(val deltaX: Double, val deltaY: Double) : Label()
+    object StopMove : Label()
+
     data class Drawn(val circle: Circle) : Label()
     data class OnClick(val dicomX: Double, val dicomY: Double, val altKey: Boolean) : Label()
     data class ChangeSlice(val deltaDicomY: Double) : Label()
 
     data class ChangeContrastBrightness(val deltaX: Double, val deltaY: Double) : Label()
+
     object ContrastBrightnessChanged : Label()
   }
 }

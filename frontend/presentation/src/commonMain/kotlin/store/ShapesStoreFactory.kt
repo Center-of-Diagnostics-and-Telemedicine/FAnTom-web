@@ -44,7 +44,14 @@ internal class ShapesStoreFactory(
         is Intent.HandleMarks -> handleMarks(intent.list, getState)
 
         is Intent.HandleClick -> handleClick(intent.dicomX, intent.dicomY, intent.altKey, getState)
+
+        is Intent.HandleMoveInClick -> handleMoveInClick(intent.deltaX, intent.deltaY, getState)
       }.let {}
+    }
+
+    private fun handleMoveInClick(deltaX: Double, deltaY: Double, state: () -> State) {
+      val selected = state().circles.firstOrNull { it.highlight }
+
     }
 
     private fun handleClick(

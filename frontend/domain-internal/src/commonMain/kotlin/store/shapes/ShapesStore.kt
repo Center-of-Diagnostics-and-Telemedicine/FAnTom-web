@@ -16,6 +16,7 @@ interface ShapesStore : Store<Intent, State, Label> {
     data class HandleMousePosition(val dicomX: Double, val dicomY: Double) : Intent()
     data class HandleMarks(val list: List<MarkDomain>) : Intent()
     data class HandleClick(val dicomX: Double, val dicomY: Double, val altKey: Boolean) : Intent()
+    data class HandleMoveInClick(val deltaX: Double, val deltaY: Double) : Intent()
   }
 
   data class State(

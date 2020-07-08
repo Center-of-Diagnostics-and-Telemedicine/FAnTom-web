@@ -71,6 +71,10 @@ internal class DrawStoreFactory(
           dispatch(Result.Idle)
           publish(Label.ContrastBrightnessChanged)
         }
+        state.isMoving -> {
+          dispatch(Result.Idle)
+          publish(Label.StopMove)
+        }
       }
     }
 
@@ -84,6 +88,15 @@ internal class DrawStoreFactory(
           dispatch(Result.ContrastBrightness(dicomX, dicomY))
           publish(
             Label.ChangeContrastBrightness(
+              deltaX = dicomX - state.startDicomX,
+              deltaY = dicomY - state.startDicomY
+            )
+          )
+        }
+        state.isMoving -> {
+          dispatch(Result.MouseMove(dicomX, dicomX))
+          publish(
+            Label.MoveInClick(
               deltaX = dicomX - state.startDicomX,
               deltaY = dicomY - state.startDicomY
             )

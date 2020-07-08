@@ -49,6 +49,7 @@ val drawLabelToShapesIntent: DrawStore.Label.() -> Intent? = {
 val drawDebounceLabelToShapesIntent: DrawStore.Label.() -> Intent? = {
   when (this) {
     is DrawStore.Label.MouseMove -> Intent.HandleMousePosition(dicomX, dicomY)
+    is DrawStore.Label.MoveInClick -> Intent.HandleMoveInClick(deltaX, deltaY)
     else -> null
   }
 }
