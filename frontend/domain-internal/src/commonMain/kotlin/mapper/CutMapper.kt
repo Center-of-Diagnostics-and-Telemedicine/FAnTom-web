@@ -41,10 +41,10 @@ val cutLabelToCutOutput: Label.() -> Output? = {
 val drawLabelToCutIntent: DrawStore.Label.() -> Intent? = {
   when (this) {
     is DrawStore.Label.Drawn -> Intent.HandleCircleDrawn(circle = circle)
+    is DrawStore.Label.OnClick -> null
     is DrawStore.Label.StartMove -> null
     is DrawStore.Label.ChangeContrastBrightness -> null
     is DrawStore.Label.MouseMove -> null
-    is DrawStore.Label.OnClick -> null
     is DrawStore.Label.ChangeSlice -> null
   }
 }

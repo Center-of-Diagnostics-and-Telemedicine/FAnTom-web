@@ -7,7 +7,8 @@ import kotlin.math.sqrt
 data class Circle(
   val dicomCenterX: Double,
   val dicomCenterY: Double,
-  val dicomRadius: Double
+  val dicomRadius: Double,
+  val id: Int
 )
 
 fun MarkDomain.toCircle(cut: Cut, sliceNumber: Int): Circle? {
@@ -23,7 +24,7 @@ fun MarkDomain.toCircle(cut: Cut, sliceNumber: Int): Circle? {
           val y = y.toDouble() / horizontalRatio
           val h = abs(sliceNumber - z).toDouble() * coefficient
           val newRadius = sqrt((radius).pow(2) - (h).pow(2))
-          Circle(dicomCenterX = x, dicomCenterY = y, dicomRadius = newRadius)
+          Circle(dicomCenterX = x, dicomCenterY = y, dicomRadius = newRadius, id = id)
         } else null
       }
       CutType.Frontal -> {
@@ -35,7 +36,7 @@ fun MarkDomain.toCircle(cut: Cut, sliceNumber: Int): Circle? {
           val resultY = z.toDouble() / horizontalRatio
           val h = abs(sliceNumber - y).toDouble()
           val newRadius = sqrt((radius).pow(2) - h.pow(2))
-          Circle(dicomCenterX = resultX, dicomCenterY = resultY, dicomRadius = newRadius)
+          Circle(dicomCenterX = resultX, dicomCenterY = resultY, dicomRadius = newRadius, id = id)
         } else null
 
       }
@@ -48,7 +49,7 @@ fun MarkDomain.toCircle(cut: Cut, sliceNumber: Int): Circle? {
           val resultY = z.toDouble() / horizontalRatio
           val h = abs(sliceNumber - x).toDouble()
           val newRadius = sqrt((radius).pow(2) - h.pow(2))
-          Circle(dicomCenterX = resultX, dicomCenterY = resultY, dicomRadius = newRadius)
+          Circle(dicomCenterX = resultX, dicomCenterY = resultY, dicomRadius = newRadius, id = id)
         } else null
       }
     }

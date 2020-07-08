@@ -42,6 +42,7 @@ val shapesStateToShapesModel: State.() -> Model = {
 val drawLabelToShapesIntent: DrawStore.Label.() -> Intent? = {
   when (this) {
     is DrawStore.Label.MouseMove -> Intent.HandleMousePosition(dicomX, dicomY)
+    is DrawStore.Label.OnClick -> Intent.HandleClick(dicomX, dicomY, altKey)
     else -> null
   }
 }

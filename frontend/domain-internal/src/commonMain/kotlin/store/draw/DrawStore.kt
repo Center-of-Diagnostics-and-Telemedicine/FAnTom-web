@@ -15,7 +15,7 @@ interface DrawStore : Store<Intent, State, Label> {
     val isContrastBrightness: Boolean = false,
   ) {
     fun circle(): Circle {
-      return Circle(startDicomX, startDicomY, dicomRadius)
+      return Circle(startDicomX, startDicomY, dicomRadius, -1)
     }
   }
 

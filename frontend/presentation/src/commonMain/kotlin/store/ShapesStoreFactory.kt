@@ -13,6 +13,8 @@ import model.*
 import repository.ResearchRepository
 import store.shapes.ShapesStore.*
 import store.shapes.ShapesStoreAbstractFactory
+import kotlin.math.pow
+import kotlin.math.sqrt
 
 internal class ShapesStoreFactory(
   storeFactory: StoreFactory,
@@ -32,15 +34,46 @@ internal class ShapesStoreFactory(
     override fun executeIntent(intent: Intent, getState: () -> State) {
       when (intent) {
         is Intent.HandleSliceNumberChange -> dispatch(Result.SliceNumberChanged(intent.sliceNumber))
+
         is Intent.HandleExternalSliceNumberChanged ->
           handleExternalSliceNumberChanged(intent.sliceNumber, intent.cut, getState)
-        is Intent.HandleMousePosition -> handleMousePosition(
-          intent.dicomX,
-          intent.dicomY,
-          getState
-        )
+
+        is Intent.HandleMousePosition ->
+          handleMousePosition(intent.dicomX, intent.dicomY, getState)
+
         is Intent.HandleMarks -> handleMarks(intent.list, getState)
+
+        is Intent.HandleClick -> handleClick(intent.dicomX, intent.dicomY, intent.altKey, getState)
       }.let {}
+    }
+
+    private fun handleClick(
+      dicomX: Double,
+      dicomY: Double,
+      altKey: Boolean,
+      getState: () -> State
+    ) {
+      val state = getState()
+      val circles = state.circles
+      if (altKey) {
+        circles
+          .firstOrNull {
+            dicomY < it.dicomCenterY + it.dicomRadius && dicomY > it.dicomCenterY - it.dicomRadius
+              && dicomX < it.dicomCenterX + it.dicomRadius && dicomX > it.dicomCenterX - it.dicomRadius
+          }
+          ?.let { circle ->
+            state.marks.firstOrNull { it.id == circle.id }?.let { publish(Label.CenterMark(it.id)) }
+          }
+      }
+
+      circles
+        .firstOrNull { area ->
+          val dist = sqrt((dicomX - area.dicomCenterX).pow(2) + (dicomY - area.dicomCenterY).pow(2))
+          dist < area.dicomRadius
+        }
+        ?.let {
+
+        }
     }
 
     private fun handleMarks(list: List<MarkDomain>, state: () -> State) {

@@ -3,7 +3,8 @@ package mapper
 import model.Circle
 import model.LEFT_MOUSE_BUTTON
 import model.MIDDLE_MOUSE_BUTTON
-import store.draw.DrawStore.*
+import store.draw.DrawStore.Intent
+import store.draw.DrawStore.State
 import view.DrawView.Event
 import view.DrawView.Model
 
@@ -31,7 +32,14 @@ fun mapMouseDown(event: Event.MouseDown): Intent {
 
 val drawStateToDrawModel: State.() -> Model = {
   if (dicomRadius != 0.0) {
-    Model(circle = Circle(startDicomX, startDicomY, dicomRadius = dicomRadius))
+    Model(
+      circle = Circle(
+        dicomCenterX = startDicomX,
+        dicomCenterY = startDicomY,
+        dicomRadius = dicomRadius,
+        id = -1
+      )
+    )
   } else {
     Model(null)
   }

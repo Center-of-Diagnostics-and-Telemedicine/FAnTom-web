@@ -22,7 +22,7 @@ import styled.css
 import styled.styledDiv
 import view.*
 
-class CutParentComponent(prps: CutParentProps) : RComponent<CutParentProps, CutState>(prps) {
+class CutParentComponent(prps: CutParentProps) : RComponent<CutParentProps, CutParentState>(prps) {
 
   private val cutViewDelegate = CutViewProxy(::updateState)
   private val shapesViewDelegate = ShapesViewProxy(::updateState)
@@ -31,7 +31,7 @@ class CutParentComponent(prps: CutParentProps) : RComponent<CutParentProps, CutS
   private lateinit var controller: CutController
 
   init {
-    state = CutState(
+    state = CutParentState(
       cutModel = initialCutModel(),
       shapesModel = initialShapesModel(),
       drawModel = initialDrawModel()
@@ -113,7 +113,7 @@ class CutParentComponent(prps: CutParentProps) : RComponent<CutParentProps, CutS
 
 }
 
-class CutState(
+class CutParentState(
   var cutModel: CutView.Model,
   var shapesModel: ShapesView.Model,
   var drawModel: DrawView.Model
