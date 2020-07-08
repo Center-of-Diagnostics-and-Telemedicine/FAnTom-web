@@ -55,6 +55,11 @@ internal class ShapesStoreFactory(
     ) {
       val state = getState()
       val circles = state.circles
+
+      state.marks.firstOrNull { it.selected }?.let {
+        publish(Label.UnselectMark(it))
+      }
+
       if (altKey) {
         circles
           .firstOrNull {
@@ -68,16 +73,17 @@ internal class ShapesStoreFactory(
           }
       }
 
-      circles
+      val circleToSelect = circles
         .firstOrNull { area ->
           val dist = sqrt((dicomX - area.dicomCenterX).pow(2) + (dicomY - area.dicomCenterY).pow(2))
           dist < area.dicomRadius
         }
-        ?.let { circle ->
-          state.marks.firstOrNull { it.id == circle.id }?.let {
-            publish(Label.CenterMark(it))
-          }
+
+      if (circleToSelect != null) {
+        state.marks.firstOrNull { it.id == circleToSelect.id }?.let {
+          publish(Label.SelectMark(it))
         }
+      }
     }
 
     private fun handleMarks(list: List<MarkDomain>, state: () -> State) {

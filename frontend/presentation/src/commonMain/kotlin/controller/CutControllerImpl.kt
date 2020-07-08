@@ -54,9 +54,10 @@ class CutControllerImpl(val dependencies: CutController.Dependencies) :
       drawStore.labels.mapNotNull(drawLabelToCutIntent) bindTo cutStore
       shapesStore.labels.mapNotNull(shapesLabelToCutIntent) bindTo cutStore
       cutStore.labels.mapNotNull(cutLabelToShapesIntent) bindTo shapesStore
+      drawStore.labels.mapNotNull(drawLabelToShapesIntent) bindTo shapesStore
       drawStore.labels
         .debounce(60, mainScheduler)
-        .mapNotNull(drawLabelToShapesIntent) bindTo shapesStore
+        .mapNotNull(drawDebounceLabelToShapesIntent) bindTo shapesStore
     }
 
     dependencies.lifecycle.doOnDestroy(cutStore::dispose)

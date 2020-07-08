@@ -153,6 +153,9 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
       is CutsContainerController.Output.SelectMark -> marksInputObservable.onNext(
         MarksController.Input.SelectMark(output.mark)
       )
+      is CutsContainerController.Output.UnselectMark -> marksInputObservable.onNext(
+        MarksController.Input.UnselectMark(output.mark)
+      )
     }.let {  }
   }
 

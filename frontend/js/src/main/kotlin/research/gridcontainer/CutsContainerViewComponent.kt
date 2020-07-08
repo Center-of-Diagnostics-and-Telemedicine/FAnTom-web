@@ -165,6 +165,11 @@ class CutsContainerViewComponent(prps: CutsContainerProps) :
           CutsContainerController.Output.SelectMark(output.mark)
         )
       }
+      is CutController.Output.UnselectMark -> {
+        props.dependencies.cutsContainerOutput(
+          CutsContainerController.Output.UnselectMark(output.mark)
+        )
+      }
       is CutController.Output.CenterMark -> {
         cutsInputObservable.onNext(
           CutController.Input.ChangeSliceNumberByMarkCenter(output.mark)

@@ -42,13 +42,13 @@ abstract class DrawStoreAbstractFactory(
   protected abstract fun createExecutor(): Executor<Intent, Nothing, State, Result, Label>
 
   protected sealed class Result : JvmSerializable {
-    class StartDraw(val startDicomX: Double, val startDicomY: Double) : Result()
-    class Drawing(val newDicomX: Double, val newDicomY: Double) : Result()
-    class ExternalDrawing(val dicomX: Double, val dicomY: Double) : Result()
-    class StartContrastBrightness(val startDicomX: Double, val startDicomY: Double) : Result()
-    class ContrastBrightness(val dicomX: Double, val dicomY: Double) : Result()
-    class StartMove(val startDicomX: Double, val startDicomY: Double) : Result()
-    class MouseMove(val dicomX: Double, val dicomY: Double) : Result()
+    data class StartDraw(val startDicomX: Double, val startDicomY: Double) : Result()
+    data class Drawing(val newDicomX: Double, val newDicomY: Double) : Result()
+    data class ExternalDrawing(val dicomX: Double, val dicomY: Double) : Result()
+    data class StartContrastBrightness(val startDicomX: Double, val startDicomY: Double) : Result()
+    data class ContrastBrightness(val dicomX: Double, val dicomY: Double) : Result()
+    data class StartMove(val startDicomX: Double, val startDicomY: Double) : Result()
+    data class MouseMove(val dicomX: Double, val dicomY: Double) : Result()
     object Idle : Result()
   }
 

@@ -29,7 +29,8 @@ interface ShapesStore : Store<Intent, State, Label> {
   ) : JvmSerializable
 
   sealed class Label {
-    data class SelectMark(val mark: MarkDomain): Label()
-    data class CenterMark(val mark: MarkDomain): Label()
+    data class SelectMark(val mark: MarkDomain) : Label()
+    data class CenterMark(val mark: MarkDomain) : Label()
+    data class UnselectMark(val mark: MarkDomain) : Label()
   }
 }

@@ -45,12 +45,12 @@ abstract class ShapesStoreAbstractFactory(
 
   protected sealed class Result : JvmSerializable {
     data class SliceNumberChanged(val sliceNumber: Int) : Result()
-    class HorizontalLineChanged(val coefficient: Double) : Result()
-    class VerticalLineChanged(val coefficient: Double) : Result()
-    class PointPositionChanged(val position: PointPosition?) : Result()
-    class HounsfieldChanged(val hu: Double) : Result()
-    class Marks(val marks: List<MarkDomain>) : Result()
-    class Circles(val list: List<Circle>) : Result()
+    data class HorizontalLineChanged(val coefficient: Double) : Result()
+    data class VerticalLineChanged(val coefficient: Double) : Result()
+    data class PointPositionChanged(val position: PointPosition?) : Result()
+    data class HounsfieldChanged(val hu: Double) : Result()
+    data class Marks(val marks: List<MarkDomain>) : Result()
+    data class Circles(val list: List<Circle>) : Result()
   }
 
   private object ReducerImpl : Reducer<State, Result> {

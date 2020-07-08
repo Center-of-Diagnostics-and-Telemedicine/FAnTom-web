@@ -23,13 +23,13 @@ interface ShapesStore : Disposable {
   )
 
   sealed class Intent {
-    class AreasIncome(val areas: List<CircleShape>) : Intent()
-    class UpdateLines(val lines: Lines) : Intent()
-    class UpdateMouseData(val positionData: PositionData) : Intent()
-    class UpdateSliceNumber(val sliceNumber: Int) : Intent()
-    class UpdateMoveRects(val moveRects: List<MoveRect>) : Intent()
-    class GetHounsfield(val positionData: PositionData): Intent()
-    class ChangeCutType(val type: CutType,val cellModel: CellModel) : Intent()
+    data class AreasIncome(val areas: List<CircleShape>) : Intent()
+    data class UpdateLines(val lines: Lines) : Intent()
+    data class UpdateMouseData(val positionData: PositionData) : Intent()
+    data class UpdateSliceNumber(val sliceNumber: Int) : Intent()
+    data class UpdateMoveRects(val moveRects: List<MoveRect>) : Intent()
+    data class GetHounsfield(val positionData: PositionData): Intent()
+    data class ChangeCutType(val type: CutType,val cellModel: CellModel) : Intent()
 
     object Idle : Intent()
   }

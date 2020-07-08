@@ -77,6 +77,9 @@ internal class CutStoreFactory(
         is Intent.HandleMarkCenter -> {
           publish(Label.CenterMark(intent.mark))
         }
+        is Intent.HandleMarkUnselect -> {
+          publish(Label.UnselectMark(intent.mark))
+        }
         is Intent.ChangeSliceNumberByMarkCenter -> {
           cut.getSliceNumberByMark(intent.mark)?.let { changeSliceNumber(it, getState) }
         }
