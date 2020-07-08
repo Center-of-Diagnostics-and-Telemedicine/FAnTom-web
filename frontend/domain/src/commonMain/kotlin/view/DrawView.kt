@@ -27,7 +27,7 @@ interface DrawView : MviView<Model, Event> {
     data class MouseClick(val x: Double, val y: Double, val altKey: Boolean, val metaKey: Boolean) :
       Event()
 
-    data class MouseWheel(val deltaY: Double) : Event()
+    data class MouseWheel(val deltaY: Int) : Event()
   }
 }
 

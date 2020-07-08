@@ -48,10 +48,12 @@ val drawLabelToCutIntent: DrawStore.Label.() -> Intent? = {
     is DrawStore.Label.Drawn -> Intent.HandleCircleDrawn(circle = circle)
     is DrawStore.Label.ChangeContrastBrightness -> Intent.ChangeContrastBrightness(deltaX, deltaY)
     DrawStore.Label.ContrastBrightnessChanged -> Intent.ContrasBrightnessChanged
+    is DrawStore.Label.ChangeSlice -> Intent.ChangeSliceNumberByDraw(deltaDicomY)
     is DrawStore.Label.OnClick -> null
     is DrawStore.Label.StartMove -> null
     is DrawStore.Label.MouseMove -> null
-    is DrawStore.Label.ChangeSlice -> null
+    is DrawStore.Label.MoveInClick -> null
+    DrawStore.Label.StopMove -> null
   }
 }
 

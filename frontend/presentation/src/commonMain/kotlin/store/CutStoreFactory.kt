@@ -16,6 +16,7 @@ import model.getSliceNumberByMark
 import repository.ResearchRepository
 import store.cut.CutStore.*
 import store.cut.CutStoreAbstractFactory
+import kotlin.math.abs
 
 internal class CutStoreFactory(
   storeFactory: StoreFactory,
@@ -89,6 +90,9 @@ internal class CutStoreFactory(
         Intent.ContrasBrightnessChanged -> {
           val state = getState()
           publish(Label.ContrastBrightnessChanged(state.black, state.white))
+        }
+        is Intent.ChangeSliceNumberByDraw -> {
+          changeSliceNumber(getState().sliceNumber + intent.deltaDicomY, getState)
         }
       }.let {}
     }

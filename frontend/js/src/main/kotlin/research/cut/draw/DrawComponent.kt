@@ -141,7 +141,7 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
 
             onWheelFunction = {
               val wheelEvent = it.asDynamic().nativeEvent as WheelEvent
-              props.eventOutput(DrawView.Event.MouseWheel(wheelEvent.deltaY))
+              props.eventOutput(DrawView.Event.MouseWheel(deltaY = if (wheelEvent.deltaY < 0.0) -1 else 1))
             }
           }
         }

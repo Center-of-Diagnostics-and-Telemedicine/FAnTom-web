@@ -27,7 +27,7 @@ interface DrawStore : Store<Intent, State, Label> {
     data class Move(val dicomX: Double, val dicomY: Double) : Intent()
     data class MouseUp(val dicomX: Double, val dicomY: Double) : Intent()
     data class MouseClick(val dicomX: Double, val dicomY: Double, val altKey: Boolean) : Intent()
-    data class MouseWheel(val deltaDicomY: Double) : Intent()
+    data class MouseWheel(val deltaDicomY: Int) : Intent()
     object MouseOut : Intent()
   }
 
@@ -40,7 +40,7 @@ interface DrawStore : Store<Intent, State, Label> {
 
     data class Drawn(val circle: Circle) : Label()
     data class OnClick(val dicomX: Double, val dicomY: Double, val altKey: Boolean) : Label()
-    data class ChangeSlice(val deltaDicomY: Double) : Label()
+    data class ChangeSlice(val deltaDicomY: Int) : Label()
 
     data class ChangeContrastBrightness(val deltaX: Double, val deltaY: Double) : Label()
 

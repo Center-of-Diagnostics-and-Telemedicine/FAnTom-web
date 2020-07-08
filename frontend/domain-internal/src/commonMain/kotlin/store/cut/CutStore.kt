@@ -27,6 +27,8 @@ interface CutStore : Store<Intent, State, Label> {
     data class HandleMarkUnselect(val mark: MarkDomain) : Intent()
 
     data class ChangeContrastBrightness(val deltaX: Double, val deltaY: Double) : Intent()
+    data class ChangeSliceNumberByDraw(val deltaDicomY: Int) : Intent()
+
     object ContrasBrightnessChanged : Intent()
   }
 
