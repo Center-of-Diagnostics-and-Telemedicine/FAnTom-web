@@ -157,11 +157,17 @@ class CutsContainerViewComponent(prps: CutsContainerProps) :
       }
       is CutController.Output.CircleDrawn -> {
         props.dependencies.cutsContainerOutput(
-          CutsContainerController.Output.CircleDrawn(
-            output.circle,
-            output.sliceNumber,
-            output.cut
-          )
+          CutsContainerController.Output.CircleDrawn(output.circle, output.sliceNumber, output.cut)
+        )
+      }
+      is CutController.Output.SelectMark -> {
+        props.dependencies.cutsContainerOutput(
+          CutsContainerController.Output.SelectMark(output.mark)
+        )
+      }
+      is CutController.Output.CenterMark -> {
+        cutsInputObservable.onNext(
+          CutController.Input.ChangeSliceNumberByMarkCenter(output.mark)
         )
       }
     }.let { }

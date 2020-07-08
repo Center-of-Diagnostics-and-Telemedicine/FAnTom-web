@@ -29,7 +29,7 @@ internal class ShapesStoreFactory(
   override fun createExecutor(): Executor<Intent, Nothing, State, Result, Label> = ExecutorImpl()
 
   private inner class ExecutorImpl :
-    ReaktiveExecutor<Intent, Nothing, State, Result, Nothing>() {
+    ReaktiveExecutor<Intent, Nothing, State, Result, Label>() {
 
     override fun executeIntent(intent: Intent, getState: () -> State) {
       when (intent) {
@@ -62,7 +62,9 @@ internal class ShapesStoreFactory(
               && dicomX < it.dicomCenterX + it.dicomRadius && dicomX > it.dicomCenterX - it.dicomRadius
           }
           ?.let { circle ->
-            state.marks.firstOrNull { it.id == circle.id }?.let { publish(Label.CenterMark(it.id)) }
+            state.marks.firstOrNull { it.id == circle.id }?.let {
+              publish(Label.CenterMark(it))
+            }
           }
       }
 
@@ -71,8 +73,10 @@ internal class ShapesStoreFactory(
           val dist = sqrt((dicomX - area.dicomCenterX).pow(2) + (dicomY - area.dicomCenterY).pow(2))
           dist < area.dicomRadius
         }
-        ?.let {
-
+        ?.let { circle ->
+          state.marks.firstOrNull { it.id == circle.id }?.let {
+            publish(Label.CenterMark(it))
+          }
         }
     }
 

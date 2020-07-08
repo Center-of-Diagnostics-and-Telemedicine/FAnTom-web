@@ -55,5 +55,7 @@ val cutLabelToShapesIntent: CutStore.Label.() -> Intent? = {
     }
     is CutStore.Label.Marks -> Intent.HandleMarks(list)
     is CutStore.Label.CircleDrawn -> null
+    is CutStore.Label.SelectMark -> TODO()
+    is CutStore.Label.CenterMark -> TODO()
   }
 }

@@ -12,6 +12,7 @@ import com.badoo.reaktive.single.subscribeOn
 import model.Cut
 import model.GET_SLICE_FAILED
 import model.ResearchApiExceptions
+import model.getSliceNumberByMark
 import repository.ResearchRepository
 import store.cut.CutStore.*
 import store.cut.CutStoreAbstractFactory
@@ -39,9 +40,7 @@ internal class CutStoreFactory(
           load(getState)
         }
         is Intent.HandleSliceNumberChange -> {
-          publish(Label.SliceNumberChanged(sliceNumber = intent.sliceNumber, cut = cut))
-          dispatch(Result.SliceNumberChanged(sliceNumber = intent.sliceNumber))
-          load(getState)
+          changeSliceNumber(intent.sliceNumber, getState)
         }
         is Intent.HandleWhiteChanged -> {
           dispatch(Result.WhiteChanged(whiteValue = intent.whiteValue))
@@ -72,7 +71,22 @@ internal class CutStoreFactory(
         is Intent.HandleMarks -> {
           publish(Label.Marks(intent.list))
         }
+        is Intent.HandleMarkSelected -> {
+          publish(Label.SelectMark(intent.mark))
+        }
+        is Intent.HandleMarkCenter -> {
+          publish(Label.CenterMark(intent.mark))
+        }
+        is Intent.ChangeSliceNumberByMarkCenter -> {
+          cut.getSliceNumberByMark(intent.mark)?.let { changeSliceNumber(it, getState) }
+        }
       }.let {}
+    }
+
+    private fun changeSliceNumber(sliceNumber: Int, getState: () -> State) {
+      dispatch(Result.SliceNumberChanged(sliceNumber = sliceNumber))
+      load(getState)
+      publish(Label.SliceNumberChanged(sliceNumber = sliceNumber, cut = cut))
     }
 
     private fun load(getState: () -> State) {
@@ -117,3 +131,5 @@ internal class CutStoreFactory(
   }
 
 }
+
+

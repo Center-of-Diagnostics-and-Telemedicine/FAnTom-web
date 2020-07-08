@@ -216,18 +216,18 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
   ) {
     models.forEach { circle ->
       debugLog(circle.toString())
-//      if (circle.highlight) {
-//        context.strokeStyle = "#18a0fb"
-//        context.lineWidth = 1.0
-//
-////        if (circle.hasContext) {
-////          context.lineWidth = 2.0
-////        }
-//
-//      } else {
-      context.lineWidth = 1.0
-      context.strokeStyle = "#00ff00"
-//      }
+      if (circle.highlight) {
+        context.strokeStyle = "#18a0fb"
+        context.lineWidth = 1.0
+
+//        if (circle.hasContext) {
+//          context.lineWidth = 2.0
+//        }
+
+      } else {
+        context.lineWidth = 1.0
+        context.strokeStyle = "#00ff00"
+      }
 
       context.beginPath()
       context.arc(

@@ -38,10 +38,13 @@ interface CutController {
     data class SliceNumberChanged(val sliceNumber: Int) : Input()
     data class ExternalSliceNumberChanged(val sliceNumber: Int, val cut: Cut) : Input()
     data class Marks(val list: List<MarkDomain>) : Input()
+    data class ChangeSliceNumberByMarkCenter(val mark: MarkDomain) : Input()
   }
 
   sealed class Output {
     data class SliceNumberChanged(val sliceNumber: Int, val cut: Cut) : Output()
     data class CircleDrawn(val circle: Circle, val sliceNumber: Int, val cut: Cut) : Output()
+    data class SelectMark(val mark: MarkDomain) : Output()
+    data class CenterMark(val mark: MarkDomain) : Output()
   }
 }

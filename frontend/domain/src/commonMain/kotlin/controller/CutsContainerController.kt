@@ -2,10 +2,7 @@ package controller
 
 import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.store.StoreFactory
-import model.Circle
-import model.Cut
-import model.Grid
-import model.ResearchSlicesSizesData
+import model.*
 import view.CutsContainerView
 
 interface CutsContainerController {
@@ -31,5 +28,6 @@ interface CutsContainerController {
     data class OpenFullCut(val cut: Cut) : Output()
     data class CloseFullCut(val cut: Cut) : Output()
     data class CircleDrawn(val circle: Circle, val sliceNumber: Int, val cut: Cut) : Output()
+    data class SelectMark(val mark: MarkDomain) : Output()
   }
 }

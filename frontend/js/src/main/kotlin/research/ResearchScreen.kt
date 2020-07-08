@@ -150,7 +150,10 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
       is CutsContainerController.Output.CircleDrawn -> marksInputObservable.onNext(
         MarksController.Input.AddNewMark(output.circle, output.sliceNumber, output.cut)
       )
-    }
+      is CutsContainerController.Output.SelectMark -> marksInputObservable.onNext(
+        MarksController.Input.SelectMark(output.mark)
+      )
+    }.let {  }
   }
 
   private fun marksOutput(output: MarksController.Output) {

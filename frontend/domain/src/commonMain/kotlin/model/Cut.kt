@@ -116,3 +116,13 @@ fun Cut.getMarkToSave(circle: Circle, sliceNumber: Int): MarkData? {
     }
   }
 }
+
+fun Cut.getSliceNumberByMark(mark: MarkDomain): Int? {
+  return when (type) {
+    CutType.Empty -> null
+    CutType.Axial -> mark.markData.z
+    CutType.Frontal
+    -> mark.markData.y
+    CutType.Sagittal -> mark.markData.x
+  }
+}

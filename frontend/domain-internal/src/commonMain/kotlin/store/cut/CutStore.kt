@@ -20,6 +20,9 @@ interface CutStore : Store<Intent, State, Label> {
       Intent()
 
     data class HandleMarks(val list: List<MarkDomain>) : Intent()
+    data class HandleMarkSelected(val mark: MarkDomain) : Intent()
+    data class HandleMarkCenter(val mark: MarkDomain) : Intent()
+    data class ChangeSliceNumberByMarkCenter(val mark: MarkDomain) : Intent()
   }
 
   data class State(
@@ -39,5 +42,7 @@ interface CutStore : Store<Intent, State, Label> {
     data class ExternalSliceNumberChanged(val externalCut: Cut, val sliceNumber: Int) : Label()
     data class CircleDrawn(val circle: Circle, val sliceNumber: Int, val cut: Cut) : Label()
     data class Marks(val list: List<MarkDomain>) : Label()
+    data class SelectMark(val mark: MarkDomain) : Label()
+    data class CenterMark(val mark: MarkDomain) : Label()
   }
 }

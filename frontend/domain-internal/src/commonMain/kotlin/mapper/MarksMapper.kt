@@ -20,6 +20,7 @@ val marksEventToIntent: Event.() -> Intent? = {
 val inputToMarksIntent: Input.() -> Intent? = {
   when (this) {
     is Input.AddNewMark -> Intent.HandleNewMark(circle, sliceNumber, cut)
+    is Input.SelectMark -> Intent.SelectMark(mark)
   }
 }
 

@@ -10,7 +10,9 @@ data class MarkDomain(
   val markData: MarkData,
   val type: MarkType,
   val comment: String
-)
+){
+  var selected = false
+}
 
 @Serializable
 data class MarkData(

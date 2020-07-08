@@ -46,9 +46,17 @@ internal class MarksStoreFactory(
     override fun executeIntent(intent: Intent, getState: () -> State) {
       when (intent) {
         is Intent.HandleNewMark -> handleNewMark(intent.circle, intent.sliceNumber, intent.cut)
+        is Intent.SelectMark -> selectMark(intent.mark, getState)
         Intent.DismissError -> TODO()
         Intent.ReloadRequested -> TODO()
       }.let {}
+    }
+
+    private fun selectMark(mark: MarkDomain, state: () -> State) {
+      val marks = state().marks
+      marks.firstOrNull { it.id == mark.id }?.let { it.selected = true }
+      dispatch(Result.Loaded(marks))
+      publish(Label.MarksLoaded(marks))
     }
 
     private fun handleNewMark(circle: Circle, sliceNumber: Int, cut: Cut) {

@@ -11,6 +11,8 @@ interface MarksStore : Store<Intent, State, Label> {
 
   sealed class Intent : JvmSerializable {
     data class HandleNewMark(val circle: Circle, val sliceNumber: Int, val cut: Cut) : Intent()
+    data class SelectMark(val mark: MarkDomain) : Intent()
+
     object DismissError : Intent()
     object ReloadRequested : Intent()
   }
