@@ -48,14 +48,16 @@ class MarksDao : MarksDaoFacade {
   }
 
   override suspend fun update(mark: MarkDomain) {
-    MarksVos.update(where = { MarksVos.id eq mark.id }) {
-      it[x] = mark.markData.x
-      it[y] = mark.markData.y
-      it[z] = mark.markData.z
-      it[radius] = mark.markData.radius
-      it[size] = mark.markData.size
-      it[type] = mark.type.intValue
-      it[comment] = mark.comment
+    return transaction {
+      MarksVos.update(where = { MarksVos.id eq mark.id }) {
+        it[x] = mark.markData.x
+        it[y] = mark.markData.y
+        it[z] = mark.markData.z
+        it[radius] = mark.markData.radius
+        it[size] = mark.markData.size
+        it[type] = mark.type.intValue
+        it[comment] = mark.comment
+      }
     }
   }
 

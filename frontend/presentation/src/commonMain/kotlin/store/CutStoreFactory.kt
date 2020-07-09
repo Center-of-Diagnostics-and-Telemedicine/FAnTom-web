@@ -16,7 +16,6 @@ import model.getSliceNumberByMark
 import repository.ResearchRepository
 import store.cut.CutStore.*
 import store.cut.CutStoreAbstractFactory
-import kotlin.math.abs
 
 internal class CutStoreFactory(
   storeFactory: StoreFactory,
@@ -94,6 +93,10 @@ internal class CutStoreFactory(
         is Intent.ChangeSliceNumberByDraw -> {
           changeSliceNumber(getState().sliceNumber + intent.deltaDicomY, getState)
         }
+        is Intent.HandleCircleUpdate -> publish(Label.CircleUpdate(intent.circleToUpdate, cut))
+        is Intent.HandleExternalCircleUpdate -> publish(
+          Label.ExternalCircleChanged(intent.circle, intent.cut)
+        )
       }.let {}
     }
 

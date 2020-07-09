@@ -39,7 +39,7 @@ class MarksRepositoryImpl(
   override suspend fun updateMark(mark: MarkDomain) {
     val response = remote.update(mark, token())
     when{
-      response.response != null -> local.create(mark)
+      response.response != null -> local.update(mark)
       response.error != null -> handleErrorResponse(response.error!!)
     }
   }

@@ -6,6 +6,7 @@ import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
 import model.Cut
 import store.draw.DrawStore.*
 import store.draw.DrawStoreAbstractFactory
+import kotlin.math.abs
 
 internal class DrawStoreFactory(
   storeFactory: StoreFactory,
@@ -94,13 +95,17 @@ internal class DrawStoreFactory(
           )
         }
         state.isMoving -> {
-          dispatch(Result.MouseMove(dicomX, dicomX))
-          publish(
-            Label.MoveInClick(
-              deltaX = dicomX - state.startDicomX,
-              deltaY = dicomY - state.startDicomY
+          val deltaX = dicomX - state.startDicomX
+          val deltaY = dicomY - state.startDicomY
+          if (abs(deltaX) > 0 && abs(deltaY) > 0) {
+            dispatch(Result.MouseMove(dicomX, dicomX))
+            publish(
+              Label.MoveInClick(
+                deltaX = deltaX,
+                deltaY = deltaY
+              )
             )
-          )
+          }
         }
         else -> {
           dispatch(Result.MouseMove(dicomX, dicomY))

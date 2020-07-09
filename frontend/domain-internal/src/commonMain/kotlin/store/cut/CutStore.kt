@@ -28,6 +28,8 @@ interface CutStore : Store<Intent, State, Label> {
 
     data class ChangeContrastBrightness(val deltaX: Double, val deltaY: Double) : Intent()
     data class ChangeSliceNumberByDraw(val deltaDicomY: Int) : Intent()
+    data class HandleCircleUpdate(val circleToUpdate: Circle, val cut: Cut) : Intent()
+    data class HandleExternalCircleUpdate(val circle: Circle, val cut: Cut) : Intent()
 
     object ContrasBrightnessChanged : Intent()
   }
@@ -53,5 +55,7 @@ interface CutStore : Store<Intent, State, Label> {
     data class CenterMark(val mark: MarkDomain) : Label()
     data class UnselectMark(val mark: MarkDomain) : Label()
     data class ContrastBrightnessChanged(val black: Int, val white: Int) : Label()
+    data class CircleUpdate(val circleToUpdate: Circle, val cut: Cut) : Label()
+    data class ExternalCircleChanged(val circle: Circle, val cut: Cut) : Label()
   }
 }

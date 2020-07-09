@@ -13,6 +13,7 @@ interface MarksStore : Store<Intent, State, Label> {
     data class HandleNewMark(val circle: Circle, val sliceNumber: Int, val cut: Cut) : Intent()
     data class SelectMark(val mark: MarkDomain) : Intent()
     data class UnselectMark(val mark: MarkDomain) : Intent()
+    data class UpdateMark(val markToUpdate: MarkDomain) : Intent()
 
     object DismissError : Intent()
     object ReloadRequested : Intent()

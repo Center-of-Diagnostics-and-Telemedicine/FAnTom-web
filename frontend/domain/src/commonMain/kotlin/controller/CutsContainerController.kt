@@ -31,5 +31,6 @@ interface CutsContainerController {
     data class SelectMark(val mark: MarkDomain) : Output()
     data class UnselectMark(val mark: MarkDomain) : Output()
     data class ContrastBrightnessChanged(val black: Int, val white: Int) : Output()
+    data class UpdateMark(val markToUpdate: MarkDomain) : Output()
   }
 }

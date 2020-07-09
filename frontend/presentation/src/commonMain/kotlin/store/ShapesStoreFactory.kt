@@ -46,11 +46,33 @@ internal class ShapesStoreFactory(
         is Intent.HandleClick -> handleClick(intent.dicomX, intent.dicomY, intent.altKey, getState)
 
         is Intent.HandleMoveInClick -> handleMoveInClick(intent.deltaX, intent.deltaY, getState)
+
+        is Intent.HandleExternalCircleChanged ->
+          handleExternalCircleChanged(intent.circle, intent.cut, getState)
       }.let {}
     }
 
-    private fun handleMoveInClick(deltaX: Double, deltaY: Double, state: () -> State) {
-      val selected = state().circles.firstOrNull { it.highlight }
+    private fun handleExternalCircleChanged(circle: Circle, cut: Cut, getState: () -> State) {
+
+    }
+
+    private fun handleMoveInClick(deltaX: Double, deltaY: Double, getState: () -> State) {
+      //не успевает обновляться при изменении, обрабатывается старая отметка
+      val circleToUpdate = getState().circles.firstOrNull { it.highlight }
+      if (circleToUpdate != null) {
+        val newX = circleToUpdate.dicomCenterX + deltaX
+        val newY = circleToUpdate.dicomCenterY + deltaY
+        dispatch(
+          Result.Circles(
+            getState().circles.replace(
+              circleToUpdate.copy(dicomCenterX = newX, dicomCenterY = newY)
+            ) { it.id == circleToUpdate.id }
+          )
+        )
+        publish(Label.UpdateCircle(circleToUpdate, cut))
+      }
+      //необходимо найти и обновить сферу
+      //после обновления сферы, посылаем на обновление отметку
 
     }
 

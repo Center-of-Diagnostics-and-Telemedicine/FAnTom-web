@@ -50,22 +50,8 @@ internal class MarksStoreFactory(
         is Intent.UnselectMark -> unselectMark(intent.mark, getState)
         Intent.DismissError -> TODO()
         Intent.ReloadRequested -> TODO()
+        is Intent.UpdateMark -> updateMark(intent.markToUpdate, getState)
       }.let {}
-    }
-
-
-    private fun selectMark(mark: MarkDomain, state: () -> State) {
-      val marks = state().marks
-      marks.firstOrNull { it.id == mark.id }?.let { it.selected = true }
-      dispatch(Result.Loaded(marks))
-      publish(Label.MarksLoaded(marks))
-    }
-
-    private fun unselectMark(mark: MarkDomain, state: () -> State) {
-      val marks = state().marks
-      marks.firstOrNull { it.id == mark.id }?.let { it.selected = false }
-      dispatch(Result.Loaded(marks))
-      publish(Label.MarksLoaded(marks))
     }
 
     private fun handleNewMark(circle: Circle, sliceNumber: Int, cut: Cut) {
@@ -87,6 +73,39 @@ internal class MarksStoreFactory(
         )
     }
 
+    private fun updateMark(markToUpdate: MarkDomain, getState: () -> State) {
+      singleFromCoroutine {
+        repository.updateMark(markToUpdate)
+        getState().marks.replace(markToUpdate) { it.id == markToUpdate.id }
+      }
+        .subscribeOn(ioScheduler)
+        .map(Result::Loaded)
+        .observeOn(mainScheduler)
+        .subscribeScoped(
+          isThreadLocal = true,
+          onSuccess = {
+            dispatch(it)
+            publish(Label.MarksLoaded(it.marks))
+          },
+          onError = ::handleError
+        )
+    }
+
+    private fun selectMark(mark: MarkDomain, state: () -> State) {
+      val marks = state().marks
+      marks.firstOrNull { it.id == mark.id }?.let { it.selected = true }
+      dispatch(Result.Loaded(marks))
+      publish(Label.MarksLoaded(marks))
+    }
+
+
+    private fun unselectMark(mark: MarkDomain, state: () -> State) {
+      val marks = state().marks
+      marks.firstOrNull { it.id == mark.id }?.let { it.selected = false }
+      dispatch(Result.Loaded(marks))
+      publish(Label.MarksLoaded(marks))
+    }
+
     private fun handleError(error: Throwable) {
       println("MarksStore" + error.message)
       val result = when (error) {
@@ -101,4 +120,10 @@ internal class MarksStoreFactory(
     }
   }
 
+}
+
+fun <T> List<T>.replace(newValue: T, block: (T) -> Boolean): List<T> {
+  return map {
+    if (block(it)) newValue else it
+  }
 }

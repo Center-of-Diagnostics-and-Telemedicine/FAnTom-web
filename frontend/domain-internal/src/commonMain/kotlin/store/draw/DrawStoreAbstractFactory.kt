@@ -80,8 +80,8 @@ abstract class DrawStoreAbstractFactory(
           startDicomY = result.dicomY
         )
         is Result.MouseMove -> copy(
-          startDicomX = result.dicomX,
-          startDicomY = result.dicomY
+          startDicomX = result.dicomX - startDicomX,
+          startDicomY = result.dicomY - startDicomY
         )
         Result.Idle -> copy(
           startDicomX = 0.0,

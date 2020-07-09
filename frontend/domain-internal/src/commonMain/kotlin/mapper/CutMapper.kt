@@ -27,6 +27,7 @@ val inputToCutIntent: Input.() -> Intent = {
       Intent.HandleExternalSliceNumberChanged(externalCut = cut, sliceNumber = sliceNumber)
     is Input.Marks -> Intent.HandleMarks(list)
     is Input.ChangeSliceNumberByMarkCenter -> Intent.ChangeSliceNumberByMarkCenter(mark)
+    is Input.ExternalCircleUpdate -> Intent.HandleExternalCircleUpdate(circleToUpdate, cut)
   }
 }
 
@@ -38,8 +39,10 @@ val cutLabelToCutOutput: Label.() -> Output? = {
     is Label.CenterMark -> Output.CenterMark(mark)
     is Label.UnselectMark -> Output.UnselectMark(mark)
     is Label.ContrastBrightnessChanged -> Output.ContrastBrightnessChanged(black, white)
+    is Label.CircleUpdate -> Output.UpdateCircle(circleToUpdate, cut)
     is Label.ExternalSliceNumberChanged -> null
     is Label.Marks -> null
+    is Label.ExternalCircleChanged -> null
   }
 }
 
@@ -62,5 +65,6 @@ val shapesLabelToCutIntent: ShapesStore.Label.() -> Intent? = {
     is ShapesStore.Label.SelectMark -> Intent.HandleMarkSelected(mark)
     is ShapesStore.Label.CenterMark -> Intent.HandleMarkCenter(mark)
     is ShapesStore.Label.UnselectMark -> Intent.HandleMarkUnselect(mark)
+    is ShapesStore.Label.UpdateCircle -> Intent.HandleCircleUpdate(circleToUpdate, cut)
   }
 }

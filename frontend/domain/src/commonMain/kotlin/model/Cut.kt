@@ -126,3 +126,28 @@ fun Cut.getSliceNumberByMark(mark: MarkDomain): Int? {
     CutType.Sagittal -> mark.markData.x
   }
 }
+
+fun Cut.updateCoordinates(mark: MarkDomain, deltaX: Int, deltaY: Int): MarkDomain? {
+  val markData = mark.markData
+  return when (type) {
+    CutType.Empty -> null
+    CutType.Axial -> mark.copy(
+      markData = markData.copy(
+        x = markData.x + deltaX,
+        y = markData.y + deltaY
+      )
+    )
+    CutType.Frontal -> mark.copy(
+      markData = markData.copy(
+        x = markData.x + deltaX,
+        z = markData.y + deltaY
+      )
+    )
+    CutType.Sagittal -> mark.copy(
+      markData = markData.copy(
+        y = markData.x + deltaX,
+        z = markData.y + deltaY
+      )
+    )
+  }
+}
