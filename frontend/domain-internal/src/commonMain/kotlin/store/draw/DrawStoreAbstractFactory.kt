@@ -49,6 +49,8 @@ abstract class DrawStoreAbstractFactory(
     data class ContrastBrightness(val dicomX: Double, val dicomY: Double) : Result()
     data class StartMove(val startDicomX: Double, val startDicomY: Double) : Result()
     data class MouseMove(val dicomX: Double, val dicomY: Double) : Result()
+    data class MouseMoveInClick(val dicomX: Double, val dicomY: Double) : Result()
+
     object Idle : Result()
   }
 
@@ -82,6 +84,10 @@ abstract class DrawStoreAbstractFactory(
         is Result.MouseMove -> copy(
           startDicomX = result.dicomX - startDicomX,
           startDicomY = result.dicomY - startDicomY
+        )
+        is Result.MouseMoveInClick -> copy(
+          startDicomX = result.dicomX,
+          startDicomY = result.dicomY
         )
         Result.Idle -> copy(
           startDicomX = 0.0,

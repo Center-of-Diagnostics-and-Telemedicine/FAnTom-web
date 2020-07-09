@@ -49,6 +49,7 @@ internal class ShapesStoreFactory(
 
         is Intent.HandleExternalCircleChanged ->
           handleExternalCircleChanged(intent.circle, intent.cut, getState)
+
       }.let {}
     }
 
@@ -62,6 +63,7 @@ internal class ShapesStoreFactory(
       if (circleToUpdate != null) {
         val newX = circleToUpdate.dicomCenterX + deltaX
         val newY = circleToUpdate.dicomCenterY + deltaY
+        println("MY: SHAPES newx = $newX, newY = $newY")
         dispatch(
           Result.Circles(
             getState().circles.replace(
