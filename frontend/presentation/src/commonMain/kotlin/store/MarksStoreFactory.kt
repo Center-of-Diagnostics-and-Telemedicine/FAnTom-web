@@ -48,10 +48,29 @@ internal class MarksStoreFactory(
         is Intent.HandleNewMark -> handleNewMark(intent.circle, intent.sliceNumber, intent.cut)
         is Intent.SelectMark -> selectMark(intent.mark, getState)
         is Intent.UnselectMark -> unselectMark(intent.mark, getState)
-        Intent.DismissError -> TODO()
-        Intent.ReloadRequested -> TODO()
         is Intent.UpdateMark -> updateMarkWithoutSaving(intent.markToUpdate, getState)
+        is Intent.UpdateMarkWithSave -> updateMarkWithSave(intent.mark)
+        Intent.ReloadRequested -> TODO()
+        Intent.DismissError -> TODO()
       }.let {}
+    }
+
+    private fun updateMarkWithSave(mark: MarkDomain) {
+      singleFromCoroutine {
+        repository.updateMark(mark)
+        repository.getMarks(researchId)
+      }
+        .subscribeOn(ioScheduler)
+        .map(Result::Loaded)
+        .observeOn(mainScheduler)
+        .subscribeScoped(
+          isThreadLocal = true,
+          onSuccess = {
+            dispatch(it)
+            publish(Label.MarksLoaded(it.marks))
+          },
+          onError = ::handleError
+        )
     }
 
     private fun handleNewMark(circle: Circle, sliceNumber: Int, cut: Cut) {

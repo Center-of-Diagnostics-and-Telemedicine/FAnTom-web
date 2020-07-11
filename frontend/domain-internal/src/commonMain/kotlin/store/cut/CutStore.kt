@@ -30,8 +30,10 @@ interface CutStore : Store<Intent, State, Label> {
     data class ChangeSliceNumberByDraw(val deltaDicomY: Int) : Intent()
 
     data class HandleMarkUpdate(val mark: MarkDomain) : Intent()
+    data class HandleMarkUpdateWithSave(val mark: MarkDomain) : Intent()
 
     object ContrasBrightnessChanged : Intent()
+    object HandleStopMoving : Intent()
   }
 
   data class State(
@@ -47,6 +49,7 @@ interface CutStore : Store<Intent, State, Label> {
   ) : JvmSerializable
 
   sealed class Label {
+
     data class SliceNumberChanged(val sliceNumber: Int, val cut: Cut) : Label()
     data class ExternalSliceNumberChanged(val externalCut: Cut, val sliceNumber: Int) : Label()
     data class CircleDrawn(val circle: Circle, val sliceNumber: Int, val cut: Cut) : Label()
@@ -56,5 +59,8 @@ interface CutStore : Store<Intent, State, Label> {
     data class UnselectMark(val mark: MarkDomain) : Label()
     data class ContrastBrightnessChanged(val black: Int, val white: Int) : Label()
     data class MarkUpdate(val mark: MarkDomain) : Label()
+    data class UpdateMarkWithSave(val mark: MarkDomain) : Label()
+
+    object StopMoving : Label()
   }
 }

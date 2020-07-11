@@ -39,6 +39,7 @@ interface CutController {
     data class ExternalSliceNumberChanged(val sliceNumber: Int, val cut: Cut) : Input()
     data class Marks(val list: List<MarkDomain>) : Input()
     data class ChangeSliceNumberByMarkCenter(val mark: MarkDomain) : Input()
+    object Idle: Input()
   }
 
   sealed class Output {
@@ -49,5 +50,6 @@ interface CutController {
     data class UnselectMark(val mark: MarkDomain) : Output()
     data class ContrastBrightnessChanged(val black: Int, val white: Int) : Output()
     data class UpdateMark(val mark: MarkDomain) : Output()
+    data class UpdateMarkWithSave(val mark: MarkDomain) : Output()
   }
 }

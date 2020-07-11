@@ -4,7 +4,7 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.disposable.CompositeDisposable
 import com.badoo.reaktive.observable.Observable
 import com.badoo.reaktive.observable.subscribe
-import com.badoo.reaktive.subject.publish.PublishSubject
+import com.badoo.reaktive.subject.behavior.BehaviorSubject
 import controller.CutController
 import controller.CutController.Input
 import controller.SliderController
@@ -30,7 +30,7 @@ import kotlin.browser.window
 class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
 
   private var testRef: Element? = null
-  private val cutInput = PublishSubject<Input>()
+  private val cutInput = BehaviorSubject<Input>(Input.Idle)
   private val disposable = CompositeDisposable()
 
   init {

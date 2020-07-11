@@ -41,15 +41,15 @@ class CutParentComponent(prps: CutParentProps) : RComponent<CutParentProps, CutP
   override fun componentDidMount() {
     lifecycleRegistry.resume()
     controller = createController()
-    val dependencies = props.dependencies
-    val disposable = dependencies.cutsInput.subscribe { controller.input(it) }
-    lifecycleRegistry.doOnDestroy(disposable::dispose)
     controller.onViewCreated(
       cutView = cutViewDelegate,
       shapesView = shapesViewDelegate,
       drawView = drawViewDelegate,
       viewLifecycle = lifecycleRegistry
     )
+    val dependencies = props.dependencies
+    val disposable = dependencies.cutsInput.subscribe { controller.input(it) }
+    lifecycleRegistry.doOnDestroy(disposable::dispose)
   }
 
   private fun createController(): CutController {

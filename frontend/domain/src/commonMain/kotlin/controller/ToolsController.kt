@@ -39,5 +39,6 @@ interface ToolsController {
 
   sealed class Input {
     data class ContrastBrightnessChanged(val black: Int, val white: Int) : Input()
+    object Idle: Input()
   }
 }

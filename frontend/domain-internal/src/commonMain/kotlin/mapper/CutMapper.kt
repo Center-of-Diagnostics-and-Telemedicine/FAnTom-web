@@ -14,7 +14,7 @@ val cutStateToCutModel: State.() -> Model? = {
   )
 }
 
-val inputToCutIntent: Input.() -> Intent = {
+val inputToCutIntent: Input.() -> Intent? = {
   when (this) {
     is Input.BlackChanged -> Intent.HandleBlackChanged(blackValue = value)
     is Input.WhiteChanged -> Intent.HandleWhiteChanged(whiteValue = value)
@@ -27,6 +27,7 @@ val inputToCutIntent: Input.() -> Intent = {
       Intent.HandleExternalSliceNumberChanged(externalCut = cut, sliceNumber = sliceNumber)
     is Input.Marks -> Intent.HandleMarks(list)
     is Input.ChangeSliceNumberByMarkCenter -> Intent.ChangeSliceNumberByMarkCenter(mark)
+    Input.Idle -> null
   }
 }
 
@@ -39,8 +40,10 @@ val cutLabelToCutOutput: Label.() -> Output? = {
     is Label.UnselectMark -> Output.UnselectMark(mark)
     is Label.ContrastBrightnessChanged -> Output.ContrastBrightnessChanged(black, white)
     is Label.MarkUpdate -> Output.UpdateMark(mark)
+    is Label.UpdateMarkWithSave -> Output.UpdateMarkWithSave(mark)
     is Label.ExternalSliceNumberChanged -> null
     is Label.Marks -> null
+    Label.StopMoving -> null
   }
 }
 
@@ -50,11 +53,11 @@ val drawLabelToCutIntent: DrawStore.Label.() -> Intent? = {
     is DrawStore.Label.ChangeContrastBrightness -> Intent.ChangeContrastBrightness(deltaX, deltaY)
     DrawStore.Label.ContrastBrightnessChanged -> Intent.ContrasBrightnessChanged
     is DrawStore.Label.ChangeSlice -> Intent.ChangeSliceNumberByDraw(deltaDicomY)
+    DrawStore.Label.StopMove -> Intent.HandleStopMoving
     is DrawStore.Label.OnClick -> null
     is DrawStore.Label.StartMove -> null
     is DrawStore.Label.MouseMove -> null
     is DrawStore.Label.MoveInClick -> null
-    DrawStore.Label.StopMove -> null
   }
 }
 
@@ -64,5 +67,6 @@ val shapesLabelToCutIntent: ShapesStore.Label.() -> Intent? = {
     is ShapesStore.Label.CenterMark -> Intent.HandleMarkCenter(mark)
     is ShapesStore.Label.UnselectMark -> Intent.HandleMarkUnselect(mark)
     is ShapesStore.Label.UpdateMark -> Intent.HandleMarkUpdate(mark)
+    is ShapesStore.Label.UpdateMarkWithSave -> Intent.HandleMarkUpdateWithSave(mark)
   }
 }

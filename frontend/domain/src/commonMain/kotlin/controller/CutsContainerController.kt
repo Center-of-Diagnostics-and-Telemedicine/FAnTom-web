@@ -22,6 +22,7 @@ interface CutsContainerController {
 
   sealed class Input {
     data class GridChanged(val grid: Grid) : Input()
+    object Idle: Input()
   }
 
   sealed class Output {
@@ -32,5 +33,6 @@ interface CutsContainerController {
     data class UnselectMark(val mark: MarkDomain) : Output()
     data class ContrastBrightnessChanged(val black: Int, val white: Int) : Output()
     data class UpdateMark(val markToUpdate: MarkDomain) : Output()
+    data class UpdateMarkWithSave(val mark: MarkDomain) : Output()
   }
 }

@@ -4,7 +4,7 @@ import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.lifecycle.LifecycleRegistry
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.observable.Observable
-import com.badoo.reaktive.subject.publish.PublishSubject
+import com.badoo.reaktive.subject.behavior.BehaviorSubject
 import com.ccfraser.muirwik.components.spacingUnits
 import components.loading
 import controller.*
@@ -37,16 +37,11 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
   private val lifecycleRegistry = LifecycleRegistry()
   private lateinit var controller: ResearchController
 
-  private val cutsContainerInputObservable = PublishSubject<CutsContainerController.Input>()
-  private val cutsInputObservable = PublishSubject<CutController.Input>()
-  private val marksInputObservable = PublishSubject<MarksController.Input>()
-  private val toolsInputObservable = PublishSubject<ToolsController.Input>()
-
-//  private var gridContainerInputObserver: Observer<GridContainerController.Input>? = null
-//  private val gridContainerInput: (Observer<GridContainerController.Input>) -> Disposable = ::gridContainerInput
-
-//  private var cutsInputObserver: Observer<CutController.Input>? = null
-//  private val cutsInput: (Observer<CutController.Input>) -> Disposable = ::cutsInput
+  private val cutsContainerInputObservable =
+    BehaviorSubject<CutsContainerController.Input>(CutsContainerController.Input.Idle)
+  private val cutsInputObservable = BehaviorSubject<CutController.Input>(CutController.Input.Idle)
+  private val marksInputObservable = BehaviorSubject<MarksController.Input>(MarksController.Input.Idle)
+  private val toolsInputObservable = BehaviorSubject<ToolsController.Input>(ToolsController.Input.Idle)
 
   init {
     state = ResearchState(
@@ -76,7 +71,6 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
     loading(model.loading)
     styledDiv {
       css(appFrameContainerStyle)
-
 
       if (model.data != null) {
         //leftDrawer
@@ -163,6 +157,9 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
       )
       is CutsContainerController.Output.UpdateMark -> marksInputObservable.onNext(
         MarksController.Input.UpdateMark(output.markToUpdate)
+      )
+      is CutsContainerController.Output.UpdateMarkWithSave -> marksInputObservable.onNext(
+        MarksController.Input.UpdateMarkWithSave(output.mark)
       )
     }.let { }
   }

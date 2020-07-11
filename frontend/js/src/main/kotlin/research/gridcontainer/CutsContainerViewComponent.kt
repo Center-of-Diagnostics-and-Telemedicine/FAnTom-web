@@ -6,7 +6,7 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.disposable.CompositeDisposable
 import com.badoo.reaktive.observable.Observable
 import com.badoo.reaktive.observable.subscribe
-import com.badoo.reaktive.subject.publish.PublishSubject
+import com.badoo.reaktive.subject.behavior.BehaviorSubject
 import controller.CutController
 import controller.CutsContainerController
 import controller.CutsContainerControllerImpl
@@ -33,7 +33,7 @@ class CutsContainerViewComponent(prps: CutsContainerProps) :
 
   private val gridViewDelegate = CutsContainerViewProxy(::updateState)
   private val lifecycleRegistry = LifecycleRegistry()
-  private val cutsInputObservable = PublishSubject<CutController.Input>()
+  private val cutsInputObservable = BehaviorSubject<CutController.Input>(CutController.Input.Idle)
   private lateinit var controller: CutsContainerController
   private val disposable = CompositeDisposable()
 
@@ -44,10 +44,10 @@ class CutsContainerViewComponent(prps: CutsContainerProps) :
   override fun componentDidMount() {
     lifecycleRegistry.resume()
     controller = createController()
+    controller.onViewCreated(gridViewDelegate, lifecycleRegistry)
     val dependencies = props.dependencies
     disposable.add(dependencies.cutsContainerInputs.subscribe { controller.input(it) })
     disposable.add(dependencies.cutsInput.subscribe { cutsInputObservable.onNext(it) })
-    controller.onViewCreated(gridViewDelegate, lifecycleRegistry)
   }
 
   private fun createController(): CutsContainerController {
@@ -183,6 +183,11 @@ class CutsContainerViewComponent(prps: CutsContainerProps) :
       is CutController.Output.UpdateMark -> {
         props.dependencies.cutsContainerOutput(
           CutsContainerController.Output.UpdateMark(output.mark)
+        )
+      }
+      is CutController.Output.UpdateMarkWithSave -> {
+        props.dependencies.cutsContainerOutput(
+          CutsContainerController.Output.UpdateMarkWithSave(output.mark)
         )
       }
     }.let { }

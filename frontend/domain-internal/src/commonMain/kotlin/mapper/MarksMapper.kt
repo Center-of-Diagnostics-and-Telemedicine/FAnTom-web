@@ -23,6 +23,8 @@ val inputToMarksIntent: Input.() -> Intent? = {
     is Input.SelectMark -> Intent.SelectMark(mark)
     is Input.UnselectMark -> Intent.UnselectMark(mark)
     is Input.UpdateMark -> Intent.UpdateMark(markToUpdate)
+    is Input.UpdateMarkWithSave -> Intent.UpdateMarkWithSave(mark)
+    Input.Idle -> null
   }
 }
 

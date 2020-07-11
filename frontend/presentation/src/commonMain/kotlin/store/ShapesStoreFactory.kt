@@ -47,7 +47,15 @@ internal class ShapesStoreFactory(
 
         is Intent.HandleMoveInClick -> handleMoveInClick(intent.deltaX, intent.deltaY, getState)
 
+        is Intent.HandleStopMoving -> handleStopMoving(getState)
+
       }.let {}
+    }
+
+    private fun handleStopMoving(getState: () -> State) {
+      getState().marks.firstOrNull { it.selected }?.let { markToUpdate ->
+        publish(Label.UpdateMarkWithSave(markToUpdate))
+      }
     }
 
     private fun handleMoveInClick(deltaX: Double, deltaY: Double, getState: () -> State) {
@@ -131,7 +139,7 @@ internal class ShapesStoreFactory(
       dispatch(Result.HorizontalLineChanged(coefficient))
     }
 
-    private fun handleMousePosition(
+    private fun  handleMousePosition(
       dicomX: Double,
       dicomY: Double,
       getState: () -> State

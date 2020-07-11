@@ -12,9 +12,10 @@ val CutsContainerStateToCutsContainerModel: State.() -> Model? = {
   )
 }
 
-val inputToCutsContainerIntent: Input.() -> Intent = {
+val inputToCutsContainerIntent: Input.() -> Intent? = {
   when (this) {
     is Input.GridChanged -> Intent.HandleGridChanged(grid)
+    Input.Idle -> null
   }
 }
 

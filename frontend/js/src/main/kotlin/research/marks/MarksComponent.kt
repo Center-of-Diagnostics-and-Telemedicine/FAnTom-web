@@ -37,18 +37,18 @@ class MarksComponent(prps: MarksProps) : RComponent<MarksProps, MarksState>(prps
       marksViewDelegate,
       lifecycleRegistry
     )
+    val dependencies = props.dependencies
+    disposable.add(dependencies.marksInput.subscribe { controller.input(it) })
   }
 
   private fun createController(): MarksController {
     val dependencies = props.dependencies
-    disposable.add(dependencies.marksInput.subscribe { controller.input(it) })
     val marksControllerDependencies =
       object : MarksController.Dependencies, Dependencies by dependencies {
         override val lifecycle: Lifecycle = lifecycleRegistry
       }
     return MarksControllerImpl(marksControllerDependencies)
   }
-
 
   override fun RBuilder.render() {
     styledDiv {

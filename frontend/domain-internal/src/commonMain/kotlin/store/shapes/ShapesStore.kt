@@ -17,6 +17,7 @@ interface ShapesStore : Store<Intent, State, Label> {
     data class HandleMarks(val list: List<MarkDomain>) : Intent()
     data class HandleClick(val dicomX: Double, val dicomY: Double, val altKey: Boolean) : Intent()
     data class HandleMoveInClick(val deltaX: Double, val deltaY: Double) : Intent()
+    object HandleStopMoving : Intent()
   }
 
   data class State(
@@ -34,5 +35,6 @@ interface ShapesStore : Store<Intent, State, Label> {
     data class CenterMark(val mark: MarkDomain) : Label()
     data class UnselectMark(val mark: MarkDomain) : Label()
     data class UpdateMark(val mark: MarkDomain) : Label()
+    data class UpdateMarkWithSave(val mark: MarkDomain) : Label()
   }
 }

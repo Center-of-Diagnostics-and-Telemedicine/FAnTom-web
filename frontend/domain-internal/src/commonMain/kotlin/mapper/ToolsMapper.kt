@@ -71,5 +71,6 @@ val toolsInputToBrightnessIntent: ToolsController.Input.() -> BrightnessStore.In
   when (this) {
     is ToolsController.Input.ContrastBrightnessChanged ->
       BrightnessStore.Intent.HandleContrastBrightnessChanged(black, white)
+    ToolsController.Input.Idle -> null
   }
 }

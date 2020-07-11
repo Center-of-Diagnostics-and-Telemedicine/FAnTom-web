@@ -34,5 +34,7 @@ interface MarksController {
     data class SelectMark(val mark: MarkDomain) : Input()
     data class UnselectMark(val mark: MarkDomain) : Input()
     data class UpdateMark(val markToUpdate: MarkDomain) : Input()
+    data class UpdateMarkWithSave(val mark: MarkDomain) : Input()
+    object Idle: Input()
   }
 }

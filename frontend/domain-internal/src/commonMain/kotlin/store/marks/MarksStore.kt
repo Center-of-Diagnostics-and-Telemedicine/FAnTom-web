@@ -14,6 +14,7 @@ interface MarksStore : Store<Intent, State, Label> {
     data class SelectMark(val mark: MarkDomain) : Intent()
     data class UnselectMark(val mark: MarkDomain) : Intent()
     data class UpdateMark(val markToUpdate: MarkDomain) : Intent()
+    data class UpdateMarkWithSave(val mark: MarkDomain) : Intent()
 
     object DismissError : Intent()
     object ReloadRequested : Intent()

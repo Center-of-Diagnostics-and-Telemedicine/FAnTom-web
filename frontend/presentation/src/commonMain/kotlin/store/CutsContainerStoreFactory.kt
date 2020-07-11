@@ -85,7 +85,6 @@ internal class CutsContainerStoreFactory(
       }
 
     private fun buildCut(type: CutType): Cut {
-
       return when (type) {
         CutType.Frontal -> frontalCut
         CutType.Sagittal -> sagittalCut
