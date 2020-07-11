@@ -180,9 +180,9 @@ class CutsContainerViewComponent(prps: CutsContainerProps) :
           CutsContainerController.Output.ContrastBrightnessChanged(output.black, output.white)
         )
       }
-      is CutController.Output.UpdateCircle -> {
-        cutsInputObservable.onNext(
-          CutController.Input.ExternalCircleUpdate(output.circleToUpdate, output.cut)
+      is CutController.Output.UpdateMark -> {
+        props.dependencies.cutsContainerOutput(
+          CutsContainerController.Output.UpdateMark(output.mark)
         )
       }
     }.let { }

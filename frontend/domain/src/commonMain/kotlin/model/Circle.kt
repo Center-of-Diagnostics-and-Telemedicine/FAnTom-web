@@ -21,9 +21,9 @@ fun MarkDomain.toCircle(cut: Cut, sliceNumber: Int): Circle? {
           val horizontalRatio = cut.horizontalCutData.data.maxFramesSize.toDouble() / cut.data!!.height
           val verticalRatio = cut.verticalCutData.data.maxFramesSize.toDouble() / cut.data.height
           val coefficient = cut.verticalCutData.data.height.toDouble() / cut.data.maxFramesSize
-          val x = x.toDouble() / verticalRatio
-          val y = y.toDouble() / horizontalRatio
-          val h = abs(sliceNumber - z).toDouble() * coefficient
+          val x = x / verticalRatio
+          val y = y / horizontalRatio
+          val h = abs(sliceNumber - z) * coefficient
           val newRadius = sqrt((radius).pow(2) - (h).pow(2))
           Circle(
             dicomCenterX = x,
@@ -38,10 +38,10 @@ fun MarkDomain.toCircle(cut: Cut, sliceNumber: Int): Circle? {
         return if ((sliceNumber < (y + radius)) && (sliceNumber > (y - radius))) {
           val horizontalRatio = cut.horizontalCutData.data.maxFramesSize.toDouble() / cut.data!!.height
           val verticalRatio = cut.verticalCutData.data.maxFramesSize.toDouble() / cut.data.maxFramesSize
-          val resultX = x.toDouble() / verticalRatio
-          //val z = if (reversed) height - area.z else area.z
-          val resultY = z.toDouble() / horizontalRatio
-          val h = abs(sliceNumber - y).toDouble()
+          val resultX = x / verticalRatio
+          val z = if (cut.data.reversed) cut.data.height - z else z
+          val resultY = z / horizontalRatio
+          val h = abs(sliceNumber - y)
           val newRadius = sqrt((radius).pow(2) - h.pow(2))
           Circle(
             dicomCenterX = resultX,
@@ -57,10 +57,10 @@ fun MarkDomain.toCircle(cut: Cut, sliceNumber: Int): Circle? {
         return if ((sliceNumber < (x + radius)) && (sliceNumber > (x - radius))) {
           val horizontalRatio = cut.horizontalCutData.data.maxFramesSize.toDouble() / cut.data!!.height
           val verticalRatio = cut.verticalCutData.data.maxFramesSize.toDouble() / cut.data.maxFramesSize
-          val resultX = y.toDouble() / verticalRatio
-          //val z = if (reversed) height - area.z else area.z
-          val resultY = z.toDouble() / horizontalRatio
-          val h = abs(sliceNumber - x).toDouble()
+          val resultX = y / verticalRatio
+          val z = if (cut.data.reversed) cut.data.height - z else z
+          val resultY = z / horizontalRatio
+          val h = abs(sliceNumber - x)
           val newRadius = sqrt((radius).pow(2) - h.pow(2))
           Circle(
             dicomCenterX = resultX,

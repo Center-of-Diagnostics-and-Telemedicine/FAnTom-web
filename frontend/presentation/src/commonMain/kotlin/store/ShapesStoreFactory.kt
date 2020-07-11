@@ -47,35 +47,15 @@ internal class ShapesStoreFactory(
 
         is Intent.HandleMoveInClick -> handleMoveInClick(intent.deltaX, intent.deltaY, getState)
 
-        is Intent.HandleExternalCircleChanged ->
-          handleExternalCircleChanged(intent.circle, intent.cut, getState)
-
       }.let {}
     }
 
-    private fun handleExternalCircleChanged(circle: Circle, cut: Cut, getState: () -> State) {
-
-    }
-
     private fun handleMoveInClick(deltaX: Double, deltaY: Double, getState: () -> State) {
-      //не успевает обновляться при изменении, обрабатывается старая отметка
-      val circleToUpdate = getState().circles.firstOrNull { it.highlight }
-      if (circleToUpdate != null) {
-        val newX = circleToUpdate.dicomCenterX + deltaX
-        val newY = circleToUpdate.dicomCenterY + deltaY
-        println("MY: SHAPES newx = $newX, newY = $newY")
-        dispatch(
-          Result.Circles(
-            getState().circles.replace(
-              circleToUpdate.copy(dicomCenterX = newX, dicomCenterY = newY)
-            ) { it.id == circleToUpdate.id }
-          )
-        )
-        publish(Label.UpdateCircle(circleToUpdate, cut))
+      getState().marks.firstOrNull { it.selected }?.let { markToUpdate ->
+        cut.updateCoordinates(markToUpdate, deltaX, deltaY)?.let {
+          publish(Label.UpdateMark(it))
+        }
       }
-      //необходимо найти и обновить сферу
-      //после обновления сферы, посылаем на обновление отметку
-
     }
 
     private fun handleClick(
@@ -156,7 +136,6 @@ internal class ShapesStoreFactory(
       dicomY: Double,
       getState: () -> State
     ) {
-      println("x = $dicomX,y = $dicomY, sliceNumber = ${getState().sliceNumber} ")
       val position = cut.getPosition(
         dicomX = dicomX,
         dicomY = dicomY,

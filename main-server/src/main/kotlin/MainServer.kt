@@ -37,10 +37,10 @@ fun main(args: Array<String>) {
   embeddedServer(Netty, 8081) {
 
     Database.connect(
-      url = "jdbc:mysql://localhost:3306/mark_tomogram?characterEncoding=utf8&useUnicode=true&useSSL=false",
+      url = "jdbc:mysql://localhost:8889/mark_tomogram?characterEncoding=utf8&useUnicode=true&useSSL=false",
       driver = "com.mysql.jdbc.Driver",
       user = "root",
-      password = ""
+      password = "root"
     )
 
     // Serialize json

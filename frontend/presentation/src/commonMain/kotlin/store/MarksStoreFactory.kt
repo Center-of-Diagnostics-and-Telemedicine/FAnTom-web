@@ -50,7 +50,7 @@ internal class MarksStoreFactory(
         is Intent.UnselectMark -> unselectMark(intent.mark, getState)
         Intent.DismissError -> TODO()
         Intent.ReloadRequested -> TODO()
-        is Intent.UpdateMark -> updateMark(intent.markToUpdate, getState)
+        is Intent.UpdateMark -> updateMarkWithoutSaving(intent.markToUpdate, getState)
       }.let {}
     }
 
@@ -73,22 +73,10 @@ internal class MarksStoreFactory(
         )
     }
 
-    private fun updateMark(markToUpdate: MarkDomain, getState: () -> State) {
-      singleFromCoroutine {
-        repository.updateMark(markToUpdate)
-        getState().marks.replace(markToUpdate) { it.id == markToUpdate.id }
-      }
-        .subscribeOn(ioScheduler)
-        .map(Result::Loaded)
-        .observeOn(mainScheduler)
-        .subscribeScoped(
-          isThreadLocal = true,
-          onSuccess = {
-            dispatch(it)
-            publish(Label.MarksLoaded(it.marks))
-          },
-          onError = ::handleError
-        )
+    private fun updateMarkWithoutSaving(markToUpdate: MarkDomain, getState: () -> State) {
+      val marks = getState().marks.replace(markToUpdate) { it.id == markToUpdate.id }
+      dispatch(Result.Loaded(marks))
+      publish(Label.MarksLoaded(marks))
     }
 
     private fun selectMark(mark: MarkDomain, state: () -> State) {

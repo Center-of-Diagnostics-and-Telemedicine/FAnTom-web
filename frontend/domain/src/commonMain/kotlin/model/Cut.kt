@@ -1,7 +1,6 @@
 package model
 
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
-import kotlin.math.roundToInt
 
 data class Cut(
   val type: CutType,
@@ -84,9 +83,9 @@ fun Cut.getMarkToSave(circle: Circle, sliceNumber: Int): MarkData? {
         val horizontalRatio = horizontalCutData.data.maxFramesSize.toDouble() / data!!.height
         val verticalRatio = verticalCutData.data.maxFramesSize.toDouble() / data.height
         MarkData(
-          x = (circle.dicomCenterX * verticalRatio).roundToInt(),
-          y = (circle.dicomCenterY * horizontalRatio).roundToInt(),
-          z = sliceNumber,
+          x = (circle.dicomCenterX * verticalRatio),
+          y = (circle.dicomCenterY * horizontalRatio),
+          z = sliceNumber.toDouble(),
           radius = circle.dicomRadius,
           size = 0.0
         )
@@ -95,9 +94,9 @@ fun Cut.getMarkToSave(circle: Circle, sliceNumber: Int): MarkData? {
         val horizontalRatio = horizontalCutData.data.maxFramesSize.toDouble() / data!!.height
         val verticalRatio = verticalCutData.data.maxFramesSize.toDouble() / data.maxFramesSize
         MarkData(
-          x = (circle.dicomCenterX * verticalRatio).roundToInt(),
-          y = sliceNumber,
-          z = (circle.dicomCenterY * horizontalRatio).roundToInt(),
+          x = (circle.dicomCenterX * verticalRatio),
+          y = sliceNumber.toDouble(),
+          z = (circle.dicomCenterY * horizontalRatio),
           radius = circle.dicomRadius,
           size = 0.0
         )
@@ -106,9 +105,9 @@ fun Cut.getMarkToSave(circle: Circle, sliceNumber: Int): MarkData? {
         val horizontalRatio = horizontalCutData.data.maxFramesSize.toDouble() / data!!.height
         val verticalRatio = verticalCutData.data.maxFramesSize.toDouble() / data.maxFramesSize
         MarkData(
-          x = sliceNumber,
-          y = (circle.dicomCenterX * verticalRatio).roundToInt(),
-          z = (circle.dicomCenterY * horizontalRatio).roundToInt(),
+          x = sliceNumber.toDouble(),
+          y = (circle.dicomCenterX * verticalRatio),
+          z = (circle.dicomCenterY * horizontalRatio),
           radius = circle.dicomRadius,
           size = 0.0
         )
@@ -120,14 +119,13 @@ fun Cut.getMarkToSave(circle: Circle, sliceNumber: Int): MarkData? {
 fun Cut.getSliceNumberByMark(mark: MarkDomain): Int? {
   return when (type) {
     CutType.Empty -> null
-    CutType.Axial -> mark.markData.z
-    CutType.Frontal
-    -> mark.markData.y
-    CutType.Sagittal -> mark.markData.x
+    CutType.Axial -> mark.markData.z.toInt()
+    CutType.Frontal -> mark.markData.y.toInt()
+    CutType.Sagittal -> mark.markData.x.toInt()
   }
 }
 
-fun Cut.updateCoordinates(mark: MarkDomain, deltaX: Int, deltaY: Int): MarkDomain? {
+fun Cut.updateCoordinates(mark: MarkDomain, deltaX: Double, deltaY: Double): MarkDomain? {
   val markData = mark.markData
   return when (type) {
     CutType.Empty -> null
@@ -135,19 +133,36 @@ fun Cut.updateCoordinates(mark: MarkDomain, deltaX: Int, deltaY: Int): MarkDomai
       markData = markData.copy(
         x = markData.x + deltaX,
         y = markData.y + deltaY
-      )
-    )
+      ),
+    ).also { it.selected = true }
     CutType.Frontal -> mark.copy(
       markData = markData.copy(
         x = markData.x + deltaX,
-        z = markData.y + deltaY
+        z = markData.z + deltaY
       )
-    )
+    ).also { it.selected = true }
     CutType.Sagittal -> mark.copy(
       markData = markData.copy(
-        y = markData.x + deltaX,
-        z = markData.y + deltaY
+        y = markData.y + deltaX,
+        z = markData.z + deltaY
       )
+    ).also { it.selected = true }
+  }
+}
+
+fun Cut.updateCircle(oldCircle: Circle, newCircle: Circle): Circle? {
+  return when (type) {
+    CutType.Empty -> null
+    CutType.Axial -> newCircle.copy(
+      dicomCenterX = newCircle.dicomCenterX,
+      dicomCenterY = newCircle.dicomCenterY
+    )
+    CutType.Frontal -> newCircle.copy(
+      dicomCenterX = newCircle.dicomCenterX,
+      dicomCenterY = newCircle.dicomCenterY
+    )
+    CutType.Sagittal -> newCircle.copy(
+      dicomCenterY = newCircle.dicomCenterX
     )
   }
 }

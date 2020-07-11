@@ -10,19 +10,19 @@ data class MarkDomain(
   val markData: MarkData,
   val type: MarkType,
   val comment: String
-){
+) {
   var selected = false
 }
 
 @Serializable
 data class MarkData(
-  val x: Int,
-  val y: Int,
-  val z: Int,
+  val x: Double,
+  val y: Double,
+  val z: Double,
   val radius: Double,
   val size: Double
 ) {
-  fun name(): String = "x: ${x}, y: ${y}, z: ${z}, r: ${radius.roundToInt()}"
+  fun name(): String = "x: ${x.roundToInt()}, y: ${y.roundToInt()}, z: ${z.roundToInt()}, r: ${radius.roundToInt()}"
 }
 
 @Serializable
@@ -40,6 +40,7 @@ object MarkTypeSerializer : KSerializer<MarkType> {
   override fun serialize(encoder: Encoder, value: MarkType) {
     encoder.encodeString(value.toString().toLowerCase())
   }
+
   override fun deserialize(decoder: Decoder): MarkType {
     return MarkType.valueOf(decoder.decodeString().toUpperCase())
   }

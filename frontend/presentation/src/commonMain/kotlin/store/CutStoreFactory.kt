@@ -93,10 +93,7 @@ internal class CutStoreFactory(
         is Intent.ChangeSliceNumberByDraw -> {
           changeSliceNumber(getState().sliceNumber + intent.deltaDicomY, getState)
         }
-        is Intent.HandleCircleUpdate -> publish(Label.CircleUpdate(intent.circleToUpdate, cut))
-        is Intent.HandleExternalCircleUpdate -> publish(
-          Label.ExternalCircleChanged(intent.circle, intent.cut)
-        )
+        is Intent.HandleMarkUpdate -> publish(Label.MarkUpdate(intent.mark))
       }.let {}
     }
 
