@@ -129,24 +129,36 @@ fun Cut.updateCoordinates(mark: MarkDomain, deltaX: Double, deltaY: Double): Mar
   val markData = mark.markData
   return when (type) {
     CutType.Empty -> null
-    CutType.Axial -> mark.copy(
-      markData = markData.copy(
-        x = markData.x + deltaX,
-        y = markData.y + deltaY
-      ),
-    ).also { it.selected = true }
-    CutType.Frontal -> mark.copy(
-      markData = markData.copy(
-        x = markData.x + deltaX,
-        z = markData.z + deltaY
-      )
-    ).also { it.selected = true }
-    CutType.Sagittal -> mark.copy(
-      markData = markData.copy(
-        y = markData.y + deltaX,
-        z = markData.z + deltaY
-      )
-    ).also { it.selected = true }
+    CutType.Axial -> {
+      val horizontalRatio = horizontalCutData.data.maxFramesSize.toDouble() / data!!.height
+      val verticalRatio = verticalCutData.data.maxFramesSize.toDouble() / data.height
+      mark.copy(
+        markData = markData.copy(
+          x = markData.x + deltaX * verticalRatio,
+          y = markData.y + deltaY * horizontalRatio
+        ),
+      ).also { it.selected = true }
+    }
+    CutType.Frontal -> {
+      val horizontalRatio = horizontalCutData.data.maxFramesSize.toDouble() / data!!.height
+      val verticalRatio = verticalCutData.data.maxFramesSize.toDouble() / data.maxFramesSize
+      mark.copy(
+        markData = markData.copy(
+          x = markData.x + deltaX * verticalRatio,
+          z = markData.z + deltaY * horizontalRatio
+        )
+      ).also { it.selected = true }
+    }
+    CutType.Sagittal -> {
+      val horizontalRatio = horizontalCutData.data.maxFramesSize.toDouble() / data!!.height
+      val verticalRatio = verticalCutData.data.maxFramesSize.toDouble() / data.maxFramesSize
+      mark.copy(
+        markData = markData.copy(
+          y = markData.y + deltaX * verticalRatio,
+          z = markData.z + deltaY * horizontalRatio
+        )
+      ).also { it.selected = true }
+    }
   }
 }
 
