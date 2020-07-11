@@ -150,7 +150,7 @@ class ToolsComponent(prps: ToolsProps) : RComponent<ToolsProps, ToolsState>(prps
     val headerStyle by css {
       display = Display.flex
       alignItems = Align.center
-      justifyContent = JustifyContent.flexEnd
+      justifyContent = JustifyContent.left
     }
 
     val nested by ListScreen.ListStyles.css {

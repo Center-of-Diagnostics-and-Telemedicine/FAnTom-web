@@ -6,8 +6,8 @@ import com.ccfraser.muirwik.components.card.mCardActionArea
 import com.ccfraser.muirwik.components.card.mCardContent
 import com.ccfraser.muirwik.components.card.mCardHeader
 import com.ccfraser.muirwik.components.styles.Breakpoint
-import kotlinx.css.Color
-import kotlinx.css.backgroundColor
+import kotlinx.css.*
+import kotlinx.css.properties.border
 import model.Research
 import react.RBuilder
 import styled.StyledElementBuilder
@@ -38,10 +38,12 @@ private fun StyledElementBuilder<MGridProps>.researchCard(
       mCard {
         css {
           if (research.seen) {
-            backgroundColor = Color.lightYellow
+            boxSizing = BoxSizing.borderBox
+            border(2.px, BorderStyle.solid, Color.yellow)
           }
           if (research.done) {
-            backgroundColor = Color.lightGreen
+            boxSizing = BoxSizing.borderBox
+            border(2.px, BorderStyle.solid, Color.green)
           }
         }
         mCardHeader(title = research.name)

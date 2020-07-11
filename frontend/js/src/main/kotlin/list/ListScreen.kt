@@ -3,6 +3,7 @@ package list
 import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.lifecycle.LifecycleRegistry
 import com.arkivanov.mvikotlin.core.store.StoreFactory
+import com.ccfraser.muirwik.components.mCssBaseline
 import com.ccfraser.muirwik.components.themeContext
 import com.ccfraser.muirwik.components.toolbarJsCssToPartialCss
 import controller.ListController
@@ -62,6 +63,7 @@ class ListScreen(props: ListProps) :
   }
 
   override fun RBuilder.render() {
+    mCssBaseline()
     themeContext.Consumer { theme ->
       styledDiv {
         css(screenContainerCss)

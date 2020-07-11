@@ -12,6 +12,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.css.*
+import kotlinx.css.properties.border
 import model.Cut
 import org.w3c.dom.Element
 import react.*
@@ -62,6 +63,12 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
   override fun RBuilder.render() {
     styledDiv {
       css(cutContainerStyle)
+      if (props.dependencies.cut.color.isNotEmpty()) {
+        css {
+          boxSizing = BoxSizing.borderBox
+          border(2.px, BorderStyle.solid, Color(props.dependencies.cut.color))
+        }
+      }
       styledDiv {
         css(blackContainerStyle)
         styledDiv {

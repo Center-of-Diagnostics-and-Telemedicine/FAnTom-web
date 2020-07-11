@@ -58,6 +58,7 @@ class LoginScreen(
   }
 
   override fun RBuilder.render() {
+    mCssBaseline()
     val model = state.model
 
     val error = state.model.error
@@ -75,7 +76,7 @@ class LoginScreen(
         }
         styledDiv {
           css {
-            marginTop = 9.spacingUnits
+            paddingTop = 9.spacingUnits
             display = Display.flex
             flexDirection = FlexDirection.column
             alignItems = Align.center

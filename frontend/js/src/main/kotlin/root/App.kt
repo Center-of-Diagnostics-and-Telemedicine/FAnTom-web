@@ -2,10 +2,12 @@ package root
 
 import ScreenType
 import com.arkivanov.mvikotlin.core.store.StoreFactory
+import com.ccfraser.muirwik.components.Colors
 import com.ccfraser.muirwik.components.mCssBaseline
 import com.ccfraser.muirwik.components.mThemeProvider
 import com.ccfraser.muirwik.components.styles.ThemeOptions
 import com.ccfraser.muirwik.components.styles.createMuiTheme
+import com.ccfraser.muirwik.components.themeContext
 import controller.ListController
 import controller.LoginController
 import list.ListScreen
@@ -18,44 +20,49 @@ import repository.MarksRepository
 import repository.ResearchRepository
 import research.ResearchScreen
 import research.research
+import styled.styledDiv
 
 abstract class App : RComponent<AppProps, AppState>() {
-
-  private var themeColor = "light"
 
   init {
     state = AppState(
       screen = ScreenType.AUTH,
-      researchId = -1
+      researchId = -1,
+      themeColor = "dark"
     )
   }
 
   override fun RBuilder.render() {
     mCssBaseline()
     @Suppress("UnsafeCastFromDynamic")
-    val themeOptions: ThemeOptions =
-      js("({palette: {primary: {light: '#757ce8',main: '#3f50b5',dark: '#002884',contrastText:'#fff',},secondary: {light: '#ff7961',main: '#f44336',dark:'#ba000d',contrastText: '#000',},}})")
-    themeOptions.palette?.type = themeColor
-    themeOptions.typography?.fontSize = 12
+    val themeOptions: ThemeOptions = js("({palette: { type: 'placeholder', primary: {main: 'placeholder'}}})")
+    themeOptions.palette?.type = state.themeColor
+    themeOptions.palette?.primary.main = Colors.Pink.shade500.toString()
     themeOptions.spacing = 1
 
     mThemeProvider(createMuiTheme(themeOptions)) {
-      when (state.screen) {
-        ScreenType.AUTH -> login(
-          dependencies = object : LoginScreen.Dependencies, Dependencies by props.dependencies {
-            override val loginOutput: (LoginController.Output) -> Unit = ::loginOutput
+      themeContext.Consumer { theme ->
+        styledDiv {
+          when (state.screen) {
+            ScreenType.AUTH -> login(
+              dependencies = object : LoginScreen.Dependencies, Dependencies by props.dependencies {
+                override val loginOutput: (LoginController.Output) -> Unit = ::loginOutput
+              }
+            )
+            ScreenType.LIST -> list(
+              dependencies = object : ListScreen.Dependencies, Dependencies by props.dependencies {
+                override val listOutput: (ListController.Output) -> Unit = ::listOutput
+              }
+            )
+            ScreenType.RESEARCH -> research(
+              dependencies = object : ResearchScreen.Dependencies,
+                Dependencies by props.dependencies {
+                override val researchId: Int = state.researchId
+              }
+            )
           }
-        )
-        ScreenType.LIST -> list(
-          dependencies = object : ListScreen.Dependencies, Dependencies by props.dependencies {
-            override val listOutput: (ListController.Output) -> Unit = ::listOutput
-          }
-        )
-        ScreenType.RESEARCH -> research(
-          dependencies = object : ResearchScreen.Dependencies, Dependencies by props.dependencies {
-            override val researchId: Int = state.researchId
-          }
-        )
+
+        }
       }
     }
   }
@@ -86,7 +93,8 @@ abstract class App : RComponent<AppProps, AppState>() {
 
 class AppState(
   var screen: ScreenType,
-  var researchId: Int
+  var researchId: Int,
+  var themeColor: String
 ) : RState
 
 interface AppProps : RProps {

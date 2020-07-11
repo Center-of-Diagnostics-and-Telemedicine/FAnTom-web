@@ -115,8 +115,8 @@ class CutsGridComponent : RComponent<CutsGridProps, CutsGridState>() {
     val squareCss by css {
       flex(1.0)
       flexDirection = FlexDirection.column
-      width = 20.px
-      height = 20.px
+      width = 25.px
+      height = 25.px
       border = "1px solid grey"
       margin(1.px)
       transition("all", 200.ms, Timing.easeOut)
@@ -125,8 +125,8 @@ class CutsGridComponent : RComponent<CutsGridProps, CutsGridState>() {
     val squareHoverCss by css {
       flex(1.0)
       flexDirection = FlexDirection.column
-      width = 20.px
-      height = 20.px
+      width = 25.px
+      height = 25.px
       border = "1px solid grey"
       margin(1.px)
       transition("all", 200.ms, Timing.easeOut)

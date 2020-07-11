@@ -5,6 +5,7 @@ import com.arkivanov.mvikotlin.core.lifecycle.LifecycleRegistry
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.observable.Observable
 import com.badoo.reaktive.subject.behavior.BehaviorSubject
+import com.ccfraser.muirwik.components.mCssBaseline
 import com.ccfraser.muirwik.components.spacingUnits
 import components.loading
 import controller.*
@@ -67,6 +68,7 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
   }
 
   override fun RBuilder.render() {
+    mCssBaseline()
     val model = state.researchModel
     loading(model.loading)
     styledDiv {
