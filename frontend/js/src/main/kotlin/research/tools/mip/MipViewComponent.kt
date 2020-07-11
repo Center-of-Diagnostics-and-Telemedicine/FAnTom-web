@@ -16,7 +16,7 @@ import research.tools.ToolsComponent
 import styled.css
 import view.MipView
 
-val altBuilder = RBuilder()
+private val altBuilder = RBuilder()
 
 fun RBuilder.renderMip(
   model: MipView.Model,
