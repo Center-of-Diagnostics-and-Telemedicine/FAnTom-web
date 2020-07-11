@@ -110,17 +110,20 @@ class ToolsComponent(prps: ToolsProps) : RComponent<ToolsProps, ToolsState>(prps
         is Tool.MIP -> renderMip(
           model = state.mipModel,
           onClick = { mipViewDelegate.dispatch(MipView.Event.ItemClick(it)) },
-          onChange = { mipViewDelegate.dispatch(MipView.Event.MipValueChanged(it)) }
+          onChange = { mipViewDelegate.dispatch(MipView.Event.MipValueChanged(it)) },
+          open = props.dependencies.open
         )
         is Tool.Brightness -> renderBrightness(
           model = state.brightnessModel,
           onBlackChange = { brightnessViewDelegate.dispatch(BrightnessView.Event.BlackChanged(it)) },
           onWhiteChange = { brightnessViewDelegate.dispatch(BrightnessView.Event.WhiteChanged(it)) },
-          onGammaChange = { brightnessViewDelegate.dispatch(BrightnessView.Event.GammaChanged(it)) }
+          onGammaChange = { brightnessViewDelegate.dispatch(BrightnessView.Event.GammaChanged(it)) },
+          open = props.dependencies.open
         )
         is Tool.Preset -> renderPreset(
           model = state.presetModel,
-          onChange = { templatesViewDelegate.dispatch(PresetView.Event.ItemClick(it)) }
+          onChange = { templatesViewDelegate.dispatch(PresetView.Event.ItemClick(it)) },
+          open = props.dependencies.open
         )
       }
     }
@@ -140,7 +143,7 @@ class ToolsComponent(prps: ToolsProps) : RComponent<ToolsProps, ToolsState>(prps
     val storeFactory: StoreFactory
     val toolsOutput: (ToolsController.Output) -> Unit
     val toolsInput: Observable<ToolsController.Input>
-
+    val open: Boolean
   }
 
   object ToolsStyles : StyleSheet("ToolsStyles", isStatic = true) {

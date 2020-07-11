@@ -18,9 +18,10 @@ private val altBuilder = RBuilder()
 
 fun RBuilder.renderPreset(
   model: PresetView.Model,
-  onChange: (Presets) -> Unit
+  onChange: (Presets) -> Unit,
+  open: Boolean
 ) {
-  mCollapse(show = true) {
+  mCollapse(show = open) {
     css(ToolsComponent.ToolsStyles.nested)
     mList {
       mListItem {

@@ -15,9 +15,10 @@ fun RBuilder.renderBrightness(
   onGammaChange: (Double) -> Unit,
   onWhiteChange: (Int) -> Unit,
   onBlackChange: (Int) -> Unit,
-  model: BrightnessView.Model
+  model: BrightnessView.Model,
+  open: Boolean
 ) {
-  mCollapse(show = true) {
+  mCollapse(show = open) {
     mList {
       css(ToolsComponent.ToolsStyles.nested)
       mListItem {

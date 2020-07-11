@@ -21,9 +21,10 @@ private val altBuilder = RBuilder()
 fun RBuilder.renderMip(
   model: MipView.Model,
   onClick: (Mip) -> Unit,
-  onChange: (Int) -> Unit
+  onChange: (Int) -> Unit,
+  open: Boolean
 ) {
-  mCollapse(show = true) {
+  mCollapse(show = open) {
     css(ToolsComponent.ToolsStyles.nested)
     mList {
       mListItem {

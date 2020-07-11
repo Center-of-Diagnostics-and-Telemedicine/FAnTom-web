@@ -84,6 +84,7 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
             Dependencies by props.dependencies {
             override val toolsOutput: (Output) -> Unit = ::toolsOutput
             override val toolsInput: Observable<ToolsController.Input> = this@ResearchScreen.toolsInputObservable
+            override val open: Boolean = state.toolsOpen
           })
         }
 
