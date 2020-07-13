@@ -25,7 +25,7 @@ internal class CutsContainerStoreFactory(
 
   private inner class ExecutorImpl : ReaktiveExecutor<Intent, Unit, State, Result, Nothing>() {
     override fun executeAction(action: Unit, getState: () -> State) {
-      val types = listOf(CutType.CT_AXIAL, CutType.EMPTY, CutType.CT_FRONTAL, CutType.CT_SAGITTAL)
+      val types = initialFourGridTypes(data.type)
       singleFromFunction {
         Result.Loaded(
           items = buildCuts(types),
@@ -38,6 +38,29 @@ internal class CutsContainerStoreFactory(
           isThreadLocal = true,
           onSuccess = ::dispatch
         )
+    }
+
+    private fun initialFourGridTypes(type: ResearchType): List<CutType> {
+      return when (type) {
+        ResearchType.CT -> listOf(
+          CutType.CT_AXIAL,
+          CutType.EMPTY,
+          CutType.CT_FRONTAL,
+          CutType.CT_SAGITTAL
+        )
+        ResearchType.MG -> listOf(
+          CutType.MG_RCC,
+          CutType.MG_LCC,
+          CutType.MG_RMLO,
+          CutType.MG_LMLO
+        )
+        ResearchType.DX -> listOf(
+          CutType.DX_GENERIC,
+          CutType.DX_POSTERO_ANTERIOR,
+          CutType.DX_LEFT_LATERAL,
+          CutType.DX_RIGHT_LATERAL
+        )
+      }
     }
 
     override fun executeIntent(intent: Intent, getState: () -> State) {
@@ -54,7 +77,15 @@ internal class CutsContainerStoreFactory(
 
     private fun buildCut(type: CutType): Cut? {
       return when (type) {
-        CutType.EMPTY,
+        CutType.EMPTY -> {
+          Cut(
+            type = CutType.EMPTY,
+            data = ModalityModel(0, 0, 0.0, 0.0, 0, 0, 0),
+            color = "",
+            verticalCutData = null,
+            horizontalCutData = null
+          )
+        }
         CutType.CT_AXIAL -> {
           Cut(
             type = CutType.CT_AXIAL,
@@ -62,16 +93,16 @@ internal class CutsContainerStoreFactory(
               ?: error("CutsContainerStoreFactory: AXIAL NOT FOUND IN DATA"),
             color = axialColor,
             verticalCutData = CutData(
-              CutType.CT_FRONTAL,
-              data.modalities[SLICE_TYPE_CT_FRONTAL]
+              type = CutType.CT_FRONTAL,
+              data = data.modalities[SLICE_TYPE_CT_FRONTAL]
                 ?: error("CutsContainerStoreFactory: FRONTAL NOT FOUND IN DATA"),
-              frontalColor
+              color = frontalColor
             ),
             horizontalCutData = CutData(
-              CutType.CT_SAGITTAL,
-              data.modalities[SLICE_TYPE_CT_SAGITTAL]
+              type = CutType.CT_SAGITTAL,
+              data = data.modalities[SLICE_TYPE_CT_SAGITTAL]
                 ?: error("CutsContainerStoreFactory: SAGITTAL NOT FOUND IN DATA"),
-              sagittalColor
+              color = sagittalColor
             )
           )
         }

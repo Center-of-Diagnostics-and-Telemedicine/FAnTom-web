@@ -13,6 +13,7 @@ import controller.CutsContainerControllerImpl
 import destroy
 import kotlinx.css.*
 import model.Cut
+import model.CutType
 import model.Grid
 import model.ResearchSlicesSizesDataNew
 import react.*
@@ -116,19 +117,19 @@ class CutsContainerViewComponent(prps: CutsContainerProps) :
         css(rowOfColumnsStyle)
 
         //контейнер для среза
-        cutContainer(
-          dependencies = dependencies(leftTop)
-        )
-        //TODO() пока известно что сверху справа пустой, поэтому заглушка
-        styledDiv {
-          css {
-            display = Display.flex
-            flexDirection = FlexDirection.row
-            position = Position.relative
-            width = 50.pct
+        cutContainer(dependencies = dependencies(leftTop))
+        if (rightTop.type == CutType.EMPTY) {
+          styledDiv {
+            css {
+              display = Display.flex
+              flexDirection = FlexDirection.row
+              position = Position.relative
+              width = 50.pct
+            }
           }
+        } else {
+          cutContainer(dependencies = dependencies(rightTop))
         }
-
       }
 
       styledDiv {

@@ -275,14 +275,14 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
 
   private fun drawLine(
     context: CanvasRenderingContext2D,
-    strokeColor: String,
+    strokeColor: String?,
     moveToX: Double,
     moveToY: Double,
     lineToX: Double,
     lineToY: Double
   ) {
     context.beginPath()
-    context.strokeStyle = strokeColor
+    strokeColor?.let { context.strokeStyle = it }
     context.moveTo(moveToX, moveToY)
     context.lineTo(lineToX, lineToY)
     context.stroke()
