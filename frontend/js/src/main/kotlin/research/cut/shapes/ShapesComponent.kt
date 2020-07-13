@@ -255,7 +255,7 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
 
     drawLine(
       context = context,
-      strokeColor = props.cut.verticalCutData.color,
+      strokeColor = props.cut.verticalCutData?.color,
       moveToX = 0.0,
       moveToY = horizontal,
       lineToX = width,
@@ -264,7 +264,7 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
 
     drawLine(
       context = context,
-      strokeColor = props.cut.horizontalCutData.color,
+      strokeColor = props.cut.horizontalCutData?.color,
       moveToX = vertical,
       moveToY = 0.0,
       lineToX = vertical,

@@ -99,54 +99,54 @@ val cutLoader: CutLoader = CutLoaderImpl(researchRepository)
 
 val axialCutStore: CutStore = CutStoreImpl(
   cutLoader,
-  SLYCE_TYPE_AXIAL
+  SLICE_TYPE_CT_AXIAL
 )
 val frontalCutStore: CutStore = CutStoreImpl(
   cutLoader,
-  SLYCE_TYPE_FRONTAL
+  SLICE_TYPE_CT_FRONTAL
 )
 val sagittalCutStore: CutStore = CutStoreImpl(
   cutLoader,
-  SLYCE_TYPE_SAGITTAL
+  SLICE_TYPE_CT_SAGITTAL
 )
 val axialCutBinder = CutBinder(
   store = axialCutStore,
   sliceNumberObservable = ResearchContainer.axialSliceNumberObservable,
-  cutType = SLYCE_TYPE_AXIAL,
-  sliceSizeDataObservable = getSliceSizesDataObservable(SLYCE_TYPE_AXIAL),
+  cutType = SLICE_TYPE_CT_AXIAL,
+  sliceSizeDataObservable = getSliceSizesDataObservable(SLICE_TYPE_CT_AXIAL),
   blackAndWhiteObservable = ResearchContainer.axialBlackAndWhiteObservable
 )
 val frontalCutBinder = CutBinder(
   store = frontalCutStore,
   sliceNumberObservable = ResearchContainer.frontalSliceNumberObservable,
-  cutType = SLYCE_TYPE_FRONTAL,
-  sliceSizeDataObservable = getSliceSizesDataObservable(SLYCE_TYPE_FRONTAL),
+  cutType = SLICE_TYPE_CT_FRONTAL,
+  sliceSizeDataObservable = getSliceSizesDataObservable(SLICE_TYPE_CT_FRONTAL),
   blackAndWhiteObservable = ResearchContainer.frontalBlackAndWhiteObservable
 )
 val sagittalCutBinder = CutBinder(
   store = sagittalCutStore,
   sliceNumberObservable = ResearchContainer.sagittalSliceNumberObservable,
-  cutType = SLYCE_TYPE_SAGITTAL,
-  sliceSizeDataObservable = getSliceSizesDataObservable(SLYCE_TYPE_SAGITTAL),
+  cutType = SLICE_TYPE_CT_SAGITTAL,
+  sliceSizeDataObservable = getSliceSizesDataObservable(SLICE_TYPE_CT_SAGITTAL),
   blackAndWhiteObservable = ResearchContainer.sagittalBlackAndWhiteObservable
 )
 
 fun injectCut(cutType: Int): CutBinder {
   return when (cutType) {
-    SLYCE_TYPE_AXIAL -> axialCutBinder
-    SLYCE_TYPE_FRONTAL -> frontalCutBinder
-    SLYCE_TYPE_SAGITTAL -> sagittalCutBinder
+    SLICE_TYPE_CT_AXIAL -> axialCutBinder
+    SLICE_TYPE_CT_FRONTAL -> frontalCutBinder
+    SLICE_TYPE_CT_SAGITTAL -> sagittalCutBinder
     else -> throw NotImplementedError("maybe you forgot to add something? injectCut")
   }
 }
 
 fun getSliceSizesDataObservable(cutType: Int): Observable<SliceSizeData> =
   when (cutType) {
-    SLYCE_TYPE_AXIAL ->
+    SLICE_TYPE_CT_AXIAL ->
       ResearchContainer.axialSlicesSizesDataObservable
-    SLYCE_TYPE_SAGITTAL ->
+    SLICE_TYPE_CT_SAGITTAL ->
       ResearchContainer.sagittalSlicesSizesDataObservable
-    SLYCE_TYPE_FRONTAL ->
+    SLICE_TYPE_CT_FRONTAL ->
       ResearchContainer.frontalSlicesSizesDataObservable
     else -> throw NotImplementedError("maybe you forgot to add something? getSliceNumberObservable")
   }
@@ -167,9 +167,9 @@ val sagittalSliderBinder = SliderBinder(
 
 fun injectSlider(cutType: Int): SliderBinder {
   return when (cutType) {
-    SLYCE_TYPE_AXIAL -> axialSliderBinder
-    SLYCE_TYPE_SAGITTAL -> sagittalSliderBinder
-    SLYCE_TYPE_FRONTAL -> frontalSliderBinder
+    SLICE_TYPE_CT_AXIAL -> axialSliderBinder
+    SLICE_TYPE_CT_SAGITTAL -> sagittalSliderBinder
+    SLICE_TYPE_CT_FRONTAL -> frontalSliderBinder
     else -> throw NotImplementedError("maybe you forgot to add something? injectCut")
   }
 }
@@ -268,24 +268,24 @@ val sagittalDrawBinder = DrawBinder(sagittalDrawStore)
 
 fun injectDrawCanvas(cutType: Int): DrawBinder =
   when (cutType) {
-    SLYCE_TYPE_AXIAL -> axialDrawBinder
-    SLYCE_TYPE_SAGITTAL -> sagittalDrawBinder
-    SLYCE_TYPE_FRONTAL -> frontalDrawBinder
+    SLICE_TYPE_CT_AXIAL -> axialDrawBinder
+    SLICE_TYPE_CT_SAGITTAL -> sagittalDrawBinder
+    SLICE_TYPE_CT_FRONTAL -> frontalDrawBinder
     else -> throw NotImplementedError("maybe you forgot to add something? getSliceNumberObservable")
   }
 
 val axialShapesStore: ShapesStore = ShapesStoreImpl(
-  SLYCE_TYPE_AXIAL,
+  SLICE_TYPE_CT_AXIAL,
   hounsfieldDataLoader,
   ResearchContainer.changeCutTypeListener
 )
 val frontalShapesStore: ShapesStore = ShapesStoreImpl(
-  SLYCE_TYPE_FRONTAL,
+  SLICE_TYPE_CT_FRONTAL,
   hounsfieldDataLoader,
   ResearchContainer.changeCutTypeListener
 )
 val sagittalShapesStore: ShapesStore = ShapesStoreImpl(
-  SLYCE_TYPE_SAGITTAL,
+  SLICE_TYPE_CT_SAGITTAL,
   hounsfieldDataLoader,
   ResearchContainer.changeCutTypeListener
 )
@@ -316,9 +316,9 @@ val sagittalShapesBinder = ShapesBinder(
 
 fun injectShapesCanvas(cutType: Int): ShapesBinder =
   when (cutType) {
-    SLYCE_TYPE_AXIAL -> axialShapesBinder
-    SLYCE_TYPE_FRONTAL -> frontalShapesBinder
-    SLYCE_TYPE_SAGITTAL -> sagittalShapesBinder
+    SLICE_TYPE_CT_AXIAL -> axialShapesBinder
+    SLICE_TYPE_CT_FRONTAL -> frontalShapesBinder
+    SLICE_TYPE_CT_SAGITTAL -> sagittalShapesBinder
     else -> throw NotImplementedError("maybe you forgot to add something? getSliceNumberObservable")
 
   }

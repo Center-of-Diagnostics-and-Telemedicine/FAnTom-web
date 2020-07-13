@@ -30,34 +30,60 @@ sealed class Grid(val types: List<CutType>) {
   ) : Grid(listOf(topLeft, topRight, bottomLeft, bottomRight))
 
   companion object {
-    fun build(type: GridType): Grid {
+    fun build(type: GridType, researchType: ResearchType): Grid {
       return when (type) {
-        GridType.Single -> initialSingleGrid()
-        GridType.TwoVertical -> initialTwoVerticalGrid()
-        GridType.TwoHorizontal -> initialTwoHorizontalGrid()
-        GridType.Four -> initialFourGrid()
+        GridType.Single -> initialSingleGrid(researchType)
+        GridType.TwoVertical -> initialTwoVerticalGrid(researchType)
+        GridType.TwoHorizontal -> initialTwoHorizontalGrid(researchType)
+        GridType.Four -> initialFourGrid(researchType)
       }
     }
   }
 }
 
-fun initialSingleGrid(): Grid {
-  return Grid.Single(CutType.Axial)
+fun initialSingleGrid(researchType: ResearchType): Grid {
+  return when (researchType) {
+    ResearchType.CT -> Grid.Single(CutType.CT_AXIAL)
+    ResearchType.MG -> Grid.Single(CutType.MG_RCC)
+    ResearchType.DX -> Grid.Single(CutType.DX_GENERIC)
+  }
 }
 
-fun initialTwoVerticalGrid(): Grid {
-  return Grid.TwoVertical(CutType.Axial, CutType.Frontal)
+fun initialTwoVerticalGrid(researchType: ResearchType): Grid {
+  return when (researchType) {
+    ResearchType.CT -> Grid.TwoVertical(CutType.CT_AXIAL, CutType.CT_FRONTAL)
+    ResearchType.MG -> Grid.TwoVertical(CutType.MG_RCC, CutType.MG_LCC)
+    ResearchType.DX -> Grid.TwoVertical(CutType.DX_GENERIC, CutType.DX_LEFT_LATERAL)
+  }
 }
 
-fun initialTwoHorizontalGrid(): Grid {
-  return Grid.TwoHorizontal(CutType.Frontal, CutType.Sagittal)
+fun initialTwoHorizontalGrid(researchType: ResearchType): Grid {
+  return when (researchType) {
+    ResearchType.CT -> Grid.TwoHorizontal(CutType.CT_FRONTAL, CutType.CT_SAGITTAL)
+    ResearchType.MG -> Grid.TwoHorizontal(CutType.MG_RCC, CutType.MG_LCC)
+    ResearchType.DX -> Grid.TwoHorizontal(CutType.DX_GENERIC, CutType.DX_LEFT_LATERAL)
+  }
 }
 
-fun initialFourGrid(): Grid {
-  return Grid.Four(
-    topLeft = CutType.Axial,
-    topRight = CutType.Empty,
-    bottomLeft = CutType.Frontal,
-    bottomRight = CutType.Sagittal
-  )
+fun initialFourGrid(researchType: ResearchType): Grid {
+  return when (researchType) {
+    ResearchType.CT -> Grid.Four(
+      topLeft = CutType.CT_AXIAL,
+      topRight = CutType.EMPTY,
+      bottomLeft = CutType.CT_FRONTAL,
+      bottomRight = CutType.CT_SAGITTAL
+    )
+    ResearchType.MG -> Grid.Four(
+      topLeft = CutType.MG_RCC,
+      topRight = CutType.MG_LCC,
+      bottomLeft = CutType.MG_RMLO,
+      bottomRight = CutType.MG_LMLO
+    )
+    ResearchType.DX -> Grid.Four(
+      topLeft = CutType.DX_GENERIC,
+      topRight = CutType.DX_POSTERO_ANTERIOR,
+      bottomLeft = CutType.DX_LEFT_LATERAL,
+      bottomRight = CutType.DX_RIGHT_LATERAL
+    )
+  }
 }

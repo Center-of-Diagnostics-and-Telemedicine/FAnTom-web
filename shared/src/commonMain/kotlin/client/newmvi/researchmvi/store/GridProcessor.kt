@@ -1,7 +1,6 @@
 package client.newmvi.researchmvi.store
 
 import model.*
-import model.*
 
 interface GridProcessor {
 
@@ -78,7 +77,7 @@ class GridProcessorImpl : GridProcessor {
       type = CutsGridType.SINGLE,
       cells = listOf(
         CellModel(
-          SLYCE_TYPE_FRONTAL,
+          SLICE_TYPE_CT_FRONTAL,
           Position.LEFT_TOP,
           researchSlicesSizesData?.frontal ?: initialSlicesSizeData(),
           CutTypeModelContainer(frontal, listOf(axial, sagittal))
@@ -92,13 +91,13 @@ class GridProcessorImpl : GridProcessor {
       type = CutsGridType.TWO_VERTICAL,
       cells = listOf(
         CellModel(
-          SLYCE_TYPE_AXIAL,
+          SLICE_TYPE_CT_AXIAL,
           Position.LEFT_TOP,
           researchSlicesSizesData?.axial ?: initialSlicesSizeData(),
           CutTypeModelContainer(axial, listOf(sagittal))
         ),
         CellModel(
-          SLYCE_TYPE_FRONTAL,
+          SLICE_TYPE_CT_FRONTAL,
           Position.LEFT_BOTTOM,
           researchSlicesSizesData?.frontal ?: initialSlicesSizeData(),
           CutTypeModelContainer(frontal, listOf(sagittal))
@@ -112,13 +111,13 @@ class GridProcessorImpl : GridProcessor {
       type = CutsGridType.TWO_HORIZONTAL,
       cells = listOf(
         CellModel(
-          SLYCE_TYPE_FRONTAL,
+          SLICE_TYPE_CT_FRONTAL,
           Position.LEFT_TOP,
           researchSlicesSizesData?.frontal ?: initialSlicesSizeData(),
           CutTypeModelContainer(frontal, listOf(sagittal))
         ),
         CellModel(
-          SLYCE_TYPE_AXIAL,
+          SLICE_TYPE_CT_AXIAL,
           Position.RIGHT_TOP,
           researchSlicesSizesData?.axial ?: initialSlicesSizeData(),
           CutTypeModelContainer(axial, listOf(sagittal))
@@ -132,19 +131,19 @@ class GridProcessorImpl : GridProcessor {
       type = CutsGridType.THREE,
       cells = listOf(
         CellModel(
-          SLYCE_TYPE_AXIAL,
+          SLICE_TYPE_CT_AXIAL,
           Position.LEFT_TOP,
           researchSlicesSizesData?.axial ?: initialSlicesSizeData(),
           CutTypeModelContainer(axial, listOf())
         ),
         CellModel(
-          SLYCE_TYPE_FRONTAL,
+          SLICE_TYPE_CT_FRONTAL,
           Position.LEFT_BOTTOM,
           researchSlicesSizesData?.frontal ?: initialSlicesSizeData(),
           CutTypeModelContainer(frontal, listOf())
         ),
         CellModel(
-          SLYCE_TYPE_SAGITTAL,
+          SLICE_TYPE_CT_SAGITTAL,
           Position.RIGHT_BOTTOM,
           researchSlicesSizesData?.sagittal ?: initialSlicesSizeData(),
           CutTypeModelContainer(sagittal, listOf())
@@ -158,9 +157,9 @@ class GridProcessorImpl : GridProcessor {
     sliceSizesData: ResearchSlicesSizesData?
   ): SliceSizeData? {
     return when (cutType) {
-      SLYCE_TYPE_AXIAL -> sliceSizesData?.axial
-      SLYCE_TYPE_FRONTAL -> sliceSizesData?.frontal
-      SLYCE_TYPE_SAGITTAL -> sliceSizesData?.sagittal
+      SLICE_TYPE_CT_AXIAL -> sliceSizesData?.axial
+      SLICE_TYPE_CT_FRONTAL -> sliceSizesData?.frontal
+      SLICE_TYPE_CT_SAGITTAL -> sliceSizesData?.sagittal
       else -> throw NotImplementedError("может стоит добавить новый тип среза?")
     }
   }
@@ -185,9 +184,9 @@ class GridProcessorImpl : GridProcessor {
 
   private fun getCutTypeByType(type: Int): CutType {
     return when (type) {
-      SLYCE_TYPE_AXIAL -> axial
-      SLYCE_TYPE_FRONTAL -> frontal
-      SLYCE_TYPE_SAGITTAL -> sagittal
+      SLICE_TYPE_CT_AXIAL -> axial
+      SLICE_TYPE_CT_FRONTAL -> frontal
+      SLICE_TYPE_CT_SAGITTAL -> sagittal
       else -> axial
     }
   }

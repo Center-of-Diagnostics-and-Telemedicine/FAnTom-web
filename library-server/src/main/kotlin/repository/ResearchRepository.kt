@@ -66,15 +66,15 @@ class ResearchRepositoryImpl(private val markTomogramm: MarkTomogrammObject) : R
 
   override fun getInitialData(): ResearchInitModel {
     return ResearchInitModel(
-      axialReal = markTomogramm.getRealValue(SLYCE_TYPE_AXIAL),
-      axialInterpolated = markTomogramm.getInterpolatedValue(SLYCE_TYPE_AXIAL),
-      frontalReal = markTomogramm.getRealValue(SLYCE_TYPE_FRONTAL),
-      frontalInterpolated = markTomogramm.getInterpolatedValue(SLYCE_TYPE_FRONTAL),
-      sagittalReal = markTomogramm.getRealValue(SLYCE_TYPE_SAGITTAL),
-      sagittalInterpolated = markTomogramm.getInterpolatedValue(SLYCE_TYPE_SAGITTAL),
+      axialReal = markTomogramm.getRealValue(SLICE_TYPE_CT_AXIAL),
+      axialInterpolated = markTomogramm.getInterpolatedValue(SLICE_TYPE_CT_AXIAL),
+      frontalReal = markTomogramm.getRealValue(SLICE_TYPE_CT_FRONTAL),
+      frontalInterpolated = markTomogramm.getInterpolatedValue(SLICE_TYPE_CT_FRONTAL),
+      sagittalReal = markTomogramm.getRealValue(SLICE_TYPE_CT_SAGITTAL),
+      sagittalInterpolated = markTomogramm.getInterpolatedValue(SLICE_TYPE_CT_SAGITTAL),
       pixelLength = markTomogramm.getPixelLengthCoef(),
       reversed =
-      markTomogramm.getOriginalPixelCoordinate(SLYCE_TYPE_AXIAL, 0, true) > 0
+      markTomogramm.getOriginalPixelCoordinate(SLICE_TYPE_CT_AXIAL, 0, true) > 0
     )
   }
 

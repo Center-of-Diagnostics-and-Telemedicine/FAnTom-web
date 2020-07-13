@@ -34,13 +34,13 @@ class CutContainer : RComponent<CutContainerProps, RState>() {
     testRef?.let {
       val model = ContainerSizeModel(it.clientWidth, it.clientHeight)
       when (props.cellModel.cutType) {
-        SLYCE_TYPE_AXIAL -> {
+        SLICE_TYPE_CT_AXIAL -> {
           ResearchContainer.axialContainerSizeChangeListener.onNext(model)
         }
-        SLYCE_TYPE_FRONTAL -> {
+        SLICE_TYPE_CT_FRONTAL -> {
           ResearchContainer.frontalContainerSizeChangeListener.onNext(model)
         }
-        SLYCE_TYPE_SAGITTAL -> {
+        SLICE_TYPE_CT_SAGITTAL -> {
           ResearchContainer.sagittalContainerSizeChangeListener.onNext(model)
         }
       }

@@ -5,6 +5,7 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import model.Grid
 import model.Mip
 import model.Presets
+import model.ResearchSlicesSizesDataNew
 import view.*
 
 interface ToolsController {
@@ -24,6 +25,7 @@ interface ToolsController {
     val storeFactory: StoreFactory
     val lifecycle: Lifecycle
     val toolsOutput: (Output) -> Unit
+    val data: ResearchSlicesSizesDataNew
   }
 
   sealed class Output {

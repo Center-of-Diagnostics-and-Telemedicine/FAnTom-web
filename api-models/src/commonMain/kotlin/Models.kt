@@ -15,9 +15,8 @@ data class ResearchSlicesSizesData(
 
 @Serializable
 data class ResearchSlicesSizesDataNew(
-  val axial: ModalityModel,
-  val frontal: ModalityModel,
-  val sagittal: ModalityModel,
+  val modalities: Map<Int, ModalityModel>,
+  val type: ResearchType,
   val researchId: Int = -1,
   val reversed: Boolean
 )
@@ -57,12 +56,47 @@ fun ResearchInitModel.toResearchSlicesSizesData(): ResearchSlicesSizesData {
 }
 
 fun ResearchInitModelNew.toResearchSlicesSizesData(): ResearchSlicesSizesDataNew {
-  return ResearchSlicesSizesDataNew(
-    axial = CT!!.ct_axial.copy(reversed = CT.reversed),
-    frontal = CT.ct_frontal.copy(reversed = CT.reversed),
-    sagittal = CT.ct_sagittal.copy(reversed = CT.reversed),
-    reversed = CT.reversed
-  )
+  return when {
+    CT != null -> {
+      val modalities = mapOf(
+        SLICE_TYPE_CT_AXIAL to CT.ct_axial.copy(reversed = CT.reversed),
+        SLICE_TYPE_CT_FRONTAL to CT.ct_frontal.copy(reversed = CT.reversed),
+        SLICE_TYPE_CT_SAGITTAL to CT.ct_sagittal.copy(reversed = CT.reversed),
+      )
+      ResearchSlicesSizesDataNew(
+        modalities = modalities,
+        reversed = CT.reversed,
+        type = ResearchType.CT
+      )
+    }
+    MG != null -> {
+      val modalities = mapOf(
+        SLICE_TYPE_MG_RCC to MG.mg_rcc.copy(reversed = MG.reversed),
+        SLICE_TYPE_MG_LCC to MG.mg_lcc.copy(reversed = MG.reversed),
+        SLICE_TYPE_MG_RMLO to MG.mg_rmlo.copy(reversed = MG.reversed),
+        SLICE_TYPE_MG_LMLO to MG.mg_lmlo.copy(reversed = MG.reversed)
+      )
+      ResearchSlicesSizesDataNew(
+        modalities = modalities,
+        reversed = MG.reversed,
+        type = ResearchType.MG
+      )
+    }
+    DX != null -> {
+      val modalities = mapOf(
+        SLICE_TYPE_DX_GENERIC to DX.dx_generic.copy(reversed = DX.reversed),
+        SLICE_TYPE_DX_POSTERO_ANTERIOR to DX.dx_postero_anterior.copy(reversed = DX.reversed),
+        SLICE_TYPE_DX_LEFT_LATERAL to DX.dx_left_lateral.copy(reversed = DX.reversed),
+        SLICE_TYPE_DX_RIGHT_LATERAL to DX.dx_right_lateral.copy(reversed = DX.reversed)
+      )
+      ResearchSlicesSizesDataNew(
+        modalities = modalities,
+        reversed = DX.reversed,
+        type = ResearchType.DX
+      )
+    }
+    else -> throw NotImplementedError("ResearchInitModelNew.toResearchSlicesSizesData failed")
+  }
 }
 
 fun initialSlicesSizeData(): SliceSizeData {

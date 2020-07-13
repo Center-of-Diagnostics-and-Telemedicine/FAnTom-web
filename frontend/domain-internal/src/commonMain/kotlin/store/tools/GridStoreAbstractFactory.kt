@@ -10,17 +10,18 @@ import model.*
 import store.tools.GridStore.*
 
 abstract class GridStoreAbstractFactory(
-  private val storeFactory: StoreFactory
+  private val storeFactory: StoreFactory,
+  data: ResearchSlicesSizesDataNew
 ) {
 
   val initialState: State = State(
     list = listOf(
-      initialSingleGrid(),
-      initialTwoVerticalGrid(),
-      initialTwoHorizontalGrid(),
-      initialFourGrid()
+      initialSingleGrid(data.type),
+      initialTwoVerticalGrid(data.type),
+      initialTwoHorizontalGrid(data.type),
+      initialFourGrid(data.type)
     ),
-    current = initialFourGrid()
+    current = initialFourGrid(data.type)
   )
 
   fun create(): GridStore =

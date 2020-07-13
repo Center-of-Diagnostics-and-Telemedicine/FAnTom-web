@@ -15,6 +15,7 @@ import controller.ToolsControllerImpl
 import destroy
 import kotlinx.css.*
 import list.ListScreen
+import model.ResearchSlicesSizesDataNew
 import model.Tool
 import react.*
 import research.tools.ToolsComponent.ToolsStyles.headerStyle
@@ -45,7 +46,7 @@ class ToolsComponent(prps: ToolsProps) : RComponent<ToolsProps, ToolsState>(prps
   init {
     state = ToolsState(
       toolsModel = initialToolsModel(),
-      gridModel = initialGridModel(),
+      gridModel = initialGridModel(props.dependencies.data.type),
       mipModel = initialMipModel(),
       brightnessModel = initialBrightnessModel(),
       presetModel = initialPresetModel()
@@ -144,6 +145,7 @@ class ToolsComponent(prps: ToolsProps) : RComponent<ToolsProps, ToolsState>(prps
     val toolsOutput: (ToolsController.Output) -> Unit
     val toolsInput: Observable<ToolsController.Input>
     val open: Boolean
+    val data: ResearchSlicesSizesDataNew
   }
 
   object ToolsStyles : StyleSheet("ToolsStyles", isStatic = true) {

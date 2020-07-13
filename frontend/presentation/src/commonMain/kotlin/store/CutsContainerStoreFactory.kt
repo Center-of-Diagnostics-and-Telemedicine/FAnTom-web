@@ -15,53 +15,21 @@ import store.gridcontainer.CutsContainerStoreAbstractFactory
 
 internal class CutsContainerStoreFactory(
   storeFactory: StoreFactory,
-  data: ResearchSlicesSizesDataNew
+  val data: ResearchSlicesSizesDataNew
 ) : CutsContainerStoreAbstractFactory(
-  storeFactory = storeFactory
+  storeFactory = storeFactory,
+  data = data
 ) {
-
-  private val axialCutData = CutData(CutType.Axial, data.axial, axialColor)
-  private val frontalCutData = CutData(
-    CutType.Frontal,
-    data.frontal,
-    frontalColor
-  )
-  private val sagittalCutData = CutData(
-    CutType.Sagittal,
-    data.sagittal,
-    sagittalColor
-  )
-  private val axialCut = Cut(
-    type = CutType.Axial,
-    data = data.axial,
-    color = axialColor,
-    verticalCutData = frontalCutData,
-    horizontalCutData = sagittalCutData
-  )
-  private val frontalCut = Cut(
-    type = CutType.Frontal,
-    data = data.frontal,
-    color = frontalColor,
-    verticalCutData = axialCutData,
-    horizontalCutData = sagittalCutData
-  )
-  private val sagittalCut = Cut(
-    type = CutType.Sagittal,
-    data = data.sagittal,
-    color = sagittalColor,
-    verticalCutData = axialCutData,
-    horizontalCutData = frontalCutData
-  )
 
   override fun createExecutor(): Executor<Intent, Unit, State, Result, Nothing> = ExecutorImpl()
 
   private inner class ExecutorImpl : ReaktiveExecutor<Intent, Unit, State, Result, Nothing>() {
     override fun executeAction(action: Unit, getState: () -> State) {
-      val types = listOf(CutType.Axial, CutType.Empty, CutType.Frontal, CutType.Sagittal)
+      val types = listOf(CutType.CT_AXIAL, CutType.EMPTY, CutType.CT_FRONTAL, CutType.CT_SAGITTAL)
       singleFromFunction {
         Result.Loaded(
           items = buildCuts(types),
-          grid = initialFourGrid()
+          grid = initialFourGrid(data.type)
         )
       }
         .subscribeOn(ioScheduler)
@@ -80,17 +48,125 @@ internal class CutsContainerStoreFactory(
     }
 
     private fun buildCuts(types: List<CutType>): List<Cut> =
-      types.map {
+      types.mapNotNull {
         buildCut(it)
       }
 
-    private fun buildCut(type: CutType): Cut {
+    private fun buildCut(type: CutType): Cut? {
       return when (type) {
-        CutType.Frontal -> frontalCut
-        CutType.Sagittal -> sagittalCut
-        CutType.Empty,
-        CutType.Axial
-        -> axialCut
+        CutType.EMPTY,
+        CutType.CT_AXIAL -> {
+          Cut(
+            type = CutType.CT_AXIAL,
+            data = data.modalities[SLICE_TYPE_CT_AXIAL]
+              ?: error("CutsContainerStoreFactory: AXIAL NOT FOUND IN DATA"),
+            color = axialColor,
+            verticalCutData = CutData(
+              CutType.CT_FRONTAL,
+              data.modalities[SLICE_TYPE_CT_FRONTAL]
+                ?: error("CutsContainerStoreFactory: FRONTAL NOT FOUND IN DATA"),
+              frontalColor
+            ),
+            horizontalCutData = CutData(
+              CutType.CT_SAGITTAL,
+              data.modalities[SLICE_TYPE_CT_SAGITTAL]
+                ?: error("CutsContainerStoreFactory: SAGITTAL NOT FOUND IN DATA"),
+              sagittalColor
+            )
+          )
+        }
+        CutType.CT_FRONTAL -> Cut(
+          type = CutType.CT_FRONTAL,
+          data = data.modalities[SLICE_TYPE_CT_FRONTAL]
+            ?: error("CutsContainerStoreFactory: FRONTAL NOT FOUND IN DATA"),
+          color = frontalColor,
+          verticalCutData = CutData(
+            type = CutType.CT_AXIAL,
+            data = data.modalities[SLICE_TYPE_CT_AXIAL]
+              ?: error("CutsContainerStoreFactory: AXIAL NOT FOUND IN DATA"),
+            color = axialColor
+          ),
+          horizontalCutData = CutData(
+            type = CutType.CT_SAGITTAL,
+            data = data.modalities[SLICE_TYPE_CT_SAGITTAL]
+              ?: error("CutsContainerStoreFactory: SAGITTAL NOT FOUND IN DATA"),
+            color = sagittalColor
+          )
+        )
+        CutType.CT_SAGITTAL -> Cut(
+          type = CutType.CT_SAGITTAL,
+          data = data.modalities[SLICE_TYPE_CT_SAGITTAL]
+            ?: error("CutsContainerStoreFactory: SAGITTAL NOT FOUND IN DATA"),
+          color = sagittalColor,
+          verticalCutData = CutData(
+            type = CutType.CT_AXIAL,
+            data = data.modalities[SLICE_TYPE_CT_AXIAL]
+              ?: error("CutsContainerStoreFactory: AXIAL NOT FOUND IN DATA"),
+            color = axialColor
+          ),
+          horizontalCutData = CutData(
+            type = CutType.CT_FRONTAL,
+            data = data.modalities[SLICE_TYPE_CT_FRONTAL]
+              ?: error("CutsContainerStoreFactory: FRONTAL NOT FOUND IN DATA"),
+            color = frontalColor
+          )
+        )
+        CutType.MG_RCC -> Cut(
+          type = CutType.MG_RCC,
+          data = data.modalities[SLICE_TYPE_MG_RCC]!!,
+          color = rcc_color,
+          verticalCutData = null,
+          horizontalCutData = null
+        )
+        CutType.MG_LCC -> Cut(
+          type = CutType.MG_LCC,
+          data = data.modalities[SLICE_TYPE_MG_LCC]!!,
+          color = lcc_color,
+          verticalCutData = null,
+          horizontalCutData = null
+        )
+        CutType.MG_RMLO -> Cut(
+          type = CutType.MG_RMLO,
+          data = data.modalities[SLICE_TYPE_MG_RMLO]!!,
+          color = rmlo_color,
+          verticalCutData = null,
+          horizontalCutData = null
+        )
+        CutType.MG_LMLO -> Cut(
+          type = CutType.MG_LMLO,
+          data = data.modalities[SLICE_TYPE_MG_LMLO]!!,
+          color = lmlo_color,
+          verticalCutData = null,
+          horizontalCutData = null
+        )
+        CutType.DX_GENERIC -> Cut(
+          type = CutType.DX_GENERIC,
+          data = data.modalities[SLICE_TYPE_DX_GENERIC]!!,
+          color = generic_color,
+          verticalCutData = null,
+          horizontalCutData = null
+        )
+        CutType.DX_POSTERO_ANTERIOR -> Cut(
+          type = CutType.DX_POSTERO_ANTERIOR,
+          data = data.modalities[SLICE_TYPE_DX_POSTERO_ANTERIOR]!!,
+          color = postero_color,
+          verticalCutData = null,
+          horizontalCutData = null
+        )
+        CutType.DX_LEFT_LATERAL -> Cut(
+          type = CutType.DX_LEFT_LATERAL,
+          data = data.modalities[SLICE_TYPE_DX_LEFT_LATERAL]!!,
+          color = left_lateral_color,
+          verticalCutData = null,
+          horizontalCutData = null
+        )
+        CutType.DX_RIGHT_LATERAL -> Cut(
+          type = CutType.DX_RIGHT_LATERAL,
+          data = data.modalities[SLICE_TYPE_DX_RIGHT_LATERAL]!!,
+          color = right_lateral_color,
+          verticalCutData = null,
+          horizontalCutData = null
+        )
       }
     }
   }

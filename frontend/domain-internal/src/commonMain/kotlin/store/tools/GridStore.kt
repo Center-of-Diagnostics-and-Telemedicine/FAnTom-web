@@ -4,7 +4,6 @@ import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import model.Grid
 import model.GridType
-import model.initialFourGrid
 import store.tools.GridStore.*
 
 interface GridStore : Store<Intent, State, Label> {
@@ -15,7 +14,7 @@ interface GridStore : Store<Intent, State, Label> {
 
   data class State(
     val list: List<Grid> = listOf(),
-    val current: Grid = initialFourGrid()
+    val current: Grid
   ) : JvmSerializable
 
   sealed class Label : JvmSerializable {

@@ -127,9 +127,9 @@ internal class ShapesStoreFactory(
       getState: () -> State
     ) {
       when {
-        cut.verticalCutData.type == externalCut.type ->
+        cut.verticalCutData?.type == externalCut.type ->
           updateVerticalCoefficient(sliceNumber, externalCut)
-        cut.horizontalCutData.type == externalCut.type ->
+        cut.horizontalCutData?.type == externalCut.type ->
           updateHorizontalCoefficient(sliceNumber, externalCut)
       }
       updateCircles(getState().marks, getState)

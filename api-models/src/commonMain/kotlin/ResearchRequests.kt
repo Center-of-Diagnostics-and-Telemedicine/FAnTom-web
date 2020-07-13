@@ -1,6 +1,5 @@
 package model
 
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -70,9 +69,9 @@ data class PointModel(
 
 fun getModalityStringType(type: Int): String {
   return when (type) {
-    SLYCE_TYPE_AXIAL -> "ct_axial"
-    SLYCE_TYPE_FRONTAL -> "ct_frontal"
-    SLYCE_TYPE_SAGITTAL -> "ct_sagittal"
+    SLICE_TYPE_CT_AXIAL -> "ct_axial"
+    SLICE_TYPE_CT_FRONTAL -> "ct_frontal"
+    SLICE_TYPE_CT_SAGITTAL -> "ct_sagittal"
     else -> throw NotImplementedError("Not implemented sliceType for type $type")
   }
 }

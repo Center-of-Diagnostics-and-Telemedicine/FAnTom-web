@@ -38,7 +38,7 @@ class CutsContainerViewComponent(prps: CutsContainerProps) :
   private val disposable = CompositeDisposable()
 
   init {
-    state = CutsContainerState(initialCutsContainerModel())
+    state = CutsContainerState(initialCutsContainerModel(props.dependencies.data.type))
   }
 
   override fun componentDidMount() {

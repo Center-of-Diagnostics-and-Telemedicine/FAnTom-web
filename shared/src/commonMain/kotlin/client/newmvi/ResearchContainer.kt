@@ -81,9 +81,9 @@ object ResearchContainer {
   val frontalMoveRectsObservable = BehaviorSubject<List<MoveRect>>(listOf())
   val sagittalMoveRectsObservable = BehaviorSubject<List<MoveRect>>(listOf())
 
-  val axialLinesObservable = BehaviorSubject(initialLines(SLYCE_TYPE_AXIAL))
-  val frontalLinesObservable = BehaviorSubject(initialLines(SLYCE_TYPE_FRONTAL))
-  val sagittalLinesObservable = BehaviorSubject(initialLines(SLYCE_TYPE_SAGITTAL))
+  val axialLinesObservable = BehaviorSubject(initialLines(SLICE_TYPE_CT_AXIAL))
+  val frontalLinesObservable = BehaviorSubject(initialLines(SLICE_TYPE_CT_FRONTAL))
+  val sagittalLinesObservable = BehaviorSubject(initialLines(SLICE_TYPE_CT_SAGITTAL))
 
   val axialMouseDataObservable = PublishSubject<MouseData>()
   val frontalMouseDataObservable = PublishSubject<MouseData>()

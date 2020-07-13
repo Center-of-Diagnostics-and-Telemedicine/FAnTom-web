@@ -14,11 +14,11 @@ data class Circle(
 
 fun MarkDomain.toCircle(cut: Cut, sliceNumber: Int): Circle? {
   markData.apply {
-    val horizontalRatio = cut.horizontalCutData.data.n_images.toDouble() / cut.data!!.screen_size_h
-    val verticalRatio = cut.verticalCutData.data.n_images.toDouble() / cut.data.screen_size_v
     when (cut.type) {
-      CutType.Empty -> return null
-      CutType.Axial -> {
+      CutType.EMPTY -> return null
+      CutType.CT_AXIAL -> {
+        val horizontalRatio = cut.horizontalCutData!!.data.n_images.toDouble() / cut.data!!.screen_size_h
+        val verticalRatio = cut.verticalCutData!!.data.n_images.toDouble() / cut.data.screen_size_v
         return if (sliceNumber < (z + radius) && sliceNumber > (z - radius)) {
           val x = x / horizontalRatio
           val y = y / verticalRatio
@@ -33,8 +33,10 @@ fun MarkDomain.toCircle(cut: Cut, sliceNumber: Int): Circle? {
           )
         } else null
       }
-      CutType.Frontal -> {
+      CutType.CT_FRONTAL -> {
         return if ((sliceNumber < (y + radius)) && (sliceNumber > (y - radius))) {
+          val horizontalRatio = cut.horizontalCutData!!.data.n_images.toDouble() / cut.data!!.screen_size_h
+          val verticalRatio = cut.verticalCutData!!.data.n_images.toDouble() / cut.data.screen_size_v
           val resultX = x / horizontalRatio
           val z = if (cut.data.reversed == true) cut.data.screen_size_v - z else z
           val resultY = z / verticalRatio
@@ -50,8 +52,10 @@ fun MarkDomain.toCircle(cut: Cut, sliceNumber: Int): Circle? {
         } else null
 
       }
-      CutType.Sagittal -> {
+      CutType.CT_SAGITTAL -> {
         return if ((sliceNumber < (x + radius)) && (sliceNumber > (x - radius))) {
+          val horizontalRatio = cut.horizontalCutData!!.data.n_images.toDouble() / cut.data!!.screen_size_h
+          val verticalRatio = cut.verticalCutData!!.data.n_images.toDouble() / cut.data.screen_size_v
           val resultX = y / horizontalRatio
           val z = if (cut.data.reversed == true) cut.data.screen_size_v - z else z
           val resultY = z / verticalRatio
@@ -66,6 +70,14 @@ fun MarkDomain.toCircle(cut: Cut, sliceNumber: Int): Circle? {
           )
         } else null
       }
+      CutType.MG_RCC -> TODO()
+      CutType.MG_LCC -> TODO()
+      CutType.MG_RMLO -> TODO()
+      CutType.MG_LMLO -> TODO()
+      CutType.DX_GENERIC -> TODO()
+      CutType.DX_POSTERO_ANTERIOR -> TODO()
+      CutType.DX_LEFT_LATERAL -> TODO()
+      CutType.DX_RIGHT_LATERAL -> TODO()
     }
   }
 //  return null

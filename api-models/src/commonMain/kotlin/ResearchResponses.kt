@@ -1,6 +1,5 @@
 package model
 
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -29,44 +28,45 @@ data class ResearchInitResponseNew(
 
 @Serializable
 data class ResearchInitModelNew(
-  val CT: CTInitModel? = null
+  val CT: CTInitModel? = null,
+  val MG: MGInitModel? = null,
+  val DX: DXInitModel? = null
 )
 
 @Serializable
 data class CTInitModel(
-  @SerialName("ct_axial")
   val ct_axial: ModalityModel,
-  @SerialName("ct_frontal")
   val ct_frontal: ModalityModel,
-  @SerialName("ct_sagittal")
   val ct_sagittal: ModalityModel,
+  val reversed: Boolean
+)
 
+@Serializable
+data class MGInitModel(
+  val mg_lcc: ModalityModel,
+  val mg_lmlo: ModalityModel,
+  val mg_rcc: ModalityModel,
+  val mg_rmlo: ModalityModel,
+  val reversed: Boolean
+)
 
-//  val axialTomogram: Int,
-//  val axialScreen: Int,
-//  val frontalTomogram: Int,
-//  val frontalScreen: Int,
-//  val sagittalTomogram: Int? = 512,
-//  val sagittalScreen: Int,
-//  val pixelLength: Double,
+@Serializable
+data class DXInitModel(
+  val dx_generic: ModalityModel,
+  val dx_postero_anterior: ModalityModel,
+  val dx_left_lateral: ModalityModel,
+  val dx_right_lateral: ModalityModel,
   val reversed: Boolean
 )
 
 @Serializable
 data class ModalityModel(
-  @SerialName("dicom_size_h")
   val dicom_size_h: Int,
-  @SerialName("dicom_size_v")
   val dicom_size_v: Int,
-  @SerialName("dicom_step_h")
   val dicom_step_h: Double,
-  @SerialName("dicom_step_v")
   val dicom_step_v: Double,
-  @SerialName("n_images")
   val n_images: Int,
-  @SerialName("screen_size_h")
   val screen_size_h: Int,
-  @SerialName("screen_size_v")
   val screen_size_v: Int,
   val reversed: Boolean? = null
 )

@@ -2,7 +2,6 @@ package presentation.screen.research.cut
 
 import com.badoo.reaktive.subject.publish.PublishSubject
 import Constants
-import client.*
 import client.newmvi.shapes.binder.ShapesBinder
 import client.newmvi.shapes.view.ShapesView
 import com.ccfraser.muirwik.components.*
@@ -37,9 +36,9 @@ class MviShapesCanvasComponent(props: MviShapesCanvasProps) :
     horizontalLine = initialLine(props.cellModel.cutType, LineType.HORIZONTAL)
     verticalLine = initialLine(props.cellModel.cutType, LineType.VERTICAL)
     selectedMenuIndex = when (props.cellModel.cutType) {
-      SLYCE_TYPE_AXIAL -> 0
-      SLYCE_TYPE_FRONTAL -> 1
-      SLYCE_TYPE_SAGITTAL -> 2
+      SLICE_TYPE_CT_AXIAL -> 0
+      SLICE_TYPE_CT_FRONTAL -> 1
+      SLICE_TYPE_CT_SAGITTAL -> 2
       else -> 0
     }
     showMenu = false

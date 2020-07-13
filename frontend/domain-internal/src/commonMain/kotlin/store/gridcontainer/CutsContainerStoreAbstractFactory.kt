@@ -5,17 +5,19 @@ import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.badoo.reaktive.utils.ensureNeverFrozen
 import model.Cut
 import model.Grid
+import model.ResearchSlicesSizesDataNew
 import model.initialFourGrid
 import store.gridcontainer.CutsContainerStore.Intent
 import store.gridcontainer.CutsContainerStore.State
 
 abstract class CutsContainerStoreAbstractFactory(
-  private val storeFactory: StoreFactory
+  private val storeFactory: StoreFactory,
+  data: ResearchSlicesSizesDataNew
 ) {
 
   val initialState: State = State(
     cuts = listOf(),
-    grid = initialFourGrid()
+    grid = initialFourGrid(data.type)
   )
 
   fun create(): CutsContainerStore =

@@ -3,6 +3,7 @@ package view
 import com.arkivanov.mvikotlin.core.view.MviView
 import model.Cut
 import model.Grid
+import model.ResearchType
 import model.initialFourGrid
 import view.CutsContainerView.Model
 
@@ -14,7 +15,7 @@ interface CutsContainerView : MviView<Model, Nothing> {
   )
 }
 
-fun initialCutsContainerModel(): Model = Model(
+fun initialCutsContainerModel(type: ResearchType): Model = Model(
   items = listOf(),
-  grid = initialFourGrid()
+  grid = initialFourGrid(type)
 )

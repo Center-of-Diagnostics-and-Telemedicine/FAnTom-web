@@ -89,7 +89,7 @@ class ToolsControllerTest {
   fun shows_FourGrid_WHEN_created() {
     createController()
 
-    assertEquals(initialFourGrid(), gridView.model.current)
+    assertEquals(initialFourGrid(data.modalities), gridView.model.current)
   }
 
   @Test
@@ -97,7 +97,7 @@ class ToolsControllerTest {
     createController()
     gridView.dispatch(GridView.Event.ItemClick(GridType.Single))
 
-    assertEquals(initialSingleGrid(), gridView.model.current)
+    assertEquals(initialSingleGrid(researchType), gridView.model.current)
   }
 
   @Test
@@ -105,7 +105,7 @@ class ToolsControllerTest {
     createController()
     gridView.dispatch(GridView.Event.ItemClick(GridType.TwoVertical))
 
-    assertEquals(initialTwoVerticalGrid(), gridView.model.current)
+    assertEquals(initialTwoVerticalGrid(researchType), gridView.model.current)
   }
 
   @Test
@@ -113,7 +113,7 @@ class ToolsControllerTest {
     createController()
     gridView.dispatch(GridView.Event.ItemClick(GridType.TwoHorizontal))
 
-    assertEquals(initialTwoHorizontalGrid(), gridView.model.current)
+    assertEquals(initialTwoHorizontalGrid(researchType), gridView.model.current)
   }
 
   @Test
@@ -121,7 +121,7 @@ class ToolsControllerTest {
     createController()
     gridView.dispatch(GridView.Event.ItemClick(GridType.Four))
 
-    assertEquals(initialFourGrid(), gridView.model.current)
+    assertEquals(initialFourGrid(data.modalities), gridView.model.current)
   }
 
   @Test

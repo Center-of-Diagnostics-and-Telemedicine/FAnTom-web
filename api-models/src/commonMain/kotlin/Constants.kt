@@ -37,10 +37,17 @@ const val libraryServerDomain: String = "localhost"
 /**
 Типы срезов
  */
-const
-val SLYCE_TYPE_AXIAL: Int = 0
-const val SLYCE_TYPE_FRONTAL: Int = 1
-const val SLYCE_TYPE_SAGITTAL: Int = 2
+const val SLICE_TYPE_CT_AXIAL: Int = 0
+const val SLICE_TYPE_CT_FRONTAL: Int = 1
+const val SLICE_TYPE_CT_SAGITTAL: Int = 2
+const val SLICE_TYPE_MG_RCC: Int = 3
+const val SLICE_TYPE_MG_LCC: Int = 4
+const val SLICE_TYPE_MG_RMLO: Int = 5
+const val SLICE_TYPE_MG_LMLO: Int = 6
+const val SLICE_TYPE_DX_GENERIC: Int = 7
+const val SLICE_TYPE_DX_POSTERO_ANTERIOR: Int = 8
+const val SLICE_TYPE_DX_LEFT_LATERAL: Int = 9
+const val SLICE_TYPE_DX_RIGHT_LATERAL: Int = 10
 
 /**
 MIP методы
@@ -109,6 +116,7 @@ enum class MoveRectType {
 const val yellow = "#ffff00"
 const val pink = "#ff00ff"
 const val blue = "#00ffff"
+const val green = "#00ff00"
 
 const val LEFT_MOUSE_BUTTON: Short = 0
 const val MIDDLE_MOUSE_BUTTON: Short = 1
@@ -119,6 +127,11 @@ enum class Environment {
   PRODUCTION
 }
 
+enum class ResearchType {
+  CT,
+  MG,
+  DX
+}
 
 enum class CutsGridType {
   SINGLE,

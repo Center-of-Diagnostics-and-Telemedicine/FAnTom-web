@@ -55,9 +55,9 @@ fun initialLines(cutType: Int): Lines = Lines(
 
 fun getColorByCutType(cutType: Int): String {
   return when (cutType) {
-    SLYCE_TYPE_AXIAL -> yellow
-    SLYCE_TYPE_FRONTAL -> pink
-    SLYCE_TYPE_SAGITTAL -> blue
+    SLICE_TYPE_CT_AXIAL -> yellow
+    SLICE_TYPE_CT_FRONTAL -> pink
+    SLICE_TYPE_CT_SAGITTAL -> blue
     else -> throw NotImplementedError("getColor не реализовал")
   }
 }
@@ -68,19 +68,19 @@ fun initialLine(cutType: Int, lineType: LineType): Line = Line(
 )
 
 fun getLineColor(cutType: Int, lineType: LineType): String = when (cutType) {
-  SLYCE_TYPE_AXIAL -> {
+  SLICE_TYPE_CT_AXIAL -> {
     when (lineType) {
       LineType.HORIZONTAL -> pink
       LineType.VERTICAL -> blue
     }
   }
-  SLYCE_TYPE_FRONTAL -> {
+  SLICE_TYPE_CT_FRONTAL -> {
     when (lineType) {
       LineType.HORIZONTAL -> yellow
       LineType.VERTICAL -> blue
     }
   }
-  SLYCE_TYPE_SAGITTAL -> {
+  SLICE_TYPE_CT_SAGITTAL -> {
     when (lineType) {
       LineType.HORIZONTAL -> yellow
       LineType.VERTICAL -> pink
@@ -165,19 +165,19 @@ fun getInitialCells(): List<CellModel> {
 //      CutTypeModelContainer(frontal, listOf(axial, sagittal))
 //    )
     CellModel(
-      SLYCE_TYPE_AXIAL,
+      SLICE_TYPE_CT_AXIAL,
       Position.LEFT_TOP,
       initialSlicesSizeData(),
       CutTypeModelContainer(axial, listOf())
     ),
     CellModel(
-      SLYCE_TYPE_FRONTAL,
+      SLICE_TYPE_CT_FRONTAL,
       Position.LEFT_BOTTOM,
       initialSlicesSizeData(),
       CutTypeModelContainer(frontal, listOf())
     ),
     CellModel(
-      SLYCE_TYPE_SAGITTAL,
+      SLICE_TYPE_CT_SAGITTAL,
       Position.RIGHT_BOTTOM,
       initialSlicesSizeData(),
       CutTypeModelContainer(sagittal, listOf())
@@ -185,9 +185,9 @@ fun getInitialCells(): List<CellModel> {
   )
 }
 
-val axial = CutType(SLYCE_TYPE_AXIAL, "Аксиальный")
-val frontal = CutType(SLYCE_TYPE_FRONTAL, "Фронтальный")
-val sagittal = CutType(SLYCE_TYPE_SAGITTAL, "Сагиттальный")
+val axial = CutType(SLICE_TYPE_CT_AXIAL, "Аксиальный")
+val frontal = CutType(SLICE_TYPE_CT_FRONTAL, "Фронтальный")
+val sagittal = CutType(SLICE_TYPE_CT_SAGITTAL, "Сагиттальный")
 
 data class CutTypeModelContainer(
   val currentCutType: CutType,

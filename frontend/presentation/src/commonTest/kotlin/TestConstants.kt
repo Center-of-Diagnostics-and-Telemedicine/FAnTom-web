@@ -19,10 +19,10 @@ val testFilters = listOf(Filter.All, Filter.NotSeen, Filter.Seen, Filter.Done)
 
 val testTools = listOf(Tool.MIP, Tool.Brightness, Tool.Preset)
 val testGrids = listOf(
-  Grid.Single(CutType.Frontal),
-  Grid.TwoVertical(CutType.Frontal, CutType.Axial),
-  Grid.TwoHorizontal(CutType.Frontal, CutType.Axial),
-  Grid.Four(CutType.Frontal, CutType.Empty, CutType.Axial, CutType.Sagittal)
+  Grid.Single(CutType.CT_FRONTAL),
+  Grid.TwoVertical(CutType.CT_FRONTAL, CutType.CT_AXIAL),
+  Grid.TwoHorizontal(CutType.CT_FRONTAL, CutType.CT_AXIAL),
+  Grid.Four(CutType.CT_FRONTAL, CutType.EMPTY, CutType.CT_AXIAL, CutType.CT_SAGITTAL)
 )
 val testMips = listOf(Mip.No, Mip.Average(), Mip.Max())
 val testPresets = listOf(
