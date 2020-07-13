@@ -41,6 +41,7 @@ val cutLabelToCutOutput: Label.() -> Output? = {
     is Label.ContrastBrightnessChanged -> Output.ContrastBrightnessChanged(black, white)
     is Label.MarkUpdate -> Output.UpdateMark(mark)
     is Label.UpdateMarkWithSave -> Output.UpdateMarkWithSave(mark)
+    is Label.StartMoveInClick -> null
     is Label.ExternalSliceNumberChanged -> null
     is Label.Marks -> null
     Label.StopMoving -> null

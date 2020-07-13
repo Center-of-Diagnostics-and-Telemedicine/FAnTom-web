@@ -1,23 +1,16 @@
-import io.ktor.application.call
-import io.ktor.application.install
-import io.ktor.auth.Authentication
-import io.ktor.auth.authenticate
-import io.ktor.auth.jwt.jwt
+
+import io.ktor.application.*
+import io.ktor.auth.*
+import io.ktor.auth.jwt.*
 import io.ktor.features.*
-import io.ktor.gson.GsonConverter
-import io.ktor.gson.gson
-import io.ktor.http.ContentType
-import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpMethod
-import io.ktor.http.HttpStatusCode
-import io.ktor.http.content.resource
-import io.ktor.http.content.resources
-import io.ktor.http.content.static
-import io.ktor.locations.Locations
-import io.ktor.response.respond
-import io.ktor.routing.routing
-import io.ktor.server.engine.embeddedServer
-import io.ktor.server.netty.Netty
+import io.ktor.gson.*
+import io.ktor.http.*
+import io.ktor.http.content.*
+import io.ktor.locations.*
+import io.ktor.response.*
+import io.ktor.routing.*
+import io.ktor.server.engine.*
+import io.ktor.server.netty.*
 import model.ID_FIELD
 import org.apache.http.auth.AuthenticationException
 import org.jetbrains.exposed.sql.Database
@@ -37,10 +30,10 @@ fun main(args: Array<String>) {
   embeddedServer(Netty, 8081) {
 
     Database.connect(
-      url = "jdbc:mysql://localhost:8889/mark_tomogram?characterEncoding=utf8&useUnicode=true&useSSL=false",
+      url = "jdbc:mysql://localhost:3306/mark_tomogram?characterEncoding=utf8&useUnicode=true&useSSL=false",
       driver = "com.mysql.jdbc.Driver",
       user = "root",
-      password = "root"
+      password = ""
     )
 
     // Serialize json

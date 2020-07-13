@@ -14,16 +14,15 @@ data class Circle(
 
 fun MarkDomain.toCircle(cut: Cut, sliceNumber: Int): Circle? {
   markData.apply {
+    val horizontalRatio = cut.horizontalCutData.data.n_images.toDouble() / cut.data!!.screen_size_h
+    val verticalRatio = cut.verticalCutData.data.n_images.toDouble() / cut.data.screen_size_v
     when (cut.type) {
       CutType.Empty -> return null
       CutType.Axial -> {
         return if (sliceNumber < (z + radius) && sliceNumber > (z - radius)) {
-          val horizontalRatio = cut.horizontalCutData.data.maxFramesSize.toDouble() / cut.data!!.height
-          val verticalRatio = cut.verticalCutData.data.maxFramesSize.toDouble() / cut.data.height
-          val coefficient = cut.verticalCutData.data.height.toDouble() / cut.data.maxFramesSize
-          val x = x / verticalRatio
-          val y = y / horizontalRatio
-          val h = abs(sliceNumber - z) * coefficient
+          val x = x / horizontalRatio
+          val y = y / verticalRatio
+          val h = abs(sliceNumber - z)// * coefficient
           val newRadius = sqrt((radius).pow(2) - (h).pow(2))
           Circle(
             dicomCenterX = x,
@@ -36,11 +35,9 @@ fun MarkDomain.toCircle(cut: Cut, sliceNumber: Int): Circle? {
       }
       CutType.Frontal -> {
         return if ((sliceNumber < (y + radius)) && (sliceNumber > (y - radius))) {
-          val horizontalRatio = cut.horizontalCutData.data.maxFramesSize.toDouble() / cut.data!!.height
-          val verticalRatio = cut.verticalCutData.data.maxFramesSize.toDouble() / cut.data.maxFramesSize
-          val resultX = x / verticalRatio
-          val z = if (cut.data.reversed) cut.data.height - z else z
-          val resultY = z / horizontalRatio
+          val resultX = x / horizontalRatio
+          val z = if (cut.data.reversed == true) cut.data.screen_size_v - z else z
+          val resultY = z / verticalRatio
           val h = abs(sliceNumber - y)
           val newRadius = sqrt((radius).pow(2) - h.pow(2))
           Circle(
@@ -55,11 +52,9 @@ fun MarkDomain.toCircle(cut: Cut, sliceNumber: Int): Circle? {
       }
       CutType.Sagittal -> {
         return if ((sliceNumber < (x + radius)) && (sliceNumber > (x - radius))) {
-          val horizontalRatio = cut.horizontalCutData.data.maxFramesSize.toDouble() / cut.data!!.height
-          val verticalRatio = cut.verticalCutData.data.maxFramesSize.toDouble() / cut.data.maxFramesSize
-          val resultX = y / verticalRatio
-          val z = if (cut.data.reversed) cut.data.height - z else z
-          val resultY = z / horizontalRatio
+          val resultX = y / horizontalRatio
+          val z = if (cut.data.reversed == true) cut.data.screen_size_v - z else z
+          val resultY = z / verticalRatio
           val h = abs(sliceNumber - x)
           val newRadius = sqrt((radius).pow(2) - h.pow(2))
           Circle(
@@ -73,4 +68,5 @@ fun MarkDomain.toCircle(cut: Cut, sliceNumber: Int): Circle? {
       }
     }
   }
+//  return null
 }

@@ -2,10 +2,7 @@ package store.research
 
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
-import model.Circle
-import model.Cut
-import model.CutType
-import model.ResearchSlicesSizesData
+import model.ResearchSlicesSizesDataNew
 import store.research.ResearchStore.Intent
 import store.research.ResearchStore.State
 
@@ -18,7 +15,7 @@ interface ResearchStore : Store<Intent, State, Nothing> {
   }
 
   data class State(
-    val data: ResearchSlicesSizesData? = null,
+    val data: ResearchSlicesSizesDataNew? = null,
     val loading: Boolean = false,
     val error: String = ""
   ) : JvmSerializable

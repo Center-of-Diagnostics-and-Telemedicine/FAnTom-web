@@ -13,6 +13,15 @@ data class ResearchSlicesSizesData(
   val reversed: Boolean = false
 )
 
+@Serializable
+data class ResearchSlicesSizesDataNew(
+  val axial: ModalityModel,
+  val frontal: ModalityModel,
+  val sagittal: ModalityModel,
+  val researchId: Int = -1,
+  val reversed: Boolean
+)
+
 fun initialResearchSlicesSizesData(): ResearchSlicesSizesData {
   return ResearchSlicesSizesData(
     axial = initialSlicesSizeData(),
@@ -47,27 +56,11 @@ fun ResearchInitModel.toResearchSlicesSizesData(): ResearchSlicesSizesData {
   )
 }
 
-fun ResearchInitModelNew.toResearchSlicesSizesData(): ResearchSlicesSizesData {
-  return ResearchSlicesSizesData(
-    axial = SliceSizeData(
-      maxFramesSize = CT!!.axialTomogram,
-      height = CT.frontalScreen,
-      pixelLength = CT.pixelLength,
-      reversed = CT.reversed
-    ),
-    frontal = SliceSizeData(
-      maxFramesSize = CT.frontalTomogram,
-      height = CT.axialScreen,
-      pixelLength = CT.pixelLength,
-      reversed = CT.reversed
-    ),
-    sagittal = SliceSizeData(
-      maxFramesSize = CT.sagittalTomogram ?: 512,
-      height = CT.axialScreen,
-      pixelLength = CT.pixelLength,
-      reversed = CT.reversed
-    ),
-    pixelLength = CT.pixelLength,
+fun ResearchInitModelNew.toResearchSlicesSizesData(): ResearchSlicesSizesDataNew {
+  return ResearchSlicesSizesDataNew(
+    axial = CT!!.ct_axial.copy(reversed = CT.reversed),
+    frontal = CT.ct_frontal.copy(reversed = CT.reversed),
+    sagittal = CT.ct_sagittal.copy(reversed = CT.reversed),
     reversed = CT.reversed
   )
 }

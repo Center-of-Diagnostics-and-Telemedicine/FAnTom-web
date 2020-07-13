@@ -3,7 +3,7 @@ package repository
 import model.CTType
 import model.Filter
 import model.Research
-import model.ResearchSlicesSizesData
+import model.ResearchSlicesSizesDataNew
 
 interface ResearchRepository {
 
@@ -11,7 +11,7 @@ interface ResearchRepository {
 
   suspend fun getResearches(): List<Research>
   suspend fun getFiltered(filter: Filter): List<Research>
-  suspend fun initResearch(researchId: Int): ResearchSlicesSizesData
+  suspend fun initResearch(researchId: Int): ResearchSlicesSizesDataNew
   suspend fun getSlice(
     researchId: Int,
     black: Int,

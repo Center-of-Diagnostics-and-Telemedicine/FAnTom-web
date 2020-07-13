@@ -13,7 +13,7 @@ abstract class CutStoreAbstractFactory(
 ) {
 
   val initialState: State = State(
-    sliceNumber = cut.data!!.maxFramesSize / 2,
+    sliceNumber = cut.data!!.n_images / 2,
     slice = "",
     black = INITIAL_BLACK.toInt(),
     white = INITIAL_WHITE.toInt(),

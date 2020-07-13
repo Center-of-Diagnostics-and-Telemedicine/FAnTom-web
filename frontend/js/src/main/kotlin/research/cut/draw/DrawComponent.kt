@@ -52,8 +52,8 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
 
   override fun RBuilder.render() {
     themeContext.Consumer { theme ->
-      val dicomWidth = props.cut.verticalCutData.data.maxFramesSize
-      val dicomHeight = props.cut.data!!.height
+      val dicomWidth = props.cut.data!!.screen_size_h
+      val dicomHeight = props.cut.data!!.screen_size_v
       val ri = dicomWidth.toDouble() / dicomHeight
       val rs = props.width.toDouble() / props.height
       if (rs > ri) {

@@ -13,6 +13,7 @@ import controller.ToolsController.Output
 import destroy
 import kotlinx.css.*
 import model.ResearchSlicesSizesData
+import model.ResearchSlicesSizesDataNew
 import react.*
 import repository.MarksRepository
 import repository.ResearchRepository
@@ -96,7 +97,7 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
         ) {
           cuts(dependencies = object : CutsContainerViewComponent.Dependencies,
             Dependencies by props.dependencies {
-            override val data: ResearchSlicesSizesData = model.data!!
+            override val data: ResearchSlicesSizesDataNew = model.data!!
             override val cutsContainerInputs: Observable<CutsContainerController.Input> = this@ResearchScreen.cutsContainerInputObservable
             override val cutsContainerOutput: (CutsContainerController.Output) -> Unit = ::gridOutput
             override val cutsInput: Observable<CutController.Input> = this@ResearchScreen.cutsInputObservable

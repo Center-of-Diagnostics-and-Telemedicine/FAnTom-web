@@ -15,7 +15,7 @@ import store.gridcontainer.CutsContainerStoreAbstractFactory
 
 internal class CutsContainerStoreFactory(
   storeFactory: StoreFactory,
-  data: ResearchSlicesSizesData
+  data: ResearchSlicesSizesDataNew
 ) : CutsContainerStoreAbstractFactory(
   storeFactory = storeFactory
 ) {
@@ -35,22 +35,22 @@ internal class CutsContainerStoreFactory(
     type = CutType.Axial,
     data = data.axial,
     color = axialColor,
-    horizontalCutData = frontalCutData,
-    verticalCutData = sagittalCutData
+    verticalCutData = frontalCutData,
+    horizontalCutData = sagittalCutData
   )
   private val frontalCut = Cut(
     type = CutType.Frontal,
     data = data.frontal,
     color = frontalColor,
-    horizontalCutData = axialCutData,
-    verticalCutData = sagittalCutData
+    verticalCutData = axialCutData,
+    horizontalCutData = sagittalCutData
   )
   private val sagittalCut = Cut(
     type = CutType.Sagittal,
     data = data.sagittal,
     color = sagittalColor,
-    horizontalCutData = axialCutData,
-    verticalCutData = frontalCutData
+    verticalCutData = axialCutData,
+    horizontalCutData = frontalCutData
   )
 
   override fun createExecutor(): Executor<Intent, Unit, State, Result, Nothing> = ExecutorImpl()

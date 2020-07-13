@@ -34,14 +34,41 @@ data class ResearchInitModelNew(
 
 @Serializable
 data class CTInitModel(
-  val axialTomogram: Int,
-  val axialScreen: Int,
-  val frontalTomogram: Int,
-  val frontalScreen: Int,
-  val sagittalTomogram: Int? = 512,
-  val sagittalScreen: Int,
-  val pixelLength: Double,
+  @SerialName("ct_axial")
+  val ct_axial: ModalityModel,
+  @SerialName("ct_frontal")
+  val ct_frontal: ModalityModel,
+  @SerialName("ct_sagittal")
+  val ct_sagittal: ModalityModel,
+
+
+//  val axialTomogram: Int,
+//  val axialScreen: Int,
+//  val frontalTomogram: Int,
+//  val frontalScreen: Int,
+//  val sagittalTomogram: Int? = 512,
+//  val sagittalScreen: Int,
+//  val pixelLength: Double,
   val reversed: Boolean
+)
+
+@Serializable
+data class ModalityModel(
+  @SerialName("dicom_size_h")
+  val dicom_size_h: Int,
+  @SerialName("dicom_size_v")
+  val dicom_size_v: Int,
+  @SerialName("dicom_step_h")
+  val dicom_step_h: Double,
+  @SerialName("dicom_step_v")
+  val dicom_step_v: Double,
+  @SerialName("n_images")
+  val n_images: Int,
+  @SerialName("screen_size_h")
+  val screen_size_h: Int,
+  @SerialName("screen_size_v")
+  val screen_size_v: Int,
+  val reversed: Boolean? = null
 )
 
 @Serializable

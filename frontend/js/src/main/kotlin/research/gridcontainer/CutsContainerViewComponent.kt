@@ -14,7 +14,7 @@ import destroy
 import kotlinx.css.*
 import model.Cut
 import model.Grid
-import model.ResearchSlicesSizesData
+import model.ResearchSlicesSizesDataNew
 import react.*
 import repository.ResearchRepository
 import research.cut.CutContainer
@@ -202,7 +202,7 @@ class CutsContainerViewComponent(prps: CutsContainerProps) :
 
   interface Dependencies {
     val storeFactory: StoreFactory
-    val data: ResearchSlicesSizesData
+    val data: ResearchSlicesSizesDataNew
     val cutsContainerInputs: Observable<CutsContainerController.Input>
     val cutsContainerOutput: (CutsContainerController.Output) -> Unit
     val cutsInput: Observable<CutController.Input>

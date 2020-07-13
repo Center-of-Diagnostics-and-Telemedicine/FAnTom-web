@@ -17,7 +17,7 @@ interface CutsContainerController {
   interface Dependencies {
     val storeFactory: StoreFactory
     val lifecycle: Lifecycle
-    val data: ResearchSlicesSizesData
+    val data: ResearchSlicesSizesDataNew
   }
 
   sealed class Input {

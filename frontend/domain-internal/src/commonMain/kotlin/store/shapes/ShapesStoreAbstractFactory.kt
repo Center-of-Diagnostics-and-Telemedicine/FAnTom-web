@@ -21,7 +21,7 @@ abstract class ShapesStoreAbstractFactory(
   val initialState: State = State(
     horizontalCoefficient = 0.5,
     verticalCoefficient = 0.5,
-    sliceNumber = cut.data!!.maxFramesSize / 2,
+    sliceNumber = cut.data!!.n_images / 2,
     position = null,
     circles = listOf(),
     hounsfield = null,
@@ -45,8 +45,8 @@ abstract class ShapesStoreAbstractFactory(
 
   protected sealed class Result : JvmSerializable {
     data class SliceNumberChanged(val sliceNumber: Int) : Result()
-    data class HorizontalLineChanged(val coefficient: Double) : Result()
-    data class VerticalLineChanged(val coefficient: Double) : Result()
+    data class HorizontalCoefficientChanged(val coefficient: Double) : Result()
+    data class VerticalCoefficientChanged(val coefficient: Double) : Result()
     data class PointPositionChanged(val position: PointPosition?) : Result()
     data class HounsfieldChanged(val hu: Double) : Result()
     data class Marks(val marks: List<MarkDomain>) : Result()
@@ -57,8 +57,8 @@ abstract class ShapesStoreAbstractFactory(
     override fun State.reduce(result: Result): State =
       when (result) {
         is Result.SliceNumberChanged -> copy(sliceNumber = result.sliceNumber)
-        is Result.HorizontalLineChanged -> copy(horizontalCoefficient = result.coefficient)
-        is Result.VerticalLineChanged -> copy(verticalCoefficient = result.coefficient)
+        is Result.HorizontalCoefficientChanged -> copy(horizontalCoefficient = result.coefficient)
+        is Result.VerticalCoefficientChanged -> copy(verticalCoefficient = result.coefficient)
         is Result.PointPositionChanged -> copy(position = result.position)
         is Result.Circles -> copy(circles = result.list)
         is Result.HounsfieldChanged -> copy(hounsfield = result.hu.toInt())

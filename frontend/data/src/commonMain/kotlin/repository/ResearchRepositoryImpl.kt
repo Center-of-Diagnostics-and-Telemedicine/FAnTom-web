@@ -36,7 +36,7 @@ class ResearchRepositoryImpl(
     }
   }
 
-  override suspend fun initResearch(researchId: Int): ResearchSlicesSizesData {
+  override suspend fun initResearch(researchId: Int): ResearchSlicesSizesDataNew {
     val response = remote.init(
       token = token(),
       id = researchId

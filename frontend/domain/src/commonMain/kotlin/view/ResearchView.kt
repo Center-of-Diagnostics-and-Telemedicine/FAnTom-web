@@ -1,17 +1,14 @@
 package view
 
 import com.arkivanov.mvikotlin.core.view.MviView
-import model.Circle
-import model.Cut
-import model.CutType
-import model.ResearchSlicesSizesData
+import model.ResearchSlicesSizesDataNew
 import view.ResearchView.Event
 import view.ResearchView.Model
 
 interface ResearchView : MviView<Model, Event> {
 
   data class Model(
-    val data: ResearchSlicesSizesData? = null,
+    val data: ResearchSlicesSizesDataNew? = null,
     val error: String,
     val loading: Boolean
   )

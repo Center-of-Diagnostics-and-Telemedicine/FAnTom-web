@@ -59,7 +59,7 @@ internal class ShapesStoreFactory(
       startDicomY: Double,
       state: () -> State
     ) {
-      //ищим ближайший
+      //todo()
       state()
     }
 
@@ -127,10 +127,10 @@ internal class ShapesStoreFactory(
       getState: () -> State
     ) {
       when {
-        cut.horizontalCutData.type == externalCut.type ->
-          updateHorizontalLine(sliceNumber, externalCut)
         cut.verticalCutData.type == externalCut.type ->
-          updateVerticalLine(sliceNumber, externalCut)
+          updateVerticalCoefficient(sliceNumber, externalCut)
+        cut.horizontalCutData.type == externalCut.type ->
+          updateHorizontalCoefficient(sliceNumber, externalCut)
       }
       updateCircles(getState().marks, getState)
     }
@@ -140,14 +140,14 @@ internal class ShapesStoreFactory(
       dispatch(Result.Circles(circles))
     }
 
-    private fun updateVerticalLine(sliceNumber: Int, externalCut: Cut) {
-      val coefficient = sliceNumber.toDouble() / externalCut.data!!.maxFramesSize
-      dispatch(Result.VerticalLineChanged(coefficient))
+    private fun updateHorizontalCoefficient(sliceNumber: Int, externalCut: Cut) {
+      val coefficient = sliceNumber.toDouble() / externalCut.data!!.n_images
+      dispatch(Result.HorizontalCoefficientChanged(coefficient))
     }
 
-    private fun updateHorizontalLine(sliceNumber: Int, externalCut: Cut) {
-      val coefficient = sliceNumber.toDouble() / externalCut.data!!.maxFramesSize
-      dispatch(Result.HorizontalLineChanged(coefficient))
+    private fun updateVerticalCoefficient(sliceNumber: Int, externalCut: Cut) {
+      val coefficient = sliceNumber.toDouble() / externalCut.data!!.n_images
+      dispatch(Result.VerticalCoefficientChanged(coefficient))
     }
 
     private fun handleMousePosition(

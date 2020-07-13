@@ -50,8 +50,8 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
         props.shapesModel.circles?.let { drawCircles(it, context) }
 //        state.moveRects?.let { drawRects(it, context) }
         drawLines(
-          horizontal = props.shapesModel.horizontalCoefficient * resultHeight,
-          vertical = props.shapesModel.verticalCoefficient * resultWidth,
+          horizontal = props.shapesModel.verticalCoefficient * resultHeight,
+          vertical = props.shapesModel.horizontalCoefficient * resultWidth,
           canvas = canvas,
           context = context
         )
@@ -61,8 +61,8 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
 
   override fun RBuilder.render() {
     themeContext.Consumer { theme ->
-      val dicomWidth = props.cut.verticalCutData.data.maxFramesSize
-      val dicomHeight = props.cut.data!!.height
+      val dicomWidth = props.cut.data!!.screen_size_h
+      val dicomHeight = props.cut.data!!.screen_size_v
       val ri = dicomWidth.toDouble() / dicomHeight
       val rs = props.width.toDouble() / props.height
       if (rs > ri) {
@@ -231,8 +231,8 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
 
       context.beginPath()
       context.arc(
-        circle.dicomCenterX / verticalRatio,
-        circle.dicomCenterY / horizontalRatio,
+        circle.dicomCenterX / horizontalRatio,
+        circle.dicomCenterY / verticalRatio,
         circle.dicomRadius / radiusRatio,
         0.0,
         2 * PI,
@@ -255,7 +255,7 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
 
     drawLine(
       context = context,
-      strokeColor = props.cut.horizontalCutData.color,
+      strokeColor = props.cut.verticalCutData.color,
       moveToX = 0.0,
       moveToY = horizontal,
       lineToX = width,
@@ -264,7 +264,7 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
 
     drawLine(
       context = context,
-      strokeColor = props.cut.verticalCutData.color,
+      strokeColor = props.cut.horizontalCutData.color,
       moveToX = vertical,
       moveToY = 0.0,
       lineToX = vertical,

@@ -31,7 +31,7 @@ const val tenMinutes: Long = 600000
 
 const val libraryServerPort: Int = 5555
 const val libraryServerSchema: String = "http://"
-const val libraryServerDomain: String = "192.168.0.106"
+const val libraryServerDomain: String = "localhost"
 
 
 /**
@@ -176,5 +176,5 @@ enum class ErrorStringCode(val value: Int) {
   AUTH_FAILED(23),
   UPDATE_MARK_FAILED(24),
   GET_MARKS_FAILED(25),
-  DELETE_MARK_FAILED(24),
+  DELETE_MARK_FAILED(26),
 }
