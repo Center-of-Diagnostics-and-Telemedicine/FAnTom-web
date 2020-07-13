@@ -93,9 +93,18 @@ internal class CutStoreFactory(
         is Intent.ChangeSliceNumberByDraw -> {
           changeSliceNumber(getState().sliceNumber + intent.deltaDicomY, getState)
         }
-        is Intent.HandleMarkUpdate -> publish(Label.MarkUpdate(intent.mark))
-        is Intent.HandleStopMoving -> publish(Label.StopMoving)
-        is Intent.HandleMarkUpdateWithSave -> publish(Label.UpdateMarkWithSave(intent.mark))
+        is Intent.HandleMarkUpdate -> {
+          publish(Label.MarkUpdate(intent.mark))
+        }
+        is Intent.HandleStopMoving -> {
+          publish(Label.StopMoving)
+        }
+        is Intent.HandleMarkUpdateWithSave -> {
+          publish(Label.UpdateMarkWithSave(intent.mark))
+        }
+        is Intent.HandleStartMoveInClick -> {
+          publish(Label.StartMoveInClick(intent.startDicomX, intent.startDicomY))
+        }
       }.let {}
     }
 

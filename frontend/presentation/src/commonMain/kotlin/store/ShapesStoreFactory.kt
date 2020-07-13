@@ -49,7 +49,18 @@ internal class ShapesStoreFactory(
 
         is Intent.HandleStopMoving -> handleStopMoving(getState)
 
+        is Intent.HandleStartMoveInClick ->
+          handleStartMoveInClick(intent.startDicomX, intent.startDicomY, getState)
       }.let {}
+    }
+
+    private fun handleStartMoveInClick(
+      startDicomX: Double,
+      startDicomY: Double,
+      state: () -> State
+    ) {
+      //ищим ближайший
+      state()
     }
 
     private fun handleStopMoving(getState: () -> State) {
@@ -139,7 +150,7 @@ internal class ShapesStoreFactory(
       dispatch(Result.HorizontalLineChanged(coefficient))
     }
 
-    private fun  handleMousePosition(
+    private fun handleMousePosition(
       dicomX: Double,
       dicomY: Double,
       getState: () -> State

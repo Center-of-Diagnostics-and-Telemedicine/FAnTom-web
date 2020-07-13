@@ -54,8 +54,8 @@ val drawLabelToCutIntent: DrawStore.Label.() -> Intent? = {
     DrawStore.Label.ContrastBrightnessChanged -> Intent.ContrasBrightnessChanged
     is DrawStore.Label.ChangeSlice -> Intent.ChangeSliceNumberByDraw(deltaDicomY)
     DrawStore.Label.StopMove -> Intent.HandleStopMoving
+    is DrawStore.Label.StartMove -> Intent.HandleStartMoveInClick(startDicomX, startDicomY)
     is DrawStore.Label.OnClick -> null
-    is DrawStore.Label.StartMove -> null
     is DrawStore.Label.MouseMove -> null
     is DrawStore.Label.MoveInClick -> null
   }

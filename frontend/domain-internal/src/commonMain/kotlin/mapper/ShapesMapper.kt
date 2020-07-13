@@ -62,6 +62,7 @@ val cutLabelToShapesIntent: CutStore.Label.() -> Intent? = {
     }
     is CutStore.Label.Marks -> Intent.HandleMarks(list)
     is CutStore.Label.StopMoving -> Intent.HandleStopMoving
+    is CutStore.Label.StartMoveInClick -> Intent.HandleStartMoveInClick(startDicomX, startDicomY)
     is CutStore.Label.CircleDrawn -> null
     is CutStore.Label.SelectMark -> null
     is CutStore.Label.CenterMark -> null
