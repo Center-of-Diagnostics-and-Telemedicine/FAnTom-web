@@ -98,7 +98,7 @@ class ResearchRepositoryImpl(
       token = token(),
       request = HounsfieldRequestNew(
         image = ImageModel(
-          modality = "CT", //TODO(remove this),
+          modality = CT_RESEARCH_TYPE, //TODO(remove this),
           type = getSliceStringType(type),
           number = sliceNumber,
           mip = MipModel(

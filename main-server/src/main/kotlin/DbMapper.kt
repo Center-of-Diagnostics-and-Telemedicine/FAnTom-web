@@ -38,18 +38,36 @@ fun ResultRow.toCovidMark(): MarkModel = MarkModel(
   rightPercent = this[CovidMarksVos.rightPercent]
 )
 
-fun ResultRow.toMark(): MarkDomain = MarkDomain(
-  id = this[MarksVos.id],
+fun ResultRow.toMultiPlanarMark(): MarkDomain = MarkDomain(
+  id = this[MultiPlanarMarksVos.id],
   markData = MarkData(
-    x = this[MarksVos.x],
-    y = this[MarksVos.y],
-    z = this[MarksVos.z],
-    radius = this[MarksVos.radius],
-    size = this[MarksVos.size]
+    x = this[MultiPlanarMarksVos.x],
+    y = this[MultiPlanarMarksVos.y],
+    z = this[MultiPlanarMarksVos.z],
+    radius = this[MultiPlanarMarksVos.radius],
+    size = this[MultiPlanarMarksVos.size],
+    cutType = this[MultiPlanarMarksVos.cutType]
   ),
   type = MarkType
     .values()
-    .firstOrNull { it.intValue == this[MarksVos.type] }
+    .firstOrNull { it.intValue == this[MultiPlanarMarksVos.type] }
     ?: MarkType.NO_TYPE_NODULE,
-  comment = this[MarksVos.comment],
+  comment = this[MultiPlanarMarksVos.comment],
+)
+
+fun ResultRow.toPlanarMark(): MarkDomain = MarkDomain(
+  id = this[PlanarMarksVos.id],
+  markData = MarkData(
+    x = this[PlanarMarksVos.x],
+    y = this[PlanarMarksVos.y],
+    z = -1.0,
+    radius = this[PlanarMarksVos.radius],
+    size = this[PlanarMarksVos.size],
+    cutType = this[PlanarMarksVos.cutType]
+  ),
+  type = MarkType
+    .values()
+    .firstOrNull { it.intValue == this[PlanarMarksVos.type] }
+    ?: MarkType.NO_TYPE_NODULE,
+  comment = this[PlanarMarksVos.comment],
 )

@@ -1,22 +1,19 @@
 package useCases
 
-import io.ktor.application.application
-import io.ktor.application.call
-import io.ktor.application.log
-import io.ktor.locations.get
-import io.ktor.locations.post
-import io.ktor.response.respond
-import io.ktor.routing.Route
-import model.ErrorModel
-import model.ErrorStringCode
-import model.MarksModel
-import model.MarksResponseNew
+import io.ktor.application.*
+import io.ktor.locations.*
+import io.ktor.response.*
+import io.ktor.routing.*
+import model.*
 import repository.MarksRepository
+import repository.ResearchRepository
 import util.GetMarks
 import util.user
 
 fun Route.getMarks(
-  markRepository: MarksRepository
+  multiPlanarMarksRepository: MarksRepository,
+  planarMarksRepository: MarksRepository,
+  researchRepository: ResearchRepository
 ) {
 
   get<GetMarks> {
@@ -25,8 +22,23 @@ fun Route.getMarks(
     }
 
     val user = call.user
+    val research = researchRepository.getResearch(it.id)
+
+    if (research == null) {
+      respondError(ErrorStringCode.RESEARCH_NOT_FOUND)
+      return@get
+    }
+
     try {
-      call.respond(MarksResponseNew(MarksModel(markRepository.getAll(user.id, it.id))))
+
+      val marks = if (research.modality == CT_RESEARCH_TYPE) {
+        multiPlanarMarksRepository.getAll(user.id, it.id)
+      } else {
+        planarMarksRepository.getAll(user.id, it.id)
+      }
+
+      call.respond(MarksResponseNew(MarksModel(marks)))
+
     } catch (e: Exception) {
       application.log.error("Failed to get marks", e)
       respondError(ErrorStringCode.GET_MARKS_FAILED)

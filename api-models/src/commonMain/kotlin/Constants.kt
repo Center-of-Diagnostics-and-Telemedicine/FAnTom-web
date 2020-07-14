@@ -31,7 +31,7 @@ const val tenMinutes: Long = 600000
 
 const val libraryServerPort: Int = 5555
 const val libraryServerSchema: String = "http://"
-const val libraryServerDomain: String = "localhost"
+const val libraryServerDomain: String = "192.168.0.102"
 
 
 /**
@@ -65,6 +65,10 @@ const val INITIAL_BLACK = -1150.0
 const val INITIAL_WHITE = 350.0
 const val INITIAL_GAMMA = 1.0
 const val INITIAL_MIP_VALUE = 0
+
+const val CT_RESEARCH_TYPE = "CT"
+const val MG_RESEARCH_TYPE = "MG"
+const val DX_RESEARCH_TYPE = "DX"
 
 
 enum class Preset(val value: Int) {

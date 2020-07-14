@@ -68,7 +68,7 @@ fun Cut.getPosition(dicomX: Double, dicomY: Double, sliceNumber: Int): PointPosi
     return when (this.type) {
       CutType.EMPTY -> null
       CutType.CT_AXIAL -> {
-        MPRPointPosition(
+        MultiPlanarPointPosition(
           x = dicomX,
           y = dicomY,
           z = sliceNumber.toDouble()
@@ -77,7 +77,7 @@ fun Cut.getPosition(dicomX: Double, dicomY: Double, sliceNumber: Int): PointPosi
       CutType.CT_FRONTAL -> {
         val verticalRatio = verticalCutData!!.data.n_images.toDouble() / data.screen_size_v
         val horizontalRatio = horizontalCutData!!.data.n_images.toDouble() / data.screen_size_h
-        MPRPointPosition(
+        MultiPlanarPointPosition(
           x = dicomX * horizontalRatio,
           y = sliceNumber.toDouble(),
           z = dicomY * verticalRatio
@@ -86,7 +86,7 @@ fun Cut.getPosition(dicomX: Double, dicomY: Double, sliceNumber: Int): PointPosi
       CutType.CT_SAGITTAL -> {
         val verticalRatio = verticalCutData!!.data.n_images.toDouble() / data.screen_size_v
         val horizontalRatio = horizontalCutData!!.data.n_images.toDouble() / data.screen_size_h
-        MPRPointPosition(
+        MultiPlanarPointPosition(
           x = sliceNumber.toDouble(),
           y = dicomX * horizontalRatio,
           z = dicomY * verticalRatio
@@ -117,7 +117,8 @@ fun Cut.getMarkToSave(circle: Circle, sliceNumber: Int): MarkData? {
           y = (circle.dicomCenterY),
           z = sliceNumber.toDouble(),
           radius = circle.dicomRadius,
-          size = 0.0
+          size = 0.0,
+          cutType = type.intType
         )
       }
       CutType.CT_FRONTAL -> {
@@ -128,7 +129,8 @@ fun Cut.getMarkToSave(circle: Circle, sliceNumber: Int): MarkData? {
           y = sliceNumber.toDouble(),
           z = (circle.dicomCenterY * verticalRatio),
           radius = circle.dicomRadius,
-          size = 0.0
+          size = 0.0,
+          cutType = type.intType
         )
       }
       CutType.CT_SAGITTAL -> {
@@ -139,13 +141,23 @@ fun Cut.getMarkToSave(circle: Circle, sliceNumber: Int): MarkData? {
           y = (circle.dicomCenterX * horizontalRatio),
           z = (circle.dicomCenterY * verticalRatio),
           radius = circle.dicomRadius,
-          size = 0.0
+          size = 0.0,
+          cutType = type.intType
         )
       }
-      CutType.MG_RCC -> TODO()
-      CutType.MG_LCC -> TODO()
-      CutType.MG_RMLO -> TODO()
-      CutType.MG_LMLO -> TODO()
+      CutType.MG_RCC,
+      CutType.MG_LCC,
+      CutType.MG_RMLO,
+      CutType.MG_LMLO -> {
+        MarkData(
+          x = circle.dicomCenterX,
+          y = circle.dicomCenterY,
+          z = -1.0,
+          radius = circle.dicomRadius,
+          size = 0.0,
+          cutType = type.intType
+        )
+      }
       CutType.DX_GENERIC -> TODO()
       CutType.DX_POSTERO_ANTERIOR -> TODO()
       CutType.DX_LEFT_LATERAL -> TODO()

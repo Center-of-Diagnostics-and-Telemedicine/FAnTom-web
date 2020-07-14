@@ -1,4 +1,3 @@
-
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.auth.jwt.*
@@ -30,10 +29,10 @@ fun main(args: Array<String>) {
   embeddedServer(Netty, 8081) {
 
     Database.connect(
-      url = "jdbc:mysql://localhost:3306/mark_tomogram?characterEncoding=utf8&useUnicode=true&useSSL=false",
+      url = "jdbc:mysql://localhost:8889/mark_tomogram?characterEncoding=utf8&useUnicode=true&useSSL=false",
       driver = "com.mysql.jdbc.Driver",
       user = "root",
-      password = ""
+      password = "root"
     )
 
     // Serialize json
@@ -102,10 +101,10 @@ fun main(args: Array<String>) {
         mark(covidMarksRepository)
         closeSession(researchRepository, sessionRepository)
 
-        getMarks(marksRepository)
-        createMark(marksRepository)
-        deleteMark(marksRepository)
-        updateMark(marksRepository)
+        getMarks(multiPlanarMarksRepository, planarMarksRepository, researchRepository)
+        createMark(multiPlanarMarksRepository, planarMarksRepository, researchRepository)
+        deleteMark(multiPlanarMarksRepository, planarMarksRepository, researchRepository)
+        updateMark(multiPlanarMarksRepository, planarMarksRepository, researchRepository)
       }
 
     }

@@ -1,6 +1,6 @@
 package util
 
-import io.ktor.locations.Location
+import io.ktor.locations.*
 import model.*
 
 @Location(ROOT)
@@ -36,8 +36,8 @@ class CreateMark(val id: Int)
 @Location("$RESEARCH_ROUTE/{id}/$MARK_ROUTE/$LIST_ROUTE")
 class GetMarks(val id: Int)
 
-@Location("$RESEARCH_ROUTE/$MARK_ROUTE")
-class UpdateMark
+@Location("$RESEARCH_ROUTE/{id}/$MARK_ROUTE")
+class UpdateMark(val id: Int)
 
 @Location("$RESEARCH_ROUTE/$MARK_ROUTE/{id}")
 class DeleteMark(val id: Int)

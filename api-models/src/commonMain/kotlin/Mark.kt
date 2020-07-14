@@ -20,7 +20,8 @@ data class MarkData(
   val y: Double,
   val z: Double,
   val radius: Double,
-  val size: Double
+  val size: Double,
+  val cutType: Int
 ) {
   fun name(): String = "x: ${x.roundToInt()}, y: ${y.roundToInt()}, z: ${z.roundToInt()}, r: ${radius.roundToInt()}"
 }

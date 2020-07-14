@@ -47,22 +47,24 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
       val context = canvas.getContext("2d") as? CanvasRenderingContext2D
       context?.let { _ ->
         clearCanvas(canvas, context)
-        props.shapesModel.circles?.let { drawCircles(it, context) }
+        props.shapesModel.circles.let { drawCircles(it, context) }
 //        state.moveRects?.let { drawRects(it, context) }
-        drawLines(
-          horizontal = props.shapesModel.verticalCoefficient * resultHeight,
-          vertical = props.shapesModel.horizontalCoefficient * resultWidth,
-          canvas = canvas,
-          context = context
-        )
+        if (props.cut.data.n_images > 1) {
+          drawLines(
+            horizontal = props.shapesModel.verticalCoefficient * resultHeight,
+            vertical = props.shapesModel.horizontalCoefficient * resultWidth,
+            canvas = canvas,
+            context = context
+          )
+        }
       }
     }
   }
 
   override fun RBuilder.render() {
     themeContext.Consumer { theme ->
-      val dicomWidth = props.cut.data!!.screen_size_h
-      val dicomHeight = props.cut.data!!.screen_size_v
+      val dicomWidth = props.cut.data.screen_size_h
+      val dicomHeight = props.cut.data.screen_size_v
       val ri = dicomWidth.toDouble() / dicomHeight
       val rs = props.width.toDouble() / props.height
       if (rs > ri) {
@@ -107,7 +109,7 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
         }
         props.shapesModel.position?.let {
           when (it) {
-            is MPRPointPosition -> {
+            is MultiPlanarPointPosition -> {
               mTypography(text = "Сагиттальный (x): ${it.x.roundToInt()}") {
                 css { color = Color(blue) }
               }
@@ -126,7 +128,8 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
                 css { color = Color.white }
               }
             }
-            else -> {}
+            else -> {
+            }
           }
         }
       }
@@ -311,8 +314,7 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
 
 }
 
-class ShapesState(
-) : RState
+class ShapesState : RState
 
 interface ShapesProps : RProps {
   var cut: Cut

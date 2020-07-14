@@ -1,4 +1,4 @@
-import io.ktor.auth.UserPasswordCredential
+import io.ktor.auth.*
 import model.UserModel
 import model.UserRole
 import model.hash
@@ -15,7 +15,8 @@ fun init() {
       ResearchVos,
       UserResearchVos,
       CovidMarksVos,
-      MarksVos
+      MultiPlanarMarksVos,
+      PlanarMarksVos
     )
     val login = "admin"
     val pass = hash("vfrcbv16")

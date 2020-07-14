@@ -1,5 +1,6 @@
 import model.ID_FIELD
 import model.MarkType
+import model.SLICE_TYPE_CT_AXIAL
 import model.UserRole
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
@@ -52,7 +53,7 @@ object CovidMarksVos : Table(COVID_MARKS_TABLE) {
   override val primaryKey = PrimaryKey(userId, researchId, name = "CovidMarkPKConstraintName")
 }
 
-object MarksVos : Table(MARKS_TABLE) {
+object MultiPlanarMarksVos : Table(MULTI_PLANAR_MARKS_TABLE) {
   val id: Column<Int> = integer(name = ID_FIELD).autoIncrement()
   val userId: Column<Int> = integer("user_$ID_FIELD")
   val researchId: Column<Int> = integer("research_$ID_FIELD")
@@ -63,6 +64,20 @@ object MarksVos : Table(MARKS_TABLE) {
   val size: Column<Double> = double(SIZE_FIELD)
   val type: Column<Int> = integer(MARK_TYPE_FILED).default(MarkType.NO_TYPE_NODULE.intValue)
   val comment: Column<String> = varchar(name = COMMENT_FILED, length = 200).default("")
+  val cutType: Column<Int> = integer(name = CUT_TYPE_FILED).default(SLICE_TYPE_CT_AXIAL)
   override val primaryKey = PrimaryKey(id, name = "MarkPKConstraintName")
+}
 
+object PlanarMarksVos : Table(PLANAR_MARKS_TABLE) {
+  val id: Column<Int> = integer(name = ID_FIELD).autoIncrement()
+  val userId: Column<Int> = integer("user_$ID_FIELD")
+  val researchId: Column<Int> = integer("research_$ID_FIELD")
+  val x: Column<Double> = double(X_FIELD)
+  val y: Column<Double> = double(Y_FIELD)
+  val radius: Column<Double> = double(RADIUS_FIELD)
+  val size: Column<Double> = double(SIZE_FIELD)
+  val type: Column<Int> = integer(MARK_TYPE_FILED).default(MarkType.NO_TYPE_NODULE.intValue)
+  val comment: Column<String> = varchar(name = COMMENT_FILED, length = 200).default("")
+  val cutType: Column<Int> = integer(name = CUT_TYPE_FILED)
+  override val primaryKey = PrimaryKey(id, name = "MarkPKConstraintName")
 }

@@ -2,7 +2,7 @@ package model
 
 interface PointPosition
 
-data class MPRPointPosition(
+data class MultiPlanarPointPosition(
   val x: Double,
   val y: Double,
   val z: Double

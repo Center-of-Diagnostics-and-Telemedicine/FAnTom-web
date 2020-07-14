@@ -1,19 +1,18 @@
 package useCases
 
-import io.ktor.application.application
-import io.ktor.application.call
-import io.ktor.application.log
-import io.ktor.locations.delete
-import io.ktor.locations.put
-import io.ktor.request.receive
-import io.ktor.response.respond
-import io.ktor.routing.Route
+import io.ktor.application.*
+import io.ktor.locations.*
+import io.ktor.response.*
+import io.ktor.routing.*
 import model.*
 import repository.MarksRepository
+import repository.ResearchRepository
 import util.DeleteMark
 
 fun Route.deleteMark(
-  markRepository: MarksRepository
+  multiPlanarMarksRepository: MarksRepository,
+  planarMarksRepository: MarksRepository,
+  researchRepository: ResearchRepository
 ) {
 
   delete<DeleteMark> {
@@ -21,9 +20,21 @@ fun Route.deleteMark(
       call.respond(BaseResponse(error = ErrorModel(errorCode.value)))
     }
 
-    val mark = call.receive<MarkDomain>()
+    val research = researchRepository.getResearch(it.id)
+
+    if (research == null) {
+      respondError(ErrorStringCode.RESEARCH_NOT_FOUND)
+      return@delete
+    }
+
     try {
-      markRepository.delete(it.id)
+
+      if (research.modality == CT_RESEARCH_TYPE) {
+        multiPlanarMarksRepository.delete(it.id)
+      } else {
+        planarMarksRepository.delete(it.id)
+      }
+
       call.respond(BaseResponse(OK()))
     } catch (e: Exception) {
       application.log.error("Failed to delete mark", e)

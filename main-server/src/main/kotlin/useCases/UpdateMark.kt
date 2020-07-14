@@ -1,18 +1,19 @@
 package useCases
 
-import io.ktor.application.application
-import io.ktor.application.call
-import io.ktor.application.log
+import io.ktor.application.*
 import io.ktor.locations.put
-import io.ktor.request.receive
-import io.ktor.response.respond
+import io.ktor.request.*
+import io.ktor.response.*
 import io.ktor.routing.Route
 import model.*
 import repository.MarksRepository
+import repository.ResearchRepository
 import util.UpdateMark
 
 fun Route.updateMark(
-  markRepository: MarksRepository
+  multiPlanarMarksRepository: MarksRepository,
+  planarMarksRepository: MarksRepository,
+  researchRepository: ResearchRepository
 ) {
 
   put<UpdateMark> {
@@ -21,8 +22,21 @@ fun Route.updateMark(
     }
 
     val mark = call.receive<MarkDomain>()
+    val research = researchRepository.getResearch(it.id)
+
+    if (research == null) {
+      respondError(ErrorStringCode.RESEARCH_NOT_FOUND)
+      return@put
+    }
+
     try {
-      markRepository.update(mark)
+
+      if (research.modality == CT_RESEARCH_TYPE) {
+        multiPlanarMarksRepository.update(mark)
+      } else {
+        planarMarksRepository.update(mark)
+      }
+
       call.respond(BaseResponse(OK()))
     } catch (e: Exception) {
       application.log.error("Failed to update mark", e)
