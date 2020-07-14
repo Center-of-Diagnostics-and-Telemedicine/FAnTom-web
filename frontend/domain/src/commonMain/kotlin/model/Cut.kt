@@ -7,7 +7,8 @@ data class Cut(
   val data: ModalityModel,
   val color: String,
   val horizontalCutData: CutData?,
-  val verticalCutData: CutData?
+  val verticalCutData: CutData?,
+  val researchType: ResearchType
 ) : JvmSerializable
 
 enum class CutType(val intType: Int) {
@@ -65,40 +66,40 @@ fun Cut.getPosition(dicomX: Double, dicomY: Double, sliceNumber: Int): PointPosi
     return null
   } else {
     return when (this.type) {
-      CutType.EMPTY -> TODO()
+      CutType.EMPTY -> null
       CutType.CT_AXIAL -> {
-        PointPosition(
+        MPRPointPosition(
           x = dicomX,
           y = dicomY,
           z = sliceNumber.toDouble()
         )
       }
       CutType.CT_FRONTAL -> {
-        val verticalRatio = verticalCutData!!.data!!.n_images.toDouble() / data!!.screen_size_v
-        val horizontalRatio = horizontalCutData!!.data!!.n_images.toDouble() / data.screen_size_h
-        PointPosition(
+        val verticalRatio = verticalCutData!!.data.n_images.toDouble() / data.screen_size_v
+        val horizontalRatio = horizontalCutData!!.data.n_images.toDouble() / data.screen_size_h
+        MPRPointPosition(
           x = dicomX * horizontalRatio,
           y = sliceNumber.toDouble(),
           z = dicomY * verticalRatio
         )
       }
       CutType.CT_SAGITTAL -> {
-        val verticalRatio = verticalCutData!!.data!!.n_images.toDouble() / data!!.screen_size_v
-        val horizontalRatio = horizontalCutData!!.data!!.n_images.toDouble() / data.screen_size_h
-        PointPosition(
+        val verticalRatio = verticalCutData!!.data.n_images.toDouble() / data.screen_size_v
+        val horizontalRatio = horizontalCutData!!.data.n_images.toDouble() / data.screen_size_h
+        MPRPointPosition(
           x = sliceNumber.toDouble(),
           y = dicomX * horizontalRatio,
           z = dicomY * verticalRatio
         )
       }
-      CutType.MG_RCC -> TODO()
-      CutType.MG_LCC -> TODO()
-      CutType.MG_RMLO -> TODO()
-      CutType.MG_LMLO -> TODO()
-      CutType.DX_GENERIC -> TODO()
-      CutType.DX_POSTERO_ANTERIOR -> TODO()
-      CutType.DX_LEFT_LATERAL -> TODO()
-      CutType.DX_RIGHT_LATERAL -> TODO()
+      CutType.MG_RCC,
+      CutType.MG_LCC,
+      CutType.MG_RMLO,
+      CutType.MG_LMLO,
+      CutType.DX_GENERIC,
+      CutType.DX_POSTERO_ANTERIOR,
+      CutType.DX_LEFT_LATERAL,
+      CutType.DX_RIGHT_LATERAL -> PlanarPointPosition(x = dicomX, y = dicomY)
     }
   }
 }
@@ -120,8 +121,8 @@ fun Cut.getMarkToSave(circle: Circle, sliceNumber: Int): MarkData? {
         )
       }
       CutType.CT_FRONTAL -> {
-        val verticalRatio = verticalCutData!!.data!!.n_images.toDouble() / data!!.screen_size_v
-        val horizontalRatio = horizontalCutData!!.data!!.n_images.toDouble() / data.screen_size_h
+        val verticalRatio = verticalCutData!!.data.n_images.toDouble() / data.screen_size_v
+        val horizontalRatio = horizontalCutData!!.data.n_images.toDouble() / data.screen_size_h
         MarkData(
           x = (circle.dicomCenterX * horizontalRatio),
           y = sliceNumber.toDouble(),
@@ -131,8 +132,8 @@ fun Cut.getMarkToSave(circle: Circle, sliceNumber: Int): MarkData? {
         )
       }
       CutType.CT_SAGITTAL -> {
-        val verticalRatio = verticalCutData!!.data!!.n_images.toDouble() / data!!.screen_size_v
-        val horizontalRatio = horizontalCutData!!.data!!.n_images.toDouble() / data.screen_size_h
+        val verticalRatio = verticalCutData!!.data.n_images.toDouble() / data.screen_size_v
+        val horizontalRatio = horizontalCutData!!.data.n_images.toDouble() / data.screen_size_h
         MarkData(
           x = sliceNumber.toDouble(),
           y = (circle.dicomCenterX * horizontalRatio),
@@ -175,8 +176,8 @@ fun Cut.updateCoordinates(mark: MarkDomain, deltaX: Double, deltaY: Double): Mar
   return when (type) {
     CutType.EMPTY -> null
     CutType.CT_AXIAL -> {
-      val verticalRatio = verticalCutData!!.data!!.n_images.toDouble() / data!!.screen_size_v
-      val horizontalRatio = horizontalCutData!!.data!!.n_images.toDouble() / data.screen_size_h
+      val verticalRatio = verticalCutData!!.data.n_images.toDouble() / data.screen_size_v
+      val horizontalRatio = horizontalCutData!!.data.n_images.toDouble() / data.screen_size_h
       mark.copy(
         markData = markData.copy(
           x = markData.x + deltaX * horizontalRatio,
@@ -185,8 +186,8 @@ fun Cut.updateCoordinates(mark: MarkDomain, deltaX: Double, deltaY: Double): Mar
       ).also { it.selected = true }
     }
     CutType.CT_FRONTAL -> {
-      val verticalRatio = verticalCutData!!.data!!.n_images.toDouble() / data!!.screen_size_v
-      val horizontalRatio = horizontalCutData!!.data!!.n_images.toDouble() / data.screen_size_h
+      val verticalRatio = verticalCutData!!.data.n_images.toDouble() / data.screen_size_v
+      val horizontalRatio = horizontalCutData!!.data.n_images.toDouble() / data.screen_size_h
       mark.copy(
         markData = markData.copy(
           x = markData.x + deltaX * horizontalRatio,
@@ -195,8 +196,8 @@ fun Cut.updateCoordinates(mark: MarkDomain, deltaX: Double, deltaY: Double): Mar
       ).also { it.selected = true }
     }
     CutType.CT_SAGITTAL -> {
-      val verticalRatio = verticalCutData!!.data!!.n_images.toDouble() / data!!.screen_size_v
-      val horizontalRatio = horizontalCutData!!.data!!.n_images.toDouble() / data.screen_size_h
+      val verticalRatio = verticalCutData!!.data.n_images.toDouble() / data.screen_size_v
+      val horizontalRatio = horizontalCutData!!.data.n_images.toDouble() / data.screen_size_h
       mark.copy(
         markData = markData.copy(
           y = markData.y + deltaX * horizontalRatio,

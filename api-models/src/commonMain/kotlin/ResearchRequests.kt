@@ -67,11 +67,19 @@ data class PointModel(
   val horizontal: Int
 )
 
-fun getModalityStringType(type: Int): String {
+fun getSliceStringType(type: Int): String {
   return when (type) {
     SLICE_TYPE_CT_AXIAL -> "ct_axial"
     SLICE_TYPE_CT_FRONTAL -> "ct_frontal"
     SLICE_TYPE_CT_SAGITTAL -> "ct_sagittal"
+    SLICE_TYPE_MG_RCC -> "mg_rcc"
+    SLICE_TYPE_MG_LCC -> "mg_lcc"
+    SLICE_TYPE_MG_RMLO -> "mg_rmlo"
+    SLICE_TYPE_MG_LMLO -> "mg_lmlo"
+    SLICE_TYPE_DX_GENERIC -> "dx_generic"
+    SLICE_TYPE_DX_POSTERO_ANTERIOR -> "dx_postero_anterior"
+    SLICE_TYPE_DX_LEFT_LATERAL -> "dx_left_lateral"
+    SLICE_TYPE_DX_RIGHT_LATERAL -> "dx_right_lateral"
     else -> throw NotImplementedError("Not implemented sliceType for type $type")
   }
 }
@@ -83,5 +91,22 @@ fun getMipMethodStringType(type: Int): String {
     MIP_METHOD_TYPE_MAXVALUE -> "mip_maxvalue"
     MIP_METHOD_TYPE_MINVALUE -> "mip_minvalue"
     else -> throw NotImplementedError("Not mipmethod implemented for type $type")
+  }
+}
+
+fun getModalityStringType(type: Int): String {
+  return when (type) {
+    SLICE_TYPE_CT_AXIAL,
+    SLICE_TYPE_CT_FRONTAL,
+    SLICE_TYPE_CT_SAGITTAL -> "CT"
+    SLICE_TYPE_MG_RCC,
+    SLICE_TYPE_MG_LCC,
+    SLICE_TYPE_MG_RMLO,
+    SLICE_TYPE_MG_LMLO -> "MG"
+    SLICE_TYPE_DX_GENERIC,
+    SLICE_TYPE_DX_POSTERO_ANTERIOR,
+    SLICE_TYPE_DX_LEFT_LATERAL,
+    SLICE_TYPE_DX_RIGHT_LATERAL -> "DX"
+    else -> throw NotImplementedError("Not implemented sliceType for type $type")
   }
 }

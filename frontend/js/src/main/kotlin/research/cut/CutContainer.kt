@@ -81,17 +81,19 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
             }
           }
         }
-        styledDiv {
-          css {
-            width = 100.pct
-            position = Position.relative
-          }
-          sliderView(
-            dependencies = object : SliderComponent.Dependencies,
-              Dependencies by props.dependencies {
-              override val sliderOutput: (SliderController.Output) -> Unit = ::sliderOutput
+        if (props.dependencies.cut.data.n_images > 1) {
+          styledDiv {
+            css {
+              width = 100.pct
+              position = Position.relative
             }
-          )
+            sliderView(
+              dependencies = object : SliderComponent.Dependencies,
+                Dependencies by props.dependencies {
+                override val sliderOutput: (SliderController.Output) -> Unit = ::sliderOutput
+              }
+            )
+          }
         }
       }
     }

@@ -63,8 +63,8 @@ class ResearchRepositoryImpl(
       token = token(),
       request = SliceRequestNew(
         image = ImageModel(
-          modality = "CT", //TODO(remove this),
-          type = getModalityStringType(type),
+          modality = getModalityStringType(type),
+          type = getSliceStringType(type),
           number = sliceNumber,
           mip = MipModel(
             mip_method = getMipMethodStringType(mipMethod),
@@ -77,15 +77,6 @@ class ResearchRepositoryImpl(
           gamma = gamma
         )
       ),
-//      request = SliceRequest(
-//        black = black,
-//        white = white,
-//        gamma = gamma,
-//        sliceType = type,
-//        mipMethod = mipMethod,
-//        sliceNumber = slyceNumber,
-//        mipValue = aproxSize
-//      ),
       researchId = researchId
     )
     return when {
@@ -108,7 +99,7 @@ class ResearchRepositoryImpl(
       request = HounsfieldRequestNew(
         image = ImageModel(
           modality = "CT", //TODO(remove this),
-          type = getModalityStringType(type),
+          type = getSliceStringType(type),
           number = sliceNumber,
           mip = MipModel(
             mip_method = getMipMethodStringType(mipMethod),

@@ -106,14 +106,27 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
           padding(1.spacingUnits)
         }
         props.shapesModel.position?.let {
-          mTypography(text = "Сагиттальный (x): ${it.x.roundToInt()}") {
-            css { color = Color(blue) }
-          }
-          mTypography(text = "Фронтальный (y): ${it.y.roundToInt()}") {
-            css { color = Color(pink) }
-          }
-          mTypography(text = "Аксиальный(z): ${it.z.roundToInt()}") {
-            css { color = Color(yellow) }
+          when (it) {
+            is MPRPointPosition -> {
+              mTypography(text = "Сагиттальный (x): ${it.x.roundToInt()}") {
+                css { color = Color(blue) }
+              }
+              mTypography(text = "Фронтальный (y): ${it.y.roundToInt()}") {
+                css { color = Color(pink) }
+              }
+              mTypography(text = "Аксиальный(z): ${it.z.roundToInt()}") {
+                css { color = Color(yellow) }
+              }
+            }
+            is PlanarPointPosition -> {
+              mTypography(text = "x: ${it.x.roundToInt()}") {
+                css { color = Color.white }
+              }
+              mTypography(text = "y: ${it.y.roundToInt()}") {
+                css { color = Color.white }
+              }
+            }
+            else -> {}
           }
         }
       }

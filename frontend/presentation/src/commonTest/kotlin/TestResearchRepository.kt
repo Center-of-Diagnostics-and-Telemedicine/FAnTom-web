@@ -1,7 +1,4 @@
-import model.CTType
-import model.Filter
-import model.Research
-import model.ResearchSlicesSizesData
+import model.*
 import repository.ResearchRepository
 
 class TestResearchRepository : ResearchRepository {

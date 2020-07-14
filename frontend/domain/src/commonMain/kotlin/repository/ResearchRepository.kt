@@ -1,9 +1,6 @@
 package repository
 
-import model.CTType
-import model.Filter
-import model.Research
-import model.ResearchSlicesSizesDataNew
+import model.*
 
 interface ResearchRepository {
 
