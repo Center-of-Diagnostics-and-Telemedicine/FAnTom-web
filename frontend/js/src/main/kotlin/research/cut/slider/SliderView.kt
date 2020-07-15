@@ -8,6 +8,7 @@ import com.ccfraser.muirwik.components.MSliderValueLabelDisplay
 import com.ccfraser.muirwik.components.mSlider
 import controller.SliderController
 import controller.SliderControllerImpl
+import destroy
 import model.Cut
 import react.*
 import resume
@@ -56,6 +57,10 @@ class SliderComponent(prps: SliderProps) : RComponent<SliderProps, SliderState>(
 
   private fun updateState(model: SliderView.Model) {
     setState { sliderModel = model }
+  }
+
+  override fun componentWillUnmount() {
+    lifecycleRegistry.destroy()
   }
 
   interface Dependencies {

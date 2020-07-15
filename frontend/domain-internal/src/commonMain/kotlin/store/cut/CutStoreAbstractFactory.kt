@@ -2,6 +2,7 @@ package store.cut
 
 import com.arkivanov.mvikotlin.core.store.*
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
+import com.badoo.reaktive.utils.atomic.AtomicInt
 import com.badoo.reaktive.utils.ensureNeverFrozen
 import model.*
 import store.cut.CutStore.*
@@ -13,7 +14,7 @@ abstract class CutStoreAbstractFactory(
 ) {
 
   val initialState: State = State(
-    sliceNumber = cut.data!!.n_images / 2,
+    sliceNumber = cut.data.n_images / 2,
     slice = "",
     black = INITIAL_BLACK.toInt(),
     white = INITIAL_WHITE.toInt(),
@@ -26,7 +27,7 @@ abstract class CutStoreAbstractFactory(
 
   fun create(): CutStore =
     object : CutStore, Store<Intent, State, Label> by storeFactory.create(
-      name = "CutStoreType${cut.type.intType}Id${researchId}",
+      name = "CutStoreType${cut.type.intType}Id${researchId}index${storeIndex.addAndGet(1)}",
       initialState = initialState,
       bootstrapper = SimpleBootstrapper(Unit),
       executorFactory = ::createExecutor,
@@ -36,6 +37,10 @@ abstract class CutStoreAbstractFactory(
         ensureNeverFrozen()
       }
     }
+
+  private companion object {
+    private val storeIndex = AtomicInt(0)
+  }
 
   protected abstract fun createExecutor(): Executor<Intent, Unit, State, Result, Label>
 

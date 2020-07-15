@@ -4,6 +4,7 @@ import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.lifecycle.LifecycleRegistry
 import com.arkivanov.mvikotlin.core.lifecycle.doOnDestroy
 import com.arkivanov.mvikotlin.core.store.StoreFactory
+import com.badoo.reaktive.disposable.CompositeDisposable
 import com.badoo.reaktive.observable.Observable
 import com.badoo.reaktive.observable.subscribe
 import controller.CutController
@@ -18,6 +19,7 @@ import research.cut.draw.drawView
 import research.cut.shapes.ShapesViewProxy
 import research.cut.shapes.shapesView
 import resume
+import stop
 import styled.css
 import styled.styledDiv
 import view.*
@@ -75,7 +77,7 @@ class CutParentComponent(prps: CutParentProps) : RComponent<CutParentProps, CutP
         w = containerWidth,
         h = containerHeight,
         slice = state.cutModel.slice,
-        reversed = props.dependencies.cut.data?.reversed
+        reversed = props.dependencies.cut.data.reversed
       )
       shapesView(
         cut = props.dependencies.cut,
@@ -98,7 +100,9 @@ class CutParentComponent(prps: CutParentProps) : RComponent<CutParentProps, CutP
   private fun updateState(model: ShapesView.Model) = setState { shapesModel = model }
   private fun updateState(model: DrawView.Model) = setState { drawModel = model }
 
-  override fun componentWillUnmount() = lifecycleRegistry.destroy()
+  override fun componentWillUnmount() {
+    lifecycleRegistry.destroy()
+  }
 
   interface Dependencies {
     val storeFactory: StoreFactory

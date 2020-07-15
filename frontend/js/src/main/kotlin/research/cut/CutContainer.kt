@@ -53,7 +53,6 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
 
   private fun callToRenderContent() {
     GlobalScope.launch {
-      delay(timeMillis = 100)
       testRef?.let {
         renderContent(it.clientHeight, it.clientWidth)
       }

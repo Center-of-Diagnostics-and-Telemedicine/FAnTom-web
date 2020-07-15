@@ -138,8 +138,9 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
         cutsInputObservable.onNext(CutController.Input.MipValueChanged(output.value))
       is Output.PresetChanged ->
         cutsInputObservable.onNext(CutController.Input.PresetChanged(output.preset))
-      is Output.GridChanged ->
+      is Output.GridChanged -> {
         cutsContainerInputObservable.onNext(CutsContainerController.Input.GridChanged(output.grid))
+      }
       is Output.Close -> researchViewDelegate.dispatch(ResearchView.Event.Close)
     }
   }

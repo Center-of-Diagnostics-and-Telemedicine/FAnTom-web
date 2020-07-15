@@ -5,6 +5,7 @@ import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
+import com.badoo.reaktive.utils.atomic.AtomicInt
 import com.badoo.reaktive.utils.ensureNeverFrozen
 import model.Cut
 import store.draw.DrawStore.*
@@ -29,7 +30,7 @@ abstract class DrawStoreAbstractFactory(
   fun create(): DrawStore =
     object : DrawStore,
       Store<Intent, State, Label> by storeFactory.create(
-        name = "DrawStoreType${cut.type.intType}Id${researchId}",
+        name = "DrawStoreType${cut.type.intType}Id${researchId}index${storeIndex.addAndGet(1)}",
         initialState = initialState,
         executorFactory = ::createExecutor,
         reducer = ReducerImpl
@@ -38,6 +39,10 @@ abstract class DrawStoreAbstractFactory(
         ensureNeverFrozen()
       }
     }
+
+  private companion object {
+    private val storeIndex = AtomicInt(0)
+  }
 
   protected abstract fun createExecutor(): Executor<Intent, Nothing, State, Result, Label>
 

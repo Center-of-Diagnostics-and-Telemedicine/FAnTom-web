@@ -39,6 +39,7 @@ interface CutController {
     data class ExternalSliceNumberChanged(val sliceNumber: Int, val cut: Cut) : Input()
     data class Marks(val list: List<MarkDomain>) : Input()
     data class ChangeSliceNumberByMarkCenter(val mark: MarkDomain) : Input()
+
     object Idle: Input()
   }
 

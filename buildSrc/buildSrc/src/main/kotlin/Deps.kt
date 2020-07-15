@@ -131,7 +131,7 @@ object Deps {
 
   object Badoo {
     object Reaktive : Group(name = "com.badoo.reaktive") {
-      private const val version = "1.1.13"
+      private const val version = "1.1.14"
 
       object Reaktive : Dependency(group = Badoo.Reaktive, name = "reaktive", version = version)
       object ReaktiveAnnotations :
@@ -148,7 +148,7 @@ object Deps {
   }
 
   object MVIKotlin : Group(name = "com.arkivanov.mvikotlin") {
-    private const val version = "2.0.0-beta5"
+    private const val version = "2.0.0-rc1"
 
     object Core : Dependency(group = MVIKotlin, name = "mvikotlin", version = version)
     object Main : Dependency(group = MVIKotlin, name = "mvikotlin-main", version = version)
