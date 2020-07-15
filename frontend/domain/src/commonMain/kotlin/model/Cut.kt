@@ -11,6 +11,8 @@ data class Cut(
   val researchType: ResearchType
 ) : JvmSerializable
 
+fun Cut.isPlanar(): Boolean = researchType != ResearchType.CT
+
 enum class CutType(val intType: Int) {
   EMPTY(-1),
   CT_AXIAL(SLICE_TYPE_CT_AXIAL),
@@ -116,7 +118,8 @@ fun Cut.getMarkToSave(circle: Circle, sliceNumber: Int): MarkData? {
           x = (circle.dicomCenterX),
           y = (circle.dicomCenterY),
           z = sliceNumber.toDouble(),
-          radius = circle.dicomRadius,
+          radiusHorizontal = circle.dicomRadiusHorizontal,
+          radiusVertical = circle.dicomRadiusHorizontal,
           size = 0.0,
           cutType = type.intType
         )
@@ -128,7 +131,8 @@ fun Cut.getMarkToSave(circle: Circle, sliceNumber: Int): MarkData? {
           x = (circle.dicomCenterX * horizontalRatio),
           y = sliceNumber.toDouble(),
           z = (circle.dicomCenterY * verticalRatio),
-          radius = circle.dicomRadius,
+          radiusHorizontal = circle.dicomRadiusHorizontal,
+          radiusVertical = circle.dicomRadiusHorizontal,
           size = 0.0,
           cutType = type.intType
         )
@@ -140,7 +144,8 @@ fun Cut.getMarkToSave(circle: Circle, sliceNumber: Int): MarkData? {
           x = sliceNumber.toDouble(),
           y = (circle.dicomCenterX * horizontalRatio),
           z = (circle.dicomCenterY * verticalRatio),
-          radius = circle.dicomRadius,
+          radiusHorizontal = circle.dicomRadiusHorizontal,
+          radiusVertical = circle.dicomRadiusHorizontal,
           size = 0.0,
           cutType = type.intType
         )
@@ -153,7 +158,8 @@ fun Cut.getMarkToSave(circle: Circle, sliceNumber: Int): MarkData? {
           x = circle.dicomCenterX,
           y = circle.dicomCenterY,
           z = -1.0,
-          radius = circle.dicomRadius,
+          radiusHorizontal = circle.dicomRadiusHorizontal,
+          radiusVertical = circle.dicomRadiusVertical,
           size = 0.0,
           cutType = type.intType
         )

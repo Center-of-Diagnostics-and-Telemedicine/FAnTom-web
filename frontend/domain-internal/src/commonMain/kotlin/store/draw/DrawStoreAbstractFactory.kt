@@ -21,7 +21,8 @@ abstract class DrawStoreAbstractFactory(
   val initialState: State = State(
     startDicomX = 0.0,
     startDicomY = 0.0,
-    dicomRadius = 0.0,
+    dicomRadiusHorizontal = 0.0,
+    dicomRadiusVertical = 0.0,
     isDrawing = false,
     isMoving = false,
     isContrastBrightness = false
@@ -48,13 +49,14 @@ abstract class DrawStoreAbstractFactory(
 
   protected sealed class Result : JvmSerializable {
     data class StartDraw(val startDicomX: Double, val startDicomY: Double) : Result()
-    data class Drawing(val newDicomX: Double, val newDicomY: Double) : Result()
+    data class MultiPlanarDrawing(val newDicomX: Double, val newDicomY: Double) : Result()
     data class ExternalDrawing(val dicomX: Double, val dicomY: Double) : Result()
     data class StartContrastBrightness(val startDicomX: Double, val startDicomY: Double) : Result()
     data class ContrastBrightness(val dicomX: Double, val dicomY: Double) : Result()
     data class StartMove(val startDicomX: Double, val startDicomY: Double) : Result()
     data class MouseMove(val dicomX: Double, val dicomY: Double) : Result()
     data class MouseMoveInClick(val dicomX: Double, val dicomY: Double) : Result()
+    data class PlanarDrawing(val dicomX: Double, val dicomY: Double) : Result()
 
     object Idle : Result()
   }
@@ -77,11 +79,16 @@ abstract class DrawStoreAbstractFactory(
           startDicomX = result.startDicomX,
           startDicomY = result.startDicomY
         )
-        is Result.Drawing -> {
+        is Result.MultiPlanarDrawing -> {
           val xSqr = result.newDicomX - startDicomX
           val ySqr = result.newDicomY - startDicomY
-          copy(dicomRadius = sqrt((xSqr).pow(2) + (ySqr).pow(2)))
+          val radius = sqrt((xSqr).pow(2) + (ySqr).pow(2))
+          copy(dicomRadiusHorizontal = radius, dicomRadiusVertical = radius)
         }
+        is Result.PlanarDrawing -> copy(
+          dicomRadiusHorizontal = (result.dicomX - startDicomX),
+          dicomRadiusVertical = (result.dicomY - startDicomY)
+        )
         is Result.ContrastBrightness -> copy(
           startDicomX = result.dicomX,
           startDicomY = result.dicomY
@@ -97,13 +104,15 @@ abstract class DrawStoreAbstractFactory(
         Result.Idle -> copy(
           startDicomX = 0.0,
           startDicomY = 0.0,
-          dicomRadius = 0.0,
+          dicomRadiusHorizontal = 0.0,
+          dicomRadiusVertical = 0.0,
           isDrawing = false,
           isContrastBrightness = false,
           isMoving = false
         )
         is Result.ExternalDrawing -> {
-          copy(dicomRadius = sqrt((result.dicomX).pow(2) + (result.dicomY).pow(2)))
+          val radius = sqrt((result.dicomX).pow(2) + (result.dicomY).pow(2))
+          copy(dicomRadiusHorizontal = radius, dicomRadiusVertical = radius)
         }
       }
   }

@@ -93,8 +93,8 @@ internal class ShapesStoreFactory(
       if (altKey) {
         circles
           .firstOrNull {
-            dicomY < it.dicomCenterY + it.dicomRadius && dicomY > it.dicomCenterY - it.dicomRadius
-              && dicomX < it.dicomCenterX + it.dicomRadius && dicomX > it.dicomCenterX - it.dicomRadius
+            dicomY < it.dicomCenterY + it.dicomRadiusHorizontal && dicomY > it.dicomCenterY - it.dicomRadiusHorizontal
+              && dicomX < it.dicomCenterX + it.dicomRadiusHorizontal && dicomX > it.dicomCenterX - it.dicomRadiusHorizontal
           }
           ?.let { circle ->
             state.marks.firstOrNull { it.id == circle.id }?.let {
@@ -106,7 +106,7 @@ internal class ShapesStoreFactory(
       val circleToSelect = circles
         .firstOrNull { area ->
           val dist = sqrt((dicomX - area.dicomCenterX).pow(2) + (dicomY - area.dicomCenterY).pow(2))
-          dist < area.dicomRadius
+          dist < area.dicomRadiusHorizontal
         }
 
       if (circleToSelect != null) {

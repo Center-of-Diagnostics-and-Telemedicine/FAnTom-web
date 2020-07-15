@@ -4,6 +4,7 @@ import com.arkivanov.mvikotlin.core.store.Executor
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
 import model.Cut
+import model.isPlanar
 import store.draw.DrawStore.*
 import store.draw.DrawStoreAbstractFactory
 
@@ -82,7 +83,11 @@ internal class DrawStoreFactory(
       val state = getState()
       when {
         state.isDrawing -> {
-          dispatch(Result.Drawing(dicomX, dicomY))
+          if (cut.isPlanar()) {
+            dispatch(Result.PlanarDrawing(dicomX, dicomY))
+          } else {
+            dispatch(Result.MultiPlanarDrawing(dicomX, dicomY))
+          }
         }
         state.isContrastBrightness -> {
           dispatch(Result.ContrastBrightness(dicomX, dicomY))

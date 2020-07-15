@@ -6,6 +6,7 @@ import kotlinx.html.classes
 import kotlinx.html.js.*
 import model.Circle
 import model.Cut
+import model.isPlanar
 import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLCanvasElement
 import org.w3c.dom.events.Event
@@ -21,17 +22,17 @@ import styled.styledCanvas
 import styled.styledDiv
 import view.DrawView
 import kotlin.browser.document
-import kotlin.math.PI
-import kotlin.math.pow
-import kotlin.math.sqrt
+import kotlin.math.*
 
 class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
 
   private var resultWidth: Int = 0
   private var resultHeight: Int = 0
-  private var horizontalRatio: Double = 0.0
   private var verticalRatio: Double = 0.0
+  private var horizontalRatio: Double = 0.0
   private var radiusRatio: Double = 0.0
+  private var startX: Double = 0.0
+  private var startY: Double = 0.0
 
   override fun componentDidMount() {
     updateCanvas()
@@ -43,6 +44,7 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
 
   private fun updateCanvas() {
     val circle = props.drawModel.circle
+    props.drawModel.circle
     if (circle != null) {
       draw(circle)
     } else {
@@ -52,8 +54,8 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
 
   override fun RBuilder.render() {
     themeContext.Consumer { theme ->
-      val dicomWidth = props.cut.data!!.screen_size_h
-      val dicomHeight = props.cut.data!!.screen_size_v
+      val dicomWidth = props.cut.data.screen_size_h
+      val dicomHeight = props.cut.data.screen_size_v
       val ri = dicomWidth.toDouble() / dicomHeight
       val rs = props.width.toDouble() / props.height
       if (rs > ri) {
@@ -67,8 +69,8 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
       val mLeft = props.width - resultWidth
       val resultTop = if (mTop <= 0) 0 else mTop / 2
       val resultLeft = if (mLeft <= 0) 0 else mLeft / 2
-      horizontalRatio = dicomHeight.toDouble() / resultHeight
-      verticalRatio = dicomWidth.toDouble() / resultWidth
+      verticalRatio = dicomHeight.toDouble() / resultHeight
+      horizontalRatio = dicomWidth.toDouble() / resultWidth
       val dicomRadius = sqrt(dicomHeight.toDouble().pow(2) + dicomWidth.toDouble().pow(2))
       val screenRadius = sqrt(resultHeight.toDouble().pow(2) + resultWidth.toDouble().pow(2))
       radiusRatio = dicomRadius / screenRadius
@@ -89,10 +91,12 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
             onMouseDownFunction = { event ->
               val mouseEvent = event.asDynamic().nativeEvent as MouseEvent
               val rect = (mouseEvent.target as HTMLCanvasElement).getBoundingClientRect()
+              startX = mouseEvent.clientX - rect.left
+              startY = mouseEvent.clientY - rect.top
               props.eventOutput(
                 DrawView.Event.MouseDown(
-                  x = (mouseEvent.clientX - rect.left) * verticalRatio,
-                  y = (mouseEvent.clientY - rect.top) * horizontalRatio,
+                  x = (mouseEvent.clientX - rect.left) * horizontalRatio,
+                  y = (mouseEvent.clientY - rect.top) * verticalRatio,
                   metaKey = mouseEvent.ctrlKey || mouseEvent.metaKey,
                   button = mouseEvent.button,
                   shiftKey = mouseEvent.shiftKey
@@ -105,8 +109,8 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
               val rect = (mouseEvent.target as HTMLCanvasElement).getBoundingClientRect()
               props.eventOutput(
                 DrawView.Event.MouseMove(
-                  x = (mouseEvent.clientX - rect.left) * verticalRatio,
-                  y = (mouseEvent.clientY - rect.top) * horizontalRatio
+                  x = (mouseEvent.clientX - rect.left) * horizontalRatio,
+                  y = (mouseEvent.clientY - rect.top) * verticalRatio
                 )
               )
             }
@@ -114,16 +118,20 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
             onMouseUpFunction = {
               val mouseEvent = castEvent(it)
               val rect = (mouseEvent.target as HTMLCanvasElement).getBoundingClientRect()
+              startX = 0.0
+              startY = 0.0
               props.eventOutput(
                 DrawView.Event.MouseUp(
-                  x = (mouseEvent.clientX - rect.left) * verticalRatio,
-                  y = (mouseEvent.clientY - rect.top) * horizontalRatio
+                  x = (mouseEvent.clientX - rect.left) * horizontalRatio,
+                  y = (mouseEvent.clientY - rect.top) * verticalRatio
                 )
               )
             }
 
             onMouseOutFunction = {
               props.eventOutput(DrawView.Event.MouseOut)
+              startX = 0.0
+              startY = 0.0
             }
 
             onClickFunction = {
@@ -131,8 +139,8 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
               val rect = (mouseEvent.target as HTMLCanvasElement).getBoundingClientRect()
               props.eventOutput(
                 DrawView.Event.MouseClick(
-                  x = (mouseEvent.clientX - rect.left) * verticalRatio,
-                  y = (mouseEvent.clientY - rect.top) * horizontalRatio,
+                  x = (mouseEvent.clientX - rect.left) * horizontalRatio,
+                  y = (mouseEvent.clientY - rect.top) * verticalRatio,
                   altKey = mouseEvent.altKey,
                   metaKey = mouseEvent.ctrlKey || mouseEvent.metaKey
                 )
@@ -159,16 +167,43 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
         canvas.width.toDouble(),
         canvas.height.toDouble()
       )
-      context.strokeStyle = "#00ff00"
-      context.beginPath()
-      context.arc(
-        circle.dicomCenterX / verticalRatio,
-        circle.dicomCenterY / horizontalRatio,
-        circle.dicomRadius / radiusRatio,
-        0.0,
-        2 * PI,
-        false
-      )
+
+      if (props.cut.isPlanar()) {
+        val radiusX = circle.dicomRadiusHorizontal / horizontalRatio * 0.5
+        val radiusY = circle.dicomRadiusVertical / verticalRatio * 0.5
+        val centerX = startX + radiusX
+        val centerY = startY + radiusY
+        val step = 0.01
+        var a = step
+        val pi2 = PI * 2 - step
+
+        context.strokeStyle = props.cut.color
+        context.beginPath()
+        context.moveTo(
+          centerX + radiusX * cos(0.0),
+          centerY + radiusY * sin(0.0)
+        )
+        while (a < pi2) {
+          context.lineTo(
+            centerX + radiusX * cos(a),
+            centerY + radiusY * sin(a)
+          )
+          a += step
+        }
+        context.closePath()
+
+      } else {
+        context.strokeStyle = "#00ff00"
+        context.beginPath()
+        context.arc(
+          circle.dicomCenterX / horizontalRatio,
+          circle.dicomCenterY / verticalRatio,
+          circle.dicomRadiusHorizontal / radiusRatio,
+          0.0,
+          2 * PI,
+          false
+        )
+      }
       context.stroke()
       context.closePath()
     }
@@ -190,8 +225,7 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
 
 }
 
-class DrawState(
-) : RState
+class DrawState : RState
 
 interface DrawProps : RProps {
   var cut: Cut

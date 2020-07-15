@@ -33,7 +33,7 @@ class MultiPlanarMarksDao : MarksDaoFacade {
         it[x] = mark.x
         it[y] = mark.y
         it[z] = mark.z
-        it[radius] = mark.radius
+        it[radius] = mark.radiusHorizontal
         it[size] = mark.size
         it[cutType] = mark.cutType
       } get MultiPlanarMarksVos.id
@@ -46,7 +46,7 @@ class MultiPlanarMarksDao : MarksDaoFacade {
         it[x] = mark.markData.x
         it[y] = mark.markData.y
         it[z] = mark.markData.z
-        it[radius] = mark.markData.radius
+        it[radius] = mark.markData.radiusHorizontal
         it[size] = mark.markData.size
         it[type] = mark.type.intValue
         it[comment] = mark.comment

@@ -32,7 +32,7 @@ class PlanarMarksDao : MarksDaoFacade {
         it[researchId] = researchhId
         it[x] = mark.x
         it[y] = mark.y
-        it[radius] = mark.radius
+        it[radiusHorizontal] = mark.radiusHorizontal
         it[size] = mark.size
         it[cutType] = mark.cutType
       } get PlanarMarksVos.id
@@ -44,7 +44,7 @@ class PlanarMarksDao : MarksDaoFacade {
       PlanarMarksVos.update(where = { PlanarMarksVos.id eq mark.id }) {
         it[x] = mark.markData.x
         it[y] = mark.markData.y
-        it[radius] = mark.markData.radius
+        it[radiusHorizontal] = mark.markData.radiusHorizontal
         it[size] = mark.markData.size
         it[type] = mark.type.intValue
         it[comment] = mark.comment

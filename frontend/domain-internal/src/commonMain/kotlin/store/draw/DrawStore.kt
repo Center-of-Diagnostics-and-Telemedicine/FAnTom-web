@@ -9,13 +9,21 @@ interface DrawStore : Store<Intent, State, Label> {
   data class State(
     val startDicomX: Double,
     val startDicomY: Double,
-    val dicomRadius: Double,
+    val dicomRadiusHorizontal: Double,
+    val dicomRadiusVertical: Double,
     val isDrawing: Boolean = false,
     val isMoving: Boolean = false,
     val isContrastBrightness: Boolean = false,
   ) {
     fun circle(): Circle {
-      return Circle(startDicomX, startDicomY, dicomRadius, -1, highlight = false)
+      return Circle(
+        dicomCenterX = startDicomX,
+        dicomCenterY = startDicomY,
+        dicomRadiusHorizontal = dicomRadiusHorizontal,
+        dicomRadiusVertical = dicomRadiusVertical,
+        id = -1,
+        highlight = false
+      )
     }
   }
 

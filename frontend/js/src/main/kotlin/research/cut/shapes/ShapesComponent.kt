@@ -249,7 +249,7 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
       context.arc(
         circle.dicomCenterX / horizontalRatio,
         circle.dicomCenterY / verticalRatio,
-        circle.dicomRadius / radiusRatio,
+        circle.dicomRadiusHorizontal / radiusRatio,
         0.0,
         2 * PI,
         false

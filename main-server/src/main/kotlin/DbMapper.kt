@@ -44,7 +44,8 @@ fun ResultRow.toMultiPlanarMark(): MarkDomain = MarkDomain(
     x = this[MultiPlanarMarksVos.x],
     y = this[MultiPlanarMarksVos.y],
     z = this[MultiPlanarMarksVos.z],
-    radius = this[MultiPlanarMarksVos.radius],
+    radiusHorizontal = this[MultiPlanarMarksVos.radius],
+    radiusVertical = this[MultiPlanarMarksVos.radius],
     size = this[MultiPlanarMarksVos.size],
     cutType = this[MultiPlanarMarksVos.cutType]
   ),
@@ -61,7 +62,8 @@ fun ResultRow.toPlanarMark(): MarkDomain = MarkDomain(
     x = this[PlanarMarksVos.x],
     y = this[PlanarMarksVos.y],
     z = -1.0,
-    radius = this[PlanarMarksVos.radius],
+    radiusHorizontal = this[PlanarMarksVos.radiusHorizontal],
+    radiusVertical = this[PlanarMarksVos.radiusVertical],
     size = this[PlanarMarksVos.size],
     cutType = this[PlanarMarksVos.cutType]
   ),

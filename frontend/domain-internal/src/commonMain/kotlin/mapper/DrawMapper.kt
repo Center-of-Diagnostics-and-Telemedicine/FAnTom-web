@@ -31,12 +31,13 @@ fun mapMouseDown(event: Event.MouseDown): Intent {
 }
 
 val drawStateToDrawModel: State.() -> Model = {
-  if (dicomRadius != 0.0) {
+  if (dicomRadiusHorizontal != 0.0) {
     Model(
       circle = Circle(
         dicomCenterX = startDicomX,
         dicomCenterY = startDicomY,
-        dicomRadius = dicomRadius,
+        dicomRadiusHorizontal = dicomRadiusHorizontal,
+        dicomRadiusVertical = dicomRadiusVertical,
         id = -1,
         highlight = false
       )

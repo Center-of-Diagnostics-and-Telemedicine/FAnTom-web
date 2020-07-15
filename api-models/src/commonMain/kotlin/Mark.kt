@@ -19,11 +19,12 @@ data class MarkData(
   val x: Double,
   val y: Double,
   val z: Double,
-  val radius: Double,
+  val radiusHorizontal: Double,
+  val radiusVertical: Double,
   val size: Double,
   val cutType: Int
 ) {
-  fun name(): String = "x: ${x.roundToInt()}, y: ${y.roundToInt()}, z: ${z.roundToInt()}, r: ${radius.roundToInt()}"
+  fun name(): String = "x: ${x.roundToInt()}, y: ${y.roundToInt()}, z: ${z.roundToInt()}, r: ${radiusHorizontal.roundToInt()}"
 }
 
 @Serializable
