@@ -15,9 +15,7 @@ import list.list
 import login.LoginScreen
 import login.login
 import react.*
-import repository.LoginRepository
-import repository.MarksRepository
-import repository.ResearchRepository
+import repository.*
 import research.ResearchScreen
 import research.research
 import styled.styledDiv
@@ -88,6 +86,8 @@ abstract class App : RComponent<AppProps, AppState>() {
     val loginRepository: LoginRepository
     val researchRepository: ResearchRepository
     val marksRepository: MarksRepository
+    val brightnessRepository: BrightnessRepository
+    val mipRepository: MipRepository
   }
 }
 

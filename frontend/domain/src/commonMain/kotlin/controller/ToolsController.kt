@@ -6,6 +6,8 @@ import model.Grid
 import model.Mip
 import model.Presets
 import model.ResearchSlicesSizesDataNew
+import repository.BrightnessRepository
+import repository.MipRepository
 import view.*
 
 interface ToolsController {
@@ -26,6 +28,8 @@ interface ToolsController {
     val lifecycle: Lifecycle
     val toolsOutput: (Output) -> Unit
     val data: ResearchSlicesSizesDataNew
+    val mipRepository: MipRepository
+    val brightnessRepository: BrightnessRepository
   }
 
   sealed class Output {

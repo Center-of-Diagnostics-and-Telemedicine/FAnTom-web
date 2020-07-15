@@ -28,7 +28,9 @@ class CutControllerImpl(val dependencies: CutController.Dependencies) :
     storeFactory = dependencies.storeFactory,
     cut = dependencies.cut,
     repository = dependencies.researchRepository,
-    researchId = dependencies.researchId
+    researchId = dependencies.researchId,
+    brightnessRepository = dependencies.brightnessRepository,
+    mipRepository = dependencies.mipRepository
   ).create()
 
   private val shapesStore = ShapesStoreFactory(

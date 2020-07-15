@@ -17,6 +17,8 @@ import model.Cut
 import org.w3c.dom.Element
 import react.*
 import react.dom.findDOMNode
+import repository.BrightnessRepository
+import repository.MipRepository
 import repository.ResearchRepository
 import research.cut.CutContainer.CutContainerStyles.blackContainerStyle
 import research.cut.CutContainer.CutContainerStyles.cutContainerStyle
@@ -127,6 +129,8 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
     val cutsInput: Observable<Input>
     val cutOutput: (CutController.Output) -> Unit
     val researchRepository: ResearchRepository
+    val brightnessRepository: BrightnessRepository
+    val mipRepository: MipRepository
     val researchId: Int
   }
 

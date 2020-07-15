@@ -17,6 +17,8 @@ import model.CutType
 import model.Grid
 import model.ResearchSlicesSizesDataNew
 import react.*
+import repository.BrightnessRepository
+import repository.MipRepository
 import repository.ResearchRepository
 import research.cut.CutContainer
 import research.cut.cutContainer
@@ -208,6 +210,8 @@ class CutsContainerViewComponent(prps: CutsContainerProps) :
     val cutsContainerOutput: (CutsContainerController.Output) -> Unit
     val cutsInput: Observable<CutController.Input>
     val researchRepository: ResearchRepository
+    val brightnessRepository: BrightnessRepository
+    val mipRepository: MipRepository
     val researchId: Int
   }
 

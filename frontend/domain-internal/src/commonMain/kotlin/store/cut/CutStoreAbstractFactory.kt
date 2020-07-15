@@ -4,23 +4,28 @@ import com.arkivanov.mvikotlin.core.store.*
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.badoo.reaktive.utils.atomic.AtomicInt
 import com.badoo.reaktive.utils.ensureNeverFrozen
-import model.*
+import model.Cut
+import model.Mip
+import repository.BrightnessRepository
+import repository.MipRepository
 import store.cut.CutStore.*
 
 abstract class CutStoreAbstractFactory(
   private val storeFactory: StoreFactory,
   private val cut: Cut,
-  private val researchId: Int
+  private val researchId: Int,
+  private val brightnessRepository: BrightnessRepository,
+  private val mipRepository: MipRepository
 ) {
 
   val initialState: State = State(
     sliceNumber = cut.data.n_images / 2,
     slice = "",
-    black = INITIAL_BLACK.toInt(),
-    white = INITIAL_WHITE.toInt(),
-    gamma = INITIAL_GAMMA,
-    mipMethod = Mip.No,
-    mipValue = INITIAL_MIP_VALUE,
+    black = brightnessRepository.getBlackValue(),
+    white = brightnessRepository.getWhiteValue(),
+    gamma = brightnessRepository.getGammaValue(),
+    mipMethod = mipRepository.getMip(),
+    mipValue = mipRepository.getMipValue(),
     loading = false,
     error = ""
   )

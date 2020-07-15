@@ -6,17 +6,18 @@ import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.badoo.reaktive.utils.ensureNeverFrozen
-import model.INITIAL_GAMMA
+import repository.BrightnessRepository
 import store.tools.BrightnessStore.*
 
 abstract class BrightnessStoreAbstractFactory(
-  private val storeFactory: StoreFactory
+  private val storeFactory: StoreFactory,
+  val brightnessRepository: BrightnessRepository
 ) {
 
   val initialState: State = State(
-    blackValue = -1150,
-    whiteValue = 350,
-    gammaValue = INITIAL_GAMMA
+    blackValue = brightnessRepository.getBlackValue(),
+    whiteValue = brightnessRepository.getWhiteValue(),
+    gammaValue = brightnessRepository.getGammaValue()
   )
 
   fun create(): BrightnessStore =

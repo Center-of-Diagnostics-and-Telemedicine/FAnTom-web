@@ -3,6 +3,8 @@ package controller
 import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import model.*
+import repository.BrightnessRepository
+import repository.MipRepository
 import repository.ResearchRepository
 import view.CutView
 import view.DrawView
@@ -20,6 +22,8 @@ interface CutController {
   )
 
   interface Dependencies {
+    val mipRepository: MipRepository
+    val brightnessRepository: BrightnessRepository
     val storeFactory: StoreFactory
     val lifecycle: Lifecycle
     val researchRepository: ResearchRepository

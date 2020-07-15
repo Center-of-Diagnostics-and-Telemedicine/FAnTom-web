@@ -13,6 +13,8 @@ import model.Cut
 import model.GET_SLICE_FAILED
 import model.ResearchApiExceptions
 import model.getSliceNumberByMark
+import repository.BrightnessRepository
+import repository.MipRepository
 import repository.ResearchRepository
 import store.cut.CutStore.*
 import store.cut.CutStoreAbstractFactory
@@ -21,11 +23,15 @@ internal class CutStoreFactory(
   storeFactory: StoreFactory,
   val cut: Cut,
   val repository: ResearchRepository,
-  val researchId: Int
+  val researchId: Int,
+  brightnessRepository: BrightnessRepository,
+  mipRepository: MipRepository
 ) : CutStoreAbstractFactory(
   storeFactory = storeFactory,
   cut = cut,
-  researchId = researchId
+  researchId = researchId,
+  brightnessRepository = brightnessRepository,
+  mipRepository = mipRepository
 ) {
   override fun createExecutor(): Executor<Intent, Unit, State, Result, Label> = ExecutorImpl()
 

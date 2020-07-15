@@ -23,7 +23,7 @@ abstract class ShapesStoreAbstractFactory(
   val initialState: State = State(
     horizontalCoefficient = 0.5,
     verticalCoefficient = 0.5,
-    sliceNumber = cut.data!!.n_images / 2,
+    sliceNumber = cut.data.n_images / 2,
     position = null,
     circles = listOf(),
     hounsfield = null,

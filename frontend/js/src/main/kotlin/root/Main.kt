@@ -31,6 +31,9 @@ private class Application {
     token = { authRepository.local.getToken() }
   )
 
+  val brightnesRepository = BrightnessRepositoryImpl()
+  val mippRepository = MipRepositoryImpl()
+
   fun start() {
     window.onload = {
       render(document.getElementById("app")) {
@@ -39,6 +42,8 @@ private class Application {
           override val loginRepository: LoginRepository = authRepository
           override val researchRepository: ResearchRepository = researchesRepository
           override val marksRepository: MarksRepository = markRepository
+          override val brightnessRepository: BrightnessRepository = brightnesRepository
+          override val mipRepository: MipRepository = mippRepository
         })
       }
     }

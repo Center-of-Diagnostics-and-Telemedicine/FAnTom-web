@@ -12,10 +12,11 @@ import controller.*
 import controller.ToolsController.Output
 import destroy
 import kotlinx.css.*
-import model.ResearchSlicesSizesData
 import model.ResearchSlicesSizesDataNew
 import react.*
+import repository.BrightnessRepository
 import repository.MarksRepository
+import repository.MipRepository
 import repository.ResearchRepository
 import research.ResearchScreen.ResearchStyles.appFrameContainerStyle
 import research.gridcontainer.CutsContainerViewComponent
@@ -100,7 +101,7 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
             Dependencies by props.dependencies {
             override val data: ResearchSlicesSizesDataNew = model.data!!
             override val cutsContainerInputs: Observable<CutsContainerController.Input> = this@ResearchScreen.cutsContainerInputObservable
-            override val cutsContainerOutput: (CutsContainerController.Output) -> Unit = ::gridOutput
+            override val cutsContainerOutput: (CutsContainerController.Output) -> Unit = ::cutsContainerOutput
             override val cutsInput: Observable<CutController.Input> = this@ResearchScreen.cutsInputObservable
           })
         }
@@ -145,7 +146,7 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
     }
   }
 
-  private fun gridOutput(output: CutsContainerController.Output) {
+  private fun cutsContainerOutput(output: CutsContainerController.Output) {
     when (output) {
       is CutsContainerController.Output.OpenFullCut -> TODO()
       is CutsContainerController.Output.CloseFullCut -> TODO()
@@ -207,6 +208,8 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
     val storeFactory: StoreFactory
     val researchRepository: ResearchRepository
     val marksRepository: MarksRepository
+    val brightnessRepository: BrightnessRepository
+    val mipRepository: MipRepository
     val researchId: Int
   }
 

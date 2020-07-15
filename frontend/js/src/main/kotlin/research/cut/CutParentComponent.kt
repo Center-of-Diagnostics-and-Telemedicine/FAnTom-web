@@ -13,6 +13,8 @@ import destroy
 import kotlinx.css.*
 import model.Cut
 import react.*
+import repository.BrightnessRepository
+import repository.MipRepository
 import repository.ResearchRepository
 import research.cut.draw.DrawViewProxy
 import research.cut.draw.drawView
@@ -110,6 +112,8 @@ class CutParentComponent(prps: CutParentProps) : RComponent<CutParentProps, CutP
     val cutsInput: Observable<CutController.Input>
     val cutOutput: (CutController.Output) -> Unit
     val researchRepository: ResearchRepository
+    val brightnessRepository: BrightnessRepository
+    val mipRepository: MipRepository
     val researchId: Int
     val height: Int
     val width: Int

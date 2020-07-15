@@ -18,6 +18,8 @@ import list.ListScreen
 import model.ResearchSlicesSizesDataNew
 import model.Tool
 import react.*
+import repository.BrightnessRepository
+import repository.MipRepository
 import research.tools.ToolsComponent.ToolsStyles.headerStyle
 import research.tools.brightness.BrightnessViewProxy
 import research.tools.brightness.renderBrightness
@@ -144,6 +146,8 @@ class ToolsComponent(prps: ToolsProps) : RComponent<ToolsProps, ToolsState>(prps
     val storeFactory: StoreFactory
     val toolsOutput: (ToolsController.Output) -> Unit
     val toolsInput: Observable<ToolsController.Input>
+    val brightnessRepository: BrightnessRepository
+    val mipRepository: MipRepository
     val open: Boolean
     val data: ResearchSlicesSizesDataNew
   }

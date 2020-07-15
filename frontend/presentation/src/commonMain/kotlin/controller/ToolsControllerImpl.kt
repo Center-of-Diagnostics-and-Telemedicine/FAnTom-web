@@ -19,8 +19,14 @@ class ToolsControllerImpl(val dependencies: ToolsController.Dependencies) : Tool
   private val toolsStore = ToolsStoreFactory(storeFactory = dependencies.storeFactory).create()
   private val gridStore =
     GridStoreFactory(storeFactory = dependencies.storeFactory, data = dependencies.data).create()
-  private val mipStore = MipStoreFactory(storeFactory = dependencies.storeFactory).create()
-  private val brightnessStore = BrightnessStoreFactory(storeFactory = dependencies.storeFactory).create()
+  private val mipStore = MipStoreFactory(
+    storeFactory = dependencies.storeFactory,
+    mipRepository = dependencies.mipRepository
+  ).create()
+  private val brightnessStore = BrightnessStoreFactory(
+    storeFactory = dependencies.storeFactory,
+    brightnessRepository = dependencies.brightnessRepository
+  ).create()
   private val presetStore = PresetStoreFactory(storeFactory = dependencies.storeFactory).create()
 
   private val inputRelay: Relay<ToolsController.Input> = PublishSubject()

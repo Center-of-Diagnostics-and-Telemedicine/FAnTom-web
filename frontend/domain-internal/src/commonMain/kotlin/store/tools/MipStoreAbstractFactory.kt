@@ -8,10 +8,12 @@ import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.badoo.reaktive.utils.ensureNeverFrozen
 import model.HasIntValue
 import model.Mip
+import repository.MipRepository
 import store.tools.MipStore.*
 
 abstract class MipStoreAbstractFactory(
-  private val storeFactory: StoreFactory
+  private val storeFactory: StoreFactory,
+  val mipRepository: MipRepository
 ) {
 
   fun create(): MipStore =
@@ -48,7 +50,7 @@ abstract class MipStoreAbstractFactory(
 
   private fun getInitialState(): State = State(
     list = listOf(Mip.No, Mip.Average(), Mip.Max()),
-    current = Mip.No,
+    current = mipRepository.getMip(),
     currentValue = null
   )
 }

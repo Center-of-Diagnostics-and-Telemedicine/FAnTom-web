@@ -4,13 +4,16 @@ import com.arkivanov.mvikotlin.core.store.Executor
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
 import model.Mip
+import repository.MipRepository
 import store.tools.MipStore.*
 import store.tools.MipStoreAbstractFactory
 
 internal class MipStoreFactory(
-  storeFactory: StoreFactory
+  storeFactory: StoreFactory,
+  mipRepository: MipRepository
 ) : MipStoreAbstractFactory(
-  storeFactory = storeFactory
+  storeFactory = storeFactory,
+  mipRepository = mipRepository
 ) {
 
   override fun createExecutor(): Executor<Intent, Nothing, State, Result, Label> =
