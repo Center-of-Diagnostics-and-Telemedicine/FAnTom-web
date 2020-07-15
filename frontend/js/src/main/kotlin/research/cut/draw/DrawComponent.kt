@@ -168,6 +168,7 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
         canvas.height.toDouble()
       )
 
+      context.beginPath()
       if (props.cut.isPlanar()) {
         val radiusX = circle.dicomRadiusHorizontal / horizontalRatio * 0.5
         val radiusY = circle.dicomRadiusVertical / verticalRatio * 0.5
@@ -178,7 +179,6 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
         val pi2 = PI * 2 - step
 
         context.strokeStyle = props.cut.color
-        context.beginPath()
         context.moveTo(
           centerX + radiusX * cos(0.0),
           centerY + radiusY * sin(0.0)
@@ -190,11 +190,9 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
           )
           a += step
         }
-        context.closePath()
 
       } else {
         context.strokeStyle = "#00ff00"
-        context.beginPath()
         context.arc(
           circle.dicomCenterX / horizontalRatio,
           circle.dicomCenterY / verticalRatio,
