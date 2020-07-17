@@ -229,55 +229,63 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
   ) {
     models.forEach { circle ->
       debugLog(circle.toString())
-      if (circle.highlight) {
-        context.strokeStyle = "#18a0fb"
-        context.lineWidth = 1.0
-
-//        if (circle.hasContext) {
-//          context.lineWidth = 2.0
-//        }
-
-      } else {
-        context.lineWidth = 1.0
-        context.strokeStyle = "#00ff00"
-      }
-
       context.beginPath()
       if(props.cut.isPlanar()){
-        val radiusX = circle.dicomRadiusHorizontal / horizontalRatio * 0.5
-        val radiusY = circle.dicomRadiusVertical / verticalRatio * 0.5
-        val centerX = circle.dicomCenterX / horizontalRatio + radiusX
-        val centerY = circle.dicomCenterY / verticalRatio + radiusY
-        val step = 0.01
-        var a = step
-        val pi2 = PI * 2 - step
-
-        context.strokeStyle = props.cut.color
-        context.beginPath()
-        context.moveTo(
-          centerX + radiusX * cos(0.0),
-          centerY + radiusY * sin(0.0)
-        )
-        while (a < pi2) {
-          context.lineTo(
-            centerX + radiusX * cos(a),
-            centerY + radiusY * sin(a)
-          )
-          a += step
-        }
+        drawPlanarCircle(circle, context)
       } else {
-        context.arc(
-          circle.dicomCenterX / horizontalRatio,
-          circle.dicomCenterY / verticalRatio,
-          circle.dicomRadiusHorizontal / radiusRatio,
-          0.0,
-          2 * PI,
-          false
-        )
+        drawSphere(context, circle)
       }
       context.stroke()
       context.closePath()
     }
+  }
+
+  private fun drawPlanarCircle(circle: Circle, context: CanvasRenderingContext2D) {
+    context.lineWidth = 1.0
+    if (circle.highlight) {
+      context.strokeStyle = props.cut.color
+    } else {
+      context.strokeStyle = "#00ff00"
+    }
+
+    val radiusX = circle.dicomRadiusHorizontal / horizontalRatio * 0.5
+    val radiusY = circle.dicomRadiusVertical / verticalRatio * 0.5
+    val centerX = circle.dicomCenterX / horizontalRatio + radiusX
+    val centerY = circle.dicomCenterY / verticalRatio + radiusY
+    val step = 0.01
+    var a = step
+    val pi2 = PI * 2 - step
+
+
+    context.moveTo(
+      centerX + radiusX * cos(0.0),
+      centerY + radiusY * sin(0.0)
+    )
+    while (a < pi2) {
+      context.lineTo(
+        centerX + radiusX * cos(a),
+        centerY + radiusY * sin(a)
+      )
+      a += step
+    }
+  }
+
+  private fun drawSphere(context: CanvasRenderingContext2D, circle: Circle) {
+    if (circle.highlight) {
+      context.strokeStyle = "#18a0fb"
+      context.lineWidth = 1.0
+    } else {
+      context.lineWidth = 1.0
+      context.strokeStyle = "#00ff00"
+    }
+    context.arc(
+      circle.dicomCenterX / horizontalRatio,
+      circle.dicomCenterY / verticalRatio,
+      circle.dicomRadiusHorizontal / radiusRatio,
+      0.0,
+      2 * PI,
+      false
+    )
   }
 
   private fun drawLines(
