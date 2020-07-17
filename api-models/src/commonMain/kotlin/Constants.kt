@@ -2,7 +2,9 @@ package model
 
 const val TOKEN = "api_token"
 const val END_POINT: String = "https://fantom.npcmr.ru"
-const val LOCALHOST = "http://localhost:8081"
+const val LOCALHOST = "http://localhost"
+const val MAIN_SERVER_PORT = 8081
+const val MAIN_SERVER_URL = "$LOCALHOST:$MAIN_SERVER_PORT"
 
 //const val END_POINT: String = "http://10.2.20.44:8080"
 const val LOGIN_ROUTE: String = "login"
@@ -22,7 +24,7 @@ const val TYPE_AXIAL = "AXIAL"
 const val TYPE_FRONTAL = "FRONTAL"
 const val TYPE_SAGITTAL = "SAGITTAL"
 
-const val localDataStorePath = "d:\\dicom"
+const val localDataStorePath = "/Users/max/Downloads/MG"
 const val dockerDataStorePath = "/app/dicom"
 
 const val ID_FIELD = "id"

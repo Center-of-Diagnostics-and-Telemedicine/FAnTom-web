@@ -30,7 +30,10 @@ interface ContainerCreator {
 class ContainerCreatorImpl() : ContainerCreator {
 
   private val config = DefaultDockerClientConfig.createDefaultConfigBuilder()
-    .withDockerHost("tcp://localhost:2375")
+    .withDockerHost("unix:///var/run/docker.sock")
+    .withRegistryUsername("max")
+    .withRegistryPassword("vfrcbv16")
+//    .withDockerHost("tcp://localhost:2375")
 //    .withRegistryUsername("m.gusev")
 //    .withRegistryPassword("8vkWq8%T")
     .build()
@@ -70,26 +73,17 @@ class ContainerCreatorImpl() : ContainerCreator {
     val portOutsideContainer = Ports.Binding("0.0.0.0", port.toString())
     portBindings.bind(portInsideContainer, portOutsideContainer)
 
-    val dirWithResearchInsideContainer = Volume("${dockerDataStorePath}/${researchDir.name}")
+    val researchPath = "${dockerDataStorePath}/${researchDir.name}"
+    val dirWithResearchInsideContainer = Volume(researchPath)
     debugLog("research path = ${researchDir.path}, dirWithResearchInsideContainer = $dirWithResearchInsideContainer")
 
     val bindDir = Bind(researchDir.path, dirWithResearchInsideContainer)
     return dockerClient
       .createContainerCmd("fantom")
       .withCmd(
-        "java",
-        "-server",
-        "-XX:+UnlockExperimentalVMOptions",
-        "-XX:+UseCGroupMemoryLimitForHeap",
-        "-XX:InitialRAMFraction=2",
-        "-XX:MinRAMFraction=2",
-        "-XX:MaxRAMFraction=2",
-        "-XX:+UseG1GC",
-        "-XX:MaxGCPauseMillis=100",
-        "-XX:+UseStringDeduplication",
-        "-jar",
-        "backend-all.jar",
-        "$port"
+        "./FantomWebServer",
+        researchPath,
+        "/app/webserver.ini"
       )
       .withExposedPorts(portInsideContainer)
       .withPortBindings(portBindings)

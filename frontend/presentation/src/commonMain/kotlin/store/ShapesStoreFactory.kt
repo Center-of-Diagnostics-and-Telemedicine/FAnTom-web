@@ -137,6 +137,7 @@ internal class ShapesStoreFactory(
 
     private fun updateCircles(list: List<MarkDomain>, state: () -> State) {
       val circles = list.mapNotNull { it.toCircle(cut, state().sliceNumber) }
+//      val rectangles = circles.mapNotNull { it.toRect(cut, state().sliceNumber) }
       dispatch(Result.Circles(circles))
     }
 

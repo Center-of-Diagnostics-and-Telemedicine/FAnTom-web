@@ -11,6 +11,7 @@ import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import model.ID_FIELD
+import model.MAIN_SERVER_PORT
 import org.apache.http.auth.AuthenticationException
 import org.jetbrains.exposed.sql.Database
 import org.slf4j.event.Level
@@ -26,7 +27,7 @@ fun main(args: Array<String>) {
 
   val jwt = "jwt"
 
-  embeddedServer(Netty, 8081) {
+  embeddedServer(Netty, MAIN_SERVER_PORT) {
 
     Database.connect(
       url = "jdbc:mysql://localhost:8889/mark_tomogram?characterEncoding=utf8&useUnicode=true&useSSL=false",

@@ -1,14 +1,11 @@
 package remote
 
-import io.ktor.client.HttpClient
-import io.ktor.client.features.HttpTimeout
-import io.ktor.client.features.json.JsonFeature
-import io.ktor.client.features.json.serializer.KotlinxSerializer
-import io.ktor.client.request.HttpRequestBuilder
-import io.ktor.client.request.get
-import io.ktor.client.request.header
-import io.ktor.client.request.post
-import io.ktor.http.takeFrom
+import io.ktor.client.*
+import io.ktor.client.features.*
+import io.ktor.client.features.json.*
+import io.ktor.client.features.json.serializer.*
+import io.ktor.client.request.*
+import io.ktor.http.*
 import kotlinx.serialization.json.Json
 import model.*
 import repository.ResearchRemote
@@ -88,7 +85,7 @@ object ResearchRemoteDataSource : ResearchRemote {
 
   private fun HttpRequestBuilder.apiUrl(path: String) {
     url {
-      takeFrom(LOCALHOST)
+      takeFrom(MAIN_SERVER_URL)
       encodedPath = path
     }
   }

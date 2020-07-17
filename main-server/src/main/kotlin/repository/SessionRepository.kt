@@ -1,10 +1,13 @@
 package repository
 
-import config
 import fantom.FantomLibraryDataSourceImpl
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import model.LOCALHOST
+import model.localDataStorePath
 import util.debugLog
+import java.io.File
 import kotlin.coroutines.CoroutineContext
 
 interface SessionRepository : CoroutineScope {
@@ -30,34 +33,34 @@ class SessionRepositoryImpl(
     userId: Int,
     accessionNumber: String
   ): RemoteLibraryRepository {
-//    val researchDir = researchDirFinder.getResearchPath(accessionNumber, File(config.dataStorePath))
-//    portsCounter += 1
-//
-//    val containerId = creator
-//      .createContainer(
-//        userId = userId,
-//        accessionNumber = accessionNumber,
-//        port = portsCounter,
-//        researchDir = researchDir,
-//        onClose = {
-//          launch {
-//            debugLog("call deleteSession")
-//            deleteSession(userId, accessionNumber)
-//          }
-//        }
-//      )
+    val researchDir = researchDirFinder.getResearchPath(accessionNumber, File(localDataStorePath))
+    portsCounter += 1
+
+    val containerId = creator
+      .createContainer(
+        userId = userId,
+        accessionNumber = accessionNumber,
+        port = portsCounter,
+        researchDir = researchDir,
+        onClose = {
+          GlobalScope.launch {
+            debugLog("call deleteSession")
+            deleteSession(userId, accessionNumber)
+          }
+        }
+      )
 
     val library = RemoteLibraryRepositoryImpl(
       remoteDataSource = FantomLibraryDataSourceImpl(
-        endPoint = "${config.libraryServerDomain}:${config.libraryServerPort}",
+        endPoint = "$LOCALHOST:${portsCounter}",
         onClose = {
-          launch {
+          GlobalScope.launch {
             debugLog("call deleteSession")
             deleteSession(userId, accessionNumber)
           }
         }
       ),
-      libraryContainerId = "containerId"
+      libraryContainerId = containerId
     )
 
     sessions[userId] = library

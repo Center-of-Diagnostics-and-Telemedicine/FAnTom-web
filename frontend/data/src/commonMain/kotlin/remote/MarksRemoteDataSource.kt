@@ -57,7 +57,7 @@ object MarksRemoteDataSource : MarksRemote {
 
   private fun HttpRequestBuilder.apiUrl(path: String) {
     url {
-      takeFrom(LOCALHOST)
+      takeFrom(MAIN_SERVER_URL)
       encodedPath = path
     }
   }
