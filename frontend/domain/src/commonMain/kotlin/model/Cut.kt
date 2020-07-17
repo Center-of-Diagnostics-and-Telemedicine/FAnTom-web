@@ -223,10 +223,17 @@ fun Cut.updateCoordinates(mark: MarkDomain, deltaX: Double, deltaY: Double): Mar
         )
       ).also { it.selected = true }
     }
-    CutType.MG_RCC -> TODO()
-    CutType.MG_LCC -> TODO()
-    CutType.MG_RMLO -> TODO()
-    CutType.MG_LMLO -> TODO()
+    CutType.MG_RCC,
+    CutType.MG_LCC,
+    CutType.MG_RMLO,
+    CutType.MG_LMLO -> {
+      mark.copy(
+        markData = markData.copy(
+          y = markData.y + deltaY,
+          x = markData.x + deltaX
+        )
+      ).also { it.selected = true }
+    }
     CutType.DX_GENERIC -> TODO()
     CutType.DX_POSTERO_ANTERIOR -> TODO()
     CutType.DX_LEFT_LATERAL -> TODO()

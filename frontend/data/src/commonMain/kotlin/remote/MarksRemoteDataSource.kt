@@ -1,11 +1,11 @@
 package remote
 
-import io.ktor.client.HttpClient
-import io.ktor.client.features.HttpTimeout
-import io.ktor.client.features.json.JsonFeature
-import io.ktor.client.features.json.serializer.KotlinxSerializer
+import io.ktor.client.*
+import io.ktor.client.features.*
+import io.ktor.client.features.json.*
+import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
-import io.ktor.http.takeFrom
+import io.ktor.http.*
 import kotlinx.serialization.json.Json
 import model.*
 import repository.MarksRemote
@@ -36,18 +36,18 @@ object MarksRemoteDataSource : MarksRemote {
     }
   }
 
-  override suspend fun update(request: MarkDomain, token: String): BaseResponse {
+  override suspend fun update(request: MarkDomain, researchId: Int, token: String): BaseResponse {
     return client.put {
       authHeader(token)
-      apiUrl("$RESEARCH_ROUTE/$MARK_ROUTE")
+      apiUrl("$RESEARCH_ROUTE/$researchId/$MARK_ROUTE")
       body = Json.stringify(MarkDomain.serializer(), request)
     }
   }
 
-  override suspend fun delete(markId: Int, token: String): BaseResponse {
+  override suspend fun delete(markId: Int, researchId: Int, token: String): BaseResponse {
     return client.delete {
       authHeader(token)
-      apiUrl("$RESEARCH_ROUTE/$MARK_ROUTE/$markId")
+      apiUrl("$RESEARCH_ROUTE/$researchId/$MARK_ROUTE/$markId")
     }
   }
 

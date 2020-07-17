@@ -57,7 +57,7 @@ internal class MarksStoreFactory(
 
     private fun updateMarkWithSave(mark: MarkDomain) {
       singleFromCoroutine {
-        repository.updateMark(mark)
+        repository.updateMark(mark, researchId)
         repository.getMarks(researchId)
       }
         .subscribeOn(ioScheduler)

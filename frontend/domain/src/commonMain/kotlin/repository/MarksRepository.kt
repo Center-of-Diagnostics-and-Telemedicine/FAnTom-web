@@ -9,6 +9,6 @@ interface MarksRepository {
 
   suspend fun getMarks(researchId: Int): List<MarkDomain>
   suspend fun saveMark(markToSave: MarkData, researchId: Int)
-  suspend fun updateMark(mark: MarkDomain)
-  suspend fun deleteMark(id: Int)
+  suspend fun updateMark(mark: MarkDomain, researchId: Int)
+  suspend fun deleteMark(id: Int, researchId: Int)
 }

@@ -36,16 +36,16 @@ class MarksRepositoryImpl(
     }
   }
 
-  override suspend fun updateMark(mark: MarkDomain) {
-    val response = remote.update(mark, token())
+  override suspend fun updateMark(mark: MarkDomain, researchId: Int) {
+    val response = remote.update(mark, researchId, token())
     when{
       response.response != null -> local.update(mark)
       response.error != null -> handleErrorResponse(response.error!!)
     }
   }
 
-  override suspend fun deleteMark(id: Int) {
-    val response = remote.delete(id, token())
+  override suspend fun deleteMark(id: Int, researchId: Int) {
+    val response = remote.delete(id, researchId, token())
     when{
       response.response != null -> local.delete(id)
       response.error != null -> handleErrorResponse(response.error!!)
