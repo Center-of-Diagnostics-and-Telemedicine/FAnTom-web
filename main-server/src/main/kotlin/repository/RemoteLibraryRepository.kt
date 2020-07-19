@@ -2,7 +2,10 @@ package repository
 
 import fantom.FantomLibraryDataSource
 import kotlinx.coroutines.delay
-import model.*
+import model.ErrorStringCode
+import model.HounsfieldRequestNew
+import model.ResearchInitModelNew
+import model.SliceRequestNew
 import util.debugLog
 
 interface RemoteLibraryRepository {
@@ -63,7 +66,7 @@ class RemoteLibraryRepositoryImpl(
   override suspend fun hounsfield(request: HounsfieldRequestNew): Double {
     val response = remoteDataSource.getHounsfield(request)
     return when {
-      response.response != null -> response.response!!.huValue
+      response.response != null -> response.response!!.brightness ?: 0.0
       response.error != null -> throw IllegalStateException("RemoteLibraryRepositoryImpl hounsfield errorCode ${response.error?.error}")
       else -> throw IllegalStateException("RemoteLibraryRepositoryImpl hounsfield unrecognized response")
     }

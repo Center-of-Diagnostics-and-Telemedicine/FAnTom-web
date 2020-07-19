@@ -98,7 +98,7 @@ class ResearchRepositoryImpl(
       token = token(),
       request = HounsfieldRequestNew(
         image = ImageModel(
-          modality = CT_RESEARCH_TYPE, //TODO(remove this),
+          modality = getModalityStringType(type), //TODO(remove this),
           type = getSliceStringType(type),
           number = sliceNumber,
           mip = MipModel(
@@ -113,7 +113,7 @@ class ResearchRepositoryImpl(
       )
     )
     return when {
-      response.response != null -> response.response!!.huValue
+      response.response != null -> response.response!!.brightness ?: 0.0
       response.error != null -> handleErrorResponse(response.error!!)
       else -> throw HounsfieldFetchError
     }

@@ -1,6 +1,9 @@
 package repository
 
-import model.*
+import model.CTType
+import model.Filter
+import model.Research
+import model.ResearchSlicesSizesDataNew
 
 interface ResearchRepository {
 
@@ -20,7 +23,15 @@ interface ResearchRepository {
     aproxSize: Int
   ): String
 
-  suspend fun getHounsfieldData(sliceNumber: Int, type: Int, mipMethod: Int, mipValue: Int, horizontal: Int, vertical: Int): Double
+  suspend fun getHounsfieldData(
+    sliceNumber: Int,
+    type: Int,
+    mipMethod: Int,
+    mipValue: Int,
+    horizontal: Int,
+    vertical: Int
+  ): Double
+
   suspend fun confirmCtTypeForResearch(
     ctType: CTType,
     leftPercent: Int,

@@ -97,7 +97,7 @@ class ResearchRepositoryImpl(
       HounsfieldRequest(axialCoord, frontalCoord, sagittalCoord)
     )
     return when {
-      response.response != null -> response.response!!.huValue
+      response.response != null -> response.response!!.brightness ?: 0.0
       response.error != null -> handleErrorResponse(response.error!!)
       else -> throw HounsfieldFetchError
     }

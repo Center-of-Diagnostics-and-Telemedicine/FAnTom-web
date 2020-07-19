@@ -92,7 +92,7 @@ data class SliceResponse(
 
 
 @Serializable
-data class HounsfieldModel(val huValue: Double)
+data class HounsfieldModel(val brightness: Double?)
 
 @Serializable
 data class HounsfieldResponse(
