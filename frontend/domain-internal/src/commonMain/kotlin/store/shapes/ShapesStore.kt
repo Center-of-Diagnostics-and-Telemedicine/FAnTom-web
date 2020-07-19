@@ -27,7 +27,8 @@ interface ShapesStore : Store<Intent, State, Label> {
     val circles: List<Circle>,
     val rects: List<Rect>,
     val hounsfield: Int?,
-    val marks: List<MarkDomain>
+    val marks: List<MarkDomain>,
+    val moveRect: Rect?
   ) : JvmSerializable
 
   sealed class Label {

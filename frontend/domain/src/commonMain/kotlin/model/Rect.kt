@@ -7,12 +7,10 @@ data class Rect(
   val sideLength: Double,
   val markId: Int,
   val type: MoveRectType
-) {
-  var inMove: Boolean = false
-}
+)
 
 fun Circle.toRects(cut: Cut): List<Rect> {
-  val sideLength = cut.data.dicom_size_v.toDouble() / 100
+  val sideLength = cut.data.screen_size_h.toDouble() / 100
   return when (cut.researchType) {
     ResearchType.CT -> {
       mainRects(sideLength)

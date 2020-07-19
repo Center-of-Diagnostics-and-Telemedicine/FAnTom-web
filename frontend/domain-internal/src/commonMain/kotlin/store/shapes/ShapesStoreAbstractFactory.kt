@@ -24,7 +24,8 @@ abstract class ShapesStoreAbstractFactory(
     circles = listOf(),
     hounsfield = null,
     marks = listOf(),
-    rects = listOf()
+    rects = listOf(),
+    moveRect = null
   )
 
   fun create(): ShapesStore =
@@ -55,6 +56,7 @@ abstract class ShapesStoreAbstractFactory(
     data class Marks(val marks: List<MarkDomain>) : Result()
     data class Circles(val circles: List<Circle>) : Result()
     data class Rects(val rects: List<Rect>) : Result()
+    data class RectInMove(val moveRect: Rect?) : Result()
   }
 
   private object ReducerImpl : Reducer<State, Result> {
@@ -68,6 +70,7 @@ abstract class ShapesStoreAbstractFactory(
         is Result.Rects -> copy(rects = result.rects)
         is Result.HounsfieldChanged -> copy(hounsfield = result.hu.toInt())
         is Result.Marks -> copy(marks = result.marks)
+        is Result.RectInMove -> copy(moveRect = result.moveRect)
       }
   }
 }
