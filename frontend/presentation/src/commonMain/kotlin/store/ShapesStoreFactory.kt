@@ -43,24 +43,60 @@ internal class ShapesStoreFactory(
 
         is Intent.HandleMarks -> handleMarks(intent.list, getState)
 
-        is Intent.HandleClick -> handleClick(intent.dicomX, intent.dicomY, intent.altKey, getState)
+        is Intent.HandleCenterMarkClick -> handleCenterMarkClick(
+          intent.dicomX,
+          intent.dicomY,
+          getState
+        )
 
         is Intent.HandleMoveInClick -> handleMoveInClick(intent.deltaX, intent.deltaY, getState)
 
         is Intent.HandleStopMoving -> handleStopMoving(getState)
 
-        is Intent.HandleStartMoveInClick ->
-          handleStartMoveInClick(intent.startDicomX, intent.startDicomY, getState)
+        is Intent.HandleStartClick ->
+          handleStartClick(intent.startDicomX, intent.startDicomY, getState)
       }.let {}
     }
 
-    private fun handleStartMoveInClick(
+    private fun handleStartClick(
       startDicomX: Double,
       startDicomY: Double,
-      state: () -> State
+      getState: () -> State
     ) {
-      //todo()
-      state()
+      val state = getState()
+      val circles = state.circles
+
+      state.marks.firstOrNull { it.selected }?.let {
+        publish(Label.UnselectMark(it))
+      }
+
+      if (cut.isPlanar()) {
+        val filtered = circles
+      }
+
+      val filtered = circles
+        .mapNotNull {
+          val xPow = (startDicomX - it.dicomCenterX).pow(2)
+          val yPow = (startDicomY - it.dicomCenterY).pow(2)
+          val dist = sqrt(xPow + yPow)
+          if (it.dicomRadiusHorizontal < it.dicomRadiusVertical) {
+            if (dist < it.dicomRadiusHorizontal) it else null
+          } else {
+            if (dist < it.dicomRadiusVertical) it else null
+          }
+        }
+      println("filtered = ${filtered.size}")
+      filtered.minBy {
+        if (it.dicomRadiusHorizontal < it.dicomRadiusVertical) {
+          it.dicomRadiusHorizontal
+        } else {
+          it.dicomRadiusVertical
+        }
+      }?.let { circleToSelect ->
+        state.marks.firstOrNull { it.id == circleToSelect.id }?.let {
+          publish(Label.SelectMark(it))
+        }
+      }
     }
 
     private fun handleStopMoving(getState: () -> State) {
@@ -77,43 +113,33 @@ internal class ShapesStoreFactory(
       }
     }
 
-    private fun handleClick(
+    private fun handleCenterMarkClick(
       dicomX: Double,
       dicomY: Double,
-      altKey: Boolean,
       getState: () -> State
     ) {
       val state = getState()
       val circles = state.circles
 
-      state.marks.firstOrNull { it.selected }?.let {
-        publish(Label.UnselectMark(it))
-      }
-
-      if (altKey) {
-        circles
-          .firstOrNull {
-            dicomY < it.dicomCenterY + it.dicomRadiusHorizontal && dicomY > it.dicomCenterY - it.dicomRadiusHorizontal
-              && dicomX < it.dicomCenterX + it.dicomRadiusHorizontal && dicomX > it.dicomCenterX - it.dicomRadiusHorizontal
-          }
-          ?.let { circle ->
-            state.marks.firstOrNull { it.id == circle.id }?.let {
-              publish(Label.CenterMark(it))
-            }
-          }
-      }
-
-      val circleToSelect = circles
-        .firstOrNull { area ->
-          val dist = sqrt((dicomX - area.dicomCenterX).pow(2) + (dicomY - area.dicomCenterY).pow(2))
-          dist < area.dicomRadiusHorizontal
+      circles
+        .firstOrNull {
+          println("MY: dicomX = $dicomX, dicomY = $dicomY")
+          println("MY: $it")
+          val bottom = it.dicomCenterY + it.dicomRadiusVertical
+          val top = it.dicomCenterY - it.dicomRadiusVertical
+          val right = it.dicomCenterX + it.dicomRadiusHorizontal
+          val left = it.dicomCenterX - it.dicomRadiusHorizontal
+          println("MY: top = $top, bottom = $bottom, left = $left, right  = $right")
+          val inVerticalBound = dicomY < bottom && dicomY > top
+          val inHorizontalBound = dicomX < right && dicomX > left
+          println("inVerticalBOund = $inVerticalBound, inHorizontalBound = $inHorizontalBound")
+          inVerticalBound && inHorizontalBound
         }
-
-      if (circleToSelect != null) {
-        state.marks.firstOrNull { it.id == circleToSelect.id }?.let {
-          publish(Label.SelectMark(it))
+        ?.let { circle ->
+          state.marks.firstOrNull { it.id == circle.id }?.let {
+            publish(Label.CenterMark(it))
+          }
         }
-      }
     }
 
     private fun handleMarks(list: List<MarkDomain>, state: () -> State) {

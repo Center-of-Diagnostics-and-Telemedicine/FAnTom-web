@@ -14,7 +14,6 @@ val drawEventToDrawIntent: Event.() -> Intent = {
     is Event.MouseMove -> Intent.Move(dicomX = x, dicomY = y)
     is Event.MouseUp -> Intent.MouseUp(dicomY = y, dicomX = x)
     Event.MouseOut -> Intent.MouseOut
-    is Event.MouseClick -> Intent.MouseClick(dicomX = x, dicomY = y, altKey = altKey)
     is Event.MouseWheel -> Intent.MouseWheel(deltaDicomY = deltaY)
   }
 }
@@ -22,11 +21,13 @@ val drawEventToDrawIntent: Event.() -> Intent = {
 fun mapMouseDown(event: Event.MouseDown): Intent {
   val isDraw = event.metaKey && event.button == LEFT_MOUSE_BUTTON
   val isContrastBrightness = event.button == MIDDLE_MOUSE_BUTTON
+  val isCenterMark = event.altKey
   return when {
     isDraw -> Intent.StartDraw(startDicomX = event.x, startDicomY = event.y)
     isContrastBrightness ->
       Intent.StartContrastBrightness(startDicomX = event.x, startDicomY = event.y)
-    else -> Intent.StartMouseMove(startDicomY = event.y, startDicomX = event.x)
+    isCenterMark -> Intent.CenterMarkClick(startDicomX = event.x, startDicomY = event.y)
+    else -> Intent.StartMouseClick(startDicomY = event.y, startDicomX = event.x)
   }
 }
 

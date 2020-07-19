@@ -41,7 +41,7 @@ val cutLabelToCutOutput: Label.() -> Output? = {
     is Label.ContrastBrightnessChanged -> Output.ContrastBrightnessChanged(black, white)
     is Label.MarkUpdate -> Output.UpdateMark(mark)
     is Label.UpdateMarkWithSave -> Output.UpdateMarkWithSave(mark)
-    is Label.StartMoveInClick -> null
+    is Label.StartClick -> null
     is Label.ExternalSliceNumberChanged -> null
     is Label.Marks -> null
     Label.StopMoving -> null
@@ -55,8 +55,8 @@ val drawLabelToCutIntent: DrawStore.Label.() -> Intent? = {
     DrawStore.Label.ContrastBrightnessChanged -> Intent.ContrasBrightnessChanged
     is DrawStore.Label.ChangeSlice -> Intent.ChangeSliceNumberByDraw(deltaDicomY)
     DrawStore.Label.StopMove -> Intent.HandleStopMoving
-    is DrawStore.Label.StartMove -> Intent.HandleStartMoveInClick(startDicomX, startDicomY)
-    is DrawStore.Label.OnClick -> null
+    is DrawStore.Label.StartClick -> Intent.HandleStartClick(startDicomX, startDicomY)
+    is DrawStore.Label.CenterMarkClick -> null
     is DrawStore.Label.MouseMove -> null
     is DrawStore.Label.MoveInClick -> null
   }

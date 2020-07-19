@@ -99,7 +99,8 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
                   y = (mouseEvent.clientY - rect.top) * verticalRatio,
                   metaKey = mouseEvent.ctrlKey || mouseEvent.metaKey,
                   button = mouseEvent.button,
-                  shiftKey = mouseEvent.shiftKey
+                  shiftKey = mouseEvent.shiftKey,
+                  altKey = mouseEvent.altKey
                 )
               )
             }
@@ -132,19 +133,6 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
               props.eventOutput(DrawView.Event.MouseOut)
               startX = 0.0
               startY = 0.0
-            }
-
-            onClickFunction = {
-              val mouseEvent = castEvent(it)
-              val rect = (mouseEvent.target as HTMLCanvasElement).getBoundingClientRect()
-              props.eventOutput(
-                DrawView.Event.MouseClick(
-                  x = (mouseEvent.clientX - rect.left) * horizontalRatio,
-                  y = (mouseEvent.clientY - rect.top) * verticalRatio,
-                  altKey = mouseEvent.altKey,
-                  metaKey = mouseEvent.ctrlKey || mouseEvent.metaKey
-                )
-              )
             }
 
             onWheelFunction = {

@@ -250,12 +250,11 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
 
     val radiusX = circle.dicomRadiusHorizontal / horizontalRatio * 0.5
     val radiusY = circle.dicomRadiusVertical / verticalRatio * 0.5
-    val centerX = circle.dicomCenterX / horizontalRatio + radiusX
-    val centerY = circle.dicomCenterY / verticalRatio + radiusY
+    val centerX = circle.dicomCenterX / horizontalRatio
+    val centerY = circle.dicomCenterY / verticalRatio
     val step = 0.01
     var a = step
     val pi2 = PI * 2 - step
-
 
     context.moveTo(
       centerX + radiusX * cos(0.0),

@@ -15,7 +15,8 @@ interface DrawView : MviView<Model, Event> {
       val y: Double,
       val metaKey: Boolean,
       val button: Short,
-      val shiftKey: Boolean
+      val shiftKey: Boolean,
+      val altKey: Boolean
     ) : Event()
 
     data class MouseMove(val x: Double, val y: Double) : Event()
@@ -23,9 +24,6 @@ interface DrawView : MviView<Model, Event> {
     data class MouseUp(val x: Double, val y: Double) : Event()
 
     object MouseOut : Event()
-
-    data class MouseClick(val x: Double, val y: Double, val altKey: Boolean, val metaKey: Boolean) :
-      Event()
 
     data class MouseWheel(val deltaY: Int) : Event()
   }

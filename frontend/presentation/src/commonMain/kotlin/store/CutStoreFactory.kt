@@ -114,8 +114,8 @@ internal class CutStoreFactory(
         is Intent.HandleMarkUpdateWithSave -> {
           publish(Label.UpdateMarkWithSave(intent.mark))
         }
-        is Intent.HandleStartMoveInClick -> {
-          publish(Label.StartMoveInClick(intent.startDicomX, intent.startDicomY))
+        is Intent.HandleStartClick -> {
+          publish(Label.StartClick(intent.startDicomX, intent.startDicomY))
         }
       }.let {}
     }

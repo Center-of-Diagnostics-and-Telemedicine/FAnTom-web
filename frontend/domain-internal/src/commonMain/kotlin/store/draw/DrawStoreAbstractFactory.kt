@@ -53,7 +53,7 @@ abstract class DrawStoreAbstractFactory(
     data class ExternalDrawing(val dicomX: Double, val dicomY: Double) : Result()
     data class StartContrastBrightness(val startDicomX: Double, val startDicomY: Double) : Result()
     data class ContrastBrightness(val dicomX: Double, val dicomY: Double) : Result()
-    data class StartMove(val startDicomX: Double, val startDicomY: Double) : Result()
+    data class StartClick(val startDicomX: Double, val startDicomY: Double) : Result()
     data class MouseMove(val dicomX: Double, val dicomY: Double) : Result()
     data class MouseMoveInClick(val dicomX: Double, val dicomY: Double) : Result()
     data class PlanarDrawing(val dicomX: Double, val dicomY: Double) : Result()
@@ -74,7 +74,7 @@ abstract class DrawStoreAbstractFactory(
           startDicomY = result.startDicomY,
           isContrastBrightness = true
         )
-        is Result.StartMove -> copy(
+        is Result.StartClick -> copy(
           isMoving = true,
           startDicomX = result.startDicomX,
           startDicomY = result.startDicomY

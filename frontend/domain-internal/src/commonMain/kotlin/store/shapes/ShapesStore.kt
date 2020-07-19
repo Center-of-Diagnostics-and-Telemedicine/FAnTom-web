@@ -15,9 +15,9 @@ interface ShapesStore : Store<Intent, State, Label> {
     data class HandleExternalSliceNumberChanged(val sliceNumber: Int, val cut: Cut) : Intent()
     data class HandleMousePosition(val dicomX: Double, val dicomY: Double) : Intent()
     data class HandleMarks(val list: List<MarkDomain>) : Intent()
-    data class HandleClick(val dicomX: Double, val dicomY: Double, val altKey: Boolean) : Intent()
+    data class HandleCenterMarkClick(val dicomX: Double, val dicomY: Double) : Intent()
     data class HandleMoveInClick(val deltaX: Double, val deltaY: Double) : Intent()
-    data class HandleStartMoveInClick(val startDicomX: Double, val startDicomY: Double) : Intent()
+    data class HandleStartClick(val startDicomX: Double, val startDicomY: Double) : Intent()
 
     object HandleStopMoving : Intent()
   }

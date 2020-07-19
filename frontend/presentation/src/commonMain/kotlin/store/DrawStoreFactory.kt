@@ -27,25 +27,20 @@ internal class DrawStoreFactory(
         is Intent.StartDraw -> handleStartDraw(intent.startDicomX, intent.startDicomY)
         is Intent.StartContrastBrightness ->
           handleStartContrastBrightness(intent.startDicomX, intent.startDicomY)
-        is Intent.StartMouseMove -> handleStartMove(intent.startDicomX, intent.startDicomY)
+        is Intent.StartMouseClick -> handleStartClick(intent.startDicomX, intent.startDicomY)
         is Intent.Move -> handleMove(intent.dicomX, intent.dicomY, getState)
 
         is Intent.MouseUp -> handleMouseUp(getState)
         is Intent.MouseOut -> handleMouseOut()
-        is Intent.MouseClick -> publish(
-          Label.OnClick(
-            dicomX = intent.dicomX,
-            dicomY = intent.dicomY,
-            altKey = intent.altKey
-          )
-        )
+        is Intent.CenterMarkClick ->
+          publish(Label.CenterMarkClick(intent.startDicomX, intent.startDicomY))
         is Intent.MouseWheel -> publish(Label.ChangeSlice(intent.deltaDicomY))
       }.let {}
     }
 
-    private fun handleStartMove(startDicomX: Double, startDicomY: Double) {
-      dispatch(Result.StartMove(startDicomX = startDicomX, startDicomY = startDicomY))
-      publish(Label.StartMove(startDicomX = startDicomX, startDicomY = startDicomY))
+    private fun handleStartClick(startDicomX: Double, startDicomY: Double) {
+      dispatch(Result.StartClick(startDicomX = startDicomX, startDicomY = startDicomY))
+      publish(Label.StartClick(startDicomX = startDicomX, startDicomY = startDicomY))
     }
 
     private fun handleStartContrastBrightness(startDicomX: Double, startDicomY: Double) {
@@ -66,7 +61,9 @@ internal class DrawStoreFactory(
       when {
         state.isDrawing -> {
           dispatch(Result.Idle)
-          publish(Label.Drawn(circle = state.circle()))
+          val circle = state.circle(cut.isPlanar())
+          println(circle.toString())
+          publish(Label.Drawn(circle = circle))
         }
         state.isContrastBrightness -> {
           dispatch(Result.Idle)
