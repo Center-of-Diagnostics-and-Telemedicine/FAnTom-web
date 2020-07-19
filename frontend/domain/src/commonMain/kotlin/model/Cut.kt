@@ -178,14 +178,14 @@ fun Cut.getSliceNumberByMark(mark: MarkDomain): Int? {
     CutType.CT_AXIAL -> mark.markData.z.toInt()
     CutType.CT_FRONTAL -> mark.markData.y.toInt()
     CutType.CT_SAGITTAL -> mark.markData.x.toInt()
-    CutType.MG_RCC -> TODO()
-    CutType.MG_LCC -> TODO()
-    CutType.MG_RMLO -> TODO()
-    CutType.MG_LMLO -> TODO()
-    CutType.DX_GENERIC -> TODO()
-    CutType.DX_POSTERO_ANTERIOR -> TODO()
-    CutType.DX_LEFT_LATERAL -> TODO()
-    CutType.DX_RIGHT_LATERAL -> TODO()
+    CutType.MG_RCC -> null
+    CutType.MG_LCC -> null
+    CutType.MG_RMLO -> null
+    CutType.MG_LMLO -> null
+    CutType.DX_GENERIC -> null
+    CutType.DX_POSTERO_ANTERIOR -> null
+    CutType.DX_LEFT_LATERAL -> null
+    CutType.DX_RIGHT_LATERAL -> null
   }
 }
 

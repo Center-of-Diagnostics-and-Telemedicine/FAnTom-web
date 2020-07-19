@@ -184,7 +184,7 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
           right = 0.px
           padding(1.spacingUnits)
         }
-        if (props.shapesModel.sliceNumber != 0) {
+        if (props.shapesModel.sliceNumber != 0 && props.cut.data.n_images > 1) {
           mTypography(text = "Срез: ${props.shapesModel.sliceNumber}") {
             css { color = Color.white }
           }
@@ -230,7 +230,7 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
     models.forEach { circle ->
       debugLog(circle.toString())
       context.beginPath()
-      if(props.cut.isPlanar()){
+      if (props.cut.isPlanar()) {
         drawPlanarCircle(circle, context)
       } else {
         drawSphere(context, circle)

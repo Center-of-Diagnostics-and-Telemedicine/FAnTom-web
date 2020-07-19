@@ -46,7 +46,10 @@ internal class CutStoreFactory(
           load(getState)
         }
         is Intent.HandleSliceNumberChange -> {
-          changeSliceNumber(intent.sliceNumber, getState)
+          val sliceNumber = intent.sliceNumber
+          if (inBounds(sliceNumber)) {
+            changeSliceNumber(sliceNumber, getState)
+          } else null
         }
         is Intent.HandleWhiteChanged -> {
           dispatch(Result.WhiteChanged(whiteValue = intent.whiteValue))
@@ -97,7 +100,10 @@ internal class CutStoreFactory(
           publish(Label.ContrastBrightnessChanged(state.black, state.white))
         }
         is Intent.ChangeSliceNumberByDraw -> {
-          changeSliceNumber(getState().sliceNumber + intent.deltaDicomY, getState)
+          val sliceNumber = getState().sliceNumber + intent.deltaDicomY
+          if (inBounds(sliceNumber)) {
+            changeSliceNumber(sliceNumber, getState)
+          } else null
         }
         is Intent.HandleMarkUpdate -> {
           publish(Label.MarkUpdate(intent.mark))
@@ -114,10 +120,19 @@ internal class CutStoreFactory(
       }.let {}
     }
 
+    private fun inBounds(sliceNumber: Int) = sliceNumber <= cut.data.n_images && sliceNumber > 0
+
     private fun changeSliceNumber(sliceNumber: Int, getState: () -> State) {
-      dispatch(Result.SliceNumberChanged(sliceNumber = sliceNumber))
-      load(getState)
-      publish(Label.SliceNumberChanged(sliceNumber = sliceNumber, cut = cut))
+      val resultSliceNumber = when {
+        sliceNumber < 1 -> 1
+        sliceNumber > cut.data.n_images -> cut.data.n_images
+        else -> sliceNumber
+      }
+      if (sliceNumber != getState().sliceNumber) {
+        dispatch(Result.SliceNumberChanged(sliceNumber = resultSliceNumber))
+        load(getState)
+        publish(Label.SliceNumberChanged(sliceNumber = sliceNumber, cut = cut))
+      }
     }
 
     private fun handleContrastBrightness(
