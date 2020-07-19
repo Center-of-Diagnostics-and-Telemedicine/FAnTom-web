@@ -14,7 +14,6 @@ import react.RBuilder
 import react.RComponent
 import react.RProps
 import react.RState
-import root.debugLog
 import styled.css
 import styled.styledCanvas
 import styled.styledDiv
@@ -45,7 +44,7 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
       context?.let { _ ->
         clearCanvas(canvas, context)
         props.shapesModel.circles.let { drawCircles(it, context) }
-//        state.moveRects?.let { drawRects(it, context) }
+        props.shapesModel.rects.let { drawRects(it, context) }
         if (props.cut.data.n_images > 1) {
           drawLines(
             horizontal = props.shapesModel.verticalCoefficient * resultHeight,
@@ -208,27 +207,26 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
     }
   }
 
-//  private fun drawMarks(
-//    moveRects: List<MarkDomain>,
-//    context: CanvasRenderingContext2D
-//  ) {
-//    moveRects.forEach { rect ->
-////      context.fillStyle = rect.color
-//      context.fillRect(
-//        rect.left,
-//        rect.top,
-//        rect.sideLength,
-//        rect.sideLength
-//      )
-//    }
-//  }
+  private fun drawRects(
+    moveRects: List<Rect>,
+    context: CanvasRenderingContext2D
+  ) {
+    moveRects.forEach { rect ->
+      context.fillStyle = "#fff"
+      context.fillRect(
+        (rect.left / horizontalRatio) - rect.sideLength / horizontalRatio / 2,
+        (rect.top / verticalRatio) - rect.sideLength / verticalRatio / 2,
+        rect.sideLength / horizontalRatio,
+        rect.sideLength / verticalRatio
+      )
+    }
+  }
 
   private fun drawCircles(
     models: List<Circle>,
     context: CanvasRenderingContext2D
   ) {
     models.forEach { circle ->
-      debugLog(circle.toString())
       context.beginPath()
       if (props.cut.isPlanar()) {
         drawPlanarCircle(circle, context)

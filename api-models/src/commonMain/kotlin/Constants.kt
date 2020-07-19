@@ -116,7 +116,11 @@ enum class MoveRectType {
   TOP,
   LEFT,
   RIGHT,
-  BOTTOM
+  BOTTOM,
+  LEFT_TOP,
+  RIGHT_TOP,
+  LEFT_BOTTOM,
+  RIGHT_BOTTOM
 }
 
 const val yellow = "#ffff00"

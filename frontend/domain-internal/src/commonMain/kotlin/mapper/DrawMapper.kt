@@ -40,7 +40,8 @@ val drawStateToDrawModel: State.() -> Model = {
         dicomRadiusHorizontal = dicomRadiusHorizontal,
         dicomRadiusVertical = dicomRadiusVertical,
         id = -1,
-        highlight = false
+        highlight = false,
+        isCenter = false
       )
     )
   } else {

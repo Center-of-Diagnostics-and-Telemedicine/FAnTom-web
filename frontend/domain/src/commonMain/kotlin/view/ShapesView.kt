@@ -4,6 +4,7 @@ import com.arkivanov.mvikotlin.core.view.MviView
 import model.Circle
 import model.CutType
 import model.PointPosition
+import model.Rect
 import view.ShapesView.Event
 import view.ShapesView.Model
 
@@ -15,7 +16,8 @@ interface ShapesView : MviView<Model, Event> {
     val sliceNumber: Int,
     val huValue: Int?,
     val position: PointPosition?,
-    val circles: List<Circle>
+    val circles: List<Circle>,
+    val rects: List<Rect>
   )
 
   sealed class Event {
@@ -29,5 +31,6 @@ fun initialShapesModel(): Model = Model(
   sliceNumber = 1,
   huValue = null,
   position = null,
-  circles = listOf()
+  circles = listOf(),
+  rects = listOf()
 )

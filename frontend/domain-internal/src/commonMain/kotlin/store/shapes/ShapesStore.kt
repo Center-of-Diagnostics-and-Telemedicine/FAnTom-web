@@ -2,10 +2,7 @@ package store.shapes
 
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
-import model.Circle
-import model.Cut
-import model.MarkDomain
-import model.PointPosition
+import model.*
 import store.shapes.ShapesStore.*
 
 interface ShapesStore : Store<Intent, State, Label> {
@@ -28,6 +25,7 @@ interface ShapesStore : Store<Intent, State, Label> {
     val sliceNumber: Int,
     val position: PointPosition?,
     val circles: List<Circle>,
+    val rects: List<Rect>,
     val hounsfield: Int?,
     val marks: List<MarkDomain>
   ) : JvmSerializable

@@ -2,6 +2,7 @@ package model
 
 import kotlin.math.abs
 import kotlin.math.pow
+import kotlin.math.roundToInt
 import kotlin.math.sqrt
 
 data class Circle(
@@ -10,7 +11,8 @@ data class Circle(
   val dicomRadiusHorizontal: Double,
   val dicomRadiusVertical: Double,
   val id: Int,
-  val highlight: Boolean
+  val highlight: Boolean,
+  val isCenter: Boolean
 )
 
 fun MarkDomain.toCircle(cut: Cut, sliceNumber: Int): Circle? {
@@ -31,7 +33,8 @@ fun MarkDomain.toCircle(cut: Cut, sliceNumber: Int): Circle? {
             dicomRadiusHorizontal = newRadius,
             dicomRadiusVertical = newRadius,
             id = id,
-            highlight = selected
+            highlight = selected,
+            isCenter = sliceNumber == z.roundToInt()
           )
         } else null
       }
@@ -50,7 +53,8 @@ fun MarkDomain.toCircle(cut: Cut, sliceNumber: Int): Circle? {
             dicomRadiusHorizontal = newRadius,
             dicomRadiusVertical = newRadius,
             id = id,
-            highlight = selected
+            highlight = selected,
+            isCenter = sliceNumber == y.roundToInt()
           )
         } else null
 
@@ -70,7 +74,8 @@ fun MarkDomain.toCircle(cut: Cut, sliceNumber: Int): Circle? {
             dicomRadiusHorizontal = newRadius,
             dicomRadiusVertical = newRadius,
             id = id,
-            highlight = selected
+            highlight = selected,
+            isCenter = sliceNumber == x.roundToInt()
           )
         } else null
       }
@@ -84,7 +89,8 @@ fun MarkDomain.toCircle(cut: Cut, sliceNumber: Int): Circle? {
           dicomRadiusHorizontal = radiusHorizontal,
           dicomRadiusVertical = radiusVertical,
           id = id,
-          highlight = selected
+          highlight = selected,
+          isCenter = true
         ) else null
       }
       CutType.DX_GENERIC -> TODO()

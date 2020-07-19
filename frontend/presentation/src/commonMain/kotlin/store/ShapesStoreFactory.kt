@@ -63,29 +63,47 @@ internal class ShapesStoreFactory(
     ) {
       val state = getState()
       val circles = state.circles
+      val rects = getState().rects
 
-      state.marks.firstOrNull { it.selected }?.let {
-        publish(Label.UnselectMark(it))
-      }
-
-      val circle = circles.getCircleByPosition(dicomX = startDicomX, dicomY = startDicomY)
-      circle?.let { circleToSelect ->
-        state.marks.firstOrNull { it.id == circleToSelect.id }?.let {
-          publish(Label.SelectMark(it))
+      //sideLength ratio not right
+      val moveRect = rects.firstOrNull {
+        val inVerticalBound = startDicomY > it.top && startDicomY < it.top + it.sideLength
+        val inHorizontalBound = startDicomX > it.left && startDicomX < it.left + it.sideLength
+        println("MY: rect = $it")
+        println("MY: startDicomY = $startDicomY, startDicomX = $startDicomX")
+        println("MY: inVerticalBound = $inVerticalBound , inHorizontalBound = $inHorizontalBound")
+        inVerticalBound && inHorizontalBound
+      }?.apply { inMove = true }
+      if (moveRect != null) {
+        dispatch(Result.Rects(rects))
+      } else {
+        state.marks.firstOrNull { it.selected }?.let {
+          publish(Label.UnselectMark(it))
+        }
+        val circle = circles.getCircleByPosition(dicomX = startDicomX, dicomY = startDicomY)
+        circle?.let { circleToSelect ->
+          state.marks.firstOrNull { it.id == circleToSelect.id }?.let {
+            publish(Label.SelectMark(it))
+          }
         }
       }
     }
 
-    private fun handleStopMoving(getState: () -> State) {
-      getState().marks.firstOrNull { it.selected }?.let { markToUpdate ->
-        publish(Label.UpdateMarkWithSave(markToUpdate))
-      }
-    }
-
     private fun handleMoveInClick(deltaX: Double, deltaY: Double, getState: () -> State) {
-      getState().marks.firstOrNull { it.selected }?.let { markToUpdate ->
-        cut.updateCoordinates(markToUpdate, deltaX, deltaY)?.let {
-          publish(Label.UpdateMark(it))
+      val selectedMark = getState().marks.firstOrNull { it.selected }
+      val moveRect = getState().rects.firstOrNull { it.inMove }
+
+      if (moveRect != null) {
+        selectedMark?.let { markToUpdate ->
+          cut.updateCoordinates(markToUpdate, deltaX, deltaY, moveRect)?.let {
+            publish(Label.UpdateMark(it))
+          }
+        }
+      } else {
+        selectedMark?.let { markToUpdate ->
+          cut.updateCoordinates(markToUpdate, deltaX, deltaY)?.let {
+            publish(Label.UpdateMark(it))
+          }
         }
       }
     }
@@ -115,6 +133,12 @@ internal class ShapesStoreFactory(
       updateCircles(list, state)
     }
 
+    private fun handleStopMoving(getState: () -> State) {
+      getState().marks.firstOrNull { it.selected }?.let { markToUpdate ->
+        publish(Label.UpdateMarkWithSave(markToUpdate))
+      }
+    }
+
     private fun handleExternalSliceNumberChanged(
       sliceNumber: Int,
       externalCut: Cut,
@@ -131,8 +155,14 @@ internal class ShapesStoreFactory(
 
     private fun updateCircles(list: List<MarkDomain>, state: () -> State) {
       val circles = list.mapNotNull { it.toCircle(cut, state().sliceNumber) }
-//      val rectangles = circles.mapNotNull { it.toRect(cut, state().sliceNumber) }
+      val selectedCircle = circles.firstOrNull { it.highlight }
+      val rectangles = if (selectedCircle != null && selectedCircle.isCenter) {
+        selectedCircle.toRects(cut)
+      } else {
+        listOf()
+      }
       dispatch(Result.Circles(circles))
+      dispatch(Result.Rects(rectangles))
     }
 
     private fun updateHorizontalCoefficient(sliceNumber: Int, externalCut: Cut) {

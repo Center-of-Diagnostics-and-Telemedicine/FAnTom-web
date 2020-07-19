@@ -241,6 +241,168 @@ fun Cut.updateCoordinates(mark: MarkDomain, deltaX: Double, deltaY: Double): Mar
   }
 }
 
+fun Cut.updateCoordinates(
+  mark: MarkDomain,
+  deltaX: Double,
+  deltaY: Double,
+  rect: Rect
+): MarkDomain? {
+  val markData = mark.markData
+  return when (type) {
+    CutType.EMPTY -> null
+    CutType.CT_AXIAL,
+    CutType.CT_FRONTAL,
+    CutType.CT_SAGITTAL -> {
+      val verticalRatio = verticalCutData!!.data.n_images.toDouble() / data.screen_size_v
+      val horizontalRatio = horizontalCutData!!.data.n_images.toDouble() / data.screen_size_h
+      when (rect.type) {
+        MoveRectType.TOP -> {
+          val radius = markData.radiusVertical - deltaY * verticalRatio
+          mark.copy(
+            markData = markData.copy(
+              radiusVertical = radius,
+              radiusHorizontal = radius
+//                size = (it.radius - deltaY) * 2 * axialSlicesSizesDataObservable.value.pixelLength
+            ),
+          ).also { it.selected = true }
+        }
+        MoveRectType.BOTTOM -> {
+          val radius = markData.radiusVertical + deltaY * verticalRatio
+          mark.copy(
+            markData = markData.copy(
+              radiusVertical = radius,
+              radiusHorizontal = radius
+//                size = (it.radius + deltaY) * 2 * axialSlicesSizesDataObservable.value.pixelLength
+            )
+          ).also { it.selected = true }
+        }
+        MoveRectType.RIGHT -> {
+          val radius = markData.radiusHorizontal + deltaX * horizontalRatio
+          mark.copy(
+            markData = markData.copy(
+              radiusHorizontal = radius,
+              radiusVertical = radius
+//                size = (it.radius + deltaX) * 2 * axialSlicesSizesDataObservable.value.pixelLength
+            )
+          ).also { it.selected = true }
+        }
+        MoveRectType.LEFT -> {
+          val radius = markData.radiusHorizontal - deltaX * horizontalRatio
+          mark.copy(
+            markData = markData.copy(
+              radiusHorizontal = radius,
+              radiusVertical = radius
+//                size = (it.radius - deltaX) * 2 * axialSlicesSizesDataObservable.value.pixelLength
+            )
+          ).also { it.selected = true }
+        }
+        MoveRectType.LEFT_TOP -> null
+        MoveRectType.RIGHT_TOP -> null
+        MoveRectType.LEFT_BOTTOM -> null
+        MoveRectType.RIGHT_BOTTOM -> null
+      }
+    }
+    CutType.MG_RCC,
+    CutType.MG_LCC,
+    CutType.MG_RMLO,
+    CutType.MG_LMLO -> {
+      val verticalRatio = verticalCutData!!.data.n_images.toDouble() / data.screen_size_v
+      val horizontalRatio = horizontalCutData!!.data.n_images.toDouble() / data.screen_size_h
+      when (rect.type) {
+        MoveRectType.TOP -> {
+          val radius = markData.radiusVertical - deltaY * verticalRatio
+          mark.copy(
+            markData = markData.copy(
+              radiusVertical = radius,
+              radiusHorizontal = radius
+//                size = (it.radius - deltaY) * 2 * axialSlicesSizesDataObservable.value.pixelLength
+            ),
+          ).also { it.selected = true }
+        }
+        MoveRectType.BOTTOM -> {
+          val radius = markData.radiusVertical + deltaY * verticalRatio
+          mark.copy(
+            markData = markData.copy(
+              radiusVertical = radius,
+              radiusHorizontal = radius
+//                size = (it.radius + deltaY) * 2 * axialSlicesSizesDataObservable.value.pixelLength
+            )
+          ).also { it.selected = true }
+        }
+        MoveRectType.RIGHT -> {
+          val radius = markData.radiusHorizontal + deltaX * horizontalRatio
+          mark.copy(
+            markData = markData.copy(
+              radiusHorizontal = radius,
+              radiusVertical = radius
+//                size = (it.radius + deltaX) * 2 * axialSlicesSizesDataObservable.value.pixelLength
+            )
+          ).also { it.selected = true }
+        }
+        MoveRectType.LEFT -> {
+          val radius = markData.radiusHorizontal - deltaX * horizontalRatio
+          mark.copy(
+            markData = markData.copy(
+              radiusHorizontal = radius,
+              radiusVertical = radius
+//                size = (it.radius - deltaX) * 2 * axialSlicesSizesDataObservable.value.pixelLength
+            )
+          ).also { it.selected = true }
+        }
+        MoveRectType.LEFT_TOP -> {
+          val radiusVertical = markData.radiusVertical - deltaY * verticalRatio
+          val radiusHorizontal = markData.radiusHorizontal - deltaX * horizontalRatio
+          mark.copy(
+            markData = markData.copy(
+              radiusHorizontal = radiusHorizontal,
+              radiusVertical = radiusVertical
+//                size = (it.radius - deltaX) * 2 * axialSlicesSizesDataObservable.value.pixelLength
+            )
+          ).also { it.selected = true }
+        }
+        MoveRectType.RIGHT_TOP -> {
+          val radiusVertical = markData.radiusVertical - deltaY * verticalRatio
+          val radiusHorizontal = markData.radiusHorizontal + deltaX * horizontalRatio
+          mark.copy(
+            markData = markData.copy(
+              radiusHorizontal = radiusHorizontal,
+              radiusVertical = radiusVertical
+//                size = (it.radius + deltaX) * 2 * axialSlicesSizesDataObservable.value.pixelLength
+            )
+          ).also { it.selected = true }
+        }
+        MoveRectType.LEFT_BOTTOM -> {
+          val radiusVertical = markData.radiusVertical + deltaY * verticalRatio
+          val radiusHorizontal = markData.radiusHorizontal - deltaX * horizontalRatio
+          mark.copy(
+            markData = markData.copy(
+              radiusHorizontal = radiusHorizontal,
+              radiusVertical = radiusVertical
+//                size = (it.radius - deltaX) * 2 * axialSlicesSizesDataObservable.value.pixelLength
+            )
+          ).also { it.selected = true }
+        }
+        MoveRectType.RIGHT_BOTTOM -> {
+          val radiusVertical = markData.radiusVertical + deltaY * verticalRatio
+          val radiusHorizontal = markData.radiusHorizontal + deltaX * horizontalRatio
+          mark.copy(
+            markData = markData.copy(
+              radiusHorizontal = radiusHorizontal,
+              radiusVertical = radiusVertical
+//                size = (it.radius + deltaX) * 2 * axialSlicesSizesDataObservable.value.pixelLength
+            )
+          ).also { it.selected = true }
+        }
+      }
+    }
+    CutType.DX_GENERIC -> TODO()
+    CutType.DX_POSTERO_ANTERIOR -> TODO()
+    CutType.DX_LEFT_LATERAL -> TODO()
+    CutType.DX_RIGHT_LATERAL -> TODO()
+  }
+}
+
+
 fun Cut.updateCircle(oldCircle: Circle, newCircle: Circle): Circle? {
   return when (type) {
     CutType.EMPTY -> null

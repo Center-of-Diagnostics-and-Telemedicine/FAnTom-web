@@ -26,7 +26,8 @@ interface DrawStore : Store<Intent, State, Label> {
           dicomRadiusHorizontal = abs(horizontalRadius),
           dicomRadiusVertical = abs(verticalRadius),
           id = -1,
-          highlight = false
+          highlight = false,
+          isCenter = false
         )
       } else {
         Circle(
@@ -35,7 +36,8 @@ interface DrawStore : Store<Intent, State, Label> {
           dicomRadiusHorizontal = dicomRadiusHorizontal,
           dicomRadiusVertical = dicomRadiusVertical,
           id = -1,
-          highlight = false
+          highlight = false,
+          isCenter = false
         )
       }
     }
