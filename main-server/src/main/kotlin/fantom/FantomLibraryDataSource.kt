@@ -23,6 +23,7 @@ interface FantomLibraryDataSource {
   suspend fun initResearch(accessionNumber: String): ResearchInitResponseNew
   suspend fun getSlice(sliceRequest: SliceRequestNew, researchName: String): SliceResponse
   suspend fun getHounsfield(request: HounsfieldRequestNew): HounsfieldResponse
+  suspend fun closeSession()
 }
 
 class FantomLibraryDataSourceImpl(
@@ -82,6 +83,12 @@ class FantomLibraryDataSourceImpl(
     return client.post {
       apiUrl("$RESEARCH_ROUTE/$BRIGHTNESS_ROUTE")
       body = Json.stringify(HounsfieldRequestNew.serializer(), request)
+    }
+  }
+
+  override suspend fun closeSession() {
+    return client.get {
+      apiUrl("$RESEARCH_ROUTE/$CLOSE_ROUTE")
     }
   }
 

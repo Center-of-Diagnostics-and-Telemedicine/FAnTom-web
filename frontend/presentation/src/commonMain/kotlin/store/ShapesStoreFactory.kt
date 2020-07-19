@@ -13,8 +13,6 @@ import model.*
 import repository.ResearchRepository
 import store.shapes.ShapesStore.*
 import store.shapes.ShapesStoreAbstractFactory
-import kotlin.math.pow
-import kotlin.math.sqrt
 
 internal class ShapesStoreFactory(
   storeFactory: StoreFactory,
@@ -70,29 +68,8 @@ internal class ShapesStoreFactory(
         publish(Label.UnselectMark(it))
       }
 
-      if (cut.isPlanar()) {
-        val filtered = circles
-      }
-
-      val filtered = circles
-        .mapNotNull {
-          val xPow = (startDicomX - it.dicomCenterX).pow(2)
-          val yPow = (startDicomY - it.dicomCenterY).pow(2)
-          val dist = sqrt(xPow + yPow)
-          if (it.dicomRadiusHorizontal < it.dicomRadiusVertical) {
-            if (dist < it.dicomRadiusHorizontal) it else null
-          } else {
-            if (dist < it.dicomRadiusVertical) it else null
-          }
-        }
-      println("filtered = ${filtered.size}")
-      filtered.minBy {
-        if (it.dicomRadiusHorizontal < it.dicomRadiusVertical) {
-          it.dicomRadiusHorizontal
-        } else {
-          it.dicomRadiusVertical
-        }
-      }?.let { circleToSelect ->
+      val circle = circles.getCircleByPosition(dicomX = startDicomX, dicomY = startDicomY)
+      circle?.let { circleToSelect ->
         state.marks.firstOrNull { it.id == circleToSelect.id }?.let {
           publish(Label.SelectMark(it))
         }
@@ -121,25 +98,16 @@ internal class ShapesStoreFactory(
       val state = getState()
       val circles = state.circles
 
-      circles
-        .firstOrNull {
-          println("MY: dicomX = $dicomX, dicomY = $dicomY")
-          println("MY: $it")
-          val bottom = it.dicomCenterY + it.dicomRadiusVertical
-          val top = it.dicomCenterY - it.dicomRadiusVertical
-          val right = it.dicomCenterX + it.dicomRadiusHorizontal
-          val left = it.dicomCenterX - it.dicomRadiusHorizontal
-          println("MY: top = $top, bottom = $bottom, left = $left, right  = $right")
-          val inVerticalBound = dicomY < bottom && dicomY > top
-          val inHorizontalBound = dicomX < right && dicomX > left
-          println("inVerticalBOund = $inVerticalBound, inHorizontalBound = $inHorizontalBound")
-          inVerticalBound && inHorizontalBound
+      val circle = circles.getCircleByPosition(
+        dicomX = dicomX,
+        dicomY = dicomY
+      )
+      circle?.let {
+        state.marks.firstOrNull { it.id == circle.id }?.let {
+          publish(Label.SelectMark(it))
+          publish(Label.CenterMark(it))
         }
-        ?.let { circle ->
-          state.marks.firstOrNull { it.id == circle.id }?.let {
-            publish(Label.CenterMark(it))
-          }
-        }
+      }
     }
 
     private fun handleMarks(list: List<MarkDomain>, state: () -> State) {
@@ -168,12 +136,12 @@ internal class ShapesStoreFactory(
     }
 
     private fun updateHorizontalCoefficient(sliceNumber: Int, externalCut: Cut) {
-      val coefficient = sliceNumber.toDouble() / externalCut.data!!.n_images
+      val coefficient = sliceNumber.toDouble() / externalCut.data.n_images
       dispatch(Result.HorizontalCoefficientChanged(coefficient))
     }
 
     private fun updateVerticalCoefficient(sliceNumber: Int, externalCut: Cut) {
-      val coefficient = sliceNumber.toDouble() / externalCut.data!!.n_images
+      val coefficient = sliceNumber.toDouble() / externalCut.data.n_images
       dispatch(Result.VerticalCoefficientChanged(coefficient))
     }
 

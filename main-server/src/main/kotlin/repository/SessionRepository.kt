@@ -71,7 +71,7 @@ class SessionRepositoryImpl(
   override suspend fun deleteSession(userId: Int, accessionNumber: String) {
     val session = sessions[userId]
       ?: throw IllegalStateException("library for user: $userId not found")
-
+    session.closeSession()
     creator.deleteLibrary(session.libraryContainerId)
     sessions.remove(userId)
   }

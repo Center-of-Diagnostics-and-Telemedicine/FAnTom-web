@@ -3,6 +3,7 @@ package store.draw
 import com.arkivanov.mvikotlin.core.store.Store
 import model.Circle
 import store.draw.DrawStore.*
+import kotlin.math.abs
 
 interface DrawStore : Store<Intent, State, Label> {
 
@@ -17,11 +18,13 @@ interface DrawStore : Store<Intent, State, Label> {
   ) {
     fun circle(planar: Boolean): Circle {
       return if (planar) {
+        val horizontalRadius = dicomRadiusHorizontal / 2
+        val verticalRadius = dicomRadiusVertical / 2
         Circle(
-          dicomCenterX = startDicomX + (dicomRadiusHorizontal / 2),
-          dicomCenterY = startDicomY + (dicomRadiusVertical / 2),
-          dicomRadiusHorizontal = dicomRadiusHorizontal,
-          dicomRadiusVertical = dicomRadiusVertical,
+          dicomCenterX = startDicomX + horizontalRadius,
+          dicomCenterY = startDicomY + verticalRadius,
+          dicomRadiusHorizontal = abs(horizontalRadius),
+          dicomRadiusVertical = abs(verticalRadius),
           id = -1,
           highlight = false
         )

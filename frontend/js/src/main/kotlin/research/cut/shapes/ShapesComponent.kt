@@ -248,8 +248,8 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
       context.strokeStyle = "#00ff00"
     }
 
-    val radiusX = circle.dicomRadiusHorizontal / horizontalRatio * 0.5
-    val radiusY = circle.dicomRadiusVertical / verticalRatio * 0.5
+    val radiusX = circle.dicomRadiusHorizontal / horizontalRatio
+    val radiusY = circle.dicomRadiusVertical / verticalRatio
     val centerX = circle.dicomCenterX / horizontalRatio
     val centerY = circle.dicomCenterY / verticalRatio
     val step = 0.01

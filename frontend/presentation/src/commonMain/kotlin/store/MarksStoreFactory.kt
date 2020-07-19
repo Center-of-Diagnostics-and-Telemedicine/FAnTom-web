@@ -100,6 +100,7 @@ internal class MarksStoreFactory(
 
     private fun selectMark(mark: MarkDomain, state: () -> State) {
       val marks = state().marks
+      marks.firstOrNull { it.selected }?.let { it.selected = false }
       marks.firstOrNull { it.id == mark.id }?.let { it.selected = true }
       dispatch(Result.Loaded(marks))
       publish(Label.MarksLoaded(marks))

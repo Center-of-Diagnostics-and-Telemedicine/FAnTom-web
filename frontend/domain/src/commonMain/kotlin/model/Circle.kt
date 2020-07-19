@@ -95,3 +95,26 @@ fun MarkDomain.toCircle(cut: Cut, sliceNumber: Int): Circle? {
   }
 //  return null
 }
+
+fun List<Circle>.getCircleByPosition(
+  dicomX: Double,
+  dicomY: Double
+): Circle? {
+  return this
+    .filter {
+      val bottom = it.dicomCenterY + it.dicomRadiusVertical
+      val top = it.dicomCenterY - it.dicomRadiusVertical
+      val right = it.dicomCenterX + it.dicomRadiusHorizontal
+      val left = it.dicomCenterX - it.dicomRadiusHorizontal
+      val inVerticalBound = dicomY < bottom && dicomY > top
+      val inHorizontalBound = dicomX < right && dicomX > left
+      inVerticalBound && inHorizontalBound
+    }
+    .minBy {
+      if (it.dicomRadiusHorizontal < it.dicomRadiusVertical) {
+        it.dicomRadiusHorizontal
+      } else {
+        it.dicomRadiusVertical
+      }
+    }
+}

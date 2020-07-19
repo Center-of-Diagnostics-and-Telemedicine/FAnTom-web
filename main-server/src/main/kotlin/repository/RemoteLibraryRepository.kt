@@ -13,6 +13,7 @@ interface RemoteLibraryRepository {
   suspend fun initResearch(accessionNumber: String): ResearchInitModelNew
   suspend fun getSlice(request: SliceRequestNew, researchName: String): String
   suspend fun hounsfield(request: HounsfieldRequestNew): Double
+  suspend fun closeSession()
 }
 
 class RemoteLibraryRepositoryImpl(
@@ -70,6 +71,10 @@ class RemoteLibraryRepositoryImpl(
       response.error != null -> throw IllegalStateException("RemoteLibraryRepositoryImpl hounsfield errorCode ${response.error?.error}")
       else -> throw IllegalStateException("RemoteLibraryRepositoryImpl hounsfield unrecognized response")
     }
+  }
+
+  override suspend fun closeSession() {
+    remoteDataSource.closeSession()
   }
 
 }
