@@ -6,16 +6,15 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.disposable.CompositeDisposable
 import com.badoo.reaktive.observable.Observable
 import com.badoo.reaktive.observable.subscribe
-import com.ccfraser.muirwik.components.list.mList
+import com.ccfraser.muirwik.components.mPaper
+import com.ccfraser.muirwik.components.table.*
+import com.ccfraser.muirwik.components.themeContext
 import controller.MarksController
 import controller.MarksControllerImpl
 import destroy
-import kotlinx.css.*
 import react.*
 import repository.MarksRepository
 import resume
-import styled.css
-import styled.styledDiv
 import view.MarksView.Model
 import view.initialMarksModel
 
@@ -51,17 +50,29 @@ class MarksComponent(prps: MarksProps) : RComponent<MarksProps, MarksState>(prps
   }
 
   override fun RBuilder.render() {
-    styledDiv {
-      css {
-        height = 100.pct
-        display = Display.flex
-        flexDirection = FlexDirection.column
-        justifyContent = JustifyContent.spaceBetween
-      }
-
-      mList {
-        state.model.items.forEach { mark ->
-          markView(mark, eventOutput = { marksViewDelegate.dispatch(it) })
+    themeContext.Consumer { theme ->
+      mPaper {
+        mTable {
+          mTableHead {
+            mTableRow {
+              mTableCell(align = MTableCellAlign.center) { +"X" }
+              mTableCell(align = MTableCellAlign.center) { +"Y" }
+              if (props.dependencies.isPlanar.not()) {
+                mTableCell(align = MTableCellAlign.center) { +"Z" }
+              }
+              mTableCell(align = MTableCellAlign.center) { +"mm" }
+              mTableCell(align = MTableCellAlign.center) { +"Тип" }
+              mTableCell(align = MTableCellAlign.center) { }
+            }
+          }
+          mTableBody {
+            state.model.items.forEach { area ->
+              markView(
+                mark = area,
+                eventOutput = { marksViewDelegate.dispatch(it) }
+              )
+            }
+          }
         }
       }
     }
@@ -79,6 +90,7 @@ class MarksComponent(prps: MarksProps) : RComponent<MarksProps, MarksState>(prps
     val marksInput: Observable<MarksController.Input>
     val marksRepository: MarksRepository
     val researchId: Int
+    val isPlanar: Boolean
   }
 }
 

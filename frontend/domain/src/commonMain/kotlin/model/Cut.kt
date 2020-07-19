@@ -397,29 +397,3 @@ fun Cut.updateCoordinatesByRect(
     CutType.DX_RIGHT_LATERAL -> TODO()
   }
 }
-
-
-fun Cut.updateCircle(oldCircle: Circle, newCircle: Circle): Circle? {
-  return when (type) {
-    CutType.EMPTY -> null
-    CutType.CT_AXIAL -> newCircle.copy(
-      dicomCenterX = newCircle.dicomCenterX,
-      dicomCenterY = newCircle.dicomCenterY
-    )
-    CutType.CT_FRONTAL -> newCircle.copy(
-      dicomCenterX = newCircle.dicomCenterX,
-      dicomCenterY = newCircle.dicomCenterY
-    )
-    CutType.CT_SAGITTAL -> newCircle.copy(
-      dicomCenterY = newCircle.dicomCenterX
-    )
-    CutType.MG_RCC -> TODO()
-    CutType.MG_LCC -> TODO()
-    CutType.MG_RMLO -> TODO()
-    CutType.MG_LMLO -> TODO()
-    CutType.DX_GENERIC -> TODO()
-    CutType.DX_POSTERO_ANTERIOR -> TODO()
-    CutType.DX_LEFT_LATERAL -> TODO()
-    CutType.DX_RIGHT_LATERAL -> TODO()
-  }
-}

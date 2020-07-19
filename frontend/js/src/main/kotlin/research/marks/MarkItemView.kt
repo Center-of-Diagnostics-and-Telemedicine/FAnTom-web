@@ -1,63 +1,163 @@
 package research.marks
 
-import com.ccfraser.muirwik.components.*
-import com.ccfraser.muirwik.components.list.mListItem
-import com.ccfraser.muirwik.components.list.mListItemIcon
-import com.ccfraser.muirwik.components.list.mListItemText
-import kotlinx.css.padding
+import com.ccfraser.muirwik.components.button.mButton
+import com.ccfraser.muirwik.components.button.mIconButton
+import com.ccfraser.muirwik.components.form.MFormControlMargin
+import com.ccfraser.muirwik.components.form.MFormControlVariant
+import com.ccfraser.muirwik.components.mTextField
+import com.ccfraser.muirwik.components.mTypography
+import com.ccfraser.muirwik.components.menu.mMenu
+import com.ccfraser.muirwik.components.menu.mMenuItem
+import com.ccfraser.muirwik.components.table.MTableCellAlign
+import com.ccfraser.muirwik.components.table.MTableCellPadding
+import com.ccfraser.muirwik.components.table.mTableCell
+import com.ccfraser.muirwik.components.table.mTableRow
+import com.ccfraser.muirwik.components.themeContext
+import kotlinx.css.*
 import model.MarkDomain
+import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.Node
+import org.w3c.dom.events.Event
 import react.*
-import react.dom.findDOMNode
-import react.dom.span
+import root.debugLog
 import styled.css
 import styled.styledDiv
 import view.MarksView
+import kotlin.math.round
 
 class MarkItemView(prps: MarkItemProps) : RComponent<MarkItemProps, MarkItemState>(prps) {
 
-  private val builder2 = RBuilder()
-  private var infoRef: Node? = null
+  private var anchorElement: Node? = null
+
+  init {
+    val comment = props.mark.comment
+    state = MarkItemState(comment = comment, writing = comment.isEmpty())
+  }
 
   override fun RBuilder.render() {
-    mListItem {
-      ref {
-        infoRef = findDOMNode(it)
-      }
-      attrs {
-        onMouseEnter = { openInfo() }
-        onMouseLeave = { closeInfo() }
-      }
-      mListItemIcon {
-        mIcon("fiber_manual_record")
-      }
-      mListItemText(primary = builder2.span { +props.mark.markData.name() })
-    }
-    mPopover(state.showInfo, onClose = { _, _ -> closeInfo() }) {
-      attrs.apply {
-        anchorReference = MPopoverAnchorRef.anchorEl
-        anchorEl = infoRef
-        anchorOriginVertical = MPopoverVerticalPosition.top
-        anchorOriginHorizontal = MPopoverHorizontalPosition.left
-        transformOriginVertical = MPopoverVerticalPosition.top
-        transformOriginHorizontal = MPopoverHorizontalPosition.right
-      }
-      styledDiv {
-        css {
-          padding(2.spacingUnits)
+    themeContext.Consumer { theme ->
+      val area = props.mark
+      mTableRow(
+        key = area.id,
+        onClick = {
+          props.eventOutput(MarksView.Event.SelectItem(area))
         }
-        +props.mark.markData.name()
+      ) {
+        if (area.selected) {
+          css {
+            backgroundColor = Color(theme.palette.primary.main)
+          }
+        }
+        mTableCell(align = MTableCellAlign.center) { +"${round(area.markData.x)}" }
+        mTableCell(align = MTableCellAlign.center) { +"${round(area.markData.y)}" }
+//        mTableCell(align = MTableCellAlign.center) { +"${round(area.markData.z)}" }
+        mTableCell(align = MTableCellAlign.center) { +"${round(area.markData.size)}" }
+        mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) {
+          mButton(
+            //getNodeTypeString(area.areaType),
+            "",
+            onClick = { handleShowMenuClick(it, area.id) }
+          )
+          mMenu(
+            state.selectedMenuIndex == area.id,
+            anchorElement = anchorElement,
+            onClose = { _, reason -> handleOnClose() }) {
+            mMenuItem(
+              "Солидный",
+              onClick = { handleSimpleClick(0) })
+            mMenuItem(
+              "Полусолидный",
+              onClick = { handleSimpleClick(1) })
+            mMenuItem("Матовое стекло", onClick = { handleSimpleClick(2) })
+            mMenuItem("non-nodule", onClick = { handleSimpleClick(3) })
+          }
+        }
+        mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) {
+          mIconButton("close", onClick = { props.eventOutput(MarksView.Event.DeleteItem(area)) })
+        }
+      }
+      if (area.selected) {
+        mTableRow {
+          if (state.writing) {
+            mTableCell(colSpan = 5) {
+              styledDiv {
+                css {
+                  display = Display.flex
+                  flexDirection = FlexDirection.row
+                  alignItems = Align.center
+                  justifyContent = JustifyContent.spaceBetween
+                }
+                commentInput()
+                mIconButton("done", onClick = {
+                  debugLog(state.comment)
+                  props.eventOutput(MarksView.Event.ItemCommentChanged(area, state.comment))
+                  setState { writing = false }
+                })
+              }
+            }
+          } else {
+            mTableCell(colSpan = 6) {
+              commentText()
+            }
+          }
+
+        }
       }
     }
   }
 
-  private fun openInfo() = setState { showInfo = true }
-  private fun closeInfo() = setState { showInfo = false }
+  private fun RBuilder.commentInput() {
+    mTextField(
+      value = state.comment,
+      variant = MFormControlVariant.outlined,
+      fullWidth = true,
+      label = "Комментарий",
+      onChange = ::onCommentChanged,
+      margin = MFormControlMargin.none
+    )
+  }
 
+  private fun RBuilder.commentText() {
+    mTypography {
+      +state.comment
+      attrs.onClick = { setState { writing = true } }
+    }
+  }
+
+  private fun handleShowMenuClick(event: Event, menuIndex: Int) {
+    event.stopPropagation()
+    val currentTarget = event.currentTarget
+    setState {
+      anchorElement = currentTarget.asDynamic()
+      selectedMenuIndex = menuIndex
+    }
+  }
+
+  private fun handleSimpleClick(type: Int) {
+//    props.changeType(type)
+    setState {
+      selectedMenuIndex = -1
+      anchorElement = null
+    }
+  }
+
+  private fun handleOnClose() {
+    setState { anchorElement = null; selectedMenuIndex = -1 }
+  }
+
+  private fun onCommentChanged(event: Event) {
+    val target = event.target as HTMLInputElement
+    val searchTerm = target.value
+    setState {
+      comment = searchTerm
+    }
+  }
 }
 
 class MarkItemState(
-  var showInfo: Boolean,
+  var selectedMenuIndex: Int = -1,
+  var comment: String = "",
+  var writing: Boolean
 ) : RState
 
 interface MarkItemProps : RProps {

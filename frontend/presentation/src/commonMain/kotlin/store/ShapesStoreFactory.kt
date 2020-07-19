@@ -70,9 +70,6 @@ internal class ShapesStoreFactory(
       val moveRect = rects.firstOrNull {
         val inVerticalBound = startDicomY > it.top && startDicomY < it.top + it.sideLength
         val inHorizontalBound = startDicomX > it.left && startDicomX < it.left + it.sideLength
-        println("MY: rect = $it")
-        println("MY: startDicomY = $startDicomY, startDicomX = $startDicomX")
-        println("MY: inVerticalBound = $inVerticalBound , inHorizontalBound = $inHorizontalBound")
         inVerticalBound && inHorizontalBound
       }
 

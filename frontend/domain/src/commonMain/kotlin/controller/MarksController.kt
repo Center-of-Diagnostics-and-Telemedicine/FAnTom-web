@@ -36,5 +36,6 @@ interface MarksController {
     data class UpdateMark(val markToUpdate: MarkDomain) : Input()
     data class UpdateMarkWithSave(val mark: MarkDomain) : Input()
     object Idle: Input()
+    object DeleteClick : Input()
   }
 }

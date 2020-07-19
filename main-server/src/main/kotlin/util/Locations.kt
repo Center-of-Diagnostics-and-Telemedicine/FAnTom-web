@@ -39,5 +39,5 @@ class GetMarks(val id: Int)
 @Location("$RESEARCH_ROUTE/{id}/$MARK_ROUTE")
 class UpdateMark(val id: Int)
 
-@Location("$RESEARCH_ROUTE/$MARK_ROUTE/{id}")
-class DeleteMark(val id: Int)
+@Location("$RESEARCH_ROUTE/{researchId}/$MARK_ROUTE/{markId}")
+class DeleteMark(val researchId: Int, val markId: Int)

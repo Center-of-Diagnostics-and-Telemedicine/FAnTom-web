@@ -12,8 +12,9 @@ val marksStateToModel: State.() -> Model = {
 
 val marksEventToIntent: Event.() -> Intent? = {
   when (this) {
-    is Event.ItemClick -> TODO()
-    is Event.DeleteClick -> TODO()
+    is Event.SelectItem -> Intent.SelectMark(mark)
+    is Event.ItemCommentChanged -> Intent.UpdateComment(mark, comment)
+    is Event.DeleteItem -> Intent.DeleteMark(mark)
   }
 }
 
@@ -24,6 +25,7 @@ val inputToMarksIntent: Input.() -> Intent? = {
     is Input.UnselectMark -> Intent.UnselectMark(mark)
     is Input.UpdateMark -> Intent.UpdateMark(markToUpdate)
     is Input.UpdateMarkWithSave -> Intent.UpdateMarkWithSave(mark)
+    Input.DeleteClick -> Intent.DeleteClicked
     Input.Idle -> null
   }
 }

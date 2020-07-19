@@ -50,9 +50,48 @@ internal class MarksStoreFactory(
         is Intent.UnselectMark -> unselectMark(intent.mark, getState)
         is Intent.UpdateMark -> updateMarkWithoutSaving(intent.markToUpdate, getState)
         is Intent.UpdateMarkWithSave -> updateMarkWithSave(intent.mark)
+        is Intent.DeleteMark -> deleteMark(intent.mark)
+        is Intent.UpdateComment -> updateComment(intent.mark, intent.comment)
+        Intent.DeleteClicked -> getState().marks.firstOrNull { it.selected }?.let { deleteMark(it) }
         Intent.ReloadRequested -> TODO()
         Intent.DismissError -> TODO()
       }.let {}
+    }
+
+    private fun updateComment(mark: MarkDomain, comment: String) {
+      singleFromCoroutine {
+        repository.updateMark(mark.copy(comment = comment), researchId)
+        repository.getMarks(researchId)
+      }
+        .subscribeOn(ioScheduler)
+        .map(Result::Loaded)
+        .observeOn(mainScheduler)
+        .subscribeScoped(
+          isThreadLocal = true,
+          onSuccess = {
+            dispatch(it)
+            publish(Label.MarksLoaded(it.marks))
+          },
+          onError = ::handleError
+        )
+    }
+
+    private fun deleteMark(mark: MarkDomain) {
+      singleFromCoroutine {
+        repository.deleteMark(mark.id, researchId)
+        repository.getMarks(researchId)
+      }
+        .subscribeOn(ioScheduler)
+        .map(Result::Loaded)
+        .observeOn(mainScheduler)
+        .subscribeScoped(
+          isThreadLocal = true,
+          onSuccess = {
+            dispatch(it)
+            publish(Label.MarksLoaded(it.marks))
+          },
+          onError = ::handleError
+        )
     }
 
     private fun updateMarkWithSave(mark: MarkDomain) {

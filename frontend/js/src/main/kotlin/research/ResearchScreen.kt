@@ -13,6 +13,8 @@ import controller.ToolsController.Output
 import destroy
 import kotlinx.css.*
 import model.ResearchSlicesSizesDataNew
+import model.isPlanar
+import org.w3c.dom.events.KeyboardEvent
 import react.*
 import repository.BrightnessRepository
 import repository.MarksRepository
@@ -31,6 +33,7 @@ import styled.css
 import styled.styledDiv
 import view.ResearchView
 import view.initialResearchModel
+import kotlin.browser.window
 
 class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchState>(prps) {
 
@@ -58,6 +61,11 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
     lifecycleRegistry.resume()
     controller = createController()
     controller.onViewCreated(researchViewDelegate, lifecycleRegistry)
+    window.addEventListener(type = "keydown", callback = {
+      val keyboardEvent = it as KeyboardEvent
+      if (keyboardEvent.keyCode == 46)
+        marksInputObservable.onNext(MarksController.Input.DeleteClick)
+    })
   }
 
   private fun createController(): ResearchController {
@@ -109,13 +117,14 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
         rightDrawer(
           open = state.marksOpen,
           drawerWidth = drawerWidth,
-          onOpen = { },
-          onClose = { }
+          onOpen = ::openMarks,
+          onClose = ::closeMarks
         ) {
           marks(dependencies = object : MarksComponent.Dependencies,
             Dependencies by props.dependencies {
             override val marksOutput: (MarksController.Output) -> Unit = ::marksOutput
             override val marksInput: Observable<MarksController.Input> = this@ResearchScreen.marksInputObservable
+            override val isPlanar: Boolean = model.data!!.type.isPlanar()
           })
         }
       }
@@ -181,6 +190,8 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
   private fun updateState(model: ResearchView.Model) = setState { researchModel = model }
   private fun closeTools() = setState { toolsOpen = false }
   private fun openTools() = setState { toolsOpen = true }
+  private fun closeMarks() = setState { marksOpen = false }
+  private fun openMarks() = setState { marksOpen = true }
 
   override fun componentWillUnmount() {
     lifecycleRegistry.destroy()

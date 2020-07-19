@@ -20,7 +20,7 @@ fun Route.deleteMark(
       call.respond(BaseResponse(error = ErrorModel(errorCode.value)))
     }
 
-    val research = researchRepository.getResearch(it.id)
+    val research = researchRepository.getResearch(it.researchId)
 
     if (research == null) {
       respondError(ErrorStringCode.RESEARCH_NOT_FOUND)
@@ -30,9 +30,9 @@ fun Route.deleteMark(
     try {
 
       if (research.modality == CT_RESEARCH_TYPE) {
-        multiPlanarMarksRepository.delete(it.id)
+        multiPlanarMarksRepository.delete(it.markId)
       } else {
-        planarMarksRepository.delete(it.id)
+        planarMarksRepository.delete(it.markId)
       }
 
       call.respond(BaseResponse(OK()))

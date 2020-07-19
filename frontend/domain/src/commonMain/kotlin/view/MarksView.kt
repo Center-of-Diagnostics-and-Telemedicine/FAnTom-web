@@ -13,8 +13,9 @@ interface MarksView : MviView<Model, Event> {
   )
 
   sealed class Event {
-    data class ItemClick(val mark: MarkDomain) : Event()
-    data class DeleteClick(val mark: MarkDomain) : Event()
+    data class SelectItem(val mark: MarkDomain) : Event()
+    data class ItemCommentChanged(val mark: MarkDomain, val comment: String) : Event()
+    data class DeleteItem(val mark: MarkDomain) : Event()
   }
 }
 

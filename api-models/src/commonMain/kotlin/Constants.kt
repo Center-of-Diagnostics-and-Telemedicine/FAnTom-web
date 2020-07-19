@@ -143,6 +143,14 @@ enum class ResearchType {
   DX
 }
 
+fun ResearchType.isPlanar(): Boolean {
+  return when (this) {
+    ResearchType.CT -> false
+    ResearchType.MG -> true
+    ResearchType.DX -> true
+  }
+}
+
 enum class CutsGridType {
   SINGLE,
   TWO_VERTICAL,

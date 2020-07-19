@@ -9,8 +9,6 @@ import com.badoo.reaktive.scheduler.mainScheduler
 import com.badoo.reaktive.single.map
 import com.badoo.reaktive.single.observeOn
 import com.badoo.reaktive.single.subscribeOn
-import model.Circle
-import model.Cut
 import model.RESEARCH_DATA_FETCH_FAILED
 import model.ResearchApiExceptions
 import repository.ResearchRepository
