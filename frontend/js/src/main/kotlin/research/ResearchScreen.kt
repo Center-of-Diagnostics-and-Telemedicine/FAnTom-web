@@ -157,8 +157,12 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
 
   private fun cutsContainerOutput(output: CutsContainerController.Output) {
     when (output) {
-      is CutsContainerController.Output.OpenFullCut -> TODO()
-      is CutsContainerController.Output.CloseFullCut -> TODO()
+      is CutsContainerController.Output.OpenFullCut -> toolsInputObservable.onNext(
+        ToolsController.Input.OpenFullCut(output.cut)
+      )
+      is CutsContainerController.Output.CloseFullCut -> toolsInputObservable.onNext(
+        ToolsController.Input.ReturnPreviousGrid(output.cut)
+      )
       is CutsContainerController.Output.CircleDrawn -> marksInputObservable.onNext(
         MarksController.Input.AddNewMark(output.circle, output.sliceNumber, output.cut)
       )

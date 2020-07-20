@@ -53,6 +53,7 @@ interface DrawStore : Store<Intent, State, Label> {
     data class CenterMarkClick(val startDicomX: Double, val startDicomY: Double) : Intent()
     data class MouseWheel(val deltaDicomY: Int) : Intent()
     object MouseOut : Intent()
+    object DoubleClick : Intent()
   }
 
   sealed class Label {
@@ -67,6 +68,7 @@ interface DrawStore : Store<Intent, State, Label> {
     data class ChangeSlice(val deltaDicomY: Int) : Label()
 
     data class ChangeContrastBrightness(val deltaX: Double, val deltaY: Double) : Label()
+    object OpenFullCut : Label()
 
     object ContrastBrightnessChanged : Label()
   }

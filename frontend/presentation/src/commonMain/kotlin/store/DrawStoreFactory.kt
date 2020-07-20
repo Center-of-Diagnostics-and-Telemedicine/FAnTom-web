@@ -35,6 +35,7 @@ internal class DrawStoreFactory(
         is Intent.CenterMarkClick ->
           publish(Label.CenterMarkClick(intent.startDicomX, intent.startDicomY))
         is Intent.MouseWheel -> publish(Label.ChangeSlice(intent.deltaDicomY))
+        Intent.DoubleClick -> publish(Label.OpenFullCut)
       }.let {}
     }
 

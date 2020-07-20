@@ -71,5 +71,6 @@ val cutLabelToShapesIntent: CutStore.Label.() -> Intent? = {
     is CutStore.Label.ContrastBrightnessChanged -> null
     is CutStore.Label.MarkUpdate -> null
     is CutStore.Label.UpdateMarkWithSave -> null
+    is CutStore.Label.OpenFullCut -> null
   }
 }

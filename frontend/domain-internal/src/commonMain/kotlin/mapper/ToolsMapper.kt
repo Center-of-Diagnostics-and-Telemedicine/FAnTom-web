@@ -72,5 +72,16 @@ val toolsInputToBrightnessIntent: ToolsController.Input.() -> BrightnessStore.In
     is ToolsController.Input.ContrastBrightnessChanged ->
       BrightnessStore.Intent.HandleContrastBrightnessChanged(black, white)
     ToolsController.Input.Idle -> null
+    is ToolsController.Input.OpenFullCut -> null
+    is ToolsController.Input.ReturnPreviousGrid -> null
+  }
+}
+
+val toolsInputToGridIntent: ToolsController.Input.() -> GridStore.Intent? = {
+  when(this){
+    is ToolsController.Input.OpenFullCut -> GridStore.Intent.HandleOpenFullCut(cut)
+    is ToolsController.Input.ReturnPreviousGrid -> GridStore.Intent.HandleReturnPreviousGrid(cut)
+    is ToolsController.Input.ContrastBrightnessChanged -> null
+    ToolsController.Input.Idle -> null
   }
 }

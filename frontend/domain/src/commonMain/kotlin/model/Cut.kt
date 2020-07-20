@@ -8,7 +8,8 @@ data class Cut(
   val color: String,
   val horizontalCutData: CutData?,
   val verticalCutData: CutData?,
-  val researchType: ResearchType
+  val researchType: ResearchType,
+  val availableCutsForChange: List<CutType>
 ) : JvmSerializable
 
 fun Cut.isPlanar(): Boolean = researchType != ResearchType.CT

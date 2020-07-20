@@ -21,7 +21,8 @@ abstract class GridStoreAbstractFactory(
       initialTwoHorizontalGrid(data.type),
       initialFourGrid(data.type)
     ),
-    current = initialFourGrid(data.type)
+    current = initialFourGrid(data.type),
+    previous = null
   )
 
   fun create(): GridStore =
@@ -39,13 +40,14 @@ abstract class GridStoreAbstractFactory(
   protected abstract fun createExecutor(): Executor<Intent, Nothing, State, Result, Label>
   protected sealed class Result : JvmSerializable {
     data class GridChanged(val grid: Grid) : Result()
-
+    data class GridChangedTemporary(val previous: Grid, val current: Grid) : Result()
   }
 
   private object ReducerImpl : Reducer<State, Result> {
     override fun State.reduce(result: Result): State =
       when (result) {
         is Result.GridChanged -> copy(current = result.grid)
+        is Result.GridChangedTemporary -> copy(current = result.current, previous = result.previous)
       }
 
   }

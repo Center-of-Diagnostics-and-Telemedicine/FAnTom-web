@@ -2,10 +2,7 @@ package controller
 
 import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.store.StoreFactory
-import model.Grid
-import model.Mip
-import model.Presets
-import model.ResearchSlicesSizesDataNew
+import model.*
 import repository.BrightnessRepository
 import repository.MipRepository
 import view.*
@@ -45,6 +42,8 @@ interface ToolsController {
 
   sealed class Input {
     data class ContrastBrightnessChanged(val black: Int, val white: Int) : Input()
-    object Idle: Input()
+    data class OpenFullCut(val cut: Cut) : Input()
+    data class ReturnPreviousGrid(val cut: Cut) : Input()
+    object Idle : Input()
   }
 }
