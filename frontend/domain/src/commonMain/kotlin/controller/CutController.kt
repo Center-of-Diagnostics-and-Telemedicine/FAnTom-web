@@ -56,5 +56,6 @@ interface CutController {
     data class ContrastBrightnessChanged(val black: Int, val white: Int) : Output()
     data class UpdateMark(val mark: MarkDomain) : Output()
     data class UpdateMarkWithSave(val mark: MarkDomain) : Output()
+    data class OpenFullCut(val cut: Cut) : Output()
   }
 }

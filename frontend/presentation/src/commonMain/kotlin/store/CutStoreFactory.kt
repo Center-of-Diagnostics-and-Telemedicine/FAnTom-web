@@ -117,7 +117,7 @@ internal class CutStoreFactory(
         is Intent.HandleStartClick -> {
           publish(Label.StartClick(intent.startDicomX, intent.startDicomY))
         }
-        Intent.OpenFullCut -> publish(Label.OpenFulLCut(cut))
+        Intent.OpenFullCut -> publish(Label.OpenFullCut(cut))
       }.let {}
     }
 

@@ -193,6 +193,11 @@ class CutsContainerViewComponent(prps: CutsContainerProps) :
           CutsContainerController.Output.UpdateMarkWithSave(output.mark)
         )
       }
+      is CutController.Output.OpenFullCut -> {
+        props.dependencies.cutsContainerOutput(
+          CutsContainerController.Output.OpenFullCut(output.cut)
+        )
+      }
     }.let { }
   }
 
