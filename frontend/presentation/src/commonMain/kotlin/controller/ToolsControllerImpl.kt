@@ -36,6 +36,7 @@ class ToolsControllerImpl(val dependencies: ToolsController.Dependencies) : Tool
 
     bind(dependencies.lifecycle, BinderLifecycleMode.CREATE_DESTROY) {
       inputRelay.mapNotNull(toolsInputToBrightnessIntent) bindTo brightnessStore
+      inputRelay.mapNotNull(toolsInputToGridIntent) bindTo gridStore
     }
 
     dependencies.lifecycle.doOnDestroy {

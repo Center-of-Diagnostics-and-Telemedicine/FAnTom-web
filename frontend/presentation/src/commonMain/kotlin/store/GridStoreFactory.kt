@@ -6,7 +6,6 @@ import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
 import model.Grid
 import model.GridType
 import model.ResearchSlicesSizesDataNew
-import model.singleGrid
 import store.tools.GridStore.*
 import store.tools.GridStoreAbstractFactory
 
@@ -28,9 +27,17 @@ internal class GridStoreFactory(
       when (intent) {
         is Intent.HandleGridClick -> changeFilter(intent.gridType)
         is Intent.HandleOpenFullCut -> {
-          val grid = singleGrid(data.type, intent.cut.type)
-          dispatch(Result.GridChangedTemporary(current = grid, previous = getState().current))
-          publish(Label.GridChanged(grid))
+          getState()
+          if (getState().previous == null) {
+            val grid = Grid.Single(intent.cut.type)
+            dispatch(Result.GridChangedTemporary(previous = getState().current, current = grid))
+            publish(Label.GridChanged(grid))
+          } else {
+            getState().previous?.let {
+              dispatch(Result.GridChanged(it))
+              publish(Label.GridChanged(it))
+            }
+          }
         }
         is Intent.HandleReturnPreviousGrid -> {
           getState().previous?.let {

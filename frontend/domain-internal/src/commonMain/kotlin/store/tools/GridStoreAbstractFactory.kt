@@ -46,7 +46,7 @@ abstract class GridStoreAbstractFactory(
   private object ReducerImpl : Reducer<State, Result> {
     override fun State.reduce(result: Result): State =
       when (result) {
-        is Result.GridChanged -> copy(current = result.grid)
+        is Result.GridChanged -> copy(current = result.grid, previous = null)
         is Result.GridChangedTemporary -> copy(current = result.current, previous = result.previous)
       }
 

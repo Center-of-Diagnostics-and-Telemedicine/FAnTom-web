@@ -25,6 +25,7 @@ import research.cut.cutContainer
 import research.gridcontainer.CutsContainerViewComponent.GridContainerStyles.columnOfRowsStyle
 import research.gridcontainer.CutsContainerViewComponent.GridContainerStyles.rowOfColumnsStyle
 import resume
+import root.debugLog
 import styled.StyleSheet
 import styled.css
 import styled.styledDiv
@@ -78,6 +79,7 @@ class CutsContainerViewComponent(prps: CutsContainerProps) :
   }
 
   private fun RBuilder.singleCutContainer(item: Cut) {
+    debugLog("singleCutContainer = $item")
     styledDiv {
       css(rowOfColumnsStyle)
       cutContainer(dependencies = dependencies(item))

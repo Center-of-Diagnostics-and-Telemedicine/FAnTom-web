@@ -88,14 +88,6 @@ fun initialFourGrid(researchType: ResearchType): Grid {
   }
 }
 
-fun singleGrid(researchType: ResearchType, cutType: CutType): Grid {
-  return when (researchType) {
-    ResearchType.CT -> Grid.Single(cutType)
-    ResearchType.MG -> Grid.Single(CutType.MG_RCC)
-    ResearchType.DX -> Grid.Single(CutType.DX_GENERIC)
-  }
-}
-
 private val ctCuts = listOf(
   CutType.CT_AXIAL,
   CutType.CT_FRONTAL,
