@@ -308,81 +308,105 @@ fun Cut.updateCoordinatesByRect(
     CutType.MG_LMLO -> {
       when (rect.type) {
         MoveRectType.TOP -> {
-          val radius = markData.radiusVertical - deltaY
+          val radius = markData.radiusVertical - deltaY / 2
+          val newY = markData.y + deltaY / 2
           mark.copy(
             markData = markData.copy(
-              radiusVertical = radius
+              radiusVertical = radius,
+              y = newY
 //                size = (it.radius - deltaY) * 2 * axialSlicesSizesDataObservable.value.pixelLength
             ),
           ).also { it.selected = true }
         }
         MoveRectType.BOTTOM -> {
-          val radius = markData.radiusVertical + deltaY
+          val radius = markData.radiusVertical + deltaY / 2
+          val newY = markData.y + deltaY / 2
           mark.copy(
             markData = markData.copy(
-              radiusVertical = radius
+              radiusVertical = radius,
+              y = newY
 //                size = (it.radius + deltaY) * 2 * axialSlicesSizesDataObservable.value.pixelLength
             )
           ).also { it.selected = true }
         }
         MoveRectType.RIGHT -> {
-          val radius = markData.radiusHorizontal + deltaX
+          val radius = markData.radiusHorizontal + deltaX / 2
+          val newX = markData.x + deltaX / 2
           mark.copy(
             markData = markData.copy(
-              radiusHorizontal = radius
+              radiusHorizontal = radius,
+              x = newX
 //                size = (it.radius + deltaX) * 2 * axialSlicesSizesDataObservable.value.pixelLength
             )
           ).also { it.selected = true }
         }
         MoveRectType.LEFT -> {
-          val radius = markData.radiusHorizontal - deltaX
+          val radius = markData.radiusHorizontal - deltaX / 2
+          val newX = markData.x + deltaX / 2
           mark.copy(
             markData = markData.copy(
-              radiusHorizontal = radius
+              radiusHorizontal = radius,
+              x = newX
 //                size = (it.radius - deltaX) * 2 * axialSlicesSizesDataObservable.value.pixelLength
             )
           ).also { it.selected = true }
         }
         MoveRectType.LEFT_TOP -> {
-          val radiusVertical = markData.radiusVertical - deltaY
-          val radiusHorizontal = markData.radiusHorizontal - deltaX
+          val radiusVertical = markData.radiusVertical - deltaY / 2
+          val newY = markData.y + deltaY / 2
+          val radiusHorizontal = markData.radiusHorizontal - deltaX / 2
+          val newX = markData.x + deltaX / 2
           mark.copy(
             markData = markData.copy(
               radiusHorizontal = radiusHorizontal,
-              radiusVertical = radiusVertical
+              radiusVertical = radiusVertical,
+              x = newX,
+              y = newY
 //                size = (it.radius - deltaX) * 2 * axialSlicesSizesDataObservable.value.pixelLength
             )
           ).also { it.selected = true }
         }
         MoveRectType.RIGHT_TOP -> {
-          val radiusVertical = markData.radiusVertical - deltaY
-          val radiusHorizontal = markData.radiusHorizontal + deltaX
+          val radiusVertical = markData.radiusVertical - deltaY / 2
+          val newY = markData.y + deltaY / 2
+          val radiusHorizontal = markData.radiusHorizontal + deltaX / 2
+          val newX = markData.x + deltaX / 2
           mark.copy(
             markData = markData.copy(
               radiusHorizontal = radiusHorizontal,
-              radiusVertical = radiusVertical
+              radiusVertical = radiusVertical,
+              x = newX,
+              y = newY
 //                size = (it.radius + deltaX) * 2 * axialSlicesSizesDataObservable.value.pixelLength
             )
           ).also { it.selected = true }
         }
         MoveRectType.LEFT_BOTTOM -> {
-          val radiusVertical = markData.radiusVertical + deltaY
-          val radiusHorizontal = markData.radiusHorizontal - deltaX
+          val radiusVertical = markData.radiusVertical + deltaY / 2
+          val newY = markData.y + deltaY / 2
+          val radiusHorizontal = markData.radiusHorizontal - deltaX / 2
+          val newX = markData.x + deltaX / 2
           mark.copy(
             markData = markData.copy(
               radiusHorizontal = radiusHorizontal,
-              radiusVertical = radiusVertical
+              radiusVertical = radiusVertical,
+              x = newX,
+              y = newY
 //                size = (it.radius - deltaX) * 2 * axialSlicesSizesDataObservable.value.pixelLength
             )
           ).also { it.selected = true }
         }
         MoveRectType.RIGHT_BOTTOM -> {
-          val radiusVertical = markData.radiusVertical + deltaY
-          val radiusHorizontal = markData.radiusHorizontal + deltaX
+          val radiusVertical = markData.radiusVertical + deltaY / 2
+          val newY = markData.y + deltaY / 2
+          val radiusHorizontal = markData.radiusHorizontal + deltaX / 2
+          val newX = markData.x + deltaX / 2
           mark.copy(
             markData = markData.copy(
               radiusHorizontal = radiusHorizontal,
-              radiusVertical = radiusVertical
+              radiusVertical = radiusVertical,
+              x = newX,
+              y = newY
 //                size = (it.radius + deltaX) * 2 * axialSlicesSizesDataObservable.value.pixelLength
             )
           ).also { it.selected = true }
