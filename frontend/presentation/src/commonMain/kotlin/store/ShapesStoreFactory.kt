@@ -68,8 +68,9 @@ internal class ShapesStoreFactory(
       dispatch(Result.RectInMove(null))
 
       val moveRect = rects.firstOrNull {
-        val inVerticalBound = startDicomY > it.top && startDicomY < it.top + it.sideLength
-        val inHorizontalBound = startDicomX > it.left && startDicomX < it.left + it.sideLength
+        val partSideLength = it.sideLength / 2
+        val inVerticalBound = startDicomY > it.top - partSideLength && startDicomY < it.top + partSideLength
+        val inHorizontalBound = startDicomX > it.left - partSideLength && startDicomX < it.left + partSideLength
         inVerticalBound && inHorizontalBound
       }
 

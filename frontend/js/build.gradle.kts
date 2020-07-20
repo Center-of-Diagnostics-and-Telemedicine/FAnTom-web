@@ -8,7 +8,6 @@ kotlin {
     produceExecutable()
     browser {
       dceTask {
-        dceOptions.devMode = true
         keep("ktor-ktor-io.\$\$importsForInline\$\$.ktor-ktor-io.io.ktor.utils.io")
       }
     }

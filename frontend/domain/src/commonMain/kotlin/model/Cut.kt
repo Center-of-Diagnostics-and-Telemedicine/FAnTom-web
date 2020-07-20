@@ -191,7 +191,6 @@ fun Cut.getSliceNumberByMark(mark: MarkDomain): Int? {
 
 fun Cut.updateCoordinates(mark: MarkDomain, deltaX: Double, deltaY: Double): MarkDomain? {
   val markData = mark.markData
-  println("updateCoordinates without rect")
   return when (type) {
     CutType.EMPTY -> null
     CutType.CT_AXIAL -> {
@@ -248,7 +247,6 @@ fun Cut.updateCoordinatesByRect(
   deltaY: Double,
   rect: Rect
 ): MarkDomain? {
-  println("updateCoordinates with rect")
   val markData = mark.markData
   return when (type) {
     CutType.EMPTY -> null
