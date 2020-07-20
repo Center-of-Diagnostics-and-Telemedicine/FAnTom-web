@@ -58,12 +58,12 @@ task cleanStatic(type: Delete) {
 }
 
 task deployScript(type: Copy, dependsOn: "cleanStatic") {
-    from "../js-frontend/build/distributions"
+    from "../frontend/js/build/distributions"
     into "src/main/resources/static/static/js"
 }
 
 task deployStatic(type: Copy, dependsOn: "deployScript") {
-    from "../js-frontend/build/distributions"
+    from "../frontend/js/build/distributions"
     into "src/main/resources/static"
 }
 

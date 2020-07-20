@@ -49,7 +49,7 @@ const val COMMENT_FILED = "comment"
 const val ROOT = "/"
 const val STATIC_ROUTE = "/static"
 const val RESOURCE_STATIC = "static/static"
-const val RESOURCE_INDEX = "index.html"
-const val RESOURCE_JS = "js-frontend.js"
+const val RESOURCE_INDEX = "static/index.html"
+const val RESOURCE_JS = "js.js"
 
 val ApplicationCall.user get() = authentication.principal<UserModel>()!!
