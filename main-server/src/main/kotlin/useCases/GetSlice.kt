@@ -1,10 +1,10 @@
 package useCases
 
 import io.ktor.application.*
-import io.ktor.locations.post
-import io.ktor.request.receive
-import io.ktor.response.respond
-import io.ktor.routing.Route
+import io.ktor.locations.*
+import io.ktor.request.*
+import io.ktor.response.*
+import io.ktor.routing.*
 import model.*
 import repository.ResearchRepository
 import repository.SessionRepository
@@ -31,11 +31,14 @@ fun Route.getSlice(
     }
 
     val existingSession = sessionRepository.getSession(userId)
-    if (existingSession == null) respondError(ErrorStringCode.SESSION_EXPIRED)
+    if (existingSession == null) {
+      respondError(ErrorStringCode.SESSION_EXPIRED)
+      return@post
+    }
 
     try {
       call.respond(
-        SliceResponse(SliceModel(existingSession!!.getSlice(request, research!!.accessionNumber)))
+        SliceResponse(SliceModel(existingSession.getSlice(request, research!!.accessionNumber)))
       )
     } catch (e: Exception) {
       application.log.error("Failed to get slice", e)

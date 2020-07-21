@@ -1,11 +1,9 @@
 package useCases
 
-import io.ktor.application.application
-import io.ktor.application.call
-import io.ktor.application.log
+import io.ktor.application.*
 import io.ktor.locations.post
-import io.ktor.request.receive
-import io.ktor.response.respond
+import io.ktor.request.*
+import io.ktor.response.*
 import io.ktor.routing.Route
 import model.*
 import repository.SessionRepository
@@ -24,10 +22,13 @@ fun Route.hounsfield(sessionRepository: SessionRepository) {
     val params = call.receive<HounsfieldRequestNew>()
 
     val existingSession = sessionRepository.getSession(userId)
-    if (existingSession == null) respondError(ErrorStringCode.SESSION_EXPIRED)
+    if (existingSession == null) {
+      respondError(ErrorStringCode.SESSION_EXPIRED)
+      return@post
+    }
 
     try {
-      call.respond(HounsfieldResponse(HounsfieldModel(existingSession!!.hounsfield(params))))
+      call.respond(HounsfieldResponse(HounsfieldModel(existingSession.hounsfield(params))))
     } catch (e: Exception) {
       application.log.error("Failed to get hounsfield", e)
       respondError(ErrorStringCode.HOUNSFIELD_ERROR)

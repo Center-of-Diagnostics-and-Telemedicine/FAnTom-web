@@ -12,6 +12,7 @@ import controller.CutsContainerController
 import controller.CutsContainerControllerImpl
 import destroy
 import kotlinx.css.*
+import kotlinx.html.id
 import model.Cut
 import model.CutType
 import model.Grid
@@ -79,8 +80,8 @@ class CutsContainerViewComponent(prps: CutsContainerProps) :
   }
 
   private fun RBuilder.singleCutContainer(item: Cut) {
-    debugLog("singleCutContainer = $item")
     styledDiv {
+      attrs.id = "singleCutContainer"
       css(rowOfColumnsStyle)
       cutContainer(dependencies = dependencies(item))
     }
@@ -88,21 +89,38 @@ class CutsContainerViewComponent(prps: CutsContainerProps) :
 
   private fun RBuilder.twoHorizontalCutsContainer(items: List<Cut>) {
     styledDiv {
-      css(rowOfColumnsStyle)
-      cutContainer(dependencies = dependencies(items.first()))
-      cutContainer(dependencies = dependencies(items.last()))
+      css{
+        flex(1.0)
+        display = Display.flex
+      }
+      styledDiv {
+        attrs.id = "twoHorizontalCutsContainer"
+        css(rowOfColumnsStyle)
+        cutContainer(dependencies = dependencies(items.first()))
+        cutContainer(dependencies = dependencies(items.last()))
+      }
     }
+
   }
 
   private fun RBuilder.twoVerticalCutsContainer(items: List<Cut>) {
     styledDiv {
-      css(rowOfColumnsStyle)
-      cutContainer(dependencies = dependencies(items.first()))
-    }
+      css{
+        flex(1.0)
+        display = Display.flex
+        flexDirection = FlexDirection.column
+      }
+      styledDiv {
+        attrs.id = "twoVerticalCutsContainer1"
+        css(rowOfColumnsStyle)
+        cutContainer(dependencies = dependencies(items.first()))
+      }
 
-    styledDiv {
-      css(rowOfColumnsStyle)
-      cutContainer(dependencies = dependencies(items.last()))
+      styledDiv {
+        attrs.id = "twoVerticalCutsContainer2"
+        css(rowOfColumnsStyle)
+        cutContainer(dependencies = dependencies(items.last()))
+      }
     }
   }
 

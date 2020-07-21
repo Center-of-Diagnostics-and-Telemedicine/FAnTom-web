@@ -38,7 +38,7 @@ class FantomLibraryDataSourceImpl(
       serializer = KotlinxSerializer(Json(JsonConfiguration(ignoreUnknownKeys = true)))
     }
     install(HttpTimeout) {
-      requestTimeoutMillis = 60000
+      requestTimeoutMillis = 600000
     }
   }
 
