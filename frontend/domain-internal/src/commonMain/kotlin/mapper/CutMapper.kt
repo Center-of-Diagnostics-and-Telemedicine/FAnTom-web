@@ -42,6 +42,7 @@ val cutLabelToCutOutput: Label.() -> Output? = {
     is Label.MarkUpdate -> Output.UpdateMark(mark)
     is Label.UpdateMarkWithSave -> Output.UpdateMarkWithSave(mark)
     is Label.OpenFullCut -> Output.OpenFullCut(cut)
+    is Label.ChangeCutType -> Output.ChangeCutType(cutType, cut)
     is Label.StartClick -> null
     is Label.ExternalSliceNumberChanged -> null
     is Label.Marks -> null
@@ -71,5 +72,6 @@ val shapesLabelToCutIntent: ShapesStore.Label.() -> Intent? = {
     is ShapesStore.Label.UnselectMark -> Intent.HandleMarkUnselect(mark)
     is ShapesStore.Label.UpdateMark -> Intent.HandleMarkUpdate(mark)
     is ShapesStore.Label.UpdateMarkWithSave -> Intent.HandleMarkUpdateWithSave(mark)
+    is ShapesStore.Label.ChangeCutType -> Intent.HandleChangeCutType(cutType)
   }
 }

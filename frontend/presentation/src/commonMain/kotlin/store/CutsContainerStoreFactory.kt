@@ -8,9 +8,7 @@ import com.badoo.reaktive.scheduler.mainScheduler
 import com.badoo.reaktive.single.observeOn
 import com.badoo.reaktive.single.singleFromFunction
 import com.badoo.reaktive.single.subscribeOn
-import model.ResearchSlicesSizesDataNew
-import model.buildCuts
-import model.initialFourGrid
+import model.*
 import store.gridcontainer.CutsContainerStore.Intent
 import store.gridcontainer.CutsContainerStore.State
 import store.gridcontainer.CutsContainerStoreAbstractFactory
@@ -41,11 +39,19 @@ internal class CutsContainerStoreFactory(
 
     override fun executeIntent(intent: Intent, getState: () -> State) {
       when (intent) {
-        is Intent.HandleGridChanged ->
-          dispatch(Result.Loaded(items = intent.grid.buildCuts(data), grid = intent.grid))
+        is Intent.HandleGridChanged -> handleGridChanged(intent)
+        is Intent.HandleChangeCutType -> handleChangeCutType(getState, intent.cut, intent.cutType)
       }.let {}
     }
 
+    private fun handleChangeCutType(getState: () -> State, oldCut: Cut, newCutType: CutType) {
+      val items = getState().grid.updateCuts(data = data, oldCut = oldCut, newCutType = newCutType)
+      dispatch(Result.Loaded(items = items, grid = getState().grid))
+    }
+
+    private fun handleGridChanged(intent: Intent.HandleGridChanged) {
+      dispatch(Result.Loaded(items = intent.grid.buildCuts(data), grid = intent.grid))
+    }
   }
 
 }

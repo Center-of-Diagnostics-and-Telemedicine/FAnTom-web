@@ -12,7 +12,6 @@ import controller.CutsContainerController
 import controller.CutsContainerControllerImpl
 import destroy
 import kotlinx.css.*
-import kotlinx.html.id
 import model.Cut
 import model.CutType
 import model.Grid
@@ -26,7 +25,6 @@ import research.cut.cutContainer
 import research.gridcontainer.CutsContainerViewComponent.GridContainerStyles.columnOfRowsStyle
 import research.gridcontainer.CutsContainerViewComponent.GridContainerStyles.rowOfColumnsStyle
 import resume
-import root.debugLog
 import styled.StyleSheet
 import styled.css
 import styled.styledDiv
@@ -81,7 +79,6 @@ class CutsContainerViewComponent(prps: CutsContainerProps) :
 
   private fun RBuilder.singleCutContainer(item: Cut) {
     styledDiv {
-      attrs.id = "singleCutContainer"
       css(rowOfColumnsStyle)
       cutContainer(dependencies = dependencies(item))
     }
@@ -94,7 +91,6 @@ class CutsContainerViewComponent(prps: CutsContainerProps) :
         display = Display.flex
       }
       styledDiv {
-        attrs.id = "twoHorizontalCutsContainer"
         css(rowOfColumnsStyle)
         cutContainer(dependencies = dependencies(items.first()))
         cutContainer(dependencies = dependencies(items.last()))
@@ -111,13 +107,11 @@ class CutsContainerViewComponent(prps: CutsContainerProps) :
         flexDirection = FlexDirection.column
       }
       styledDiv {
-        attrs.id = "twoVerticalCutsContainer1"
         css(rowOfColumnsStyle)
         cutContainer(dependencies = dependencies(items.first()))
       }
 
       styledDiv {
-        attrs.id = "twoVerticalCutsContainer2"
         css(rowOfColumnsStyle)
         cutContainer(dependencies = dependencies(items.last()))
       }
@@ -216,6 +210,11 @@ class CutsContainerViewComponent(prps: CutsContainerProps) :
       is CutController.Output.OpenFullCut -> {
         props.dependencies.cutsContainerOutput(
           CutsContainerController.Output.OpenFullCut(output.cut)
+        )
+      }
+      is CutController.Output.ChangeCutType -> {
+        props.dependencies.cutsContainerOutput(
+          CutsContainerController.Output.ChangeCutType(output.cutType, output.cut)
         )
       }
     }.let { }

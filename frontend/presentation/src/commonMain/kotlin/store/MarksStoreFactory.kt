@@ -10,6 +10,7 @@ import com.badoo.reaktive.single.map
 import com.badoo.reaktive.single.observeOn
 import com.badoo.reaktive.single.subscribeOn
 import model.*
+import replace
 import repository.MarksRepository
 import store.marks.MarksStore.*
 import store.marks.MarksStoreAbstractFactory
@@ -165,12 +166,5 @@ internal class MarksStoreFactory(
       }
       dispatch(result)
     }
-  }
-
-}
-
-fun <T> List<T>.replace(newValue: T, block: (T) -> Boolean): List<T> {
-  return map {
-    if (block(it)) newValue else it
   }
 }

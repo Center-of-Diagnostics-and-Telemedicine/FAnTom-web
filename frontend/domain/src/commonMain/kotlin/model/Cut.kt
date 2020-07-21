@@ -29,6 +29,23 @@ enum class CutType(val intType: Int) {
   DX_RIGHT_LATERAL(SLICE_TYPE_DX_RIGHT_LATERAL),
 }
 
+fun CutType.getName(): String? =
+  when (this) {
+    CutType.EMPTY -> null
+    CutType.CT_AXIAL -> "Аксиальный"
+    CutType.CT_FRONTAL -> "Фронтальный"
+    CutType.CT_SAGITTAL -> "Сагиттальный"
+    CutType.MG_RCC -> "MG_RCC"
+    CutType.MG_LCC -> "MG_LCC"
+    CutType.MG_RMLO -> "MG_RMLO"
+    CutType.MG_LMLO -> "MG_LMLO"
+    CutType.DX_GENERIC -> "DX_GENERIC"
+    CutType.DX_POSTERO_ANTERIOR -> "DX_POSTERO_ANTERIOR"
+    CutType.DX_LEFT_LATERAL -> "DX_LEFT_LATERAL"
+    CutType.DX_RIGHT_LATERAL -> "DX_RIGHT_LATERAL"
+  }
+
+
 data class CutData(
   val type: CutType,
   val data: ModalityModel,

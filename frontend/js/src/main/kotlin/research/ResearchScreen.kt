@@ -181,6 +181,9 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
       is CutsContainerController.Output.UpdateMarkWithSave -> marksInputObservable.onNext(
         MarksController.Input.UpdateMarkWithSave(output.mark)
       )
+      is CutsContainerController.Output.ChangeCutType -> cutsContainerInputObservable.onNext(
+        CutsContainerController.Input.ChangeCutType(output.cutType, output.cut)
+      )
     }.let { }
   }
 

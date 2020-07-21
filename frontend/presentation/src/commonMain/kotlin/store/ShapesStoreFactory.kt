@@ -53,6 +53,8 @@ internal class ShapesStoreFactory(
 
         is Intent.HandleStartClick ->
           handleStartClick(intent.startDicomX, intent.startDicomY, getState)
+
+        is Intent.HandleChangeCutType -> publish(Label.ChangeCutType(intent.value))
       }.let {}
     }
 

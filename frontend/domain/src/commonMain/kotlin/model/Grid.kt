@@ -1,5 +1,7 @@
 package model
 
+import replace
+
 sealed class GridType {
   object Single : GridType()
   object TwoVertical : GridType()
@@ -111,10 +113,20 @@ private val dxCuts = listOf(
 fun Grid.buildCuts(data: ResearchSlicesSizesDataNew): List<Cut> =
   when (this) {
     is Grid.Single -> listOf(buildSingleCut(types.first(), data))
-    is Grid.TwoVertical -> buildTwoCuts(types, data)
+    is Grid.TwoVertical,
     is Grid.TwoHorizontal -> buildTwoCuts(types, data)
     is Grid.Four -> buildFourCuts(types, data)
   }
+
+fun Grid.updateCuts(data: ResearchSlicesSizesDataNew, oldCut: Cut, newCutType: CutType): List<Cut> {
+  val newTypes = types.replace(newValue = newCutType) { it == oldCut.type }
+  return when (this) {
+    is Grid.Single -> listOf(buildSingleCut(newCutType, data))
+    is Grid.TwoVertical,
+    is Grid.TwoHorizontal -> buildTwoCuts(newTypes, data)
+    is Grid.Four -> buildFourCuts(newTypes, data)
+  }
+}
 
 
 private fun buildSingleCut(type: CutType, data: ResearchSlicesSizesDataNew): Cut =

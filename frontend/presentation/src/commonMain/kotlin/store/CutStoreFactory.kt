@@ -118,6 +118,10 @@ internal class CutStoreFactory(
           publish(Label.StartClick(intent.startDicomX, intent.startDicomY))
         }
         Intent.OpenFullCut -> publish(Label.OpenFullCut(cut))
+
+        is Intent.HandleChangeCutType -> {
+          publish(Label.ChangeCutType(intent.cutType, cut))
+        }
       }.let {}
     }
 

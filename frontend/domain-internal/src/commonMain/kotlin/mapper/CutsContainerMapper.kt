@@ -15,6 +15,7 @@ val CutsContainerStateToCutsContainerModel: State.() -> Model? = {
 val inputToCutsContainerIntent: Input.() -> Intent? = {
   when (this) {
     is Input.GridChanged -> Intent.HandleGridChanged(grid)
+    is Input.ChangeCutType -> Intent.HandleChangeCutType(cutType, cut)
     Input.Idle -> null
   }
 }

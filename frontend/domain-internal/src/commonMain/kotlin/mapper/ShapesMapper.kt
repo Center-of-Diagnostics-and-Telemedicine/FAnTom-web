@@ -18,7 +18,7 @@ import view.ShapesView.Model
 
 val shapesEventToShapesIntent: Event.() -> Intent = {
   when (this) {
-    is Event.CutTypeOnChange -> TODO()
+    is Event.CutTypeOnChange -> Intent.HandleChangeCutType(value)
   }
 }
 
@@ -72,5 +72,6 @@ val cutLabelToShapesIntent: CutStore.Label.() -> Intent? = {
     is CutStore.Label.MarkUpdate -> null
     is CutStore.Label.UpdateMarkWithSave -> null
     is CutStore.Label.OpenFullCut -> null
+    is CutStore.Label.ChangeCutType -> null
   }
 }

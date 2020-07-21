@@ -44,7 +44,7 @@ interface CutController {
     data class Marks(val list: List<MarkDomain>) : Input()
     data class ChangeSliceNumberByMarkCenter(val mark: MarkDomain) : Input()
 
-    object Idle: Input()
+    object Idle : Input()
   }
 
   sealed class Output {
@@ -57,5 +57,6 @@ interface CutController {
     data class UpdateMark(val mark: MarkDomain) : Output()
     data class UpdateMarkWithSave(val mark: MarkDomain) : Output()
     data class OpenFullCut(val cut: Cut) : Output()
+    data class ChangeCutType(val cutType: CutType, val cut: Cut) : Output()
   }
 }

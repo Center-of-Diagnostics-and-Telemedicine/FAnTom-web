@@ -32,6 +32,7 @@ interface CutStore : Store<Intent, State, Label> {
     data class HandleMarkUpdate(val mark: MarkDomain) : Intent()
     data class HandleMarkUpdateWithSave(val mark: MarkDomain) : Intent()
     data class HandleStartClick(val startDicomX: Double, val startDicomY: Double) : Intent()
+    data class HandleChangeCutType(val cutType: CutType) : Intent()
 
     object ContrasBrightnessChanged : Intent()
     object HandleStopMoving : Intent()
@@ -64,6 +65,7 @@ interface CutStore : Store<Intent, State, Label> {
     data class UpdateMarkWithSave(val mark: MarkDomain) : Label()
     data class StartClick(val startDicomX: Double, val startDicomY: Double) : Label()
     data class OpenFullCut(val cut: Cut) : Label()
+    data class ChangeCutType(val cutType: CutType, val cut: Cut) : Label()
 
     object StopMoving : Label()
   }

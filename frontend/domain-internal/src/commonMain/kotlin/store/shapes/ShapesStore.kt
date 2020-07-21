@@ -15,6 +15,7 @@ interface ShapesStore : Store<Intent, State, Label> {
     data class HandleCenterMarkClick(val dicomX: Double, val dicomY: Double) : Intent()
     data class HandleMoveInClick(val deltaX: Double, val deltaY: Double) : Intent()
     data class HandleStartClick(val startDicomX: Double, val startDicomY: Double) : Intent()
+    data class HandleChangeCutType(val value: CutType) : Intent()
 
     object HandleStopMoving : Intent()
   }
@@ -37,5 +38,6 @@ interface ShapesStore : Store<Intent, State, Label> {
     data class UnselectMark(val mark: MarkDomain) : Label()
     data class UpdateMark(val mark: MarkDomain) : Label()
     data class UpdateMarkWithSave(val mark: MarkDomain) : Label()
+    data class ChangeCutType(val cutType: CutType) : Label()
   }
 }

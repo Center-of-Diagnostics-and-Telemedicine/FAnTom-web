@@ -26,26 +26,29 @@ internal class GridStoreFactory(
     override fun executeIntent(intent: Intent, getState: () -> State) {
       when (intent) {
         is Intent.HandleGridClick -> changeFilter(intent.gridType)
-        is Intent.HandleOpenFullCut -> {
-          getState()
-          if (getState().previous == null) {
-            val grid = Grid.Single(intent.cut.type)
-            dispatch(Result.GridChangedTemporary(previous = getState().current, current = grid))
-            publish(Label.GridChanged(grid))
-          } else {
-            getState().previous?.let {
-              dispatch(Result.GridChanged(it))
-              publish(Label.GridChanged(it))
-            }
-          }
-        }
-        is Intent.HandleReturnPreviousGrid -> {
-          getState().previous?.let {
-            dispatch(Result.GridChanged(it))
-            publish(Label.GridChanged(it))
-          }
-        }
+        is Intent.HandleOpenFullCut -> handleOpenFullCut(getState, intent)
+        is Intent.HandleReturnPreviousGrid -> returnPreviousGrid(getState)
       }.let {}
+    }
+
+    private fun handleOpenFullCut(
+      getState: () -> State,
+      intent: Intent.HandleOpenFullCut
+    ) {
+      if (getState().previous == null) {
+        val grid = Grid.Single(intent.cut.type)
+        dispatch(Result.GridChangedTemporary(previous = getState().current, current = grid))
+        publish(Label.GridChanged(grid))
+      } else {
+        returnPreviousGrid(getState)
+      }
+    }
+
+    private fun returnPreviousGrid(getState: () -> State) {
+      getState().previous?.let {
+        dispatch(Result.GridChanged(it))
+        publish(Label.GridChanged(it))
+      }
     }
 
     private fun changeFilter(gridType: GridType) {
