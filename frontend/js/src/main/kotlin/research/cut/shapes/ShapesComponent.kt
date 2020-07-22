@@ -136,8 +136,6 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
 
       val otherTypes = props.cut.availableCutsForChange
       val cutName = props.cut.type.getName()
-      debugLog("MY: ${props.cut.availableCutsForChange}")
-      debugLog("MY: cutName != null ${cutName != null}, otherTypes.isNotEmpty() = ${otherTypes.isNotEmpty()}")
       if(cutName != null && otherTypes.isNotEmpty()) {
         styledDiv {
           css {
@@ -348,6 +346,10 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
     context: CanvasRenderingContext2D
   ) {
     context.clearRect(0.0, 0.0, canvas.width.toDouble(), canvas.height.toDouble())
+  }
+
+  override fun componentWillUnmount() {
+    debugLog("MY: componentWillUnmount ShapesComponent ${props.cut.type}")
   }
 
 }

@@ -9,14 +9,16 @@ import controller.CutController
 import controller.CutController.Input
 import controller.SliderController
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.css.*
 import kotlinx.css.properties.border
 import model.Cut
 import org.w3c.dom.Element
 import react.*
+import react.dom.div
 import react.dom.findDOMNode
+import react.dom.render
+import react.dom.unmountComponentAtNode
 import repository.BrightnessRepository
 import repository.MipRepository
 import repository.ResearchRepository
@@ -25,6 +27,7 @@ import research.cut.CutContainer.CutContainerStyles.cutContainerStyle
 import research.cut.CutContainer.CutContainerStyles.cutStyle
 import research.cut.slider.SliderComponent
 import research.cut.slider.sliderView
+import root.debugLog
 import styled.StyleSheet
 import styled.css
 import styled.styledDiv
@@ -35,6 +38,7 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
   private var testRef: Element? = null
   private val cutInput = BehaviorSubject<Input>(Input.Idle)
   private val disposable = CompositeDisposable()
+  private var x = 0
 
   init {
     state = CutContainerState(width = 0, height = 0)
@@ -74,6 +78,9 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
         css(blackContainerStyle)
         styledDiv {
           css(cutStyle)
+          if (x % 2 == 0) {
+            div { }
+          }
 
           ref {
             testRef = findDOMNode(it)
@@ -101,17 +108,18 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
   }
 
   private fun renderContent(clientHeight: Int, clientWidth: Int) {
-    react.dom.render(
-      RBuilder().cut(
-        dependencies = object : CutParentComponent.Dependencies,
-          Dependencies by props.dependencies {
-          override val cutsInput: Observable<Input> = this@CutContainer.cutInput
-          override val height: Int = clientHeight
-          override val width: Int = clientWidth
-        }
-      ).asElementOrNull(),
-      container = testRef
-    )
+    testRef?.let {
+      render(it) {
+        cut(
+          dependencies = object : CutParentComponent.Dependencies,
+            Dependencies by props.dependencies {
+            override val cutsInput: Observable<Input> = this@CutContainer.cutInput
+            override val height: Int = clientHeight
+            override val width: Int = clientWidth
+          }
+        )
+      }
+    }
   }
 
   private fun sliderOutput(output: SliderController.Output) {
@@ -121,7 +129,12 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
     }
   }
 
-  override fun componentWillUnmount() = disposable.dispose()
+  override fun componentWillUnmount() {
+    debugLog("MY: componentWillUnmount CutContainer ${props.dependencies.cut.type}")
+    disposable.dispose()
+    unmountComponentAtNode(testRef)
+    testRef = null
+  }
 
   interface Dependencies {
     val storeFactory: StoreFactory

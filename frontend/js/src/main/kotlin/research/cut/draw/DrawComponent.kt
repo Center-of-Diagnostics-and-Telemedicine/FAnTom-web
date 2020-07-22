@@ -17,6 +17,7 @@ import react.RBuilder
 import react.RComponent
 import react.RProps
 import react.RState
+import root.debugLog
 import styled.css
 import styled.styledCanvas
 import styled.styledDiv
@@ -212,6 +213,11 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
   }
 
   private fun castEvent(it: Event): MouseEvent = it.asDynamic().nativeEvent as MouseEvent
+
+  override fun componentWillUnmount() {
+    debugLog("MY: componentWillUnmount DrawComponent ${props.cut.type}")
+
+  }
 
 }
 

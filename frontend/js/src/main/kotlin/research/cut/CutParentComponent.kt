@@ -21,6 +21,7 @@ import research.cut.draw.drawView
 import research.cut.shapes.ShapesViewProxy
 import research.cut.shapes.shapesView
 import resume
+import root.debugLog
 import stop
 import styled.css
 import styled.styledDiv
@@ -103,6 +104,7 @@ class CutParentComponent(prps: CutParentProps) : RComponent<CutParentProps, CutP
   private fun updateState(model: DrawView.Model) = setState { drawModel = model }
 
   override fun componentWillUnmount() {
+    debugLog("MY: componentWillUnmount CutParentComponent ${props.dependencies.cut.type}")
     lifecycleRegistry.destroy()
   }
 
