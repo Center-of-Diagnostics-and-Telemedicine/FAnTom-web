@@ -44,15 +44,17 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
       val context = canvas.getContext("2d") as? CanvasRenderingContext2D
       context?.let { _ ->
         clearCanvas(canvas, context)
-        props.shapesModel.circles.let { drawCircles(it, context) }
-        props.shapesModel.rects.let { drawRects(it, context) }
-        if (props.cut.data.n_images > 1) {
-          drawLines(
-            horizontal = props.shapesModel.verticalCoefficient * resultHeight,
-            vertical = props.shapesModel.horizontalCoefficient * resultWidth,
-            canvas = canvas,
-            context = context
-          )
+        if (props.loading.not()) {
+          props.shapesModel.circles.let { drawCircles(it, context) }
+          props.shapesModel.rects.let { drawRects(it, context) }
+          if (props.cut.data.n_images > 1) {
+            drawLines(
+              horizontal = props.shapesModel.verticalCoefficient * resultHeight,
+              vertical = props.shapesModel.horizontalCoefficient * resultWidth,
+              canvas = canvas,
+              context = context
+            )
+          }
         }
       }
     }
