@@ -2,13 +2,13 @@ package dao
 
 import PlanarMarksVos
 import model.MarkData
-import model.MarkDomain
+import model.MarkEntity
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import toPlanarMark
 
 class PlanarMarksDao : MarksDaoFacade {
-  override suspend fun get(id: Int): MarkDomain? {
+  override suspend fun get(id: Int): MarkEntity? {
     return transaction {
       PlanarMarksVos
         .select { PlanarMarksVos.id eq id }
@@ -17,7 +17,7 @@ class PlanarMarksDao : MarksDaoFacade {
     }
   }
 
-  override suspend fun getAll(userId: Int, researchId: Int): List<MarkDomain> {
+  override suspend fun getAll(userId: Int, researchId: Int): List<MarkEntity> {
     return transaction {
       PlanarMarksVos
         .select { PlanarMarksVos.researchId.eq(researchId).and(PlanarMarksVos.userId.eq(userId)) }
@@ -40,7 +40,7 @@ class PlanarMarksDao : MarksDaoFacade {
     }
   }
 
-  override suspend fun update(mark: MarkDomain) {
+  override suspend fun update(mark: MarkEntity) {
     return transaction {
       PlanarMarksVos.update(where = { PlanarMarksVos.id eq mark.id }) {
         it[x] = mark.markData.x
@@ -48,7 +48,7 @@ class PlanarMarksDao : MarksDaoFacade {
         it[radiusHorizontal] = mark.markData.radiusHorizontal
         it[radiusVertical] = mark.markData.radiusVertical
         it[size] = mark.markData.size
-        it[type] = mark.type.intValue
+        it[type] = mark.type
         it[comment] = mark.comment
         it[cutType] = mark.markData.cutType
       }

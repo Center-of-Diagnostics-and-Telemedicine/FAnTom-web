@@ -21,7 +21,7 @@ fun Route.updateMark(
       call.respond(BaseResponse(error = ErrorModel(errorCode.value)))
     }
 
-    val mark = call.receive<MarkDomain>()
+    val mark = call.receive<MarkEntity>()
     val research = researchRepository.getResearch(it.id)
 
     if (research == null) {

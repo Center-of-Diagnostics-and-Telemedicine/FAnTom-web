@@ -1,12 +1,12 @@
 package repository
 
 import model.MarkData
-import model.MarkDomain
+import model.MarkEntity
 
 interface MarksRepository {
-  suspend fun get(id: Int): MarkDomain?
-  suspend fun getAll(userId: Int, researchId: Int): List<MarkDomain>
-  suspend fun create(mark: MarkData, userId: Int, researchId: Int): MarkDomain?
-  suspend fun update(mark: MarkDomain)
+  suspend fun get(id: Int): MarkEntity?
+  suspend fun getAll(userId: Int, researchId: Int): List<MarkEntity>
+  suspend fun create(mark: MarkData, userId: Int, researchId: Int): MarkEntity?
+  suspend fun update(mark: MarkEntity)
   suspend fun delete(id: Int)
 }

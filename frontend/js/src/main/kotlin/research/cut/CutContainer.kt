@@ -14,8 +14,10 @@ import kotlinx.css.*
 import kotlinx.css.properties.border
 import model.Cut
 import org.w3c.dom.Element
-import react.*
-import react.dom.div
+import react.RBuilder
+import react.RComponent
+import react.RProps
+import react.RState
 import react.dom.findDOMNode
 import react.dom.render
 import react.dom.unmountComponentAtNode
@@ -38,7 +40,6 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
   private var testRef: Element? = null
   private val cutInput = BehaviorSubject<Input>(Input.Idle)
   private val disposable = CompositeDisposable()
-  private var x = 0
 
   init {
     state = CutContainerState(width = 0, height = 0)
@@ -78,10 +79,6 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
         css(blackContainerStyle)
         styledDiv {
           css(cutStyle)
-          if (x % 2 == 0) {
-            div { }
-          }
-
           ref {
             testRef = findDOMNode(it)
             if (testRef != null) {

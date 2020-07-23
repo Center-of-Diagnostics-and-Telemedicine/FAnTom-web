@@ -1,12 +1,12 @@
 package dao
 
 import model.MarkData
-import model.MarkDomain
+import model.MarkEntity
 
 interface MarksDaoFacade {
-  suspend fun get(id: Int): MarkDomain?
-  suspend fun getAll(userId: Int, researchId: Int): List<MarkDomain>
+  suspend fun get(id: Int): MarkEntity?
+  suspend fun getAll(userId: Int, researchId: Int): List<MarkEntity>
   suspend fun save(mark: MarkData, userrId: Int, researchhId: Int): Int
-  suspend fun update(mark: MarkDomain)
+  suspend fun update(mark: MarkEntity)
   suspend fun delete(id: Int)
 }

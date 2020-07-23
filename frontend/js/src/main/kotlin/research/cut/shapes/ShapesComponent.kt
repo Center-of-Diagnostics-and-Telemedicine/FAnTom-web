@@ -1,10 +1,8 @@
 package research.cut.shapes
 
-import com.ccfraser.muirwik.components.*
-import com.ccfraser.muirwik.components.list.MListItemAlignItems
-import com.ccfraser.muirwik.components.list.mList
-import com.ccfraser.muirwik.components.list.mListItem
-import com.ccfraser.muirwik.components.transitions.mCollapse
+import com.ccfraser.muirwik.components.mTypography
+import com.ccfraser.muirwik.components.spacingUnits
+import com.ccfraser.muirwik.components.themeContext
 import kotlinx.css.*
 import kotlinx.css.Position
 import kotlinx.html.classes
@@ -134,50 +132,50 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
         }
       }
 
-      val otherTypes = props.cut.availableCutsForChange
-      val cutName = props.cut.type.getName()
-      if(cutName != null && otherTypes.isNotEmpty()) {
-        styledDiv {
-          css {
-            position = Position.absolute
-            zIndex = 10
-            top = 0.px
-            left = 0.px
-            padding(1.spacingUnits)
-          }
-          mClickAwayListener(onClickAway = { setState { showMenu = false } }) {
-            mList(disablePadding = true) {
-              css {
-                backgroundColor = Color("#424242")
-                borderRadius = 4.px
-
-              }
-              mListItem(
-                primaryText = cutName,
-                onClick = { setState { showMenu = !showMenu } },
-                divider = false
-              ) {
-                if (otherTypes.isNotEmpty()) {
-                  if (state.showMenu) mIcon("expand_less") else mIcon("expand_more")
-                }
-              }
-              mCollapse(show = state.showMenu) {
-                mList {
-                  otherTypes.forEach { cutType ->
-                    mListItem(
-                      button = true,
-                      onClick = { handleSimpleClick(cutType) },
-                      alignItems = MListItemAlignItems.flexStart
-                    ) {
-                      mTypography(text = cutType.name)
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
+//      val otherTypes = props.cut.availableCutsForChange
+//      val cutName = props.cut.type.getName()
+//      if(cutName != null && otherTypes.isNotEmpty()) {
+//        styledDiv {
+//          css {
+//            position = Position.absolute
+//            zIndex = 10
+//            top = 0.px
+//            left = 0.px
+//            padding(1.spacingUnits)
+//          }
+//          mClickAwayListener(onClickAway = { setState { showMenu = false } }) {
+//            mList(disablePadding = true) {
+//              css {
+//                backgroundColor = Color("#424242")
+//                borderRadius = 4.px
+//
+//              }
+//              mListItem(
+//                primaryText = cutName,
+//                onClick = { setState { showMenu = !showMenu } },
+//                divider = false
+//              ) {
+//                if (otherTypes.isNotEmpty()) {
+//                  if (state.showMenu) mIcon("expand_less") else mIcon("expand_more")
+//                }
+//              }
+//              mCollapse(show = state.showMenu) {
+//                mList {
+//                  otherTypes.forEach { cutType ->
+//                    mListItem(
+//                      button = true,
+//                      onClick = { handleSimpleClick(cutType) },
+//                      alignItems = MListItemAlignItems.flexStart
+//                    ) {
+//                      mTypography(text = cutType.name)
+//                    }
+//                  }
+//                }
+//              }
+//            }
+//          }
+//        }
+//      }
 
 
       styledDiv {

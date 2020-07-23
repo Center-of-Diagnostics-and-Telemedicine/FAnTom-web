@@ -36,11 +36,11 @@ object MarksRemoteDataSource : MarksRemote {
     }
   }
 
-  override suspend fun update(request: MarkDomain, researchId: Int, token: String): BaseResponse {
+  override suspend fun update(request: MarkEntity, researchId: Int, token: String): BaseResponse {
     return client.put {
       authHeader(token)
       apiUrl("$RESEARCH_ROUTE/$researchId/$MARK_ROUTE")
-      body = Json.stringify(MarkDomain.serializer(), request)
+      body = Json.stringify(MarkEntity.serializer(), request)
     }
   }
 

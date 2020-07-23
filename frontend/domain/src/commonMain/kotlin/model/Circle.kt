@@ -15,7 +15,7 @@ data class Circle(
   val isCenter: Boolean
 )
 
-fun MarkDomain.toCircle(cut: Cut, sliceNumber: Int): Circle? {
+fun MarkModel.toCircle(cut: Cut, sliceNumber: Int): Circle? {
   markData.apply {
     when (cut.type) {
       CutType.EMPTY -> return null

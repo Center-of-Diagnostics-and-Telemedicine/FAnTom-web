@@ -2,23 +2,23 @@ package local
 
 import com.badoo.reaktive.utils.atomic.AtomicReference
 import com.badoo.reaktive.utils.atomic.update
-import model.MarkDomain
+import model.MarkEntity
 import repository.MarksLocal
 
 actual object MarksLocalDataSource : MarksLocal {
 
-  private val map = AtomicReference<Map<Int, MarkDomain>>(emptyMap())
+  private val map = AtomicReference<Map<Int, MarkEntity>>(emptyMap())
 
-  override suspend fun get(markId: Int): MarkDomain? = map.value[markId]
+  override suspend fun get(markId: Int): MarkEntity? = map.value[markId]
 
-  override suspend fun getAll(): List<MarkDomain> = map.value.values.toList()
+  override suspend fun getAll(): List<MarkEntity> = map.value.values.toList()
 
-  override suspend fun create(mark: MarkDomain) {
+  override suspend fun create(mark: MarkEntity) {
     val id = mark.id
     map.update { it.plus(id to mark) }
   }
 
-  override suspend fun update(mark: MarkDomain) {
+  override suspend fun update(mark: MarkEntity) {
     val id = mark.id
     map.update {
       it.plus(
@@ -31,7 +31,7 @@ actual object MarksLocalDataSource : MarksLocal {
     }
   }
 
-  override suspend fun saveList(marks: List<MarkDomain>) {
+  override suspend fun saveList(marks: List<MarkEntity>) {
     map.update { map ->
       map.plus(marks.map { it.id to it })
     }

@@ -12,6 +12,7 @@ import com.ccfraser.muirwik.components.themeContext
 import controller.MarksController
 import controller.MarksControllerImpl
 import destroy
+import model.ResearchSlicesSizesDataNew
 import react.*
 import repository.MarksRepository
 import resume
@@ -91,6 +92,7 @@ class MarksComponent(prps: MarksProps) : RComponent<MarksProps, MarksState>(prps
     val marksRepository: MarksRepository
     val researchId: Int
     val isPlanar: Boolean
+    val data: ResearchSlicesSizesDataNew
   }
 }
 

@@ -8,7 +8,7 @@ class MarksRepositoryImpl(
   override val token: suspend () -> String
 ) : MarksRepository {
 
-  override suspend fun getMarks(researchId: Int): List<MarkDomain> {
+  override suspend fun getMarks(researchId: Int): List<MarkEntity> {
     val cached = local.getAll()
     if (cached.isNotEmpty()) {
       return cached
@@ -36,7 +36,7 @@ class MarksRepositoryImpl(
     }
   }
 
-  override suspend fun updateMark(mark: MarkDomain, researchId: Int) {
+  override suspend fun updateMark(mark: MarkEntity, researchId: Int) {
     val response = remote.update(mark, researchId, token())
     when{
       response.response != null -> local.update(mark)

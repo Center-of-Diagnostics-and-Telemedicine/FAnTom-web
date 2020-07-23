@@ -3,10 +3,10 @@ package model
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class MarksModel(val list: List<MarkDomain>)
+data class MarksModel(val list: List<MarkEntity>)
 
 @Serializable
-data class MarkDomainModel(val mark: MarkDomain)
+data class MarkDomainModel(val mark: MarkEntity)
 
 @Serializable
 data class MarksResponseNew(

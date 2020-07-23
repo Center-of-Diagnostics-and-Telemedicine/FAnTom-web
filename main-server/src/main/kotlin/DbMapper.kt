@@ -30,7 +30,7 @@ fun ResultRow.toUserResearch(): UserResearchModel = UserResearchModel(
   done = this[UserResearchVos.done] == 1
 )
 
-fun ResultRow.toCovidMark(): MarkModel = MarkModel(
+fun ResultRow.toCovidMark(): CovidMark = CovidMark(
   userId = this[CovidMarksVos.userId],
   researchId = this[CovidMarksVos.researchId],
   ctType = this[CovidMarksVos.ctType],
@@ -38,7 +38,7 @@ fun ResultRow.toCovidMark(): MarkModel = MarkModel(
   rightPercent = this[CovidMarksVos.rightPercent]
 )
 
-fun ResultRow.toMultiPlanarMark(): MarkDomain = MarkDomain(
+fun ResultRow.toMultiPlanarMark(): MarkEntity = MarkEntity(
   id = this[MultiPlanarMarksVos.id],
   markData = MarkData(
     x = this[MultiPlanarMarksVos.x],
@@ -49,14 +49,11 @@ fun ResultRow.toMultiPlanarMark(): MarkDomain = MarkDomain(
     size = this[MultiPlanarMarksVos.size],
     cutType = this[MultiPlanarMarksVos.cutType]
   ),
-  type = MarkType
-    .values()
-    .firstOrNull { it.intValue == this[MultiPlanarMarksVos.type] }
-    ?: MarkType.NO_TYPE_NODULE,
+  type = this[MultiPlanarMarksVos.type],
   comment = this[MultiPlanarMarksVos.comment],
 )
 
-fun ResultRow.toPlanarMark(): MarkDomain = MarkDomain(
+fun ResultRow.toPlanarMark(): MarkEntity = MarkEntity(
   id = this[PlanarMarksVos.id],
   markData = MarkData(
     x = this[PlanarMarksVos.x],
@@ -67,9 +64,6 @@ fun ResultRow.toPlanarMark(): MarkDomain = MarkDomain(
     size = this[PlanarMarksVos.size],
     cutType = this[PlanarMarksVos.cutType]
   ),
-  type = MarkType
-    .values()
-    .firstOrNull { it.intValue == this[PlanarMarksVos.type] }
-    ?: MarkType.NO_TYPE_NODULE,
+  type = this[PlanarMarksVos.type],
   comment = this[PlanarMarksVos.comment],
 )

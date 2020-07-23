@@ -31,11 +31,11 @@ interface CutsContainerController {
     data class OpenFullCut(val cut: Cut) : Output()
     data class CloseFullCut(val cut: Cut) : Output()
     data class CircleDrawn(val circle: Circle, val sliceNumber: Int, val cut: Cut) : Output()
-    data class SelectMark(val mark: MarkDomain) : Output()
-    data class UnselectMark(val mark: MarkDomain) : Output()
+    data class SelectMark(val mark: MarkModel) : Output()
+    data class UnselectMark(val mark: MarkModel) : Output()
     data class ContrastBrightnessChanged(val black: Int, val white: Int) : Output()
-    data class UpdateMark(val markToUpdate: MarkDomain) : Output()
-    data class UpdateMarkWithSave(val mark: MarkDomain) : Output()
+    data class UpdateMark(val markToUpdate: MarkModel) : Output()
+    data class UpdateMarkWithSave(val mark: MarkModel) : Output()
     data class ChangeCutType(val cutType: CutType, val cut: Cut) : CutsContainerController.Output()
   }
 }

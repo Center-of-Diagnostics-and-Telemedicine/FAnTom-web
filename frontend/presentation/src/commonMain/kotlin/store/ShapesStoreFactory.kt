@@ -131,7 +131,7 @@ internal class ShapesStoreFactory(
       }
     }
 
-    private fun handleMarks(list: List<MarkDomain>, state: () -> State) {
+    private fun handleMarks(list: List<MarkModel>, state: () -> State) {
       dispatch(Result.Marks(list))
       updateCircles(list, state)
     }
@@ -156,7 +156,7 @@ internal class ShapesStoreFactory(
       updateCircles(getState().marks, getState)
     }
 
-    private fun updateCircles(list: List<MarkDomain>, state: () -> State) {
+    private fun updateCircles(list: List<MarkModel>, state: () -> State) {
       val circles = list.mapNotNull { it.toCircle(cut, state().sliceNumber) }
       val selectedCircle = circles.firstOrNull { it.highlight }
       val rectangles = if (selectedCircle != null && selectedCircle.isCenter) {

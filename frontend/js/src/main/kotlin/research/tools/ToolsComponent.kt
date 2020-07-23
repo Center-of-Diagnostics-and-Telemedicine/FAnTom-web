@@ -20,11 +20,9 @@ import model.Tool
 import react.*
 import repository.BrightnessRepository
 import repository.MipRepository
-import research.tools.ToolsComponent.ToolsStyles.headerStyle
 import research.tools.brightness.BrightnessViewProxy
 import research.tools.brightness.renderBrightness
 import research.tools.grid.GridViewProxy
-import research.tools.grid.grid
 import research.tools.mip.MipViewProxy
 import research.tools.mip.renderMip
 import research.tools.preset.PresetViewProxy
@@ -81,13 +79,13 @@ class ToolsComponent(prps: ToolsProps) : RComponent<ToolsProps, ToolsState>(prps
   }
 
   override fun RBuilder.render() {
-    styledDiv {
-      css(headerStyle)
-      grid(
-        current = state.gridModel.current,
-        onClick = { gridViewDelegate.dispatch(GridView.Event.ItemClick(it)) }
-      )
-    }
+//    styledDiv {
+//      css(headerStyle)
+//      grid(
+//        current = state.gridModel.current,
+//        onClick = { gridViewDelegate.dispatch(GridView.Event.ItemClick(it)) }
+//      )
+//    }
 
     mDivider()
 

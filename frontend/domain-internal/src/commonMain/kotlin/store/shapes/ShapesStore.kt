@@ -11,7 +11,7 @@ interface ShapesStore : Store<Intent, State, Label> {
     data class HandleSliceNumberChange(val sliceNumber: Int) : Intent()
     data class HandleExternalSliceNumberChanged(val sliceNumber: Int, val cut: Cut) : Intent()
     data class HandleMousePosition(val dicomX: Double, val dicomY: Double) : Intent()
-    data class HandleMarks(val list: List<MarkDomain>) : Intent()
+    data class HandleMarks(val list: List<MarkModel>) : Intent()
     data class HandleCenterMarkClick(val dicomX: Double, val dicomY: Double) : Intent()
     data class HandleMoveInClick(val deltaX: Double, val deltaY: Double) : Intent()
     data class HandleStartClick(val startDicomX: Double, val startDicomY: Double) : Intent()
@@ -28,16 +28,16 @@ interface ShapesStore : Store<Intent, State, Label> {
     val circles: List<Circle>,
     val rects: List<Rect>,
     val hounsfield: Int?,
-    val marks: List<MarkDomain>,
+    val marks: List<MarkModel>,
     val moveRect: Rect?
   ) : JvmSerializable
 
   sealed class Label {
-    data class SelectMark(val mark: MarkDomain) : Label()
-    data class CenterMark(val mark: MarkDomain) : Label()
-    data class UnselectMark(val mark: MarkDomain) : Label()
-    data class UpdateMark(val mark: MarkDomain) : Label()
-    data class UpdateMarkWithSave(val mark: MarkDomain) : Label()
+    data class SelectMark(val mark: MarkModel) : Label()
+    data class CenterMark(val mark: MarkModel) : Label()
+    data class UnselectMark(val mark: MarkModel) : Label()
+    data class UpdateMark(val mark: MarkModel) : Label()
+    data class UpdateMarkWithSave(val mark: MarkModel) : Label()
     data class ChangeCutType(val cutType: CutType) : Label()
   }
 }

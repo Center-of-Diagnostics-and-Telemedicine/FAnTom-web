@@ -4,19 +4,19 @@ import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import model.Circle
 import model.Cut
-import model.MarkDomain
+import model.MarkModel
 import store.marks.MarksStore.*
 
 interface MarksStore : Store<Intent, State, Label> {
 
   sealed class Intent : JvmSerializable {
     data class HandleNewMark(val circle: Circle, val sliceNumber: Int, val cut: Cut) : Intent()
-    data class SelectMark(val mark: MarkDomain) : Intent()
-    data class UnselectMark(val mark: MarkDomain) : Intent()
-    data class UpdateMark(val markToUpdate: MarkDomain) : Intent()
-    data class UpdateMarkWithSave(val mark: MarkDomain) : Intent()
-    data class DeleteMark(val mark: MarkDomain) : MarksStore.Intent()
-    data class UpdateComment(val mark: MarkDomain, val comment: String) : Intent()
+    data class SelectMark(val mark: MarkModel) : Intent()
+    data class UnselectMark(val mark: MarkModel) : Intent()
+    data class UpdateMark(val markToUpdate: MarkModel) : Intent()
+    data class UpdateMarkWithSave(val mark: MarkModel) : Intent()
+    data class DeleteMark(val mark: MarkModel) : MarksStore.Intent()
+    data class UpdateComment(val mark: MarkModel, val comment: String) : Intent()
 
     object DismissError : Intent()
     object ReloadRequested : Intent()
@@ -24,13 +24,13 @@ interface MarksStore : Store<Intent, State, Label> {
   }
 
   data class State(
-    val marks: List<MarkDomain> = listOf(),
-    val current: MarkDomain? = null,
+    val marks: List<MarkModel> = listOf(),
+    val current: MarkModel? = null,
     val loading: Boolean = false,
     val error: String = ""
   ) : JvmSerializable
 
   sealed class Label {
-    data class MarksLoaded(val list: List<MarkDomain>) : Label()
+    data class MarksLoaded(val list: List<MarkModel>) : Label()
   }
 }

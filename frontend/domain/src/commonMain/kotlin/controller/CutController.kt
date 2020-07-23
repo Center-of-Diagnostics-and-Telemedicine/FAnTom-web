@@ -41,8 +41,8 @@ interface CutController {
     data class PresetChanged(val preset: Presets) : Input()
     data class SliceNumberChanged(val sliceNumber: Int) : Input()
     data class ExternalSliceNumberChanged(val sliceNumber: Int, val cut: Cut) : Input()
-    data class Marks(val list: List<MarkDomain>) : Input()
-    data class ChangeSliceNumberByMarkCenter(val mark: MarkDomain) : Input()
+    data class Marks(val list: List<MarkModel>) : Input()
+    data class ChangeSliceNumberByMarkCenter(val mark: MarkModel) : Input()
 
     object Idle : Input()
   }
@@ -50,12 +50,12 @@ interface CutController {
   sealed class Output {
     data class SliceNumberChanged(val sliceNumber: Int, val cut: Cut) : Output()
     data class CircleDrawn(val circle: Circle, val sliceNumber: Int, val cut: Cut) : Output()
-    data class SelectMark(val mark: MarkDomain) : Output()
-    data class CenterMark(val mark: MarkDomain) : Output()
-    data class UnselectMark(val mark: MarkDomain) : Output()
+    data class SelectMark(val mark: MarkModel) : Output()
+    data class CenterMark(val mark: MarkModel) : Output()
+    data class UnselectMark(val mark: MarkModel) : Output()
     data class ContrastBrightnessChanged(val black: Int, val white: Int) : Output()
-    data class UpdateMark(val mark: MarkDomain) : Output()
-    data class UpdateMarkWithSave(val mark: MarkDomain) : Output()
+    data class UpdateMark(val mark: MarkModel) : Output()
+    data class UpdateMarkWithSave(val mark: MarkModel) : Output()
     data class OpenFullCut(val cut: Cut) : Output()
     data class ChangeCutType(val cutType: CutType, val cut: Cut) : Output()
   }

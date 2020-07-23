@@ -120,11 +120,13 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
           onOpen = ::openMarks,
           onClose = ::closeMarks
         ) {
+          val sizesData = model.data
           marks(dependencies = object : MarksComponent.Dependencies,
             Dependencies by props.dependencies {
             override val marksOutput: (MarksController.Output) -> Unit = ::marksOutput
             override val marksInput: Observable<MarksController.Input> = this@ResearchScreen.marksInputObservable
-            override val isPlanar: Boolean = model.data!!.type.isPlanar()
+            override val isPlanar: Boolean = sizesData!!.type.isPlanar()
+            override val data: ResearchSlicesSizesDataNew = sizesData!!
           })
         }
       }

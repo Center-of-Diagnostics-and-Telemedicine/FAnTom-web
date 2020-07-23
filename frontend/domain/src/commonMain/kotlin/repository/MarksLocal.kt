@@ -1,12 +1,12 @@
 package repository
 
-import model.MarkDomain
+import model.MarkEntity
 
 interface MarksLocal {
-  suspend fun get(markId: Int): MarkDomain?
-  suspend fun getAll(): List<MarkDomain>
-  suspend fun create(mark: MarkDomain)
-  suspend fun update(mark: MarkDomain)
-  suspend fun saveList(marks: List<MarkDomain>)
+  suspend fun get(markId: Int): MarkEntity?
+  suspend fun getAll(): List<MarkEntity>
+  suspend fun create(mark: MarkEntity)
+  suspend fun update(mark: MarkEntity)
+  suspend fun saveList(marks: List<MarkEntity>)
   suspend fun delete(markId: Int)
 }

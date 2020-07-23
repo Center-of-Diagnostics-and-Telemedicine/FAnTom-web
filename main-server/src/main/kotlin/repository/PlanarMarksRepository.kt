@@ -2,21 +2,21 @@ package repository
 
 import dao.MarksDaoFacade
 import model.MarkData
-import model.MarkDomain
+import model.MarkEntity
 
 class PlanarMarksRepositoryImpl(
   private val marksDaoFacade: MarksDaoFacade
 ) : MarksRepository {
 
-  override suspend fun get(id: Int): MarkDomain? {
+  override suspend fun get(id: Int): MarkEntity? {
     return marksDaoFacade.get(id)
   }
 
-  override suspend fun getAll(userId: Int, researchId: Int): List<MarkDomain> {
+  override suspend fun getAll(userId: Int, researchId: Int): List<MarkEntity> {
     return marksDaoFacade.getAll(userId, researchId)
   }
 
-  override suspend fun create(mark: MarkData, userId: Int, researchId: Int): MarkDomain? {
+  override suspend fun create(mark: MarkData, userId: Int, researchId: Int): MarkEntity? {
     return marksDaoFacade
       .save(mark, userId, researchId)
       .let { id ->
@@ -24,7 +24,7 @@ class PlanarMarksRepositoryImpl(
       }
   }
 
-  override suspend fun update(mark: MarkDomain) {
+  override suspend fun update(mark: MarkEntity) {
     checkMarkExistence(mark.id)
     marksDaoFacade.update(mark)
   }

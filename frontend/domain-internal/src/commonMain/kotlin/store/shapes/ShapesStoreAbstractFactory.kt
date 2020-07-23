@@ -53,7 +53,7 @@ abstract class ShapesStoreAbstractFactory(
     data class VerticalCoefficientChanged(val coefficient: Double) : Result()
     data class PointPositionChanged(val position: PointPosition?) : Result()
     data class HounsfieldChanged(val hu: Double) : Result()
-    data class Marks(val marks: List<MarkDomain>) : Result()
+    data class Marks(val marks: List<MarkModel>) : Result()
     data class Circles(val circles: List<Circle>) : Result()
     data class Rects(val rects: List<Rect>) : Result()
     data class RectInMove(val moveRect: Rect?) : Result()

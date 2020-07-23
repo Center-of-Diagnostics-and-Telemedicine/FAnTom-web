@@ -190,7 +190,7 @@ fun Cut.getMarkToSave(circle: Circle, sliceNumber: Int): MarkData? {
   }
 }
 
-fun Cut.getSliceNumberByMark(mark: MarkDomain): Int? {
+fun Cut.getSliceNumberByMark(mark: MarkModel): Int? {
   return when (type) {
     CutType.EMPTY -> null
     CutType.CT_AXIAL -> mark.markData.z.toInt()
@@ -207,7 +207,7 @@ fun Cut.getSliceNumberByMark(mark: MarkDomain): Int? {
   }
 }
 
-fun Cut.updateCoordinates(mark: MarkDomain, deltaX: Double, deltaY: Double): MarkDomain? {
+fun Cut.updateCoordinates(mark: MarkModel, deltaX: Double, deltaY: Double): MarkModel? {
   val markData = mark.markData
   return when (type) {
     CutType.EMPTY -> null
@@ -260,11 +260,11 @@ fun Cut.updateCoordinates(mark: MarkDomain, deltaX: Double, deltaY: Double): Mar
 }
 
 fun Cut.updateCoordinatesByRect(
-  mark: MarkDomain,
+  mark: MarkModel,
   deltaX: Double,
   deltaY: Double,
   rect: Rect
-): MarkDomain? {
+): MarkModel? {
   val markData = mark.markData
   return when (type) {
     CutType.EMPTY -> null

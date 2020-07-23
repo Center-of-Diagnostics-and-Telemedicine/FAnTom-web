@@ -23,14 +23,22 @@ data class ResearchInitResponse(
 @Serializable
 data class ResearchInitResponseNew(
   val response: ResearchInitModelNew? = null,
-  val error: ErrorModel? = null
+  val error: ErrorModel? = null,
+  val dictionary: List<List<Map<String, MarkTypeEntity>>>? = null
 )
 
 @Serializable
 data class ResearchInitModelNew(
   val CT: CTInitModel? = null,
   val MG: MGInitModel? = null,
-  val DX: DXInitModel? = null
+  val DX: DXInitModel? = null,
+  val dictionary: Map<String, MarkTypeEntity>? = null
+)
+
+@Serializable
+data class MarkTypeEntity(
+  val EN: String? = "",
+  val RU: String? = ""
 )
 
 @Serializable

@@ -35,7 +35,7 @@ class RemoteLibraryRepositoryImpl(
     return when {
       response.response != null -> {
         debugLog("ResearchInitResponse income")
-        return response.response!!
+        return response.response!!.copy(dictionary = response.dictionary?.first()?.first())
       }
       response.error != null -> {
         when (response.error!!.error) {

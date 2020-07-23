@@ -1,5 +1,4 @@
 import model.ID_FIELD
-import model.MarkType
 import model.SLICE_TYPE_CT_AXIAL
 import model.UserRole
 import org.jetbrains.exposed.sql.Column
@@ -62,7 +61,7 @@ object MultiPlanarMarksVos : Table(MULTI_PLANAR_MARKS_TABLE) {
   val z: Column<Double> = double(Z_FIELD)
   val radius: Column<Double> = double(RADIUS_HORIZONTAL_FIELD)
   val size: Column<Double> = double(SIZE_FIELD)
-  val type: Column<Int> = integer(MARK_TYPE_FILED).default(MarkType.NO_TYPE_NODULE.intValue)
+  val type: Column<String> = varchar(name = MARK_TYPE_FILED, length = 20).default("")
   val comment: Column<String> = varchar(name = COMMENT_FILED, length = 200).default("")
   val cutType: Column<Int> = integer(name = CUT_TYPE_FILED).default(SLICE_TYPE_CT_AXIAL)
   override val primaryKey = PrimaryKey(id, name = "MarkPKConstraintName")
@@ -77,7 +76,7 @@ object PlanarMarksVos : Table(PLANAR_MARKS_TABLE) {
   val radiusHorizontal: Column<Double> = double(RADIUS_HORIZONTAL_FIELD)
   val radiusVertical: Column<Double> = double(RADIUS_VERTICAL_FIELD)
   val size: Column<Double> = double(SIZE_FIELD)
-  val type: Column<Int> = integer(MARK_TYPE_FILED).default(MarkType.NO_TYPE_NODULE.intValue)
+  val type: Column<String> = varchar(name = MARK_TYPE_FILED, length = 20).default("")
   val comment: Column<String> = varchar(name = COMMENT_FILED, length = 200).default("")
   val cutType: Column<Int> = integer(name = CUT_TYPE_FILED)
   override val primaryKey = PrimaryKey(id, name = "MarkPKConstraintName")

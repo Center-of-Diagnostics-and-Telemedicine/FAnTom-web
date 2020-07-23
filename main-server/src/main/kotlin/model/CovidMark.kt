@@ -1,6 +1,6 @@
 package model
 
-data class MarkModel(
+data class CovidMark(
   val userId: Int,
   val researchId: Int,
   val ctType: Int,
@@ -8,8 +8,8 @@ data class MarkModel(
   val rightPercent: Int
 )
 
-fun ConfirmCTTypeRequest.toMarkModel(userId: Int): MarkModel {
-  return MarkModel(
+fun ConfirmCTTypeRequest.toMarkModel(userId: Int): CovidMark {
+  return CovidMark(
     userId = userId,
     researchId = researchId,
     ctType = ctType,

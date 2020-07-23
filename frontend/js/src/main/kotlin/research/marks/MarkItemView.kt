@@ -14,7 +14,7 @@ import com.ccfraser.muirwik.components.table.mTableCell
 import com.ccfraser.muirwik.components.table.mTableRow
 import com.ccfraser.muirwik.components.themeContext
 import kotlinx.css.*
-import model.MarkDomain
+import model.MarkModel
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.Node
 import org.w3c.dom.events.Event
@@ -161,13 +161,13 @@ class MarkItemState(
 ) : RState
 
 interface MarkItemProps : RProps {
-  var mark: MarkDomain
+  var mark: MarkModel
   var eventOutput: (MarksView.Event) -> Unit
 }
 
 fun RBuilder.markView(
-  mark: MarkDomain, eventOutput:
-  (MarksView.Event) -> Unit
+  mark: MarkModel,
+  eventOutput: (MarksView.Event) -> Unit
 ) = child(MarkItemView::class) {
   attrs.mark = mark
   attrs.eventOutput = eventOutput

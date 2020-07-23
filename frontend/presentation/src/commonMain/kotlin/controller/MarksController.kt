@@ -23,7 +23,8 @@ class MarksControllerImpl(val dependencies: MarksController.Dependencies) :
   private val marksStore = MarksStoreFactory(
     storeFactory = dependencies.storeFactory,
     repository = dependencies.marksRepository,
-    researchId = dependencies.researchId
+    researchId = dependencies.researchId,
+    data = dependencies.data
   ).create()
 
   private val inputRelay: Relay<MarksController.Input> = PublishSubject()

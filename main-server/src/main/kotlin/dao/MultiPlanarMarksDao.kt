@@ -2,13 +2,13 @@ package dao
 
 import MultiPlanarMarksVos
 import model.MarkData
-import model.MarkDomain
+import model.MarkEntity
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import toMultiPlanarMark
 
 class MultiPlanarMarksDao : MarksDaoFacade {
-  override suspend fun get(id: Int): MarkDomain? {
+  override suspend fun get(id: Int): MarkEntity? {
     return transaction {
       MultiPlanarMarksVos
         .select { MultiPlanarMarksVos.id eq id }
@@ -17,7 +17,7 @@ class MultiPlanarMarksDao : MarksDaoFacade {
     }
   }
 
-  override suspend fun getAll(userId: Int, researchId: Int): List<MarkDomain> {
+  override suspend fun getAll(userId: Int, researchId: Int): List<MarkEntity> {
     return transaction {
       MultiPlanarMarksVos
         .select { MultiPlanarMarksVos.researchId.eq(researchId).and(MultiPlanarMarksVos.userId.eq(userId)) }
@@ -40,7 +40,7 @@ class MultiPlanarMarksDao : MarksDaoFacade {
     }
   }
 
-  override suspend fun update(mark: MarkDomain) {
+  override suspend fun update(mark: MarkEntity) {
     return transaction {
       MultiPlanarMarksVos.update(where = { MultiPlanarMarksVos.id eq mark.id }) {
         it[x] = mark.markData.x
@@ -48,7 +48,7 @@ class MultiPlanarMarksDao : MarksDaoFacade {
         it[z] = mark.markData.z
         it[radius] = mark.markData.radiusHorizontal
         it[size] = mark.markData.size
-        it[type] = mark.type.intValue
+        it[type] = mark.type
         it[comment] = mark.comment
         it[cutType] = mark.markData.cutType
       }

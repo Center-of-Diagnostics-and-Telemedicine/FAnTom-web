@@ -1,20 +1,20 @@
 package dao
 
 import CovidMarksVos
-import model.MarkModel
+import model.CovidMark
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import toCovidMark
 
 interface CovidMarkDaoFacade {
-  suspend fun getMark(userId: Int, researchId: Int): MarkModel?
-  suspend fun createMark(markModel: MarkModel)
+  suspend fun getMark(userId: Int, researchId: Int): CovidMark?
+  suspend fun createMark(covidMark: CovidMark)
   suspend fun deleteMark(researchId: Int, userId: Int)
-  suspend fun updateMark(markModel: MarkModel)
+  suspend fun updateMark(covidMark: CovidMark)
 }
 
 class CovidCovidMarkDao : CovidMarkDaoFacade {
-  override suspend fun getMark(userId: Int, researchId: Int): MarkModel? {
+  override suspend fun getMark(userId: Int, researchId: Int): CovidMark? {
     return transaction {
       CovidMarksVos.select { CovidMarksVos.researchId eq researchId and (CovidMarksVos.userId eq userId) }
       .firstOrNull()
@@ -22,14 +22,14 @@ class CovidCovidMarkDao : CovidMarkDaoFacade {
     }
   }
 
-  override suspend fun createMark(markModel: MarkModel) {
+  override suspend fun createMark(covidMark: CovidMark) {
     return transaction {
       CovidMarksVos.insert {
-        it[userId] = markModel.userId
-        it[researchId] = markModel.researchId
-        it[ctType] = markModel.ctType
-        it[leftPercent] = markModel.leftPercent
-        it[rightPercent] = markModel.rightPercent
+        it[userId] = covidMark.userId
+        it[researchId] = covidMark.researchId
+        it[ctType] = covidMark.ctType
+        it[leftPercent] = covidMark.leftPercent
+        it[rightPercent] = covidMark.rightPercent
       }
     }
   }
@@ -40,14 +40,14 @@ class CovidCovidMarkDao : CovidMarkDaoFacade {
     }
   }
 
-  override suspend fun updateMark(markModel: MarkModel) {
+  override suspend fun updateMark(covidMark: CovidMark) {
     return transaction {
-      CovidMarksVos.update(where = { CovidMarksVos.researchId eq markModel.researchId and (CovidMarksVos.userId eq markModel.userId) }) {
-        it[userId] = markModel.userId
-        it[researchId] = markModel.researchId
-        it[ctType] = markModel.ctType
-        it[leftPercent] = markModel.leftPercent
-        it[rightPercent] = markModel.rightPercent
+      CovidMarksVos.update(where = { CovidMarksVos.researchId eq covidMark.researchId and (CovidMarksVos.userId eq covidMark.userId) }) {
+        it[userId] = covidMark.userId
+        it[researchId] = covidMark.researchId
+        it[ctType] = covidMark.ctType
+        it[leftPercent] = covidMark.leftPercent
+        it[rightPercent] = covidMark.rightPercent
       }
     }
   }

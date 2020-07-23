@@ -18,7 +18,8 @@ data class ResearchSlicesSizesDataNew(
   val modalities: Map<Int, ModalityModel>,
   val type: ResearchType,
   val researchId: Int = -1,
-  val reversed: Boolean
+  val reversed: Boolean,
+  val markTypes: Map<String, MarkTypeEntity>
 )
 
 fun initialResearchSlicesSizesData(): ResearchSlicesSizesData {
@@ -66,7 +67,8 @@ fun ResearchInitModelNew.toResearchSlicesSizesData(): ResearchSlicesSizesDataNew
       ResearchSlicesSizesDataNew(
         modalities = modalities,
         reversed = CT.reversed,
-        type = ResearchType.CT
+        type = ResearchType.CT,
+        markTypes = dictionary!!
       )
     }
     MG != null -> {
@@ -79,7 +81,8 @@ fun ResearchInitModelNew.toResearchSlicesSizesData(): ResearchSlicesSizesDataNew
       ResearchSlicesSizesDataNew(
         modalities = modalities,
         reversed = MG.reversed,
-        type = ResearchType.MG
+        type = ResearchType.MG,
+        markTypes = dictionary!!
       )
     }
     DX != null -> {
@@ -92,7 +95,8 @@ fun ResearchInitModelNew.toResearchSlicesSizesData(): ResearchSlicesSizesDataNew
       ResearchSlicesSizesDataNew(
         modalities = modalities,
         reversed = DX.reversed,
-        type = ResearchType.DX
+        type = ResearchType.DX,
+        markTypes = dictionary!!
       )
     }
     else -> throw NotImplementedError("ResearchInitModelNew.toResearchSlicesSizesData failed")

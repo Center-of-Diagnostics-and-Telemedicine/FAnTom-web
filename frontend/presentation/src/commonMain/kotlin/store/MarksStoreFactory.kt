@@ -6,6 +6,7 @@ import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
 import com.badoo.reaktive.coroutinesinterop.singleFromCoroutine
 import com.badoo.reaktive.scheduler.ioScheduler
 import com.badoo.reaktive.scheduler.mainScheduler
+import com.badoo.reaktive.single.Single
 import com.badoo.reaktive.single.map
 import com.badoo.reaktive.single.observeOn
 import com.badoo.reaktive.single.subscribeOn
@@ -18,7 +19,8 @@ import store.marks.MarksStoreAbstractFactory
 internal class MarksStoreFactory(
   storeFactory: StoreFactory,
   val repository: MarksRepository,
-  val researchId: Int
+  val researchId: Int,
+  val data: ResearchSlicesSizesDataNew
 ) : MarksStoreAbstractFactory(
   storeFactory = storeFactory
 ) {
@@ -32,6 +34,7 @@ internal class MarksStoreFactory(
         repository.getMarks(researchId)
       }
         .subscribeOn(ioScheduler)
+        .markEntityToMarkModel()
         .map(Result::Loaded)
         .observeOn(mainScheduler)
         .subscribeScoped(
@@ -59,12 +62,13 @@ internal class MarksStoreFactory(
       }.let {}
     }
 
-    private fun updateComment(mark: MarkDomain, comment: String) {
+    private fun updateComment(mark: MarkModel, comment: String) {
       singleFromCoroutine {
-        repository.updateMark(mark.copy(comment = comment), researchId)
+        repository.updateMark(mark.toMarkEntity().copy(comment = comment), researchId)
         repository.getMarks(researchId)
       }
         .subscribeOn(ioScheduler)
+        .markEntityToMarkModel()
         .map(Result::Loaded)
         .observeOn(mainScheduler)
         .subscribeScoped(
@@ -77,12 +81,13 @@ internal class MarksStoreFactory(
         )
     }
 
-    private fun deleteMark(mark: MarkDomain) {
+    private fun deleteMark(mark: MarkModel) {
       singleFromCoroutine {
         repository.deleteMark(mark.id, researchId)
         repository.getMarks(researchId)
       }
         .subscribeOn(ioScheduler)
+        .markEntityToMarkModel()
         .map(Result::Loaded)
         .observeOn(mainScheduler)
         .subscribeScoped(
@@ -95,12 +100,13 @@ internal class MarksStoreFactory(
         )
     }
 
-    private fun updateMarkWithSave(mark: MarkDomain) {
+    private fun updateMarkWithSave(mark: MarkModel) {
       singleFromCoroutine {
-        repository.updateMark(mark, researchId)
+        repository.updateMark(mark.toMarkEntity(), researchId)
         repository.getMarks(researchId)
       }
         .subscribeOn(ioScheduler)
+        .markEntityToMarkModel()
         .map(Result::Loaded)
         .observeOn(mainScheduler)
         .subscribeScoped(
@@ -120,6 +126,7 @@ internal class MarksStoreFactory(
         repository.getMarks(researchId)
       }
         .subscribeOn(ioScheduler)
+        .markEntityToMarkModel()
         .map(Result::Loaded)
         .observeOn(mainScheduler)
         .subscribeScoped(
@@ -132,13 +139,13 @@ internal class MarksStoreFactory(
         )
     }
 
-    private fun updateMarkWithoutSaving(markToUpdate: MarkDomain, getState: () -> State) {
+    private fun updateMarkWithoutSaving(markToUpdate: MarkModel, getState: () -> State) {
       val marks = getState().marks.replace(markToUpdate) { it.id == markToUpdate.id }
       dispatch(Result.Loaded(marks))
       publish(Label.MarksLoaded(marks))
     }
 
-    private fun selectMark(mark: MarkDomain, state: () -> State) {
+    private fun selectMark(mark: MarkModel, state: () -> State) {
       val marks = state().marks
       marks.firstOrNull { it.selected }?.let { it.selected = false }
       marks.firstOrNull { it.id == mark.id }?.let { it.selected = true }
@@ -146,13 +153,16 @@ internal class MarksStoreFactory(
       publish(Label.MarksLoaded(marks))
     }
 
-
-    private fun unselectMark(mark: MarkDomain, state: () -> State) {
+    private fun unselectMark(mark: MarkModel, state: () -> State) {
       val marks = state().marks
       marks.firstOrNull { it.id == mark.id }?.let { it.selected = false }
       dispatch(Result.Loaded(marks))
       publish(Label.MarksLoaded(marks))
     }
+
+
+    private fun Single<List<MarkEntity>>.markEntityToMarkModel(): Single<List<MarkModel>> =
+      map { it.map { it.toMarkModel(data.markTypes) } }
 
     private fun handleError(error: Throwable) {
       println("MarksStore" + error.message)
