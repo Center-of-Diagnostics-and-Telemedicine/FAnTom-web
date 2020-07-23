@@ -5,6 +5,7 @@ import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import model.Circle
 import model.Cut
 import model.MarkModel
+import model.MarkTypeModel
 import store.marks.MarksStore.*
 
 interface MarksStore : Store<Intent, State, Label> {
@@ -17,6 +18,7 @@ interface MarksStore : Store<Intent, State, Label> {
     data class UpdateMarkWithSave(val mark: MarkModel) : Intent()
     data class DeleteMark(val mark: MarkModel) : MarksStore.Intent()
     data class UpdateComment(val mark: MarkModel, val comment: String) : Intent()
+    data class ChangeMarkType(val type: MarkTypeModel, val mark: MarkModel) : Intent()
 
     object DismissError : Intent()
     object ReloadRequested : Intent()
@@ -27,7 +29,8 @@ interface MarksStore : Store<Intent, State, Label> {
     val marks: List<MarkModel> = listOf(),
     val current: MarkModel? = null,
     val loading: Boolean = false,
-    val error: String = ""
+    val error: String = "",
+    val markTypes: List<MarkTypeModel> = listOf()
   ) : JvmSerializable
 
   sealed class Label {

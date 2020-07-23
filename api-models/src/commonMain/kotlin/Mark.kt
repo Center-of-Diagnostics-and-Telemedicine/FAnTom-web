@@ -36,7 +36,7 @@ data class MarkModel(
 }
 
 data class MarkTypeModel(
-  val name: String,
+  val typeId: String,
   val en: String,
   val ru: String
 )
@@ -51,7 +51,7 @@ fun MarkEntity.toMarkModel(types: Map<String, MarkTypeEntity>): MarkModel =
 
 fun MarkTypeEntity.toMarkTypeModel(type: String): MarkTypeModel =
   MarkTypeModel(
-    name = type,
+    typeId = type,
     en = EN ?: "",
     ru = RU ?: ""
   )
@@ -60,7 +60,7 @@ fun MarkModel.toMarkEntity(): MarkEntity =
   MarkEntity(
     id = id,
     markData = markData,
-    type = type?.name ?: "",
+    type = type?.typeId ?: "",
     comment = comment,
   ).also { it.selected = selected }
 

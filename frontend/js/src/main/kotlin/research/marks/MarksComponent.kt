@@ -70,7 +70,8 @@ class MarksComponent(prps: MarksProps) : RComponent<MarksProps, MarksState>(prps
             state.model.items.forEach { area ->
               markView(
                 mark = area,
-                eventOutput = { marksViewDelegate.dispatch(it) }
+                eventOutput = { marksViewDelegate.dispatch(it) },
+                markTypes = state.model.markTypes
               )
             }
           }

@@ -4,6 +4,7 @@ import com.arkivanov.mvikotlin.core.store.*
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.badoo.reaktive.utils.ensureNeverFrozen
 import model.MarkModel
+import model.MarkTypeModel
 import store.marks.MarksStore.*
 
 abstract class MarksStoreAbstractFactory(
@@ -28,6 +29,7 @@ abstract class MarksStoreAbstractFactory(
   protected sealed class Result : JvmSerializable {
     object Loading : Result()
     data class Loaded(val marks: List<MarkModel>) : Result()
+    data class MarkTypesLoaded(val markTypes: List<MarkTypeModel>) : Result()
     data class Error(val error: String) : Result()
 
     object DismissErrorRequested : Result()
@@ -38,6 +40,7 @@ abstract class MarksStoreAbstractFactory(
       when (result) {
         is Result.Loading -> copy(loading = true)
         is Result.Loaded -> copy(marks = result.marks, loading = false)
+        is Result.MarkTypesLoaded -> copy(markTypes = result.markTypes, loading = false)
         is Result.Error -> copy(error = result.error, loading = false)
         is Result.DismissErrorRequested -> copy(error = "")
       }

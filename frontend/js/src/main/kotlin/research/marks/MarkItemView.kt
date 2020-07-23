@@ -15,6 +15,7 @@ import com.ccfraser.muirwik.components.table.mTableRow
 import com.ccfraser.muirwik.components.themeContext
 import kotlinx.css.*
 import model.MarkModel
+import model.MarkTypeModel
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.Node
 import org.w3c.dom.events.Event
@@ -54,22 +55,19 @@ class MarkItemView(prps: MarkItemProps) : RComponent<MarkItemProps, MarkItemStat
         mTableCell(align = MTableCellAlign.center) { +"${round(area.markData.size)}" }
         mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) {
           mButton(
-            //getNodeTypeString(area.areaType),
-            "",
+            caption = if (area.type == null) "тип" else area.type!!.ru.take(3),
             onClick = { handleShowMenuClick(it, area.id) }
           )
           mMenu(
             state.selectedMenuIndex == area.id,
             anchorElement = anchorElement,
             onClose = { _, reason -> handleOnClose() }) {
-            mMenuItem(
-              "Солидный",
-              onClick = { handleSimpleClick(0) })
-            mMenuItem(
-              "Полусолидный",
-              onClick = { handleSimpleClick(1) })
-            mMenuItem("Матовое стекло", onClick = { handleSimpleClick(2) })
-            mMenuItem("non-nodule", onClick = { handleSimpleClick(3) })
+
+            props.markTypes.forEach { markType ->
+              mMenuItem(
+                primaryText = markType.ru,
+                onClick = { handleSimpleClick(markType) })
+            }
           }
         }
         mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) {
@@ -133,8 +131,8 @@ class MarkItemView(prps: MarkItemProps) : RComponent<MarkItemProps, MarkItemStat
     }
   }
 
-  private fun handleSimpleClick(type: Int) {
-//    props.changeType(type)
+  private fun handleSimpleClick(type: MarkTypeModel) {
+    props.eventOutput(MarksView.Event.ChangeMarkType(type, props.mark))
     setState {
       selectedMenuIndex = -1
       anchorElement = null
@@ -163,12 +161,16 @@ class MarkItemState(
 interface MarkItemProps : RProps {
   var mark: MarkModel
   var eventOutput: (MarksView.Event) -> Unit
+  var markTypes: List<MarkTypeModel>
 }
 
 fun RBuilder.markView(
   mark: MarkModel,
-  eventOutput: (MarksView.Event) -> Unit
+  eventOutput: (MarksView.Event) -> Unit,
+  markTypes: List<MarkTypeModel>
 ) = child(MarkItemView::class) {
+  debugLog("MY: markTypes.size = $markTypes")
   attrs.mark = mark
   attrs.eventOutput = eventOutput
+  attrs.markTypes = markTypes
 }

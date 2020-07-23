@@ -7,7 +7,7 @@ import view.MarksView.Event
 import view.MarksView.Model
 
 val marksStateToModel: State.() -> Model = {
-  Model(items = marks, current = current)
+  Model(items = marks, current = current, markTypes = markTypes)
 }
 
 val marksEventToIntent: Event.() -> Intent? = {
@@ -15,6 +15,7 @@ val marksEventToIntent: Event.() -> Intent? = {
     is Event.SelectItem -> Intent.SelectMark(mark)
     is Event.ItemCommentChanged -> Intent.UpdateComment(mark, comment)
     is Event.DeleteItem -> Intent.DeleteMark(mark)
+    is Event.ChangeMarkType -> Intent.ChangeMarkType(type, mark)
   }
 }
 

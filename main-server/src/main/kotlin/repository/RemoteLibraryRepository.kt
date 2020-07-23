@@ -2,10 +2,7 @@ package repository
 
 import fantom.FantomLibraryDataSource
 import kotlinx.coroutines.delay
-import model.ErrorStringCode
-import model.HounsfieldRequestNew
-import model.ResearchInitModelNew
-import model.SliceRequestNew
+import model.*
 import util.debugLog
 
 interface RemoteLibraryRepository {
@@ -35,7 +32,13 @@ class RemoteLibraryRepositoryImpl(
     return when {
       response.response != null -> {
         debugLog("ResearchInitResponse income")
-        return response.response!!.copy(dictionary = response.dictionary?.first()?.first())
+        val resultMarkTypes = mutableMapOf<String, MarkTypeEntity>()
+        response.dictionary?.first()?.map { maps ->
+          maps.map { entry ->
+            resultMarkTypes[entry.key] = entry.value
+          }
+        }
+        return response.response!!.copy(dictionary = resultMarkTypes)
       }
       response.error != null -> {
         when (response.error!!.error) {

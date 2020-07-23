@@ -30,6 +30,10 @@ internal class MarksStoreFactory(
   private inner class ExecutorImpl : ReaktiveExecutor<Intent, Unit, State, Result, Label>() {
 
     override fun executeAction(action: Unit, getState: () -> State) {
+      println("MY: markTypes.size in store = ${data.markTypes}")
+      val markTypes = data.markTypes.map { it.value.toMarkTypeModel(it.key) }
+      dispatch(Result.MarkTypesLoaded(markTypes))
+
       singleFromCoroutine {
         repository.getMarks(researchId)
       }
@@ -57,6 +61,7 @@ internal class MarksStoreFactory(
         is Intent.DeleteMark -> deleteMark(intent.mark)
         is Intent.UpdateComment -> updateComment(intent.mark, intent.comment)
         Intent.DeleteClicked -> getState().marks.firstOrNull { it.selected }?.let { deleteMark(it) }
+        is Intent.ChangeMarkType -> updateMarkWithSave(intent.mark.copy(type = intent.type))
         Intent.ReloadRequested -> TODO()
         Intent.DismissError -> TODO()
       }.let {}
