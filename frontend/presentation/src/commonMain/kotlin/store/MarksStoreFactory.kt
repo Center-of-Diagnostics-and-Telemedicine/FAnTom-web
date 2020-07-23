@@ -35,19 +35,7 @@ internal class MarksStoreFactory(
 
       singleFromCoroutine {
         repository.getMarks(researchId)
-      }
-        .subscribeOn(ioScheduler)
-        .markEntityToMarkModel()
-        .map(Result::Loaded)
-        .observeOn(mainScheduler)
-        .subscribeScoped(
-          isThreadLocal = true,
-          onSuccess = {
-            dispatch(it)
-            publish(Label.MarksLoaded(it.marks))
-          },
-          onError = ::handleError
-        )
+      }.subscribeSingle()
     }
 
     override fun executeIntent(intent: Intent, getState: () -> State) {
@@ -55,7 +43,7 @@ internal class MarksStoreFactory(
         is Intent.HandleNewMark -> handleNewMark(intent.circle, intent.sliceNumber, intent.cut)
         is Intent.SelectMark -> selectMark(intent.mark, getState)
         is Intent.UnselectMark -> unSelectMark(intent.mark, getState)
-        is Intent.UpdateMarkWightoutSaving -> updateMarkWithoutSaving(intent.markToUpdate, getState)
+        is Intent.UpdateMarkWithoutSaving -> updateMarkWithoutSaving(intent.markToUpdate, getState)
         is Intent.UpdateMarkWithSave -> updateMarkWithSave(intent.mark)
         is Intent.DeleteMark -> deleteMark(intent.mark)
         is Intent.UpdateComment -> updateComment(intent.mark, intent.comment)
@@ -64,6 +52,10 @@ internal class MarksStoreFactory(
           getState().marks.firstOrNull { it.id == intent.markId }?.copy(type = intent.type)?.let {
             updateMarkWithSave(it)
           }
+        is Intent.SetCurrentMark -> {
+          getState().marks.firstOrNull { it.selected }?.let { unSelectMark(it, getState) }
+          getState().marks.firstOrNull { it.id == intent.mark.id }?.let { selectMark(it, getState) }
+        }
         Intent.ReloadRequested -> TODO()
         Intent.DismissError -> TODO()
       }.let {}
@@ -73,57 +65,14 @@ internal class MarksStoreFactory(
       singleFromCoroutine {
         repository.updateMark(mark.toMarkEntity().copy(comment = comment), researchId)
         repository.getMarks(researchId)
-      }
-        .subscribeOn(ioScheduler)
-        .markEntityToMarkModel()
-        .map(Result::Loaded)
-        .observeOn(mainScheduler)
-        .subscribeScoped(
-          isThreadLocal = true,
-          onSuccess = {
-            dispatch(it)
-            publish(Label.MarksLoaded(it.marks))
-          },
-          onError = ::handleError
-        )
+      }.subscribeSingle()
     }
 
     private fun deleteMark(mark: MarkModel) {
       singleFromCoroutine {
         repository.deleteMark(mark.id, researchId)
         repository.getMarks(researchId)
-      }
-        .subscribeOn(ioScheduler)
-        .markEntityToMarkModel()
-        .map(Result::Loaded)
-        .observeOn(mainScheduler)
-        .subscribeScoped(
-          isThreadLocal = true,
-          onSuccess = {
-            dispatch(it)
-            publish(Label.MarksLoaded(it.marks))
-          },
-          onError = ::handleError
-        )
-    }
-
-    private fun updateMarkWithSave(mark: MarkModel) {
-      singleFromCoroutine {
-        repository.updateMark(mark.toMarkEntity(), researchId)
-        repository.getMarks(researchId)
-      }
-        .subscribeOn(ioScheduler)
-        .markEntityToMarkModel()
-        .map(Result::Loaded)
-        .observeOn(mainScheduler)
-        .subscribeScoped(
-          isThreadLocal = true,
-          onSuccess = {
-            dispatch(it)
-            publish(Label.MarksLoaded(it.marks))
-          },
-          onError = ::handleError
-        )
+      }.subscribeSingle()
     }
 
     private fun handleNewMark(circle: Circle, sliceNumber: Int, cut: Cut) {
@@ -131,19 +80,14 @@ internal class MarksStoreFactory(
         val markToSave = cut.getMarkToSave(circle, sliceNumber)
         repository.saveMark(markToSave!!, researchId)
         repository.getMarks(researchId)
-      }
-        .subscribeOn(ioScheduler)
-        .markEntityToMarkModel()
-        .map(Result::Loaded)
-        .observeOn(mainScheduler)
-        .subscribeScoped(
-          isThreadLocal = true,
-          onSuccess = {
-            dispatch(it)
-            publish(Label.MarksLoaded(it.marks))
-          },
-          onError = ::handleError
-        )
+      }.subscribeSingle()
+    }
+
+    private fun updateMarkWithSave(mark: MarkModel) {
+      singleFromCoroutine {
+        repository.updateMark(mark.toMarkEntity(), researchId)
+        repository.getMarks(researchId)
+      }.subscribeSingle()
     }
 
     private fun updateMarkWithoutSaving(markToUpdate: MarkModel, getState: () -> State) {
@@ -160,19 +104,7 @@ internal class MarksStoreFactory(
           localy = true
         )
         repository.getMarks(researchId)
-      }
-        .subscribeOn(ioScheduler)
-        .markEntityToMarkModel()
-        .map(Result::Loaded)
-        .observeOn(mainScheduler)
-        .subscribeScoped(
-          isThreadLocal = true,
-          onSuccess = {
-            dispatch(it)
-            publish(Label.MarksLoaded(it.marks))
-          },
-          onError = ::handleError
-        )
+      }.subscribeSingle()
     }
 
     private fun unSelectMark(mark: MarkModel, state: () -> State) {
@@ -183,8 +115,15 @@ internal class MarksStoreFactory(
           localy = true
         )
         repository.getMarks(researchId)
-      }
-        .subscribeOn(ioScheduler)
+      }.subscribeSingle()
+    }
+
+
+    private fun Single<List<MarkEntity>>.markEntityToMarkModel(): Single<List<MarkModel>> =
+      map { list -> list.map { it.toMarkModel(data.markTypes) } }
+
+    private fun Single<List<MarkEntity>>.subscribeSingle() =
+      subscribeOn(ioScheduler)
         .markEntityToMarkModel()
         .map(Result::Loaded)
         .observeOn(mainScheduler)
@@ -196,11 +135,6 @@ internal class MarksStoreFactory(
           },
           onError = ::handleError
         )
-    }
-
-
-    private fun Single<List<MarkEntity>>.markEntityToMarkModel(): Single<List<MarkModel>> =
-      map { list -> list.map { it.toMarkModel(data.markTypes) } }
 
     private fun handleError(error: Throwable) {
       println("MarksStore" + error.message)

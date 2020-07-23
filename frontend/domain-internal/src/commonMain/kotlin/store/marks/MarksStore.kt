@@ -14,11 +14,12 @@ interface MarksStore : Store<Intent, State, Label> {
     data class HandleNewMark(val circle: Circle, val sliceNumber: Int, val cut: Cut) : Intent()
     data class SelectMark(val mark: MarkModel) : Intent()
     data class UnselectMark(val mark: MarkModel) : Intent()
-    data class UpdateMarkWightoutSaving(val markToUpdate: MarkModel) : Intent()
+    data class UpdateMarkWithoutSaving(val markToUpdate: MarkModel) : Intent()
     data class UpdateMarkWithSave(val mark: MarkModel) : Intent()
     data class DeleteMark(val mark: MarkModel) : MarksStore.Intent()
     data class UpdateComment(val mark: MarkModel, val comment: String) : Intent()
     data class ChangeMarkType(val type: MarkTypeModel, val markId: Int) : Intent()
+    data class SetCurrentMark(val mark: MarkModel) : Intent()
 
     object DismissError : Intent()
     object ReloadRequested : Intent()

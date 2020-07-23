@@ -29,7 +29,7 @@ interface CutStore : Store<Intent, State, Label> {
     data class ChangeContrastBrightness(val deltaX: Double, val deltaY: Double) : Intent()
     data class ChangeSliceNumberByDraw(val deltaDicomY: Int) : Intent()
 
-    data class HandleMarkUpdate(val mark: MarkModel) : Intent()
+    data class HandleMarkUpdateWithoutSave(val mark: MarkModel) : Intent()
     data class HandleMarkUpdateWithSave(val mark: MarkModel) : Intent()
     data class HandleStartClick(val startDicomX: Double, val startDicomY: Double) : Intent()
     data class HandleChangeCutType(val cutType: CutType) : Intent()
@@ -61,7 +61,7 @@ interface CutStore : Store<Intent, State, Label> {
     data class CenterMark(val mark: MarkModel) : Label()
     data class UnselectMark(val mark: MarkModel) : Label()
     data class ContrastBrightnessChanged(val black: Int, val white: Int) : Label()
-    data class MarkUpdate(val mark: MarkModel) : Label()
+    data class UpdateMarkWithoutSave(val mark: MarkModel) : Label()
     data class UpdateMarkWithSave(val mark: MarkModel) : Label()
     data class StartClick(val startDicomX: Double, val startDicomY: Double) : Label()
     data class OpenFullCut(val cut: Cut) : Label()

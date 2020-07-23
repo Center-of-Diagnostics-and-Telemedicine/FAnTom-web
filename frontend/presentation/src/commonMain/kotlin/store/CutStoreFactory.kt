@@ -105,8 +105,8 @@ internal class CutStoreFactory(
             changeSliceNumber(sliceNumber, getState)
           } else null
         }
-        is Intent.HandleMarkUpdate -> {
-          publish(Label.MarkUpdate(intent.mark))
+        is Intent.HandleMarkUpdateWithoutSave -> {
+          publish(Label.UpdateMarkWithoutSave(intent.mark))
         }
         is Intent.HandleStopMoving -> {
           publish(Label.StopMoving)

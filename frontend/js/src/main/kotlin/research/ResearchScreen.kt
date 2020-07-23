@@ -177,8 +177,8 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
       is CutsContainerController.Output.ContrastBrightnessChanged -> toolsInputObservable.onNext(
         ToolsController.Input.ContrastBrightnessChanged(output.black, output.white)
       )
-      is CutsContainerController.Output.UpdateMark -> marksInputObservable.onNext(
-        MarksController.Input.UpdateMark(output.markToUpdate)
+      is CutsContainerController.Output.UpdateMarkWithoutSave -> marksInputObservable.onNext(
+        MarksController.Input.UpdateMarkWithoutSave(output.markToUpdate)
       )
       is CutsContainerController.Output.UpdateMarkWithSave -> marksInputObservable.onNext(
         MarksController.Input.UpdateMarkWithSave(output.mark)

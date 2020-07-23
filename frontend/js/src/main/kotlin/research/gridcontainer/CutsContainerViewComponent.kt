@@ -197,9 +197,9 @@ class CutsContainerViewComponent(prps: CutsContainerProps) :
           CutsContainerController.Output.ContrastBrightnessChanged(output.black, output.white)
         )
       }
-      is CutController.Output.UpdateMark -> {
+      is CutController.Output.UpdateMarkWithoutSave -> {
         props.dependencies.cutsContainerOutput(
-          CutsContainerController.Output.UpdateMark(output.mark)
+          CutsContainerController.Output.UpdateMarkWithoutSave(output.mark)
         )
       }
       is CutController.Output.UpdateMarkWithSave -> {

@@ -99,13 +99,13 @@ internal class ShapesStoreFactory(
       if (moveRect != null) {
         selectedMark?.let { markToUpdate ->
           cut.updateCoordinatesByRect(markToUpdate, deltaX, deltaY, moveRect)?.let {
-            publish(Label.UpdateMark(it))
+            publish(Label.UpdateMarkCoordinates(it))
           }
         }
       } else {
         selectedMark?.let { markToUpdate ->
           cut.updateCoordinates(markToUpdate, deltaX, deltaY)?.let {
-            publish(Label.UpdateMark(it))
+            publish(Label.UpdateMarkCoordinates(it))
           }
         }
       }

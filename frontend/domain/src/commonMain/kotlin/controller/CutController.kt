@@ -54,7 +54,7 @@ interface CutController {
     data class CenterMark(val mark: MarkModel) : Output()
     data class UnselectMark(val mark: MarkModel) : Output()
     data class ContrastBrightnessChanged(val black: Int, val white: Int) : Output()
-    data class UpdateMark(val mark: MarkModel) : Output()
+    data class UpdateMarkWithoutSave(val mark: MarkModel) : Output()
     data class UpdateMarkWithSave(val mark: MarkModel) : Output()
     data class OpenFullCut(val cut: Cut) : Output()
     data class ChangeCutType(val cutType: CutType, val cut: Cut) : Output()

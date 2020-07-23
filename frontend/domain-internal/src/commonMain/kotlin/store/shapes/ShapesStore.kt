@@ -36,7 +36,7 @@ interface ShapesStore : Store<Intent, State, Label> {
     data class SelectMark(val mark: MarkModel) : Label()
     data class CenterMark(val mark: MarkModel) : Label()
     data class UnselectMark(val mark: MarkModel) : Label()
-    data class UpdateMark(val mark: MarkModel) : Label()
+    data class UpdateMarkCoordinates(val mark: MarkModel) : Label()
     data class UpdateMarkWithSave(val mark: MarkModel) : Label()
     data class ChangeCutType(val cutType: CutType) : Label()
   }

@@ -35,7 +35,7 @@ interface MarksController {
     data class AddNewMark(val circle: Circle, val sliceNumber: Int, val cut: Cut) : Input()
     data class SelectMark(val mark: MarkModel) : Input()
     data class UnselectMark(val mark: MarkModel) : Input()
-    data class UpdateMark(val markToUpdate: MarkModel) : Input()
+    data class UpdateMarkWithoutSave(val markToUpdate: MarkModel) : Input()
     data class UpdateMarkWithSave(val mark: MarkModel) : Input()
     object Idle: Input()
     object DeleteClick : Input()

@@ -12,7 +12,7 @@ val marksStateToModel: State.() -> Model = {
 
 val marksEventToIntent: Event.() -> Intent? = {
   when (this) {
-    is Event.SelectItem -> Intent.SelectMark(mark)
+    is Event.SelectItem -> Intent.SetCurrentMark(mark)
     is Event.ItemCommentChanged -> Intent.UpdateComment(mark, comment)
     is Event.DeleteItem -> Intent.DeleteMark(mark)
     is Event.ChangeMarkType -> Intent.ChangeMarkType(type, markId)
@@ -24,7 +24,7 @@ val inputToMarksIntent: Input.() -> Intent? = {
     is Input.AddNewMark -> Intent.HandleNewMark(circle, sliceNumber, cut)
     is Input.SelectMark -> Intent.SelectMark(mark)
     is Input.UnselectMark -> Intent.UnselectMark(mark)
-    is Input.UpdateMark -> Intent.UpdateMarkWightoutSaving(markToUpdate)
+    is Input.UpdateMarkWithoutSave -> Intent.UpdateMarkWithoutSaving(markToUpdate)
     is Input.UpdateMarkWithSave -> Intent.UpdateMarkWithSave(mark)
     Input.DeleteClick -> Intent.DeleteClicked
     Input.Idle -> null
