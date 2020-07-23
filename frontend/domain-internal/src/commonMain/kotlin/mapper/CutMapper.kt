@@ -10,7 +10,8 @@ import view.CutView.Model
 val cutStateToCutModel: State.() -> Model? = {
   Model(
     slice = slice,
-    sliceNumber = sliceNumber
+    sliceNumber = sliceNumber,
+    loading = loading
   )
 }
 

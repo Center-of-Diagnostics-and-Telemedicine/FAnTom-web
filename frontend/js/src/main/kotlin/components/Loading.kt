@@ -1,13 +1,14 @@
 package components
 
+import com.ccfraser.muirwik.components.MCircularProgressColor
 import com.ccfraser.muirwik.components.mCircularProgress
 import com.ccfraser.muirwik.components.size
 import kotlinx.css.*
 import react.RBuilder
 import styled.css
 
-fun RBuilder.loading(isLoading: Boolean) = if (isLoading) {
-  mCircularProgress {
+fun RBuilder.screenLoading(isLoading: Boolean) = if (isLoading) {
+  mCircularProgress(color = MCircularProgressColor.secondary) {
     attrs.size = 80.px
     css {
       position = Position.absolute

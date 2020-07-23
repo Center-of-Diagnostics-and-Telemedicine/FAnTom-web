@@ -4,7 +4,6 @@ import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.lifecycle.LifecycleRegistry
 import com.arkivanov.mvikotlin.core.lifecycle.doOnDestroy
 import com.arkivanov.mvikotlin.core.store.StoreFactory
-import com.badoo.reaktive.disposable.CompositeDisposable
 import com.badoo.reaktive.observable.Observable
 import com.badoo.reaktive.observable.subscribe
 import controller.CutController
@@ -22,7 +21,6 @@ import research.cut.shapes.ShapesViewProxy
 import research.cut.shapes.shapesView
 import resume
 import root.debugLog
-import stop
 import styled.css
 import styled.styledDiv
 import view.*
@@ -67,6 +65,7 @@ class CutParentComponent(prps: CutParentProps) : RComponent<CutParentProps, CutP
   }
 
   override fun RBuilder.render() {
+    debugLog("MY: loading = ${state.cutModel.loading}")
     styledDiv {
       css {
         position = Position.absolute
@@ -80,14 +79,16 @@ class CutParentComponent(prps: CutParentProps) : RComponent<CutParentProps, CutP
         w = containerWidth,
         h = containerHeight,
         slice = state.cutModel.slice,
-        reversed = props.dependencies.cut.data.reversed
+        reversed = props.dependencies.cut.data.reversed,
+        loading = state.cutModel.loading
       )
       shapesView(
         cut = props.dependencies.cut,
         width = containerWidth,
         height = containerHeight,
         shapesModel = state.shapesModel,
-        eventOutput = { shapesViewDelegate.dispatch(it) }
+        eventOutput = { shapesViewDelegate.dispatch(it) },
+        loading = state.cutModel.loading
       )
       drawView(
         cut = props.dependencies.cut,

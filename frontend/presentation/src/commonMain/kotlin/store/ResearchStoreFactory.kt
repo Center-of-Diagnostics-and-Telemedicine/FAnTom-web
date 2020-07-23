@@ -37,6 +37,7 @@ internal class ResearchStoreFactory(
     }
 
     private fun load() {
+      dispatch(Result.Loading)
       singleFromCoroutine {
         repository.initResearch(researchId = researchId)
       }

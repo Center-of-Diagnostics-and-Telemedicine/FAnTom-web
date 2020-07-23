@@ -1,7 +1,6 @@
 package research.cut.shapes
 
-import com.ccfraser.muirwik.components.mTypography
-import com.ccfraser.muirwik.components.spacingUnits
+import com.ccfraser.muirwik.components.mCssBaseline
 import com.ccfraser.muirwik.components.themeContext
 import kotlinx.css.*
 import kotlinx.css.Position
@@ -60,6 +59,7 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
   }
 
   override fun RBuilder.render() {
+    mCssBaseline()
     themeContext.Consumer { theme ->
       val dicomWidth = props.cut.data.screen_size_h
       val dicomHeight = props.cut.data.screen_size_v
@@ -81,130 +81,45 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
       val dicomRadius = sqrt(dicomHeight.toDouble().pow(2) + dicomWidth.toDouble().pow(2))
       val screenRadius = sqrt(resultHeight.toDouble().pow(2) + resultWidth.toDouble().pow(2))
       radiusRatio = dicomRadius / screenRadius
-      styledDiv {
-        css {
-          position = Position.absolute
-          zIndex = 1
-          top = resultTop.px
-          left = resultLeft.px
-        }
-        styledCanvas {
-          attrs {
-            classes += "shape_canvas_${props.cut.type.intType}"
-            width = resultWidth.toString()
-            height = resultHeight.toString()
-          }
-        }
-      }
 
-      styledDiv {
-        css {
-          position = Position.absolute
-          zIndex = 1
-          bottom = 0.px
-          left = 0.px
-          padding(1.spacingUnits)
-        }
-        props.shapesModel.position?.let {
-          when (it) {
-            is MultiPlanarPointPosition -> {
-              mTypography(text = "Сагиттальный (x): ${it.x.roundToInt()}") {
-                css { color = Color(blue) }
-              }
-              mTypography(text = "Фронтальный (y): ${it.y.roundToInt()}") {
-                css { color = Color(pink) }
-              }
-              mTypography(text = "Аксиальный(z): ${it.z.roundToInt()}") {
-                css { color = Color(yellow) }
-              }
-            }
-            is PlanarPointPosition -> {
-              mTypography(text = "x: ${it.x.roundToInt()}") {
-                css { color = Color.white }
-              }
-              mTypography(text = "y: ${it.y.roundToInt()}") {
-                css { color = Color.white }
-              }
-            }
-            else -> {
-            }
-          }
-        }
-      }
+      shapesCanvas(resultTop, resultLeft)
+      props.shapesModel.position?.let { pointPosition(it) }
 
 //      val otherTypes = props.cut.availableCutsForChange
 //      val cutName = props.cut.type.getName()
-//      if(cutName != null && otherTypes.isNotEmpty()) {
-//        styledDiv {
-//          css {
-//            position = Position.absolute
-//            zIndex = 10
-//            top = 0.px
-//            left = 0.px
-//            padding(1.spacingUnits)
-//          }
-//          mClickAwayListener(onClickAway = { setState { showMenu = false } }) {
-//            mList(disablePadding = true) {
-//              css {
-//                backgroundColor = Color("#424242")
-//                borderRadius = 4.px
-//
-//              }
-//              mListItem(
-//                primaryText = cutName,
-//                onClick = { setState { showMenu = !showMenu } },
-//                divider = false
-//              ) {
-//                if (otherTypes.isNotEmpty()) {
-//                  if (state.showMenu) mIcon("expand_less") else mIcon("expand_more")
-//                }
-//              }
-//              mCollapse(show = state.showMenu) {
-//                mList {
-//                  otherTypes.forEach { cutType ->
-//                    mListItem(
-//                      button = true,
-//                      onClick = { handleSimpleClick(cutType) },
-//                      alignItems = MListItemAlignItems.flexStart
-//                    ) {
-//                      mTypography(text = cutType.name)
-//                    }
-//                  }
-//                }
-//              }
-//            }
-//          }
-//        }
-//      }
+//      cutType(
+//        cutName = cutName,
+//        otherTypes = otherTypes,
+//        onClickAway = { setState { showMenu = false } },
+//        onClick = { setState { showMenu = !showMenu } },
+//        showMenu = state.showMenu,
+//        onMenuItemClick = { handleSimpleClick(it) }
+//      )
 
-
-      styledDiv {
-        css {
-          position = Position.absolute
-          zIndex = 1
-          top = 0.px
-          right = 0.px
-          padding(1.spacingUnits)
-        }
-        if (props.shapesModel.sliceNumber != 0 && props.cut.data.n_images > 1) {
-          mTypography(text = "Срез: ${props.shapesModel.sliceNumber}") {
-            css { color = Color.white }
-          }
-        }
-      }
+      sliceNumber(
+        sliceNumber = props.shapesModel.sliceNumber,
+        imagesCount = props.cut.data.n_images
+      )
 
       props.shapesModel.huValue?.let {
-        styledDiv {
-          css {
-            position = Position.absolute
-            zIndex = 1
-            bottom = 0.px
-            right = 0.px
-            padding(1.spacingUnits)
-          }
-          mTypography(text = "HU: $it") {
-            css { color = Color.white }
-          }
+        huValue(it)
+      }
+    }
+  }
+
+  private fun RBuilder.shapesCanvas(resultTop: Int, resultLeft: Int) {
+    styledDiv {
+      css {
+        position = Position.absolute
+        zIndex = 1
+        top = resultTop.px
+        left = resultLeft.px
+      }
+      styledCanvas {
+        attrs {
+          classes += "shape_canvas_${props.cut.type.intType}"
+          width = resultWidth.toString()
+          height = resultHeight.toString()
         }
       }
     }
@@ -362,6 +277,7 @@ interface ShapesProps : RProps {
   var height: Int
   var shapesModel: ShapesView.Model
   var eventOutput: (ShapesView.Event) -> Unit
+  var loading: Boolean
 }
 
 fun RBuilder.shapesView(
@@ -369,11 +285,13 @@ fun RBuilder.shapesView(
   width: Int,
   height: Int,
   shapesModel: ShapesView.Model,
-  eventOutput: (ShapesView.Event) -> Unit
+  eventOutput: (ShapesView.Event) -> Unit,
+  loading: Boolean
 ) = child(ShapesComponent::class) {
   attrs.cut = cut
   attrs.width = width
   attrs.height = height
   attrs.shapesModel = shapesModel
   attrs.eventOutput = eventOutput
+  attrs.loading = loading
 }
