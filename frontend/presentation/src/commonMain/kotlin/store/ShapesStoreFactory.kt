@@ -84,8 +84,8 @@ internal class ShapesStoreFactory(
         }
 
         val circle = circles.getCircleByPosition(dicomX = startDicomX, dicomY = startDicomY)
-        circle?.let { circleToSelect ->
-          state.marks.firstOrNull { it.id == circleToSelect.id }?.let {
+        if (circle != null) {
+          state.marks.firstOrNull { it.id == circle.id }?.let {
             publish(Label.SelectMark(it))
           }
         }

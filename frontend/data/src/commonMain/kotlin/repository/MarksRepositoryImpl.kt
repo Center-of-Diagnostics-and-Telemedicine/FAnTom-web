@@ -36,17 +36,21 @@ class MarksRepositoryImpl(
     }
   }
 
-  override suspend fun updateMark(mark: MarkEntity, researchId: Int) {
-    val response = remote.update(mark, researchId, token())
-    when{
-      response.response != null -> local.update(mark)
-      response.error != null -> handleErrorResponse(response.error!!)
+  override suspend fun updateMark(mark: MarkEntity, researchId: Int, localy: Boolean) {
+    if (localy) {
+      local.update(mark)
+    } else {
+      val response = remote.update(mark, researchId, token())
+      when {
+        response.response != null -> local.update(mark)
+        response.error != null -> handleErrorResponse(response.error!!)
+      }
     }
   }
 
   override suspend fun deleteMark(id: Int, researchId: Int) {
     val response = remote.delete(id, researchId, token())
-    when{
+    when {
       response.response != null -> local.delete(id)
       response.error != null -> handleErrorResponse(response.error!!)
     }

@@ -30,7 +30,6 @@ internal class MarksStoreFactory(
   private inner class ExecutorImpl : ReaktiveExecutor<Intent, Unit, State, Result, Label>() {
 
     override fun executeAction(action: Unit, getState: () -> State) {
-      println("MY: markTypes.size in store = ${data.markTypes}")
       val markTypes = data.markTypes.map { it.value.toMarkTypeModel(it.key) }
       dispatch(Result.MarkTypesLoaded(markTypes))
 
@@ -55,8 +54,8 @@ internal class MarksStoreFactory(
       when (intent) {
         is Intent.HandleNewMark -> handleNewMark(intent.circle, intent.sliceNumber, intent.cut)
         is Intent.SelectMark -> selectMark(intent.mark, getState)
-        is Intent.UnselectMark -> unselectMark(intent.mark, getState)
-        is Intent.UpdateMark -> updateMarkWithoutSaving(intent.markToUpdate, getState)
+        is Intent.UnselectMark -> unSelectMark(intent.mark, getState)
+        is Intent.UpdateMarkWightoutSaving -> updateMarkWithoutSaving(intent.markToUpdate, getState)
         is Intent.UpdateMarkWithSave -> updateMarkWithSave(intent.mark)
         is Intent.DeleteMark -> deleteMark(intent.mark)
         is Intent.UpdateComment -> updateComment(intent.mark, intent.comment)
@@ -154,23 +153,54 @@ internal class MarksStoreFactory(
     }
 
     private fun selectMark(mark: MarkModel, state: () -> State) {
-      val marks = state().marks
-      marks.firstOrNull { it.selected }?.let { it.selected = false }
-      marks.firstOrNull { it.id == mark.id }?.let { it.selected = true }
-      dispatch(Result.Loaded(marks))
-      publish(Label.MarksLoaded(marks))
+      singleFromCoroutine {
+        repository.updateMark(
+          mark = mark.toMarkEntity().also { it.selected = true },
+          researchId = researchId,
+          localy = true
+        )
+        repository.getMarks(researchId)
+      }
+        .subscribeOn(ioScheduler)
+        .markEntityToMarkModel()
+        .map(Result::Loaded)
+        .observeOn(mainScheduler)
+        .subscribeScoped(
+          isThreadLocal = true,
+          onSuccess = {
+            dispatch(it)
+            publish(Label.MarksLoaded(it.marks))
+          },
+          onError = ::handleError
+        )
     }
 
-    private fun unselectMark(mark: MarkModel, state: () -> State) {
-      val marks = state().marks
-      marks.firstOrNull { it.id == mark.id }?.let { it.selected = false }
-      dispatch(Result.Loaded(marks))
-      publish(Label.MarksLoaded(marks))
+    private fun unSelectMark(mark: MarkModel, state: () -> State) {
+      singleFromCoroutine {
+        repository.updateMark(
+          mark = mark.toMarkEntity().also { it.selected = false },
+          researchId = researchId,
+          localy = true
+        )
+        repository.getMarks(researchId)
+      }
+        .subscribeOn(ioScheduler)
+        .markEntityToMarkModel()
+        .map(Result::Loaded)
+        .observeOn(mainScheduler)
+        .subscribeScoped(
+          isThreadLocal = true,
+          onSuccess = {
+            dispatch(it)
+            publish(Label.MarksLoaded(it.marks))
+          },
+          onError = ::handleError
+        )
     }
 
 
     private fun Single<List<MarkEntity>>.markEntityToMarkModel(): Single<List<MarkModel>> =
-      map { it.map { it.toMarkModel(data.markTypes) } }
+      map { list -> list.map { it.toMarkModel(data.markTypes) } }
 
     private fun handleError(error: Throwable) {
       println("MarksStore" + error.message)

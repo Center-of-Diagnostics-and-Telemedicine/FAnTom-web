@@ -24,7 +24,7 @@ val inputToMarksIntent: Input.() -> Intent? = {
     is Input.AddNewMark -> Intent.HandleNewMark(circle, sliceNumber, cut)
     is Input.SelectMark -> Intent.SelectMark(mark)
     is Input.UnselectMark -> Intent.UnselectMark(mark)
-    is Input.UpdateMark -> Intent.UpdateMark(markToUpdate)
+    is Input.UpdateMark -> Intent.UpdateMarkWightoutSaving(markToUpdate)
     is Input.UpdateMarkWithSave -> Intent.UpdateMarkWithSave(mark)
     Input.DeleteClick -> Intent.DeleteClicked
     Input.Idle -> null
