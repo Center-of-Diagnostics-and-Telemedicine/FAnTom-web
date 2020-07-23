@@ -18,7 +18,7 @@ interface MarksView : MviView<Model, Event> {
     data class SelectItem(val mark: MarkModel) : Event()
     data class ItemCommentChanged(val mark: MarkModel, val comment: String) : Event()
     data class DeleteItem(val mark: MarkModel) : Event()
-    data class ChangeMarkType(val type: MarkTypeModel, val mark: MarkModel) : Event()
+    data class ChangeMarkType(val type: MarkTypeModel, val markId: Int) : Event()
   }
 }
 

@@ -66,7 +66,10 @@ class MarkItemView(prps: MarkItemProps) : RComponent<MarkItemProps, MarkItemStat
             props.markTypes.forEach { markType ->
               mMenuItem(
                 primaryText = markType.ru,
-                onClick = { handleSimpleClick(markType) })
+                onClick = {
+                  it.stopPropagation()
+                  handleSimpleClick(markType)
+                })
             }
           }
         }
@@ -132,7 +135,7 @@ class MarkItemView(prps: MarkItemProps) : RComponent<MarkItemProps, MarkItemStat
   }
 
   private fun handleSimpleClick(type: MarkTypeModel) {
-    props.eventOutput(MarksView.Event.ChangeMarkType(type, props.mark))
+    props.eventOutput(MarksView.Event.ChangeMarkType(type, props.mark.id))
     setState {
       selectedMenuIndex = -1
       anchorElement = null

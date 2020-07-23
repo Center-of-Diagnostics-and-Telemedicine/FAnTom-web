@@ -61,7 +61,10 @@ internal class MarksStoreFactory(
         is Intent.DeleteMark -> deleteMark(intent.mark)
         is Intent.UpdateComment -> updateComment(intent.mark, intent.comment)
         Intent.DeleteClicked -> getState().marks.firstOrNull { it.selected }?.let { deleteMark(it) }
-        is Intent.ChangeMarkType -> updateMarkWithSave(intent.mark.copy(type = intent.type))
+        is Intent.ChangeMarkType ->
+          getState().marks.firstOrNull { it.id == intent.markId }?.copy(type = intent.type)?.let {
+            updateMarkWithSave(it)
+          }
         Intent.ReloadRequested -> TODO()
         Intent.DismissError -> TODO()
       }.let {}

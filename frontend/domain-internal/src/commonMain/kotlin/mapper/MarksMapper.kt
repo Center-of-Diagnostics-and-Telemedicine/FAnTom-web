@@ -15,7 +15,7 @@ val marksEventToIntent: Event.() -> Intent? = {
     is Event.SelectItem -> Intent.SelectMark(mark)
     is Event.ItemCommentChanged -> Intent.UpdateComment(mark, comment)
     is Event.DeleteItem -> Intent.DeleteMark(mark)
-    is Event.ChangeMarkType -> Intent.ChangeMarkType(type, mark)
+    is Event.ChangeMarkType -> Intent.ChangeMarkType(type, markId)
   }
 }
 
