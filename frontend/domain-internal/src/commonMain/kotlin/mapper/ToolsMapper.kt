@@ -22,7 +22,7 @@ val toolsEventToToolsIntent: Event.() -> Intent? =
   {
     when (this) {
       is Event.ItemClick -> Intent.HandleToolClick(tool)
-      Event.CloseClick -> throw NoSuchElementException("CloseClick event not implemented")
+      Event.CloseClick -> null
     }
   }
 

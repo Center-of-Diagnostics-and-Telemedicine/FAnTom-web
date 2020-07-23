@@ -230,6 +230,7 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
     val marksRepository: MarksRepository
     val brightnessRepository: BrightnessRepository
     val mipRepository: MipRepository
+    val researchOutput: (ResearchController.Output) -> Unit
     val researchId: Int
   }
 

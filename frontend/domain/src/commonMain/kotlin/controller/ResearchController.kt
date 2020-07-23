@@ -17,9 +17,10 @@ interface ResearchController {
     val lifecycle: Lifecycle
     val researchRepository: ResearchRepository
     val researchId: Int
+    val researchOutput: (Output) -> Unit
   }
 
   sealed class Output {
-    data class ItemSelected(val id: Int) : Output()
+    object Close : Output()
   }
 }

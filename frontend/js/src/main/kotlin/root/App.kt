@@ -10,6 +10,7 @@ import com.ccfraser.muirwik.components.styles.createMuiTheme
 import com.ccfraser.muirwik.components.themeContext
 import controller.ListController
 import controller.LoginController
+import controller.ResearchController
 import list.ListScreen
 import list.list
 import login.LoginScreen
@@ -55,6 +56,7 @@ abstract class App : RComponent<AppProps, AppState>() {
             ScreenType.RESEARCH -> research(
               dependencies = object : ResearchScreen.Dependencies,
                 Dependencies by props.dependencies {
+                override val researchOutput: (ResearchController.Output) -> Unit = ::researchOutput
                 override val researchId: Int = state.researchId
               }
             )
@@ -78,6 +80,12 @@ abstract class App : RComponent<AppProps, AppState>() {
   private fun loginOutput(output: LoginController.Output) {
     when (output) {
       LoginController.Output.Authorized -> setState { screen = ScreenType.LIST }
+    }
+  }
+
+  private fun researchOutput(output: ResearchController.Output) {
+    when (output) {
+      is ResearchController.Output.Close -> setState { screen = ScreenType.LIST }
     }
   }
 

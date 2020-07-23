@@ -12,8 +12,7 @@ import com.badoo.reaktive.single.subscribeOn
 import model.RESEARCH_DATA_FETCH_FAILED
 import model.ResearchApiExceptions
 import repository.ResearchRepository
-import store.research.ResearchStore.Intent
-import store.research.ResearchStore.State
+import store.research.ResearchStore.*
 import store.research.ResearchStoreAbstractFactory
 
 internal class ResearchStoreFactory(
@@ -23,16 +22,16 @@ internal class ResearchStoreFactory(
 ) : ResearchStoreAbstractFactory(
   storeFactory = storeFactory
 ) {
-  override fun createExecutor(): Executor<Intent, Unit, State, Result, Nothing> = ExecutorImpl()
+  override fun createExecutor(): Executor<Intent, Unit, State, Result, Label> = ExecutorImpl()
 
-  private inner class ExecutorImpl : ReaktiveExecutor<Intent, Unit, State, Result, Nothing>() {
+  private inner class ExecutorImpl : ReaktiveExecutor<Intent, Unit, State, Result, Label>() {
     override fun executeAction(action: Unit, getState: () -> State) = load()
 
     override fun executeIntent(intent: Intent, getState: () -> State) {
       when (intent) {
         Intent.DismissError -> dispatch(Result.DismissErrorRequested)
         Intent.ReloadRequested -> load()
-        Intent.CloseRequested -> TODO()
+        Intent.CloseRequested -> publish(Label.Close)
       }.let {}
     }
 

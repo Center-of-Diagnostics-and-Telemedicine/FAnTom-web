@@ -5,8 +5,9 @@ import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import model.ResearchSlicesSizesDataNew
 import store.research.ResearchStore.Intent
 import store.research.ResearchStore.State
+import store.research.ResearchStore.Label
 
-interface ResearchStore : Store<Intent, State, Nothing> {
+interface ResearchStore : Store<Intent, State, Label> {
 
   sealed class Intent : JvmSerializable {
     object DismissError : Intent()
@@ -20,7 +21,7 @@ interface ResearchStore : Store<Intent, State, Nothing> {
     val error: String = ""
   ) : JvmSerializable
 
-  sealed class Output {
-    object Close : Output()
+  sealed class Label {
+    object Close : Label()
   }
 }
