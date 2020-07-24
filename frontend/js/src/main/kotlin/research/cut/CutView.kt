@@ -16,15 +16,15 @@ fun RBuilder.cutView(
   reversed: Boolean? = false,
   loading: Boolean
 ) {
-//  if (loading) {
-//    mLinearProgress(color = MLinearProgressColor.secondary) {
-//      css {
-//        width = w.px
-//        top = 0.px
-//        left = 0.px
-//      }
-//    }
-//  }
+  if (loading) {
+    mLinearProgress(color = MLinearProgressColor.secondary) {
+      css {
+        width = w.px
+        top = 0.px
+        left = 0.px
+      }
+    }
+  }
   styledImg {
     css {
       if (reversed == true) transform.scaleY(-1)

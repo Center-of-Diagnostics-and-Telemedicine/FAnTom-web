@@ -53,6 +53,8 @@ abstract class CutStoreAbstractFactory(
   protected sealed class Result : JvmSerializable {
     object MainLoading : Result()
     object SecondaryLoading : Result()
+    object DismissError : Result()
+
     data class Loaded(val slice: String) : Result()
     data class Error(val message: String) : Result()
 
@@ -69,14 +71,20 @@ abstract class CutStoreAbstractFactory(
     override fun State.reduce(result: Result): State =
       when (result) {
         is Result.MainLoading -> copy(mainLoading = true)
-        is Result.SecondaryLoading ->copy(secondaryLoading = true)
+        is Result.SecondaryLoading -> copy(secondaryLoading = true)
         is Result.Loaded -> copy(
           mainLoading = false,
           secondaryLoading = false,
           error = "",
           slice = result.slice
         )
-        is Result.Error -> copy(error = result.message)
+        is Result.Error -> copy(
+          error = result.message,
+          secondaryLoading = false,
+          mainLoading = false
+        )
+        is Result.DismissError -> copy(error = "")
+
         is Result.SliceNumberChanged -> copy(sliceNumber = result.sliceNumber)
         is Result.BlackChanged -> copy(black = result.blackValue)
         is Result.WhiteChanged -> copy(white = result.whiteValue)

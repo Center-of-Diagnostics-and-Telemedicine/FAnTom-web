@@ -37,6 +37,7 @@ interface CutStore : Store<Intent, State, Label> {
     object ContrasBrightnessChanged : Intent()
     object HandleStopMoving : Intent()
     object OpenFullCut : Intent()
+    object DismissErrorRequested : Intent()
   }
 
   data class State(

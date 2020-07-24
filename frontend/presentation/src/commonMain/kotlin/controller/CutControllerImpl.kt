@@ -76,6 +76,7 @@ class CutControllerImpl(val dependencies: CutController.Dependencies) :
 
       shapesView.events.mapNotNull(shapesEventToShapesIntent) bindTo shapesStore
       drawView.events.mapNotNull(drawEventToDrawIntent) bindTo drawStore
+      cutView.events.mapNotNull(cutEventToCutIntent) bindTo cutStore
     }
 
     bind(viewLifecycle, BinderLifecycleMode.START_STOP) {

@@ -5,6 +5,7 @@ import controller.CutController.Output
 import store.cut.CutStore.*
 import store.draw.DrawStore
 import store.shapes.ShapesStore
+import view.CutView.Event
 import view.CutView.Model
 
 val cutStateToCutModel: State.() -> Model? = {
@@ -12,8 +13,15 @@ val cutStateToCutModel: State.() -> Model? = {
     slice = slice,
     sliceNumber = sliceNumber,
     mainLoading = mainLoading,
-    secondaryLoading = secondaryLoading
+    secondaryLoading = secondaryLoading,
+    error = error
   )
+}
+
+val cutEventToCutIntent: Event.() -> Intent? = {
+  when (this) {
+    Event.DismissError -> Intent.DismissErrorRequested
+  }
 }
 
 val inputToCutIntent: Input.() -> Intent? = {

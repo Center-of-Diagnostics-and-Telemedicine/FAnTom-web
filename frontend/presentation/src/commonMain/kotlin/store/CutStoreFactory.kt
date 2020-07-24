@@ -123,6 +123,7 @@ internal class CutStoreFactory(
         is Intent.HandleChangeCutType -> {
           publish(Label.ChangeCutType(intent.cutType, cut))
         }
+        Intent.DismissErrorRequested -> dispatch(Result.DismissError)
       }.let {}
     }
 
@@ -184,9 +185,7 @@ internal class CutStoreFactory(
 
     private fun handleError(error: Throwable) {
       val result = when (error) {
-        is ResearchApiExceptions.SliceFetchException -> Result.Error(error.error)
-        is ResearchApiExceptions.IncorrectSliceNumberException -> Result.Error(error.error)
-        is ResearchApiExceptions.ResearchNotFoundException -> Result.Error(error.error)
+        is ResearchApiExceptions -> Result.Error(error.error)
         else -> {
           println("cut: other exception ${error.message}")
           Result.Error(GET_SLICE_FAILED)

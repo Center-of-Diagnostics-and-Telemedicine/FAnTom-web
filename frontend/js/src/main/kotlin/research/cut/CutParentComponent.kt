@@ -9,6 +9,7 @@ import com.badoo.reaktive.observable.subscribe
 import com.ccfraser.muirwik.components.MCircularProgressColor
 import com.ccfraser.muirwik.components.mCircularProgress
 import com.ccfraser.muirwik.components.size
+import components.alert
 import controller.CutController
 import controller.CutControllerImpl
 import destroy
@@ -69,6 +70,11 @@ class CutParentComponent(prps: CutParentProps) : RComponent<CutParentProps, CutP
 
   override fun RBuilder.render() {
     debugLog("MY: loading = ${state.cutModel.mainLoading}")
+    alert(
+      message = state.cutModel.error,
+      open = state.cutModel.error.isNotEmpty(),
+      handleClose = { cutViewDelegate.dispatch(CutView.Event.DismissError) }
+    )
     styledDiv {
       css {
         position = Position.absolute
