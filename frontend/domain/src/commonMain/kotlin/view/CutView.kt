@@ -8,12 +8,14 @@ interface CutView : MviView<Model, Nothing> {
   data class Model(
     val slice: String,
     val sliceNumber: Int,
-    val loading: Boolean
+    val mainLoading: Boolean,
+    val secondaryLoading: Boolean
   )
 }
 
 fun initialCutModel(): Model = Model(
   slice = "",
   sliceNumber = 1,
-  loading = false
+  mainLoading = false,
+  secondaryLoading = false
 )

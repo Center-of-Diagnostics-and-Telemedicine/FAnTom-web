@@ -1,23 +1,25 @@
 package store.tools
 
-import com.arkivanov.mvikotlin.core.store.Executor
-import com.arkivanov.mvikotlin.core.store.Reducer
-import com.arkivanov.mvikotlin.core.store.Store
-import com.arkivanov.mvikotlin.core.store.StoreFactory
+import com.arkivanov.mvikotlin.core.store.*
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.badoo.reaktive.utils.ensureNeverFrozen
 import model.Presets
+import model.ResearchSlicesSizesDataNew
+import model.initialPreset
+import model.initialPresets
 import store.tools.PresetStore.*
 
 
 abstract class PresetStoreAbstractFactory(
-  private val storeFactory: StoreFactory
+  private val storeFactory: StoreFactory,
+  private val data: ResearchSlicesSizesDataNew
 ) {
 
   fun create(): PresetStore =
     object : PresetStore, Store<Intent, State, Label> by storeFactory.create(
       name = "PresetStore",
       initialState = getInitialState(),
+      bootstrapper = SimpleBootstrapper(Unit),
       executorFactory = ::createExecutor,
       reducer = ReducerImpl
     ) {
@@ -26,7 +28,7 @@ abstract class PresetStoreAbstractFactory(
       }
     }
 
-  protected abstract fun createExecutor(): Executor<Intent, Nothing, State, Result, Label>
+  protected abstract fun createExecutor(): Executor<Intent, Unit, State, Result, Label>
 
   protected sealed class Result : JvmSerializable {
     data class PresetChanged(val preset: Presets) : Result()
@@ -39,14 +41,10 @@ abstract class PresetStoreAbstractFactory(
       }
   }
 
-  private fun getInitialState(): State = State(
-    list = listOf(
-      Presets.SoftTissue,
-      Presets.Vessels,
-      Presets.Bones,
-      Presets.Brain,
-      Presets.Lungs,
-    ),
-    current = Presets.getInitialPreset()
-  )
+  private fun getInitialState(): State =
+    State(
+      list = initialPresets(data.type),
+      current = initialPreset(data.type)
+    )
 }
+

@@ -26,7 +26,8 @@ abstract class CutStoreAbstractFactory(
     gamma = brightnessRepository.getGammaValue(),
     mipMethod = mipRepository.getMip(),
     mipValue = mipRepository.getMipValue(),
-    loading = false,
+    mainLoading = false,
+    secondaryLoading = false,
     error = ""
   )
 
@@ -50,7 +51,8 @@ abstract class CutStoreAbstractFactory(
   protected abstract fun createExecutor(): Executor<Intent, Unit, State, Result, Label>
 
   protected sealed class Result : JvmSerializable {
-    object Loading : Result()
+    object MainLoading : Result()
+    object SecondaryLoading : Result()
     data class Loaded(val slice: String) : Result()
     data class Error(val message: String) : Result()
 
@@ -66,9 +68,11 @@ abstract class CutStoreAbstractFactory(
   private object ReducerImpl : Reducer<State, Result> {
     override fun State.reduce(result: Result): State =
       when (result) {
-        is Result.Loading -> copy(loading = true)
+        is Result.MainLoading -> copy(mainLoading = true)
+        is Result.SecondaryLoading ->copy(secondaryLoading = true)
         is Result.Loaded -> copy(
-          loading = false,
+          mainLoading = false,
+          secondaryLoading = false,
           error = "",
           slice = result.slice
         )

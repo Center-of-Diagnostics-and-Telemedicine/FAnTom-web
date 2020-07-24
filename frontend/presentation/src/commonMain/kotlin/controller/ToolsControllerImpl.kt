@@ -16,18 +16,30 @@ import view.*
 
 class ToolsControllerImpl(val dependencies: ToolsController.Dependencies) : ToolsController {
 
-  private val toolsStore = ToolsStoreFactory(storeFactory = dependencies.storeFactory).create()
-  private val gridStore =
-    GridStoreFactory(storeFactory = dependencies.storeFactory, data = dependencies.data).create()
+  private val toolsStore = ToolsStoreFactory(
+    storeFactory = dependencies.storeFactory
+  ).create()
+
+  private val gridStore = GridStoreFactory(
+    storeFactory = dependencies.storeFactory,
+    data = dependencies.data
+  ).create()
+
   private val mipStore = MipStoreFactory(
     storeFactory = dependencies.storeFactory,
     mipRepository = dependencies.mipRepository
   ).create()
+
+  private val presetStore = PresetStoreFactory(
+    storeFactory = dependencies.storeFactory,
+    data = dependencies.data,
+    brightnessRepository = dependencies.brightnessRepository
+  ).create()
+
   private val brightnessStore = BrightnessStoreFactory(
     storeFactory = dependencies.storeFactory,
     brightnessRepository = dependencies.brightnessRepository
   ).create()
-  private val presetStore = PresetStoreFactory(storeFactory = dependencies.storeFactory).create()
 
   private val inputRelay: Relay<ToolsController.Input> = PublishSubject()
   override val input: (ToolsController.Input) -> Unit = inputRelay::onNext

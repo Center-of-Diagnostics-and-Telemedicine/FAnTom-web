@@ -64,8 +64,7 @@ val presetLabelToToolsOutput: PresetStore.Label.() -> Output? = {
 
 val presetLabelToBrightnessIntent: PresetStore.Label.() -> BrightnessStore.Intent? = {
   when (this) {
-    is PresetStore.Label.PresetChanged ->
-      BrightnessStore.Intent.PresetChanged(item)
+    is PresetStore.Label.PresetChanged -> BrightnessStore.Intent.PresetChanged(item)
   }
 }
 

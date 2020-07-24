@@ -47,7 +47,8 @@ interface CutStore : Store<Intent, State, Label> {
     val gamma: Double,
     val mipMethod: Mip,
     val mipValue: Int,
-    val loading: Boolean,
+    val mainLoading: Boolean,
+    val secondaryLoading: Boolean,
     val error: String
   ) : JvmSerializable
 

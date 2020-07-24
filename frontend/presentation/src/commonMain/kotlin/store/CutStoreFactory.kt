@@ -37,39 +37,40 @@ internal class CutStoreFactory(
 
   private inner class ExecutorImpl : ReaktiveExecutor<Intent, Unit, State, Result, Label>() {
 
-    override fun executeAction(action: Unit, getState: () -> State) = load(getState)
+    override fun executeAction(action: Unit, getState: () -> State) =
+      load(getState = getState, loadingType = Result.MainLoading)
 
     override fun executeIntent(intent: Intent, getState: () -> State) {
       when (intent) {
-        is Intent.HandleBlackChanged -> {
-          dispatch(Result.BlackChanged(blackValue = intent.blackValue))
-          load(getState)
-        }
         is Intent.HandleSliceNumberChange -> {
           val sliceNumber = intent.sliceNumber
           if (inBounds(sliceNumber)) {
             changeSliceNumber(sliceNumber, getState)
           } else null
         }
+        is Intent.HandleBlackChanged -> {
+          dispatch(Result.BlackChanged(blackValue = intent.blackValue))
+          load(getState, Result.SecondaryLoading)
+        }
         is Intent.HandleWhiteChanged -> {
           dispatch(Result.WhiteChanged(whiteValue = intent.whiteValue))
-          load(getState)
+          load(getState, Result.SecondaryLoading)
         }
         is Intent.HandleGammaChanged -> {
           dispatch(Result.GammaChanged(gammaValue = intent.gammaValue))
-          load(getState)
+          load(getState, Result.SecondaryLoading)
         }
         is Intent.HandleMipChanged -> {
           dispatch(Result.MipChanged(mip = intent.mip))
-          load(getState)
+          load(getState, Result.SecondaryLoading)
         }
         is Intent.HandleMipValueChanged -> {
           dispatch(Result.MipValueChanged(mipValue = intent.mipValue))
-          load(getState)
+          load(getState, Result.SecondaryLoading)
         }
         is Intent.HandlePresetChanged -> {
           dispatch(Result.PresetChanged(black = intent.presets.black, white = intent.presets.white))
-          load(getState)
+          load(getState, Result.SecondaryLoading)
         }
         is Intent.HandleCircleDrawn -> {
           publish(Label.CircleDrawn(intent.circle, getState().sliceNumber, cut))
@@ -135,7 +136,7 @@ internal class CutStoreFactory(
       }
       if (sliceNumber != getState().sliceNumber) {
         dispatch(Result.SliceNumberChanged(sliceNumber = resultSliceNumber))
-        load(getState)
+        load(getState, Result.SecondaryLoading)
         publish(Label.SliceNumberChanged(sliceNumber = sliceNumber, cut = cut))
       }
     }
@@ -151,13 +152,13 @@ internal class CutStoreFactory(
       val white = oldWhite - deltaY + deltaX
       dispatch(Result.BlackChanged(blackValue = black.toInt()))
       dispatch(Result.WhiteChanged(whiteValue = white.toInt()))
-      load(state)
+      load(state, Result.SecondaryLoading)
     }
 
-    private fun load(getState: () -> State) {
+    private fun load(getState: () -> State, loadingType: Result) {
       val state = getState()
-      if (state.loading.not()) {
-        dispatch(Result.Loading)
+      if (state.mainLoading.not() && state.secondaryLoading.not()) {
+        dispatch(loadingType)
         singleFromCoroutine {
           repository.getSlice(
             researchId = researchId,

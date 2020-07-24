@@ -6,6 +6,9 @@ import com.arkivanov.mvikotlin.core.lifecycle.doOnDestroy
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.observable.Observable
 import com.badoo.reaktive.observable.subscribe
+import com.ccfraser.muirwik.components.MCircularProgressColor
+import com.ccfraser.muirwik.components.mCircularProgress
+import com.ccfraser.muirwik.components.size
 import controller.CutController
 import controller.CutControllerImpl
 import destroy
@@ -65,7 +68,7 @@ class CutParentComponent(prps: CutParentProps) : RComponent<CutParentProps, CutP
   }
 
   override fun RBuilder.render() {
-    debugLog("MY: loading = ${state.cutModel.loading}")
+    debugLog("MY: loading = ${state.cutModel.mainLoading}")
     styledDiv {
       css {
         position = Position.absolute
@@ -75,20 +78,27 @@ class CutParentComponent(prps: CutParentProps) : RComponent<CutParentProps, CutP
       }
       val containerWidth = props.dependencies.width
       val containerHeight = props.dependencies.height
-      cutView(
-        w = containerWidth,
-        h = containerHeight,
-        slice = state.cutModel.slice,
-        reversed = props.dependencies.cut.data.reversed,
-        loading = state.cutModel.loading
-      )
+      if (state.cutModel.mainLoading) {
+        cutLoading(
+          w = containerWidth,
+          h = containerHeight,
+        )
+      } else {
+        cutView(
+          w = containerWidth,
+          h = containerHeight,
+          slice = state.cutModel.slice,
+          reversed = props.dependencies.cut.data.reversed,
+          loading = state.cutModel.mainLoading
+        )
+      }
       shapesView(
         cut = props.dependencies.cut,
         width = containerWidth,
         height = containerHeight,
         shapesModel = state.shapesModel,
         eventOutput = { shapesViewDelegate.dispatch(it) },
-        loading = state.cutModel.loading
+        loading = state.cutModel.mainLoading
       )
       drawView(
         cut = props.dependencies.cut,
@@ -97,6 +107,19 @@ class CutParentComponent(prps: CutParentProps) : RComponent<CutParentProps, CutP
         drawModel = state.drawModel,
         eventOutput = { drawViewDelegate.dispatch(it) }
       )
+    }
+  }
+
+  private fun RBuilder.cutLoading(h: Int, w: Int) {
+    mCircularProgress(color = MCircularProgressColor.secondary) {
+      attrs.size = 50.px
+      css {
+        position = Position.absolute
+        top = (h / 2).px
+        left = (w / 2).px
+        marginTop = (-25).px
+        marginLeft = (-25).px
+      }
     }
   }
 

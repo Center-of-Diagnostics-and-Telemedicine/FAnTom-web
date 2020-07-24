@@ -11,7 +11,8 @@ val cutStateToCutModel: State.() -> Model? = {
   Model(
     slice = slice,
     sliceNumber = sliceNumber,
-    loading = loading
+    mainLoading = mainLoading,
+    secondaryLoading = secondaryLoading
   )
 }
 
