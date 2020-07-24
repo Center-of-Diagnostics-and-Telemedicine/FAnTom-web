@@ -75,6 +75,13 @@ object ResearchRemoteDataSource : ResearchRemote {
   override suspend fun closeSession(token: String, researchId: Int): BaseResponse {
     return client.get {
       authHeader(token)
+      apiUrl("$SESSION_ROUTE/$CLOSE_ROUTE")
+    }
+  }
+
+  override suspend fun closeResearch(token: String, researchId: Int): BaseResponse {
+    return client.get {
+      authHeader(token)
       apiUrl("$RESEARCH_ROUTE/$researchId/$CLOSE_ROUTE")
     }
   }

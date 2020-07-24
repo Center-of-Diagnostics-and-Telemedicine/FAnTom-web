@@ -16,6 +16,7 @@ interface ResearchView : MviView<Model, Event> {
   sealed class Event {
     object Reload : Event()
     object DismissError : Event()
+    object BackToList : Event()
     object Close : Event()
   }
 }

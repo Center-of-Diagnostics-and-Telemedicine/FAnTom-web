@@ -16,7 +16,6 @@ import util.CloseSession
 import util.user
 
 fun Route.closeSession(
-  researchRepository: ResearchRepository,
   sessionRepository: SessionRepository
 ) {
 
@@ -28,14 +27,14 @@ fun Route.closeSession(
 
     val userId = call.user.id
 
-    val research = researchRepository.getResearch(it.id)
-    if (research == null) respondError(ErrorStringCode.RESEARCH_NOT_FOUND)
-
     val session = sessionRepository.getSession(userId)
-    if (session == null) respondError(ErrorStringCode.SESSION_EXPIRED)
+    if (session == null) {
+      respondError(ErrorStringCode.SESSION_EXPIRED)
+      return@get
+    }
 
     try {
-      sessionRepository.deleteSession(userId, research!!.accessionNumber)
+      sessionRepository.deleteSession(userId)
       call.respond(BaseResponse(response = OK()))
     } catch (e: Exception) {
       application.log.error("Failed to close session", e)

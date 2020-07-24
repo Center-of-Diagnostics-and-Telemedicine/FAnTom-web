@@ -29,6 +29,7 @@ interface MarksController {
 
   sealed class Output {
     data class Marks(val list: List<MarkModel>) : Output()
+    object CloseResearch : Output()
   }
 
   sealed class Input {
@@ -39,5 +40,6 @@ interface MarksController {
     data class UpdateMarkWithSave(val mark: MarkModel) : Input()
     object Idle: Input()
     object DeleteClick : Input()
+    object CloseResearchRequested : Input()
   }
 }

@@ -24,6 +24,7 @@ interface MarksStore : Store<Intent, State, Label> {
     object DismissError : Intent()
     object ReloadRequested : Intent()
     object DeleteClicked : Intent()
+    object HandleCloseResearch : Intent()
   }
 
   data class State(
@@ -35,6 +36,7 @@ interface MarksStore : Store<Intent, State, Label> {
   ) : JvmSerializable
 
   sealed class Label {
+    object CloseResearch : Label()
     data class MarksLoaded(val list: List<MarkModel>) : Label()
   }
 }

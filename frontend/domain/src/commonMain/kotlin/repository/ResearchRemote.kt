@@ -22,4 +22,5 @@ interface ResearchRemote {
   ): BaseResponse
 
   suspend fun closeSession(token: String, researchId: Int): BaseResponse
+  suspend fun closeResearch(token: String, researchId: Int): BaseResponse
 }

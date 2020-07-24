@@ -9,6 +9,7 @@ sealed class ResearchApiExceptions(val error: String) : Throwable() {
   object ResearchInitializationException : ResearchApiExceptions(RESEARCH_INITIALIZATION_FAILED)
   object ResearchDataFetchError : ResearchApiExceptions(RESEARCH_DATA_FETCH_FAILED)
   object ResearchNotFoundException : ResearchApiExceptions(RESEARCH_NOT_FOUND)
+  object CloseResearchException : ResearchApiExceptions(RESEARCH_CLOSE_FAILED)
 
   object SliceFetchException : ResearchApiExceptions(GET_SLICE_FAILED)
   object IncorrectSliceNumberException : ResearchApiExceptions(INCORRECT_SLICE_NUMBER)

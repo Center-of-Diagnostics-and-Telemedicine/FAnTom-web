@@ -14,6 +14,7 @@ interface ToolsView : MviView<Model, Event> {
 
   sealed class Event {
     data class ItemClick(val tool: Tool) : Event()
+    object BackClick : Event()
     object CloseClick : Event()
   }
 }

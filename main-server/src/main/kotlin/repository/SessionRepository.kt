@@ -13,7 +13,7 @@ import kotlin.coroutines.CoroutineContext
 interface SessionRepository : CoroutineScope {
   suspend fun getSession(userId: Int): RemoteLibraryRepository?
   suspend fun createSession(userId: Int, accessionNumber: String): RemoteLibraryRepository
-  suspend fun deleteSession(userId: Int, accessionNumber: String)
+  suspend fun deleteSession(userId: Int)
 }
 
 class SessionRepositoryImpl(
@@ -45,7 +45,7 @@ class SessionRepositoryImpl(
         onClose = {
           GlobalScope.launch {
             debugLog("call deleteSession")
-            deleteSession(userId, accessionNumber)
+            deleteSession(userId)
           }
         }
       )
@@ -56,7 +56,7 @@ class SessionRepositoryImpl(
         onClose = {
           GlobalScope.launch {
             debugLog("call deleteSession")
-            deleteSession(userId, accessionNumber)
+            deleteSession(userId)
           }
         }
       ),
@@ -68,7 +68,7 @@ class SessionRepositoryImpl(
     return library
   }
 
-  override suspend fun deleteSession(userId: Int, accessionNumber: String) {
+  override suspend fun deleteSession(userId: Int) {
     val session = sessions[userId]
       ?: throw IllegalStateException("library for user: $userId not found")
     session.closeSession()

@@ -12,6 +12,7 @@ interface ResearchStore : Store<Intent, State, Label> {
   sealed class Intent : JvmSerializable {
     object DismissError : Intent()
     object ReloadRequested : Intent()
+    object BackRequested : Intent()
     object CloseRequested : Intent()
   }
 
@@ -22,6 +23,6 @@ interface ResearchStore : Store<Intent, State, Label> {
   ) : JvmSerializable
 
   sealed class Label {
-    object Close : Label()
+    object Back : Label()
   }
 }

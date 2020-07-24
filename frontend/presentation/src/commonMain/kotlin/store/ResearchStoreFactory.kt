@@ -31,8 +31,39 @@ internal class ResearchStoreFactory(
       when (intent) {
         Intent.DismissError -> dispatch(Result.DismissErrorRequested)
         Intent.ReloadRequested -> load()
-        Intent.CloseRequested -> publish(Label.Close)
+        Intent.BackRequested -> handleBackToList()
+        Intent.CloseRequested -> handleCloseResearch()
       }.let {}
+    }
+
+    private fun handleBackToList() {
+      singleFromCoroutine {
+        repository.closeSession(researchId)
+      }
+        .subscribeOn(ioScheduler)
+        .observeOn(mainScheduler)
+        .subscribeScoped(
+          isThreadLocal = true,
+          onSuccess = { publish(Label.Back) },
+          onError = {
+            handleError(it)
+            publish(Label.Back)
+          }
+        )
+    }
+
+    private fun handleCloseResearch() {
+      singleFromCoroutine {
+        repository.closeResearch(researchId = researchId)
+        repository.closeSession(researchId)
+      }
+        .subscribeOn(ioScheduler)
+        .observeOn(mainScheduler)
+        .subscribeScoped(
+          isThreadLocal = true,
+          onSuccess = { publish(Label.Back) },
+          onError = ::handleError
+        )
     }
 
     private fun load() {

@@ -235,9 +235,9 @@ class ToolsControllerTest {
   fun publishes_Output_Auth_WHEN_Event_Auth() {
     createController()
 
-    toolsView.dispatch(ToolsView.Event.CloseClick)
+    toolsView.dispatch(ToolsView.Event.BackClick)
 
-    assertTrue(ToolsController.Output.Close in output)
+    assertTrue(ToolsController.Output.Back in output)
   }
 
   private fun createController() {

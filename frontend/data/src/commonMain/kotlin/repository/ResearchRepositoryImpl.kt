@@ -10,10 +10,10 @@ class ResearchRepositoryImpl(
 ) : ResearchRepository {
 
   override suspend fun getResearches(): List<Research> {
-    val cached = local.getAll()
-    if (cached.isNotEmpty()) {
-      return cached
-    }
+//    val cached = local.getAll()
+//    if (cached.isNotEmpty()) {
+//      return cached
+//    }
     val response = remote.getAll(token())
     return when {
       response.response != null -> {
@@ -141,6 +141,15 @@ class ResearchRepositoryImpl(
     when {
       response.response != null -> return
       response.error != null -> handleErrorResponse<Boolean>(response.error!!)
+      else -> throw CloseResearchException
+    }
+  }
+
+  override suspend fun closeResearch(researchId: Int) {
+    val response = remote.closeResearch(token(), researchId)
+    when {
+      response.response != null -> return
+      response.error != null -> handleErrorResponse<Boolean>(response.error!!)
       else -> throw CloseSessionException
     }
   }
@@ -152,6 +161,7 @@ class ResearchRepositoryImpl(
       ErrorStringCode.RESEARCH_NOT_FOUND.value -> throw ResearchNotFoundException
       ErrorStringCode.RESEARCH_INITIALIZATION_FAILED.value -> throw ResearchInitializationException
       ErrorStringCode.RESEARCH_DATA_FETCH_FAILED.value -> throw ResearchDataFetchError
+      ErrorStringCode.RESEARCH_CLOSE_FAILED.value -> throw CloseResearchException
 
       ErrorStringCode.HOUNSFIELD_ERROR.value -> throw HounsfieldFetchError
       ErrorStringCode.INCORRECT_AXIAL_COORD.value -> throw IncorrectAxialValueException

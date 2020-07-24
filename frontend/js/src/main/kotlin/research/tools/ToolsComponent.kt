@@ -92,19 +92,14 @@ class ToolsComponent(prps: ToolsProps) : RComponent<ToolsProps, ToolsState>(prps
     styledDiv {
       css { justifyContent = JustifyContent.spaceBetween }
       mList {
-
-        renderTools(state.toolsModel.items)
-
-        mListItemWithIcon(
-          primaryText = "Все исследования",
-          iconName = "keyboard_backspace",
-          onClick = { toolsViewDelegate.dispatch(ToolsView.Event.CloseClick) }
-        )
+        backButton()
+        tools(state.toolsModel.items)
+        closeButton()
       }
     }
   }
 
-  private fun RBuilder.renderTools(items: List<Tool>) {
+  private fun RBuilder.tools(items: List<Tool>) {
     items.forEach { tool ->
       mListItemWithIcon(primaryText = tool.name, iconName = tool.icon)
       when (tool) {
@@ -128,6 +123,22 @@ class ToolsComponent(prps: ToolsProps) : RComponent<ToolsProps, ToolsState>(prps
         )
       }
     }
+  }
+
+  private fun RBuilder.closeButton() {
+    mListItemWithIcon(
+      primaryText = "Закончить исследование",
+      iconName = "done",
+      onClick = { toolsViewDelegate.dispatch(ToolsView.Event.CloseClick) }
+    )
+  }
+
+  private fun RBuilder.backButton() {
+    mListItemWithIcon(
+      primaryText = "Все исследования",
+      iconName = "keyboard_backspace",
+      onClick = { toolsViewDelegate.dispatch(ToolsView.Event.BackClick) }
+    )
   }
 
   private fun updateState(model: ToolsView.Model) = setState { toolsModel = model }

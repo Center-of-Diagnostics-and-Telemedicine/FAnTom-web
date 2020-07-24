@@ -37,6 +37,7 @@ interface ToolsController {
     data class MipMethodChanged(val mip: Mip) : Output()
     data class MipValueChanged(val value: Int) : Output()
     data class PresetChanged(val preset: Presets) : Output()
+    object Back : Output()
     object Close : Output()
   }
 

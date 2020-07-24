@@ -31,7 +31,6 @@ abstract class MarksStoreAbstractFactory(
     data class Loaded(val marks: List<MarkModel>) : Result()
     data class MarkTypesLoaded(val markTypes: List<MarkTypeModel>) : Result()
     data class Error(val error: String) : Result()
-
     object DismissErrorRequested : Result()
   }
 

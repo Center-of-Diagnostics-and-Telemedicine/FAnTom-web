@@ -30,12 +30,12 @@ interface ContainerCreator {
 class ContainerCreatorImpl() : ContainerCreator {
 
   private val config = DefaultDockerClientConfig.createDefaultConfigBuilder()
-    .withDockerHost("unix:///var/run/docker.sock")
-    .withRegistryUsername("max")
-    .withRegistryPassword("vfrcbv16")
-//    .withDockerHost("tcp://localhost:2375")
-//    .withRegistryUsername("m.gusev")
-//    .withRegistryPassword("8vkWq8%T")
+//    .withDockerHost("unix:///var/run/docker.sock")
+//    .withRegistryUsername("max")
+//    .withRegistryPassword("vfrcbv16")
+    .withDockerHost("tcp://localhost:2375")
+    .withRegistryUsername("m.gusev")
+    .withRegistryPassword("Gusev!8")
     .build()
 
   private val execFactory = JerseyDockerCmdExecFactory()

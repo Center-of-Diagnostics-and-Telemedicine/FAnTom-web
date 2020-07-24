@@ -30,10 +30,10 @@ fun main(args: Array<String>) {
   embeddedServer(Netty, MAIN_SERVER_PORT) {
 
     Database.connect(
-      url = "jdbc:mysql://localhost:8889/mark_tomogram?characterEncoding=utf8&useUnicode=true&useSSL=false",
+      url = "jdbc:mysql://localhost:3306/mark_tomogram?characterEncoding=utf8&useUnicode=true&useSSL=false",
       driver = "com.mysql.jdbc.Driver",
       user = "root",
-      password = "root"
+      password = ""
     )
 
     // Serialize json
@@ -84,7 +84,7 @@ fun main(args: Array<String>) {
     routing {
       static {
         resource(ROOT, RESOURCE_INDEX)
-        resource(ROOT, RESOURCE_JS)
+//        resource(ROOT, RESOURCE_JS)
 
         static(STATIC_ROUTE) {
           resources(RESOURCE_STATIC)
@@ -95,12 +95,16 @@ fun main(args: Array<String>) {
 
       authenticate(jwt) {
         register(userRepository)
+
         researchesList(researchRepository, userResearchRepository, covidMarksRepository)
         initResearch(researchRepository, sessionRepository, userResearchRepository)
+        closeResearch(sessionRepository, researchRepository, userResearchRepository)
+
         getSlice(researchRepository, sessionRepository)
         hounsfield(sessionRepository)
+        closeSession(sessionRepository)
+
         mark(covidMarksRepository)
-        closeSession(researchRepository, sessionRepository)
 
         getMarks(multiPlanarMarksRepository, planarMarksRepository, researchRepository)
         createMark(multiPlanarMarksRepository, planarMarksRepository, researchRepository)

@@ -11,7 +11,8 @@ interface MarksView : MviView<Model, Event> {
   data class Model(
     val items: List<MarkModel>,
     val current: MarkModel?,
-    val markTypes: List<MarkTypeModel>
+    val markTypes: List<MarkTypeModel>,
+    val error: String
   )
 
   sealed class Event {
@@ -19,11 +20,13 @@ interface MarksView : MviView<Model, Event> {
     data class ItemCommentChanged(val mark: MarkModel, val comment: String) : Event()
     data class DeleteItem(val mark: MarkModel) : Event()
     data class ChangeMarkType(val type: MarkTypeModel, val markId: Int) : Event()
+    object DissmissError : Event()
   }
 }
 
 fun initialMarksModel(): Model = Model(
   items = listOf(),
   current = null,
-  markTypes = listOf()
+  markTypes = listOf(),
+  error = ""
 )

@@ -7,7 +7,7 @@ import view.MarksView.Event
 import view.MarksView.Model
 
 val marksStateToModel: State.() -> Model = {
-  Model(items = marks, current = current, markTypes = markTypes)
+  Model(items = marks, current = current, markTypes = markTypes, error = error)
 }
 
 val marksEventToIntent: Event.() -> Intent? = {
@@ -16,6 +16,7 @@ val marksEventToIntent: Event.() -> Intent? = {
     is Event.ItemCommentChanged -> Intent.UpdateComment(mark, comment)
     is Event.DeleteItem -> Intent.DeleteMark(mark)
     is Event.ChangeMarkType -> Intent.ChangeMarkType(type, markId)
+    Event.DissmissError -> Intent.DismissError
   }
 }
 
@@ -27,6 +28,7 @@ val inputToMarksIntent: Input.() -> Intent? = {
     is Input.UpdateMarkWithoutSave -> Intent.UpdateMarkWithoutSaving(markToUpdate)
     is Input.UpdateMarkWithSave -> Intent.UpdateMarkWithSave(mark)
     Input.DeleteClick -> Intent.DeleteClicked
+    Input.CloseResearchRequested -> Intent.HandleCloseResearch
     Input.Idle -> null
   }
 }
@@ -34,5 +36,6 @@ val inputToMarksIntent: Input.() -> Intent? = {
 val marksLabelToMarksOutput: Label.() -> Output? = {
   when (this) {
     is Label.MarksLoaded -> Output.Marks(list)
+    Label.CloseResearch -> Output.CloseResearch
   }
 }

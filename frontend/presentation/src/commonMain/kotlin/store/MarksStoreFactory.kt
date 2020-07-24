@@ -56,9 +56,19 @@ internal class MarksStoreFactory(
           getState().marks.firstOrNull { it.selected }?.let { unSelectMark(it, getState) }
           getState().marks.firstOrNull { it.id == intent.mark.id }?.let { selectMark(it, getState) }
         }
+        Intent.HandleCloseResearch -> handleCloseResearch(getState)
         Intent.ReloadRequested -> TODO()
-        Intent.DismissError -> TODO()
+        Intent.DismissError -> dispatch(Result.DismissErrorRequested)
       }.let {}
+    }
+
+    private fun handleCloseResearch(state: () -> State) {
+      val markWithoutType = state().marks.firstOrNull { it.type == null }
+      if (markWithoutType != null) {
+        dispatch(Result.Error(MARK_TYPE_NOT_SET))
+      } else {
+        publish(Label.CloseResearch)
+      }
     }
 
     private fun updateComment(mark: MarkModel, comment: String) {

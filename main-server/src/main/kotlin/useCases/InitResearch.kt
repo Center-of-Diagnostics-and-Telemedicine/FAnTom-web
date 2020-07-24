@@ -42,7 +42,7 @@ fun Route.initResearch(
     if (sessionToClose != null) {
       debugLog("found existing session for user, going to close it")
       try {
-        sessionRepository.deleteSession(userId, research.accessionNumber)
+        sessionRepository.deleteSession(userId)
       } catch (e: Exception) {
       }
     }

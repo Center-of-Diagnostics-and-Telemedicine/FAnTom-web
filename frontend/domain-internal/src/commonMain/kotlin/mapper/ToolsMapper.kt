@@ -22,14 +22,16 @@ val toolsEventToToolsIntent: Event.() -> Intent? =
   {
     when (this) {
       is Event.ItemClick -> Intent.HandleToolClick(tool)
+      Event.BackClick -> null
       Event.CloseClick -> null
     }
   }
 
 val toolsEventToToolsOutput: Event.() -> Output? = {
   when (this) {
-    is Event.ItemClick -> null
+    is Event.BackClick -> Output.Back
     is Event.CloseClick -> Output.Close
+    is Event.ItemClick -> null
   }
 }
 

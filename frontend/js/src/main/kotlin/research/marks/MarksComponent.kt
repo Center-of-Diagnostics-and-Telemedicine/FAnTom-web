@@ -9,6 +9,7 @@ import com.badoo.reaktive.observable.subscribe
 import com.ccfraser.muirwik.components.mPaper
 import com.ccfraser.muirwik.components.table.*
 import com.ccfraser.muirwik.components.themeContext
+import components.alert
 import controller.MarksController
 import controller.MarksControllerImpl
 import destroy
@@ -16,6 +17,7 @@ import model.ResearchSlicesSizesDataNew
 import react.*
 import repository.MarksRepository
 import resume
+import view.MarksView
 import view.MarksView.Model
 import view.initialMarksModel
 
@@ -52,6 +54,13 @@ class MarksComponent(prps: MarksProps) : RComponent<MarksProps, MarksState>(prps
 
   override fun RBuilder.render() {
     themeContext.Consumer { theme ->
+
+      alert(
+        message = state.model.error,
+        open = state.model.error.isNotEmpty(),
+        handleClose = { marksViewDelegate.dispatch(MarksView.Event.DissmissError) }
+      )
+
       mPaper {
         mTable {
           mTableHead {

@@ -24,8 +24,11 @@ class GetSlice(val id: Int)
 @Location("/$RESEARCH_ROUTE/$HOUNSFIELD_ROUTE")
 class Hounsfield()
 
+@Location("/$SESSION_ROUTE/$CLOSE_ROUTE")
+class CloseSession
+
 @Location("/$RESEARCH_ROUTE/{id}/$CLOSE_ROUTE")
-class CloseSession(val id: Int)
+class CloseResearch(val id: Int)
 
 @Location("/$RESEARCH_ROUTE/{id}/$COVID_MARK_ROUTE")
 class CovidMark(val id: Int)

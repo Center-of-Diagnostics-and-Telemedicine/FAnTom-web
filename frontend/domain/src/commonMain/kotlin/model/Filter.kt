@@ -16,11 +16,11 @@ sealed class Filter(
 
   object Seen : Filter(
     name = "Просмотренные",
-    icon = "done"
+    icon = "visibility"
   )
 
   object Done : Filter(
     name = "Оконченные",
-    icon = "done_all"
+    icon = "done"
   )
 }

@@ -40,4 +40,5 @@ interface ResearchRepository {
   )
 
   suspend fun closeSession(researchId: Int)
+  suspend fun closeResearch(researchId: Int)
 }

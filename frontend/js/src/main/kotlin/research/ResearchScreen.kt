@@ -7,6 +7,7 @@ import com.badoo.reaktive.observable.Observable
 import com.badoo.reaktive.subject.behavior.BehaviorSubject
 import com.ccfraser.muirwik.components.mCssBaseline
 import com.ccfraser.muirwik.components.spacingUnits
+import components.alert
 import components.screenLoading
 import controller.*
 import controller.ToolsController.Output
@@ -31,6 +32,7 @@ import resume
 import styled.StyleSheet
 import styled.css
 import styled.styledDiv
+import view.MarksView
 import view.ResearchView
 import view.initialResearchModel
 import kotlin.browser.window
@@ -81,6 +83,11 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
     mCssBaseline()
     val model = state.researchModel
     screenLoading(model.loading)
+    alert(
+      message = state.researchModel.error,
+      open = state.researchModel.error.isNotEmpty(),
+      handleClose = { researchViewDelegate.dispatch(ResearchView.Event.DismissError) }
+    )
     styledDiv {
       css(appFrameContainerStyle)
 
@@ -153,7 +160,8 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
       is Output.GridChanged -> {
         cutsContainerInputObservable.onNext(CutsContainerController.Input.GridChanged(output.grid))
       }
-      is Output.Close -> researchViewDelegate.dispatch(ResearchView.Event.Close)
+      is Output.Back -> researchViewDelegate.dispatch(ResearchView.Event.BackToList)
+      is Output.Close -> marksInputObservable.onNext(MarksController.Input.CloseResearchRequested)
     }
   }
 
@@ -193,7 +201,9 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
     when (output) {
       is MarksController.Output.Marks ->
         cutsInputObservable.onNext(CutController.Input.Marks(output.list))
-    }
+      MarksController.Output.CloseResearch ->
+        researchViewDelegate.dispatch(ResearchView.Event.Close)
+    }.let { }
   }
 
   private fun updateState(model: ResearchView.Model) = setState { researchModel = model }

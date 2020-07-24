@@ -28,5 +28,6 @@ fun getErrorMessageByCode(errorCode: ErrorStringCode): String {
     ErrorStringCode.UPDATE_MARK_FAILED -> MARK_UPDATE_EXCEPTION
     ErrorStringCode.GET_MARKS_FAILED -> MARKS_FETCH_EXCEPTION
     ErrorStringCode.DELETE_MARK_FAILED -> MARK_DELETE_EXCEPTION
+    ErrorStringCode.RESEARCH_CLOSE_FAILED -> RESEARCH_CLOSE_FAILED
   }
 }

@@ -27,4 +27,6 @@ const val MARKS_FETCH_EXCEPTION = "Не удалось получить отме
 const val MARK_CREATE_EXCEPTION = "Не удалось создать отметку"
 const val MARK_UPDATE_EXCEPTION = "Не удалось изменить отметку"
 const val MARK_DELETE_EXCEPTION = "Не удалось удалить отметку"
+const val RESEARCH_CLOSE_FAILED = "Не удалось закрыть исследование"
+const val MARK_TYPE_NOT_SET = "У отметки отсутствует тип. Пожалуйста, выбирите тип отметки"
 

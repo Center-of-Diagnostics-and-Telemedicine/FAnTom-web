@@ -17,12 +17,13 @@ val researchEventToResearchIntent: Event.() -> Intent? = {
   when (this) {
     Event.DismissError -> Intent.DismissError
     Event.Reload -> Intent.ReloadRequested
+    Event.BackToList -> Intent.BackRequested
     Event.Close -> Intent.CloseRequested
   }
 }
 
 val researchLabelToResearchOutput: Label.() -> Output? = {
   when (this) {
-    Label.Close -> Output.Close
+    Label.Back -> Output.Close
   }
 }
