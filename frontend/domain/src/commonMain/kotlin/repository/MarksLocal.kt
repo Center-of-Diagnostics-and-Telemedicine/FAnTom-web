@@ -9,4 +9,5 @@ interface MarksLocal {
   suspend fun update(mark: MarkEntity)
   suspend fun saveList(marks: List<MarkEntity>)
   suspend fun delete(markId: Int)
+  suspend fun clean()
 }

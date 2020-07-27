@@ -2,8 +2,8 @@ package research.marks
 
 import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.lifecycle.LifecycleRegistry
+import com.arkivanov.mvikotlin.core.lifecycle.doOnDestroy
 import com.arkivanov.mvikotlin.core.store.StoreFactory
-import com.badoo.reaktive.disposable.CompositeDisposable
 import com.badoo.reaktive.observable.Observable
 import com.badoo.reaktive.observable.subscribe
 import com.ccfraser.muirwik.components.mPaper
@@ -13,6 +13,8 @@ import components.alert
 import controller.MarksController
 import controller.MarksControllerImpl
 import destroy
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import model.ResearchSlicesSizesDataNew
 import react.*
 import repository.MarksRepository
@@ -26,7 +28,6 @@ class MarksComponent(prps: MarksProps) : RComponent<MarksProps, MarksState>(prps
   private val marksViewDelegate = MarksViewProxy(::updateState)
   private val lifecycleRegistry = LifecycleRegistry()
   private lateinit var controller: MarksController
-  private val disposable = CompositeDisposable()
 
   init {
     state = MarksState(initialMarksModel())
@@ -40,7 +41,8 @@ class MarksComponent(prps: MarksProps) : RComponent<MarksProps, MarksState>(prps
       lifecycleRegistry
     )
     val dependencies = props.dependencies
-    disposable.add(dependencies.marksInput.subscribe { controller.input(it) })
+    val disposable = dependencies.marksInput.subscribe { controller.input(it) }
+    lifecycleRegistry.doOnDestroy(disposable::dispose)
   }
 
   private fun createController(): MarksController {
@@ -68,11 +70,23 @@ class MarksComponent(prps: MarksProps) : RComponent<MarksProps, MarksState>(prps
               mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) { +"X" }
               mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) { +"Y" }
               if (props.dependencies.isPlanar.not()) {
-                mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) { +"Z" }
+                mTableCell(
+                  align = MTableCellAlign.center,
+                  padding = MTableCellPadding.none
+                ) { +"Z" }
               }
-              mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) { +"mm_v" }
-              mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) { +"mm_h" }
-              mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) { +"Тип" }
+              mTableCell(
+                align = MTableCellAlign.center,
+                padding = MTableCellPadding.none
+              ) { +"mm_v" }
+              mTableCell(
+                align = MTableCellAlign.center,
+                padding = MTableCellPadding.none
+              ) { +"mm_h" }
+              mTableCell(
+                align = MTableCellAlign.center,
+                padding = MTableCellPadding.none
+              ) { +"Тип" }
               mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) { }
             }
           }

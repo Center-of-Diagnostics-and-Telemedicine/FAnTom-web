@@ -12,6 +12,8 @@ import components.screenLoading
 import controller.*
 import controller.ToolsController.Output
 import destroy
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import kotlinx.css.*
 import model.ResearchSlicesSizesDataNew
 import model.isPlanar
@@ -213,6 +215,11 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
   private fun openMarks() = setState { marksOpen = true }
 
   override fun componentWillUnmount() {
+    GlobalScope.launch {
+      props.dependencies.marksRepository.clean()
+      props.dependencies.brightnessRepository.clean()
+      props.dependencies.mipRepository.clean()
+    }
     lifecycleRegistry.destroy()
   }
 

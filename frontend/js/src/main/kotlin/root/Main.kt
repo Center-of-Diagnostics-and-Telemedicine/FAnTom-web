@@ -1,5 +1,6 @@
 package root
 
+import DEBUG
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import local.LoginLocalDataSource
 import local.MarksLocalDataSource
@@ -56,6 +57,6 @@ fun main() {
 }
 
 fun Any.debugLog(text: String?) {
-  if (text.isNullOrEmpty().not())
-    console.log("${this::class.simpleName?.toUpperCase()}: $text")
+//  if (text.isNullOrEmpty().not() && DEBUG)
+//    console.log("${this::class.simpleName?.toUpperCase()}: $text")
 }

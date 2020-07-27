@@ -41,4 +41,8 @@ actual object MarksLocalDataSource : MarksLocal {
     map.update { it.minus(markId) }
   }
 
+  override suspend fun clean() {
+    map.compareAndSet(map.value, emptyMap())
+  }
+
 }

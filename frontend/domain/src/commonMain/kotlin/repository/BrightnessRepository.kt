@@ -17,6 +17,8 @@ interface BrightnessRepository {
   fun getGammaValue(): Double
   fun setGammaValue(value: Double)
 
+  fun clean()
+
 }
 
 class BrightnessRepositoryImpl : BrightnessRepository {
@@ -47,6 +49,12 @@ class BrightnessRepositoryImpl : BrightnessRepository {
 
   override fun setGammaValue(value: Double) {
     gamma.compareAndSet(gamma.value, value)
+  }
+
+  override fun clean() {
+    black.compareAndSet(black.value, INITIAL_BLACK.toInt())
+    white.compareAndSet(white.value, INITIAL_WHITE.toInt())
+    gamma.compareAndSet(gamma.value, INITIAL_GAMMA)
   }
 
 

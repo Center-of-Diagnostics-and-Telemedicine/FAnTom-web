@@ -13,6 +13,8 @@ interface MipRepository {
   fun getMipValue(): Int
   fun setMipValue(value: Int)
 
+  fun clean()
+
 }
 
 class MipRepositoryImpl : MipRepository {
@@ -34,6 +36,11 @@ class MipRepositoryImpl : MipRepository {
 
   override fun setMipValue(value: Int) {
     mipValue.compareAndSet(mipValue.value, value)
+  }
+
+  override fun clean() {
+    mip.compareAndSet(mip.value, Mip.No)
+    mipValue.compareAndSet(mipValue.value, INITIAL_MIP_VALUE)
   }
 
 }

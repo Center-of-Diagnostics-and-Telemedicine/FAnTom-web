@@ -56,6 +56,10 @@ class MarksRepositoryImpl(
     }
   }
 
+  override suspend fun clean() {
+    local.clean()
+  }
+
   private fun <T : Any> handleErrorResponse(response: ErrorModel): T {
     when (response.error) {
       ErrorStringCode.RESEARCH_NOT_FOUND.value -> throw ResearchApiExceptions.ResearchNotFoundException

@@ -11,4 +11,5 @@ interface MarksRepository {
   suspend fun saveMark(markToSave: MarkData, researchId: Int)
   suspend fun updateMark(mark: MarkEntity, researchId: Int, localy: Boolean = false)
   suspend fun deleteMark(id: Int, researchId: Int)
+  suspend fun clean()
 }

@@ -30,10 +30,10 @@ fun main(args: Array<String>) {
   embeddedServer(Netty, MAIN_SERVER_PORT) {
 
     Database.connect(
-      url = "jdbc:mysql://localhost:3306/mark_tomogram?characterEncoding=utf8&useUnicode=true&useSSL=false",
+      url = "jdbc:mysql://localhost:3306/fantom_mg?characterEncoding=utf8&useUnicode=true&useSSL=false",
       driver = "com.mysql.jdbc.Driver",
       user = "root",
-      password = ""
+      password = "vfrcbv16"
     )
 
     // Serialize json
