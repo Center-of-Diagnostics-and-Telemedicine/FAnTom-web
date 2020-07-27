@@ -263,10 +263,6 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
     context.clearRect(0.0, 0.0, canvas.width.toDouble(), canvas.height.toDouble())
   }
 
-  override fun componentWillUnmount() {
-    debugLog("MY: componentWillUnmount ShapesComponent ${props.cut.type}")
-  }
-
 }
 
 class ShapesState(

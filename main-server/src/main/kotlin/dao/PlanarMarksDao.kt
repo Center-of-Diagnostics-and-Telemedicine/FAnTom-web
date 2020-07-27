@@ -34,7 +34,8 @@ class PlanarMarksDao : MarksDaoFacade {
         it[y] = mark.y
         it[radiusHorizontal] = mark.radiusHorizontal
         it[radiusVertical] = mark.radiusVertical
-        it[size] = mark.size
+        it[sizeVertical] = mark.sizeVertical
+        it[sizeHorizontal] = mark.sizeHorizontal
         it[cutType] = mark.cutType
       } get PlanarMarksVos.id
     }
@@ -47,7 +48,8 @@ class PlanarMarksDao : MarksDaoFacade {
         it[y] = mark.markData.y
         it[radiusHorizontal] = mark.markData.radiusHorizontal
         it[radiusVertical] = mark.markData.radiusVertical
-        it[size] = mark.markData.size
+        it[sizeVertical] = mark.markData.sizeVertical
+        it[sizeHorizontal] = mark.markData.sizeHorizontal
         it[type] = mark.type
         it[comment] = mark.comment
         it[cutType] = mark.markData.cutType

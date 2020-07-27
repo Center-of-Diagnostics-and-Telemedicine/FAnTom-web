@@ -127,7 +127,6 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
   }
 
   override fun componentWillUnmount() {
-    debugLog("MY: componentWillUnmount CutContainer ${props.dependencies.cut.type}")
     disposable.dispose()
     unmountComponentAtNode(testRef)
     testRef = null

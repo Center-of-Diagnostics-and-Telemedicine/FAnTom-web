@@ -51,8 +51,8 @@ class MarkItemView(prps: MarkItemProps) : RComponent<MarkItemProps, MarkItemStat
         }
         mTableCell(align = MTableCellAlign.center) { +"${round(area.markData.x)}" }
         mTableCell(align = MTableCellAlign.center) { +"${round(area.markData.y)}" }
-//        mTableCell(align = MTableCellAlign.center) { +"${round(area.markData.z)}" }
-        mTableCell(align = MTableCellAlign.center) { +"${round(area.markData.size)}" }
+        mTableCell(align = MTableCellAlign.center) { +"${round(area.markData.sizeVertical)}" }
+        mTableCell(align = MTableCellAlign.center) { +"${round(area.markData.sizeHorizontal)}" }
         mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) {
           mButton(
             caption = if (area.type == null) "тип" else area.type!!.ru.take(3),
@@ -172,7 +172,6 @@ fun RBuilder.markView(
   eventOutput: (MarksView.Event) -> Unit,
   markTypes: List<MarkTypeModel>
 ) = child(MarkItemView::class) {
-  debugLog("MY: markTypes.size = $markTypes")
   attrs.mark = mark
   attrs.eventOutput = eventOutput
   attrs.markTypes = markTypes

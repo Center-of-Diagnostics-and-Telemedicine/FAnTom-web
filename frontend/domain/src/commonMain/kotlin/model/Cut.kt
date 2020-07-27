@@ -138,7 +138,8 @@ fun Cut.getMarkToSave(circle: Circle, sliceNumber: Int): MarkData? {
           z = sliceNumber.toDouble(),
           radiusHorizontal = circle.dicomRadiusHorizontal,
           radiusVertical = circle.dicomRadiusHorizontal,
-          size = 0.0,
+          sizeVertical = circle.dicomRadiusHorizontal * data.dicom_step_h,
+          sizeHorizontal = circle.dicomRadiusHorizontal * data.dicom_step_h,
           cutType = type.intType
         )
       }
@@ -151,7 +152,8 @@ fun Cut.getMarkToSave(circle: Circle, sliceNumber: Int): MarkData? {
           z = (circle.dicomCenterY * verticalRatio),
           radiusHorizontal = circle.dicomRadiusHorizontal,
           radiusVertical = circle.dicomRadiusHorizontal,
-          size = 0.0,
+          sizeVertical = circle.dicomRadiusHorizontal * data.dicom_step_h,
+          sizeHorizontal = circle.dicomRadiusHorizontal * data.dicom_step_h,
           cutType = type.intType
         )
       }
@@ -164,7 +166,8 @@ fun Cut.getMarkToSave(circle: Circle, sliceNumber: Int): MarkData? {
           z = (circle.dicomCenterY * verticalRatio),
           radiusHorizontal = circle.dicomRadiusHorizontal,
           radiusVertical = circle.dicomRadiusHorizontal,
-          size = 0.0,
+          sizeVertical = circle.dicomRadiusHorizontal * data.dicom_step_h,
+          sizeHorizontal = circle.dicomRadiusHorizontal * data.dicom_step_h,
           cutType = type.intType
         )
       }
@@ -172,13 +175,17 @@ fun Cut.getMarkToSave(circle: Circle, sliceNumber: Int): MarkData? {
       CutType.MG_LCC,
       CutType.MG_RMLO,
       CutType.MG_LMLO -> {
+        println("MY: circle.dicomRadiusHorizontal = ${circle.dicomRadiusHorizontal}, circle.dicomRadiusVertical = ${circle.dicomRadiusVertical}")
+        println("MY: data.dicom_step_v = ${data.dicom_step_v}, data.dicom_step_h = ${data.dicom_step_h}")
+        println("MY: circle.dicomRadiusVertical * data.dicom_step_v = ${circle.dicomRadiusVertical * data.dicom_step_v}, circle.dicomRadiusHorizontal * data.dicom_step_h = ${circle.dicomRadiusHorizontal * data.dicom_step_h}")
         MarkData(
           x = circle.dicomCenterX,
           y = circle.dicomCenterY,
           z = -1.0,
           radiusHorizontal = circle.dicomRadiusHorizontal,
           radiusVertical = circle.dicomRadiusVertical,
-          size = 0.0,
+          sizeVertical = circle.dicomRadiusVertical * data.dicom_step_v * 2,
+          sizeHorizontal = circle.dicomRadiusHorizontal * data.dicom_step_h * 2,
           cutType = type.intType
         )
       }
@@ -331,8 +338,8 @@ fun Cut.updateCoordinatesByRect(
           mark.copy(
             markData = markData.copy(
               radiusVertical = radius,
-              y = newY
-//                size = (it.radius - deltaY) * 2 * axialSlicesSizesDataObservable.value.pixelLength
+              y = newY,
+              sizeVertical = radius * data.dicom_step_v * 2
             ),
           ).also { it.selected = true }
         }
@@ -342,8 +349,8 @@ fun Cut.updateCoordinatesByRect(
           mark.copy(
             markData = markData.copy(
               radiusVertical = radius,
-              y = newY
-//                size = (it.radius + deltaY) * 2 * axialSlicesSizesDataObservable.value.pixelLength
+              y = newY,
+              sizeVertical = radius * data.dicom_step_v * 2
             )
           ).also { it.selected = true }
         }
@@ -353,7 +360,8 @@ fun Cut.updateCoordinatesByRect(
           mark.copy(
             markData = markData.copy(
               radiusHorizontal = radius,
-              x = newX
+              x = newX,
+              sizeHorizontal = radius * data.dicom_step_h * 2
 //                size = (it.radius + deltaX) * 2 * axialSlicesSizesDataObservable.value.pixelLength
             )
           ).also { it.selected = true }
@@ -364,7 +372,8 @@ fun Cut.updateCoordinatesByRect(
           mark.copy(
             markData = markData.copy(
               radiusHorizontal = radius,
-              x = newX
+              x = newX,
+              sizeHorizontal = radius * data.dicom_step_h * 2
 //                size = (it.radius - deltaX) * 2 * axialSlicesSizesDataObservable.value.pixelLength
             )
           ).also { it.selected = true }
@@ -379,8 +388,9 @@ fun Cut.updateCoordinatesByRect(
               radiusHorizontal = radiusHorizontal,
               radiusVertical = radiusVertical,
               x = newX,
-              y = newY
-//                size = (it.radius - deltaX) * 2 * axialSlicesSizesDataObservable.value.pixelLength
+              y = newY,
+              sizeVertical = radiusVertical * data.dicom_step_v * 2,
+              sizeHorizontal = radiusHorizontal * data.dicom_step_h * 2
             )
           ).also { it.selected = true }
         }
@@ -394,7 +404,9 @@ fun Cut.updateCoordinatesByRect(
               radiusHorizontal = radiusHorizontal,
               radiusVertical = radiusVertical,
               x = newX,
-              y = newY
+              y = newY,
+              sizeVertical = radiusVertical * data.dicom_step_v * 2,
+              sizeHorizontal = radiusHorizontal * data.dicom_step_h * 2
 //                size = (it.radius + deltaX) * 2 * axialSlicesSizesDataObservable.value.pixelLength
             )
           ).also { it.selected = true }
@@ -409,7 +421,9 @@ fun Cut.updateCoordinatesByRect(
               radiusHorizontal = radiusHorizontal,
               radiusVertical = radiusVertical,
               x = newX,
-              y = newY
+              y = newY,
+              sizeVertical = radiusVertical * data.dicom_step_v * 2,
+              sizeHorizontal = radiusHorizontal * data.dicom_step_h * 2
 //                size = (it.radius - deltaX) * 2 * axialSlicesSizesDataObservable.value.pixelLength
             )
           ).also { it.selected = true }
@@ -424,7 +438,9 @@ fun Cut.updateCoordinatesByRect(
               radiusHorizontal = radiusHorizontal,
               radiusVertical = radiusVertical,
               x = newX,
-              y = newY
+              y = newY,
+              sizeVertical = radiusVertical * data.dicom_step_v * 2,
+              sizeHorizontal = radiusHorizontal * data.dicom_step_h * 2
 //                size = (it.radius + deltaX) * 2 * axialSlicesSizesDataObservable.value.pixelLength
             )
           ).also { it.selected = true }

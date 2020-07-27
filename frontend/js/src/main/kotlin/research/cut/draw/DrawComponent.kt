@@ -214,11 +214,6 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
 
   private fun castEvent(it: Event): MouseEvent = it.asDynamic().nativeEvent as MouseEvent
 
-  override fun componentWillUnmount() {
-    debugLog("MY: componentWillUnmount DrawComponent ${props.cut.type}")
-
-  }
-
 }
 
 class DrawState : RState

@@ -69,7 +69,6 @@ class CutParentComponent(prps: CutParentProps) : RComponent<CutParentProps, CutP
   }
 
   override fun RBuilder.render() {
-    debugLog("MY: loading = ${state.cutModel.mainLoading}")
     alert(
       message = state.cutModel.error,
       open = state.cutModel.error.isNotEmpty(),
@@ -134,7 +133,6 @@ class CutParentComponent(prps: CutParentProps) : RComponent<CutParentProps, CutP
   private fun updateState(model: DrawView.Model) = setState { drawModel = model }
 
   override fun componentWillUnmount() {
-    debugLog("MY: componentWillUnmount CutParentComponent ${props.dependencies.cut.type}")
     lifecycleRegistry.destroy()
   }
 

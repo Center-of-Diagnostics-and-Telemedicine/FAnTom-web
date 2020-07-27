@@ -70,7 +70,8 @@ class MarksComponent(prps: MarksProps) : RComponent<MarksProps, MarksState>(prps
               if (props.dependencies.isPlanar.not()) {
                 mTableCell(align = MTableCellAlign.center) { +"Z" }
               }
-              mTableCell(align = MTableCellAlign.center) { +"mm" }
+              mTableCell(align = MTableCellAlign.center) { +"mm_v" }
+              mTableCell(align = MTableCellAlign.center) { +"mm_h" }
               mTableCell(align = MTableCellAlign.center) { +"Тип" }
               mTableCell(align = MTableCellAlign.center) { }
             }

@@ -4,7 +4,7 @@ const val TOKEN = "api_token"
 const val END_POINT: String = "https://fantom.npcmr.ru"
 const val LOCALHOST = "http://localhost"
 const val MAIN_SERVER_PORT = 8081
-const val MAIN_SERVER_URL = "$LOCALHOST:$MAIN_SERVER_PORT"
+const val MAIN_SERVER_URL = "http://10.2.20.56:$MAIN_SERVER_PORT"
 
 //const val END_POINT: String = "http://10.2.20.44:8080"
 const val LOGIN_ROUTE: String = "login"
@@ -24,7 +24,7 @@ const val TYPE_AXIAL = "AXIAL"
 const val TYPE_FRONTAL = "FRONTAL"
 const val TYPE_SAGITTAL = "SAGITTAL"
 
-const val localDataStorePath = "/Users/max/Downloads/MG"
+const val localDataStorePath = "D:\\dicom"
 const val dockerDataStorePath = "/app/dicom"
 
 const val ID_FIELD = "id"
@@ -33,7 +33,7 @@ const val tenMinutes: Long = 600000
 
 const val libraryServerPort: Int = 5555
 const val libraryServerSchema: String = "http://"
-const val libraryServerDomain: String = "192.168.0.102"
+const val libraryServerDomain: String = "localhost"
 
 
 /**
@@ -86,6 +86,15 @@ const val VESSELS = "vessels"
 const val BONES = "bones"
 const val BRAIN = "brain"
 const val LUNGS = "lungs"
+const val MG_1 = "MG_F"
+const val MG_2 = "MG_2"
+const val MG_3 = "MG_3"
+const val MG_4 = "MG_4"
+const val MG_5 = "MG_5"
+const val MG_6 = "MG_6"
+const val MG_7 = "MG_7"
+const val MG_8 = "MG_8"
+const val MG_9 = "MG_9"
 
 enum class LineType {
   HORIZONTAL,
@@ -208,4 +217,5 @@ enum class ErrorStringCode(val value: Int) {
   UPDATE_MARK_FAILED(24),
   GET_MARKS_FAILED(25),
   DELETE_MARK_FAILED(26),
+  RESEARCH_CLOSE_FAILED(27)
 }
