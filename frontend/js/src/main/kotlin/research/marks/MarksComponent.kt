@@ -65,15 +65,15 @@ class MarksComponent(prps: MarksProps) : RComponent<MarksProps, MarksState>(prps
         mTable {
           mTableHead {
             mTableRow {
-              mTableCell(align = MTableCellAlign.center) { +"X" }
-              mTableCell(align = MTableCellAlign.center) { +"Y" }
+              mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) { +"X" }
+              mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) { +"Y" }
               if (props.dependencies.isPlanar.not()) {
-                mTableCell(align = MTableCellAlign.center) { +"Z" }
+                mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) { +"Z" }
               }
-              mTableCell(align = MTableCellAlign.center) { +"mm_v" }
-              mTableCell(align = MTableCellAlign.center) { +"mm_h" }
-              mTableCell(align = MTableCellAlign.center) { +"Тип" }
-              mTableCell(align = MTableCellAlign.center) { }
+              mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) { +"mm_v" }
+              mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) { +"mm_h" }
+              mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) { +"Тип" }
+              mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) { }
             }
           }
           mTableBody {

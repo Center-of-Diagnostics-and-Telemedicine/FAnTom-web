@@ -1,5 +1,7 @@
 package research.marks
 
+import com.ccfraser.muirwik.components.button.MButtonSize
+import com.ccfraser.muirwik.components.button.MIconButtonSize
 import com.ccfraser.muirwik.components.button.mButton
 import com.ccfraser.muirwik.components.button.mIconButton
 import com.ccfraser.muirwik.components.form.MFormControlMargin
@@ -49,14 +51,15 @@ class MarkItemView(prps: MarkItemProps) : RComponent<MarkItemProps, MarkItemStat
             backgroundColor = Color(theme.palette.primary.main)
           }
         }
-        mTableCell(align = MTableCellAlign.center) { +"${round(area.markData.x)}" }
-        mTableCell(align = MTableCellAlign.center) { +"${round(area.markData.y)}" }
-        mTableCell(align = MTableCellAlign.center) { +"${round(area.markData.sizeVertical)}" }
-        mTableCell(align = MTableCellAlign.center) { +"${round(area.markData.sizeHorizontal)}" }
+        mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) { +"${round(area.markData.x)}" }
+        mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) { +"${round(area.markData.y)}" }
+        mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) { +"${round(area.markData.sizeVertical)}" }
+        mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) { +"${round(area.markData.sizeHorizontal)}" }
         mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) {
           mButton(
             caption = if (area.type == null) "тип" else area.type!!.ru.take(3),
-            onClick = { handleShowMenuClick(it, area.id) }
+            onClick = { handleShowMenuClick(it, area.id) },
+            size = MButtonSize.small
           )
           mMenu(
             state.selectedMenuIndex == area.id,
@@ -74,7 +77,7 @@ class MarkItemView(prps: MarkItemProps) : RComponent<MarkItemProps, MarkItemStat
           }
         }
         mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) {
-          mIconButton("close", onClick = { props.eventOutput(MarksView.Event.DeleteItem(area)) })
+          mIconButton("close", onClick = { props.eventOutput(MarksView.Event.DeleteItem(area)) }, size = MIconButtonSize.small)
         }
       }
       if (area.selected) {
