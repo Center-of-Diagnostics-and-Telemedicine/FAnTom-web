@@ -18,6 +18,11 @@ class ResearchDirFinderImpl : ResearchDirFinder {
             println("file contains $accessionName")
             return file
           }
+        } else if(file.isFile) {
+          if (file.name.contains(accessionName)) {
+            println("file contains $accessionName")
+            return file
+          }
         }
       }
     }

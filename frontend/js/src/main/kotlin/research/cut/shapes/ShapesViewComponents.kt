@@ -31,6 +31,21 @@ fun RBuilder.huValue(value: Int) {
   }
 }
 
+fun RBuilder.brightnessValue(value: Int) {
+  styledDiv {
+    css {
+      position = Position.absolute
+      zIndex = 1
+      bottom = 0.px
+      right = 0.px
+      padding(1.spacingUnits)
+    }
+    mTypography(text = "Val: $value") {
+      css { color = Color.white }
+    }
+  }
+}
+
 fun RBuilder.sliceNumber(sliceNumber: Int, imagesCount: Int) {
   styledDiv {
     css {

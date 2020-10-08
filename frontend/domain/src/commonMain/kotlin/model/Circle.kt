@@ -79,6 +79,10 @@ fun MarkModel.toCircle(cut: Cut, sliceNumber: Int): Circle? {
           )
         } else null
       }
+      CutType.DX_GENERIC,
+      CutType.DX_POSTERO_ANTERIOR,
+      CutType.DX_LEFT_LATERAL,
+      CutType.DX_RIGHT_LATERAL,
       CutType.MG_RCC,
       CutType.MG_LCC,
       CutType.MG_RMLO,
@@ -93,10 +97,6 @@ fun MarkModel.toCircle(cut: Cut, sliceNumber: Int): Circle? {
           isCenter = true
         ) else null
       }
-      CutType.DX_GENERIC -> TODO()
-      CutType.DX_POSTERO_ANTERIOR -> TODO()
-      CutType.DX_LEFT_LATERAL -> TODO()
-      CutType.DX_RIGHT_LATERAL -> TODO()
     }
   }
 //  return null

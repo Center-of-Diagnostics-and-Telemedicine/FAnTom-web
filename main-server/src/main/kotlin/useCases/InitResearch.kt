@@ -17,6 +17,7 @@ import repository.UserResearchRepository
 import util.InitResearch
 import util.debugLog
 import util.user
+import java.net.ConnectException
 
 fun Route.initResearch(
   researchRepository: ResearchRepository,
@@ -56,8 +57,11 @@ fun Route.initResearch(
       call.respond(ResearchInitResponseNew(response = response))
     } catch (e: Exception) {
       application.log.error("Failed to init research", e)
-      e.printStackTrace()
-      respondError(ErrorStringCode.RESEARCH_INITIALIZATION_FAILED)
+      if (e is ConnectException) {
+        respondError(ErrorStringCode.SESSION_EXPIRED)
+      } else {
+        respondError(ErrorStringCode.RESEARCH_INITIALIZATION_FAILED)
+      }
     }
 
   }

@@ -15,6 +15,7 @@ fun Circle.toRects(cut: Cut): List<Rect> {
     ResearchType.CT -> {
       mainRects(sideLength)
     }
+    ResearchType.DX,
     ResearchType.MG -> {
       val leftTop = Rect(
         left = dicomCenterX - dicomRadiusHorizontal,
@@ -48,7 +49,6 @@ fun Circle.toRects(cut: Cut): List<Rect> {
       list.addAll(listOf(leftTop, rightTop, leftBottom, rightBottom))
       return list
     }
-    ResearchType.DX -> TODO()
   }
 }
 

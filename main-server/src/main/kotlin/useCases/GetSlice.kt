@@ -10,6 +10,7 @@ import repository.ResearchRepository
 import repository.SessionRepository
 import util.GetSlice
 import util.user
+import java.net.ConnectException
 
 fun Route.getSlice(
   researchRepository: ResearchRepository,
@@ -42,7 +43,11 @@ fun Route.getSlice(
       )
     } catch (e: Exception) {
       application.log.error("Failed to get slice", e)
-      respondError(ErrorStringCode.GET_SLICE_FAILED)
+      if(e is ConnectException){
+        respondError(ErrorStringCode.SESSION_EXPIRED)
+      } else {
+        respondError(ErrorStringCode.GET_SLICE_FAILED)
+      }
     }
   }
 }

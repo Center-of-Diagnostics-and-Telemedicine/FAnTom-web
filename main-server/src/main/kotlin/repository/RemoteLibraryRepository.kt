@@ -22,6 +22,7 @@ class RemoteLibraryRepositoryImpl(
     val response = try {
       remoteDataSource.initResearch(accessionNumber)
     } catch (e: Exception) {
+      debugLog(e.localizedMessage)
       debugLog("maybe not initialized")
       delay(1000)
       debugLog("calling to initialize again")

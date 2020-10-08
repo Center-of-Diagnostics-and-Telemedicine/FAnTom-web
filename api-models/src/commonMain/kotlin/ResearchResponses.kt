@@ -60,10 +60,7 @@ data class MGInitModel(
 
 @Serializable
 data class DXInitModel(
-  val dx_generic: ModalityModel,
-  val dx_postero_anterior: ModalityModel,
-  val dx_left_lateral: ModalityModel,
-  val dx_right_lateral: ModalityModel,
+  val dx0: ModalityModel,
   val reversed: Boolean
 )
 

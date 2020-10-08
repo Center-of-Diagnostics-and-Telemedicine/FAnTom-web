@@ -9,6 +9,7 @@ import model.*
 import repository.SessionRepository
 import util.Hounsfield
 import util.user
+import java.net.ConnectException
 
 fun Route.hounsfield(sessionRepository: SessionRepository) {
 
@@ -31,7 +32,11 @@ fun Route.hounsfield(sessionRepository: SessionRepository) {
       call.respond(HounsfieldResponse(HounsfieldModel(existingSession.hounsfield(params))))
     } catch (e: Exception) {
       application.log.error("Failed to get hounsfield", e)
-      respondError(ErrorStringCode.HOUNSFIELD_ERROR)
+      if(e is ConnectException){
+        respondError(ErrorStringCode.SESSION_EXPIRED)
+      } else {
+        respondError(ErrorStringCode.HOUNSFIELD_ERROR)
+      }
     }
   }
 }

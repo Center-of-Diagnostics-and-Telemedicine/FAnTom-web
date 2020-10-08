@@ -6,12 +6,15 @@ import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.badoo.reaktive.utils.ensureNeverFrozen
+import model.ResearchSlicesSizesDataNew
+import model.ResearchType
 import model.Tool
 import store.tools.ToolsStore.Intent
 import store.tools.ToolsStore.State
 
 abstract class ToolsStoreAbstractFactory(
-  private val storeFactory: StoreFactory
+  private val storeFactory: StoreFactory,
+  private val data: ResearchSlicesSizesDataNew
 ) {
 
   fun create(): ToolsStore =
@@ -39,7 +42,10 @@ abstract class ToolsStoreAbstractFactory(
       }
   }
 
-  private fun getInitialState(): State = State(
-    list = listOf(Tool.MIP, Tool.Brightness, Tool.Preset)
-  )
+  private fun getInitialState(): State =
+    when (data.type) {
+      ResearchType.CT -> State(list = listOf(Tool.MIP, Tool.Brightness, Tool.Preset))
+      ResearchType.DX,
+      ResearchType.MG -> State(list = listOf(Tool.Brightness, Tool.Preset))
+    }
 }

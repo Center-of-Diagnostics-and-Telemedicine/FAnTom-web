@@ -100,6 +100,69 @@ sealed class Presets(val name: String, val valueName: String, val black: Int, va
     white = 60000
   )
 
+  object DX1 : Presets(
+    name = "[D]",
+    valueName = DX_1,
+    black = 0,
+    white = 256
+  )
+
+  object DX2 : Presets(
+    name = "[2]",
+    valueName = DX_2,
+    black = 0,
+    white = 40
+  )
+
+  object DX3 : Presets(
+    name = "[3]",
+    valueName = DX_3,
+    black = 0,
+    white = 80
+  )
+
+  object DX4 : Presets(
+    name = "[4]",
+    valueName = DX_4,
+    black = 0,
+    white = 160
+  )
+
+  object DX5 : Presets(
+    name = "[5]",
+    valueName = DX_5,
+    black = 0,
+    white = 320
+  )
+
+  object DX6 : Presets(
+    name = "[6]",
+    valueName = DX_6,
+    black = 0,
+    white = 640
+  )
+
+  object DX7 : Presets(
+    name = "[7]",
+    valueName = DX_7,
+    black = 0,
+    white = 1280
+  )
+
+  object DX8 : Presets(
+    name = "[8]",
+    valueName = DX_8,
+    black = 0,
+    white = 2560
+  )
+
+  object DX9 : Presets(
+    name = "[9]",
+    valueName = DX_9,
+    black = 0,
+    white = 5120
+  )
+
   companion object {
     fun getInitialPreset(): Presets = SoftTissue
 
@@ -119,6 +182,15 @@ sealed class Presets(val name: String, val valueName: String, val black: Int, va
         MG_7 -> MG7
         MG_8 -> MG8
         MG_9 -> MG9
+        DX_1 -> DX1
+        DX_2 -> DX2
+        DX_3 -> DX3
+        DX_4 -> DX4
+        DX_5 -> DX5
+        DX_6 -> DX6
+        DX_7 -> DX7
+        DX_8 -> DX8
+        DX_9 -> DX9
         else -> throw NoSuchElementException("cant build Preset with valueName $valueName")
       }
     }
@@ -129,7 +201,7 @@ fun initialPresets(researchType: ResearchType): List<Presets> =
   when (researchType) {
     ResearchType.CT -> ctPresets()
     ResearchType.MG -> mgPresets()
-    ResearchType.DX -> listOf()
+    ResearchType.DX -> dxPresets()
   }
 
 fun initialPreset(researchType: ResearchType): Presets =
@@ -157,4 +229,16 @@ fun mgPresets(): List<Presets> = listOf(
   Presets.MG7,
   Presets.MG8,
   Presets.MG9,
+)
+
+fun dxPresets(): List<Presets> = listOf(
+  Presets.DX1,
+  Presets.DX2,
+  Presets.DX3,
+  Presets.DX4,
+  Presets.DX5,
+  Presets.DX6,
+  Presets.DX7,
+  Presets.DX8,
+  Presets.DX9,
 )

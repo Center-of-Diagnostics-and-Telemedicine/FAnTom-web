@@ -103,8 +103,18 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
         imagesCount = props.cut.data.n_images
       )
 
-      props.shapesModel.huValue?.let {
-        huValue(it)
+      when(props.cut.researchType){
+        ResearchType.CT -> {
+          props.shapesModel.huValue?.let {
+            huValue(it)
+          }
+        }
+        ResearchType.MG,
+        ResearchType.DX -> {
+          props.shapesModel.huValue?.let {
+            brightnessValue(it)
+          }
+        }
       }
     }
   }

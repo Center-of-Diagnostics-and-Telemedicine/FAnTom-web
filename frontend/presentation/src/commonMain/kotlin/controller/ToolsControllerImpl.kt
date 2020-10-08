@@ -17,7 +17,8 @@ import view.*
 class ToolsControllerImpl(val dependencies: ToolsController.Dependencies) : ToolsController {
 
   private val toolsStore = ToolsStoreFactory(
-    storeFactory = dependencies.storeFactory
+    storeFactory = dependencies.storeFactory,
+    data = dependencies.data
   ).create()
 
   private val gridStore = GridStoreFactory(

@@ -3,8 +3,8 @@ package model
 const val TOKEN = "api_token"
 const val END_POINT: String = "https://fantom.npcmr.ru"
 const val LOCALHOST = "http://localhost"
-const val MAIN_SERVER_PORT = 80
-const val MAIN_SERVER_URL = END_POINT
+const val MAIN_SERVER_PORT = 8081
+const val MAIN_SERVER_URL = "$LOCALHOST:$MAIN_SERVER_PORT"
 
 //const val END_POINT: String = "http://10.2.20.44:8080"
 const val LOGIN_ROUTE: String = "login"
@@ -24,7 +24,7 @@ const val TYPE_AXIAL = "AXIAL"
 const val TYPE_FRONTAL = "FRONTAL"
 const val TYPE_SAGITTAL = "SAGITTAL"
 
-const val localDataStorePath = "/data/fantom/mg"
+const val localDataStorePath = "C:\\dicom\\out"
 const val dockerDataStorePath = "/app/dicom"
 
 const val ID_FIELD = "id"
@@ -95,6 +95,15 @@ const val MG_6 = "MG_6"
 const val MG_7 = "MG_7"
 const val MG_8 = "MG_8"
 const val MG_9 = "MG_9"
+const val DX_1 = "DX_D"
+const val DX_2 = "DX_2"
+const val DX_3 = "DX_3"
+const val DX_4 = "DX_4"
+const val DX_5 = "DX_5"
+const val DX_6 = "DX_6"
+const val DX_7 = "DX_7"
+const val DX_8 = "DX_8"
+const val DX_9 = "DX_9"
 
 enum class LineType {
   HORIZONTAL,

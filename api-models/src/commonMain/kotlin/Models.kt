@@ -87,10 +87,10 @@ fun ResearchInitModelNew.toResearchSlicesSizesData(): ResearchSlicesSizesDataNew
     }
     DX != null -> {
       val modalities = mapOf(
-        SLICE_TYPE_DX_GENERIC to DX.dx_generic.copy(reversed = DX.reversed),
-        SLICE_TYPE_DX_POSTERO_ANTERIOR to DX.dx_postero_anterior.copy(reversed = DX.reversed),
-        SLICE_TYPE_DX_LEFT_LATERAL to DX.dx_left_lateral.copy(reversed = DX.reversed),
-        SLICE_TYPE_DX_RIGHT_LATERAL to DX.dx_right_lateral.copy(reversed = DX.reversed)
+        SLICE_TYPE_DX_GENERIC to DX.dx0.copy(reversed = DX.reversed),
+//        SLICE_TYPE_DX_POSTERO_ANTERIOR to DX.dx_postero_anterior.copy(reversed = DX.reversed),
+//        SLICE_TYPE_DX_LEFT_LATERAL to DX.dx_left_lateral.copy(reversed = DX.reversed),
+//        SLICE_TYPE_DX_RIGHT_LATERAL to DX.dx_right_lateral.copy(reversed = DX.reversed)
       )
       ResearchSlicesSizesDataNew(
         modalities = modalities,

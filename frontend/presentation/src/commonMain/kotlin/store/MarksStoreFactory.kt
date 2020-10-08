@@ -62,29 +62,6 @@ internal class MarksStoreFactory(
       }.let {}
     }
 
-    private fun handleCloseResearch(state: () -> State) {
-      val markWithoutType = state().marks.firstOrNull { it.type == null }
-      if (markWithoutType != null) {
-        dispatch(Result.Error(MARK_TYPE_NOT_SET))
-      } else {
-        publish(Label.CloseResearch)
-      }
-    }
-
-    private fun updateComment(mark: MarkModel, comment: String) {
-      singleFromCoroutine {
-        repository.updateMark(mark.toMarkEntity().copy(comment = comment), researchId)
-        repository.getMarks(researchId)
-      }.subscribeSingle()
-    }
-
-    private fun deleteMark(mark: MarkModel) {
-      singleFromCoroutine {
-        repository.deleteMark(mark.id, researchId)
-        repository.getMarks(researchId)
-      }.subscribeSingle()
-    }
-
     private fun handleNewMark(circle: Circle, sliceNumber: Int, cut: Cut) {
       singleFromCoroutine {
         val markToSave = cut.getMarkToSave(circle, sliceNumber)
@@ -98,6 +75,29 @@ internal class MarksStoreFactory(
         repository.updateMark(mark.toMarkEntity(), researchId)
         repository.getMarks(researchId)
       }.subscribeSingle()
+    }
+
+    private fun deleteMark(mark: MarkModel) {
+      singleFromCoroutine {
+        repository.deleteMark(mark.id, researchId)
+        repository.getMarks(researchId)
+      }.subscribeSingle()
+    }
+
+    private fun updateComment(mark: MarkModel, comment: String) {
+      singleFromCoroutine {
+        repository.updateMark(mark.toMarkEntity().copy(comment = comment), researchId)
+        repository.getMarks(researchId)
+      }.subscribeSingle()
+    }
+
+    private fun handleCloseResearch(state: () -> State) {
+      val markWithoutType = state().marks.firstOrNull { it.type == null }
+      if (markWithoutType != null) {
+        dispatch(Result.Error(MARK_TYPE_NOT_SET))
+      } else {
+        publish(Label.CloseResearch)
+      }
     }
 
     private fun updateMarkWithoutSaving(markToUpdate: MarkModel, getState: () -> State) {
