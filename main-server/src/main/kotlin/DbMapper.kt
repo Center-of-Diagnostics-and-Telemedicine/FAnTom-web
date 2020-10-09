@@ -48,7 +48,8 @@ fun ResultRow.toMultiPlanarMark(): MarkEntity = MarkEntity(
     radiusVertical = this[MultiPlanarMarksVos.radius],
     sizeVertical = this[MultiPlanarMarksVos.size],
     sizeHorizontal = this[MultiPlanarMarksVos.size],
-    cutType = this[MultiPlanarMarksVos.cutType]
+    cutType = this[MultiPlanarMarksVos.cutType],
+    shapeType = SHAPE_TYPE_CIRCLE
   ),
   type = this[MultiPlanarMarksVos.type],
   comment = this[MultiPlanarMarksVos.comment],
@@ -64,7 +65,8 @@ fun ResultRow.toPlanarMark(): MarkEntity = MarkEntity(
     radiusVertical = this[PlanarMarksVos.radiusVertical],
     sizeVertical = this[PlanarMarksVos.sizeVertical],
     sizeHorizontal = this[PlanarMarksVos.sizeHorizontal],
-    cutType = this[PlanarMarksVos.cutType]
+    cutType = this[PlanarMarksVos.cutType],
+    shapeType = this[PlanarMarksVos.shapeType]
   ),
   type = this[PlanarMarksVos.type],
   comment = this[PlanarMarksVos.comment],

@@ -124,8 +124,8 @@ fun Cut.getPosition(dicomX: Double, dicomY: Double, sliceNumber: Int): PointPosi
   }
 }
 
-fun Cut.getMarkToSave(circle: Circle, sliceNumber: Int): MarkData? {
-  return if (circle.dicomCenterX < 0.0 || circle.dicomCenterY < 0.0) {
+fun Cut.getMarkToSave(shape: Shape, sliceNumber: Int): MarkData? {
+  return if (shape.dicomCenterX < 0.0 || shape.dicomCenterY < 0.0) {
     null
   } else {
 
@@ -133,28 +133,30 @@ fun Cut.getMarkToSave(circle: Circle, sliceNumber: Int): MarkData? {
       CutType.EMPTY -> null
       CutType.CT_AXIAL -> {
         MarkData(
-          x = (circle.dicomCenterX),
-          y = (circle.dicomCenterY),
+          x = (shape.dicomCenterX),
+          y = (shape.dicomCenterY),
           z = sliceNumber.toDouble(),
-          radiusHorizontal = circle.dicomRadiusHorizontal,
-          radiusVertical = circle.dicomRadiusHorizontal,
-          sizeVertical = circle.dicomRadiusHorizontal * data.dicom_step_h,
-          sizeHorizontal = circle.dicomRadiusHorizontal * data.dicom_step_h,
-          cutType = type.intType
+          radiusHorizontal = shape.dicomRadiusHorizontal,
+          radiusVertical = shape.dicomRadiusHorizontal,
+          sizeVertical = shape.dicomRadiusHorizontal * data.dicom_step_h,
+          sizeHorizontal = shape.dicomRadiusHorizontal * data.dicom_step_h,
+          cutType = type.intType,
+          shapeType = shape.getType()
         )
       }
       CutType.CT_FRONTAL -> {
         val verticalRatio = verticalCutData!!.data.n_images.toDouble() / data.screen_size_v
         val horizontalRatio = horizontalCutData!!.data.n_images.toDouble() / data.screen_size_h
         MarkData(
-          x = (circle.dicomCenterX * horizontalRatio),
+          x = (shape.dicomCenterX * horizontalRatio),
           y = sliceNumber.toDouble(),
-          z = (circle.dicomCenterY * verticalRatio),
-          radiusHorizontal = circle.dicomRadiusHorizontal,
-          radiusVertical = circle.dicomRadiusHorizontal,
-          sizeVertical = circle.dicomRadiusHorizontal * data.dicom_step_h,
-          sizeHorizontal = circle.dicomRadiusHorizontal * data.dicom_step_h,
-          cutType = type.intType
+          z = (shape.dicomCenterY * verticalRatio),
+          radiusHorizontal = shape.dicomRadiusHorizontal,
+          radiusVertical = shape.dicomRadiusHorizontal,
+          sizeVertical = shape.dicomRadiusHorizontal * data.dicom_step_h,
+          sizeHorizontal = shape.dicomRadiusHorizontal * data.dicom_step_h,
+          cutType = type.intType,
+          shapeType = shape.getType()
         )
       }
       CutType.CT_SAGITTAL -> {
@@ -162,13 +164,14 @@ fun Cut.getMarkToSave(circle: Circle, sliceNumber: Int): MarkData? {
         val horizontalRatio = horizontalCutData!!.data.n_images.toDouble() / data.screen_size_h
         MarkData(
           x = sliceNumber.toDouble(),
-          y = (circle.dicomCenterX * horizontalRatio),
-          z = (circle.dicomCenterY * verticalRatio),
-          radiusHorizontal = circle.dicomRadiusHorizontal,
-          radiusVertical = circle.dicomRadiusHorizontal,
-          sizeVertical = circle.dicomRadiusHorizontal * data.dicom_step_h,
-          sizeHorizontal = circle.dicomRadiusHorizontal * data.dicom_step_h,
-          cutType = type.intType
+          y = (shape.dicomCenterX * horizontalRatio),
+          z = (shape.dicomCenterY * verticalRatio),
+          radiusHorizontal = shape.dicomRadiusHorizontal,
+          radiusVertical = shape.dicomRadiusHorizontal,
+          sizeVertical = shape.dicomRadiusHorizontal * data.dicom_step_h,
+          sizeHorizontal = shape.dicomRadiusHorizontal * data.dicom_step_h,
+          cutType = type.intType,
+          shapeType = shape.getType()
         )
       }
       CutType.DX_GENERIC,
@@ -179,18 +182,16 @@ fun Cut.getMarkToSave(circle: Circle, sliceNumber: Int): MarkData? {
       CutType.MG_LCC,
       CutType.MG_RMLO,
       CutType.MG_LMLO -> {
-        println("MY: circle.dicomRadiusHorizontal = ${circle.dicomRadiusHorizontal}, circle.dicomRadiusVertical = ${circle.dicomRadiusVertical}")
-        println("MY: data.dicom_step_v = ${data.dicom_step_v}, data.dicom_step_h = ${data.dicom_step_h}")
-        println("MY: circle.dicomRadiusVertical * data.dicom_step_v = ${circle.dicomRadiusVertical * data.dicom_step_v}, circle.dicomRadiusHorizontal * data.dicom_step_h = ${circle.dicomRadiusHorizontal * data.dicom_step_h}")
         MarkData(
-          x = circle.dicomCenterX,
-          y = circle.dicomCenterY,
+          x = shape.dicomCenterX,
+          y = shape.dicomCenterY,
           z = -1.0,
-          radiusHorizontal = circle.dicomRadiusHorizontal,
-          radiusVertical = circle.dicomRadiusVertical,
-          sizeVertical = circle.dicomRadiusVertical * data.dicom_step_v * 2,
-          sizeHorizontal = circle.dicomRadiusHorizontal * data.dicom_step_h * 2,
-          cutType = type.intType
+          radiusHorizontal = shape.dicomRadiusHorizontal,
+          radiusVertical = shape.dicomRadiusVertical,
+          sizeVertical = shape.dicomRadiusVertical * data.dicom_step_v * 2,
+          sizeHorizontal = shape.dicomRadiusHorizontal * data.dicom_step_h * 2,
+          cutType = type.intType,
+          shapeType = shape.getType()
         )
       }
     }

@@ -22,7 +22,7 @@ val marksEventToIntent: Event.() -> Intent? = {
 
 val inputToMarksIntent: Input.() -> Intent? = {
   when (this) {
-    is Input.AddNewMark -> Intent.HandleNewMark(circle, sliceNumber, cut)
+    is Input.AddNewMark -> Intent.HandleNewMark(shape, sliceNumber, cut)
     is Input.SelectMark -> Intent.SelectMark(mark)
     is Input.UnselectMark -> Intent.UnselectMark(mark)
     is Input.UpdateMarkWithoutSave -> Intent.UpdateMarkWithoutSaving(markToUpdate)

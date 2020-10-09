@@ -37,6 +37,7 @@ class PlanarMarksDao : MarksDaoFacade {
         it[sizeVertical] = mark.sizeVertical
         it[sizeHorizontal] = mark.sizeHorizontal
         it[cutType] = mark.cutType
+        it[shapeType] = mark.shapeType
       } get PlanarMarksVos.id
     }
   }

@@ -17,6 +17,16 @@ fun init() {
       MultiPlanarMarksVos,
       PlanarMarksVos
     )
+    SchemaUtils.createMissingTablesAndColumns(
+      UserVos,
+      ResearchVos,
+      UserResearchVos,
+      CovidMarksVos,
+      MultiPlanarMarksVos,
+      PlanarMarksVos
+    )
+
+
     val login = "admin"
     val pass = hash("vfrcbv16")
     val userByCredentials = getUserByCredentials(UserPasswordCredential(login, pass))

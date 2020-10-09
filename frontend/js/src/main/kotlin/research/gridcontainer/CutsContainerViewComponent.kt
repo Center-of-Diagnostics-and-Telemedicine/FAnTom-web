@@ -177,6 +177,11 @@ class CutsContainerViewComponent(prps: CutsContainerProps) :
           CutsContainerController.Output.CircleDrawn(output.circle, output.sliceNumber, output.cut)
         )
       }
+      is CutController.Output.RectangleDrawn -> {
+        props.dependencies.cutsContainerOutput(
+          CutsContainerController.Output.RectangleDrawn(output.rectangle, output.sliceNumber, output.cut)
+        )
+      }
       is CutController.Output.SelectMark -> {
         props.dependencies.cutsContainerOutput(
           CutsContainerController.Output.SelectMark(output.mark)

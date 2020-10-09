@@ -22,9 +22,10 @@ data class MarkData(
   val radiusVertical: Double,
   val sizeVertical: Double,
   val sizeHorizontal: Double,
-  val cutType: Int
+  val cutType: Int,
+  val shapeType: Int
 ) {
-  fun name(): String = "x: ${x.roundToInt()}, y: ${y.roundToInt()}, z: ${z.roundToInt()}, r: ${radiusHorizontal.roundToInt()}"
+  fun name(): String = "x: ${x.roundToInt()}, y: ${y.roundToInt()}, z: ${z.roundToInt()}, r: ${radiusHorizontal.roundToInt()}, shapeType: $shapeType"
 }
 
 data class MarkModel(

@@ -10,7 +10,6 @@ import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLCanvasElement
 import org.w3c.dom.get
 import react.*
-import root.debugLog
 import styled.css
 import styled.styledCanvas
 import styled.styledDiv
@@ -45,7 +44,7 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
       context?.let { _ ->
         clearCanvas(canvas, context)
         if (props.loading.not()) {
-          props.shapesModel.circles.let { drawCircles(it, context) }
+          props.shapesModel.shapes.let { drawShapes(it, context) }
           props.shapesModel.rects.let { drawRects(it, context) }
           if (props.cut.data.n_images > 1) {
             drawLines(
@@ -103,7 +102,7 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
         imagesCount = props.cut.data.n_images
       )
 
-      when(props.cut.researchType){
+      when (props.cut.researchType) {
         ResearchType.CT -> {
           props.shapesModel.huValue?.let {
             huValue(it)
@@ -157,16 +156,23 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
     }
   }
 
-  private fun drawCircles(
-    models: List<Circle>,
+  private fun drawShapes(
+    models: List<Shape>,
     context: CanvasRenderingContext2D
   ) {
-    models.forEach { circle ->
+    models.forEach { shape ->
       context.beginPath()
-      if (props.cut.isPlanar()) {
-        drawPlanarCircle(circle, context)
-      } else {
-        drawSphere(context, circle)
+      when (shape) {
+        is Circle -> {
+          if (props.cut.isPlanar()) {
+            drawPlanarCircle(shape, context)
+          } else {
+            drawSphere(context, shape)
+          }
+        }
+        is Rectangle -> {
+          drawPlanarRectangle(shape, context)
+        }
       }
       context.stroke()
       context.closePath()
@@ -200,6 +206,21 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
       )
       a += step
     }
+  }
+
+  private fun drawPlanarRectangle(rectangle: Rectangle, context: CanvasRenderingContext2D) {
+    context.lineWidth = 1.0
+    if (rectangle.highlight) {
+      context.strokeStyle = props.cut.color
+    } else {
+      context.strokeStyle = "#00ff00"
+    }
+
+    val x = (rectangle.dicomCenterX - rectangle.dicomRadiusHorizontal) / horizontalRatio
+    val y = (rectangle.dicomCenterY - rectangle.dicomRadiusVertical) / verticalRatio
+    val w = rectangle.dicomRadiusHorizontal / horizontalRatio * 2
+    val h = rectangle.dicomRadiusVertical / verticalRatio * 2
+    context.rect(x, y, w, h)
   }
 
   private fun drawSphere(context: CanvasRenderingContext2D, circle: Circle) {

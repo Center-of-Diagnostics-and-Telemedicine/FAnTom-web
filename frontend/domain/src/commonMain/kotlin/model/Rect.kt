@@ -9,7 +9,7 @@ data class Rect(
   val type: MoveRectType
 )
 
-fun Circle.toRects(cut: Cut): List<Rect> {
+fun Shape.toRects(cut: Cut): List<Rect> {
   val sideLength = cut.data.screen_size_h.toDouble() / 100
   return when (cut.researchType) {
     ResearchType.CT -> {
@@ -52,7 +52,7 @@ fun Circle.toRects(cut: Cut): List<Rect> {
   }
 }
 
-private fun Circle.mainRects(sideLength: Double): List<Rect> {
+private fun Shape.mainRects(sideLength: Double): List<Rect> {
   val left = Rect(
     left = dicomCenterX - dicomRadiusHorizontal,
     top = dicomCenterY,

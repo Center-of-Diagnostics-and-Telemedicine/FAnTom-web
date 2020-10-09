@@ -23,7 +23,7 @@ abstract class DrawStoreAbstractFactory(
     startDicomY = 0.0,
     dicomRadiusHorizontal = 0.0,
     dicomRadiusVertical = 0.0,
-    isDrawing = false,
+    isDrawingEllipse = false,
     isMoving = false,
     isContrastBrightness = false
   )
@@ -48,7 +48,8 @@ abstract class DrawStoreAbstractFactory(
   protected abstract fun createExecutor(): Executor<Intent, Nothing, State, Result, Label>
 
   protected sealed class Result : JvmSerializable {
-    data class StartDraw(val startDicomX: Double, val startDicomY: Double) : Result()
+    data class StartDrawEllipse(val startDicomX: Double, val startDicomY: Double) : Result()
+    data class StartDrawRectangle(val startDicomX: Double, val startDicomY: Double) : Result()
     data class MultiPlanarDrawing(val newDicomX: Double, val newDicomY: Double) : Result()
     data class ExternalDrawing(val dicomX: Double, val dicomY: Double) : Result()
     data class StartContrastBrightness(val startDicomX: Double, val startDicomY: Double) : Result()
@@ -64,10 +65,15 @@ abstract class DrawStoreAbstractFactory(
   private object ReducerImpl : Reducer<State, Result> {
     override fun State.reduce(result: Result): State =
       when (result) {
-        is Result.StartDraw -> copy(
+        is Result.StartDrawEllipse -> copy(
           startDicomX = result.startDicomX,
           startDicomY = result.startDicomY,
-          isDrawing = true
+          isDrawingEllipse = true
+        )
+        is Result.StartDrawRectangle -> copy(
+          startDicomX = result.startDicomX,
+          startDicomY = result.startDicomY,
+          isDrawingRectangle = true
         )
         is Result.StartContrastBrightness -> copy(
           startDicomX = result.startDicomX,
@@ -106,7 +112,8 @@ abstract class DrawStoreAbstractFactory(
           startDicomY = 0.0,
           dicomRadiusHorizontal = 0.0,
           dicomRadiusVertical = 0.0,
-          isDrawing = false,
+          isDrawingEllipse = false,
+          isDrawingRectangle = false,
           isContrastBrightness = false,
           isMoving = false
         )

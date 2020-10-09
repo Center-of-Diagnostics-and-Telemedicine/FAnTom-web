@@ -64,12 +64,12 @@ internal class ShapesStoreFactory(
       getState: () -> State
     ) {
       val state = getState()
-      val circles = state.circles
-      val rects = getState().rects
+      val shapes = state.shapes
+      val sideRects = getState().rects
 
-      dispatch(Result.RectInMove(null))
+      dispatch(Result.SideRectInMove(null))
 
-      val moveRect = rects.firstOrNull {
+      val moveRect = sideRects.firstOrNull {
         val partSideLength = it.sideLength / 2
         val inVerticalBound = startDicomY > it.top - partSideLength && startDicomY < it.top + partSideLength
         val inHorizontalBound = startDicomX > it.left - partSideLength && startDicomX < it.left + partSideLength
@@ -77,13 +77,13 @@ internal class ShapesStoreFactory(
       }
 
       if (moveRect != null) {
-        dispatch(Result.RectInMove(moveRect))
+        dispatch(Result.SideRectInMove(moveRect))
       } else {
         state.marks.firstOrNull { it.selected }?.let {
           publish(Label.UnselectMark(it))
         }
 
-        val circle = circles.getCircleByPosition(dicomX = startDicomX, dicomY = startDicomY)
+        val circle = shapes.getShapeByPosition(dicomX = startDicomX, dicomY = startDicomY)
         if (circle != null) {
           state.marks.firstOrNull { it.id == circle.id }?.let {
             publish(Label.SelectMark(it))
@@ -117,14 +117,14 @@ internal class ShapesStoreFactory(
       getState: () -> State
     ) {
       val state = getState()
-      val circles = state.circles
+      val shapes = state.shapes
 
-      val circle = circles.getCircleByPosition(
+      val shape = shapes.getShapeByPosition(
         dicomX = dicomX,
         dicomY = dicomY
       )
-      circle?.let {
-        state.marks.firstOrNull { it.id == circle.id }?.let {
+      shape?.let {
+        state.marks.firstOrNull { it.id == shape.id }?.let {
           publish(Label.SelectMark(it))
           publish(Label.CenterMark(it))
         }
@@ -133,7 +133,7 @@ internal class ShapesStoreFactory(
 
     private fun handleMarks(list: List<MarkModel>, state: () -> State) {
       dispatch(Result.Marks(list))
-      updateCircles(list, state)
+      updateShapes(list, state)
     }
 
     private fun handleStopMoving(getState: () -> State) {
@@ -153,18 +153,18 @@ internal class ShapesStoreFactory(
         cut.horizontalCutData?.type == externalCut.type ->
           updateHorizontalCoefficient(sliceNumber, externalCut)
       }
-      updateCircles(getState().marks, getState)
+      updateShapes(getState().marks, getState)
     }
 
-    private fun updateCircles(list: List<MarkModel>, state: () -> State) {
-      val circles = list.mapNotNull { it.toCircle(cut, state().sliceNumber) }
-      val selectedCircle = circles.firstOrNull { it.highlight }
-      val rectangles = if (selectedCircle != null && selectedCircle.isCenter) {
-        selectedCircle.toRects(cut)
+    private fun updateShapes(list: List<MarkModel>, state: () -> State) {
+      val shapes = list.mapNotNull { it.toShape(cut, state().sliceNumber) }
+      val selectedShape = shapes.firstOrNull { it.highlight }
+      val rectangles = if (selectedShape != null && selectedShape.isCenter) {
+        selectedShape.toRects(cut)
       } else {
         listOf()
       }
-      dispatch(Result.Circles(circles))
+      dispatch(Result.Shapes(shapes))
       dispatch(Result.Rects(rectangles))
     }
 

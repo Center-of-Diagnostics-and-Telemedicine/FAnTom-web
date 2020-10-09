@@ -1,4 +1,5 @@
 import model.ID_FIELD
+import model.SHAPE_TYPE_CIRCLE
 import model.SLICE_TYPE_CT_AXIAL
 import model.UserRole
 import org.jetbrains.exposed.sql.Column
@@ -80,5 +81,6 @@ object PlanarMarksVos : Table(PLANAR_MARKS_TABLE) {
   val type: Column<String> = varchar(name = MARK_TYPE_FILED, length = 20).default("")
   val comment: Column<String> = varchar(name = COMMENT_FILED, length = 200).default("")
   val cutType: Column<Int> = integer(name = CUT_TYPE_FILED)
+  val shapeType: Column<Int> = integer(name = SHAPE_TYPE_FILED).default(SHAPE_TYPE_CIRCLE)
   override val primaryKey = PrimaryKey(id, name = "MarkPKConstraintName")
 }

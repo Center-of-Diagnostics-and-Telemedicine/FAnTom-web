@@ -2,6 +2,7 @@ package store.draw
 
 import com.arkivanov.mvikotlin.core.store.Store
 import model.Circle
+import model.Rectangle
 import store.draw.DrawStore.*
 import kotlin.math.abs
 
@@ -12,7 +13,8 @@ interface DrawStore : Store<Intent, State, Label> {
     val startDicomY: Double,
     val dicomRadiusHorizontal: Double,
     val dicomRadiusVertical: Double,
-    val isDrawing: Boolean = false,
+    val isDrawingEllipse: Boolean = false,
+    val isDrawingRectangle: Boolean = false,
     val isMoving: Boolean = false,
     val isContrastBrightness: Boolean = false,
   ) {
@@ -41,10 +43,25 @@ interface DrawStore : Store<Intent, State, Label> {
         )
       }
     }
+
+    fun rectangle(): Rectangle {
+      val horizontalRadius = dicomRadiusHorizontal / 2
+      val verticalRadius = dicomRadiusVertical / 2
+      return Rectangle(
+        dicomCenterX = startDicomX + horizontalRadius,
+        dicomCenterY = startDicomY + verticalRadius,
+        dicomRadiusHorizontal = abs(horizontalRadius),
+        dicomRadiusVertical = abs(verticalRadius),
+        id = -1,
+        highlight = false,
+        isCenter = false
+      )
+    }
   }
 
   sealed class Intent {
-    data class StartDraw(val startDicomX: Double, val startDicomY: Double) : Intent()
+    data class StartDrawEllipse(val startDicomX: Double, val startDicomY: Double) : Intent()
+    data class StartDrawRectangle(val startDicomX: Double, val startDicomY: Double) : Intent()
     data class StartContrastBrightness(val startDicomX: Double, val startDicomY: Double) : Intent()
     data class StartMouseClick(val startDicomX: Double, val startDicomY: Double) : Intent()
 
@@ -63,11 +80,14 @@ interface DrawStore : Store<Intent, State, Label> {
     data class MoveInClick(val deltaX: Double, val deltaY: Double) : Label()
     object StopMove : Label()
 
-    data class Drawn(val circle: Circle) : Label()
+    data class CircleDrawn(val circle: Circle) : Label()
+    data class RectangleDrawn(val rectangle: Rectangle) : Label()
+
     data class CenterMarkClick(val dicomX: Double, val dicomY: Double) : Label()
     data class ChangeSlice(val deltaDicomY: Int) : Label()
 
     data class ChangeContrastBrightness(val deltaX: Double, val deltaY: Double) : Label()
+
     object OpenFullCut : Label()
 
     object ContrastBrightnessChanged : Label()

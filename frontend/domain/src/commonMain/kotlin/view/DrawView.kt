@@ -1,13 +1,13 @@
 package view
 
 import com.arkivanov.mvikotlin.core.view.MviView
-import model.Circle
+import model.Shape
 import view.DrawView.Event
 import view.DrawView.Model
 
 interface DrawView : MviView<Model, Event> {
 
-  data class Model(val circle: Circle?)
+  data class Model(val shape: Shape?)
 
   sealed class Event {
     data class MouseDown(
@@ -30,6 +30,4 @@ interface DrawView : MviView<Model, Event> {
   }
 }
 
-fun initialDrawModel(): Model = Model(
-  circle = null
-)
+fun initialDrawModel(): Model = Model(shape = null)

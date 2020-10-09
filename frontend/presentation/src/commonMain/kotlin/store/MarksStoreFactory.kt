@@ -10,6 +10,7 @@ import com.badoo.reaktive.single.Single
 import com.badoo.reaktive.single.map
 import com.badoo.reaktive.single.observeOn
 import com.badoo.reaktive.single.subscribeOn
+import com.badoo.reaktive.utils.printStack
 import model.*
 import replace
 import repository.MarksRepository
@@ -40,7 +41,7 @@ internal class MarksStoreFactory(
 
     override fun executeIntent(intent: Intent, getState: () -> State) {
       when (intent) {
-        is Intent.HandleNewMark -> handleNewMark(intent.circle, intent.sliceNumber, intent.cut)
+        is Intent.HandleNewMark -> handleNewMark(intent.shape, intent.sliceNumber, intent.cut)
         is Intent.SelectMark -> selectMark(intent.mark, getState)
         is Intent.UnselectMark -> unSelectMark(intent.mark, getState)
         is Intent.UpdateMarkWithoutSaving -> updateMarkWithoutSaving(intent.markToUpdate, getState)
@@ -62,9 +63,9 @@ internal class MarksStoreFactory(
       }.let {}
     }
 
-    private fun handleNewMark(circle: Circle, sliceNumber: Int, cut: Cut) {
+    private fun handleNewMark(shape: Shape, sliceNumber: Int, cut: Cut) {
       singleFromCoroutine {
-        val markToSave = cut.getMarkToSave(circle, sliceNumber)
+        val markToSave = cut.getMarkToSave(shape, sliceNumber)
         repository.saveMark(markToSave!!, researchId)
         repository.getMarks(researchId)
       }.subscribeSingle()
@@ -147,6 +148,7 @@ internal class MarksStoreFactory(
         )
 
     private fun handleError(error: Throwable) {
+      error.printStack()
       println("MarksStore" + error.message)
       val result = when (error) {
         is ResearchApiExceptions.MarksFetchException -> Result.Error(error.error)

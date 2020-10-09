@@ -3,6 +3,7 @@ package mapper
 import model.Circle
 import model.LEFT_MOUSE_BUTTON
 import model.MIDDLE_MOUSE_BUTTON
+import model.Rectangle
 import store.draw.DrawStore.Intent
 import store.draw.DrawStore.State
 import view.DrawView.Event
@@ -20,11 +21,14 @@ val drawEventToDrawIntent: Event.() -> Intent = {
 }
 
 fun mapMouseDown(event: Event.MouseDown): Intent {
-  val isDraw = event.metaKey && event.button == LEFT_MOUSE_BUTTON
+  val isDrawEllipse = event.metaKey && event.button == LEFT_MOUSE_BUTTON
+  val isDrawRectangle = event.shiftKey && event.button == LEFT_MOUSE_BUTTON
+  println("isDrawRectangle = $isDrawRectangle")
   val isContrastBrightness = event.button == MIDDLE_MOUSE_BUTTON
   val isCenterMark = event.altKey
   return when {
-    isDraw -> Intent.StartDraw(startDicomX = event.x, startDicomY = event.y)
+    isDrawEllipse -> Intent.StartDrawEllipse(startDicomX = event.x, startDicomY = event.y)
+    isDrawRectangle -> Intent.StartDrawRectangle(startDicomX = event.x, startDicomY = event.y)
     isContrastBrightness ->
       Intent.StartContrastBrightness(startDicomX = event.x, startDicomY = event.y)
     isCenterMark -> Intent.CenterMarkClick(startDicomX = event.x, startDicomY = event.y)
@@ -33,9 +37,10 @@ fun mapMouseDown(event: Event.MouseDown): Intent {
 }
 
 val drawStateToDrawModel: State.() -> Model = {
+  val emptyModel = Model(null)
   if (dicomRadiusHorizontal != 0.0) {
-    Model(
-      circle = Circle(
+    val shape = when {
+      isDrawingRectangle -> Rectangle(
         dicomCenterX = startDicomX,
         dicomCenterY = startDicomY,
         dicomRadiusHorizontal = dicomRadiusHorizontal,
@@ -44,33 +49,21 @@ val drawStateToDrawModel: State.() -> Model = {
         highlight = false,
         isCenter = false
       )
-    )
+      isDrawingEllipse -> Circle(
+        dicomCenterX = startDicomX,
+        dicomCenterY = startDicomY,
+        dicomRadiusHorizontal = dicomRadiusHorizontal,
+        dicomRadiusVertical = dicomRadiusVertical,
+        id = -1,
+        highlight = false,
+        isCenter = false
+      )
+      else -> null
+    }
+    Model(shape)
   } else {
-    Model(null)
+    emptyModel
   }
-
 }
-
-//val drawLabelToOutput: Label.() -> Output = {
-//  when (this) {
-//    is Label.StartMove -> Output.StartMoving(
-//      startDicomX = startDicomX,
-//      startDicomY = startDicomY
-//    )
-//    is Label.ChangeContrastBrightness -> Output.ChangeContrastBrightness(
-//      deltaX = deltaX,
-//      deltaY = deltaY
-//    )
-//    is Label.MouseMove -> Output.MousePosition(dicomX = dicomX, dicomY = dicomY, cutType = cutType)
-//    is Label.Drawn -> Output.Drawn(circle = circle, cutType = cutType)
-//    is Label.OnClick -> Output.OnClick(
-//      dicomX = dicomX,
-//      dicomY = dicomY,
-//      altKeyPressed = altKey,
-//      cutType = type,
-//    )
-//    is Label.ChangeSlice -> Output.ChangeSlice(deltaY = deltaDicomY, type = cutType)
-//  }
-//}
 
 

@@ -24,7 +24,11 @@ internal class DrawStoreFactory(
 
     override fun executeIntent(intent: Intent, getState: () -> State) {
       when (intent) {
-        is Intent.StartDraw -> handleStartDraw(intent.startDicomX, intent.startDicomY)
+        is Intent.StartDrawEllipse -> handleStartDrawEllipse(intent.startDicomX, intent.startDicomY)
+        is Intent.StartDrawRectangle -> handleStartDrawRectangle(
+          intent.startDicomX,
+          intent.startDicomY
+        )
         is Intent.StartContrastBrightness ->
           handleStartContrastBrightness(intent.startDicomX, intent.startDicomY)
         is Intent.StartMouseClick -> handleStartClick(intent.startDicomX, intent.startDicomY)
@@ -48,8 +52,12 @@ internal class DrawStoreFactory(
       dispatch(Result.StartContrastBrightness(startDicomX = startDicomX, startDicomY = startDicomY))
     }
 
-    fun handleStartDraw(startDicomX: Double, startDicomY: Double) {
-      dispatch(Result.StartDraw(startDicomX = startDicomX, startDicomY = startDicomY))
+    fun handleStartDrawEllipse(startDicomX: Double, startDicomY: Double) {
+      dispatch(Result.StartDrawEllipse(startDicomX = startDicomX, startDicomY = startDicomY))
+    }
+
+    fun handleStartDrawRectangle(startDicomX: Double, startDicomY: Double) {
+      dispatch(Result.StartDrawRectangle(startDicomX = startDicomX, startDicomY = startDicomY))
     }
 
     private fun handleMouseOut() {
@@ -60,11 +68,15 @@ internal class DrawStoreFactory(
     private fun handleMouseUp(getState: () -> State) {
       val state = getState()
       when {
-        state.isDrawing -> {
+        state.isDrawingEllipse -> {
           dispatch(Result.Idle)
           val circle = state.circle(cut.isPlanar())
-          println(circle.toString())
-          publish(Label.Drawn(circle = circle))
+          publish(Label.CircleDrawn(circle = circle))
+        }
+        state.isDrawingRectangle -> {
+          dispatch(Result.Idle)
+          val rectangle = state.rectangle()
+          publish(Label.RectangleDrawn(rectangle = rectangle))
         }
         state.isContrastBrightness -> {
           dispatch(Result.Idle)
@@ -80,12 +92,15 @@ internal class DrawStoreFactory(
     private fun handleMove(dicomX: Double, dicomY: Double, getState: () -> State) {
       val state = getState()
       when {
-        state.isDrawing -> {
+        state.isDrawingEllipse -> {
           if (cut.isPlanar()) {
             dispatch(Result.PlanarDrawing(dicomX, dicomY))
           } else {
             dispatch(Result.MultiPlanarDrawing(dicomX, dicomY))
           }
+        }
+        state.isDrawingRectangle -> {
+          dispatch(Result.PlanarDrawing(dicomX, dicomY))
         }
         state.isContrastBrightness -> {
           dispatch(Result.ContrastBrightness(dicomX, dicomY))

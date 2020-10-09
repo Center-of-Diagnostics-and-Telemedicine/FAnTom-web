@@ -1,10 +1,10 @@
 package view
 
 import com.arkivanov.mvikotlin.core.view.MviView
-import model.Circle
 import model.CutType
 import model.PointPosition
 import model.Rect
+import model.Shape
 import view.ShapesView.Event
 import view.ShapesView.Model
 
@@ -16,7 +16,7 @@ interface ShapesView : MviView<Model, Event> {
     val sliceNumber: Int,
     val huValue: Int?,
     val position: PointPosition?,
-    val circles: List<Circle>,
+    val shapes: List<Shape>,
     val rects: List<Rect>
   )
 
@@ -31,6 +31,6 @@ fun initialShapesModel(): Model = Model(
   sliceNumber = 1,
   huValue = null,
   position = null,
-  circles = listOf(),
+  shapes = listOf(),
   rects = listOf()
 )

@@ -2,10 +2,10 @@ package controller
 
 import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.store.StoreFactory
-import model.Circle
 import model.Cut
 import model.MarkModel
 import model.ResearchSlicesSizesDataNew
+import model.Shape
 import repository.MarksRepository
 import view.MarksView
 
@@ -33,7 +33,7 @@ interface MarksController {
   }
 
   sealed class Input {
-    data class AddNewMark(val circle: Circle, val sliceNumber: Int, val cut: Cut) : Input()
+    data class AddNewMark(val shape: Shape, val sliceNumber: Int, val cut: Cut) : Input()
     data class SelectMark(val mark: MarkModel) : Input()
     data class UnselectMark(val mark: MarkModel) : Input()
     data class UpdateMarkWithoutSave(val markToUpdate: MarkModel) : Input()

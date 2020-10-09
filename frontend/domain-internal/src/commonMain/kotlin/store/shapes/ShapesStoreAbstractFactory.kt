@@ -21,7 +21,7 @@ abstract class ShapesStoreAbstractFactory(
     verticalCoefficient = 0.5,
     sliceNumber = cut.data.n_images / 2,
     position = null,
-    circles = listOf(),
+    shapes = listOf(),
     hounsfield = null,
     marks = listOf(),
     rects = listOf(),
@@ -54,9 +54,9 @@ abstract class ShapesStoreAbstractFactory(
     data class PointPositionChanged(val position: PointPosition?) : Result()
     data class HounsfieldChanged(val hu: Double) : Result()
     data class Marks(val marks: List<MarkModel>) : Result()
-    data class Circles(val circles: List<Circle>) : Result()
+    data class Shapes(val shapes: List<Shape>) : Result()
     data class Rects(val rects: List<Rect>) : Result()
-    data class RectInMove(val moveRect: Rect?) : Result()
+    data class SideRectInMove(val moveRect: Rect?) : Result()
   }
 
   private object ReducerImpl : Reducer<State, Result> {
@@ -66,11 +66,11 @@ abstract class ShapesStoreAbstractFactory(
         is Result.HorizontalCoefficientChanged -> copy(horizontalCoefficient = result.coefficient)
         is Result.VerticalCoefficientChanged -> copy(verticalCoefficient = result.coefficient)
         is Result.PointPositionChanged -> copy(position = result.position)
-        is Result.Circles -> copy(circles = result.circles)
+        is Result.Shapes -> copy(shapes = result.shapes)
         is Result.Rects -> copy(rects = result.rects)
         is Result.HounsfieldChanged -> copy(hounsfield = result.hu.toInt())
         is Result.Marks -> copy(marks = result.marks)
-        is Result.RectInMove -> copy(moveRect = result.moveRect)
+        is Result.SideRectInMove -> copy(moveRect = result.moveRect)
       }
   }
 }

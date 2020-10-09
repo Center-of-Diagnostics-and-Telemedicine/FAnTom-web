@@ -45,6 +45,7 @@ val cutLabelToCutOutput: Label.() -> Output? = {
   when (this) {
     is Label.SliceNumberChanged -> Output.SliceNumberChanged(sliceNumber, cut)
     is Label.CircleDrawn -> Output.CircleDrawn(circle, sliceNumber, cut)
+    is Label.RectangleDrawn -> Output.RectangleDrawn(rectangle, sliceNumber, cut)
     is Label.SelectMark -> Output.SelectMark(mark)
     is Label.CenterMark -> Output.CenterMark(mark)
     is Label.UnselectMark -> Output.UnselectMark(mark)
@@ -62,7 +63,8 @@ val cutLabelToCutOutput: Label.() -> Output? = {
 
 val drawLabelToCutIntent: DrawStore.Label.() -> Intent? = {
   when (this) {
-    is DrawStore.Label.Drawn -> Intent.HandleCircleDrawn(circle = circle)
+    is DrawStore.Label.CircleDrawn -> Intent.HandleCircleDrawn(circle = circle)
+    is DrawStore.Label.RectangleDrawn -> Intent.HandleRectangleDrawn(rectangle = rectangle)
     is DrawStore.Label.ChangeContrastBrightness -> Intent.ChangeContrastBrightness(deltaX, deltaY)
     DrawStore.Label.ContrastBrightnessChanged -> Intent.ContrasBrightnessChanged
     is DrawStore.Label.ChangeSlice -> Intent.ChangeSliceNumberByDraw(deltaDicomY)

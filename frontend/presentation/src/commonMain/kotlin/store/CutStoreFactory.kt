@@ -75,6 +75,9 @@ internal class CutStoreFactory(
         is Intent.HandleCircleDrawn -> {
           publish(Label.CircleDrawn(intent.circle, getState().sliceNumber, cut))
         }
+        is Intent.HandleRectangleDrawn -> {
+          publish(Label.RectangleDrawn(intent.rectangle, getState().sliceNumber, cut))
+        }
         is Intent.HandleExternalSliceNumberChanged -> {
           publish(Label.ExternalSliceNumberChanged(intent.externalCut, intent.sliceNumber))
         }

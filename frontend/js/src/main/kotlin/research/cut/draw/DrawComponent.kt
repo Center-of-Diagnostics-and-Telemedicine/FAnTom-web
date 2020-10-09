@@ -2,11 +2,10 @@ package research.cut.draw
 
 import com.ccfraser.muirwik.components.themeContext
 import kotlinx.css.*
+import kotlinx.css.Position
 import kotlinx.html.classes
 import kotlinx.html.js.*
-import model.Circle
-import model.Cut
-import model.isPlanar
+import model.*
 import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLCanvasElement
 import org.w3c.dom.events.Event
@@ -44,10 +43,9 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
   }
 
   private fun updateCanvas() {
-    val circle = props.drawModel.circle
-    props.drawModel.circle
-    if (circle != null) {
-      draw(circle)
+    val shape = props.drawModel.shape
+    if (shape != null) {
+      draw(shape)
     } else {
       clearCanvas()
     }
@@ -150,8 +148,17 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
     }
   }
 
-  private fun draw(circle: Circle?) {
-    circle?.let {
+  private fun draw(shape: Shape) {
+    debugLog("MY: shape = $shape, shape is rect = ${shape is Rectangle}")
+    when (shape) {
+      is Circle -> drawCircle(shape)
+      is Rectangle -> drawRectangle(shape)
+      else -> throw NotImplementedError("private fun draw(shape: Shape?) shape not implemented")
+    }
+  }
+
+  private fun drawCircle(circle: Circle) {
+    circle.let {
       val canvas = document.getElementsByClassName("draw_canvas_${props.cut.type.intType}")[0] as HTMLCanvasElement
       val context = canvas.getContext("2d") as CanvasRenderingContext2D
       context.clearRect(
@@ -195,6 +202,29 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
           false
         )
       }
+      context.stroke()
+      context.closePath()
+    }
+  }
+
+  private fun drawRectangle(rectangle: Rectangle) {
+    rectangle.let {
+      val canvas = document.getElementsByClassName("draw_canvas_${props.cut.type.intType}")[0] as HTMLCanvasElement
+      val context = canvas.getContext("2d") as CanvasRenderingContext2D
+      context.clearRect(
+        0.0,
+        0.0,
+        canvas.width.toDouble(),
+        canvas.height.toDouble()
+      )
+
+      context.beginPath()
+      context.strokeStyle = "#00ff00"
+      val x = rectangle.dicomCenterX
+      val y = rectangle.dicomCenterY
+      val w = rectangle.dicomRadiusHorizontal
+      val h = rectangle.dicomRadiusVertical
+      context.rect(x, y, w, h)
       context.stroke()
       context.closePath()
     }

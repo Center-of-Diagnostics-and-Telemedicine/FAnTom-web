@@ -25,7 +25,7 @@ interface ShapesStore : Store<Intent, State, Label> {
     val verticalCoefficient: Double,
     val sliceNumber: Int,
     val position: PointPosition?,
-    val circles: List<Circle>,
+    val shapes: List<Shape>,
     val rects: List<Rect>,
     val hounsfield: Int?,
     val marks: List<MarkModel>,

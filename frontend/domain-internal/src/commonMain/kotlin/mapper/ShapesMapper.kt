@@ -29,7 +29,7 @@ val shapesStateToShapesModel: State.() -> Model = {
     sliceNumber = sliceNumber,
     huValue = hounsfield,
     position = position,
-    circles = circles,
+    shapes = shapes,
     rects = rects
   )
 }
@@ -65,6 +65,7 @@ val cutLabelToShapesIntent: CutStore.Label.() -> Intent? = {
     is CutStore.Label.StopMoving -> Intent.HandleStopMoving
     is CutStore.Label.StartClick -> Intent.HandleStartClick(startDicomX, startDicomY)
     is CutStore.Label.CircleDrawn -> null
+    is CutStore.Label.RectangleDrawn -> null
     is CutStore.Label.SelectMark -> null
     is CutStore.Label.CenterMark -> null
     is CutStore.Label.UnselectMark -> null

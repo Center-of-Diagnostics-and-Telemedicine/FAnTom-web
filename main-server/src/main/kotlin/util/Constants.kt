@@ -44,6 +44,7 @@ const val SIZE_VERTICAL_FIELD = "size_vertical"
 const val SIZE_HORIZONTAL_FIELD = "size_horizontal"
 const val MARK_TYPE_FILED = "mark_type"
 const val CUT_TYPE_FILED = "cut_type"
+const val SHAPE_TYPE_FILED = "shape_type"
 const val COMMENT_FILED = "comment"
 
 

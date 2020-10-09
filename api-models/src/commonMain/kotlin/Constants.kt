@@ -51,6 +51,9 @@ const val SLICE_TYPE_DX_POSTERO_ANTERIOR: Int = 8
 const val SLICE_TYPE_DX_LEFT_LATERAL: Int = 9
 const val SLICE_TYPE_DX_RIGHT_LATERAL: Int = 10
 
+const val SHAPE_TYPE_CIRCLE = 0
+const val SHAPE_TYPE_RECTANGLE = 1
+
 /**
 MIP методы
  */

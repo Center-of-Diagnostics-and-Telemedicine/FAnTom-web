@@ -3,7 +3,7 @@ import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.arkivanov.mvikotlin.timetravel.store.TimeTravelStoreFactory
 
 const val ANIMATION_DURATION = 200
-const val DEBUG = false
+const val DEBUG = true
 
 val storeFactoryInstance =
     if (DEBUG) {
