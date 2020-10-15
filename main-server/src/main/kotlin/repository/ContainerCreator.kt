@@ -40,14 +40,14 @@ class ContainerCreatorImpl() : ContainerCreator {
     /**
      * for linux server
      **/
-//     .withDockerHost("unix:///var/run/docker.sock")
-//    .withRegistryUsername("m.gusev")
-//    .withRegistryPassword("8vkWq8%T")
+     .withDockerHost("unix:///var/run/docker.sock")
+    .withRegistryUsername("m.gusev")
+    .withRegistryPassword("8vkWq8%T")
 
     /**
      * for windows
      **/
-    .withDockerHost("tcp://localhost:2375")
+//    .withDockerHost("tcp://localhost:2375")
 //    .withRegistryUsername("m.gusev")
 //    .withRegistryPassword("Gusev!8")
     .build()

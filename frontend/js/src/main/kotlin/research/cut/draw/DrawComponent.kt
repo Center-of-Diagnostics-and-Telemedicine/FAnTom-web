@@ -220,10 +220,10 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
 
       context.beginPath()
       context.strokeStyle = "#00ff00"
-      val x = rectangle.dicomCenterX
-      val y = rectangle.dicomCenterY
-      val w = rectangle.dicomRadiusHorizontal
-      val h = rectangle.dicomRadiusVertical
+      val x = startX
+      val y = startY
+      val w = rectangle.dicomRadiusHorizontal / horizontalRatio
+      val h = rectangle.dicomRadiusVertical / verticalRatio
       context.rect(x, y, w, h)
       context.stroke()
       context.closePath()

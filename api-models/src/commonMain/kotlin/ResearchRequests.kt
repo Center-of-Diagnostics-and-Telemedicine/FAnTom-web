@@ -45,7 +45,9 @@ data class ImageModel(
   val modality: String,
   val type: String,
   val number: Int,
-  val mip: MipModel
+  val mip: MipModel,
+  val width: Int = 1,
+  val height: Int = 1
 )
 
 @Serializable

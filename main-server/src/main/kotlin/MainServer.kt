@@ -33,7 +33,9 @@ fun main(args: Array<String>) {
       url = "jdbc:mysql://localhost:3306/fantom_mg?characterEncoding=utf8&useUnicode=true&useSSL=false",
       driver = "com.mysql.jdbc.Driver",
       user = "root",
-      password = ""
+      password = "vfrcbv16"
+//      password = ""
+
     )
 
     // Serialize json
