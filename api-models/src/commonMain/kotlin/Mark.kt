@@ -67,4 +67,4 @@ fun MarkModel.toMarkEntity(): MarkEntity =
     type = type?.typeId ?: "",
     comment = comment,
   ).also { it.selected = selected }
-\
+

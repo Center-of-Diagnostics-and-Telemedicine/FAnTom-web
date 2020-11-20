@@ -1,7 +1,6 @@
 package repository
 
 import fantom.FantomLibraryDataSource
-import io.ktor.util.*
 import kotlinx.coroutines.delay
 import model.*
 import util.debugLog
@@ -38,19 +37,7 @@ class RemoteLibraryRepositoryImpl(
         val resultMarkTypes = mutableMapOf<String, MarkTypeEntity>()
         response.dictionary?.first()?.map { maps ->
           maps.map { entry ->
-            val rgb = entry.value.CLR?.replace("\\s".toRegex(), "")?.split(",")
-
-            val red = rgb?.get(0)
-            val green = rgb?.get(1)
-            val blue = rgb?.get(2)
-            val markTypeEntity = if (red.isNullOrEmpty().not() && green.isNullOrEmpty().not() && blue.isNullOrEmpty().not()) {
-              val color = Color(red!!.toInt(),green!!.toInt(),blue!!.toInt())
-              val hex = "#" + Integer.toHexString(color.getRGB()).substring(2)
-//              val hexColor = String.format("#%02x%02x%02x", red, green, blue)
-              entry.value.copy(CLR = hex)
-            } else entry.value
-            resultMarkTypes[entry.key] = markTypeEntity
-
+            resultMarkTypes[entry.key] = transformMarkEntity(entry.value)
           }
         }
         return response.response!!.copy(dictionary = resultMarkTypes)
@@ -71,6 +58,22 @@ class RemoteLibraryRepositoryImpl(
       }
       else -> throw IllegalStateException("RemoteLibraryRepositoryImpl initResearch unrecognized response")
     }
+  }
+
+  private fun transformMarkEntity(
+    value: MarkTypeEntity
+  ): MarkTypeEntity {
+    val rgb = value.CLR?.replace("\\s".toRegex(), "")?.split(",")
+    return if (rgb != null && rgb.size > 1) {
+      val red = rgb[0]
+      val green = rgb[1]
+      val blue = rgb[2]
+      if (red.isEmpty().not() && green.isEmpty().not() && blue.isEmpty().not()) {
+        val color = Color(red.toInt(), green.toInt(), blue.toInt())
+        val hex = "#" + Integer.toHexString(color.rgb).substring(2)
+        value.copy(CLR = hex)
+      } else value
+    } else value
   }
 
   override suspend fun getSlice(request: SliceRequestNew, researchName: String): String {
