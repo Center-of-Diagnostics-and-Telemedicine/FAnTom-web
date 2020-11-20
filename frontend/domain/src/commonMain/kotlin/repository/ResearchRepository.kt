@@ -20,7 +20,9 @@ interface ResearchRepository {
     type: Int,
     mipMethod: Int,
     sliceNumber: Int,
-    aproxSize: Int
+    aproxSize: Int,
+    width: Int,
+    height: Int
   ): String
 
   suspend fun getHounsfieldData(

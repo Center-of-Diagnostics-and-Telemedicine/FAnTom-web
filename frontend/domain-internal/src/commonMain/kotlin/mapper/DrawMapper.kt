@@ -1,9 +1,6 @@
 package mapper
 
-import model.Circle
-import model.LEFT_MOUSE_BUTTON
-import model.MIDDLE_MOUSE_BUTTON
-import model.Rectangle
+import model.*
 import store.draw.DrawStore.Intent
 import store.draw.DrawStore.State
 import view.DrawView.Event
@@ -47,7 +44,8 @@ val drawStateToDrawModel: State.() -> Model = {
         dicomRadiusVertical = dicomRadiusVertical,
         id = -1,
         highlight = false,
-        isCenter = false
+        isCenter = false,
+        color = defaultMarkColor
       )
       isDrawingEllipse -> Circle(
         dicomCenterX = startDicomX,
@@ -56,7 +54,8 @@ val drawStateToDrawModel: State.() -> Model = {
         dicomRadiusVertical = dicomRadiusVertical,
         id = -1,
         highlight = false,
-        isCenter = false
+        isCenter = false,
+        color = defaultMarkColor
       )
       else -> null
     }

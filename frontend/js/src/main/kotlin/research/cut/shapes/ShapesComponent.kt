@@ -180,11 +180,12 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
   }
 
   private fun drawPlanarCircle(circle: Circle, context: CanvasRenderingContext2D) {
-    context.lineWidth = 1.0
+    val color = circle.color
+    context.strokeStyle = if (color.isEmpty()) defaultMarkColor else color
     if (circle.highlight) {
-      context.strokeStyle = props.cut.color
+      context.lineWidth = 2.0
     } else {
-      context.strokeStyle = "#00ff00"
+      context.lineWidth = 1.0
     }
 
     val radiusX = circle.dicomRadiusHorizontal / horizontalRatio
@@ -209,11 +210,12 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
   }
 
   private fun drawPlanarRectangle(rectangle: Rectangle, context: CanvasRenderingContext2D) {
-    context.lineWidth = 1.0
+    val color = rectangle.color
+    context.strokeStyle = if (color.isEmpty()) defaultMarkColor else color
     if (rectangle.highlight) {
-      context.strokeStyle = props.cut.color
+      context.lineWidth = 2.0
     } else {
-      context.strokeStyle = "#00ff00"
+      context.lineWidth = 1.0
     }
 
     val x = (rectangle.dicomCenterX - rectangle.dicomRadiusHorizontal) / horizontalRatio
@@ -224,12 +226,12 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
   }
 
   private fun drawSphere(context: CanvasRenderingContext2D, circle: Circle) {
+    val color = circle.color
+    context.strokeStyle = if (color.isEmpty()) defaultMarkColor else color
     if (circle.highlight) {
-      context.strokeStyle = "#18a0fb"
-      context.lineWidth = 1.0
+      context.lineWidth = 2.0
     } else {
       context.lineWidth = 1.0
-      context.strokeStyle = "#00ff00"
     }
     context.arc(
       circle.dicomCenterX / horizontalRatio,

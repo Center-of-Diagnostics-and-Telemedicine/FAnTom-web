@@ -3,6 +3,7 @@ package store.draw
 import com.arkivanov.mvikotlin.core.store.Store
 import model.Circle
 import model.Rectangle
+import model.defaultMarkColor
 import store.draw.DrawStore.*
 import kotlin.math.abs
 
@@ -29,7 +30,8 @@ interface DrawStore : Store<Intent, State, Label> {
           dicomRadiusVertical = abs(verticalRadius),
           id = -1,
           highlight = false,
-          isCenter = false
+          isCenter = false,
+          color = defaultMarkColor
         )
       } else {
         Circle(
@@ -39,7 +41,8 @@ interface DrawStore : Store<Intent, State, Label> {
           dicomRadiusVertical = dicomRadiusVertical,
           id = -1,
           highlight = false,
-          isCenter = false
+          isCenter = false,
+          color = defaultMarkColor
         )
       }
     }
@@ -54,7 +57,8 @@ interface DrawStore : Store<Intent, State, Label> {
         dicomRadiusVertical = abs(verticalRadius),
         id = -1,
         highlight = false,
-        isCenter = false
+        isCenter = false,
+        color = defaultMarkColor
       )
     }
   }

@@ -1,9 +1,11 @@
 package repository
 
 import fantom.FantomLibraryDataSource
+import io.ktor.util.*
 import kotlinx.coroutines.delay
 import model.*
 import util.debugLog
+import java.awt.Color
 
 interface RemoteLibraryRepository {
   val libraryContainerId: String
@@ -29,14 +31,26 @@ class RemoteLibraryRepositoryImpl(
       return initResearch(accessionNumber)
     }
 
-    debugLog(response.toString())
+//    debugLog(response.toString())
     return when {
       response.response != null -> {
         debugLog("ResearchInitResponse income")
         val resultMarkTypes = mutableMapOf<String, MarkTypeEntity>()
         response.dictionary?.first()?.map { maps ->
           maps.map { entry ->
-            resultMarkTypes[entry.key] = entry.value
+            val rgb = entry.value.CLR?.replace("\\s".toRegex(), "")?.split(",")
+
+            val red = rgb?.get(0)
+            val green = rgb?.get(1)
+            val blue = rgb?.get(2)
+            val markTypeEntity = if (red.isNullOrEmpty().not() && green.isNullOrEmpty().not() && blue.isNullOrEmpty().not()) {
+              val color = Color(red!!.toInt(),green!!.toInt(),blue!!.toInt())
+              val hex = "#" + Integer.toHexString(color.getRGB()).substring(2)
+//              val hexColor = String.format("#%02x%02x%02x", red, green, blue)
+              entry.value.copy(CLR = hex)
+            } else entry.value
+            resultMarkTypes[entry.key] = markTypeEntity
+
           }
         }
         return response.response!!.copy(dictionary = resultMarkTypes)

@@ -40,7 +40,8 @@ data class MarkModel(
 data class MarkTypeModel(
   val typeId: String,
   val en: String,
-  val ru: String
+  val ru: String,
+  val color: String
 )
 
 fun MarkEntity.toMarkModel(types: Map<String, MarkTypeEntity>): MarkModel =
@@ -55,7 +56,8 @@ fun MarkTypeEntity.toMarkTypeModel(type: String): MarkTypeModel =
   MarkTypeModel(
     typeId = type,
     en = EN ?: "",
-    ru = RU ?: ""
+    ru = RU ?: "",
+    color = CLR ?: ""
   )
 
 fun MarkModel.toMarkEntity(): MarkEntity =
@@ -65,24 +67,4 @@ fun MarkModel.toMarkEntity(): MarkEntity =
     type = type?.typeId ?: "",
     comment = comment,
   ).also { it.selected = selected }
-
-//@Serializable
-//enum class MarkType(val intValue: Int) {
-//  NO_TYPE_NODULE(-1),
-//  SOLID_NODULE(0),
-//  PART_SOLID_NODULE(1),
-//  PURE_SUBSOLID_NODULE(2),
-//  NOT_ONKO(3);
-//}
-
-//@Serializer(forClass = MarkType::class)
-//object MarkTypeSerializer : KSerializer<MarkType> {
-//  override val descriptor: SerialDescriptor = StringDescriptor
-//  override fun serialize(encoder: Encoder, value: MarkType) {
-//    encoder.encodeString(value.toString().toLowerCase())
-//  }
-//
-//  override fun deserialize(decoder: Decoder): MarkType {
-//    return MarkType.valueOf(decoder.decodeString().toUpperCase())
-//  }
-//}
+\

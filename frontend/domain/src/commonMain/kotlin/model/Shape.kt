@@ -5,6 +5,8 @@ import kotlin.math.pow
 import kotlin.math.roundToInt
 import kotlin.math.sqrt
 
+const val defaultMarkColor = "#00ff00"
+
 interface Shape {
   val dicomCenterX: Double
   val dicomCenterY: Double
@@ -13,6 +15,7 @@ interface Shape {
   val id: Int
   val highlight: Boolean
   val isCenter: Boolean
+  val color: String
 }
 
 fun Shape.getType(): Int {
@@ -30,7 +33,8 @@ data class Circle(
   override val dicomRadiusVertical: Double,
   override val id: Int,
   override val highlight: Boolean,
-  override val isCenter: Boolean
+  override val isCenter: Boolean,
+  override val color: String
 ) : Shape
 
 data class Rectangle(
@@ -40,7 +44,8 @@ data class Rectangle(
   override val dicomRadiusVertical: Double,
   override val id: Int,
   override val highlight: Boolean,
-  override val isCenter: Boolean
+  override val isCenter: Boolean,
+  override val color: String
 ) : Shape
 
 fun MarkModel.toShape(cut: Cut, sliceNumber: Int): Shape? {
@@ -92,7 +97,8 @@ private fun MarkModel.toCircle(cut: Cut, sliceNumber: Int): Circle? {
             dicomRadiusVertical = newRadius,
             id = id,
             highlight = selected,
-            isCenter = sliceNumber == z.roundToInt()
+            isCenter = sliceNumber == z.roundToInt(),
+            color = type?.color ?: ""
           )
         } else null
       }
@@ -112,7 +118,8 @@ private fun MarkModel.toCircle(cut: Cut, sliceNumber: Int): Circle? {
             dicomRadiusVertical = newRadius,
             id = id,
             highlight = selected,
-            isCenter = sliceNumber == y.roundToInt()
+            isCenter = sliceNumber == y.roundToInt(),
+            color = type?.color ?: ""
           )
         } else null
 
@@ -133,7 +140,8 @@ private fun MarkModel.toCircle(cut: Cut, sliceNumber: Int): Circle? {
             dicomRadiusVertical = newRadius,
             id = id,
             highlight = selected,
-            isCenter = sliceNumber == x.roundToInt()
+            isCenter = sliceNumber == x.roundToInt(),
+            color = type?.color ?: ""
           )
         } else null
       }
@@ -152,7 +160,8 @@ private fun MarkModel.toCircle(cut: Cut, sliceNumber: Int): Circle? {
           dicomRadiusVertical = radiusVertical,
           id = id,
           highlight = selected,
-          isCenter = true
+          isCenter = true,
+          color = type?.color ?: ""
         ) else null
       }
     }
@@ -182,7 +191,8 @@ private fun MarkModel.toRectangle(cut: Cut): Rectangle? {
           dicomRadiusVertical = radiusVertical,
           id = id,
           highlight = selected,
-          isCenter = true
+          isCenter = true,
+          color = type?.color ?: ""
         ) else null
       }
     }

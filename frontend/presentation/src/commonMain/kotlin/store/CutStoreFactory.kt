@@ -172,7 +172,9 @@ internal class CutStoreFactory(
             gamma = state.gamma,
             mipMethod = state.mipMethod.intValue,
             sliceNumber = state.sliceNumber,
-            aproxSize = state.mipValue
+            aproxSize = state.mipValue,
+            width = cut.data.screen_size_h,
+            height = 0
           )
         }
           .subscribeOn(ioScheduler)

@@ -57,7 +57,9 @@ class ResearchRepositoryImpl(
     type: Int,
     mipMethod: Int,
     sliceNumber: Int,
-    aproxSize: Int
+    aproxSize: Int,
+    width: Int,
+    height: Int
   ): String {
     val response = remote.getSlice(
       token = token(),
@@ -69,7 +71,9 @@ class ResearchRepositoryImpl(
           mip = MipModel(
             mip_method = getMipMethodStringType(mipMethod),
             mip_value = aproxSize
-          )
+          ),
+          width = width,
+          height = height
         ),
         brightness = BrightnessModel(
           black = black,
@@ -97,7 +101,7 @@ class ResearchRepositoryImpl(
     val response = remote.hounsfield(
       token = token(),
       request = HounsfieldRequestNew(
-        image = ImageModel(
+        image = ImageHounsfieldModel(
           modality = getModalityStringType(type), //TODO(remove this),
           type = getSliceStringType(type),
           number = sliceNumber,

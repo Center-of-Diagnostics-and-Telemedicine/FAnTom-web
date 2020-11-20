@@ -38,7 +38,8 @@ data class ResearchInitModelNew(
 @Serializable
 data class MarkTypeEntity(
   val EN: String? = "",
-  val RU: String? = ""
+  val RU: String? = "",
+  val CLR: String? = ""
 )
 
 @Serializable
