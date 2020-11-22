@@ -2,7 +2,12 @@ package research.cut.slider
 
 import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.lifecycle.LifecycleRegistry
+import com.arkivanov.mvikotlin.core.lifecycle.doOnDestroy
 import com.arkivanov.mvikotlin.core.store.StoreFactory
+import com.badoo.reaktive.observable.Observable
+import com.badoo.reaktive.observable.doOnBeforeNext
+import com.badoo.reaktive.observable.subscribe
+import com.badoo.reaktive.subject.publish.PublishSubject
 import com.ccfraser.muirwik.components.MSliderOrientation
 import com.ccfraser.muirwik.components.MSliderValueLabelDisplay
 import com.ccfraser.muirwik.components.mSlider
@@ -20,6 +25,7 @@ class SliderComponent(prps: SliderProps) : RComponent<SliderProps, SliderState>(
   private val sliderViewDelegate = SliderViewProxy(::updateState)
   private val lifecycleRegistry = LifecycleRegistry()
   private lateinit var controller: SliderController
+  private val sliderInput = PublishSubject<SliderController.Input>()
 
   init {
     state = SliderState(initialSliderModel())
@@ -33,11 +39,13 @@ class SliderComponent(prps: SliderProps) : RComponent<SliderProps, SliderState>(
 
   private fun createController(): SliderController {
     val dependencies = props.dependencies
-    val cutControllerDependencies =
+    val disposable = dependencies.sliderInput.doOnBeforeNext { console.log("sliderInput YO") }.subscribe { controller.input(it) }
+    val sliderControllerDependencies =
       object : SliderController.Dependencies, Dependencies by dependencies {
         override val lifecycle: Lifecycle = lifecycleRegistry
       }
-    return SliderControllerImpl(cutControllerDependencies)
+    lifecycleRegistry.doOnDestroy(disposable::dispose)
+    return SliderControllerImpl(sliderControllerDependencies)
   }
 
   override fun RBuilder.render() {
@@ -67,6 +75,7 @@ class SliderComponent(prps: SliderProps) : RComponent<SliderProps, SliderState>(
     val storeFactory: StoreFactory
     val cut: Cut
     val sliderOutput: (SliderController.Output) -> Unit
+    val sliderInput: Observable<SliderController.Input>
     val researchId: Int
   }
 

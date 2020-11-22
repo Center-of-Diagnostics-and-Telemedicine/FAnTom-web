@@ -7,6 +7,8 @@ import view.SliderView
 
 interface SliderController {
 
+  val input: (Input) -> Unit
+
   fun onViewCreated(
     sliderView: SliderView,
     viewLifecycle: Lifecycle
@@ -18,6 +20,10 @@ interface SliderController {
     val cut: Cut
     val researchId: Int
     val sliderOutput: (Output) -> Unit
+  }
+
+  sealed class Input{
+    data class SliceNumberChanged(val sliceNumber: Int) : Input()
   }
 
   sealed class Output {

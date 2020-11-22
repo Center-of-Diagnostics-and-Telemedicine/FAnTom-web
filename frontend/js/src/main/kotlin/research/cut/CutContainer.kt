@@ -5,6 +5,7 @@ import com.badoo.reaktive.disposable.CompositeDisposable
 import com.badoo.reaktive.observable.Observable
 import com.badoo.reaktive.observable.subscribe
 import com.badoo.reaktive.subject.behavior.BehaviorSubject
+import com.badoo.reaktive.subject.publish.PublishSubject
 import controller.CutController
 import controller.CutController.Input
 import controller.SliderController
@@ -29,7 +30,6 @@ import research.cut.CutContainer.CutContainerStyles.cutContainerStyle
 import research.cut.CutContainer.CutContainerStyles.cutStyle
 import research.cut.slider.SliderComponent
 import research.cut.slider.sliderView
-import root.debugLog
 import styled.StyleSheet
 import styled.css
 import styled.styledDiv
@@ -39,6 +39,7 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
 
   private var testRef: Element? = null
   private val cutInput = BehaviorSubject<Input>(Input.Idle)
+  private val sliderInput = PublishSubject<SliderController.Input>()
   private val disposable = CompositeDisposable()
 
   init {
@@ -46,7 +47,12 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
   }
 
   override fun componentDidMount() {
-    disposable.add(props.dependencies.cutsInput.subscribe { cutInput.onNext(it) })
+    disposable.add(props.dependencies.cutsInput.subscribe {
+      cutInput.onNext(it)
+      if (it is Input.ExternalSliceNumberChanged && it.cut.type == props.dependencies.cut.type) {
+        sliderInput.onNext(SliderController.Input.SliceNumberChanged(it.sliceNumber))
+      }
+    })
     window.addEventListener(type = "resize", callback = { callToRenderContent() })
   }
 
@@ -96,6 +102,7 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
               dependencies = object : SliderComponent.Dependencies,
                 Dependencies by props.dependencies {
                 override val sliderOutput: (SliderController.Output) -> Unit = ::sliderOutput
+                override val sliderInput: Observable<SliderController.Input> = this@CutContainer.sliderInput
               }
             )
           }

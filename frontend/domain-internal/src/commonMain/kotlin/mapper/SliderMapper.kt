@@ -1,5 +1,6 @@
 package mapper
 
+import controller.SliderController.Input
 import controller.SliderController.Output
 import store.slider.SliderStore.Intent
 import store.slider.SliderStore.State
@@ -12,6 +13,12 @@ val sliderStateToSliderModel: State.() -> Model? = {
     maxValue = maxValue,
     defaultValue = defaultValue
   )
+}
+
+val inputToSliderIntent: Input.() -> Intent? = {
+  when (this) {
+    is Input.SliceNumberChanged -> Intent.HandleChange(value = sliceNumber)
+  }
 }
 
 val sliderEventToSlideIntent: Event.() -> Intent? =
