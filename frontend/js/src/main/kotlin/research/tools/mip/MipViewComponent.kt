@@ -18,6 +18,31 @@ import view.MipView
 
 private val altBuilder = RBuilder()
 
+//fun RBuilder.renderInfo(
+//  onClick: (Mip) -> Unit
+//) {
+//  mCollapse(show = open) {
+//    css(ToolsComponent.ToolsStyles.nested)
+//    mList {
+//      mListItem {
+//        mip(
+//          items = model.items,
+//          currentMip = model.current,
+//          onClick = onClick
+//        )
+//      }
+//      model.currentValue?.let { currentValue ->
+//        mListItem {
+//          mipValue(
+//            currentValue = currentValue,
+//            onChange = onChange
+//          )
+//        }
+//      }
+//    }
+//  }
+//}
+
 fun RBuilder.renderMip(
   model: MipView.Model,
   onClick: (Mip) -> Unit,

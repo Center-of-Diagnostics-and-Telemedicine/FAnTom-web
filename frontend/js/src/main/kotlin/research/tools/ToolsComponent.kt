@@ -6,6 +6,9 @@ import com.arkivanov.mvikotlin.core.lifecycle.doOnDestroy
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.observable.Observable
 import com.badoo.reaktive.observable.subscribe
+import com.ccfraser.muirwik.components.MColor
+import com.ccfraser.muirwik.components.button.mButton
+import com.ccfraser.muirwik.components.dialog.*
 import com.ccfraser.muirwik.components.list.mList
 import com.ccfraser.muirwik.components.list.mListItemWithIcon
 import com.ccfraser.muirwik.components.mDivider
@@ -14,12 +17,14 @@ import controller.ToolsController
 import controller.ToolsControllerImpl
 import destroy
 import kotlinx.css.*
-import list.ListScreen
 import model.ResearchSlicesSizesDataNew
 import model.Tool
 import react.*
 import repository.BrightnessRepository
 import repository.MipRepository
+import research.tools.ToolsComponent.ToolsStyles.dialogListItemContainer
+import research.tools.ToolsComponent.ToolsStyles.dialogListItemLeft
+import research.tools.ToolsComponent.ToolsStyles.dialogListItemRight
 import research.tools.brightness.BrightnessViewProxy
 import research.tools.brightness.renderBrightness
 import research.tools.grid.GridViewProxy
@@ -49,7 +54,8 @@ class ToolsComponent(prps: ToolsProps) : RComponent<ToolsProps, ToolsState>(prps
       gridModel = initialGridModel(props.dependencies.data.type),
       mipModel = initialMipModel(),
       brightnessModel = initialBrightnessModel(),
-      presetModel = initialPresetModel()
+      presetModel = initialPresetModel(),
+      infoDialogOpen = false
     )
   }
 
@@ -93,6 +99,7 @@ class ToolsComponent(prps: ToolsProps) : RComponent<ToolsProps, ToolsState>(prps
       css { justifyContent = JustifyContent.spaceBetween }
       mList {
         backButton()
+        infoButton()
         tools(state.toolsModel.items)
         closeButton()
       }
@@ -141,6 +148,64 @@ class ToolsComponent(prps: ToolsProps) : RComponent<ToolsProps, ToolsState>(prps
     )
   }
 
+  private fun RBuilder.infoButton() {
+    mListItemWithIcon(
+      primaryText = "Информация",
+      iconName = "info",
+      onClick = { setState { infoDialogOpen = !infoDialogOpen } }
+    )
+
+    infoDialog()
+  }
+
+  private fun RBuilder.infoDialog() {
+
+    fun closeInfoDialog() {
+      setState { infoDialogOpen = false }
+    }
+
+    mDialog(state.infoDialogOpen, onClose = { _, _ -> closeInfoDialog() }) {
+      mDialogTitle("Команды")
+      mDialogContent {
+        styledDiv {
+          styledDiv {
+            css(dialogListItemContainer)
+            styledDiv { css(dialogListItemLeft); +"Окно (ширина/центр)" }
+            styledDiv { css(dialogListItemRight); +"СКМ (зажать)" }
+          }
+          styledDiv {
+            css(dialogListItemContainer)
+            styledDiv { css(dialogListItemLeft); +"Номер среза" }
+            styledDiv { css(dialogListItemRight); +"СКМ (крутить)" }
+          }
+          styledDiv {
+            css(dialogListItemContainer)
+            styledDiv { css(dialogListItemLeft); +"Разметка (эллипс)" }
+            styledDiv { css(dialogListItemRight); +"ЛКМ + CTRL/CMD" }
+          }
+          styledDiv {
+            css(dialogListItemContainer)
+            styledDiv { css(dialogListItemLeft); +"Разметка (прямоугольник)" }
+            styledDiv { css(dialogListItemRight); +"ЛКМ + SHIFT" }
+          }
+          styledDiv {
+            css(dialogListItemContainer)
+            styledDiv { css(dialogListItemLeft); +"Центр отметки" }
+            styledDiv { css(dialogListItemRight); +"ЛКМ + ALT" }
+          }
+          styledDiv {
+            css(dialogListItemContainer)
+            styledDiv { css(dialogListItemLeft); +"Удалить отметку" }
+            styledDiv { css(dialogListItemRight); +"DEL/Backspace" }
+          }
+        }
+      }
+      mDialogActions {
+        mButton("Закрыть", MColor.primary, onClick = { closeInfoDialog() })
+      }
+    }
+  }
+
   private fun updateState(model: ToolsView.Model) = setState { toolsModel = model }
   private fun updateState(model: GridView.Model) = setState { gridModel = model }
   private fun updateState(model: MipView.Model) = setState { mipModel = model }
@@ -168,8 +233,23 @@ class ToolsComponent(prps: ToolsProps) : RComponent<ToolsProps, ToolsState>(prps
       justifyContent = JustifyContent.left
     }
 
-    val nested by ListScreen.ListStyles.css {
+    val nested by css {
       paddingLeft = 4.spacingUnits
+    }
+
+    val dialogListItemContainer by css {
+      display = Display.flex
+      alignItems = Align.flexStart
+      flexDirection = FlexDirection.row
+      justifyContent = JustifyContent.spaceBetween
+    }
+
+    val dialogListItemRight by css {
+      marginLeft = 2.spacingUnits
+    }
+
+    val dialogListItemLeft by css {
+      marginRight = 2.spacingUnits
     }
   }
 
@@ -180,7 +260,8 @@ class ToolsState(
   var gridModel: GridView.Model,
   var mipModel: MipView.Model,
   var brightnessModel: BrightnessView.Model,
-  var presetModel: PresetView.Model
+  var presetModel: PresetView.Model,
+  var infoDialogOpen: Boolean
 ) : RState
 
 interface ToolsProps : RProps {

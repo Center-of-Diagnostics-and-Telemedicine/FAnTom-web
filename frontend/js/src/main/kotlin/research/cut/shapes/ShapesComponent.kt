@@ -281,6 +281,7 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
     lineToX: Double,
     lineToY: Double
   ) {
+    context.lineWidth = 1.0
     context.beginPath()
     strokeColor?.let { context.strokeStyle = it }
     context.moveTo(moveToX, moveToY)

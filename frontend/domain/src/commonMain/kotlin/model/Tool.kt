@@ -1,9 +1,10 @@
 package model
 
 sealed class Tool(
-    val name: String,
-    val icon: String
+  val name: String,
+  val icon: String
 ) {
+
   object MIP : Tool(
     name = "MIP",
     icon = "line_weight"
