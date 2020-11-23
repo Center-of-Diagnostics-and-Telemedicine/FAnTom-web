@@ -22,7 +22,7 @@ data class HounsfieldRequest(
 
 @Serializable
 data class HounsfieldRequestNew(
-  val image: ImageHounsfieldModel,
+  val image: ImageModel,
   val point: PointModel
 )
 
@@ -48,14 +48,6 @@ data class ImageModel(
   val mip: MipModel,
   val width: Int,
   val height: Int
-)
-
-@Serializable
-data class ImageHounsfieldModel(
-  val modality: String,
-  val type: String,
-  val number: Int,
-  val mip: MipModel
 )
 
 @Serializable

@@ -206,7 +206,9 @@ internal class ShapesStoreFactory(
           sliceNumber = state().sliceNumber,
           type = cut.type.intType,
           mipMethod = MIP_METHOD_TYPE_NO_MIP,
-          mipValue = 0
+          mipValue = 0,
+          width = cut.data.screen_size_h,
+          height = 0
         )
       }
         .subscribeOn(ioScheduler)

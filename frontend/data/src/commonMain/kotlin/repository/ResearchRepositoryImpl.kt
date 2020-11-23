@@ -96,19 +96,23 @@ class ResearchRepositoryImpl(
     mipMethod: Int,
     mipValue: Int,
     horizontal: Int,
-    vertical: Int
+    vertical: Int,
+    width: Int,
+    height: Int
   ): Double {
     val response = remote.hounsfield(
       token = token(),
       request = HounsfieldRequestNew(
-        image = ImageHounsfieldModel(
+        image = ImageModel(
           modality = getModalityStringType(type), //TODO(remove this),
           type = getSliceStringType(type),
           number = sliceNumber,
           mip = MipModel(
             mip_method = getMipMethodStringType(mipMethod),
             mip_value = mipValue
-          )
+          ),
+          height = height,
+          width = width
         ),
         point = PointModel(
           vertical = vertical,

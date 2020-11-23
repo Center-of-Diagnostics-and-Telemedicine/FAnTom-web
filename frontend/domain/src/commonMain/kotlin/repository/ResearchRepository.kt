@@ -31,7 +31,9 @@ interface ResearchRepository {
     mipMethod: Int,
     mipValue: Int,
     horizontal: Int,
-    vertical: Int
+    vertical: Int,
+    width: Int,
+    height: Int
   ): Double
 
   suspend fun confirmCtTypeForResearch(
