@@ -35,7 +35,6 @@ fun main(args: Array<String>) {
       user = "root",
 //      password = "vfrcbv16"
       password = ""
-
     )
 
     // Serialize json
