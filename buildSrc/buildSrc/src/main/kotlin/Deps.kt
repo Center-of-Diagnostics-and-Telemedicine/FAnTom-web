@@ -14,6 +14,7 @@ object Deps {
       object StdLib {
         object Common : Dependency(group = Kotlin, name = "kotlin-stdlib-common", version = version)
         object Jdk7 : Dependency(group = Kotlin, name = "kotlin-stdlib-jdk7", version = version)
+        object Jdk8 : Dependency(group = Kotlin, name = "kotlin-stdlib-jdk8", version = version)
         object Js : Dependency(group = Kotlin, name = "kotlin-stdlib-js", version = version)
       }
 
@@ -50,9 +51,17 @@ object Deps {
         Dependency(group = Wrappers, name = "kotlin-extensions", version = extensionsVersion)
     }
 
-    object Kotlinx : Group(name = "org.jetbrains.kotlinx") {
+    object Exposed : Group(name = "org.jetbrains.exposed") {
+      private const val version = "0.22.1"
+
+      object Core : Dependency(group = Exposed, name = "exposed-core", version = version)
+      object Dao : Dependency(group = Exposed, name = "exposed-dao", version = version)
+      object Jdbc : Dependency(group = Exposed, name = "exposed-jdbc", version = version)
+    }
+
+    object Kotlinx : Group(name = "kotlinx") {
       object Coroutines {
-        private const val version = "1.3.5-1.4-M1"
+        private const val version = "1.4.1"
 
         object Core :
           Dependency(group = Kotlinx, name = "kotlinx-coroutines-core", version = version) {
@@ -71,44 +80,45 @@ object Deps {
       }
 
       object Serialization {
-        private const val version = "0.20.0-1.4-M1"
+        private const val version = "1.0.1"
 
-        object Runtime {
+        object Json {
           object Core :
-            Dependency(group = Kotlinx, name = "kotlinx-serialization-runtime", version = version)
+            Dependency(group = Kotlinx, name = "kotlinx-serialization-json", version = version)
 
-          object Common :
-            Dependency(
-              group = Kotlinx,
-              name = "kotlinx-serialization-runtime-common",
-              version = version
-            )
-
-          object Native :
-            Dependency(
-              group = Kotlinx,
-              name = "kotlinx-serialization-runtime-native",
-              version = version
-            )
-
-          object Js :
-            Dependency(
-              group = Kotlinx,
-              name = "kotlinx-serialization-runtime-js",
-              version = version
-            )
+//          object Common :
+//            Dependency(
+//              group = Kotlinx,
+//              name = "kotlinx-serialization-runtime-common",
+//              version = version
+//            )
+//
+//          object Native :
+//            Dependency(
+//              group = Kotlinx,
+//              name = "kotlinx-serialization-runtime-native",
+//              version = version
+//            )
+//
+//          object Js :
+//            Dependency(
+//              group = Kotlinx,
+//              name = "kotlinx-serialization-runtime-js",
+//              version = version
+//            )
         }
       }
     }
   }
 
   object Ktor : Group(name = "io.ktor") {
-    private const val version = "1.3.2-1.4-M1"
+    private const val version = "1.4.1"
 
     object Client {
 
       object Common : Dependency(group = Ktor, name = "ktor-client-core", version = version)
       object Js : Dependency(group = Ktor, name = "ktor-client-js", version = version)
+      object Apache : Dependency(group = Ktor, name = "ktor-client-apache", version = version)
 
       object Json {
         object Common : Dependency(group = Ktor, name = "ktor-client-json", version = version)
@@ -126,29 +136,48 @@ object Deps {
         object Js :
           Dependency(group = Ktor, name = "ktor-client-serialization-js", version = version)
       }
+
+      object Logging {
+        object Jvm : Dependency(group = Ktor, name = "ktor-client-logging-jvm", version = version)
+      }
+
+      object HtmlBuilder : Dependency(group = Ktor, name = "ktor-html-builder", version = version)
+
+      object Auth {
+        object Core : Dependency(group = Ktor, name = "ktor-auth", version = version)
+        object Jwt : Dependency(group = Ktor, name = "ktor-auth-jwt", version = version)
+      }
+
+      object Gson : Dependency(group = Ktor, name = "ktor-gson", version = version)
+      object Locations : Dependency(group = Ktor, name = "ktor-locations", version = version)
+    }
+
+    object Server {
+      object Netty : Dependency(group = Ktor, name = "ktor-server-netty", version = version)
     }
   }
 
   object Badoo {
     object Reaktive : Group(name = "com.badoo.reaktive") {
-      private const val version = "1.1.14"
+      private const val version = "1.1.19"
 
-      object Reaktive : Dependency(group = Badoo.Reaktive, name = "reaktive", version = version)
+      object Core : Dependency(group = Reaktive, name = "reaktive", version = version)
+      object Jvm : Dependency(group = Reaktive, name = "reaktive-jvm", version = version)
       object ReaktiveAnnotations :
-        Dependency(group = Badoo.Reaktive, name = "reaktive-annotations", version = version)
+        Dependency(group = Reaktive, name = "reaktive-annotations", version = version)
 
       object CoroutinesInterop :
-        Dependency(group = Badoo.Reaktive, name = "coroutines-interop", version = version)
+        Dependency(group = Reaktive, name = "coroutines-interop", version = version)
 
       object ReaktiveTesting :
-        Dependency(group = Badoo.Reaktive, name = "reaktive-testing", version = version)
+        Dependency(group = Reaktive, name = "reaktive-testing", version = version)
 
-      object Utils : Dependency(group = Badoo.Reaktive, name = "utils", version = version)
+      object Utils : Dependency(group = Reaktive, name = "utils", version = version)
     }
   }
 
   object MVIKotlin : Group(name = "com.arkivanov.mvikotlin") {
-    private const val version = "2.0.0-rc1"
+    private const val version = "2.0.0"
 
     object Core : Dependency(group = MVIKotlin, name = "mvikotlin", version = version)
     object Main : Dependency(group = MVIKotlin, name = "mvikotlin-main", version = version)

@@ -13,7 +13,5 @@ class SliderViewProxy(
     updateState(model)
   }
 
-  public override fun dispatch(event: Event) {
-    super.dispatch(event)
-  }
+
 }

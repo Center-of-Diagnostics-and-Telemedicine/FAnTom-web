@@ -3,13 +3,10 @@ plugins {
 }
 
 kotlin {
-  target {
+  js {
     useCommonJs()
-    produceExecutable()
     browser {
-      dceTask {
-        keep("ktor-ktor-io.\$\$importsForInline\$\$.ktor-ktor-io.io.ktor.utils.io")
-      }
+      binaries.executable()
     }
   }
 }
@@ -32,13 +29,13 @@ dependencies {
   implementation(Deps.MVIKotlin.TimeTravel)
   implementation(Deps.MVIKotlin.Logging)
   implementation(Deps.MVIKotlin.Rx)
-  implementation(Deps.Badoo.Reaktive.Reaktive)
+  implementation(Deps.Badoo.Reaktive.Core)
   implementation(project(":frontend:data"))
   implementation(project(":frontend:presentation"))
 
   implementation(npm("core-js", "2.6.5"))
   implementation(npm("svg-inline-loader", "0.8.0"))
-  implementation(npm("abort-controller"))
+  implementation(npm("abort-controller", "3.0.0"))
   implementation(npm("react", Deps.reactVersion))
   implementation(npm("react-dom", Deps.reactVersion))
   implementation(npm("react-is", Deps.reactVersion))

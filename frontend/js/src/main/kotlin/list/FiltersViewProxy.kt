@@ -12,8 +12,4 @@ class FiltersViewProxy(
   override fun render(model: Model) {
     updateState(model)
   }
-
-  public override fun dispatch(event: Event) {
-    super.dispatch(event)
-  }
 }
