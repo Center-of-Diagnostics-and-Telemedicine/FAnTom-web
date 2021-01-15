@@ -1,0 +1,158 @@
+plugins {
+    id("java")
+    id("org.jetbrains.kotlin.jvm")
+    id("kotlinx-serialization")
+    id("application")
+    id("distribution")
+    id("com.github.johnrengelman.shadow") version "5.0.0"
+}
+
+def main_class_name = "MainServerKt"
+
+shadowJar {
+    manifest {
+        attributes "Main-Class": main_class_name
+    }
+    archiveBaseName = "main_server"
+}
+
+dependencies {
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:$kotlinx_serialization_version")
+    implementation("org.jetbrains.exposed:exposed-core:0.22.1")
+    implementation("org.jetbrains.exposed:exposed-dao:0.22.1")
+    implementation("org.jetbrains.exposed:exposed-jdbc:0.22.1")
+    implementation("io.ktor:ktor-server-netty:$ktor_version")
+    implementation("io.ktor:ktor-client-apache:$ktor_version")
+    implementation("io.ktor:ktor-client-serialization-jvm:$ktor_version")
+    implementation("io.ktor:ktor-client-json-jvm:$ktor_version")
+    implementation("io.ktor:ktor-client-logging-jvm:$ktor_version")
+    implementation("io.ktor:ktor-html-builder:$ktor_version")
+    implementation("io.ktor:ktor-auth:$ktor_version")
+    implementation("io.ktor:ktor-auth-jwt:$ktor_version")
+    implementation("io.ktor:ktor-jackson:$ktor_version")
+    implementation("io.ktor:ktor-serialization:$ktor_version")
+    implementation("io.ktor:ktor-gson:$ktor_version")
+    implementation("io.ktor:ktor-locations:$ktor_version")
+    implementation("ch.qos.logback:logback-classic:$logback_version")
+    implementation("mysql:mysql-connector-java:5.1.46")
+    api(project(":api-models"))
+    implementation("org.flywaydb:flyway-core:6.2.0")
+    compile("com.github.docker-java:docker-java:3.2.1")
+    implementation("com.badoo.reaktive:reaktive-jvm:$reaktive_version")
+    // https://mvnrepository.com/artifact/commons-cli/commons-cli
+    implementation("commons-cli:commons-cli:1.4")
+
+
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+
+application {
+    mainClassName = main_class_name
+}
+
+task cleanStatic(type: Delete) {
+    delete "/resources/static"
+}
+
+task deployScript(type: Copy, dependsOn: "cleanStatic") {
+    from "../frontend/js/build/distributions"
+    into "src/main/resources/static/static/js"
+}
+
+task deployStatic(type: Copy, dependsOn: "deployScript") {
+    from "../frontend/js/build/distributions"
+    into "src/main/resources/static"
+}
+
+processResources { dependsOn "deployStatic" }
+clean { dependsOn "cleanStatic" }
+
+
+//import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+//
+//plugins {
+//    application
+//    id("java")
+//    id("org.jetbrains.kotlin.jvm")
+//    id("kotlinx-serialization")
+//    id("application")
+//    id("distribution")
+//    id("com.github.johnrengelman.shadow") version "5.0.0"
+//}
+//
+//val mMainClassName = "MainServerKt"
+//
+//application {
+//    mainClassName = mMainClassName
+//}
+//
+//tasks.shadowJar {
+//    manifest.attributes["Main-class"] = mMainClassName
+//}
+//
+//dependencies {
+////  implementation(Deps.Jetbrains.Kotlinx.Serialization.Json.Core)
+//    implementation(Deps.Jetbrains.Kotlin.StdLib.Jdk8)
+//
+//    implementation(Deps.Jetbrains.Exposed.Core)
+//    implementation(Deps.Jetbrains.Exposed.Dao)
+//    implementation(Deps.Jetbrains.Exposed.Jdbc)
+//
+//    implementation(Deps.Ktor.Server.Netty)
+//    implementation(Deps.Ktor.Client.Apache)
+//
+//    implementation(Deps.Ktor.Client.Serialization.Common)
+//    implementation(Deps.Ktor.Client.Serialization.Jvm)
+//    implementation(Deps.Ktor.Client.Gson)
+//    implementation(Deps.Ktor.Client.Json.Jvm)
+//
+//    implementation(Deps.Ktor.Client.HtmlBuilder)
+//    implementation(Deps.Ktor.Client.Logging.Jvm)
+//
+//    implementation(Deps.Ktor.Client.Auth.Core)
+//    implementation(Deps.Ktor.Client.Auth.Jwt)
+//
+//    implementation(Deps.Ktor.Client.Locations)
+//    implementation(Deps.Badoo.Reaktive.Jvm)
+//
+//    implementation("ch.qos.logback:logback-classic:1.2.3")
+//    implementation("mysql:mysql-connector-java:5.1.46")
+//    api(project(":api-models"))
+//    implementation("org.flywaydb:flyway-core:6.2.0")
+//    compile("com.github.docker-java:docker-java:3.2.1")
+//    implementation("commons-cli:commons-cli:1.4")
+//}
+//
+//java {
+//    sourceCompatibility = JavaVersion.VERSION_1_8
+//}
+//
+//tasks.withType<KotlinCompile>().all {
+//    kotlinOptions.jvmTarget = "1.8"
+//}
+//
+//tasks.register<Delete>("cleanStatic") {
+//    delete("/resources/static")
+//}
+//
+//tasks.register<Copy>("deployScript") {
+//    dependsOn("cleanStatic")
+//    from("../frontend/js/build/distributions")
+//    into("src/main/resources/static/static/js")
+//}
+//
+//tasks.register<Copy>("deployScript") {
+//    dependsOn("deployScript")
+//    from("../frontend/js/build/distributions")
+//    into("src/main/resources/static")
+//}
+//tasks.processResources {
+//    dependsOn("deployStatic")
+//}
+//tasks.clean {
+//    dependsOn("cleanStatic")
+//}

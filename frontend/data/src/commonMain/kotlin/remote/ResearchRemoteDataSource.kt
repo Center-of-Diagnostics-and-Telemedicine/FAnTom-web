@@ -46,7 +46,7 @@ object ResearchRemoteDataSource : ResearchRemote {
     return client.post {
       authHeader(token)
       apiUrl("$RESEARCH_ROUTE/$researchId")
-      body = Json.encodeToString(SliceRequestNew.serializer(), request)
+      body = Json.stringify(SliceRequestNew.serializer(), request)
     }
   }
 
@@ -57,7 +57,7 @@ object ResearchRemoteDataSource : ResearchRemote {
     return client.post {
       authHeader(token)
       apiUrl("$RESEARCH_ROUTE/$HOUNSFIELD_ROUTE")
-      body = Json.encodeToString(HounsfieldRequestNew.serializer(), request)
+      body = Json.stringify(HounsfieldRequestNew.serializer(), request)
     }
   }
 
@@ -68,7 +68,7 @@ object ResearchRemoteDataSource : ResearchRemote {
     return client.post {
       authHeader(token)
       apiUrl("$RESEARCH_ROUTE/${request.researchId}/$MARK_ROUTE")
-      body = Json.encodeToString(ConfirmCTTypeRequest.serializer(), request)
+      body = Json.stringify(ConfirmCTTypeRequest.serializer(), request)
     }
   }
 

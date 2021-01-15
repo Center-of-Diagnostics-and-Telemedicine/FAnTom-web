@@ -3,10 +3,13 @@ plugins {
 }
 
 kotlin {
-  js {
+  target {
     useCommonJs()
+    produceExecutable()
     browser {
-      binaries.executable()
+      dceTask {
+        keep("ktor-ktor-io.\$\$importsForInline\$\$.ktor-ktor-io.io.ktor.utils.io")
+      }
     }
   }
 }

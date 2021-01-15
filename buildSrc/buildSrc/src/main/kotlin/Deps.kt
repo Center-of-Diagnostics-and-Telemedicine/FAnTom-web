@@ -59,7 +59,7 @@ object Deps {
       object Jdbc : Dependency(group = Exposed, name = "exposed-jdbc", version = version)
     }
 
-    object Kotlinx : Group(name = "kotlinx") {
+    object Kotlinx : Group(name = "org.jetbrains.kotlinx") {
       object Coroutines {
         private const val version = "1.4.1"
 
@@ -80,32 +80,32 @@ object Deps {
       }
 
       object Serialization {
-        private const val version = "1.0.1"
+        private const val version = "0.20.0-1.4-M1"
 
-        object Json {
+        object Runtime {
           object Core :
-            Dependency(group = Kotlinx, name = "kotlinx-serialization-json", version = version)
+            Dependency(group = Kotlinx, name = "kotlinx-serialization-runtime", version = version)
 
-//          object Common :
-//            Dependency(
-//              group = Kotlinx,
-//              name = "kotlinx-serialization-runtime-common",
-//              version = version
-//            )
-//
-//          object Native :
-//            Dependency(
-//              group = Kotlinx,
-//              name = "kotlinx-serialization-runtime-native",
-//              version = version
-//            )
-//
-//          object Js :
-//            Dependency(
-//              group = Kotlinx,
-//              name = "kotlinx-serialization-runtime-js",
-//              version = version
-//            )
+          object Common :
+            Dependency(
+              group = Kotlinx,
+              name = "kotlinx-serialization-runtime-common",
+              version = version
+            )
+
+          object Native :
+            Dependency(
+              group = Kotlinx,
+              name = "kotlinx-serialization-runtime-native",
+              version = version
+            )
+
+          object Js :
+            Dependency(
+              group = Kotlinx,
+              name = "kotlinx-serialization-runtime-js",
+              version = version
+            )
         }
       }
     }
