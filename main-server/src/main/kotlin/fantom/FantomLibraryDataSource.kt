@@ -12,7 +12,6 @@ import io.ktor.client.features.logging.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonConfiguration
 import model.*
 import util.debugLog
 
@@ -36,14 +35,14 @@ class FantomLibraryDataSourceImpl(
 
   private val client: HttpClient = HttpClient {
     install(JsonFeature) {
-      serializer = KotlinxSerializer(Json(JsonConfiguration(ignoreUnknownKeys = true)))
+      serializer = KotlinxSerializer()
     }
     install(HttpTimeout) {
       requestTimeoutMillis = 600000
     }
     install(Logging) {
       logger = Logger.DEFAULT
-      level = LogLevel.ALL
+      level = LogLevel.BODY
     }
   }
 

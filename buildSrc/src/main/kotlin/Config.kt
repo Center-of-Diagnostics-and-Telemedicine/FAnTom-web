@@ -82,6 +82,7 @@ inline fun <reified T : BuildTarget> ExtensionAware.doIfBuildTargetAvailable(blo
 
 @ExperimentalDceDsl
 fun Project.setupMultiplatform() {
+
   plugins.apply("kotlin-multiplatform")
   plugins.apply("kotlinx-serialization")
 
