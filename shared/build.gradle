@@ -1,0 +1,116 @@
+plugins {
+    id("org.jetbrains.kotlin.multiplatform")
+    id("kotlinx-serialization")
+}
+
+kotlin {
+    jvm()
+    js {
+        browser {
+            testTask {
+                testLogging {
+                    showExceptions = true
+                    exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+                    showCauses = true
+                    showStackTraces = true
+                }
+            }
+            dceTask {
+                keep("ktor-ktor-io.\$\$importsForInline\$\$.ktor-ktor-io.io.ktor.utils.io")
+            }
+        }
+        nodejs {
+            testTask {
+                testLogging {
+                    showExceptions = true
+                    exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+                    showCauses = true
+                    showStackTraces = true
+                }
+            }
+        }
+    }
+
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation(kotlin("stdlib-common"))
+                api(project(":api-models"))
+
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$kotlinx_serialization_version")
+                implementation("com.badoo.reaktive:reaktive:$reaktive_version")
+                implementation("com.badoo.reaktive:reaktive-annotations:$reaktive_version")
+                implementation("com.badoo.reaktive:coroutines-interop:$reaktive_version")
+                implementation("com.badoo.reaktive:utils:$reaktive_version")
+                implementation("io.ktor:ktor-client-core:$ktor_version")
+                implementation("io.ktor:ktor-client-json:$ktor_version")
+                implementation("io.ktor:ktor-client-serialization:$ktor_version")
+
+                implementation("com.arkivanov.mvikotlin:mvikotlin:2.0.0-beta4")
+                implementation("com.arkivanov.mvikotlin:mvikotlin:2.0.0-beta4")
+                implementation("com.arkivanov.mvikotlin:mvikotlin-main:2.0.0-beta4")
+                implementation("com.arkivanov.mvikotlin:mvikotlin-extensions-reaktive:2.0.0-beta4")
+            }
+        }
+        commonTest {
+            dependencies {
+                implementation(kotlin("test-common"))
+                implementation(kotlin("test-annotations-common"))
+            }
+        }
+        jvmMain {
+            dependencies {
+                implementation(kotlin("stdlib-jdk8"))
+                implementation("io.ktor:ktor-server-netty:$ktor_version")
+                implementation("io.ktor:ktor-client-apache:$ktor_version")
+                implementation("io.ktor:ktor-jackson:$ktor_version")
+                implementation("io.ktor:ktor-html-builder:$ktor_version")
+                implementation("ch.qos.logback:logback-classic:$logback_version")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:$kotlinx_serialization_version")
+
+                implementation("io.ktor:ktor-client-serialization-jvm:$ktor_version")
+                implementation("io.ktor:ktor-client-json-jvm:$ktor_version")
+                implementation("io.ktor:ktor-client-serialization:$ktor_version")
+                implementation("io.ktor:ktor-serialization:$ktor_version")
+
+                implementation("com.badoo.reaktive:reaktive-jvm:$reaktive_version")
+
+            }
+        }
+        jvmTest {
+            dependencies {
+                implementation(kotlin("test"))
+                implementation(kotlin("test-junit"))
+            }
+        }
+        jsMain {
+            dependencies {
+                implementation(kotlin("stdlib-js"))
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:$kotlinx_serialization_version")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.3.5")
+
+                implementation("io.ktor:ktor-client-js:$ktor_version")
+                implementation("io.ktor:ktor-client-serialization-js:$ktor_version")
+                implementation("io.ktor:ktor-client-json-js:$ktor_version")
+
+                implementation("com.badoo.reaktive:reaktive-js:$reaktive_version")
+                implementation("com.badoo.reaktive:reaktive-annotations-js:$reaktive_version")
+                implementation("com.badoo.reaktive:coroutines-interop-js:$reaktive_version")
+                implementation("com.badoo.reaktive:utils-js:$reaktive_version")
+
+                implementation("com.arkivanov.mvikotlin:mvikotlin:2.0.0-beta4")
+                implementation("com.arkivanov.mvikotlin:mvikotlin:2.0.0-beta4")
+                implementation("com.arkivanov.mvikotlin:mvikotlin-main:2.0.0-beta4")
+                implementation("com.arkivanov.mvikotlin:mvikotlin-extensions-reaktive:2.0.0-beta4")
+
+                implementation(npm("text-encoding", "0.7.0"))
+                implementation(npm("source-map-loader", "0.2.4"))
+            }
+        }
+        jsTest {
+            dependencies {
+                implementation(kotlin("test-js"))
+            }
+        }
+    }
+}

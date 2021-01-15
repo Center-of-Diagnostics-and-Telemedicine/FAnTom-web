@@ -1,0 +1,47 @@
+plugins {
+    id("java")
+    id("org.jetbrains.kotlin.jvm")
+    id("kotlinx-serialization")
+    id("application")
+    id("distribution")
+    id("com.github.johnrengelman.shadow") version "5.0.0"
+}
+
+apply plugin: "com.github.johnrengelman.shadow"
+
+def main_class_name = "ServerKt"
+
+shadowJar {
+    manifest {
+        attributes "Main-Class": main_class_name
+    }
+    archiveBaseName = "backend"
+}
+
+dependencies {
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:$kotlinx_serialization_version")
+
+    implementation("io.ktor:ktor-server-netty:$ktor_version")
+
+    implementation("io.ktor:ktor-jackson:$ktor_version")
+    implementation("io.ktor:ktor-gson:$ktor_version")
+    implementation("io.ktor:ktor-locations:$ktor_version")
+    implementation("io.ktor:ktor-serialization:$ktor_version")
+
+    implementation("ch.qos.logback:logback-classic:$logback_version")
+
+    implementation(group: "net.java.dev.jna", name: "jna", version: "4.5.0")
+
+    api(project(":api-models"))
+
+
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+
+application {
+    mainClassName = main_class_name
+}
