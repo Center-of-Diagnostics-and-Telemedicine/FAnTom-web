@@ -96,11 +96,6 @@ val Project.isAnyTargetAvailable: Boolean
 
 
 fun Project.setupMultiplatform() {
-
-  if (!isAnyTargetAvailable) {
-    return
-  }
-
   plugins.apply("kotlin-multiplatform")
   plugins.apply("kotlinx-serialization")
 
