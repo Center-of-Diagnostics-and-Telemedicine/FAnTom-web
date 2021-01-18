@@ -12,5 +12,7 @@ open class TestMviView<Model : Any, Event : Any> : BaseMviView<Model, Event>() {
     this.model = model
   }
 
-
+  public override fun dispatch(event: Event) {
+    super.dispatch(event)
+  }
 }
