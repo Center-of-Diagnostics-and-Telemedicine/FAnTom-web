@@ -32,7 +32,7 @@ object MarksRemoteDataSource : MarksRemote {
     return client.post {
       authHeader(token)
       apiUrl("$RESEARCH_ROUTE/$researchId/$MARK_ROUTE")
-      body = Json.stringify(MarkData.serializer(), request)
+      body = Json.encodeToString(MarkData.serializer(), request)
     }
   }
 
@@ -40,7 +40,7 @@ object MarksRemoteDataSource : MarksRemote {
     return client.put {
       authHeader(token)
       apiUrl("$RESEARCH_ROUTE/$researchId/$MARK_ROUTE")
-      body = Json.stringify(MarkEntity.serializer(), request)
+      body = Json.encodeToString(MarkEntity.serializer(), request)
     }
   }
 

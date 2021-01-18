@@ -76,7 +76,7 @@ class FantomLibraryDataSourceImpl(
   ): SliceResponse {
     return client.post {
       apiUrl("/$RESEARCH_ROUTE/$SLICE_ROUTE")
-      val stringify = Json.stringify(SliceRequestNew.serializer(), sliceRequest)
+      val stringify = Json.encodeToString(SliceRequestNew.serializer(), sliceRequest)
       body = stringify
     }
   }
@@ -86,7 +86,7 @@ class FantomLibraryDataSourceImpl(
   ): HounsfieldResponse {
     return client.post {
       apiUrl("$RESEARCH_ROUTE/$BRIGHTNESS_ROUTE")
-      body = Json.stringify(HounsfieldRequestNew.serializer(), request)
+      body = Json.encodeToString(HounsfieldRequestNew.serializer(), request)
     }
   }
 
