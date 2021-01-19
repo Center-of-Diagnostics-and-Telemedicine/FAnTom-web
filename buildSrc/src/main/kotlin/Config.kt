@@ -1,20 +1,16 @@
-
 import com.android.build.gradle.BaseExtension
 import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.Project
 import org.gradle.api.plugins.ExtensionAware
 import org.gradle.kotlin.dsl.extra
 import org.gradle.kotlin.dsl.getByType
+import org.jetbrains.kotlin.gradle.dsl.Kotlin2JsProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
-import org.jetbrains.kotlin.gradle.plugin.KotlinTarget
-import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinAndroidTarget
-import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
-import org.jetbrains.kotlin.gradle.targets.js.KotlinJsTarget
-import org.jetbrains.kotlin.gradle.targets.jvm.KotlinJvmTarget
+import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalDceDsl
 
 enum class BuildType {
-  ALL, METADATA, NON_NATIVE, ANDROID, JVM, JS, LINUX, IOS, MAC_OS
+  ALL, METADATA, NON_NATIVE, LINUX, IOS
 }
 
 val ExtensionAware.buildType: BuildType
@@ -42,11 +38,9 @@ interface BuildTarget {
   object Android : NonNative
   object Jvm : NonNative
   object Js : NonNative
-  object IosX64 : Ios
-  object IosArm64 : Ios
-  object MacOsX64 : Darwin
-  object LinuxX64 : Linux
-
+//    object IosX64 : Ios
+//    object IosArm64 : Ios
+//    object LinuxX64 : Linux
 }
 
 private val ALL_BUILD_TARGETS =
@@ -54,23 +48,18 @@ private val ALL_BUILD_TARGETS =
     BuildTarget.Android,
     BuildTarget.Jvm,
     BuildTarget.Js
-//    BuildTarget.IosX64,
-//    BuildTarget.IosArm64,
-//    BuildTarget.MacOsX64,
-//    BuildTarget.LinuxX64
+//        BuildTarget.IosX64,
+//        BuildTarget.IosArm64,
+//        BuildTarget.LinuxX64
   )
 
 private val BUILD_TYPE_TO_BUILD_TARGETS: Map<BuildType, Set<BuildTarget>> =
   mapOf(
     BuildType.ALL to ALL_BUILD_TARGETS,
     BuildType.METADATA to ALL_BUILD_TARGETS,
-    BuildType.NON_NATIVE to setOf(BuildTarget.Android, BuildTarget.Jvm, BuildTarget.Js),
-    BuildType.ANDROID to setOf(BuildTarget.Android),
-    BuildType.JVM to setOf(BuildTarget.Jvm),
-    BuildType.JS to setOf(BuildTarget.Js)
-//    BuildType.LINUX to setOf(BuildTarget.LinuxX64),
-//    BuildType.IOS to setOf(BuildTarget.IosX64, BuildTarget.IosArm64),
-//    BuildType.MAC_OS to setOf(BuildTarget.MacOsX64)
+    BuildType.NON_NATIVE to setOf(BuildTarget.Android, BuildTarget.Jvm, BuildTarget.Js)
+//        BuildType.LINUX to setOf(BuildTarget.LinuxX64)
+//        BuildType.IOS to setOf(BuildTarget.IosX64, BuildTarget.IosArm64)
   )
 
 val BuildType.buildTargets: Set<BuildTarget> get() = requireNotNull(BUILD_TYPE_TO_BUILD_TARGETS[this])
@@ -91,19 +80,19 @@ inline fun <reified T : BuildTarget> ExtensionAware.doIfBuildTargetAvailable(blo
   }
 }
 
-val Project.isAnyTargetAvailable: Boolean
-  get() = buildType.buildTargets.any { it in buildTargets }
-
-
+@ExperimentalDceDsl
 fun Project.setupMultiplatform() {
   plugins.apply("kotlin-multiplatform")
   plugins.apply("kotlinx-serialization")
 
-  kotlinCompat {
+  kotlinProject {
     doIfBuildTargetAvailable<BuildTarget.Js> {
       js {
         nodejs()
         browser {
+          dceTask {
+            keep("ktor-ktor-io.\$\$importsForInline\$\$.ktor-ktor-io.io.ktor.utils.io")
+          }
         }
 
         compilations.all {
@@ -126,7 +115,7 @@ fun Project.setupMultiplatform() {
       commonMain {
         dependencies {
           implementation(Deps.Jetbrains.Kotlin.StdLib.Common)
-          implementation(Deps.Jetbrains.Kotlinx.Serialization.Json.Core)
+          implementation(Deps.Jetbrains.Kotlinx.Serialization.Runtime.Common)
         }
       }
 
@@ -145,7 +134,7 @@ fun Project.setupMultiplatform() {
 
         dependencies {
           implementation(Deps.Jetbrains.Kotlin.StdLib.Jdk7)
-          implementation(Deps.Jetbrains.Kotlinx.Serialization.Json.Core)
+          implementation(Deps.Jetbrains.Kotlinx.Serialization.Runtime.Core)
         }
       }
 
@@ -165,7 +154,7 @@ fun Project.setupMultiplatform() {
 
         dependencies {
           implementation(Deps.Jetbrains.Kotlin.StdLib.Js)
-//          implementation(Deps.Jetbrains.Kotlinx.Serialization.Runtime.Js)
+          implementation(Deps.Jetbrains.Kotlinx.Serialization.Runtime.Js)
         }
       }
 
@@ -180,61 +169,16 @@ fun Project.setupMultiplatform() {
   }
 }
 
-fun KotlinMultiplatformExtension.jsCompat(): KotlinJsTarget? = findTargetByName("js")
-
-fun KotlinMultiplatformExtension.jsCompat(block: KotlinJsTarget.() -> Unit) {
-  jsCompat()?.apply(block)
+fun Project.android(block: BaseExtension.() -> Unit) {
+  extensions.getByType<BaseExtension>().block()
 }
 
-fun KotlinMultiplatformExtension.androidCompat(): KotlinAndroidTarget? = findTargetByName("android")
-
-fun KotlinMultiplatformExtension.androidCompat(block: KotlinAndroidTarget.() -> Unit) {
-  androidCompat()?.apply(block)
+fun Project.js(block: Kotlin2JsProjectExtension.() -> Unit) {
+  extensions.getByType<Kotlin2JsProjectExtension>().block()
 }
 
-fun KotlinMultiplatformExtension.jvmCompat(): KotlinJvmTarget? = findTargetByName("jvm")
-
-fun KotlinMultiplatformExtension.jvmCompat(block: KotlinJvmTarget.() -> Unit) {
-  jvmCompat()?.apply(block)
-}
-
-fun KotlinMultiplatformExtension.linuxX64Compat(): KotlinNativeTarget? = findTargetByName("linuxX64")
-
-fun KotlinMultiplatformExtension.linuxX64Compat(block: KotlinNativeTarget.() -> Unit) {
-  linuxX64Compat()?.also(block)
-}
-
-fun KotlinMultiplatformExtension.iosX64Compat(): KotlinNativeTarget? = findTargetByName("iosX64")
-
-fun KotlinMultiplatformExtension.iosX64Compat(block: KotlinNativeTarget.() -> Unit) {
-  iosX64Compat()?.apply(block)
-}
-
-fun KotlinMultiplatformExtension.iosArm64Compat(): KotlinNativeTarget? = findTargetByName("iosArm64")
-
-fun KotlinMultiplatformExtension.iosArm64Compat(block: KotlinNativeTarget.() -> Unit) {
-  iosArm64Compat()?.apply(block)
-}
-
-fun KotlinMultiplatformExtension.macosX64Compat(): KotlinNativeTarget? = findTargetByName("macosX64")
-
-fun KotlinMultiplatformExtension.macosX64Compat(block: KotlinNativeTarget.() -> Unit) {
-  macosX64Compat()?.also(block)
-}
-
-private inline fun <reified T : KotlinTarget> KotlinMultiplatformExtension.findTargetByName(name: String): T? =
-  targets.findByName(name) as T?
-
-fun Project.androidCompat(block: BaseExtension.() -> Unit) {
-  if (isBuildTargetAvailable<BuildTarget.Android>()) {
-    extensions.getByType<BaseExtension>().block()
-  }
-}
-
-fun Project.kotlinCompat(block: KotlinMultiplatformExtension.() -> Unit) {
-  if (isAnyTargetAvailable) {
-    extensions.getByType<KotlinMultiplatformExtension>().block()
-  }
+fun Project.kotlinProject(block: KotlinMultiplatformExtension.() -> Unit) {
+  extensions.getByType<KotlinMultiplatformExtension>().block()
 }
 
 typealias SourceSets = NamedDomainObjectContainer<KotlinSourceSet>
