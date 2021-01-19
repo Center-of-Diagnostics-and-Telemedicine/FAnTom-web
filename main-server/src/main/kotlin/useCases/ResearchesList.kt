@@ -1,11 +1,9 @@
 package useCases
 
-import io.ktor.application.application
-import io.ktor.application.call
-import io.ktor.application.log
-import io.ktor.locations.get
-import io.ktor.response.respond
-import io.ktor.routing.Route
+import io.ktor.application.*
+import io.ktor.locations.*
+import io.ktor.response.*
+import io.ktor.routing.*
 import model.*
 import repository.CovidMarkRepository
 import repository.ResearchRepository
@@ -33,7 +31,8 @@ fun Route.researchesList(
               seen = it.seen,
               done = it.done,
               marked = marked,
-              modality = research.modality
+              modality = research.modality,
+              category = research.category
             )
           } else {
             null

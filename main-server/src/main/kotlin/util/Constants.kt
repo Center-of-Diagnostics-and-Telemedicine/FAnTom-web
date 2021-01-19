@@ -28,6 +28,7 @@ const val DOCTOR_1_FIELD = "doctor1"
 const val DOCTOR_2_FIELD = "doctor2"
 const val POS_IN_BLOCK_FIELD = "pos_in_block"
 const val MODALITY_FIELD = "modality"
+const val CATEGORY_FIELD = "category"
 
 const val USER_TABLE = "user"
 const val RESEARCH_TABLE = "research"

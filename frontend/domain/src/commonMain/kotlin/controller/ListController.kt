@@ -3,6 +3,7 @@ package controller
 import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import repository.ResearchRepository
+import view.CategoryView
 import view.FilterView
 import view.ListView
 
@@ -11,6 +12,7 @@ interface ListController {
   fun onViewCreated(
     listView: ListView,
     filterView: FilterView,
+    categoryView: CategoryView,
     viewLifecycle: Lifecycle
   )
 

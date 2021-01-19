@@ -26,14 +26,20 @@ class ResearchRepositoryImpl(
     }
   }
 
-  override suspend fun getFiltered(filter: Filter): List<Research> {
+  override suspend fun getFiltered(filter: Filter, category: Category): List<Research> {
     val cached = local.getAll()
-    return when (filter) {
+    val filteredByVisibility = when (filter) {
       Filter.All -> cached
       Filter.NotSeen -> cached.filterNot { it.seen }
       Filter.Seen -> cached.filter { it.seen }
       Filter.Done -> cached.filter { it.done }
     }
+    val filteredByCategory = when (category) {
+      Category.All -> filteredByVisibility
+      else -> filteredByVisibility.filter { it.category == category.name }
+    }
+
+    return filteredByCategory
   }
 
   override suspend fun initResearch(researchId: Int): ResearchSlicesSizesDataNew {

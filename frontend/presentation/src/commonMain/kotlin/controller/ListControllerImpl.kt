@@ -11,6 +11,7 @@ import com.badoo.reaktive.observable.mapNotNull
 import mapper.*
 import store.FilterStoreFactory
 import store.ListStoreFactory
+import view.CategoryView
 import view.FilterView
 import view.ListView
 
@@ -41,16 +42,19 @@ class ListControllerImpl(val dependencies: ListController.Dependencies) : ListCo
   override fun onViewCreated(
     listView: ListView,
     filterView: FilterView,
+    categoryView: CategoryView,
     viewLifecycle: Lifecycle
   ) {
     bind(viewLifecycle, BinderLifecycleMode.CREATE_DESTROY) {
       listView.events.mapNotNull(listEventToListIntent) bindTo listStore
       filterView.events.mapNotNull(filterEventToFilterIntent) bindTo filterStore
+      categoryView.events.mapNotNull(categoryEventToFilterIntent) bindTo filterStore
     }
 
     bind(viewLifecycle, BinderLifecycleMode.START_STOP) {
       listStore.states.mapNotNull(listStateToListModel) bindTo listView
       filterStore.states.mapNotNull(filterStateToFilterModel) bindTo filterView
+      filterStore.states.mapNotNull(filterStateToCategoryModel) bindTo categoryView
       listView.events.mapNotNull(listEventToOutput) bindTo dependencies.listOutput
     }
   }

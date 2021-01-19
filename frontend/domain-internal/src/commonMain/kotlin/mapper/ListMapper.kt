@@ -35,6 +35,6 @@ val listEventToOutput: Event.() -> Output? = {
 val filterLabelToListIntent: Label.() -> Intent? =
   {
     when (this) {
-      is Label.FilterChanged -> Intent.HandleFilterChanged(item)
+      is Label.FilterChanged -> Intent.HandleFilterChanged(filter, category)
     }
   }

@@ -127,7 +127,8 @@ data class Research(
   val seen: Boolean,
   val done: Boolean,
   val marked: Boolean,
-  val modality: String
+  val modality: String,
+  val category: String
 )
 
 @Serializable

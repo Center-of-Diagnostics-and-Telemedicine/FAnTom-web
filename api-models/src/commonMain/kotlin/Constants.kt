@@ -76,6 +76,12 @@ const val CT_RESEARCH_TYPE = "CT"
 const val MG_RESEARCH_TYPE = "MG"
 const val DX_RESEARCH_TYPE = "DX"
 
+const val CT_RESEARCH_CATEGORY = "CT"
+const val MR_RESEARCH_CATEGORY = "MR"
+const val MG_RESEARCH_CATEGORY = "MG"
+const val DX_RESEARCH_CATEGORY = "DX"
+const val COVID_RESEARCH_CATEGORY = "Covid"
+
 
 enum class Preset(val value: Int) {
   PRESET_SOFT_TISSUE(0),

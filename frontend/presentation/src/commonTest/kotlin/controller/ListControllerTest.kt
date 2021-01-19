@@ -14,10 +14,7 @@ import repository.ResearchRepository
 import resume
 import testFilters
 import testResearches
-import view.FilterView
-import view.ListView
-import view.TestFilterView
-import view.TestListView
+import view.*
 import kotlin.test.*
 
 class ListControllerTest {
@@ -35,6 +32,7 @@ class ListControllerTest {
 
   private val listView = TestListView()
   private val filterView = TestFilterView()
+  private val categoryView = TestCategoryView()
   private lateinit var controller: ListController
 
   @BeforeTest
@@ -138,7 +136,7 @@ class ListControllerTest {
 
   private fun createController() {
     controller = ListControllerImpl(dependencies)
-    controller.onViewCreated(listView, filterView, lifecycle)
+    controller.onViewCreated(listView, filterView, categoryView, lifecycle)
     lifecycle.resume()
   }
 }

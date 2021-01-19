@@ -4,6 +4,7 @@ import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.lifecycle.LifecycleRegistry
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.ccfraser.muirwik.components.mCssBaseline
+import com.ccfraser.muirwik.components.spacingUnits
 import com.ccfraser.muirwik.components.themeContext
 import com.ccfraser.muirwik.components.toolbarJsCssToPartialCss
 import controller.ListController
@@ -13,6 +14,7 @@ import kotlinx.css.*
 import list.ListScreen.ListStyles.appFrameCss
 import list.ListScreen.ListStyles.mainContainerCss
 import list.ListScreen.ListStyles.screenContainerCss
+import model.Category
 import model.Filter
 import react.*
 import repository.ResearchRepository
@@ -20,16 +22,14 @@ import resume
 import styled.StyleSheet
 import styled.css
 import styled.styledDiv
-import view.FilterView
-import view.ListView
-import view.initialFilterModel
-import view.initialListModel
+import view.*
 
 class ListScreen(props: ListProps) :
   RComponent<ListProps, ListState>(props) {
 
   private val listViewDelegate = ListViewProxy(updateState = ::updateState)
   private val filtersViewDelegate = FiltersViewProxy(updateState = ::updateState)
+  private val categoryViewDelegate = CategoriesViewProxy(updateState = ::updateState)
   private val lifecycleRegistry = LifecycleRegistry()
   private lateinit var controller: ListController
 
@@ -39,7 +39,8 @@ class ListScreen(props: ListProps) :
     state = ListState(
       drawerOpen = false,
       listModel = initialListModel(),
-      filtersModel = initialFilterModel()
+      filtersModel = initialFilterModel(),
+      categoriesModel = initialCategoryModel()
     )
   }
 
@@ -49,6 +50,7 @@ class ListScreen(props: ListProps) :
     controller.onViewCreated(
       listViewDelegate,
       filtersViewDelegate,
+      categoryViewDelegate,
       lifecycleRegistry
     )
   }
@@ -101,6 +103,12 @@ class ListScreen(props: ListProps) :
             styledDiv {
               css(mainContainerCss)
 
+              categories(
+                categories = state.categoriesModel.items,
+                onClick = ::onCategoryClick,
+                currentCategory = state.categoriesModel.current
+              )
+
               //mainContent
               researchList(
                 items = state.listModel.items,
@@ -122,11 +130,16 @@ class ListScreen(props: ListProps) :
     listViewDelegate.dispatch(ListView.Event.ItemClick(id))
   }
 
+  private fun onCategoryClick(category: Category) {
+    categoryViewDelegate.dispatch(CategoryView.Event.ItemClick(category))
+  }
+
   private fun closeDrawer() = setState { drawerOpen = false }
   private fun openDrawer() = setState { drawerOpen = true }
 
   private fun updateState(newModel: ListView.Model) = setState { listModel = newModel }
   private fun updateState(newModel: FilterView.Model) = setState { filtersModel = newModel }
+  private fun updateState(newModel: CategoryView.Model) = setState { categoriesModel = newModel }
 
   override fun componentWillUnmount() {
     lifecycleRegistry.destroy()
@@ -165,6 +178,17 @@ class ListScreen(props: ListProps) :
       flexGrow = 1.0
       minWidth = 0.px
     }
+
+    val categoriesContainerCss by ListStyles.css {
+      display = Display.flex
+      justifyContent = JustifyContent.start
+      flexWrap = FlexWrap.wrap
+      marginBottom = 16.px
+    }
+
+    val chipMarginCss by ListStyles.css {
+      margin(4.px)
+    }
   }
 
   interface Dependencies {
@@ -177,6 +201,7 @@ class ListScreen(props: ListProps) :
 class ListState(
   var listModel: ListView.Model,
   var filtersModel: FilterView.Model,
+  var categoriesModel: CategoryView.Model,
   var drawerOpen: Boolean = false
 ) : RState
 

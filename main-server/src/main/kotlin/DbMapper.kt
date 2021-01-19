@@ -20,7 +20,8 @@ fun ResultRow.toResearch(): ResearchModel = ResearchModel(
   doctor1 = this[ResearchVos.doctor1],
   doctor2 = this[ResearchVos.doctor2],
   posInBlock = this[ResearchVos.pos_in_block],
-  modality = this[ResearchVos.modality]
+  modality = this[ResearchVos.modality],
+  category = this[ResearchVos.category]
 )
 
 fun ResultRow.toUserResearch(): UserResearchModel = UserResearchModel(

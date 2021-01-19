@@ -24,3 +24,7 @@ sealed class Filter(
     icon = "done"
   )
 }
+
+val allFilters = listOf(
+  Filter.All, Filter.NotSeen, Filter.Seen, Filter.Done
+)

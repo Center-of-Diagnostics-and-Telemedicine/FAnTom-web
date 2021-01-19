@@ -9,6 +9,7 @@ import com.badoo.reaktive.scheduler.mainScheduler
 import com.badoo.reaktive.single.map
 import com.badoo.reaktive.single.observeOn
 import com.badoo.reaktive.single.subscribeOn
+import model.Category
 import model.Filter
 import model.RESEARCH_INITIALIZATION_FAILED
 import model.ResearchApiExceptions
@@ -31,15 +32,15 @@ internal class ListStoreFactory(
 
     override fun executeIntent(intent: Intent, getState: () -> State) {
       when (intent) {
-        is Intent.HandleFilterChanged -> filterChanged(intent.filter)
+        is Intent.HandleFilterChanged -> filterChanged(intent.filter, intent.category)
         Intent.DismissError -> dispatch(Result.DismissErrorRequested)
         Intent.ReloadRequested -> load()
       }.let {}
     }
 
-    private fun filterChanged(filter: Filter) {
+    private fun filterChanged(filter: Filter, category: Category) {
       singleFromCoroutine {
-        repository.getFiltered(filter)
+        repository.getFiltered(filter, category)
       }
         .subscribeOn(ioScheduler)
         .map(Result::Loaded)

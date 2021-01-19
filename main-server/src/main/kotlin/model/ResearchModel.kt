@@ -12,5 +12,6 @@ data class ResearchModel(
   val doctor1: String,
   val doctor2: String,
   val posInBlock: String,
-  val modality: String
+  val modality: String,
+  val category: String
 )

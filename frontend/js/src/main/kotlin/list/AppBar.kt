@@ -6,7 +6,10 @@ import kotlinx.css.zIndex
 import react.RBuilder
 import styled.css
 
-fun RBuilder.appBar(onClick: () -> Unit) {
+fun RBuilder.appBar(
+  onClick: () -> Unit,
+  block: (RBuilder.() -> Unit)? = null
+) {
   themeContext.Consumer { theme ->
     mAppBar(position = MAppBarPosition.absolute) {
       css { zIndex = theme.zIndex.drawer + 1 }
