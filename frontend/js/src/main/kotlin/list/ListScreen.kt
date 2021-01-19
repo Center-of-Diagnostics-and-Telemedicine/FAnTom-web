@@ -4,7 +4,6 @@ import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.lifecycle.LifecycleRegistry
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.ccfraser.muirwik.components.mCssBaseline
-import com.ccfraser.muirwik.components.spacingUnits
 import com.ccfraser.muirwik.components.themeContext
 import com.ccfraser.muirwik.components.toolbarJsCssToPartialCss
 import controller.ListController
@@ -16,6 +15,7 @@ import list.ListScreen.ListStyles.mainContainerCss
 import list.ListScreen.ListStyles.screenContainerCss
 import model.Category
 import model.Filter
+import model.Research
 import react.*
 import repository.ResearchRepository
 import resume
@@ -126,8 +126,8 @@ class ListScreen(props: ListProps) :
     filtersViewDelegate.dispatch(FilterView.Event.ItemClick(filter))
   }
 
-  private fun onListItemClick(id: Int) {
-    listViewDelegate.dispatch(ListView.Event.ItemClick(id))
+  private fun onListItemClick(research: Research) {
+    listViewDelegate.dispatch(ListView.Event.ItemClick(research))
   }
 
   private fun onCategoryClick(category: Category) {

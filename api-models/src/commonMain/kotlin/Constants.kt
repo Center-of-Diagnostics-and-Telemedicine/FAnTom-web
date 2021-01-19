@@ -81,6 +81,7 @@ const val MR_RESEARCH_CATEGORY = "MR"
 const val MG_RESEARCH_CATEGORY = "MG"
 const val DX_RESEARCH_CATEGORY = "DX"
 const val COVID_RESEARCH_CATEGORY = "Covid"
+const val ALL_RESEARCH_CATEGORY = "Все"
 
 
 enum class Preset(val value: Int) {

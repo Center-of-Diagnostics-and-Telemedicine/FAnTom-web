@@ -18,7 +18,7 @@ private val breakpoints =
     .up(Breakpoint.lg, MGridSize.cells4)
     .down(Breakpoint.sm, MGridSize.cells12)
 
-fun RBuilder.researchList(items: List<Research>, onClick: (Int) -> Unit) {
+fun RBuilder.researchList(items: List<Research>, onClick: (Research) -> Unit) {
   mGridContainer(MGridSpacing.spacing2) {
     if (items.isNotEmpty()) {
       for (research in items) {
@@ -30,11 +30,11 @@ fun RBuilder.researchList(items: List<Research>, onClick: (Int) -> Unit) {
 
 private fun StyledElementBuilder<MGridProps>.researchCard(
   breakpoints: MGridBreakpoints,
-  onClick: (Int) -> Unit,
+  onClick: (Research) -> Unit,
   research: Research
 ) {
   mGridItem(breakpoints) {
-    mCardActionArea(onClick = { onClick(research.id) }) {
+    mCardActionArea(onClick = { onClick(research) }) {
       mCard {
         css {
           if (research.seen) {

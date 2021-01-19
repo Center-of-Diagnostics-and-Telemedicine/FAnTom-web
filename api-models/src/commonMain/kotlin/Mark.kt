@@ -13,6 +13,7 @@ data class MarkEntity(
   var selected = false
 }
 
+
 @Serializable
 data class MarkData(
   val x: Double,
@@ -67,4 +68,3 @@ fun MarkModel.toMarkEntity(): MarkEntity =
     type = type?.typeId ?: "",
     comment = comment,
   ).also { it.selected = selected }
-

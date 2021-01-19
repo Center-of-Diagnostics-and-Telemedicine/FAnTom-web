@@ -15,6 +15,8 @@ import list.ListScreen
 import list.list
 import login.LoginScreen
 import login.login
+import model.Category
+import model.Research
 import react.*
 import repository.*
 import research.ResearchScreen
@@ -26,7 +28,7 @@ abstract class App : RComponent<AppProps, AppState>() {
   init {
     state = AppState(
       screen = ScreenType.AUTH,
-      researchId = -1,
+      research = null,
       themeColor = "dark"
     )
   }
@@ -57,7 +59,7 @@ abstract class App : RComponent<AppProps, AppState>() {
               dependencies = object : ResearchScreen.Dependencies,
                 Dependencies by props.dependencies {
                 override val researchOutput: (ResearchController.Output) -> Unit = ::researchOutput
-                override val researchId: Int = state.researchId
+                override val research: Research = state.research!!
               }
             )
           }
@@ -71,7 +73,7 @@ abstract class App : RComponent<AppProps, AppState>() {
     when (output) {
       is ListController.Output.ItemSelected ->
         setState {
-          researchId = output.id
+          research = output.research
           screen = ScreenType.RESEARCH
         }
     }
@@ -101,7 +103,7 @@ abstract class App : RComponent<AppProps, AppState>() {
 
 class AppState(
   var screen: ScreenType,
-  var researchId: Int,
+  var research: Research? = null,
   var themeColor: String
 ) : RState
 

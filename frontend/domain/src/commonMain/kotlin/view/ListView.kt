@@ -15,7 +15,7 @@ interface ListView : MviView<Model, Event> {
 
   sealed class Event {
     object Reload : Event()
-    data class ItemClick(val id: Int) : Event()
+    data class ItemClick(val research: Research) : Event()
     object DismissError : Event()
   }
 }

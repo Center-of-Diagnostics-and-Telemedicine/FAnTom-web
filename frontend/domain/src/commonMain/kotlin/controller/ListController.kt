@@ -2,6 +2,7 @@ package controller
 
 import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.store.StoreFactory
+import model.Research
 import repository.ResearchRepository
 import view.CategoryView
 import view.FilterView
@@ -24,6 +25,6 @@ interface ListController {
   }
 
   sealed class Output {
-    data class ItemSelected(val id: Int) : Output()
+    data class ItemSelected(val research: Research) : Output()
   }
 }

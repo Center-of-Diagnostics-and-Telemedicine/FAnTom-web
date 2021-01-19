@@ -25,9 +25,8 @@ sealed class Category(
   )
 
   object All : Category(
-    name = "Все"
+    name = ALL_RESEARCH_CATEGORY
   )
-
 }
 
 val allCategories = listOf(
@@ -38,3 +37,14 @@ val allCategories = listOf(
   Category.DX,
   Category.Covid
 )
+
+fun Research.getCategoryByString(): Category {
+  return when (category) {
+    CT_RESEARCH_CATEGORY -> Category.CT
+    MR_RESEARCH_CATEGORY -> Category.MR
+    MG_RESEARCH_CATEGORY -> Category.MG
+    DX_RESEARCH_CATEGORY -> Category.DX
+    COVID_RESEARCH_CATEGORY -> Category.Covid
+    else -> Category.All
+  }
+}

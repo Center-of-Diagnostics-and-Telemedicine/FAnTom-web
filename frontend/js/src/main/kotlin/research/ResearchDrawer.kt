@@ -2,13 +2,15 @@ package research
 
 import com.ccfraser.muirwik.components.*
 import kotlinext.js.jsObject
+import kotlinx.css.LinearDimension
 import kotlinx.css.pct
+import kotlinx.css.px
 import kotlinx.css.vh
 import react.RBuilder
 
 fun RBuilder.leftDrawer(
   open: Boolean,
-  drawerWidth: Int,
+  drawerWidth: LinearDimension,
   onOpen: () -> Unit,
   onClose: () -> Unit,
   block: RBuilder.() -> Unit
@@ -18,7 +20,7 @@ fun RBuilder.leftDrawer(
 
 fun RBuilder.rightDrawer(
   open: Boolean,
-  drawerWidth: Int,
+  drawerWidth: LinearDimension,
   onOpen: () -> Unit,
   onClose: () -> Unit,
   block: RBuilder.() -> Unit
@@ -28,7 +30,7 @@ fun RBuilder.rightDrawer(
 
 private fun RBuilder.drawer(
   open: Boolean,
-  drawerWidth: Int,
+  drawerWidth: LinearDimension,
   onOpen: () -> Unit,
   onClose: () -> Unit,
   anchor: MDrawerAnchor,
@@ -50,17 +52,13 @@ private fun RBuilder.drawer(
   }
 }
 
-private fun mPaperProps(open: Boolean, drawerWidth: Int): MPaperProps {
+private fun mPaperProps(open: Boolean, drawerWidth: LinearDimension): MPaperProps {
   val pp: MPaperProps = jsObject { }
   pp.asDynamic().style = kotlinext.js.js {
     height = 100.pct
     minHeight = 100.vh
-    if (open.not()) {
-      overflowX = "hidden"
-      width = 7.spacingUnits.value
-    } else {
-      width = drawerWidth + 1
-    }
+    overflowX = "hidden"
+    width = drawerWidth + 1.px
   }
   return pp
 }

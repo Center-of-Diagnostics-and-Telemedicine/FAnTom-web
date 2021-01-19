@@ -25,7 +25,7 @@ val listEventToListIntent: Event.() -> Intent? = {
 
 val listEventToOutput: Event.() -> Output? = {
   when (this) {
-    is Event.ItemClick -> Output.ItemSelected(id)
+    is Event.ItemClick -> Output.ItemSelected(research)
     is Event.Reload,
     is Event.DismissError,
     -> null
