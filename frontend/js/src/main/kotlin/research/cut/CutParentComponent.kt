@@ -15,6 +15,7 @@ import controller.CutControllerImpl
 import destroy
 import kotlinx.css.*
 import model.Cut
+import model.Research
 import react.*
 import repository.BrightnessRepository
 import repository.MipRepository
@@ -144,7 +145,7 @@ class CutParentComponent(prps: CutParentProps) : RComponent<CutParentProps, CutP
     val researchRepository: ResearchRepository
     val brightnessRepository: BrightnessRepository
     val mipRepository: MipRepository
-    val researchId: Int
+    val research: Research
     val height: Int
     val width: Int
   }

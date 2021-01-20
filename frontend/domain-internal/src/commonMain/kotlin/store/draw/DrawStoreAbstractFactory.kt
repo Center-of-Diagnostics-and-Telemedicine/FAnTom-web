@@ -8,6 +8,7 @@ import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.badoo.reaktive.utils.atomic.AtomicInt
 import com.badoo.reaktive.utils.ensureNeverFrozen
 import model.Cut
+import model.Research
 import store.draw.DrawStore.*
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -15,7 +16,7 @@ import kotlin.math.sqrt
 abstract class DrawStoreAbstractFactory(
   private val storeFactory: StoreFactory,
   private val cut: Cut,
-  private val researchId: Int
+  private val research: Research
 ) {
 
   val initialState: State = State(
@@ -31,7 +32,7 @@ abstract class DrawStoreAbstractFactory(
   fun create(): DrawStore =
     object : DrawStore,
       Store<Intent, State, Label> by storeFactory.create(
-        name = "DrawStoreType${cut.type.intType}Id${researchId}index${storeIndex.addAndGet(1)}",
+        name = "DrawStoreType${cut.type.intType}Id${research.id}index${storeIndex.addAndGet(1)}",
         initialState = initialState,
         executorFactory = ::createExecutor,
         reducer = ReducerImpl

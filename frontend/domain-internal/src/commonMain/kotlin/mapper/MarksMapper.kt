@@ -37,5 +37,6 @@ val marksLabelToMarksOutput: Label.() -> Output? = {
   when (this) {
     is Label.MarksLoaded -> Output.Marks(list)
     Label.CloseResearch -> Output.CloseResearch
+    is Label.CenterSelectedMark -> Output.CenterSelectedMark(mark)
   }
 }

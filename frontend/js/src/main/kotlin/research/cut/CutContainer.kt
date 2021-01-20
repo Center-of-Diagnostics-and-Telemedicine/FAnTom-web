@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 import kotlinx.css.*
 import kotlinx.css.properties.border
 import model.Cut
+import model.Research
 import org.w3c.dom.Element
 import react.RBuilder
 import react.RComponent
@@ -147,7 +148,7 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
     val researchRepository: ResearchRepository
     val brightnessRepository: BrightnessRepository
     val mipRepository: MipRepository
-    val researchId: Int
+    val research: Research
   }
 
   object CutContainerStyles : StyleSheet("CutStyles", isStatic = true) {

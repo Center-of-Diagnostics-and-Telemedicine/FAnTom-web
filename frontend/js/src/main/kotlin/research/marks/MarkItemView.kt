@@ -51,10 +51,28 @@ class MarkItemView(prps: MarkItemProps) : RComponent<MarkItemProps, MarkItemStat
             backgroundColor = Color(theme.palette.primary.main)
           }
         }
-        mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) { +"${round(area.markData.x)}" }
-        mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) { +"${round(area.markData.y)}" }
-        mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) { +"${round(area.markData.sizeVertical)}" }
-        mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) { +"${round(area.markData.sizeHorizontal)}" }
+        mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) {
+          +"${round(area.markData.x)}"
+        }
+        mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) {
+          +"${round(area.markData.y)}"
+        }
+        if (props.isPlanar) {
+          mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) {
+            +"${round(area.markData.sizeVertical)}"
+          }
+          mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) {
+            +"${round(area.markData.sizeHorizontal)}"
+          }
+        } else {
+          mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) {
+            +"${round(area.markData.z)}"
+          }
+          mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) {
+            +"${round(area.markData.sizeHorizontal)}"
+          }
+        }
+
         mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) {
           mButton(
             caption = if (area.type == null) "тип" else area.type!!.ru.take(3),
@@ -77,7 +95,11 @@ class MarkItemView(prps: MarkItemProps) : RComponent<MarkItemProps, MarkItemStat
           }
         }
         mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) {
-          mIconButton("close", onClick = { props.eventOutput(MarksView.Event.DeleteItem(area)) }, size = MIconButtonSize.small)
+          mIconButton(
+            "close",
+            onClick = { props.eventOutput(MarksView.Event.DeleteItem(area)) },
+            size = MIconButtonSize.small
+          )
         }
       }
       if (area.selected) {
@@ -168,14 +190,17 @@ interface MarkItemProps : RProps {
   var mark: MarkModel
   var eventOutput: (MarksView.Event) -> Unit
   var markTypes: List<MarkTypeModel>
+  var isPlanar: Boolean
 }
 
 fun RBuilder.markView(
   mark: MarkModel,
   eventOutput: (MarksView.Event) -> Unit,
-  markTypes: List<MarkTypeModel>
+  markTypes: List<MarkTypeModel>,
+  isPlanar: Boolean
 ) = child(MarkItemView::class) {
   attrs.mark = mark
   attrs.eventOutput = eventOutput
   attrs.markTypes = markTypes
+  attrs.isPlanar = isPlanar
 }

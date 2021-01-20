@@ -15,6 +15,7 @@ import controller.SliderController
 import controller.SliderControllerImpl
 import destroy
 import model.Cut
+import model.Research
 import react.*
 import resume
 import view.SliderView
@@ -76,7 +77,7 @@ class SliderComponent(prps: SliderProps) : RComponent<SliderProps, SliderState>(
     val cut: Cut
     val sliderOutput: (SliderController.Output) -> Unit
     val sliderInput: Observable<SliderController.Input>
-    val researchId: Int
+    val research: Research
   }
 
 }

@@ -29,7 +29,7 @@ interface CutController {
     val researchRepository: ResearchRepository
     val cutOutput: (Output) -> Unit
     val cut: Cut
-    val researchId: Int
+    val research: Research
   }
 
   sealed class Input {

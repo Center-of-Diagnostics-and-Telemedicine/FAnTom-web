@@ -7,13 +7,14 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.badoo.reaktive.utils.ensureNeverFrozen
 import model.Cut
+import model.Research
 import store.slider.SliderStore.Intent
 import store.slider.SliderStore.State
 
 abstract class SliderStoreAbstractFactory(
   private val storeFactory: StoreFactory,
   private val cut: Cut,
-  private val researchId: Int
+  private val research: Research
 ) {
 
   val initialState: State = State(
@@ -24,7 +25,7 @@ abstract class SliderStoreAbstractFactory(
 
   fun create(): SliderStore =
     object : SliderStore, Store<Intent, State, Nothing> by storeFactory.create(
-      name = "SliderStoreType${cut.type.intType}Id${researchId}",
+      name = "SliderStoreType${cut.type.intType}Id${research.id}",
       initialState = initialState,
       executorFactory = ::createExecutor,
       reducer = ReducerImpl

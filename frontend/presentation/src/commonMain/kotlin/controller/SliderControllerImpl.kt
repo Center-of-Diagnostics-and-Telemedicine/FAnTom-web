@@ -21,7 +21,7 @@ class SliderControllerImpl(val dependencies: Dependencies) :
   private val sliderStore = SliderStoreFactory(
     storeFactory = dependencies.storeFactory,
     cut = dependencies.cut,
-    researchId = dependencies.researchId
+    research = dependencies.research
   ).create()
 
   private val inputRelay: Relay<Input> = PublishSubject()

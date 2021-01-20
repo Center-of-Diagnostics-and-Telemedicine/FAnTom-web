@@ -23,7 +23,7 @@ class MarksControllerImpl(val dependencies: MarksController.Dependencies) :
   private val marksStore = MarksStoreFactory(
     storeFactory = dependencies.storeFactory,
     repository = dependencies.marksRepository,
-    researchId = dependencies.researchId,
+    research = dependencies.research,
     data = dependencies.data
   ).create()
 

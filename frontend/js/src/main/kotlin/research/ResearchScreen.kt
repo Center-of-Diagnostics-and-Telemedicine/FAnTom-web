@@ -114,7 +114,7 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
     //leftDrawer
     leftDrawer(
       open = state.toolsOpen,
-      drawerWidth = drawerWidth.px,
+      drawerWidth = if (state.toolsOpen) drawerWidth.px else 8.spacingUnits,
       onOpen = ::openTools,
       onClose = ::closeTools
     ) {
@@ -128,8 +128,8 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
     }
 
     mainContent(
-      marginnLeft = if (state.toolsOpen) drawerWidth.px else 7.spacingUnits,
-      marginnRight = if (state.marksOpen) drawerWidth.px else 7.spacingUnits
+      marginnLeft = if (state.toolsOpen) drawerWidth.px else 8.spacingUnits,
+      marginnRight = if (state.marksOpen) drawerWidth.px else 16.spacingUnits
     ) {
       cuts(dependencies = object : CutsContainerViewComponent.Dependencies,
         Dependencies by props.dependencies {
@@ -137,13 +137,12 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
         override val cutsContainerInputs: Observable<CutsContainerController.Input> = this@ResearchScreen.cutsContainerInputObservable
         override val cutsContainerOutput: (CutsContainerController.Output) -> Unit = ::cutsContainerOutput
         override val cutsInput: Observable<CutController.Input> = this@ResearchScreen.cutsInputObservable
-        override val researchId: Int = props.dependencies.research.id
       })
     }
 
     rightDrawer(
       open = state.marksOpen,
-      drawerWidth = drawerWidth.px,
+      drawerWidth = if (state.marksOpen) drawerWidth.px else 8.spacingUnits,
       onOpen = ::openMarks,
       onClose = ::closeMarks
     ) {
@@ -154,12 +153,11 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
         override val marksInput: Observable<MarksController.Input> = this@ResearchScreen.marksInputObservable
         override val isPlanar: Boolean = sizesData!!.type.isPlanar()
         override val data: ResearchSlicesSizesDataNew = sizesData!!
-        override val researchId: Int = props.dependencies.research.id
       })
     }
   }
 
-  private fun RBuilder.covid(model: ResearchView.Model){
+  private fun RBuilder.covid(model: ResearchView.Model) {
     //leftDrawer
     leftDrawer(
       open = state.toolsOpen,
@@ -186,7 +184,6 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
         override val cutsContainerInputs: Observable<CutsContainerController.Input> = this@ResearchScreen.cutsContainerInputObservable
         override val cutsContainerOutput: (CutsContainerController.Output) -> Unit = ::cutsContainerOutput
         override val cutsInput: Observable<CutController.Input> = this@ResearchScreen.cutsInputObservable
-        override val researchId: Int = props.dependencies.research.id
       })
     }
 
@@ -274,6 +271,8 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
         cutsInputObservable.onNext(CutController.Input.Marks(output.list))
       MarksController.Output.CloseResearch ->
         researchViewDelegate.dispatch(ResearchView.Event.Close)
+      is MarksController.Output.CenterSelectedMark ->
+        cutsInputObservable.onNext(CutController.Input.ChangeSliceNumberByMarkCenter(output.mark))
     }.let { }
   }
 

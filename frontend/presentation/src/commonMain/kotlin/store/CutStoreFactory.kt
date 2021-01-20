@@ -9,10 +9,7 @@ import com.badoo.reaktive.scheduler.mainScheduler
 import com.badoo.reaktive.single.map
 import com.badoo.reaktive.single.observeOn
 import com.badoo.reaktive.single.subscribeOn
-import model.Cut
-import model.GET_SLICE_FAILED
-import model.ResearchApiExceptions
-import model.getSliceNumberByMark
+import model.*
 import repository.BrightnessRepository
 import repository.MipRepository
 import repository.ResearchRepository
@@ -23,13 +20,13 @@ internal class CutStoreFactory(
   storeFactory: StoreFactory,
   val cut: Cut,
   val repository: ResearchRepository,
-  val researchId: Int,
+  val research: Research,
   brightnessRepository: BrightnessRepository,
   mipRepository: MipRepository
 ) : CutStoreAbstractFactory(
   storeFactory = storeFactory,
   cut = cut,
-  researchId = researchId,
+  research = research,
   brightnessRepository = brightnessRepository,
   mipRepository = mipRepository
 ) {
@@ -50,27 +47,32 @@ internal class CutStoreFactory(
         }
         is Intent.HandleBlackChanged -> {
           dispatch(Result.BlackChanged(blackValue = intent.blackValue))
-          load(getState, Result.SecondaryLoading)
+          load(getState, Result.SecondaryLoading, black = intent.blackValue)
         }
         is Intent.HandleWhiteChanged -> {
           dispatch(Result.WhiteChanged(whiteValue = intent.whiteValue))
-          load(getState, Result.SecondaryLoading)
+          load(getState, Result.SecondaryLoading, white = intent.whiteValue)
         }
         is Intent.HandleGammaChanged -> {
           dispatch(Result.GammaChanged(gammaValue = intent.gammaValue))
-          load(getState, Result.SecondaryLoading)
+          load(getState, Result.SecondaryLoading, gamma = intent.gammaValue)
         }
         is Intent.HandleMipChanged -> {
           dispatch(Result.MipChanged(mip = intent.mip))
-          load(getState, Result.SecondaryLoading)
+          load(getState, Result.SecondaryLoading, mipMethod = intent.mip.intValue)
         }
         is Intent.HandleMipValueChanged -> {
           dispatch(Result.MipValueChanged(mipValue = intent.mipValue))
-          load(getState, Result.SecondaryLoading)
+          load(getState, Result.SecondaryLoading, aproxSize = intent.mipValue)
         }
         is Intent.HandlePresetChanged -> {
           dispatch(Result.PresetChanged(black = intent.presets.black, white = intent.presets.white))
-          load(getState, Result.SecondaryLoading)
+          load(
+            getState,
+            Result.SecondaryLoading,
+            black = intent.presets.black,
+            white = intent.presets.white
+          )
         }
         is Intent.HandleCircleDrawn -> {
           publish(Label.CircleDrawn(intent.circle, getState().sliceNumber, cut))
@@ -130,18 +132,18 @@ internal class CutStoreFactory(
       }.let {}
     }
 
-    private fun inBounds(sliceNumber: Int) = sliceNumber <= cut.data.n_images && sliceNumber > 0
-
     private fun changeSliceNumber(sliceNumber: Int, getState: () -> State) {
       val resultSliceNumber = when {
         sliceNumber < 1 -> 1
         sliceNumber > cut.data.n_images -> cut.data.n_images
         else -> sliceNumber
       }
+
+      println("MY: resultSliceNumberAfterIfs = $resultSliceNumber, sliceNumberMethodParam = $sliceNumber, getState.SliceNumebr = ${getState().sliceNumber}, cut = ${cut.type.name}")
       if (sliceNumber != getState().sliceNumber) {
         dispatch(Result.SliceNumberChanged(sliceNumber = resultSliceNumber))
-        load(getState, Result.SecondaryLoading)
-        publish(Label.SliceNumberChanged(sliceNumber = sliceNumber, cut = cut))
+        load(getState, Result.SecondaryLoading, sliceNumber = resultSliceNumber)
+        publish(Label.SliceNumberChanged(sliceNumber = resultSliceNumber, cut = cut))
       }
     }
 
@@ -159,20 +161,30 @@ internal class CutStoreFactory(
       load(state, Result.SecondaryLoading)
     }
 
-    private fun load(getState: () -> State, loadingType: Result) {
-      val state = getState()
-      if (state.mainLoading.not() && state.secondaryLoading.not()) {
+    private fun load(
+      getState: () -> State,
+      loadingType: Result,
+      mainLoading: Boolean? = getState().mainLoading,
+      secondaryLoading: Boolean? = getState().secondaryLoading,
+      black: Int? = getState().black,
+      white: Int? = getState().white,
+      gamma: Double? = getState().gamma,
+      mipMethod: Int? = getState().mipMethod.intValue,
+      aproxSize: Int? = getState().mipValue,
+      sliceNumber: Int? = getState().sliceNumber
+    ) {
+      if (!mainLoading!! && !secondaryLoading!!) {
         dispatch(loadingType)
         singleFromCoroutine {
           repository.getSlice(
-            researchId = researchId,
+            researchId = research.id,
             type = cut.type.intType,
-            black = state.black,
-            white = state.white,
-            gamma = state.gamma,
-            mipMethod = state.mipMethod.intValue,
-            sliceNumber = state.sliceNumber,
-            aproxSize = state.mipValue,
+            black = black!!,
+            white = white!!,
+            gamma = gamma!!,
+            mipMethod = mipMethod!!,
+            sliceNumber = sliceNumber!!,
+            aproxSize = aproxSize!!,
             width = cut.data.screen_size_h,
             height = 0
           )
@@ -198,6 +210,8 @@ internal class CutStoreFactory(
       }
       dispatch(result)
     }
+
+    private fun inBounds(sliceNumber: Int) = sliceNumber <= cut.data.n_images && sliceNumber > 0
   }
 
 }

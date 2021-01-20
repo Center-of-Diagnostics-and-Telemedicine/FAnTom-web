@@ -6,6 +6,7 @@ import com.badoo.reaktive.utils.atomic.AtomicInt
 import com.badoo.reaktive.utils.ensureNeverFrozen
 import model.Cut
 import model.Mip
+import model.Research
 import repository.BrightnessRepository
 import repository.MipRepository
 import store.cut.CutStore.*
@@ -13,7 +14,7 @@ import store.cut.CutStore.*
 abstract class CutStoreAbstractFactory(
   private val storeFactory: StoreFactory,
   private val cut: Cut,
-  private val researchId: Int,
+  private val research: Research,
   private val brightnessRepository: BrightnessRepository,
   private val mipRepository: MipRepository
 ) {
@@ -33,7 +34,7 @@ abstract class CutStoreAbstractFactory(
 
   fun create(): CutStore =
     object : CutStore, Store<Intent, State, Label> by storeFactory.create(
-      name = "CutStoreType${cut.type.intType}Id${researchId}index${storeIndex.addAndGet(1)}",
+      name = "CutStoreType${cut.type.intType}Id${research.id}index${storeIndex.addAndGet(1)}",
       initialState = initialState,
       bootstrapper = SimpleBootstrapper(Unit),
       executorFactory = ::createExecutor,

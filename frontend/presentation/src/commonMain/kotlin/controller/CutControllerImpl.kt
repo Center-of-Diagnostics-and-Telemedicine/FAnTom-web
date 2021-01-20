@@ -28,7 +28,7 @@ class CutControllerImpl(val dependencies: CutController.Dependencies) :
     storeFactory = dependencies.storeFactory,
     cut = dependencies.cut,
     repository = dependencies.researchRepository,
-    researchId = dependencies.researchId,
+    research = dependencies.research,
     brightnessRepository = dependencies.brightnessRepository,
     mipRepository = dependencies.mipRepository
   ).create()
@@ -36,14 +36,14 @@ class CutControllerImpl(val dependencies: CutController.Dependencies) :
   private val shapesStore = ShapesStoreFactory(
     storeFactory = dependencies.storeFactory,
     cut = dependencies.cut,
-    researchId = dependencies.researchId,
+    research = dependencies.research,
     repository = dependencies.researchRepository
   ).create()
 
   private val drawStore = DrawStoreFactory(
     storeFactory = dependencies.storeFactory,
     cut = dependencies.cut,
-    researchId = dependencies.researchId
+    research = dependencies.research
   ).create()
 
   private val inputRelay: Relay<Input> = PublishSubject()

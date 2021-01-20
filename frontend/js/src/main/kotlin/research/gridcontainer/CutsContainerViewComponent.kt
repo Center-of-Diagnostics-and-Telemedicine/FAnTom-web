@@ -12,10 +12,8 @@ import controller.CutsContainerController
 import controller.CutsContainerControllerImpl
 import destroy
 import kotlinx.css.*
-import model.Cut
-import model.CutType
-import model.Grid
-import model.ResearchSlicesSizesDataNew
+import kotlinx.css.Position
+import model.*
 import react.*
 import repository.BrightnessRepository
 import repository.MipRepository
@@ -241,7 +239,7 @@ class CutsContainerViewComponent(prps: CutsContainerProps) :
     val researchRepository: ResearchRepository
     val brightnessRepository: BrightnessRepository
     val mipRepository: MipRepository
-    val researchId: Int
+    val research: Research
   }
 
   object GridContainerStyles : StyleSheet("CutsStyles", isStatic = true) {

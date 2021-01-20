@@ -18,11 +18,11 @@ internal class ShapesStoreFactory(
   storeFactory: StoreFactory,
   val cut: Cut,
   val repository: ResearchRepository,
-  val researchId: Int
+  val research: Research
 ) : ShapesStoreAbstractFactory(
   storeFactory = storeFactory,
   cut = cut,
-  researchId = researchId
+  research = research
 ) {
   override fun createExecutor(): Executor<Intent, Nothing, State, Result, Label> = ExecutorImpl()
 

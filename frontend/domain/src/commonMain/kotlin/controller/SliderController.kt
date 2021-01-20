@@ -3,6 +3,7 @@ package controller
 import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import model.Cut
+import model.Research
 import view.SliderView
 
 interface SliderController {
@@ -18,7 +19,7 @@ interface SliderController {
     val storeFactory: StoreFactory
     val lifecycle: Lifecycle
     val cut: Cut
-    val researchId: Int
+    val research: Research
     val sliderOutput: (Output) -> Unit
   }
 

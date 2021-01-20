@@ -13,7 +13,7 @@ import store.shapes.ShapesStore.*
 abstract class ShapesStoreAbstractFactory(
   private val storeFactory: StoreFactory,
   private val cut: Cut,
-  private val researchId: Int
+  private val research: Research
 ) {
 
   val initialState: State = State(
@@ -31,7 +31,7 @@ abstract class ShapesStoreAbstractFactory(
   fun create(): ShapesStore =
     object : ShapesStore,
       Store<Intent, State, Label> by storeFactory.create(
-        name = "ShapesStoreType${cut.type.intType}Id${researchId}index${storeIndex.addAndGet(1)}",
+        name = "ShapesStoreType${cut.type.intType}Id${research.id}index${storeIndex.addAndGet(1)}",
         initialState = initialState,
         executorFactory = ::createExecutor,
         reducer = ReducerImpl

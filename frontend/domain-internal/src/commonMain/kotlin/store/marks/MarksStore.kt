@@ -38,5 +38,6 @@ interface MarksStore : Store<Intent, State, Label> {
   sealed class Label {
     object CloseResearch : Label()
     data class MarksLoaded(val list: List<MarkModel>) : Label()
+    data class CenterSelectedMark(val mark: MarkModel) : Label()
   }
 }

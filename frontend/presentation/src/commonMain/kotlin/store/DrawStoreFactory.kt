@@ -4,6 +4,7 @@ import com.arkivanov.mvikotlin.core.store.Executor
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
 import model.Cut
+import model.Research
 import model.isPlanar
 import store.draw.DrawStore.*
 import store.draw.DrawStoreAbstractFactory
@@ -11,11 +12,11 @@ import store.draw.DrawStoreAbstractFactory
 internal class DrawStoreFactory(
   storeFactory: StoreFactory,
   val cut: Cut,
-  val researchId: Int
+  val research: Research
 ) : DrawStoreAbstractFactory(
   storeFactory = storeFactory,
   cut = cut,
-  researchId = researchId
+  research = research
 ) {
   override fun createExecutor(): Executor<Intent, Nothing, State, Result, Label> = ExecutorImpl()
 

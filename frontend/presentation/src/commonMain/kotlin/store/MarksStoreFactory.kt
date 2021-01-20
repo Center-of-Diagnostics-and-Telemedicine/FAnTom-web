@@ -20,7 +20,7 @@ import store.marks.MarksStoreAbstractFactory
 internal class MarksStoreFactory(
   storeFactory: StoreFactory,
   val repository: MarksRepository,
-  val researchId: Int,
+  val research: Research,
   val data: ResearchSlicesSizesDataNew
 ) : MarksStoreAbstractFactory(
   storeFactory = storeFactory
@@ -35,7 +35,7 @@ internal class MarksStoreFactory(
       dispatch(Result.MarkTypesLoaded(markTypes))
 
       singleFromCoroutine {
-        repository.getMarks(researchId)
+        repository.getMarks(research.id)
       }.subscribeSingle()
     }
 
@@ -66,29 +66,29 @@ internal class MarksStoreFactory(
     private fun handleNewMark(shape: Shape, sliceNumber: Int, cut: Cut) {
       singleFromCoroutine {
         val markToSave = cut.getMarkToSave(shape, sliceNumber)
-        repository.saveMark(markToSave!!, researchId)
-        repository.getMarks(researchId)
+        repository.saveMark(markToSave!!, research.id)
+        repository.getMarks(research.id)
       }.subscribeSingle()
     }
 
     private fun updateMarkWithSave(mark: MarkModel) {
       singleFromCoroutine {
-        repository.updateMark(mark.toMarkEntity(), researchId)
-        repository.getMarks(researchId)
+        repository.updateMark(mark.toMarkEntity(), research.id)
+        repository.getMarks(research.id)
       }.subscribeSingle()
     }
 
     private fun deleteMark(mark: MarkModel) {
       singleFromCoroutine {
-        repository.deleteMark(mark.id, researchId)
-        repository.getMarks(researchId)
+        repository.deleteMark(mark.id, research.id)
+        repository.getMarks(research.id)
       }.subscribeSingle()
     }
 
     private fun updateComment(mark: MarkModel, comment: String) {
       singleFromCoroutine {
-        repository.updateMark(mark.toMarkEntity().copy(comment = comment), researchId)
-        repository.getMarks(researchId)
+        repository.updateMark(mark.toMarkEntity().copy(comment = comment), research.id)
+        repository.getMarks(research.id)
       }.subscribeSingle()
     }
 
@@ -111,10 +111,11 @@ internal class MarksStoreFactory(
       singleFromCoroutine {
         repository.updateMark(
           mark = mark.toMarkEntity().also { it.selected = true },
-          researchId = researchId,
+          researchId = research.id,
           localy = true
         )
-        repository.getMarks(researchId)
+        publish(Label.CenterSelectedMark(mark))
+        repository.getMarks(research.id)
       }.subscribeSingle()
     }
 
@@ -122,10 +123,10 @@ internal class MarksStoreFactory(
       singleFromCoroutine {
         repository.updateMark(
           mark = mark.toMarkEntity().also { it.selected = false },
-          researchId = researchId,
+          researchId = research.id,
           localy = true
         )
-        repository.getMarks(researchId)
+        repository.getMarks(research.id)
       }.subscribeSingle()
     }
 

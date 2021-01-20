@@ -25,6 +25,7 @@ internal class CovidMarksStoreFactory(
   private inner class ExecutorImpl : ReaktiveExecutor<Intent, Unit, State, Result, Label>() {
 
     override fun executeAction(action: Unit, getState: () -> State) {
+      //todo(тут надо грузить то что лежит в бд)
 //      singleFromCoroutine {
 //        repository.getCovidMark(researchId)
 //      }
@@ -45,6 +46,7 @@ internal class CovidMarksStoreFactory(
           intent.variant,
           getState
         )
+        //todo(нужно добавить сохранение выбираемых значений)
         Intent.DismissError -> dispatch(Result.DismissErrorRequested)
         Intent.ReloadRequested -> TODO()
         Intent.DeleteClicked -> TODO()

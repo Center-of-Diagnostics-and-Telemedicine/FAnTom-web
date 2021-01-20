@@ -15,11 +15,6 @@ interface CovidMarksView : MviView<Model, Event> {
 
   sealed class Event {
     data class VariantChosen(val lungLobeModel: LungLobeModel, val variant: Int) : Event()
-//    data class SelectItem(val mark: MarkModel) : Event()
-//    data class ItemCommentChanged(val mark: MarkModel, val comment: String) : Event()
-//    data class DeleteItem(val mark: MarkModel) : Event()
-//    data class ChangeMarkType(val type: MarkTypeModel, val markId: Int) : Event()
-//    object DissmissError : Event()
   }
 }
 

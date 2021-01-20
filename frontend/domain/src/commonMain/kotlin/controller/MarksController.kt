@@ -2,10 +2,7 @@ package controller
 
 import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.store.StoreFactory
-import model.Cut
-import model.MarkModel
-import model.ResearchSlicesSizesDataNew
-import model.Shape
+import model.*
 import repository.MarksRepository
 import view.MarksView
 
@@ -23,12 +20,14 @@ interface MarksController {
     val lifecycle: Lifecycle
     val marksRepository: MarksRepository
     val marksOutput: (Output) -> Unit
-    val researchId: Int
+    val research: Research
     val data: ResearchSlicesSizesDataNew
   }
 
   sealed class Output {
     data class Marks(val list: List<MarkModel>) : Output()
+    data class CenterSelectedMark(val mark: MarkModel) : Output()
+
     object CloseResearch : Output()
   }
 

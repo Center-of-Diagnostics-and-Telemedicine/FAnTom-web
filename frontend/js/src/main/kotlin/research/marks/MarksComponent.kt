@@ -13,8 +13,7 @@ import components.alert
 import controller.MarksController
 import controller.MarksControllerImpl
 import destroy
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import model.Research
 import model.ResearchSlicesSizesDataNew
 import react.*
 import repository.MarksRepository
@@ -69,20 +68,26 @@ class MarksComponent(prps: MarksProps) : RComponent<MarksProps, MarksState>(prps
             mTableRow {
               mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) { +"X" }
               mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) { +"Y" }
-              if (props.dependencies.isPlanar.not()) {
+
+              if (props.dependencies.isPlanar) {
+                mTableCell(
+                  align = MTableCellAlign.center,
+                  padding = MTableCellPadding.none
+                ) { +"mm_v" }
+                mTableCell(
+                  align = MTableCellAlign.center,
+                  padding = MTableCellPadding.none
+                ) { +"mm_h" }
+              } else {
                 mTableCell(
                   align = MTableCellAlign.center,
                   padding = MTableCellPadding.none
                 ) { +"Z" }
+                mTableCell(
+                  align = MTableCellAlign.center,
+                  padding = MTableCellPadding.none
+                ) { +"mm" }
               }
-              mTableCell(
-                align = MTableCellAlign.center,
-                padding = MTableCellPadding.none
-              ) { +"mm_v" }
-              mTableCell(
-                align = MTableCellAlign.center,
-                padding = MTableCellPadding.none
-              ) { +"mm_h" }
               mTableCell(
                 align = MTableCellAlign.center,
                 padding = MTableCellPadding.none
@@ -95,7 +100,8 @@ class MarksComponent(prps: MarksProps) : RComponent<MarksProps, MarksState>(prps
               markView(
                 mark = area,
                 eventOutput = { marksViewDelegate.dispatch(it) },
-                markTypes = state.model.markTypes
+                markTypes = state.model.markTypes,
+                isPlanar = props.dependencies.isPlanar
               )
             }
           }
@@ -115,7 +121,7 @@ class MarksComponent(prps: MarksProps) : RComponent<MarksProps, MarksState>(prps
     val marksOutput: (MarksController.Output) -> Unit
     val marksInput: Observable<MarksController.Input>
     val marksRepository: MarksRepository
-    val researchId: Int
+    val research: Research
     val isPlanar: Boolean
     val data: ResearchSlicesSizesDataNew
   }
