@@ -48,7 +48,7 @@ private fun StyledElementBuilder<MGridProps>.researchCard(
         }
         mCardHeader(title = research.name)
         mCardContent {
-          mTypography(text = research.id.toString())
+          mTypography(text = research.category)
         }
       }
     }

@@ -25,7 +25,6 @@ import research.cut.draw.drawView
 import research.cut.shapes.ShapesViewProxy
 import research.cut.shapes.shapesView
 import resume
-import root.debugLog
 import styled.css
 import styled.styledDiv
 import view.*

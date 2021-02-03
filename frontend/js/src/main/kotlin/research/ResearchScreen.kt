@@ -5,8 +5,11 @@ import com.arkivanov.mvikotlin.core.lifecycle.LifecycleRegistry
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.observable.Observable
 import com.badoo.reaktive.subject.behavior.BehaviorSubject
-import com.ccfraser.muirwik.components.mCssBaseline
-import com.ccfraser.muirwik.components.spacingUnits
+import com.ccfraser.muirwik.components.*
+import com.ccfraser.muirwik.components.button.MButtonVariant
+import com.ccfraser.muirwik.components.button.mButton
+import com.ccfraser.muirwik.components.dialog.*
+import com.ccfraser.muirwik.components.form.MFormControlMargin
 import components.alert
 import components.screenLoading
 import controller.*
@@ -15,6 +18,7 @@ import destroy
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.css.*
+import kotlinx.html.InputType
 import model.*
 import org.w3c.dom.events.KeyboardEvent
 import react.*
@@ -55,10 +59,16 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
     BehaviorSubject<CovidMarksController.Input>(CovidMarksController.Input.Idle)
   private val toolsInputObservable = BehaviorSubject<ToolsController.Input>(ToolsController.Input.Idle)
 
+  private var confirmationDialogValue: String = ""
+  private var confirmationDialogSelectedValue: String = ""
+  private var confirmationDialogOpen: Boolean = false
+  private var confirmationDialogScrollOpen: Boolean = false
+
   init {
     state = ResearchState(
       toolsOpen = false,
       marksOpen = false,
+      dialogOpen = false,
       researchModel = initialResearchModel()
     )
   }
@@ -93,6 +103,9 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
       open = state.researchModel.error.isNotEmpty(),
       handleClose = { researchViewDelegate.dispatch(ResearchView.Event.DismissError) }
     )
+
+    formDialog(state.dialogOpen)
+
     styledDiv {
       css(appFrameContainerStyle)
 
@@ -271,8 +284,11 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
         cutsInputObservable.onNext(CutController.Input.Marks(output.list))
       MarksController.Output.CloseResearch ->
         researchViewDelegate.dispatch(ResearchView.Event.Close)
-      is MarksController.Output.CenterSelectedMark ->
+      is MarksController.Output.CenterSelectedMark -> {
         cutsInputObservable.onNext(CutController.Input.ChangeSliceNumberByMarkCenter(output.mark))
+        setState { dialogOpen = true }
+
+      }
     }.let { }
   }
 
@@ -282,6 +298,23 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
       else -> TODO()
     }.let { }
   }
+
+  private fun RBuilder.formDialog(open: Boolean) {
+    fun handleClose() {
+      setState { dialogOpen = false}
+    }
+    mDialog(open, onClose =  { _, _ -> handleClose() }) {
+      mDialogTitle("Комментарий (можно оставить поле пустым) (5/5)")
+      mDialogContent {
+        mTextField("Комментарий", autoFocus = true, margin = MFormControlMargin.dense, type = InputType.text, fullWidth = true)
+      }
+      mDialogActions {
+        mButton("Закрыть", onClick = { handleClose() }, variant = MButtonVariant.text)
+        mButton("Подтвердить",  onClick = { handleClose() }, variant = MButtonVariant.text)
+      }
+    }
+  }
+
 
   private fun updateState(model: ResearchView.Model) = setState { researchModel = model }
   private fun closeTools() = setState { toolsOpen = false }
@@ -331,6 +364,7 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
 class ResearchState(
   var toolsOpen: Boolean,
   var marksOpen: Boolean,
+  var dialogOpen: Boolean,
   var researchModel: ResearchView.Model
 ) : RState
 

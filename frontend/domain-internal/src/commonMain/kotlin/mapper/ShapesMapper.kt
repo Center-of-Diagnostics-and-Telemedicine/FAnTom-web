@@ -4,6 +4,7 @@ import store.cut.CutStore
 import store.draw.DrawStore
 import store.shapes.ShapesStore.Intent
 import store.shapes.ShapesStore.State
+import store.userinput.UserInputStore
 import view.ShapesView.Event
 import view.ShapesView.Model
 
@@ -51,6 +52,13 @@ val drawLabelToShapesIntent: DrawStore.Label.() -> Intent? = {
 val drawDebounceLabelToShapesIntent: DrawStore.Label.() -> Intent? = {
   when (this) {
     is DrawStore.Label.MouseMove -> Intent.HandleMousePosition(dicomX, dicomY)
+    else -> null
+  }
+}
+
+val userInputDebounceLabelToShapesIntent: UserInputStore.Label.() -> Intent? = {
+  when (this) {
+    is UserInputStore.Label.MouseMove -> Intent.HandleMousePosition(dicomX, dicomY)
     else -> null
   }
 }
