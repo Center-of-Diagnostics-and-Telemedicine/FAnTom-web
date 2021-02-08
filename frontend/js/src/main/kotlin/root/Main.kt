@@ -6,6 +6,7 @@ import local.LoginLocalDataSource
 import local.MarksLocalDataSource
 import local.ResearchLocalDataSource
 import react.dom.render
+import remote.CovidMarksRemoteDataSource
 import remote.LoginRemoteDataSource
 import remote.MarksRemoteDataSource
 import remote.ResearchRemoteDataSource
@@ -20,16 +21,24 @@ private class Application {
     local = LoginLocalDataSource,
     remote = LoginRemoteDataSource
   )
+
+  val getToken: suspend () -> String = { authRepository.local.getToken() }
+
   val researchesRepository = ResearchRepositoryImpl(
     local = ResearchLocalDataSource,
     remote = ResearchRemoteDataSource,
-    token = { authRepository.local.getToken() }
+    token = getToken
   )
 
   val markRepository = MarksRepositoryImpl(
     local = MarksLocalDataSource,
     remote = MarksRemoteDataSource,
-    token = { authRepository.local.getToken() }
+    token = getToken
+  )
+
+  val covidMarkRepository = CovidMarksRepositoryImpl(
+    remote = CovidMarksRemoteDataSource,
+    token = getToken
   )
 
   val brightnesRepository = BrightnessRepositoryImpl()
@@ -45,6 +54,7 @@ private class Application {
           override val marksRepository: MarksRepository = markRepository
           override val brightnessRepository: BrightnessRepository = brightnesRepository
           override val mipRepository: MipRepository = mippRepository
+          override val covidMarksRepository: CovidMarksRepository = covidMarkRepository
         })
       }
     }

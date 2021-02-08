@@ -9,7 +9,7 @@ interface CovidMarksView : MviView<Model, Event> {
 
   data class Model(
     val loading: Boolean,
-    val lungLobeModels: List<LungLobeModel>,
+    val lungLobeModels: Map<Int, LungLobeModel>,
     val error: String
   )
 
@@ -19,7 +19,7 @@ interface CovidMarksView : MviView<Model, Event> {
 }
 
 fun initialCovidMarksModel(): Model = Model(
-  lungLobeModels = listOf(),
+  lungLobeModels = mapOf(),
   loading = false,
   error = ""
 )

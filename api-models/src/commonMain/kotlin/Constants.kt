@@ -240,4 +240,10 @@ enum class ErrorStringCode(val value: Int) {
   RESEARCH_CLOSE_FAILED(27)
 }
 
+const val rightUpperLobeId: Int = 1
+const val middleLobeId: Int = 2
+const val rightLowerLobeId: Int = 3
+const val leftUpperLobeId: Int = 4
+const val leftLowerLobeId: Int = 5
+
 

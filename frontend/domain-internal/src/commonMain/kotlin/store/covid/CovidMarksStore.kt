@@ -12,12 +12,11 @@ interface CovidMarksStore : Store<Intent, State, Label> {
     data class ChangeVariant(val lungLobeModel: LungLobeModel, val variant: Int) : Intent()
     object DismissError : Intent()
     object ReloadRequested : Intent()
-    object DeleteClicked : Intent()
     object HandleCloseResearch : Intent()
   }
 
   data class State(
-    val covidLungLobes: List<LungLobeModel>,
+    val covidLungLobes: Map<Int, LungLobeModel>,
     val loading: Boolean = false,
     val error: String = ""
   ) : JvmSerializable

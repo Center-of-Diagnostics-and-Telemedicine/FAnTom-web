@@ -3,17 +3,20 @@ package store
 import com.arkivanov.mvikotlin.core.store.Executor
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
-import model.LungLobeModel
-import model.ResearchSlicesSizesDataNew
-import model.changeValue
-import replace
-import repository.MarksRepository
+import com.badoo.reaktive.coroutinesinterop.singleFromCoroutine
+import com.badoo.reaktive.scheduler.ioScheduler
+import com.badoo.reaktive.scheduler.mainScheduler
+import com.badoo.reaktive.single.map
+import com.badoo.reaktive.single.observeOn
+import com.badoo.reaktive.single.subscribeOn
+import model.*
+import repository.CovidMarksRepository
 import store.covid.CovidMarksStore.*
 import store.covid.CovidMarksStoreAbstractFactory
 
 internal class CovidMarksStoreFactory(
   storeFactory: StoreFactory,
-  val repository: MarksRepository,
+  val repository: CovidMarksRepository,
   val researchId: Int,
   val data: ResearchSlicesSizesDataNew
 ) : CovidMarksStoreAbstractFactory(
@@ -25,18 +28,18 @@ internal class CovidMarksStoreFactory(
   private inner class ExecutorImpl : ReaktiveExecutor<Intent, Unit, State, Result, Label>() {
 
     override fun executeAction(action: Unit, getState: () -> State) {
-      //todo(тут надо грузить то что лежит в бд)
-//      singleFromCoroutine {
-//        repository.getCovidMark(researchId)
-//      }
-//        .subscribeOn(ioScheduler)
-//        .map(Result::Loaded)
-//        .observeOn(mainScheduler)
-//        .subscribeScoped(
-//          isThreadLocal = true,
-//          onSuccess = ::dispatch,
-//          onError = ::handleError
-//        )
+      singleFromCoroutine {
+        repository.getMark(researchId)
+      }
+        .map(CovidMarkEntity::toLungLobeModel)
+        .subscribeOn(ioScheduler)
+        .map(Result::Loaded)
+        .observeOn(mainScheduler)
+        .subscribeScoped(
+          isThreadLocal = true,
+          onSuccess = ::dispatch,
+          onError = ::handleError
+        )
     }
 
     override fun executeIntent(intent: Intent, getState: () -> State) {
@@ -49,7 +52,6 @@ internal class CovidMarksStoreFactory(
         //todo(нужно добавить сохранение выбираемых значений)
         Intent.DismissError -> dispatch(Result.DismissErrorRequested)
         Intent.ReloadRequested -> TODO()
-        Intent.DeleteClicked -> TODO()
         Intent.HandleCloseResearch -> TODO()
       }.let {}
     }
@@ -60,11 +62,21 @@ internal class CovidMarksStoreFactory(
       getState: () -> State
     ) {
       val newModel = lungLobeModel.changeValue(variant)
-      val newList = getState()
-        .covidLungLobes
-        .toMutableList()
-        .replace(newModel) { it.shortName == lungLobeModel.shortName }
-      dispatch(Result.Loaded(newList))
+      val newMap = getState().covidLungLobes.toMutableMap()
+      newMap[lungLobeModel.id] = newModel
+      dispatch(Result.Loaded(newMap))
+    }
+
+    private fun handleError(error: Throwable) {
+      val result = when (error) {
+        is ResearchApiExceptions.MarksFetchException -> Result.Error(error.error)
+        is ResearchApiExceptions.ResearchNotFoundException -> Result.Error(error.error)
+        else -> {
+          println("marks: other exception ${error.message}")
+          Result.Error(MARKS_FETCH_EXCEPTION)
+        }
+      }
+      dispatch(result)
     }
   }
 

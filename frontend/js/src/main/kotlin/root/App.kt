@@ -96,6 +96,7 @@ abstract class App : RComponent<AppProps, AppState>() {
     val loginRepository: LoginRepository
     val researchRepository: ResearchRepository
     val marksRepository: MarksRepository
+    val covidMarksRepository: CovidMarksRepository
     val brightnessRepository: BrightnessRepository
     val mipRepository: MipRepository
   }

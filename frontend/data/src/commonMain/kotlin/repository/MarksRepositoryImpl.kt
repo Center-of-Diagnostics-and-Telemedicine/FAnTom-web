@@ -64,7 +64,9 @@ class MarksRepositoryImpl(
     when (response.error) {
       ErrorStringCode.RESEARCH_NOT_FOUND.value -> throw ResearchApiExceptions.ResearchNotFoundException
 
-      ErrorStringCode.CREATE_MARK_FAILED.value -> throw ResearchApiExceptions.ConfirmCtTypeForResearchException
+      ErrorStringCode.GET_MARKS_FAILED.value -> throw ResearchApiExceptions.MarksFetchException
+      ErrorStringCode.CREATE_MARK_FAILED.value -> throw ResearchApiExceptions.MarkCreateException
+      ErrorStringCode.UPDATE_MARK_FAILED.value -> throw ResearchApiExceptions.MarkUpdateException
 
       ErrorStringCode.SESSION_CLOSE_FAILED.value -> throw ResearchApiExceptions.CloseSessionException
       ErrorStringCode.SESSION_EXPIRED.value -> throw ResearchApiExceptions.SessionExpiredException

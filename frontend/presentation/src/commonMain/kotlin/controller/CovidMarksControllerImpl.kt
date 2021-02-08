@@ -20,7 +20,7 @@ class CovidMarksControllerImpl(val dependencies: CovidMarksController.Dependenci
 
   private val marksStore = CovidMarksStoreFactory(
     storeFactory = dependencies.storeFactory,
-    repository = dependencies.marksRepository,
+    repository = dependencies.covidMarksRepository,
     researchId = dependencies.researchId,
     data = dependencies.data
   ).create()

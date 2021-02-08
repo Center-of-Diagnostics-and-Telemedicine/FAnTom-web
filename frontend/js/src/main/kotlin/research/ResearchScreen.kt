@@ -22,10 +22,7 @@ import kotlinx.html.InputType
 import model.*
 import org.w3c.dom.events.KeyboardEvent
 import react.*
-import repository.BrightnessRepository
-import repository.MarksRepository
-import repository.MipRepository
-import repository.ResearchRepository
+import repository.*
 import research.ResearchScreen.ResearchStyles.appFrameContainerStyle
 import research.covid.CovidMarksComponent
 import research.covid.covidMarks
@@ -353,6 +350,7 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
     val storeFactory: StoreFactory
     val researchRepository: ResearchRepository
     val marksRepository: MarksRepository
+    val covidMarksRepository: CovidMarksRepository
     val brightnessRepository: BrightnessRepository
     val mipRepository: MipRepository
     val researchOutput: (ResearchController.Output) -> Unit

@@ -1,6 +1,7 @@
 package model
 
 data class LungLobeModel(
+  val id: Int,
   val fullName: String,
   val shortName: String,
   val value: LungLobeValue?,
@@ -30,6 +31,7 @@ private val allValues = listOf(
 )
 
 private val rightUpperLobe = LungLobeModel(
+  id = rightUpperLobeId,
   fullName = "Правая верхняя доля",
   shortName = "ПВД",
   value = null,
@@ -37,6 +39,7 @@ private val rightUpperLobe = LungLobeModel(
 )
 
 private val middleLobe = LungLobeModel(
+  id = middleLobeId,
   fullName = "Средняя доля",
   shortName = "СД",
   value = null,
@@ -44,6 +47,7 @@ private val middleLobe = LungLobeModel(
 )
 
 private val rightLowerLobe = LungLobeModel(
+  id = rightLowerLobeId,
   fullName = "Правая нижняя доля",
   shortName = "ПНД",
   value = null,
@@ -51,6 +55,7 @@ private val rightLowerLobe = LungLobeModel(
 )
 
 private val leftLowerLobe = LungLobeModel(
+  id = leftLowerLobeId,
   fullName = "Левая нижняя доля",
   shortName = "ЛНД",
   value = null,
@@ -58,6 +63,7 @@ private val leftLowerLobe = LungLobeModel(
 )
 
 private val leftUpperLobe = LungLobeModel(
+  id = leftUpperLobeId,
   fullName = "Левая Верхняя доля",
   shortName = "ЛВД",
   value = null,
@@ -65,15 +71,49 @@ private val leftUpperLobe = LungLobeModel(
 )
 
 
-val initialLungLobeModels = listOf(
-  rightUpperLobe,
-  middleLobe,
-  rightLowerLobe,
-  leftUpperLobe,
-  leftLowerLobe
+val initialLungLobeModels = mapOf(
+  rightUpperLobeId to rightUpperLobe,
+  middleLobeId to middleLobe,
+  rightLowerLobeId to rightLowerLobe,
+  leftUpperLobeId to leftUpperLobe,
+  leftLowerLobeId to leftLowerLobe
 )
 
 fun LungLobeModel.changeValue(newValue: Int): LungLobeModel {
   val newValueModel = allValues.firstOrNull { it.value == newValue }
   return this.copy(value = newValueModel)
+}
+
+fun CovidMarkEntity.toLungLobeModel(): Map<Int, LungLobeModel> {
+  val rightUpperLobeModel = rightUpperLobe.changeValue(covidMarkData.rightUpperLobeValue)
+  val rightLowerLobeModel = leftLowerLobe.changeValue(covidMarkData.leftLowerLobeValue)
+  val middleLobeModel = middleLobe.changeValue(covidMarkData.middleLobeValue)
+  val leftUpperLobeModel = leftUpperLobe.changeValue(covidMarkData.leftUpperLobeValue)
+  val leftLowerLobeModel = leftLowerLobe.changeValue(covidMarkData.leftLowerLobeValue)
+
+  return mapOf(
+    rightUpperLobeId to rightUpperLobeModel,
+    rightLowerLobeId to rightLowerLobeModel,
+    middleLobeId to middleLobeModel,
+    leftUpperLobeId to leftUpperLobeModel,
+    leftLowerLobeId to leftLowerLobeModel
+  )
+}
+
+fun Map<Int, LungLobeModel>.toCovidMarkEntity(): CovidMarkEntity {
+  val rightUpperLobeValue = this[rightUpperLobeId]
+  val rightLowerLobeValue = this[rightLowerLobeId]
+  val middleLobeValue = this[middleLobeId]
+  val leftUpperLobeValue = this[leftUpperLobeId]
+  val leftLowerLobeValue = this[leftLowerLobeId]
+
+  return CovidMarkEntity(
+    covidMarkData = CovidMarkData(
+      rightUpperLobeValue = rightUpperLobeValue?.value?.value ?: zeroValue.value,
+      rightLowerLobeValue = rightLowerLobeValue?.value?.value ?: zeroValue.value,
+      middleLobeValue = middleLobeValue?.value?.value ?: zeroValue.value,
+      leftUpperLobeValue = leftUpperLobeValue?.value?.value ?: zeroValue.value,
+      leftLowerLobeValue = leftLowerLobeValue?.value?.value ?: zeroValue.value,
+    )
+  )
 }

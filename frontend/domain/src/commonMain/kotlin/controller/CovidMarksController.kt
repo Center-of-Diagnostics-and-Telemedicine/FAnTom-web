@@ -6,6 +6,7 @@ import model.Circle
 import model.Cut
 import model.MarkModel
 import model.ResearchSlicesSizesDataNew
+import repository.CovidMarksRepository
 import repository.MarksRepository
 import view.CovidMarksView
 import view.MarksView
@@ -22,7 +23,7 @@ interface CovidMarksController {
   interface Dependencies {
     val storeFactory: StoreFactory
     val lifecycle: Lifecycle
-    val marksRepository: MarksRepository
+    val covidMarksRepository: CovidMarksRepository
     val marksOutput: (Output) -> Unit
     val researchId: Int
     val data: ResearchSlicesSizesDataNew

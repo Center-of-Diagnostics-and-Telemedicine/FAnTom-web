@@ -12,6 +12,7 @@ import controller.CovidMarksControllerImpl
 import kotlinx.css.*
 import model.ResearchSlicesSizesDataNew
 import react.*
+import repository.CovidMarksRepository
 import repository.MarksRepository
 import resume
 import styled.css
@@ -63,7 +64,7 @@ class CovidMarksComponent(prps: CovidMarksProps) :
         flexDirection = FlexDirection.column
       }
       mList {
-        state.model.lungLobeModels.forEach { lungLobeModel ->
+        state.model.lungLobeModels.values.forEach { lungLobeModel ->
           val panelName = "panel${lungLobeModel.shortName}"
 
           covidMarkView(
@@ -88,7 +89,7 @@ class CovidMarksComponent(prps: CovidMarksProps) :
 
   interface Dependencies {
     val storeFactory: StoreFactory
-    val marksRepository: MarksRepository
+    val covidMarksRepository: CovidMarksRepository
     val marksOutput: (CovidMarksController.Output) -> Unit
     val data: ResearchSlicesSizesDataNew
     val marksInput: Observable<CovidMarksController.Input>
