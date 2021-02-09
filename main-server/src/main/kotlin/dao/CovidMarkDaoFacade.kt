@@ -1,35 +1,37 @@
 package dao
 
 import CovidMarksVos
-import model.CovidMark
+import model.CovidMarkModel
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import toCovidMark
 
 interface CovidMarkDaoFacade {
-  suspend fun getMark(userId: Int, researchId: Int): CovidMark?
-  suspend fun createMark(covidMark: CovidMark)
+  suspend fun getMark(userId: Int, researchId: Int): CovidMarkModel?
+  suspend fun createMark(covidMark: CovidMarkModel)
   suspend fun deleteMark(researchId: Int, userId: Int)
-  suspend fun updateMark(covidMark: CovidMark)
+  suspend fun updateMark(covidMark: CovidMarkModel)
 }
 
 class CovidCovidMarkDao : CovidMarkDaoFacade {
-  override suspend fun getMark(userId: Int, researchId: Int): CovidMark? {
+  override suspend fun getMark(userId: Int, researchId: Int): CovidMarkModel? {
     return transaction {
       CovidMarksVos.select { CovidMarksVos.researchId eq researchId and (CovidMarksVos.userId eq userId) }
-      .firstOrNull()
-      ?.toCovidMark()
+        .firstOrNull()
+        ?.toCovidMark()
     }
   }
 
-  override suspend fun createMark(covidMark: CovidMark) {
+  override suspend fun createMark(covidMark: CovidMarkModel) {
     return transaction {
       CovidMarksVos.insert {
         it[userId] = covidMark.userId
         it[researchId] = covidMark.researchId
-        it[ctType] = covidMark.ctType
-        it[leftPercent] = covidMark.leftPercent
-        it[rightPercent] = covidMark.rightPercent
+        it[rightUpperLobeValue] = covidMark.rightUpperLobeValue
+        it[middleLobeValue] = covidMark.middleLobeValue
+        it[rightLowerLobeValue] = covidMark.rightLowerLobeValue
+        it[leftUpperLobeValue] = covidMark.leftUpperLobeValue
+        it[leftLowerLobeValue] = covidMark.leftLowerLobeValue
       }
     }
   }
@@ -40,14 +42,16 @@ class CovidCovidMarkDao : CovidMarkDaoFacade {
     }
   }
 
-  override suspend fun updateMark(covidMark: CovidMark) {
+  override suspend fun updateMark(covidMark: CovidMarkModel) {
     return transaction {
       CovidMarksVos.update(where = { CovidMarksVos.researchId eq covidMark.researchId and (CovidMarksVos.userId eq covidMark.userId) }) {
         it[userId] = covidMark.userId
         it[researchId] = covidMark.researchId
-        it[ctType] = covidMark.ctType
-        it[leftPercent] = covidMark.leftPercent
-        it[rightPercent] = covidMark.rightPercent
+        it[rightUpperLobeValue] = covidMark.rightUpperLobeValue
+        it[middleLobeValue] = covidMark.middleLobeValue
+        it[rightLowerLobeValue] = covidMark.rightLowerLobeValue
+        it[leftUpperLobeValue] = covidMark.leftUpperLobeValue
+        it[leftLowerLobeValue] = covidMark.leftLowerLobeValue
       }
     }
   }

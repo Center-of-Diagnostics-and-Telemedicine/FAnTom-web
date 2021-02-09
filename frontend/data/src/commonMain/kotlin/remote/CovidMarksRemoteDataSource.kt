@@ -33,7 +33,7 @@ object CovidMarksRemoteDataSource : CovidMarksRemote {
     researchId: Int,
     token: String
   ): CovidMarksResponse {
-    return client.put {
+    return client.post {
       authHeader(token)
       apiUrl("$RESEARCH_ROUTE/$researchId/$COVID_MARK_ROUTE")
       body = Json.stringify(CovidMarkEntity.serializer(), request)

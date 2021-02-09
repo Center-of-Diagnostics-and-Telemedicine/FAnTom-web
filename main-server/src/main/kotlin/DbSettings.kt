@@ -48,9 +48,11 @@ object UserResearchVos : Table("user_research") {
 object CovidMarksVos : Table(COVID_MARKS_TABLE) {
   val userId: Column<Int> = integer("user_$ID_FIELD")
   val researchId: Column<Int> = integer("research_$ID_FIELD")
-  val ctType: Column<Int> = integer(CT_TYPE_FIELD)
-  val leftPercent: Column<Int> = integer(LEFT_PERCENT_FIELD)
-  val rightPercent: Column<Int> = integer(RIGHT_PERCENT_FIELD)
+  val rightUpperLobeValue: Column<Int> = integer(RIGHT_UPPER_LOBE_VALUE_FIELD)
+  val middleLobeValue: Column<Int> = integer(MIDDLE_LOBE_VALUE_FIELD)
+  val rightLowerLobeValue: Column<Int> = integer(RIGHT_LOWER_LOBE_VALUE_FIELD)
+  val leftUpperLobeValue: Column<Int> = integer(LEFT_UPPER_LOBE_VALUE_FIELD)
+  val leftLowerLobeValue: Column<Int> = integer(LEFT_LOWER_LOBE_VALUE_FIELD)
   override val primaryKey = PrimaryKey(userId, researchId, name = "CovidMarkPKConstraintName")
 }
 

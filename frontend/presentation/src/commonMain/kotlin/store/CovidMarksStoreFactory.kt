@@ -44,12 +44,12 @@ internal class CovidMarksStoreFactory(
 
     override fun executeIntent(intent: Intent, getState: () -> State) {
       when (intent) {
-        is Intent.ChangeVariant -> handleChangeVariant(
-          intent.lungLobeModel,
-          intent.variant,
-          getState
-        )
-        //todo(нужно добавить сохранение выбираемых значений)
+        is Intent.ChangeVariant ->
+          handleChangeVariant(
+            lungLobeModel = intent.lungLobeModel,
+            variant = intent.variant,
+            getState = getState
+          )
         Intent.DismissError -> dispatch(Result.DismissErrorRequested)
         Intent.ReloadRequested -> TODO()
         Intent.HandleCloseResearch -> TODO()
@@ -61,10 +61,21 @@ internal class CovidMarksStoreFactory(
       variant: Int,
       getState: () -> State
     ) {
-      val newModel = lungLobeModel.changeValue(variant)
-      val newMap = getState().covidLungLobes.toMutableMap()
-      newMap[lungLobeModel.id] = newModel
-      dispatch(Result.Loaded(newMap))
+      singleFromCoroutine {
+        val newModel = lungLobeModel.changeValue(variant)
+        val newMap = getState().covidLungLobes.toMutableMap()
+        newMap[lungLobeModel.id] = newModel
+        repository.saveMark(newMap.toCovidMarkEntity(), researchId)
+        newMap
+      }
+        .subscribeOn(ioScheduler)
+        .map(Result::Loaded)
+        .observeOn(mainScheduler)
+        .subscribeScoped(
+          isThreadLocal = true,
+          onSuccess = ::dispatch,
+          onError = ::handleError
+        )
     }
 
     private fun handleError(error: Throwable) {

@@ -24,7 +24,11 @@ const val TYPE_AXIAL = "AXIAL"
 const val TYPE_FRONTAL = "FRONTAL"
 const val TYPE_SAGITTAL = "SAGITTAL"
 
-const val localDataStorePath = "C:\\dicom\\test"
+//mac
+const val localDataStorePath = "/Users/max/Documents/test"
+//win
+//const val localDataStorePath = "C:\\dicom\\test"
+//deploy
 //const val localDataStorePath = "/data/fantom/dx2"
 const val dockerDataStorePath = "/app/dicom"
 

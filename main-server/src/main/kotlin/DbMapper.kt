@@ -31,12 +31,14 @@ fun ResultRow.toUserResearch(): UserResearchModel = UserResearchModel(
   done = this[UserResearchVos.done] == 1
 )
 
-fun ResultRow.toCovidMark(): CovidMark = CovidMark(
+fun ResultRow.toCovidMark(): CovidMarkModel = CovidMarkModel(
   userId = this[CovidMarksVos.userId],
   researchId = this[CovidMarksVos.researchId],
-  ctType = this[CovidMarksVos.ctType],
-  leftPercent = this[CovidMarksVos.leftPercent],
-  rightPercent = this[CovidMarksVos.rightPercent]
+  rightUpperLobeValue = this[CovidMarksVos.rightUpperLobeValue],
+  middleLobeValue = this[CovidMarksVos.middleLobeValue],
+  rightLowerLobeValue = this[CovidMarksVos.rightLowerLobeValue],
+  leftUpperLobeValue = this[CovidMarksVos.leftUpperLobeValue],
+  leftLowerLobeValue = this[CovidMarksVos.leftLowerLobeValue]
 )
 
 fun ResultRow.toMultiPlanarMark(): MarkEntity = MarkEntity(

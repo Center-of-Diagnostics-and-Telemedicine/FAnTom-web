@@ -1,14 +1,14 @@
 package useCases
 
 import io.ktor.application.*
-import io.ktor.locations.post
-import io.ktor.request.receive
-import io.ktor.response.respond
-import io.ktor.routing.Route
+import io.ktor.locations.*
+import io.ktor.request.*
+import io.ktor.response.*
+import io.ktor.routing.*
 import model.*
 import repository.CovidMarkRepository
-import util.*
 import util.CovidMark
+import util.user
 
 fun Route.mark(
   covidMarkRepository: CovidMarkRepository
@@ -20,9 +20,11 @@ fun Route.mark(
     }
 
     val user = call.user
-    val markModel = call.receive<ConfirmCTTypeRequest>().toMarkModel(user.id)
+    val markModel = call.receive<CovidMarkEntity>().toCovidMarkModel(user.id, it.id)
+
     try {
-      val existing = covidMarkRepository.getMark(userId = user.id, researchId = markModel.researchId)
+      val existing =
+        covidMarkRepository.getMark(userId = user.id, researchId = markModel.researchId)
       if (existing == null) {
         covidMarkRepository.createMark(markModel)
       } else {
@@ -30,7 +32,7 @@ fun Route.mark(
       }
       call.respond(BaseResponse(response = OK()))
     } catch (e: Exception) {
-      application.log.error("Failed to createMark", e)
+      application.log.error("Failed to create/update CovidMark", e)
       respondError(ErrorStringCode.CREATE_MARK_FAILED)
     }
   }

@@ -1,5 +1,3 @@
-package repository
-
 import com.github.dockerjava.api.DockerClient
 import com.github.dockerjava.api.command.CreateContainerCmd
 import com.github.dockerjava.api.command.WaitContainerResultCallback
@@ -33,9 +31,9 @@ class ContainerCreatorImpl() : ContainerCreator {
     /**
      * for mac
      **/
-//    .withDockerHost("unix:///var/run/docker.sock")
-//    .withRegistryUsername("max")
-//    .withRegistryPassword("vfrcbv16")
+    .withDockerHost("unix:///var/run/docker.sock")
+    .withRegistryUsername("max")
+    .withRegistryPassword(" ")
 
     /**
      * for linux server
@@ -47,7 +45,7 @@ class ContainerCreatorImpl() : ContainerCreator {
     /**
      * for windows
      **/
-    .withDockerHost("tcp://localhost:2375")
+//    .withDockerHost("tcp://localhost:2375")
 //    .withRegistryUsername("m.gusev")
 //    .withRegistryPassword("Gusev!8")
     .build()
