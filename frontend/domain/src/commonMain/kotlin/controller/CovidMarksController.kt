@@ -20,12 +20,13 @@ interface CovidMarksController {
     val storeFactory: StoreFactory
     val lifecycle: Lifecycle
     val covidMarksRepository: CovidMarksRepository
-    val marksOutput: (Output) -> Unit
+    val covidMarksOutput: (Output) -> Unit
     val research: Research
     val data: ResearchSlicesSizesDataNew
   }
 
   sealed class Output {
+    object CloseResearch : Output()
   }
 
   sealed class Input {

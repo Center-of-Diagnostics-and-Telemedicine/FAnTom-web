@@ -51,9 +51,21 @@ internal class CovidMarksStoreFactory(
             getState = getState
           )
         Intent.DismissError -> dispatch(Result.DismissErrorRequested)
-        Intent.ReloadRequested -> TODO()
-        Intent.HandleCloseResearch -> TODO()
+        Intent.ReloadRequested -> null
+        Intent.HandleCloseResearch -> handleCloseResearch(getState)
       }.let {}
+    }
+
+    private fun handleCloseResearch(getState: () -> State) {
+      val mark = getState().covidLungLobes
+      println("MY: modelWithNoValue = ${mark.values}")
+      val modelWithNoValue = mark.values.firstOrNull { it.value == null }
+      println("MY: modelWithNoValue = $modelWithNoValue")
+      if (modelWithNoValue != null) {
+        dispatch(Result.Error(COVID_MARK_TYPE_NOT_SET))
+      } else {
+        publish(Label.CloseResearch)
+      }
     }
 
     private fun handleChangeVariant(

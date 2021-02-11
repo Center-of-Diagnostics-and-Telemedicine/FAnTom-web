@@ -29,4 +29,5 @@ const val MARK_UPDATE_EXCEPTION = "Не удалось изменить отме
 const val MARK_DELETE_EXCEPTION = "Не удалось удалить отметку"
 const val RESEARCH_CLOSE_FAILED = "Не удалось закрыть исследование"
 const val MARK_TYPE_NOT_SET = "У отметки отсутствует тип. Пожалуйста, выбирите тип отметки"
+const val COVID_MARK_TYPE_NOT_SET = "Выбраны значения не для всех долей. Пожалуйста, выбирите значения для оставшихся долей"
 

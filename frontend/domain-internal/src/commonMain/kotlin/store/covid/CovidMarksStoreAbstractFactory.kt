@@ -14,7 +14,7 @@ abstract class CovidMarksStoreAbstractFactory(
   fun create(): CovidMarksStore =
     object : CovidMarksStore, Store<Intent, State, Label> by storeFactory.create(
       name = "CovidMarksStore",
-      initialState = State(initialLungLobeModels),
+      initialState = State(),
       bootstrapper = SimpleBootstrapper(Unit),
       executorFactory = ::createExecutor,
       reducer = ReducerImpl

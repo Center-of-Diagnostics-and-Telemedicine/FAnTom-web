@@ -13,18 +13,19 @@ val covidMarksStateToModel: State.() -> Model = {
 val covidMarksEventToIntent: Event.() -> Intent? = {
   when (this) {
     is Event.VariantChosen -> Intent.ChangeVariant(lungLobeModel, variant)
+    Event.DissmissError -> Intent.DismissError
   }
 }
 
 val inputToCovidMarksIntent: Input.() -> Intent? = {
   when (this) {
-    Input.Idle -> TODO()
-    Input.CloseResearchRequested -> TODO()
+    Input.CloseResearchRequested -> Intent.HandleCloseResearch
+    Input.Idle -> null
   }
 }
 
 val covidMarksLabelToMarksOutput: Label.() -> Output? = {
   when (this) {
-    Label.CloseResearch -> TODO()
+    Label.CloseResearch -> Output.CloseResearch
   }
 }

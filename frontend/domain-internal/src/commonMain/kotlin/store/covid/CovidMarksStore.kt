@@ -16,7 +16,7 @@ interface CovidMarksStore : Store<Intent, State, Label> {
   }
 
   data class State(
-    val covidLungLobes: Map<Int, LungLobeModel>,
+    val covidLungLobes: Map<Int, LungLobeModel> = emptyMap(),
     val loading: Boolean = false,
     val error: String = ""
   ) : JvmSerializable

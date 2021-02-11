@@ -44,7 +44,7 @@ class CovidMarksControllerImpl(val dependencies: CovidMarksController.Dependenci
     viewLifecycle: Lifecycle
   ) {
     bind(viewLifecycle, BinderLifecycleMode.CREATE_DESTROY) {
-      marksStore.labels.mapNotNull(covidMarksLabelToMarksOutput) bindTo dependencies.marksOutput
+      marksStore.labels.mapNotNull(covidMarksLabelToMarksOutput) bindTo dependencies.covidMarksOutput
       marksView.events.mapNotNull(covidMarksEventToIntent) bindTo marksStore
     }
 

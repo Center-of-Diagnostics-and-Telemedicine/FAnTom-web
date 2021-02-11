@@ -14,6 +14,7 @@ interface CovidMarksView : MviView<Model, Event> {
   )
 
   sealed class Event {
+    object DissmissError : Event()
     data class VariantChosen(val lungLobeModel: LungLobeModel, val variant: Int) : Event()
   }
 }

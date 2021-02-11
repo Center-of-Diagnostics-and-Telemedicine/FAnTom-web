@@ -6,10 +6,7 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.observable.Observable
 import com.badoo.reaktive.subject.behavior.BehaviorSubject
 import com.ccfraser.muirwik.components.*
-import com.ccfraser.muirwik.components.button.MButtonVariant
-import com.ccfraser.muirwik.components.button.mButton
 import com.ccfraser.muirwik.components.dialog.*
-import com.ccfraser.muirwik.components.form.MFormControlMargin
 import components.alert
 import components.screenLoading
 import controller.*
@@ -18,7 +15,6 @@ import destroy
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.css.*
-import kotlinx.html.InputType
 import model.*
 import org.w3c.dom.events.KeyboardEvent
 import react.*
@@ -51,10 +47,12 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
   private val cutsContainerInputObservable =
     BehaviorSubject<CutsContainerController.Input>(CutsContainerController.Input.Idle)
   private val cutsInputObservable = BehaviorSubject<CutController.Input>(CutController.Input.Idle)
-  private val marksInputObservable = BehaviorSubject<MarksController.Input>(MarksController.Input.Idle)
+  private val marksInputObservable =
+    BehaviorSubject<MarksController.Input>(MarksController.Input.Idle)
   private val covidMarksInputObservable =
     BehaviorSubject<CovidMarksController.Input>(CovidMarksController.Input.Idle)
-  private val toolsInputObservable = BehaviorSubject<ToolsController.Input>(ToolsController.Input.Idle)
+  private val toolsInputObservable =
+    BehaviorSubject<ToolsController.Input>(ToolsController.Input.Idle)
 
   private var confirmationDialogValue: String = ""
   private var confirmationDialogSelectedValue: String = ""
@@ -101,13 +99,12 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
       handleClose = { researchViewDelegate.dispatch(ResearchView.Event.DismissError) }
     )
 
-    formDialog(state.dialogOpen)
+//    formDialog(state.dialogOpen)
 
     styledDiv {
       css(appFrameContainerStyle)
 
       if (model.data != null) {
-
         when (props.dependencies.research.getCategoryByString()) {
           Category.Covid -> {
             covid(model)
@@ -131,7 +128,8 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
       tools(dependencies = object : ToolsComponent.Dependencies,
         Dependencies by props.dependencies {
         override val toolsOutput: (Output) -> Unit = ::toolsOutput
-        override val toolsInput: Observable<ToolsController.Input> = this@ResearchScreen.toolsInputObservable
+        override val toolsInput: Observable<ToolsController.Input> =
+          this@ResearchScreen.toolsInputObservable
         override val open: Boolean = state.toolsOpen
         override val data: ResearchSlicesSizesDataNew = model.data!!
       })
@@ -144,9 +142,12 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
       cuts(dependencies = object : CutsContainerViewComponent.Dependencies,
         Dependencies by props.dependencies {
         override val data: ResearchSlicesSizesDataNew = model.data!!
-        override val cutsContainerInputs: Observable<CutsContainerController.Input> = this@ResearchScreen.cutsContainerInputObservable
-        override val cutsContainerOutput: (CutsContainerController.Output) -> Unit = ::cutsContainerOutput
-        override val cutsInput: Observable<CutController.Input> = this@ResearchScreen.cutsInputObservable
+        override val cutsContainerInputs: Observable<CutsContainerController.Input> =
+          this@ResearchScreen.cutsContainerInputObservable
+        override val cutsContainerOutput: (CutsContainerController.Output) -> Unit =
+          ::cutsContainerOutput
+        override val cutsInput: Observable<CutController.Input> =
+          this@ResearchScreen.cutsInputObservable
       })
     }
 
@@ -160,7 +161,8 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
       marks(dependencies = object : MarksComponent.Dependencies,
         Dependencies by props.dependencies {
         override val marksOutput: (MarksController.Output) -> Unit = ::marksOutput
-        override val marksInput: Observable<MarksController.Input> = this@ResearchScreen.marksInputObservable
+        override val marksInput: Observable<MarksController.Input> =
+          this@ResearchScreen.marksInputObservable
         override val isPlanar: Boolean = sizesData!!.type.isPlanar()
         override val data: ResearchSlicesSizesDataNew = sizesData!!
       })
@@ -178,7 +180,8 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
       tools(dependencies = object : ToolsComponent.Dependencies,
         Dependencies by props.dependencies {
         override val toolsOutput: (Output) -> Unit = ::toolsOutput
-        override val toolsInput: Observable<ToolsController.Input> = this@ResearchScreen.toolsInputObservable
+        override val toolsInput: Observable<ToolsController.Input> =
+          this@ResearchScreen.toolsInputObservable
         override val open: Boolean = state.toolsOpen
         override val data: ResearchSlicesSizesDataNew = model.data!!
       })
@@ -191,9 +194,12 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
       cuts(dependencies = object : CutsContainerViewComponent.Dependencies,
         Dependencies by props.dependencies {
         override val data: ResearchSlicesSizesDataNew = model.data!!
-        override val cutsContainerInputs: Observable<CutsContainerController.Input> = this@ResearchScreen.cutsContainerInputObservable
-        override val cutsContainerOutput: (CutsContainerController.Output) -> Unit = ::cutsContainerOutput
-        override val cutsInput: Observable<CutController.Input> = this@ResearchScreen.cutsInputObservable
+        override val cutsContainerInputs: Observable<CutsContainerController.Input> =
+          this@ResearchScreen.cutsContainerInputObservable
+        override val cutsContainerOutput: (CutsContainerController.Output) -> Unit =
+          ::cutsContainerOutput
+        override val cutsInput: Observable<CutController.Input> =
+          this@ResearchScreen.cutsInputObservable
       })
     }
 
@@ -206,8 +212,8 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
       val sizesData = model.data
       covidMarks(dependencies = object : CovidMarksComponent.Dependencies,
         Dependencies by props.dependencies {
-        override val marksOutput: (CovidMarksController.Output) -> Unit = ::covidMarksOutput
-        override val marksInput: Observable<CovidMarksController.Input> =
+        override val covidMarksOutput: (CovidMarksController.Output) -> Unit = ::covidMarksOutput
+        override val covidMarksInput: Observable<CovidMarksController.Input> =
           this@ResearchScreen.covidMarksInputObservable
         override val data: ResearchSlicesSizesDataNew = sizesData!!
         override val open: Boolean = state.marksOpen
@@ -236,7 +242,10 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
         cutsContainerInputObservable.onNext(CutsContainerController.Input.GridChanged(output.grid))
       }
       is Output.Back -> researchViewDelegate.dispatch(ResearchView.Event.BackToList)
-      is Output.Close -> marksInputObservable.onNext(MarksController.Input.CloseResearchRequested)
+      is Output.Close -> {
+        covidMarksInputObservable.onNext(CovidMarksController.Input.CloseResearchRequested)
+        marksInputObservable.onNext(MarksController.Input.CloseResearchRequested)
+      }
     }
   }
 
@@ -291,26 +300,26 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
 
   private fun covidMarksOutput(output: CovidMarksController.Output) {
     when (output) {
-
-      else -> TODO()
-    }.let { }
-  }
-
-  private fun RBuilder.formDialog(open: Boolean) {
-    fun handleClose() {
-      setState { dialogOpen = false}
-    }
-    mDialog(open, onClose =  { _, _ -> handleClose() }) {
-      mDialogTitle("Комментарий (можно оставить поле пустым) (5/5)")
-      mDialogContent {
-        mTextField("Комментарий", autoFocus = true, margin = MFormControlMargin.dense, type = InputType.text, fullWidth = true)
-      }
-      mDialogActions {
-        mButton("Закрыть", onClick = { handleClose() }, variant = MButtonVariant.text)
-        mButton("Подтвердить",  onClick = { handleClose() }, variant = MButtonVariant.text)
-      }
+      CovidMarksController.Output.CloseResearch ->
+        researchViewDelegate.dispatch(ResearchView.Event.Close)
     }
   }
+
+//  private fun RBuilder.formDialog(open: Boolean) {
+//    fun handleClose() {
+//      setState { dialogOpen = false}
+//    }
+//    mDialog(open, onClose =  { _, _ -> handleClose() }) {
+//      mDialogTitle("Комментарий (можно оставить поле пустым) (5/5)")
+//      mDialogContent {
+//        mTextField("Комментарий", autoFocus = true, margin = MFormControlMargin.dense, type = InputType.text, fullWidth = true)
+//      }
+//      mDialogActions {
+//        mButton("Закрыть", onClick = { handleClose() }, variant = MButtonVariant.text)
+//        mButton("Подтвердить",  onClick = { handleClose() }, variant = MButtonVariant.text)
+//      }
+//    }
+//  }
 
 
   private fun updateState(model: ResearchView.Model) = setState { researchModel = model }

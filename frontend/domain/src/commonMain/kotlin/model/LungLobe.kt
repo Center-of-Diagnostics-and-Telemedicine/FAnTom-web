@@ -109,11 +109,11 @@ fun Map<Int, LungLobeModel>.toCovidMarkEntity(): CovidMarkEntity {
 
   return CovidMarkEntity(
     covidMarkData = CovidMarkData(
-      rightUpperLobeValue = rightUpperLobeValue?.value?.value ?: -1,
-      rightLowerLobeValue = rightLowerLobeValue?.value?.value ?: -1,
-      middleLobeValue = middleLobeValue?.value?.value ?: -1,
-      leftUpperLobeValue = leftUpperLobeValue?.value?.value ?: -1,
-      leftLowerLobeValue = leftLowerLobeValue?.value?.value ?: -1,
+      rightUpperLobeValue = rightUpperLobeValue?.value?.value ?: noValue,
+      rightLowerLobeValue = rightLowerLobeValue?.value?.value ?: noValue,
+      middleLobeValue = middleLobeValue?.value?.value ?: noValue,
+      leftUpperLobeValue = leftUpperLobeValue?.value?.value ?: noValue,
+      leftLowerLobeValue = leftLowerLobeValue?.value?.value ?: noValue,
     )
   )
 }

@@ -7,8 +7,10 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.observable.Observable
 import com.badoo.reaktive.observable.subscribe
 import com.ccfraser.muirwik.components.list.mList
+import components.alert
 import controller.CovidMarksController
 import controller.CovidMarksControllerImpl
+import destroy
 import kotlinx.css.Display
 import kotlinx.css.FlexDirection
 import kotlinx.css.display
@@ -45,7 +47,7 @@ class CovidMarksComponent(prps: CovidMarksProps) :
       lifecycleRegistry
     )
     val dependencies = props.dependencies
-    val disposable = dependencies.marksInput.subscribe { controller.input(it) }
+    val disposable = dependencies.covidMarksInput.subscribe { controller.input(it) }
     lifecycleRegistry.doOnDestroy(disposable::dispose)
   }
 
@@ -59,6 +61,11 @@ class CovidMarksComponent(prps: CovidMarksProps) :
   }
 
   override fun RBuilder.render() {
+    alert(
+      message = state.model.error,
+      open = state.model.error.isNotEmpty(),
+      handleClose = { marksViewDelegate.dispatch(CovidMarksView.Event.DissmissError) }
+    )
 
     styledDiv {
       css {
@@ -89,12 +96,16 @@ class CovidMarksComponent(prps: CovidMarksProps) :
 
   private fun updateState(marksModel: Model) = setState { model = marksModel }
 
+  override fun componentWillUnmount() {
+    lifecycleRegistry.destroy()
+  }
+
   interface Dependencies {
     val storeFactory: StoreFactory
     val covidMarksRepository: CovidMarksRepository
-    val marksOutput: (CovidMarksController.Output) -> Unit
+    val covidMarksOutput: (CovidMarksController.Output) -> Unit
     val data: ResearchSlicesSizesDataNew
-    val marksInput: Observable<CovidMarksController.Input>
+    val covidMarksInput: Observable<CovidMarksController.Input>
     val open: Boolean
     val research: Research
   }

@@ -34,6 +34,8 @@ const val dockerDataStorePath = "/app/dicom"
 
 const val ID_FIELD = "id"
 
+const val noValue = -1
+
 const val tenMinutes: Long = 600000
 
 const val libraryServerPort: Int = 5555
