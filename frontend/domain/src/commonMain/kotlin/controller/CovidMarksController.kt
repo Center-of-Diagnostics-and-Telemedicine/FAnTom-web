@@ -2,14 +2,10 @@ package controller
 
 import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.store.StoreFactory
-import model.Circle
-import model.Cut
-import model.MarkModel
+import model.Research
 import model.ResearchSlicesSizesDataNew
 import repository.CovidMarksRepository
-import repository.MarksRepository
 import view.CovidMarksView
-import view.MarksView
 
 interface CovidMarksController {
 
@@ -25,7 +21,7 @@ interface CovidMarksController {
     val lifecycle: Lifecycle
     val covidMarksRepository: CovidMarksRepository
     val marksOutput: (Output) -> Unit
-    val researchId: Int
+    val research: Research
     val data: ResearchSlicesSizesDataNew
   }
 
@@ -33,7 +29,7 @@ interface CovidMarksController {
   }
 
   sealed class Input {
-    object Idle: Input()
+    object Idle : Input()
     object CloseResearchRequested : Input()
   }
 }

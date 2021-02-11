@@ -86,7 +86,7 @@ fun LungLobeModel.changeValue(newValue: Int): LungLobeModel {
 
 fun CovidMarkEntity.toLungLobeModel(): Map<Int, LungLobeModel> {
   val rightUpperLobeModel = rightUpperLobe.changeValue(covidMarkData.rightUpperLobeValue)
-  val rightLowerLobeModel = leftLowerLobe.changeValue(covidMarkData.leftLowerLobeValue)
+  val rightLowerLobeModel = rightLowerLobe.changeValue(covidMarkData.rightLowerLobeValue)
   val middleLobeModel = middleLobe.changeValue(covidMarkData.middleLobeValue)
   val leftUpperLobeModel = leftUpperLobe.changeValue(covidMarkData.leftUpperLobeValue)
   val leftLowerLobeModel = leftLowerLobe.changeValue(covidMarkData.leftLowerLobeValue)
@@ -109,11 +109,11 @@ fun Map<Int, LungLobeModel>.toCovidMarkEntity(): CovidMarkEntity {
 
   return CovidMarkEntity(
     covidMarkData = CovidMarkData(
-      rightUpperLobeValue = rightUpperLobeValue?.value?.value ?: zeroValue.value,
-      rightLowerLobeValue = rightLowerLobeValue?.value?.value ?: zeroValue.value,
-      middleLobeValue = middleLobeValue?.value?.value ?: zeroValue.value,
-      leftUpperLobeValue = leftUpperLobeValue?.value?.value ?: zeroValue.value,
-      leftLowerLobeValue = leftLowerLobeValue?.value?.value ?: zeroValue.value,
+      rightUpperLobeValue = rightUpperLobeValue?.value?.value ?: -1,
+      rightLowerLobeValue = rightLowerLobeValue?.value?.value ?: -1,
+      middleLobeValue = middleLobeValue?.value?.value ?: -1,
+      leftUpperLobeValue = leftUpperLobeValue?.value?.value ?: -1,
+      leftLowerLobeValue = leftLowerLobeValue?.value?.value ?: -1,
     )
   )
 }

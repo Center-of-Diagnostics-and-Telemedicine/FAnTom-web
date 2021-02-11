@@ -6,7 +6,6 @@ import com.badoo.reaktive.utils.ensureNeverFrozen
 import model.LungLobeModel
 import model.initialLungLobeModels
 import store.covid.CovidMarksStore.*
-import store.marks.MarksStoreAbstractFactory
 
 abstract class CovidMarksStoreAbstractFactory(
   private val storeFactory: StoreFactory
@@ -29,7 +28,7 @@ abstract class CovidMarksStoreAbstractFactory(
 
   protected sealed class Result : JvmSerializable {
     object Loading : Result()
-    data class Loaded(val covidLungLobes: Map<Int,LungLobeModel>) : Result()
+    data class Loaded(val covidLungLobes: Map<Int, LungLobeModel>) : Result()
     data class Error(val error: String) : Result()
     object DismissErrorRequested : Result()
   }

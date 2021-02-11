@@ -11,8 +11,8 @@ data class CovidMarkEntity(
 @Serializable
 data class CovidMarkData(
   val rightUpperLobeValue: Int,
-  val middleLobeValue: Int,
   val rightLowerLobeValue: Int,
+  val middleLobeValue: Int,
   val leftUpperLobeValue: Int,
   val leftLowerLobeValue: Int
 )

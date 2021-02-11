@@ -17,7 +17,7 @@ import store.covid.CovidMarksStoreAbstractFactory
 internal class CovidMarksStoreFactory(
   storeFactory: StoreFactory,
   val repository: CovidMarksRepository,
-  val researchId: Int,
+  val research: Research,
   val data: ResearchSlicesSizesDataNew
 ) : CovidMarksStoreAbstractFactory(
   storeFactory = storeFactory
@@ -29,7 +29,7 @@ internal class CovidMarksStoreFactory(
 
     override fun executeAction(action: Unit, getState: () -> State) {
       singleFromCoroutine {
-        repository.getMark(researchId)
+        repository.getMark(research.id)
       }
         .map(CovidMarkEntity::toLungLobeModel)
         .subscribeOn(ioScheduler)
@@ -65,8 +65,8 @@ internal class CovidMarksStoreFactory(
         val newModel = lungLobeModel.changeValue(variant)
         val newMap = getState().covidLungLobes.toMutableMap()
         newMap[lungLobeModel.id] = newModel
-        repository.saveMark(newMap.toCovidMarkEntity(), researchId)
-        newMap
+        repository.saveMark(newMap.toCovidMarkEntity(), research.id)
+        return@singleFromCoroutine newMap
       }
         .subscribeOn(ioScheduler)
         .map(Result::Loaded)

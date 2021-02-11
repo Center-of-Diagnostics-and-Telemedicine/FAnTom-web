@@ -107,6 +107,7 @@ fun main(args: Array<String>) {
         closeSession(sessionRepository)
 
         mark(covidMarksRepository)
+        getCovidMark(covidMarksRepository, researchRepository)
 
         getMarks(multiPlanarMarksRepository, planarMarksRepository, researchRepository)
         createMark(multiPlanarMarksRepository, planarMarksRepository, researchRepository)

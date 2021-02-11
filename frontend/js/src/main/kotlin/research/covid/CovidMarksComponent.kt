@@ -6,14 +6,17 @@ import com.arkivanov.mvikotlin.core.lifecycle.doOnDestroy
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.observable.Observable
 import com.badoo.reaktive.observable.subscribe
-import com.ccfraser.muirwik.components.list.*
+import com.ccfraser.muirwik.components.list.mList
 import controller.CovidMarksController
 import controller.CovidMarksControllerImpl
-import kotlinx.css.*
+import kotlinx.css.Display
+import kotlinx.css.FlexDirection
+import kotlinx.css.display
+import kotlinx.css.flexDirection
+import model.Research
 import model.ResearchSlicesSizesDataNew
 import react.*
 import repository.CovidMarksRepository
-import repository.MarksRepository
 import resume
 import styled.css
 import styled.styledDiv
@@ -51,7 +54,6 @@ class CovidMarksComponent(prps: CovidMarksProps) :
     val marksControllerDependencies =
       object : CovidMarksController.Dependencies, Dependencies by dependencies {
         override val lifecycle: Lifecycle = lifecycleRegistry
-        override val researchId: Int = dependencies.data.researchId
       }
     return CovidMarksControllerImpl(marksControllerDependencies)
   }
@@ -94,6 +96,7 @@ class CovidMarksComponent(prps: CovidMarksProps) :
     val data: ResearchSlicesSizesDataNew
     val marksInput: Observable<CovidMarksController.Input>
     val open: Boolean
+    val research: Research
   }
 }
 
@@ -103,6 +106,7 @@ interface CovidMarksProps : RProps {
   var dependencies: CovidMarksComponent.Dependencies
 }
 
-fun RBuilder.covidMarks(dependencies: CovidMarksComponent.Dependencies) = child(CovidMarksComponent::class) {
-  attrs.dependencies = dependencies
-}
+fun RBuilder.covidMarks(dependencies: CovidMarksComponent.Dependencies) =
+  child(CovidMarksComponent::class) {
+    attrs.dependencies = dependencies
+  }

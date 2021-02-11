@@ -20,7 +20,8 @@ fun Route.mark(
     }
 
     val user = call.user
-    val markModel = call.receive<CovidMarkEntity>().toCovidMarkModel(user.id, it.id)
+    val markEntity = call.receive<CovidMarkEntity>()
+    val markModel = markEntity.toCovidMarkModel(user.id, it.id)
 
     try {
       val existing =
@@ -30,7 +31,7 @@ fun Route.mark(
       } else {
         covidMarkRepository.updateMark(markModel)
       }
-      call.respond(BaseResponse(response = OK()))
+      call.respond(CovidMarksResponse(response = markEntity))
     } catch (e: Exception) {
       application.log.error("Failed to create/update CovidMark", e)
       respondError(ErrorStringCode.CREATE_MARK_FAILED)

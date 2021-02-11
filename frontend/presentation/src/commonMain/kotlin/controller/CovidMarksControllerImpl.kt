@@ -10,8 +10,10 @@ import com.arkivanov.mvikotlin.extensions.reaktive.states
 import com.badoo.reaktive.observable.mapNotNull
 import com.badoo.reaktive.subject.Relay
 import com.badoo.reaktive.subject.publish.PublishSubject
-import mapper.*
-import mapper.marksEventToIntent
+import mapper.covidMarksEventToIntent
+import mapper.covidMarksLabelToMarksOutput
+import mapper.covidMarksStateToModel
+import mapper.inputToCovidMarksIntent
 import store.CovidMarksStoreFactory
 import view.CovidMarksView
 
@@ -21,7 +23,7 @@ class CovidMarksControllerImpl(val dependencies: CovidMarksController.Dependenci
   private val marksStore = CovidMarksStoreFactory(
     storeFactory = dependencies.storeFactory,
     repository = dependencies.covidMarksRepository,
-    researchId = dependencies.researchId,
+    research = dependencies.research,
     data = dependencies.data
   ).create()
 
