@@ -16,6 +16,7 @@ val marksEventToIntent: Event.() -> Intent? = {
     is Event.ItemCommentChanged -> Intent.UpdateComment(mark, comment)
     is Event.DeleteItem -> Intent.DeleteMark(mark)
     is Event.ChangeMarkType -> Intent.ChangeMarkType(type, markId)
+    is Event.ChangeVisibility -> Intent.ChangeVisibility(mark)
     Event.DissmissError -> Intent.DismissError
   }
 }

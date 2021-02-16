@@ -11,6 +11,7 @@ data class MarkEntity(
   val comment: String
 ) {
   var selected = false
+  var visible = true
 }
 
 
@@ -26,7 +27,8 @@ data class MarkData(
   val cutType: Int,
   val shapeType: Int
 ) {
-  fun name(): String = "x: ${x.roundToInt()}, y: ${y.roundToInt()}, z: ${z.roundToInt()}, r: ${radiusHorizontal.roundToInt()}, shapeType: $shapeType"
+  fun name(): String =
+    "x: ${x.roundToInt()}, y: ${y.roundToInt()}, z: ${z.roundToInt()}, r: ${radiusHorizontal.roundToInt()}, shapeType: $shapeType"
 }
 
 data class MarkModel(
@@ -35,6 +37,7 @@ data class MarkModel(
   val type: MarkTypeModel?,
   val comment: String
 ) {
+  var visible: Boolean = true
   var selected: Boolean = false
 }
 
@@ -51,7 +54,10 @@ fun MarkEntity.toMarkModel(types: Map<String, MarkTypeEntity>): MarkModel =
     markData = markData,
     type = types[type]?.toMarkTypeModel(type),
     comment = comment,
-  ).also { it.selected = selected }
+  ).also {
+    it.selected = selected
+    it.visible = visible
+  }
 
 fun MarkTypeEntity.toMarkTypeModel(type: String): MarkTypeModel =
   MarkTypeModel(
@@ -67,4 +73,7 @@ fun MarkModel.toMarkEntity(): MarkEntity =
     markData = markData,
     type = type?.typeId ?: "",
     comment = comment,
-  ).also { it.selected = selected }
+  ).also {
+    it.selected = selected
+    it.visible = visible
+  }

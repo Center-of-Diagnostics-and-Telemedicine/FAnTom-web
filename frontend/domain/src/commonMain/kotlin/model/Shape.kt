@@ -83,7 +83,8 @@ private fun MarkModel.toCircle(cut: Cut, sliceNumber: Int): Circle? {
     when (cut.type) {
       CutType.EMPTY -> return null
       CutType.CT_AXIAL -> {
-        val horizontalRatio = cut.horizontalCutData!!.data.n_images.toDouble() / cut.data.screen_size_h
+        val horizontalRatio =
+          cut.horizontalCutData!!.data.n_images.toDouble() / cut.data.screen_size_h
         val verticalRatio = cut.verticalCutData!!.data.n_images.toDouble() / cut.data.screen_size_v
         return if (sliceNumber < (z + radiusHorizontal) && sliceNumber > (z - radiusHorizontal)) {
           val x = x / horizontalRatio
@@ -104,8 +105,10 @@ private fun MarkModel.toCircle(cut: Cut, sliceNumber: Int): Circle? {
       }
       CutType.CT_FRONTAL -> {
         return if ((sliceNumber < (y + radiusHorizontal)) && (sliceNumber > (y - radiusHorizontal))) {
-          val horizontalRatio = cut.horizontalCutData!!.data.n_images.toDouble() / cut.data.screen_size_h
-          val verticalRatio = cut.verticalCutData!!.data.n_images.toDouble() / cut.data.screen_size_v
+          val horizontalRatio =
+            cut.horizontalCutData!!.data.n_images.toDouble() / cut.data.screen_size_h
+          val verticalRatio =
+            cut.verticalCutData!!.data.n_images.toDouble() / cut.data.screen_size_v
           val resultX = x / horizontalRatio
           val z = if (cut.data.reversed == true) cut.data.screen_size_v - z else z
           val resultY = z / verticalRatio
@@ -126,8 +129,10 @@ private fun MarkModel.toCircle(cut: Cut, sliceNumber: Int): Circle? {
       }
       CutType.CT_SAGITTAL -> {
         return if ((sliceNumber < (x + radiusHorizontal)) && (sliceNumber > (x - radiusHorizontal))) {
-          val horizontalRatio = cut.horizontalCutData!!.data.n_images.toDouble() / cut.data.screen_size_h
-          val verticalRatio = cut.verticalCutData!!.data.n_images.toDouble() / cut.data.screen_size_v
+          val horizontalRatio =
+            cut.horizontalCutData!!.data.n_images.toDouble() / cut.data.screen_size_h
+          val verticalRatio =
+            cut.verticalCutData!!.data.n_images.toDouble() / cut.data.screen_size_v
           val resultX = y / horizontalRatio
           val z = if (cut.data.reversed == true) cut.data.screen_size_v - z else z
           val resultY = z / verticalRatio

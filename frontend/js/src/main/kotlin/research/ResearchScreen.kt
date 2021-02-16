@@ -174,16 +174,19 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
         open = state.toolsOpen,
         onClick = { setState { toolsOpen = !state.toolsOpen } }
       )
-      tools(dependencies = object : ToolsComponent.Dependencies,
-        Dependencies by props.dependencies {
-        override val toolsOutput: (Output) -> Unit = ::toolsOutput
-        override val toolsInput: Observable<ToolsController.Input> =
-          this@ResearchScreen.toolsInputObservable
-        override val open: Boolean = state.toolsOpen
-        override val data: ResearchSlicesSizesDataNew = model.data!!
-      })
+      tools(dependencies = toolsDependencies(model))
     }
   }
+
+  private fun toolsDependencies(model: ResearchView.Model) =
+    object : ToolsComponent.Dependencies,
+      Dependencies by props.dependencies {
+      override val toolsOutput: (Output) -> Unit = ::toolsOutput
+      override val toolsInput: Observable<ToolsController.Input> =
+        this@ResearchScreen.toolsInputObservable
+      override val open: Boolean = state.toolsOpen
+      override val data: ResearchSlicesSizesDataNew = model.data!!
+    }
 
   private fun marksDependencies(sizesData: ResearchSlicesSizesDataNew?) =
     object : MarksComponent.Dependencies,

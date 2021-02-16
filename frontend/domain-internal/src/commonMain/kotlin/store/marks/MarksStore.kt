@@ -20,6 +20,7 @@ interface MarksStore : Store<Intent, State, Label> {
     data class UpdateComment(val mark: MarkModel, val comment: String) : Intent()
     data class ChangeMarkType(val type: MarkTypeModel, val markId: Int) : Intent()
     data class SetCurrentMark(val mark: MarkModel) : Intent()
+    data class ChangeVisibility(val mark: MarkModel) : Intent()
 
     object DismissError : Intent()
     object ReloadRequested : Intent()

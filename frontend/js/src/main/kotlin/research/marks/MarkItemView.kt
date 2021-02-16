@@ -42,35 +42,28 @@ class MarkItemView(prps: MarkItemProps) : RComponent<MarkItemProps, MarkItemStat
       val area = props.mark
       mTableRow(
         key = area.id,
-        onClick = {
-          props.eventOutput(MarksView.Event.SelectItem(area))
-        }
+        onClick = { props.eventOutput(MarksView.Event.SelectItem(area)) }
       ) {
         if (area.selected) {
           css {
             backgroundColor = Color(theme.palette.primary.main)
           }
         }
-        mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) {
-          +"${round(area.markData.x)}"
+        mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.checkbox) {
+          mIconButton(
+            if (area.visible) "visibility" else "visibility_off",
+            onClick = { props.eventOutput(MarksView.Event.ChangeVisibility(area)) },
+            size = MIconButtonSize.small
+          )
         }
-        mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) {
-          +"${round(area.markData.y)}"
-        }
+        tableCell("${round(area.markData.x)}")
+        tableCell("${round(area.markData.y)}")
         if (props.isPlanar) {
-          mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) {
-            +"${round(area.markData.sizeVertical)}"
-          }
-          mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) {
-            +"${round(area.markData.sizeHorizontal)}"
-          }
+          tableCell("${round(area.markData.sizeVertical)}")
+          tableCell("${round(area.markData.sizeHorizontal)}")
         } else {
-          mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) {
-            +"${round(area.markData.z)}"
-          }
-          mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) {
-            +"${round(area.markData.sizeHorizontal)}"
-          }
+          tableCell("${round(area.markData.z)}")
+          tableCell("${round(area.markData.sizeHorizontal)}")
         }
 
         mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) {
@@ -94,7 +87,7 @@ class MarkItemView(prps: MarkItemProps) : RComponent<MarkItemProps, MarkItemStat
             }
           }
         }
-        mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) {
+        mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.checkbox) {
           mIconButton(
             "close",
             onClick = { props.eventOutput(MarksView.Event.DeleteItem(area)) },

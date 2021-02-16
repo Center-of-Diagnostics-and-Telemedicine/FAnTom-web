@@ -26,7 +26,10 @@ actual object MarksLocalDataSource : MarksLocal {
           markData = mark.markData,
           comment = mark.comment,
           type = mark.type,
-        ).also { newMark -> newMark.selected = mark.selected }
+        ).also { newMark ->
+          newMark.selected = mark.selected
+          newMark.visible = mark.visible
+        }
       )
     }
   }

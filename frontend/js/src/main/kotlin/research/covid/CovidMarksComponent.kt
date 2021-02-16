@@ -7,6 +7,7 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.observable.Observable
 import com.badoo.reaktive.observable.subscribe
 import com.ccfraser.muirwik.components.list.mList
+import com.ccfraser.muirwik.components.mDivider
 import components.alert
 import controller.CovidMarksController
 import controller.CovidMarksControllerImpl
@@ -66,6 +67,7 @@ class CovidMarksComponent(prps: CovidMarksProps) :
       open = state.model.error.isNotEmpty(),
       handleClose = { marksViewDelegate.dispatch(CovidMarksView.Event.DissmissError) }
     )
+    mDivider()
 
     styledDiv {
       css {

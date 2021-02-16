@@ -71,8 +71,10 @@ internal class ShapesStoreFactory(
 
       val moveRect = sideRects.firstOrNull {
         val partSideLength = it.sideLength / 2
-        val inVerticalBound = startDicomY > it.top - partSideLength && startDicomY < it.top + partSideLength
-        val inHorizontalBound = startDicomX > it.left - partSideLength && startDicomX < it.left + partSideLength
+        val inVerticalBound =
+          startDicomY > it.top - partSideLength && startDicomY < it.top + partSideLength
+        val inHorizontalBound =
+          startDicomX > it.left - partSideLength && startDicomX < it.left + partSideLength
         inVerticalBound && inHorizontalBound
       }
 
@@ -157,7 +159,9 @@ internal class ShapesStoreFactory(
     }
 
     private fun updateShapes(list: List<MarkModel>, state: () -> State) {
-      val shapes = list.mapNotNull { it.toShape(cut, state().sliceNumber) }
+      val shapes = list
+        .filter { it.visible }
+        .mapNotNull { it.toShape(cut, state().sliceNumber) }
       val selectedShape = shapes.firstOrNull { it.highlight }
       val rectangles = if (selectedShape != null && selectedShape.isCenter) {
         selectedShape.toRects(cut)

@@ -60,6 +60,8 @@ internal class MarksStoreFactory(
         Intent.HandleCloseResearch -> handleCloseResearch(getState)
         Intent.ReloadRequested -> TODO()
         Intent.DismissError -> dispatch(Result.DismissErrorRequested)
+        is Intent.ChangeVisibility ->
+          updateMarkWithoutSaving(intent.mark.apply { visible = !this.visible }, getState)
       }.let {}
     }
 

@@ -6,6 +6,8 @@ import com.arkivanov.mvikotlin.core.lifecycle.doOnDestroy
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.observable.Observable
 import com.badoo.reaktive.observable.subscribe
+import com.ccfraser.muirwik.components.mDivider
+import com.ccfraser.muirwik.components.mIcon
 import com.ccfraser.muirwik.components.mPaper
 import com.ccfraser.muirwik.components.table.*
 import com.ccfraser.muirwik.components.themeContext
@@ -13,11 +15,13 @@ import components.alert
 import controller.MarksController
 import controller.MarksControllerImpl
 import destroy
+import kotlinx.css.padding
 import model.Research
 import model.ResearchSlicesSizesDataNew
 import react.*
 import repository.MarksRepository
 import resume
+import styled.css
 import view.MarksView
 import view.MarksView.Model
 import view.initialMarksModel
@@ -61,38 +65,28 @@ class MarksComponent(prps: MarksProps) : RComponent<MarksProps, MarksState>(prps
         open = state.model.error.isNotEmpty(),
         handleClose = { marksViewDelegate.dispatch(MarksView.Event.DissmissError) }
       )
+      mDivider()
 
       mPaper {
         mTable {
           mTableHead {
             mTableRow {
-              mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) { +"X" }
-              mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) { +"Y" }
+              mTableCell(align = MTableCellAlign.center) {
+                css { padding = "8px" }
+                mIcon("visibility")
+              }
+              tableCell("X")
+              tableCell("Y")
 
               if (props.dependencies.isPlanar) {
-                mTableCell(
-                  align = MTableCellAlign.center,
-                  padding = MTableCellPadding.none
-                ) { +"mm_v" }
-                mTableCell(
-                  align = MTableCellAlign.center,
-                  padding = MTableCellPadding.none
-                ) { +"mm_h" }
+                tableCell("mm_v")
+                tableCell("mm_h")
               } else {
-                mTableCell(
-                  align = MTableCellAlign.center,
-                  padding = MTableCellPadding.none
-                ) { +"Z" }
-                mTableCell(
-                  align = MTableCellAlign.center,
-                  padding = MTableCellPadding.none
-                ) { +"mm" }
+                tableCell("Z")
+                tableCell("mm")
               }
-              mTableCell(
-                align = MTableCellAlign.center,
-                padding = MTableCellPadding.none
-              ) { +"Тип" }
-              mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) { }
+              tableCell("Тип")
+              tableCell("")
             }
           }
           mTableBody {
