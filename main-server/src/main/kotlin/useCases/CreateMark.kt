@@ -34,7 +34,7 @@ fun Route.createMark(
 
     try {
 
-      val mark = if (research.modality == CT_RESEARCH_TYPE) {
+      val mark = if (research.modality == CT_RESEARCH_MODALITY) {
         multiPlanarMarksRepository.create(markModel, user.id, it.id)
       } else {
         planarMarksRepository.create(markModel, user.id, it.id)

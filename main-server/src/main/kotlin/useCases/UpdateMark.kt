@@ -31,7 +31,7 @@ fun Route.updateMark(
 
     try {
 
-      if (research.modality == CT_RESEARCH_TYPE) {
+      if (research.modality == CT_RESEARCH_MODALITY) {
         multiPlanarMarksRepository.update(mark)
       } else {
         planarMarksRepository.update(mark)

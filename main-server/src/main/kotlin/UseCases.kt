@@ -1,5 +1,5 @@
 import io.ktor.auth.*
-import model.DX_RESEARCH_TYPE
+import model.DX_RESEARCH_MODALITY
 import model.UserModel
 import model.UserRole
 import model.hash
@@ -140,7 +140,7 @@ fun seedDBWithDicoms() {
           it[doctor1] = fileName
           it[doctor2] = fileName
           it[pos_in_block] = fileName
-          it[modality] = DX_RESEARCH_TYPE
+          it[modality] = DX_RESEARCH_MODALITY
         }
       }
     }

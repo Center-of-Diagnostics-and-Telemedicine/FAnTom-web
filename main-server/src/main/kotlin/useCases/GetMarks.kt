@@ -31,7 +31,7 @@ fun Route.getMarks(
 
     try {
 
-      val marks = if (research.modality == CT_RESEARCH_TYPE) {
+      val marks = if (research.modality == CT_RESEARCH_MODALITY) {
         multiPlanarMarksRepository.getAll(user.id, it.id)
       } else {
         planarMarksRepository.getAll(user.id, it.id)

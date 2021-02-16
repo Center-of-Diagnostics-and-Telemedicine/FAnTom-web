@@ -12,7 +12,7 @@ val marksStateToModel: State.() -> Model = {
 
 val marksEventToIntent: Event.() -> Intent? = {
   when (this) {
-    is Event.SelectItem -> Intent.SetCurrentMark(mark)
+    is Event.SelectItem -> Intent.SelectMark(mark)
     is Event.ItemCommentChanged -> Intent.UpdateComment(mark, comment)
     is Event.DeleteItem -> Intent.DeleteMark(mark)
     is Event.ChangeMarkType -> Intent.ChangeMarkType(type, markId)

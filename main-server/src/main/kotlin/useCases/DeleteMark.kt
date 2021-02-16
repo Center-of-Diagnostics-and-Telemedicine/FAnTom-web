@@ -29,7 +29,7 @@ fun Route.deleteMark(
 
     try {
 
-      if (research.modality == CT_RESEARCH_TYPE) {
+      if (research.modality == CT_RESEARCH_MODALITY) {
         multiPlanarMarksRepository.delete(it.markId)
       } else {
         planarMarksRepository.delete(it.markId)

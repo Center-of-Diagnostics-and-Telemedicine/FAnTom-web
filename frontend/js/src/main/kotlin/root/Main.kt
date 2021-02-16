@@ -31,7 +31,6 @@ private class Application {
   )
 
   val markRepository = MarksRepositoryImpl(
-    local = MarksLocalDataSource,
     remote = MarksRemoteDataSource,
     token = getToken
   )

@@ -36,27 +36,27 @@ internal class MarksStoreFactory(
 
       singleFromCoroutine {
         repository.getMarks(research.id)
-      }.subscribeSingle()
+      }
+        .map { list -> list.map { it.toMarkModel(data.markTypes) } }
+        .subscribeSingle()
     }
 
     override fun executeIntent(intent: Intent, getState: () -> State) {
       when (intent) {
-        is Intent.HandleNewMark -> handleNewMark(intent.shape, intent.sliceNumber, intent.cut)
+        is Intent.HandleNewMark ->
+          handleNewMark(intent.shape, intent.sliceNumber, intent.cut, getState)
         is Intent.SelectMark -> selectMark(intent.mark, getState)
         is Intent.UnselectMark -> unSelectMark(intent.mark, getState)
         is Intent.UpdateMarkWithoutSaving -> updateMarkWithoutSaving(intent.markToUpdate, getState)
-        is Intent.UpdateMarkWithSave -> updateMarkWithSave(intent.mark)
-        is Intent.DeleteMark -> deleteMark(intent.mark)
-        is Intent.UpdateComment -> updateComment(intent.mark, intent.comment)
-        Intent.DeleteClicked -> getState().marks.firstOrNull { it.selected }?.let { deleteMark(it) }
+        is Intent.UpdateMarkWithSave -> updateMarkWithSave(intent.mark, getState)
+        is Intent.DeleteMark -> deleteMark(intent.mark, getState)
+        is Intent.UpdateComment -> updateComment(intent.mark, intent.comment, getState)
+        Intent.DeleteClicked ->
+          getState().marks.firstOrNull { it.selected }?.let { deleteMark(it, getState) }
         is Intent.ChangeMarkType ->
           getState().marks.firstOrNull { it.id == intent.markId }?.copy(type = intent.type)?.let {
-            updateMarkWithSave(it)
+            updateMarkWithSave(it, getState)
           }
-        is Intent.SetCurrentMark -> {
-          getState().marks.firstOrNull { it.selected }?.let { unSelectMark(it, getState) }
-          getState().marks.firstOrNull { it.id == intent.mark.id }?.let { selectMark(it, getState) }
-        }
         Intent.HandleCloseResearch -> handleCloseResearch(getState)
         Intent.ReloadRequested -> TODO()
         Intent.DismissError -> dispatch(Result.DismissErrorRequested)
@@ -65,32 +65,32 @@ internal class MarksStoreFactory(
       }.let {}
     }
 
-    private fun handleNewMark(shape: Shape, sliceNumber: Int, cut: Cut) {
+    private fun handleNewMark(shape: Shape, sliceNumber: Int, cut: Cut, getState: () -> State) {
       singleFromCoroutine {
         val markToSave = cut.getMarkToSave(shape, sliceNumber)
-        repository.saveMark(markToSave!!, research.id)
-        repository.getMarks(research.id)
+        val mark = repository.saveMark(markToSave!!, research.id).toMarkModel(data.markTypes)
+        getState().marks.plus(mark)
       }.subscribeSingle()
     }
 
-    private fun updateMarkWithSave(mark: MarkModel) {
+    private fun updateMarkWithSave(mark: MarkModel, getState: () -> State) {
       singleFromCoroutine {
         repository.updateMark(mark.toMarkEntity(), research.id)
-        repository.getMarks(research.id)
+        getState().marks.replace(newValue = mark, block = { it.id == mark.id })
       }.subscribeSingle()
     }
 
-    private fun deleteMark(mark: MarkModel) {
+    private fun deleteMark(mark: MarkModel, getState: () -> State) {
       singleFromCoroutine {
         repository.deleteMark(mark.id, research.id)
-        repository.getMarks(research.id)
+        getState().marks.filter { it.id != mark.id }.minus(mark)
       }.subscribeSingle()
     }
 
-    private fun updateComment(mark: MarkModel, comment: String) {
+    private fun updateComment(mark: MarkModel, comment: String, getState: () -> State) {
       singleFromCoroutine {
         repository.updateMark(mark.toMarkEntity().copy(comment = comment), research.id)
-        repository.getMarks(research.id)
+        getState().marks.replace(newValue = mark, block = { it.id == mark.id })
       }.subscribeSingle()
     }
 
@@ -103,42 +103,32 @@ internal class MarksStoreFactory(
       }
     }
 
-    private fun updateMarkWithoutSaving(markToUpdate: MarkModel, getState: () -> State) {
-      val marks = getState().marks.replace(markToUpdate) { it.id == markToUpdate.id }
+    private fun updateMarkWithoutSaving(mark: MarkModel, getState: () -> State) {
+      val marks = getState().marks.replace(newValue = mark, block = { it.id == mark.id })
       dispatch(Result.Loaded(marks))
       publish(Label.MarksLoaded(marks))
     }
 
     private fun selectMark(mark: MarkModel, state: () -> State) {
       singleFromCoroutine {
-        repository.updateMark(
-          mark = mark.toMarkEntity().also { it.selected = true },
-          researchId = research.id,
-          localy = true
-        )
-        publish(Label.CenterSelectedMark(mark))
-        repository.getMarks(research.id)
+        val list = state().marks
+        list.map { it.selected = false }
+        list.firstOrNull { it.id == mark.id }?.selected = true
+        if (research.isPlanar().not()) publish(Label.CenterSelectedMark(mark))
+        list
       }.subscribeSingle()
     }
 
     private fun unSelectMark(mark: MarkModel, state: () -> State) {
       singleFromCoroutine {
-        repository.updateMark(
-          mark = mark.toMarkEntity().also { it.selected = false },
-          researchId = research.id,
-          localy = true
-        )
-        repository.getMarks(research.id)
+        val list = state().marks
+        list.map { it.selected = false }
+        list
       }.subscribeSingle()
     }
 
-
-    private fun Single<List<MarkEntity>>.markEntityToMarkModel(): Single<List<MarkModel>> =
-      map { list -> list.map { it.toMarkModel(data.markTypes) } }
-
-    private fun Single<List<MarkEntity>>.subscribeSingle() =
+    private fun Single<List<MarkModel>>.subscribeSingle() =
       subscribeOn(ioScheduler)
-        .markEntityToMarkModel()
         .map(Result::Loaded)
         .observeOn(mainScheduler)
         .subscribeScoped(

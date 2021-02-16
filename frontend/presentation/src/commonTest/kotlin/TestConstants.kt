@@ -15,7 +15,7 @@ val testResearches = listOf(
     seen = false,
     done = false,
     marked = false,
-    modality = CT_RESEARCH_TYPE,
+    modality = CT_RESEARCH_MODALITY,
     category = CT_RESEARCH_CATEGORY
   ),
   Research(
@@ -24,7 +24,7 @@ val testResearches = listOf(
     seen = true,
     done = true,
     marked = true,
-    modality = CT_RESEARCH_TYPE,
+    modality = CT_RESEARCH_MODALITY,
     category = CT_RESEARCH_CATEGORY
   ),
   Research(
@@ -33,7 +33,7 @@ val testResearches = listOf(
     seen = false,
     done = true,
     marked = false,
-    modality = CT_RESEARCH_TYPE,
+    modality = CT_RESEARCH_MODALITY,
     category = CT_RESEARCH_CATEGORY
   ),
   Research(
@@ -42,7 +42,7 @@ val testResearches = listOf(
     seen = true,
     done = false,
     marked = false,
-    modality = CT_RESEARCH_TYPE,
+    modality = CT_RESEARCH_MODALITY,
     category = CT_RESEARCH_CATEGORY
   ),
 )

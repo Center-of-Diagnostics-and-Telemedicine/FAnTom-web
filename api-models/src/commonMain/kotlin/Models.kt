@@ -184,3 +184,11 @@ data class User(
   val name: String,
   val password: String
 )
+
+fun Research.isPlanar(): Boolean =
+  when (this.modality) {
+    CT_RESEARCH_MODALITY -> false
+    MG_RESEARCH_MODALITY -> true
+    DX_RESEARCH_MODALITY -> true
+    else -> false
+  }
