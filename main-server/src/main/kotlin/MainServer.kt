@@ -66,7 +66,7 @@ fun main(args: Array<String>) {
     }
     install(DefaultHeaders)
     install(CallLogging) {
-      level = Level.INFO
+      level = Level.DEBUG
     }
     install(ConditionalHeaders)
     install(Locations)

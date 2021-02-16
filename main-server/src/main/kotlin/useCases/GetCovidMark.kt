@@ -4,10 +4,7 @@ import io.ktor.application.*
 import io.ktor.locations.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import model.CovidMarksResponse
-import model.ErrorModel
-import model.ErrorStringCode
-import model.toCovidMarkEntity
+import model.*
 import repository.CovidMarkRepository
 import repository.ResearchRepository
 import util.CovidMark
@@ -35,7 +32,7 @@ fun Route.getCovidMark(
       val mark = covidMarksRepository.getMark(user.id, it.id)
 
       when (mark) {
-        null -> respondError(ErrorStringCode.GET_MARKS_FAILED)
+        null -> call.respond(CovidMarksResponse(response = getEmptyCovidMarkEntity()))
         else -> call.respond(CovidMarksResponse(response = mark.toCovidMarkEntity()))
       }
 

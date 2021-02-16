@@ -16,3 +16,14 @@ data class CovidMarkData(
   val leftUpperLobeValue: Int,
   val leftLowerLobeValue: Int
 )
+
+fun getEmptyCovidMarkEntity(): CovidMarkEntity =
+  CovidMarkEntity(
+    covidMarkData = CovidMarkData(
+      rightUpperLobeValue = noValue,
+      rightLowerLobeValue = noValue,
+      middleLobeValue = noValue,
+      leftUpperLobeValue = noValue,
+      leftLowerLobeValue = noValue,
+    )
+  )

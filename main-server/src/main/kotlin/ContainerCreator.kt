@@ -25,15 +25,15 @@ interface ContainerCreator {
   suspend fun deleteLibrary(containerId: String)
 }
 
-class ContainerCreatorImpl() : ContainerCreator {
+class ContainerCreatorImpl : ContainerCreator {
 
   private val config = DefaultDockerClientConfig.createDefaultConfigBuilder()
     /**
      * for mac
      **/
-    .withDockerHost("unix:///var/run/docker.sock")
-    .withRegistryUsername("max")
-    .withRegistryPassword(" ")
+//    .withDockerHost("unix:///var/run/docker.sock")
+//    .withRegistryUsername("max")
+//    .withRegistryPassword(" ")
 
     /**
      * for linux server
@@ -45,7 +45,7 @@ class ContainerCreatorImpl() : ContainerCreator {
     /**
      * for windows
      **/
-//    .withDockerHost("tcp://localhost:2375")
+    .withDockerHost("tcp://localhost:2375")
 //    .withRegistryUsername("m.gusev")
 //    .withRegistryPassword("Gusev!8")
     .build()
