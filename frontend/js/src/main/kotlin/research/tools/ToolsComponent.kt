@@ -25,6 +25,7 @@ import repository.MipRepository
 import research.tools.ToolsComponent.ToolsStyles.dialogListItemContainer
 import research.tools.ToolsComponent.ToolsStyles.dialogListItemLeft
 import research.tools.ToolsComponent.ToolsStyles.dialogListItemRight
+import research.tools.ToolsComponent.ToolsStyles.headerStyle
 import research.tools.brightness.BrightnessViewProxy
 import research.tools.brightness.renderBrightness
 import research.tools.grid.GridViewProxy
