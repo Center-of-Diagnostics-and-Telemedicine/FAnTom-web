@@ -39,10 +39,15 @@ internal class DrawStoreFactory(
         is Intent.MouseOut -> handleMouseOut()
         is Intent.CenterMarkClick ->
           publish(Label.CenterMarkClick(intent.startDicomX, intent.startDicomY))
-        is Intent.MouseWheel -> publish(Label.ChangeSlice(intent.deltaDicomY))
+        is Intent.MouseWheel -> handleMouseData(intent)
         Intent.DoubleClick -> publish(Label.OpenFullCut)
       }.let {}
     }
+
+    private fun handleMouseData(intent: Intent.MouseWheel) =
+      if (cut.data.n_images > 1) {
+        publish(Label.ChangeSlice(intent.deltaDicomY))
+      } else null
 
     private fun handleStartClick(startDicomX: Double, startDicomY: Double) {
       dispatch(Result.StartClick(startDicomX = startDicomX, startDicomY = startDicomY))
