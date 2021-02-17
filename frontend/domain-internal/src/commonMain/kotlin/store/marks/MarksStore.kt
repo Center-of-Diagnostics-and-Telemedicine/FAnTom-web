@@ -29,7 +29,6 @@ interface MarksStore : Store<Intent, State, Label> {
 
   data class State(
     val marks: List<MarkModel> = listOf(),
-    val current: MarkModel? = null,
     val loading: Boolean = false,
     val error: String = "",
     val markTypes: List<MarkTypeModel> = listOf()

@@ -1,23 +1,10 @@
-package repository
-
 import com.badoo.reaktive.utils.atomic.AtomicInt
 import com.badoo.reaktive.utils.atomic.AtomicReference
 import model.INITIAL_MIP_VALUE
 import model.Mip
+import repository.MipRepository
 
-interface MipRepository {
-
-  fun getMip(): Mip
-  fun setMip(value: Mip)
-
-  fun getMipValue(): Int
-  fun setMipValue(value: Int)
-
-  fun clean()
-
-}
-
-class MipRepositoryImpl : MipRepository {
+class TestMipRepository : MipRepository {
 
   private val mip: AtomicReference<Mip> = AtomicReference(Mip.No)
   private val mipValue: AtomicInt = AtomicInt(INITIAL_MIP_VALUE)

@@ -25,9 +25,9 @@ const val TYPE_FRONTAL = "FRONTAL"
 const val TYPE_SAGITTAL = "SAGITTAL"
 
 //mac
-//const val localDataStorePath = "/Users/max/Documents/test"
+const val localDataStorePath = "/Users/max/Documents/test"
 //win
-const val localDataStorePath = "C:\\dicom\\test"
+//const val localDataStorePath = "C:\\dicom\\test"
 //deploy
 //const val localDataStorePath = "/data/fantom/dx2"
 const val dockerDataStorePath = "/app/dicom"
@@ -78,9 +78,9 @@ const val INITIAL_WHITE = 350.0
 const val INITIAL_GAMMA = 1.0
 const val INITIAL_MIP_VALUE = 0
 
-const val CT_RESEARCH_TYPE = "CT"
-const val MG_RESEARCH_TYPE = "MG"
-const val DX_RESEARCH_TYPE = "DX"
+const val CT_RESEARCH_MODALITY = "CT"
+const val MG_RESEARCH_MODALITY = "MG"
+const val DX_RESEARCH_MODALITY = "DX"
 
 const val CT_RESEARCH_CATEGORY = "CT"
 const val MR_RESEARCH_CATEGORY = "MR"

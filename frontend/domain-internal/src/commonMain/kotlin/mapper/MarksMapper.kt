@@ -7,7 +7,7 @@ import view.MarksView.Event
 import view.MarksView.Model
 
 val marksStateToModel: State.() -> Model = {
-  Model(items = marks, current = current, markTypes = markTypes, error = error)
+  Model(items = marks, markTypes = markTypes, error = error)
 }
 
 val marksEventToIntent: Event.() -> Intent? = {

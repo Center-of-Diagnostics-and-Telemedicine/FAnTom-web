@@ -10,7 +10,6 @@ interface MarksView : MviView<Model, Event> {
 
   data class Model(
     val items: List<MarkModel>,
-    val current: MarkModel?,
     val markTypes: List<MarkTypeModel>,
     val error: String
   )
@@ -28,7 +27,6 @@ interface MarksView : MviView<Model, Event> {
 
 fun initialMarksModel(): Model = Model(
   items = listOf(),
-  current = null,
   markTypes = listOf(),
   error = ""
 )

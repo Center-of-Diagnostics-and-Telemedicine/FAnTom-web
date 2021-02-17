@@ -60,9 +60,15 @@ internal class MarksStoreFactory(
         Intent.HandleCloseResearch -> handleCloseResearch(getState)
         Intent.ReloadRequested -> TODO()
         Intent.DismissError -> dispatch(Result.DismissErrorRequested)
-        is Intent.ChangeVisibility ->
-          updateMarkWithoutSaving(intent.mark.apply { visible = !this.visible }, getState)
+        is Intent.ChangeVisibility -> handleChangeVisibility(intent.mark, getState)
       }.let {}
+    }
+
+    private fun handleChangeVisibility(mark: MarkModel, state: () -> State) {
+      val result = state().marks.toList()
+      result.find { it.id == mark.id }?.let { it.visible = !it.visible }
+      dispatch(Result.Loaded(result))
+      publish(Label.MarksLoaded(result))
     }
 
     private fun handleNewMark(shape: Shape, sliceNumber: Int, cut: Cut, getState: () -> State) {
@@ -89,8 +95,10 @@ internal class MarksStoreFactory(
 
     private fun updateComment(mark: MarkModel, comment: String, getState: () -> State) {
       singleFromCoroutine {
-        repository.updateMark(mark.toMarkEntity().copy(comment = comment), research.id)
-        getState().marks.replace(newValue = mark, block = { it.id == mark.id })
+        val updatedMarkEntity = mark.toMarkEntity().copy(comment = comment)
+        val updatedMarkModel = updatedMarkEntity.toMarkModel(data.markTypes)
+        repository.updateMark(updatedMarkEntity, research.id)
+        getState().marks.replace(updatedMarkModel) { it.id == mark.id }
       }.subscribeSingle()
     }
 

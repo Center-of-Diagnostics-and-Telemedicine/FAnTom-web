@@ -52,7 +52,10 @@ class MarkItemView(prps: MarkItemProps) : RComponent<MarkItemProps, MarkItemStat
         mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.checkbox) {
           mIconButton(
             if (area.visible) "visibility" else "visibility_off",
-            onClick = { props.eventOutput(MarksView.Event.ChangeVisibility(area)) },
+            onClick = {
+              it.stopPropagation()
+              props.eventOutput(MarksView.Event.ChangeVisibility(area))
+            },
             size = MIconButtonSize.small
           )
         }
@@ -69,7 +72,10 @@ class MarkItemView(prps: MarkItemProps) : RComponent<MarkItemProps, MarkItemStat
         mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) {
           mButton(
             caption = if (area.type == null) "тип" else area.type!!.ru.take(3),
-            onClick = { handleShowMenuClick(it, area.id) },
+            onClick = {
+              it.stopPropagation()
+              handleShowMenuClick(it, area.id)
+            },
             size = MButtonSize.small
           )
           mMenu(
@@ -90,7 +96,10 @@ class MarkItemView(prps: MarkItemProps) : RComponent<MarkItemProps, MarkItemStat
         mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.checkbox) {
           mIconButton(
             "close",
-            onClick = { props.eventOutput(MarksView.Event.DeleteItem(area)) },
+            onClick = {
+              it.stopPropagation()
+              props.eventOutput(MarksView.Event.DeleteItem(area))
+            },
             size = MIconButtonSize.small
           )
         }

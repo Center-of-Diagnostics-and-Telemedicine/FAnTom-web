@@ -9,6 +9,7 @@ import com.badoo.reaktive.scheduler.mainScheduler
 import com.badoo.reaktive.single.observeOn
 import com.badoo.reaktive.single.subscribeOn
 import model.BASE_ERROR
+import model.ResearchApiExceptions
 import model.ResearchApiExceptions.AuthFailedException
 import repository.LoginRepository
 import store.login.LoginStore.*
@@ -64,7 +65,7 @@ internal class LoginStoreFactory(
 
     private fun handleError(error: Throwable) {
       val result = when (error) {
-        is AuthFailedException -> Result.Error(error.error)
+        is ResearchApiExceptions -> Result.Error(error.error)
         else -> {
           println("login: other exception ${error.message}")
           Result.Error(BASE_ERROR)

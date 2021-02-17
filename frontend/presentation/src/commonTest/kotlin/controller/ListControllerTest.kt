@@ -129,9 +129,9 @@ class ListControllerTest {
     val testItem = testResearches.first()
     createController()
 
-    listView.dispatch(ListView.Event.ItemClick(id = testItem.id))
+    listView.dispatch(ListView.Event.ItemClick(research = testItem))
 
-    assertTrue(ListController.Output.ItemSelected(id = testItem.id) in output)
+    assertTrue(ListController.Output.ItemSelected(research = testItem) in output)
   }
 
   private fun createController() {
