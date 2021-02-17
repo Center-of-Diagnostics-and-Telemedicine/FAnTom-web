@@ -23,7 +23,6 @@ interface CutStore : Store<Intent, State, Label> {
 
     data class HandleMarks(val list: List<MarkModel>) : Intent()
     data class HandleMarkSelected(val mark: MarkModel) : Intent()
-    data class HandleMarkCenter(val mark: MarkModel) : Intent()
     data class ChangeSliceNumberByMarkCenter(val mark: MarkModel) : Intent()
     data class HandleMarkUnselect(val mark: MarkModel) : Intent()
 
@@ -67,7 +66,6 @@ interface CutStore : Store<Intent, State, Label> {
 
     data class Marks(val list: List<MarkModel>) : Label()
     data class SelectMark(val mark: MarkModel) : Label()
-    data class CenterMark(val mark: MarkModel) : Label()
     data class UnselectMark(val mark: MarkModel) : Label()
     data class ContrastBrightnessChanged(val black: Int, val white: Int) : Label()
     data class UpdateMarkWithoutSave(val mark: MarkModel) : Label()

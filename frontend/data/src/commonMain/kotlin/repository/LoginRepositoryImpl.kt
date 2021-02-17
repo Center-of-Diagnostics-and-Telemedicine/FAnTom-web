@@ -1,6 +1,7 @@
 package repository
 
 import model.*
+import model.ResearchApiExceptions.*
 
 class LoginRepositoryImpl(
   val local: LoginLocal,
@@ -12,7 +13,7 @@ class LoginRepositoryImpl(
     return when {
       response.response != null -> local.saveToken(token = response.response!!.token)
       response.error != null -> handleErrorResponse(response.error!!)
-      else -> throw ResearchApiExceptions.AuthFailedException
+      else -> throw AuthFailedException
     }
   }
 
@@ -22,8 +23,8 @@ class LoginRepositoryImpl(
 
   private fun <T : Any> handleErrorResponse(errorModel: ErrorModel): T {
     when (errorModel.error) {
-      ErrorStringCode.AUTH_FAILED.value -> throw ResearchApiExceptions.AuthFailedException
-      ErrorStringCode.INVALID_AUTH_CREDENTIALS.value -> throw ResearchApiExceptions.InvalidAuthCredentials
+      ErrorStringCode.AUTH_FAILED.value -> throw AuthFailedException
+      ErrorStringCode.INVALID_AUTH_CREDENTIALS.value -> throw InvalidAuthCredentials
       else -> throw Exception(BASE_ERROR)
     }
   }

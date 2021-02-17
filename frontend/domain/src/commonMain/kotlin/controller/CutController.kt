@@ -52,7 +52,6 @@ interface CutController {
     data class CircleDrawn(val circle: Circle, val sliceNumber: Int, val cut: Cut) : Output()
     data class RectangleDrawn(val rectangle: Rectangle, val sliceNumber: Int, val cut: Cut) : Output()
     data class SelectMark(val mark: MarkModel) : Output()
-    data class CenterMark(val mark: MarkModel) : Output()
     data class UnselectMark(val mark: MarkModel) : Output()
     data class ContrastBrightnessChanged(val black: Int, val white: Int) : Output()
     data class UpdateMarkWithoutSave(val mark: MarkModel) : Output()

@@ -9,10 +9,7 @@ import com.badoo.reaktive.scheduler.mainScheduler
 import com.badoo.reaktive.single.map
 import com.badoo.reaktive.single.observeOn
 import com.badoo.reaktive.single.subscribeOn
-import model.Category
-import model.Filter
-import model.RESEARCH_INITIALIZATION_FAILED
-import model.ResearchApiExceptions
+import model.*
 import repository.ResearchRepository
 import store.list.ListStore.Intent
 import store.list.ListStore.State
@@ -64,12 +61,10 @@ internal class ListStoreFactory(
 
     private fun handleError(error: Throwable) {
       val result = when (error) {
-        is ResearchApiExceptions.ResearchListFetchException -> Result.Error(error.error)
-        is ResearchApiExceptions.ResearchDataFetchError -> Result.Error(error.error)
-        is ResearchApiExceptions.ResearchNotFoundException -> Result.Error(error.error)
+        is ResearchApiExceptions -> Result.Error(error.error)
         else -> {
           println("list: other exception ${error.message}")
-          Result.Error(RESEARCH_INITIALIZATION_FAILED)
+          Result.Error(BASE_ERROR)
         }
       }
       dispatch(result)

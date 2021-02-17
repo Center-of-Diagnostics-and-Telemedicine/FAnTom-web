@@ -71,7 +71,6 @@ interface DrawStore : Store<Intent, State, Label> {
 
     data class Move(val dicomX: Double, val dicomY: Double) : Intent()
     data class MouseUp(val dicomX: Double, val dicomY: Double) : Intent()
-    data class CenterMarkClick(val startDicomX: Double, val startDicomY: Double) : Intent()
     data class MouseWheel(val deltaDicomY: Int) : Intent()
     object MouseOut : Intent()
     object DoubleClick : Intent()
@@ -87,7 +86,6 @@ interface DrawStore : Store<Intent, State, Label> {
     data class CircleDrawn(val circle: Circle) : Label()
     data class RectangleDrawn(val rectangle: Rectangle) : Label()
 
-    data class CenterMarkClick(val dicomX: Double, val dicomY: Double) : Label()
     data class ChangeSlice(val deltaDicomY: Int) : Label()
 
     data class ChangeContrastBrightness(val deltaX: Double, val deltaY: Double) : Label()

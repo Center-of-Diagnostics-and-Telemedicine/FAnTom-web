@@ -10,10 +10,6 @@ class ResearchRepositoryImpl(
 ) : ResearchRepository {
 
   override suspend fun getResearches(): List<Research> {
-//    val cached = local.getAll()
-//    if (cached.isNotEmpty()) {
-//      return cached
-//    }
     val response = remote.getAll(token())
     return when {
       response.response != null -> {
@@ -34,12 +30,11 @@ class ResearchRepositoryImpl(
       Filter.Seen -> cached.filter { it.seen }
       Filter.Done -> cached.filter { it.done }
     }
-    val filteredByCategory = when (category) {
+
+    return when (category) {
       Category.All -> filteredByVisibility
       else -> filteredByVisibility.filter { it.category == category.name }
     }
-
-    return filteredByCategory
   }
 
   override suspend fun initResearch(researchId: Int): ResearchSlicesSizesDataNew {

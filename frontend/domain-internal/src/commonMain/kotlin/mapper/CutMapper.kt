@@ -48,7 +48,6 @@ val cutLabelToCutOutput: Label.() -> Output? = {
     is Label.CircleDrawn -> Output.CircleDrawn(circle, sliceNumber, cut)
     is Label.RectangleDrawn -> Output.RectangleDrawn(rectangle, sliceNumber, cut)
     is Label.SelectMark -> Output.SelectMark(mark)
-    is Label.CenterMark -> Output.CenterMark(mark)
     is Label.UnselectMark -> Output.UnselectMark(mark)
     is Label.ContrastBrightnessChanged -> Output.ContrastBrightnessChanged(black, white)
     is Label.UpdateMarkWithoutSave -> Output.UpdateMarkWithoutSave(mark)
@@ -72,7 +71,6 @@ val drawLabelToCutIntent: DrawStore.Label.() -> Intent? = {
     DrawStore.Label.StopMove -> Intent.HandleStopMoving
     is DrawStore.Label.StartClick -> Intent.HandleStartClick(startDicomX, startDicomY)
     is DrawStore.Label.OpenFullCut -> Intent.OpenFullCut
-    is DrawStore.Label.CenterMarkClick -> null
     is DrawStore.Label.MouseMove -> null
     is DrawStore.Label.MoveInClick -> null
   }
@@ -81,7 +79,6 @@ val drawLabelToCutIntent: DrawStore.Label.() -> Intent? = {
 val shapesLabelToCutIntent: ShapesStore.Label.() -> Intent? = {
   when (this) {
     is ShapesStore.Label.SelectMark -> Intent.HandleMarkSelected(mark)
-    is ShapesStore.Label.CenterMark -> Intent.HandleMarkCenter(mark)
     is ShapesStore.Label.UnselectMark -> Intent.HandleMarkUnselect(mark)
     is ShapesStore.Label.UpdateMarkCoordinates -> Intent.HandleMarkUpdateWithoutSave(mark)
     is ShapesStore.Label.UpdateMarkWithSave -> Intent.HandleMarkUpdateWithSave(mark)

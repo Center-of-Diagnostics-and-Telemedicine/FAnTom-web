@@ -1,6 +1,7 @@
 package repository
 
 import model.*
+import model.ResearchApiExceptions.*
 
 class MarksRepositoryImpl(
   val remote: MarksRemote,
@@ -12,7 +13,7 @@ class MarksRepositoryImpl(
     return when {
       response.response != null -> response.response!!.list
       response.error != null -> handleErrorResponse(response.error!!)
-      else -> throw ResearchApiExceptions.ResearchListFetchException
+      else -> throw MarksFetchException
     }
   }
 
@@ -21,7 +22,7 @@ class MarksRepositoryImpl(
     return when {
       response.response != null -> response.response!!.mark
       response.error != null -> handleErrorResponse(response.error!!)
-      else -> throw ResearchApiExceptions.ResearchListFetchException
+      else -> throw MarkCreateException
     }
   }
 
@@ -30,6 +31,7 @@ class MarksRepositoryImpl(
     when {
       response.response != null -> response.response!!
       response.error != null -> handleErrorResponse(response.error!!)
+      else -> throw MarkUpdateException
     }
   }
 
@@ -38,6 +40,7 @@ class MarksRepositoryImpl(
     when {
       response.response != null -> response.response!!
       response.error != null -> handleErrorResponse(response.error!!)
+      else -> throw MarkDeleteException
     }
   }
 
@@ -46,14 +49,14 @@ class MarksRepositoryImpl(
 
   private fun <T : Any> handleErrorResponse(response: ErrorModel): T {
     when (response.error) {
-      ErrorStringCode.RESEARCH_NOT_FOUND.value -> throw ResearchApiExceptions.ResearchNotFoundException
+      ErrorStringCode.RESEARCH_NOT_FOUND.value -> throw ResearchNotFoundException
 
-      ErrorStringCode.GET_MARKS_FAILED.value -> throw ResearchApiExceptions.MarksFetchException
-      ErrorStringCode.CREATE_MARK_FAILED.value -> throw ResearchApiExceptions.MarkCreateException
-      ErrorStringCode.UPDATE_MARK_FAILED.value -> throw ResearchApiExceptions.MarkUpdateException
+      ErrorStringCode.GET_MARKS_FAILED.value -> throw MarksFetchException
+      ErrorStringCode.CREATE_MARK_FAILED.value -> throw MarkCreateException
+      ErrorStringCode.UPDATE_MARK_FAILED.value -> throw MarkUpdateException
 
-      ErrorStringCode.SESSION_CLOSE_FAILED.value -> throw ResearchApiExceptions.CloseSessionException
-      ErrorStringCode.SESSION_EXPIRED.value -> throw ResearchApiExceptions.SessionExpiredException
+      ErrorStringCode.SESSION_CLOSE_FAILED.value -> throw CloseSessionException
+      ErrorStringCode.SESSION_EXPIRED.value -> throw SessionExpiredException
       else -> throw Exception(BASE_ERROR)
     }
   }

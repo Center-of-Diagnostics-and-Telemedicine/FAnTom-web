@@ -13,6 +13,7 @@ import model.*
 import repository.CovidMarksRepository
 import store.covid.CovidMarksStore.*
 import store.covid.CovidMarksStoreAbstractFactory
+import store.cut.CutStoreAbstractFactory
 
 internal class CovidMarksStoreFactory(
   storeFactory: StoreFactory,
@@ -58,9 +59,7 @@ internal class CovidMarksStoreFactory(
 
     private fun handleCloseResearch(getState: () -> State) {
       val mark = getState().covidLungLobes
-      println("MY: modelWithNoValue = ${mark.values}")
       val modelWithNoValue = mark.values.firstOrNull { it.value == null }
-      println("MY: modelWithNoValue = $modelWithNoValue")
       if (modelWithNoValue != null) {
         dispatch(Result.Error(COVID_MARK_TYPE_NOT_SET))
       } else {
@@ -92,11 +91,10 @@ internal class CovidMarksStoreFactory(
 
     private fun handleError(error: Throwable) {
       val result = when (error) {
-        is ResearchApiExceptions.MarksFetchException -> Result.Error(error.error)
-        is ResearchApiExceptions.ResearchNotFoundException -> Result.Error(error.error)
+        is ResearchApiExceptions -> Result.Error(error.error)
         else -> {
-          println("marks: other exception ${error.message}")
-          Result.Error(MARKS_FETCH_EXCEPTION)
+          println("cut: other exception ${error.message}")
+          Result.Error(BASE_ERROR)
         }
       }
       dispatch(result)

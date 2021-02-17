@@ -22,6 +22,7 @@ sealed class ResearchApiExceptions(val error: String) : Throwable() {
   object MarksFetchException : ResearchApiExceptions(MARKS_FETCH_EXCEPTION)
   object MarkCreateException : ResearchApiExceptions(MARK_CREATE_EXCEPTION)
   object MarkUpdateException : ResearchApiExceptions(MARK_UPDATE_EXCEPTION)
+  object MarkDeleteException : ResearchApiExceptions(MARK_DELETE_EXCEPTION)
 
   object ConfirmCtTypeForResearchException : ResearchApiExceptions(CREATE_MARK_FAILED)
 

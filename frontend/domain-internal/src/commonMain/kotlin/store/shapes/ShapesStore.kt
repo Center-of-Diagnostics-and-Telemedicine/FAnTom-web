@@ -12,7 +12,6 @@ interface ShapesStore : Store<Intent, State, Label> {
     data class HandleExternalSliceNumberChanged(val sliceNumber: Int, val cut: Cut) : Intent()
     data class HandleMousePosition(val dicomX: Double, val dicomY: Double) : Intent()
     data class HandleMarks(val list: List<MarkModel>) : Intent()
-    data class HandleCenterMarkClick(val dicomX: Double, val dicomY: Double) : Intent()
     data class HandleMoveInClick(val deltaX: Double, val deltaY: Double) : Intent()
     data class HandleStartClick(val startDicomX: Double, val startDicomY: Double) : Intent()
     data class HandleChangeCutType(val value: CutType) : Intent()
@@ -34,7 +33,6 @@ interface ShapesStore : Store<Intent, State, Label> {
 
   sealed class Label {
     data class SelectMark(val mark: MarkModel) : Label()
-    data class CenterMark(val mark: MarkModel) : Label()
     data class UnselectMark(val mark: MarkModel) : Label()
     data class UpdateMarkCoordinates(val mark: MarkModel) : Label()
     data class UpdateMarkWithSave(val mark: MarkModel) : Label()

@@ -8,9 +8,8 @@ import com.badoo.reaktive.scheduler.ioScheduler
 import com.badoo.reaktive.scheduler.mainScheduler
 import com.badoo.reaktive.single.observeOn
 import com.badoo.reaktive.single.subscribeOn
-import model.AUTH_FAILED
+import model.BASE_ERROR
 import model.ResearchApiExceptions.AuthFailedException
-import model.ResearchApiExceptions.InvalidAuthCredentials
 import repository.LoginRepository
 import store.login.LoginStore.*
 import store.login.LoginStoreAbstractFactory
@@ -66,10 +65,9 @@ internal class LoginStoreFactory(
     private fun handleError(error: Throwable) {
       val result = when (error) {
         is AuthFailedException -> Result.Error(error.error)
-        is InvalidAuthCredentials -> Result.Error(error.error)
         else -> {
           println("login: other exception ${error.message}")
-          Result.Error(AUTH_FAILED)
+          Result.Error(BASE_ERROR)
         }
       }
       dispatch(result)

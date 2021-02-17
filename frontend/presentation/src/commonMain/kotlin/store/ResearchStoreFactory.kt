@@ -9,7 +9,7 @@ import com.badoo.reaktive.scheduler.mainScheduler
 import com.badoo.reaktive.single.map
 import com.badoo.reaktive.single.observeOn
 import com.badoo.reaktive.single.subscribeOn
-import model.RESEARCH_DATA_FETCH_FAILED
+import model.BASE_ERROR
 import model.ResearchApiExceptions
 import repository.ResearchRepository
 import store.research.ResearchStore.*
@@ -83,11 +83,10 @@ internal class ResearchStoreFactory(
 
     private fun handleError(error: Throwable) {
       val result = when (error) {
-        is ResearchApiExceptions.ResearchInitializationException -> Result.Error(error.error)
-        is ResearchApiExceptions.ResearchNotFoundException -> Result.Error(error.error)
+        is ResearchApiExceptions -> Result.Error(error.error)
         else -> {
           println("login: other exception ${error.message}")
-          Result.Error(RESEARCH_DATA_FETCH_FAILED)
+          Result.Error(BASE_ERROR)
         }
       }
       dispatch(result)

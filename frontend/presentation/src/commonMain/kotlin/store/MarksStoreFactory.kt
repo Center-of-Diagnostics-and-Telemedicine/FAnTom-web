@@ -144,11 +144,10 @@ internal class MarksStoreFactory(
       error.printStack()
       println("MarksStore" + error.message)
       val result = when (error) {
-        is ResearchApiExceptions.MarksFetchException -> Result.Error(error.error)
-        is ResearchApiExceptions.ResearchNotFoundException -> Result.Error(error.error)
+        is ResearchApiExceptions -> Result.Error(error.error)
         else -> {
           println("marks: other exception ${error.message}")
-          Result.Error(MARKS_FETCH_EXCEPTION)
+          Result.Error(BASE_ERROR)
         }
       }
       dispatch(result)

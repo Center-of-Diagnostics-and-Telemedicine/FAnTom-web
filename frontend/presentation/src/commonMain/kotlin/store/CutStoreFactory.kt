@@ -89,9 +89,6 @@ internal class CutStoreFactory(
         is Intent.HandleMarkSelected -> {
           publish(Label.SelectMark(intent.mark))
         }
-        is Intent.HandleMarkCenter -> {
-          publish(Label.CenterMark(intent.mark))
-        }
         is Intent.HandleMarkUnselect -> {
           publish(Label.UnselectMark(intent.mark))
         }
@@ -205,7 +202,7 @@ internal class CutStoreFactory(
         is ResearchApiExceptions -> Result.Error(error.error)
         else -> {
           println("cut: other exception ${error.message}")
-          Result.Error(GET_SLICE_FAILED)
+          Result.Error(BASE_ERROR)
         }
       }
       dispatch(result)

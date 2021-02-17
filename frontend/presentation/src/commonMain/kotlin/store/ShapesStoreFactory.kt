@@ -41,12 +41,6 @@ internal class ShapesStoreFactory(
 
         is Intent.HandleMarks -> handleMarks(intent.list, getState)
 
-        is Intent.HandleCenterMarkClick -> handleCenterMarkClick(
-          intent.dicomX,
-          intent.dicomY,
-          getState
-        )
-
         is Intent.HandleMoveInClick -> handleMoveInClick(intent.deltaX, intent.deltaY, getState)
 
         is Intent.HandleStopMoving -> handleStopMoving(getState)
@@ -109,26 +103,6 @@ internal class ShapesStoreFactory(
           cut.updateCoordinates(markToUpdate, deltaX, deltaY)?.let {
             publish(Label.UpdateMarkCoordinates(it))
           }
-        }
-      }
-    }
-
-    private fun handleCenterMarkClick(
-      dicomX: Double,
-      dicomY: Double,
-      getState: () -> State
-    ) {
-      val state = getState()
-      val shapes = state.shapes
-
-      val shape = shapes.getShapeByPosition(
-        dicomX = dicomX,
-        dicomY = dicomY
-      )
-      shape?.let {
-        state.marks.firstOrNull { it.id == shape.id }?.let {
-          publish(Label.SelectMark(it))
-          publish(Label.CenterMark(it))
         }
       }
     }

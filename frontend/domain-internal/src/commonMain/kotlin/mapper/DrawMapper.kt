@@ -39,13 +39,11 @@ fun mapMouseDown(event: Event.MouseDown): Intent {
   val isDrawRectangle = event.shiftKey && event.button == LEFT_MOUSE_BUTTON
   println("isDrawRectangle = $isDrawRectangle")
   val isContrastBrightness = event.button == MIDDLE_MOUSE_BUTTON
-  val isCenterMark = event.altKey
   return when {
     isDrawEllipse -> Intent.StartDrawEllipse(startDicomX = event.x, startDicomY = event.y)
     isDrawRectangle -> Intent.StartDrawRectangle(startDicomX = event.x, startDicomY = event.y)
     isContrastBrightness ->
       Intent.StartContrastBrightness(startDicomX = event.x, startDicomY = event.y)
-    isCenterMark -> Intent.CenterMarkClick(startDicomX = event.x, startDicomY = event.y)
     else -> Intent.StartMouseClick(startDicomY = event.y, startDicomX = event.x)
   }
 }

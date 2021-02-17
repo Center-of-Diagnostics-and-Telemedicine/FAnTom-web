@@ -9,15 +9,13 @@ actual object ResearchLocalDataSource : ResearchLocal {
 
   private val map = AtomicReference<Map<String, Research>>(emptyMap())
 
-  override suspend fun get(accessionName: String): Research? = map.value[accessionName]
-
   override suspend fun getAll(): List<Research> = map.value.values.toList()
 
   override suspend fun save(research: Research) {
-    val name = research.name
+    val id = research.id.toString()
     map.update {
       it.plus(
-        name to requireNotNull(it[name]).copy(
+        id to requireNotNull(it[id]).copy(
           id = research.id,
           name = research.name,
           seen = research.seen,
@@ -30,11 +28,11 @@ actual object ResearchLocalDataSource : ResearchLocal {
 
   override suspend fun saveList(list: List<Research>) {
     map.update { map ->
-      map.plus(list.map { it.name to it })
+      map.plus(list.map { it.id.toString() to it })
     }
   }
 
-  override suspend fun delete(name: String) {
-    map.update { it.minus(name) }
+  override suspend fun delete(id: String) {
+    map.update { it.minus(id) }
   }
 }

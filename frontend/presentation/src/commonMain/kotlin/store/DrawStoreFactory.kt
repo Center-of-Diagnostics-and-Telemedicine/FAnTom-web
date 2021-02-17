@@ -37,8 +37,6 @@ internal class DrawStoreFactory(
 
         is Intent.MouseUp -> handleMouseUp(getState)
         is Intent.MouseOut -> handleMouseOut()
-        is Intent.CenterMarkClick ->
-          publish(Label.CenterMarkClick(intent.startDicomX, intent.startDicomY))
         is Intent.MouseWheel -> handleMouseData(intent)
         Intent.DoubleClick -> publish(Label.OpenFullCut)
       }.let {}

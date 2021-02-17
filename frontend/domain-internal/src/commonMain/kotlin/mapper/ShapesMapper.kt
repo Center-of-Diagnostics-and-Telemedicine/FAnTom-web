@@ -43,7 +43,6 @@ val shapesStateToShapesModel: State.() -> Model = {
 
 val drawLabelToShapesIntent: DrawStore.Label.() -> Intent? = {
   when (this) {
-    is DrawStore.Label.CenterMarkClick -> Intent.HandleCenterMarkClick(dicomX, dicomY)
     is DrawStore.Label.MoveInClick -> Intent.HandleMoveInClick(deltaX, deltaY)
     else -> null
   }
@@ -75,7 +74,6 @@ val cutLabelToShapesIntent: CutStore.Label.() -> Intent? = {
     is CutStore.Label.CircleDrawn -> null
     is CutStore.Label.RectangleDrawn -> null
     is CutStore.Label.SelectMark -> null
-    is CutStore.Label.CenterMark -> null
     is CutStore.Label.UnselectMark -> null
     is CutStore.Label.ContrastBrightnessChanged -> null
     is CutStore.Label.UpdateMarkWithoutSave -> null
