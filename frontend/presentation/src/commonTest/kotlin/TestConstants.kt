@@ -47,6 +47,8 @@ val testResearches = listOf(
   ),
 )
 
+val testResearch = testResearches.first()
+
 val testFilters = listOf(Filter.All, Filter.NotSeen, Filter.Seen, Filter.Done)
 
 val testTools = listOf(Tool.MIP, Tool.Brightness, Tool.Preset)
@@ -83,35 +85,38 @@ val ctMarkTypes = mapOf(
     CLR = ""
   )
 )
+val testCtAxialModalityModel = ModalityModel(
+  dicom_size_h = 512,
+  dicom_size_v = 512,
+  dicom_step_h = 0.698,
+  dicom_step_v = 0.698,
+  n_images = 357,
+  screen_size_h = 512,
+  screen_size_v = 512
+)
+val testCtFrontalModalityModel = ModalityModel(
+  dicom_size_h = 512,
+  dicom_size_v = 357,
+  dicom_step_h = 0.698,
+  dicom_step_v = 0.7977563025210084,
+  n_images = 512,
+  screen_size_h = 512,
+  screen_size_v = 408
+)
+val testCtSagittalModalityModel = ModalityModel(
+  dicom_size_h = 512,
+  dicom_size_v = 357,
+  dicom_step_h = 0.698,
+  dicom_step_v = 0.7977563025210084,
+  n_images = 512,
+  screen_size_h = 512,
+  screen_size_v = 408,
+)
 val testResearchInitModelCT = ResearchInitModelNew(
   CT = CTInitModel(
-    ct_axial = ModalityModel(
-      dicom_size_h = 512,
-      dicom_size_v = 512,
-      dicom_step_h = 0.698,
-      dicom_step_v = 0.698,
-      n_images = 357,
-      screen_size_h = 512,
-      screen_size_v = 512
-    ),
-    ct_frontal = ModalityModel(
-      dicom_size_h = 512,
-      dicom_size_v = 357,
-      dicom_step_h = 0.698,
-      dicom_step_v = 0.7977563025210084,
-      n_images = 512,
-      screen_size_h = 512,
-      screen_size_v = 408
-    ),
-    ct_sagittal = ModalityModel(
-      dicom_size_h = 512,
-      dicom_size_v = 357,
-      dicom_step_h = 0.698,
-      dicom_step_v = 0.7977563025210084,
-      n_images = 512,
-      screen_size_h = 512,
-      screen_size_v = 408,
-    ),
+    ct_axial = testCtAxialModalityModel,
+    ct_frontal = testCtFrontalModalityModel,
+    ct_sagittal = testCtSagittalModalityModel,
     reversed = false
   ),
   dictionary = ctMarkTypes
@@ -273,6 +278,24 @@ val testMarkType = MarkTypeModel(
 
 const val testStringId = "testId"
 const val testIntId = -1000
+
+val testCut = Cut(
+  type = CutType.CT_AXIAL,
+  data = testCtAxialModalityModel,
+  color = axialColor,
+  verticalCutData = CutData(
+    type = CutType.CT_FRONTAL,
+    data = testCtFrontalModalityModel,
+    color = frontalColor
+  ),
+  horizontalCutData = CutData(
+    type = CutType.CT_SAGITTAL,
+    data = testCtSagittalModalityModel,
+    color = sagittalColor
+  ),
+  researchType = ResearchType.CT,
+  availableCutsForChange = listOf()
+)
 
 
 
