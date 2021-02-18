@@ -13,7 +13,6 @@ import model.*
 import repository.CovidMarksRepository
 import store.covid.CovidMarksStore.*
 import store.covid.CovidMarksStoreAbstractFactory
-import store.cut.CutStoreAbstractFactory
 
 internal class CovidMarksStoreFactory(
   storeFactory: StoreFactory,
@@ -32,7 +31,7 @@ internal class CovidMarksStoreFactory(
       singleFromCoroutine {
         repository.getMark(research.id)
       }
-        .map(CovidMarkEntity::toLungLobeModel)
+        .map(CovidMarkEntity::toLungLobeModelMap)
         .subscribeOn(ioScheduler)
         .map(Result::Loaded)
         .observeOn(mainScheduler)

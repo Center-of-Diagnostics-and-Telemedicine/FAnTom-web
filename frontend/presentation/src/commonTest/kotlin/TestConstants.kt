@@ -312,6 +312,11 @@ val testCircle = Circle(
   color = "#00ff00"
 )
 
+val testCovidMarkEntity = getEmptyCovidMarkEntity()
+val testCovidMarkModel = testCovidMarkEntity.toLungLobeModelMap()
+val testLungLobeModel = testCovidMarkModel.values.first()
+val testLungLobeValue = testLungLobeModel.availableValues.first()
+
 
 
 

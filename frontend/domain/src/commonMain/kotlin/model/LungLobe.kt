@@ -84,7 +84,7 @@ fun LungLobeModel.changeValue(newValue: Int): LungLobeModel {
   return this.copy(value = newValueModel)
 }
 
-fun CovidMarkEntity.toLungLobeModel(): Map<Int, LungLobeModel> {
+fun CovidMarkEntity.toLungLobeModelMap(): Map<Int, LungLobeModel> {
   val rightUpperLobeModel = rightUpperLobe.changeValue(covidMarkData.rightUpperLobeValue)
   val rightLowerLobeModel = rightLowerLobe.changeValue(covidMarkData.rightLowerLobeValue)
   val middleLobeModel = middleLobe.changeValue(covidMarkData.middleLobeValue)
