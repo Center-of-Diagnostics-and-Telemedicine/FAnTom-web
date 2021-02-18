@@ -53,6 +53,7 @@ val testFilters = listOf(Filter.All, Filter.NotSeen, Filter.Seen, Filter.Done)
 
 val testTools = listOf(Tool.MIP, Tool.Brightness, Tool.Preset)
 
+val testCategory = Category.CT
 //val testGrids = listOf(
 //  Grid.Single(CutType.CT_AXIAL),
 //  Grid.TwoVertical(CutType.CT_FRONTAL, CutType.CT_AXIAL),

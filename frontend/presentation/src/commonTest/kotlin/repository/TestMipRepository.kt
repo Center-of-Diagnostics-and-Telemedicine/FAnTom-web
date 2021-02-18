@@ -1,3 +1,5 @@
+package repository
+
 import com.badoo.reaktive.utils.atomic.AtomicInt
 import com.badoo.reaktive.utils.atomic.AtomicReference
 import model.INITIAL_MIP_VALUE

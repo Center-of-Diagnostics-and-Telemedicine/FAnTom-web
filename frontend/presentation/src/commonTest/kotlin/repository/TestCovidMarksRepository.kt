@@ -1,5 +1,8 @@
+package repository
+
 import model.CovidMarkEntity
-import repository.CovidMarksRepository
+import testCovidMarkEntity
+import testToken
 
 class TestCovidMarksRepository : CovidMarksRepository {
 

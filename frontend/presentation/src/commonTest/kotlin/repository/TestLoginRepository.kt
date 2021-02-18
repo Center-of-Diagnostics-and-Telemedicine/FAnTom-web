@@ -1,5 +1,8 @@
+package repository
+
 import model.ResearchApiExceptions
-import repository.LoginRepository
+import testLogin
+import testPassword
 
 class TestLoginRepository : LoginRepository {
 

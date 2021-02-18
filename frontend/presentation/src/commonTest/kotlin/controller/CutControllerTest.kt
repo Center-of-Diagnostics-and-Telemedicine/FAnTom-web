@@ -1,8 +1,8 @@
 package controller
 
-import TestBrightnessRepository
-import TestMipRepository
-import TestResearchRepository
+import repository.TestBrightnessRepository
+import repository.TestMipRepository
+import repository.TestResearchRepository
 import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.lifecycle.LifecycleRegistry
 import com.arkivanov.mvikotlin.core.store.StoreFactory
@@ -24,7 +24,6 @@ import testMark
 import testMouseWheelPosition
 import testPosition
 import testResearch
-import testResearchInitModelCT
 import testSliceNumber
 import view.*
 import kotlin.test.*

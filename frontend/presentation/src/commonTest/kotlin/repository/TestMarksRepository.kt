@@ -1,6 +1,11 @@
+package repository
+
 import model.MarkData
 import model.MarkEntity
-import repository.MarksRepository
+import testIntId
+import testMarkType
+import testMarks
+import testToken
 
 class TestMarksRepository : MarksRepository {
 

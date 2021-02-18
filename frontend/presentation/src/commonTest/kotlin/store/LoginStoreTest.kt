@@ -1,6 +1,6 @@
 package store
 
-import TestLoginRepository
+import repository.TestLoginRepository
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.badoo.reaktive.scheduler.overrideSchedulers
 import com.badoo.reaktive.test.scheduler.TestScheduler

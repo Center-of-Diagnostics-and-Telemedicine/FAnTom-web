@@ -1,6 +1,6 @@
 package controller
 
-import TestMarksRepository
+import repository.TestMarksRepository
 import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.lifecycle.LifecycleRegistry
 import com.arkivanov.mvikotlin.core.store.StoreFactory

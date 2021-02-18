@@ -1,7 +1,7 @@
 package controller
 
-import TestBrightnessRepository
-import TestMipRepository
+import repository.TestBrightnessRepository
+import repository.TestMipRepository
 import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.lifecycle.LifecycleRegistry
 import com.arkivanov.mvikotlin.core.store.StoreFactory

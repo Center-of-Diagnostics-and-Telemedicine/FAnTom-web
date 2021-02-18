@@ -1,6 +1,14 @@
+package repository
+
 import model.*
 import model.ResearchApiExceptions.ResearchInitializationException
-import repository.ResearchRepository
+import testHounsfield
+import testImage
+import testResearchInitModelCT
+import testResearchInitModelDX
+import testResearchInitModelMG
+import testResearches
+import testToken
 
 class TestResearchRepository : ResearchRepository {
 
