@@ -21,7 +21,7 @@ interface CutsContainerController {
   }
 
   sealed class Input {
-    data class GridChanged(val grid: Grid) : Input()
+    data class ChangeGrid(val grid: Grid) : Input()
     data class ChangeCutType(val cutType: CutType, val cut: Cut) : Input()
 
     object Idle : Input()

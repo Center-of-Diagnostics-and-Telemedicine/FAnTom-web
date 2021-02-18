@@ -166,6 +166,7 @@ internal class ShapesStoreFactory(
         dicomY = dicomY,
         sliceNumber = getState().sliceNumber
       )
+      println("mouse position = $position")
       dispatch(Result.PointPositionChanged(position = position))
       if (position != null) {
         hounsfield(dicomX, dicomY, getState)

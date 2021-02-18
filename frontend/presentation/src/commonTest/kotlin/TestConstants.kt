@@ -215,6 +215,8 @@ val testResearchInitModelDX = ResearchInitModelNew(
 
 const val testImage = "aabbww"
 const val testHounsfield = 1.0
+const val testPosition = 10.0
+const val testMouseWheelPosition = 10
 
 val testMarks = listOf(
   MarkEntity(
@@ -297,6 +299,8 @@ val testCut = Cut(
   availableCutsForChange = listOf()
 )
 
+val testCutType = CutType.CT_AXIAL
+val testSliceNumber = testCut.data.n_images / 2
 
 
 

@@ -37,7 +37,6 @@ val drawEventToUserInputIntent: Event.() -> UserInputStore.Intent? = {
 fun mapMouseDown(event: Event.MouseDown): Intent {
   val isDrawEllipse = event.metaKey && event.button == LEFT_MOUSE_BUTTON
   val isDrawRectangle = event.shiftKey && event.button == LEFT_MOUSE_BUTTON
-  println("isDrawRectangle = $isDrawRectangle")
   val isContrastBrightness = event.button == MIDDLE_MOUSE_BUTTON
   return when {
     isDrawEllipse -> Intent.StartDrawEllipse(startDicomX = event.x, startDicomY = event.y)

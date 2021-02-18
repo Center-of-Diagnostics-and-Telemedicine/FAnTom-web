@@ -238,7 +238,7 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
       is Output.PresetChanged ->
         cutsInputObservable.onNext(CutController.Input.PresetChanged(output.preset))
       is Output.GridChanged -> {
-        cutsContainerInputObservable.onNext(CutsContainerController.Input.GridChanged(output.grid))
+        cutsContainerInputObservable.onNext(CutsContainerController.Input.ChangeGrid(output.grid))
       }
       is Output.Back -> researchViewDelegate.dispatch(ResearchView.Event.BackToList)
       is Output.Close -> {
