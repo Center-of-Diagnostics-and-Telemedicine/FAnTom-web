@@ -15,7 +15,7 @@ interface UserInputStore : Store<Intent, State, Label> {
     data class StartContrastBrightness(val startDicomX: Double, val startDicomY: Double) : Intent()
     data class MouseWheel(val deltaDicomY: Int) : Intent()
     data class MouseMove(val dicomX: Double, val dicomY: Double) : Intent()
-    data class MouseUp(val dicomY: Double, val dicomX: Double) : Intent()
+    object MouseUp : Intent()
 
     object MouseOut : Intent()
     object DoubleClick : Intent()

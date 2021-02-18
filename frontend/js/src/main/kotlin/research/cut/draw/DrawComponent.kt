@@ -116,16 +116,9 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
             }
 
             onMouseUpFunction = {
-              val mouseEvent = castEvent(it)
-              val rect = (mouseEvent.target as HTMLCanvasElement).getBoundingClientRect()
               startX = 0.0
               startY = 0.0
-              props.eventOutput(
-                DrawView.Event.MouseUp(
-                  x = (mouseEvent.clientX - rect.left) * horizontalRatio,
-                  y = (mouseEvent.clientY - rect.top) * verticalRatio
-                )
-              )
+              props.eventOutput(DrawView.Event.MouseUp)
             }
 
             onMouseOutFunction = {
@@ -149,7 +142,6 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
   }
 
   private fun draw(shape: Shape) {
-    debugLog("MY: shape = $shape, shape is rect = ${shape is Rectangle}")
     when (shape) {
       is Circle -> drawCircle(shape)
       is Rectangle -> drawRectangle(shape)

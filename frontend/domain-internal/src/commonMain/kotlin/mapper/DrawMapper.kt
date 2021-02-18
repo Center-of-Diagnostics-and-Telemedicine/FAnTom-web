@@ -11,7 +11,7 @@ val drawEventToDrawIntent: Event.() -> Intent? = {
   when (this) {
     is Event.MouseDown -> mapMouseDown(this)
     is Event.MouseMove -> Intent.Move(dicomX = x, dicomY = y)
-    is Event.MouseUp -> Intent.MouseUp(dicomY = y, dicomX = x)
+    is Event.MouseUp -> Intent.MouseUp
     Event.MouseOut -> Intent.MouseOut
     is Event.MouseWheel -> Intent.MouseWheel(deltaDicomY = deltaY)
     Event.DoubleClick -> Intent.DoubleClick
@@ -30,7 +30,7 @@ val drawEventToUserInputIntent: Event.() -> UserInputStore.Intent? = {
     Event.MouseOut -> UserInputStore.Intent.MouseOut
     Event.DoubleClick -> UserInputStore.Intent.DoubleClick
     is Event.MouseWheel -> UserInputStore.Intent.MouseWheel(deltaDicomY = deltaY)
-    is Event.MouseUp -> UserInputStore.Intent.MouseUp(dicomY = y, dicomX = x)
+    is Event.MouseUp -> UserInputStore.Intent.MouseUp
   }
 }
 

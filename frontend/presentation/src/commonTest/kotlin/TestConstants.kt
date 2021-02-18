@@ -301,6 +301,16 @@ val testCut = Cut(
 
 val testCutType = CutType.CT_AXIAL
 val testSliceNumber = testCut.data.n_images / 2
+val testCircle = Circle(
+  dicomCenterX = 10.0,
+  dicomCenterY = 10.0,
+  dicomRadiusHorizontal = 14.142135623730951,
+  dicomRadiusVertical = 14.142135623730951,
+  id = -1,
+  highlight = false,
+  isCenter = false,
+  color = "#00ff00"
+)
 
 
 

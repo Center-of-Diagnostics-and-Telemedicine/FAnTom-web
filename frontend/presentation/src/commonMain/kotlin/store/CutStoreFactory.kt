@@ -136,7 +136,6 @@ internal class CutStoreFactory(
         else -> sliceNumber
       }
 
-      println("MY: resultSliceNumberAfterIfs = $resultSliceNumber, sliceNumberMethodParam = $sliceNumber, getState.SliceNumebr = ${getState().sliceNumber}, cut = ${cut.type.name}")
       if (sliceNumber != getState().sliceNumber) {
         dispatch(Result.SliceNumberChanged(sliceNumber = resultSliceNumber))
         load(getState, Result.SecondaryLoading, sliceNumber = resultSliceNumber)

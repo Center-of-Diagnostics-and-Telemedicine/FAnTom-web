@@ -21,7 +21,7 @@ interface DrawView : MviView<Model, Event> {
 
     data class MouseMove(val x: Double, val y: Double) : Event()
 
-    data class MouseUp(val x: Double, val y: Double) : Event()
+    object MouseUp : Event()
 
     object MouseOut : Event()
     object DoubleClick : Event()

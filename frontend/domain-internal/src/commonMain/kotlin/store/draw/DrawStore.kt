@@ -70,7 +70,7 @@ interface DrawStore : Store<Intent, State, Label> {
     data class StartMouseClick(val startDicomX: Double, val startDicomY: Double) : Intent()
 
     data class Move(val dicomX: Double, val dicomY: Double) : Intent()
-    data class MouseUp(val dicomX: Double, val dicomY: Double) : Intent()
+    object MouseUp : Intent()
     data class MouseWheel(val deltaDicomY: Int) : Intent()
     object MouseOut : Intent()
     object DoubleClick : Intent()
