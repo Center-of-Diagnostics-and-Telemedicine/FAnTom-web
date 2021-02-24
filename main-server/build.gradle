@@ -37,6 +37,8 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("mysql:mysql-connector-java:5.1.46")
     api(project(":api-models"))
+    api(project(":backend-models"))
+    api(project(":main-server-domain"))
     implementation("org.flywaydb:flyway-core:6.2.0")
     compile("com.github.docker-java:docker-java:3.2.1")
     implementation("com.badoo.reaktive:reaktive-jvm:$reaktive_version")

@@ -1,8 +1,3 @@
-package util
-
-import io.ktor.application.*
-import io.ktor.auth.*
-import model.UserModel
 
 const val AUTHENTICATION = "Authentication"
 const val NAME_FIELD = "name"
@@ -41,9 +36,11 @@ const val COVID_MARKS_TABLE = "covid_marks"
 
 const val MULTI_PLANAR_MARKS_TABLE = "multi_planar_marks"
 const val PLANAR_MARKS_TABLE = "planar_marks"
+const val EXPERT_MARKS_TABLE = "expert_marks"
 const val X_FIELD = "x"
 const val Y_FIELD = "y"
 const val Z_FIELD = "z"
+const val Z_MM_FIELD = "z_mm"
 const val RADIUS_HORIZONTAL_FIELD = "radius_horizontal"
 const val RADIUS_VERTICAL_FIELD = "radius_vertical"
 const val SIZE_VERTICAL_FIELD = "size_vertical"
@@ -52,6 +49,7 @@ const val MARK_TYPE_FILED = "mark_type"
 const val CUT_TYPE_FILED = "cut_type"
 const val SHAPE_TYPE_FILED = "shape_type"
 const val COMMENT_FILED = "comment"
+const val DIAMETER_MM_FIELD = "diameter_mm"
 
 
 const val ROOT = "/"
@@ -59,5 +57,3 @@ const val STATIC_ROUTE = "/static"
 const val RESOURCE_STATIC = "static/static"
 const val RESOURCE_INDEX = "static/index.html"
 const val RESOURCE_JS = "js.js"
-
-val ApplicationCall.user get() = authentication.principal<UserModel>()!!

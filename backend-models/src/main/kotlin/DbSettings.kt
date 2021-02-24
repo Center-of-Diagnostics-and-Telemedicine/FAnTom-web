@@ -4,7 +4,6 @@ import model.SLICE_TYPE_CT_AXIAL
 import model.UserRole
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
-import util.*
 
 object UserVos : Table(name = USER_TABLE) {
   val id: Column<Int> = integer(name = ID_FIELD).autoIncrement()
@@ -86,4 +85,17 @@ object PlanarMarksVos : Table(PLANAR_MARKS_TABLE) {
   val cutType: Column<Int> = integer(name = CUT_TYPE_FILED)
   val shapeType: Column<Int> = integer(name = SHAPE_TYPE_FILED).default(SHAPE_TYPE_CIRCLE)
   override val primaryKey = PrimaryKey(id, name = "MarkPKConstraintName")
+}
+
+object ExpertMarksVos : Table(EXPERT_MARKS_TABLE) {
+  val id: Column<Int> = integer(name = ID_FIELD).autoIncrement()
+  val userId: Column<Int> = integer("user_$ID_FIELD")
+  val researchId: Column<Int> = integer("research_$ID_FIELD")
+  val markId: Column<Int> = integer("mark_$ID_FIELD")
+  val diameterMm: Column<Int> = integer(DIAMETER_MM_FIELD)
+  val type: Column<String> = varchar(name = MARK_TYPE_FILED, 20)
+  val x: Column<Double> = double(X_FIELD)
+  val y: Column<Double> = double(Y_FIELD)
+  val z: Column<Double> = double(Z_FIELD)
+  val z_mm: Column<Double> = double(Z_MM_FIELD)
 }

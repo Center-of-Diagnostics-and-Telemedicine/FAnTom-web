@@ -3,9 +3,6 @@ import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
 import model.ID_FIELD
 import model.UserModel
-import util.AUTHENTICATION
-import util.NAME_FIELD
-import util.PASSWORD_FIELD
 import java.util.*
 
 object JwtConfig {

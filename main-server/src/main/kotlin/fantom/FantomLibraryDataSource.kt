@@ -14,18 +14,8 @@ import io.ktor.http.*
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonConfiguration
 import model.*
+import repository.FantomLibraryDataSource
 import util.debugLog
-
-interface FantomLibraryDataSource {
-  val endPoint: String
-  val onClose: () -> Unit
-
-  suspend fun getAccessionNames(): List<String>
-  suspend fun initResearch(accessionNumber: String): ResearchInitResponseNew
-  suspend fun getSlice(sliceRequest: SliceRequestNew, researchName: String): SliceResponse
-  suspend fun getHounsfield(request: HounsfieldRequestNew): HounsfieldResponse
-  suspend fun closeSession()
-}
 
 class FantomLibraryDataSourceImpl(
   override val endPoint: String,

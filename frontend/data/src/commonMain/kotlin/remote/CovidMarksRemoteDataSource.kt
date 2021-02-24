@@ -7,6 +7,7 @@ import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.parse
 import model.*
 import repository.CovidMarksRemote
 

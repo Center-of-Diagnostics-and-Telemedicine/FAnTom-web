@@ -9,8 +9,6 @@ actual object ResearchLocalDataSource : ResearchLocal {
 
   private val map = AtomicReference<Map<String, Research>>(emptyMap())
 
-  override suspend fun get(accessionName: String): Research? = map.value[accessionName]
-
   override suspend fun getAll(): List<Research> = map.value.values.toList()
 
   override suspend fun save(research: Research) {

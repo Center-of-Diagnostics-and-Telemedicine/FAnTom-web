@@ -19,6 +19,7 @@ const val BRIGHTNESS_ROUTE: String = "brightness"
 const val AUTH_CHECK_ROUTE: String = "check"
 const val CLOSE_ROUTE: String = "close"
 const val SESSION_ROUTE: String = "session"
+const val JSON_TYPE = "json"
 
 const val TYPE_AXIAL = "AXIAL"
 const val TYPE_FRONTAL = "FRONTAL"
@@ -42,6 +43,9 @@ const val libraryServerPort: Int = 5555
 const val libraryServerSchema: String = "http://"
 const val libraryServerDomain: String = "localhost"
 
+const val protocolsPath = "C:\\Users\\max\\Downloads\\protocol"
+
+const val defaultUserPassword = "password"
 
 /**
 Типы срезов

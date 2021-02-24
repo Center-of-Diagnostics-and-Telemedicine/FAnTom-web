@@ -80,7 +80,7 @@ class CovidMarksControllerTest {
     createController()
     controller.input(CovidMarksController.Input.CloseResearchRequested)
 
-    assertTrue(CovidMarksController.Output.CloseResearch in output)
+    assertTrue(CovidMarksController.Output.CloseResearch !in output)
   }
 
   /**
