@@ -5,13 +5,13 @@ import io.ktor.locations.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import model.*
-import repository.CovidMarkRepository
+import repository.CovidMarksRepository
 import repository.ResearchRepository
 import util.CovidMark
 import util.user
 
 fun Route.getCovidMark(
-  covidMarksRepository: CovidMarkRepository,
+  covidMarksRepository: CovidMarksRepository,
   researchRepository: ResearchRepository
 ) {
 

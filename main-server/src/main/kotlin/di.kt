@@ -11,8 +11,8 @@ val researchRepository = ResearchRepositoryImpl(researchDao)
 val userResearchDao = UserResearchDao()
 val userResearchRepository = UserResearchRepositoryImpl(userResearchDao)
 
-val covidMarksDao = CovidCovidMarkDao()
-val covidMarksRepository = CovidCovidMarkRepositoryImpl(covidMarksDao)
+val covidMarksDao = CovidMarkDao()
+val covidMarksRepository = CovidMarksRepositoryImpl(covidMarksDao)
 
 val multiPlanarMarksDao = MultiPlanarMarksDao()
 val planarMarksDao = PlanarMarksDao()

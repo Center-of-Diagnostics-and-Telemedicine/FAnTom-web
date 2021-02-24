@@ -15,7 +15,7 @@ import repository.ResearchRepository
 import repository.SessionRepository
 import repository.UserResearchRepository
 import util.InitResearch
-import util.debugLog
+import debugLog
 import util.user
 import java.net.ConnectException
 

@@ -14,11 +14,6 @@ kotlin {
   }
 }
 
-val kotlin_version = "pre.94-kotlin-1.3.70" // for kotlin-wrappers
-val kotlin_react_version = "16.13.0-$kotlin_version"
-val kotlin_styled_version = "1.0.0-$kotlin_version"
-val muirwik_version = "0.4.1"
-
 dependencies {
   implementation(Deps.Jetbrains.Wrappers.React.Core)
   implementation(Deps.Jetbrains.Wrappers.React.ReactDom)

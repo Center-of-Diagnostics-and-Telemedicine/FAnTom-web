@@ -5,7 +5,7 @@ import io.ktor.locations.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import model.*
-import repository.CovidMarkRepository
+import repository.CovidMarksRepository
 import repository.ResearchRepository
 import repository.UserResearchRepository
 import util.ResearchesList
@@ -14,7 +14,7 @@ import util.user
 fun Route.researchesList(
   researchRepository: ResearchRepository,
   userResearchRepository: UserResearchRepository,
-  marksRepositoryCovid: CovidMarkRepository
+  marksRepositoryCovid: CovidMarksRepository
 ) {
 
   get<ResearchesList> {

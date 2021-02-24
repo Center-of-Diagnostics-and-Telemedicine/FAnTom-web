@@ -14,6 +14,7 @@ object Deps {
       object StdLib {
         object Common : Dependency(group = Kotlin, name = "kotlin-stdlib-common", version = version)
         object Jdk7 : Dependency(group = Kotlin, name = "kotlin-stdlib-jdk7", version = version)
+        object Jvm : Dependency(group = Kotlin, name = "kotlin-stdlib-jdk8", version = "")
         object Js : Dependency(group = Kotlin, name = "kotlin-stdlib-js", version = version)
       }
 
@@ -134,6 +135,7 @@ object Deps {
       private const val version = "1.1.19"
 
       object Reaktive : Dependency(group = Badoo.Reaktive, name = "reaktive", version = version)
+      object Jvm : Dependency(group = Badoo.Reaktive, name = "reaktive-jvm", version = version)
       object ReaktiveAnnotations :
         Dependency(group = Badoo.Reaktive, name = "reaktive-annotations", version = version)
 

@@ -10,20 +10,8 @@ import com.github.dockerjava.core.DockerClientImpl
 import com.github.dockerjava.jaxrs.JerseyDockerCmdExecFactory
 import model.dockerDataStorePath
 import model.libraryServerPort
-import util.debugLog
+import repository.ContainerCreator
 import java.io.File
-
-interface ContainerCreator {
-  suspend fun createContainer(
-    userId: Int,
-    accessionNumber: String,
-    port: Int,
-    researchDir: File,
-    onClose: () -> Unit
-  ): String
-
-  suspend fun deleteLibrary(containerId: String)
-}
 
 class ContainerCreatorImpl : ContainerCreator {
 
@@ -85,7 +73,7 @@ class ContainerCreatorImpl : ContainerCreator {
     val portOutsideContainer = Ports.Binding("0.0.0.0", port.toString())
     portBindings.bind(portInsideContainer, portOutsideContainer)
 
-    val researchPath = "${dockerDataStorePath}/${researchDir.name}"
+    val researchPath = "$dockerDataStorePath/${researchDir.name}"
     val dirWithResearchInsideContainer = Volume(researchPath)
     debugLog("research path = ${researchDir.path}, dirWithResearchInsideContainer = $dirWithResearchInsideContainer")
 

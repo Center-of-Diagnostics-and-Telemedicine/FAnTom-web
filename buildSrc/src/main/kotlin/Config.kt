@@ -5,6 +5,7 @@ import org.gradle.api.plugins.ExtensionAware
 import org.gradle.kotlin.dsl.extra
 import org.gradle.kotlin.dsl.getByType
 import org.jetbrains.kotlin.gradle.dsl.Kotlin2JsProjectExtension
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalDceDsl
@@ -179,6 +180,10 @@ fun Project.js(block: Kotlin2JsProjectExtension.() -> Unit) {
 
 fun Project.kotlinProject(block: KotlinMultiplatformExtension.() -> Unit) {
   extensions.getByType<KotlinMultiplatformExtension>().block()
+}
+
+fun Project.jvm(block: KotlinJvmProjectExtension.() -> Unit) {
+  extensions.getByType<KotlinJvmProjectExtension>().block()
 }
 
 typealias SourceSets = NamedDomainObjectContainer<KotlinSourceSet>

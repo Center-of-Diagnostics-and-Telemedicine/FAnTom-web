@@ -1,10 +1,5 @@
-package repository
-
+import repository.ResearchDirFinder
 import java.io.File
-
-interface ResearchDirFinder {
-  fun getResearchPath(accessionName: String, rootDir: File): File
-}
 
 class ResearchDirFinderImpl : ResearchDirFinder {
 
@@ -15,12 +10,12 @@ class ResearchDirFinderImpl : ResearchDirFinder {
       for (file in listFiles) {
         if (file.isDirectory) {
           if (file.name.contains(accessionName)) {
-            println("file contains $accessionName")
+            debugLog("file contains $accessionName")
             return file
           }
         } else if(file.isFile) {
           if (file.name.contains(accessionName)) {
-            println("file contains $accessionName")
+            debugLog("file contains $accessionName")
             return file
           }
         }

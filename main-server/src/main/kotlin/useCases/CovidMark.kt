@@ -6,12 +6,12 @@ import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import model.*
-import repository.CovidMarkRepository
+import repository.CovidMarksRepository
 import util.CovidMark
 import util.user
 
 fun Route.mark(
-  covidMarkRepository: CovidMarkRepository
+  covidMarksRepository: CovidMarksRepository
 ) {
 
   post<CovidMark> {
@@ -25,11 +25,11 @@ fun Route.mark(
 
     try {
       val existing =
-        covidMarkRepository.getMark(userId = user.id, researchId = markModel.researchId)
+        covidMarksRepository.getMark(userId = user.id, researchId = markModel.researchId)
       if (existing == null) {
-        covidMarkRepository.createMark(markModel)
+        covidMarksRepository.createMark(markModel)
       } else {
-        covidMarkRepository.updateMark(markModel)
+        covidMarksRepository.updateMark(markModel)
       }
       call.respond(CovidMarksResponse(response = markEntity))
     } catch (e: Exception) {

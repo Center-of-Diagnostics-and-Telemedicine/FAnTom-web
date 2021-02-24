@@ -1,4 +1,4 @@
-package fantom
+package remote
 
 import com.badoo.reaktive.observable.debounce
 import com.badoo.reaktive.observable.subscribe
@@ -15,7 +15,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonConfiguration
 import model.*
 import repository.FantomLibraryDataSource
-import util.debugLog
+import debugLog
 
 class FantomLibraryDataSourceImpl(
   override val endPoint: String,
