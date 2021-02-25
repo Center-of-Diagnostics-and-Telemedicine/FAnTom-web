@@ -17,7 +17,7 @@ class ResearchDao() : ResearchDaoFacade {
     }
   }
 
-  override suspend fun getResearchByAccessionName(accessionNumber: String): ResearchModel? {
+  override suspend fun getResearchByAccessionNumber(accessionNumber: String): ResearchModel? {
     return transaction {
       ResearchVos
         .select { ResearchVos.accessionNumber eq accessionNumber }

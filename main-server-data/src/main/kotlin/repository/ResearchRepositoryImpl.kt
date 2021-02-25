@@ -11,8 +11,12 @@ class ResearchRepositoryImpl(
     return researchDaoFacade.getResearchById(researchId)
   }
 
+  override suspend fun getResearchByAccessionNumber(accessionNumber: String): ResearchModel? {
+    return researchDaoFacade.getResearchByAccessionNumber(accessionNumber)
+  }
+
   override suspend fun createResearch(researchModel: ResearchModel) {
-    val existingResearch = researchDaoFacade.getResearchByAccessionName(researchModel.accessionNumber)
+    val existingResearch = researchDaoFacade.getResearchByAccessionNumber(researchModel.accessionNumber)
     if (existingResearch != null) {
       throw IllegalStateException("research exists")
     }

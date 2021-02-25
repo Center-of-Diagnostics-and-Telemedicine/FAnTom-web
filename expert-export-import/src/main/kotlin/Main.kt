@@ -1,10 +1,13 @@
 import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
+import model.DEFAULT_USER_NAME
 import model.JSON_TYPE
+import model.UserModel
 import model.protocolsPath
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
+import useCase.*
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -17,26 +20,69 @@ fun main() {
 
 
   val jsonFileModels = getFiles(protocolsPath)
-  val doctorIds = jsonFileModels
-  val doctors = jsonFileModels.map { it.doctors.map { it.id } }.flatten().distinct()
+  jsonFileModels.forEach { jsonModel ->
+    val doctorIds = jsonModel.doctors.map { it.id }
+    val users = createDoctors(
+      doctorsIds = doctorIds,
+      userRepository = userRepository
+    )
+    val research = createResearch(
+      researchData = jsonModel.ids,
+      researchRepository = researchRepository
+    )
+    val userResearches = createUserResearches(
+      userModels = users,
+      researchModels = listOf(research),
+      repository = userResearchRepository
+    )
+    val userToNodule = mapNodules(jsonModel, users)
+
+    val marks = createMarks(userToNodule)
+  }
 
 
-  createDoctors(doctors)
-  createMarks()
+  val doctorsIds = jsonFileModels.map { it.doctors.map { it.id } }.flatten().distinct()
+  val users = createDoctors(
+    doctorsIds = doctorsIds,
+    userRepository = userRepository
+  )
+
+  val researchesData = jsonFileModels.map { it.ids }
+  val researches = createResearches(
+    researchesData = researchesData,
+    researchRepository = researchRepository
+  )
+  val userResearches = createUserResearches(
+    userModels = users,
+    researchModels = researches,
+    repository = userResearchRepository
+  )
+  val nodules = mapNodules(jsonFileModels)
+
+  val marks = createMarks(nodules, users, researches)
 
   val a = 1
-
-  //достаем json в объекты
-  //создаем записи простых отметок
 }
 
-fun createMarks() {
-}
+fun mapNodules(
+  jsonFileModel: JsonFileModel,
+  users: List<UserModel>
+): List<Map<UserModel, NoduleModel?>> {
+  val nodules = mutableListOf<Map<UserModel, NoduleModel?>>()
 
-fun createDoctors(doctors: List<String>) {
-  transaction {
-
+  jsonFileModel.nodules?.firstOrNull()?.let { nodulesParent ->
+    val mapToAdd = mutableMapOf<UserModel, NoduleModel?>()
+    nodulesParent.firstOrNull()?.let { map ->
+      map.forEach { doctorId, noduleModel ->
+        val userLogin = DEFAULT_USER_NAME + "_" + doctorId
+        val user = users.first { it.name == userLogin }
+        mapToAdd[user] = noduleModel
+      }
+    }
+    nodules.add(mapToAdd)
   }
+
+  return nodules
 }
 
 fun getFiles(protocolsPath: String): List<JsonFileModel> {
