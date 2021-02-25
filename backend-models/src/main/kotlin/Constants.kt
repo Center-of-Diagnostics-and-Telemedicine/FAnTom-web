@@ -1,4 +1,3 @@
-
 const val AUTHENTICATION = "Authentication"
 const val NAME_FIELD = "name"
 const val PASSWORD_FIELD = "password"
@@ -50,6 +49,14 @@ const val CUT_TYPE_FILED = "cut_type"
 const val SHAPE_TYPE_FILED = "shape_type"
 const val COMMENT_FILED = "comment"
 const val DIAMETER_MM_FIELD = "diameter_mm"
+const val VERSION_FIELD = "version"
+const val Z_TYPE_FIELD = "z_type"
+const val MACHINE_LEARNING_FIELD = "machine_learning"
+const val DECISION_FIELD = "expert_decision"
+const val DECISION_ID_FIELD = "expert_decision_id"
+const val DECISION_COMMENT_FIELD = "expert_decision_comment"
+const val DECISION_PROPER_SIZE_FIELD = "expert_decision_proper_size"
+const val DECISION_TYPE_FIELD = "expert_decision_type"
 
 
 const val ROOT = "/"

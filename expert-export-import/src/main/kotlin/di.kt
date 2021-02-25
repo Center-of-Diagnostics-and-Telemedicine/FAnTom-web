@@ -1,6 +1,7 @@
 import dao.*
 import kotlinx.coroutines.GlobalScope
 import repository.*
+import repository.repository.ExportedMarksRepository
 
 val userDao = UserDao()
 val userRepository = UserRepositoryImpl(userDao)
@@ -26,3 +27,6 @@ val sessionRepository = SessionRepositoryImpl(
   researchDirFinder,
   GlobalScope.coroutineContext
 )
+
+val exportedMarksDao = ExportedMarksDao()
+val exportedMarksRepository = ExportedMarksRepositoryImpl(exportedMarksDao)

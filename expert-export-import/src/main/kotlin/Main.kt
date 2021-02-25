@@ -1,9 +1,5 @@
-import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
-import model.DEFAULT_USER_NAME
-import model.JSON_TYPE
-import model.UserModel
-import model.protocolsPath
+import model.*
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -12,8 +8,7 @@ import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
 
-@OptIn(UnstableDefault::class)
-fun main() {
+suspend fun main() {
 //  connectToDatabase()
 //
 //  initDb()
@@ -37,31 +32,13 @@ fun main() {
     )
     val userToNodule = mapNodules(jsonModel, users)
 
-    val marks = createMarks(userToNodule)
+    createMarks(
+      usersToNodules = userToNodule,
+      users = users,
+      research,
+      repository = exportedMarksRepository
+    )
   }
-
-
-  val doctorsIds = jsonFileModels.map { it.doctors.map { it.id } }.flatten().distinct()
-  val users = createDoctors(
-    doctorsIds = doctorsIds,
-    userRepository = userRepository
-  )
-
-  val researchesData = jsonFileModels.map { it.ids }
-  val researches = createResearches(
-    researchesData = researchesData,
-    researchRepository = researchRepository
-  )
-  val userResearches = createUserResearches(
-    userModels = users,
-    researchModels = researches,
-    repository = userResearchRepository
-  )
-  val nodules = mapNodules(jsonFileModels)
-
-  val marks = createMarks(nodules, users, researches)
-
-  val a = 1
 }
 
 fun mapNodules(
