@@ -37,11 +37,11 @@ class ExportedMarksDao : ExportedMarksDaoFacade {
         it[y] = mark.y
         it[z] = mark.z
         it[zType] = mark.zType
-        it[expertDecisionMachineLearning] = mark.expertDecisionMachineLearning
+        it[expertDecisionMachineLearning] = if (mark.expertDecisionMachineLearning == true) 1 else 0
+        it[expertDecisionProperSize] = if (mark.expertDecisionProperSize == true) 1 else 0
         it[expertDecision] = mark.expertDecision
         it[expertDecisionId] = mark.expertDecisionId
         it[expertDecisionComment] = mark.expertDecisionComment
-        it[expertDecisionProperSize] = mark.expertDecisionProperSize
         it[expertDecisionType] = mark.expertDecisionType
       } get ExpertMarksVos.id
     }
@@ -57,11 +57,11 @@ class ExportedMarksDao : ExportedMarksDaoFacade {
         it[y] = mark.y
         it[z] = mark.z
         it[zType] = mark.zType
-        it[expertDecisionMachineLearning] = mark.expertDecisionMachineLearning
+        it[expertDecisionMachineLearning] = if (mark.expertDecisionMachineLearning == true) 1 else 0
+        it[expertDecisionProperSize] = if (mark.expertDecisionProperSize == true) 1 else 0
         it[expertDecision] = mark.expertDecision
         it[expertDecisionId] = mark.expertDecisionId
         it[expertDecisionComment] = mark.expertDecisionComment
-        it[expertDecisionProperSize] = mark.expertDecisionProperSize
         it[expertDecisionType] = mark.expertDecisionType
       }
     }

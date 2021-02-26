@@ -1,6 +1,10 @@
 # FAnTom
 
-* Set of projects:
+### FAnTom is a software for creating datasets of marked CT-images for machine learning systems.
+
+## Modules
+
+* Fantom consists of several modules:
   * [Api Models Library](api-models) &mdash; MPP library with constants and serializable data classes for client-server interaction
   * [Backend Models Library](api-models) &mdash; Java library with constants and serializable data classes for server-side logic
   * [Main Backend Server](main-server) &mdash; Main Server with MySQL. Depends on [Api Models Library](api-models), [Backend Models Library](api-models).
@@ -22,13 +26,27 @@
 It is a [Kotlin Multiplatform](https://kotlinlang.org/docs/reference/multiplatform.html) project.
 
 It uses:
+- [XRAD](https://github.com/Center-of-Diagnostics-and-Telemedicine/xrad) for DICOM processing.
 - `kotlin-multiplatform`, `kotlin-js` and `kotlin-jvm` plugins for Kotlin compilation;
 - [Ktor framework](https://ktor.io) as a web server;
 - [Exposed](https://github.com/JetBrains/Exposed) and MySQL;
 - [kotlinx.serialization](https://github.com/Kotlin/kotlinx.serialization) for client/server (de-)serialization;
 - [MVIKotlin](https://github.com/arkivanov/MVIKotlin) for client-side architecture;
 - [React](https://reactjs.org), [Styled components](https://www.styled-components.com) and [kotlin-wrappers](https://github.com/JetBrains/kotlin-wrappers) for rendering.
-- [XRAD](https://github.com/Center-of-Diagnostics-and-Telemedicine/xrad) for DICOM processing.
+
+## Screenshots
+
+* Auth
+
+![Auth](media/auth.jpg)
+
+* List Screen
+
+![List Screen](media/list.png)
+
+* Main Screen
+
+![Main Screen](media/ct_mark_right.png)
 
 ## License
 
