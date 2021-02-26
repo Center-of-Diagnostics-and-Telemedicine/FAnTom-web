@@ -51,4 +51,4 @@ It uses:
 ## License
 
 General license information is located in the LICENSE file.
-Unless otherwise specified, for the majority of the code, the FAnTom-web is licensed under BSD-3-Clause license
+Unless otherwise specified, for the majority of the code, the FAnTom-web is licensed under [BSD-3-Clause license](LICENSE)
