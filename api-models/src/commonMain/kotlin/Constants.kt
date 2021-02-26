@@ -6,7 +6,6 @@ const val LOCALHOST = "http://localhost"
 const val MAIN_SERVER_PORT = 8081
 const val MAIN_SERVER_URL = "$LOCALHOST:$MAIN_SERVER_PORT"
 
-//const val END_POINT: String = "http://10.2.20.44:8080"
 const val LOGIN_ROUTE: String = "login"
 const val RESEARCH_ROUTE: String = "research"
 const val MARK_ROUTE: String = "mark"

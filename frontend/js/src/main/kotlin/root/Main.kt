@@ -3,7 +3,6 @@ package root
 import DEBUG
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import local.LoginLocalDataSource
-import local.MarksLocalDataSource
 import local.ResearchLocalDataSource
 import react.dom.render
 import remote.CovidMarksRemoteDataSource
@@ -14,6 +13,12 @@ import repository.*
 import storeFactoryInstance
 import kotlin.browser.document
 import kotlin.browser.window
+
+/**
+Copyright (c) 2021, Moscow Center for Diagnostics & Telemedicine
+All rights reserved.
+This file is licensed under BSD-3-Clause license. See LICENSE file for details.
+ */
 
 private class Application {
 

@@ -16,9 +16,16 @@ import org.apache.http.auth.AuthenticationException
 import org.jetbrains.exposed.sql.Database
 import org.slf4j.event.Level
 import useCases.*
-import util.*
+import util.Config
+import util.parseConfig
 
 lateinit var config: Config
+
+/**
+Copyright (c) 2021, Moscow Center for Diagnostics & Telemedicine
+All rights reserved.
+This file is licensed under BSD-3-Clause license. See LICENSE file for details.
+ */
 
 
 fun main(args: Array<String>) {
