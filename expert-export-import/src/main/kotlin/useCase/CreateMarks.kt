@@ -6,7 +6,7 @@ import repository.repository.ExportedMarksRepository
 suspend fun createMarks(
   usersToNodules: List<Map<UserModel, NoduleModel?>>,
   users: List<UserModel>,
-  research: Research,
+  research: ResearchModel,
   repository: ExportedMarksRepository
 ) {
   usersToNodules.forEach { usersToNodulesMap ->
@@ -27,7 +27,7 @@ private suspend fun createMark(
   repository: ExportedMarksRepository,
   nodule: NoduleModel,
   user: UserModel,
-  research: Research
+  research: ResearchModel
 ) {
   val expertDecisionModel = nodule.expertDecision?.firstOrNull()
   repository.create(

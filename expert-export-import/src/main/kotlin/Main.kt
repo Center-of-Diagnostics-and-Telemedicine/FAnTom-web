@@ -35,7 +35,7 @@ suspend fun main() {
     createMarks(
       usersToNodules = userToNodule,
       users = users,
-      research,
+      research = research,
       repository = exportedMarksRepository
     )
   }
