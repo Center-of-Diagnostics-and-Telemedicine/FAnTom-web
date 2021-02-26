@@ -1,10 +1,10 @@
-# FAnTom
+# FAnTom-web
 
-### FAnTom is a software for creating datasets of marked CT-images for machine learning systems.
+### FAnTom-web is a software for creating datasets of marked CT-images for machine learning systems.
 
 ## Modules
 
-* Fantom consists of several modules:
+* FAnTom-web consists of several modules:
   * [Api Models Library](api-models) &mdash; MPP library with constants and serializable data classes for client-server interaction
   * [Backend Models Library](api-models) &mdash; Java library with constants and serializable data classes for server-side logic
   * [Main Backend Server](main-server) &mdash; Main Server with MySQL. Depends on [Api Models Library](api-models), [Backend Models Library](api-models).
@@ -51,3 +51,4 @@ It uses:
 ## License
 
 General license information is located in the LICENSE file.
+Unless otherwise specified, for the majority of the code, the FAnTom-web is licensed under BSD-3-Clause license

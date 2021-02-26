@@ -1,14 +1,14 @@
-FAnTom Copyright
+FAnTom-web Copyright
 
 
 
-FAnTom is a client-server software.
+FAnTom-web is a client-server software.
 
-The FAnTom includes packages and modules covered by separate
+The FAnTom-web includes packages and modules covered by separate
 copyright and licenses that can be found in the corresponding package or module
 directory.
 
-Unless otherwise specified, for the majority of the code, the FAnTom 
+Unless otherwise specified, for the majority of the code, the FAnTom-web
 is licensed under BSD-3-Clause license and has the following copyright:
 
 Copyright (c) 2021, Moscow Center for Diagnostics & Telemedicine
