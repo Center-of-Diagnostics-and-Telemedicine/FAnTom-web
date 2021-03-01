@@ -24,6 +24,10 @@ sealed class Category(
     name = COVID_RESEARCH_CATEGORY
   )
 
+  object Expert : Category(
+    name = EXPERT_CATEGORY
+  )
+
   object All : Category(
     name = ALL_RESEARCH_CATEGORY
   )

@@ -59,6 +59,9 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
   private var confirmationDialogOpen: Boolean = false
   private var confirmationDialogScrollOpen: Boolean = false
 
+  private val drawerBigMargin = 16.spacingUnits
+  private val drawerLittleMargin = 8.spacingUnits
+
   init {
     state = ResearchState(
       toolsOpen = false,
@@ -105,13 +108,19 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
       css(appFrameContainerStyle)
       if (model.data != null) {
         leftMenu(model)
+        contentWithCuts(model)
 
         when (props.dependencies.research.getCategoryByString()) {
           Category.Covid -> {
-            covid(model)
+
+            rightMenu(drawerBigMargin) {
+              covidMarks(dependencies = covidMarksDependencies(model))
+            }
           }
           else -> {
-            markup(model)
+            rightMenu(drawerLittleMargin) {
+              marks(dependencies = marksDependencies(model.data))
+            }
           }
         }
       }
@@ -119,39 +128,22 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
     }
   }
 
-  private fun RBuilder.markup(model: ResearchView.Model) {
+  private fun RBuilder.contentWithCuts(model: ResearchView.Model) {
     mainContent(
-      marginnLeft = if (state.toolsOpen) drawerWidth.px else 8.spacingUnits,
-      marginnRight = if (state.marksOpen) drawerWidth.px else 16.spacingUnits
+      marginnLeft = if (state.toolsOpen) drawerWidth.px else drawerLittleMargin,
+      marginnRight = if (state.marksOpen) drawerWidth.px else drawerBigMargin
     ) {
       cuts(dependencies = cutsDependencies(model))
-    }
-
-    rightDrawer(
-      open = state.marksOpen,
-      drawerWidth = if (state.marksOpen) drawerWidth.px else 8.spacingUnits,
-      onOpen = ::openMarks,
-      onClose = ::closeMarks
-    ) {
-      rightDrawerHeaderButton(
-        open = state.marksOpen,
-        onClick = { setState { marksOpen = !state.marksOpen } }
-      )
-      marks(dependencies = marksDependencies(model.data))
     }
   }
 
-  private fun RBuilder.covid(model: ResearchView.Model) {
-    mainContent(
-      marginnLeft = if (state.toolsOpen) drawerWidth.px else 8.spacingUnits,
-      marginnRight = if (state.marksOpen) drawerWidth.px else 16.spacingUnits
-    ) {
-      cuts(dependencies = cutsDependencies(model))
-    }
-
+  private fun RBuilder.rightMenu(
+    drawerMargin: LinearDimension,
+    block: RBuilder.() -> Unit
+  ) {
     rightDrawer(
       open = state.marksOpen,
-      drawerWidth = if (state.marksOpen) drawerWidth.px else 16.spacingUnits,
+      drawerWidth = if (state.marksOpen) drawerWidth.px else drawerMargin,
       onOpen = ::openMarks,
       onClose = ::closeMarks
     ) {
@@ -159,14 +151,14 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
         open = state.marksOpen,
         onClick = { setState { marksOpen = !state.marksOpen } }
       )
-      covidMarks(dependencies = covidMarksDependencies(model))
+      block()
     }
   }
 
   private fun RBuilder.leftMenu(model: ResearchView.Model) {
     leftDrawer(
       open = state.toolsOpen,
-      drawerWidth = if (state.toolsOpen) drawerWidth.px else 8.spacingUnits,
+      drawerWidth = if (state.toolsOpen) drawerWidth.px else drawerLittleMargin,
       onOpen = ::openTools,
       onClose = ::closeTools
     ) {
@@ -292,7 +284,6 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
       is MarksController.Output.CenterSelectedMark -> {
         cutsInputObservable.onNext(CutController.Input.ChangeSliceNumberByMarkCenter(output.mark))
         setState { dialogOpen = true }
-
       }
     }.let { }
   }
@@ -303,23 +294,6 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
         researchViewDelegate.dispatch(ResearchView.Event.Close)
     }
   }
-
-//  private fun RBuilder.formDialog(open: Boolean) {
-//    fun handleClose() {
-//      setState { dialogOpen = false}
-//    }
-//    mDialog(open, onClose =  { _, _ -> handleClose() }) {
-//      mDialogTitle("Комментарий (можно оставить поле пустым) (5/5)")
-//      mDialogContent {
-//        mTextField("Комментарий", autoFocus = true, margin = MFormControlMargin.dense, type = InputType.text, fullWidth = true)
-//      }
-//      mDialogActions {
-//        mButton("Закрыть", onClick = { handleClose() }, variant = MButtonVariant.text)
-//        mButton("Подтвердить",  onClick = { handleClose() }, variant = MButtonVariant.text)
-//      }
-//    }
-//  }
-
 
   private fun updateState(model: ResearchView.Model) = setState { researchModel = model }
   private fun closeTools() = setState { toolsOpen = false }
