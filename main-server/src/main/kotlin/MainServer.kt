@@ -9,7 +9,6 @@ import io.ktor.locations.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.server.netty.*
-import kotlinx.coroutines.GlobalScope
 import model.DATABASE_DRIVER
 import model.DockerConfigModel
 import model.DockerContainerAppConfigModel
@@ -141,7 +140,7 @@ private fun Application.sessionRepository(): SessionRepository {
   return SessionRepositoryFactory(
     dockerConfigModel = dockerConfigModel(),
     researchDirFinder = researchDirFinder(),
-    context = GlobalScope.coroutineContext
+    context = coroutineContext
   ).build()
 }
 
