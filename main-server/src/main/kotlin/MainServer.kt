@@ -1,3 +1,6 @@
+import com.auth0.jwt.JWT
+import com.auth0.jwt.JWTVerifier
+import com.auth0.jwt.algorithms.Algorithm
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.auth.jwt.*
@@ -24,8 +27,6 @@ This file is licensed under BSD-3-Clause license. See LICENSE file for details.
 fun main(args: Array<String>): Unit = EngineMain.main(args)
 
 fun Application.module(testing: Boolean = false) {
-
-  val jwt = "jwt"
 
   Database.connect(
     url = DATABASE_URL,
@@ -66,12 +67,16 @@ fun Application.module(testing: Boolean = false) {
   }
   install(ConditionalHeaders)
   install(Locations)
+
+
+  val jwtConfig = jwtConfig()
+
   install(Authentication) {
-    jwt(jwt) {
-      verifier(JwtConfig.verifier)
-      realm = "ktor.io"
-      validate {
-        it.payload.getClaim(ID_FIELD).asInt()?.let(::getUser)
+    jwt {
+      realm = environment.config.property("jwt.realm").getString()
+      verifier(jwtConfig.verifier)
+      validate { credential ->
+        credential.payload.getClaim(ID_FIELD).asInt()?.let(::getUser)
       }
     }
   }
@@ -89,9 +94,9 @@ fun Application.module(testing: Boolean = false) {
       }
     }
 
-    login(userRepository)
+    login(userRepository, jwtConfig::makeToken)
 
-    authenticate(jwt) {
+    authenticate {
       register(userRepository)
 
       researchesList(researchRepository, userResearchRepository, covidMarksRepository)
@@ -113,4 +118,11 @@ fun Application.module(testing: Boolean = false) {
 
   }
 
+}
+
+private fun Application.jwtConfig(): JwtConfig {
+  val jwtIssuer = environment.config.property("jwt.domain").getString()
+  val jwtSecret = environment.config.property("jwt.secret").getString()
+
+  return JwtConfig(jwtSecret, jwtIssuer)
 }
