@@ -1,22 +1,17 @@
 package repository
 
 import ContainerCreatorImpl
+import model.DockerConfigModel
 import kotlin.coroutines.CoroutineContext
 
 class SessionRepositoryFactory(
-  private val dockerHost: String,
-  private val dockerUserName: String,
-  private val dockerUserPassword: String,
+  private val dockerConfigModel: DockerConfigModel,
   private val researchDirFinder: ResearchDirFinder,
-  private val context: CoroutineContext
+  private val context: CoroutineContext,
 ) {
 
   fun build(): SessionRepository {
-    val creator = ContainerCreatorImpl(
-      dockerHost = dockerHost,
-      dockerUserName = dockerUserName,
-      dockerUserPassword = dockerUserPassword
-    )
+    val creator = ContainerCreatorImpl(dockerConfigModel)
 
     return SessionRepositoryImpl(
       creator,

@@ -123,16 +123,29 @@ fun Application.module(testing: Boolean = false) {
 }
 
 private fun Application.sessionRepository(): SessionRepository {
+  return SessionRepositoryFactory(
+    dockerConfigModel = dockerConfigModel(),
+    researchDirFinder = researchDirFinder(),
+    context = GlobalScope.coroutineContext
+  ).build()
+}
+
+private fun Application.researchDirFinder(): ResearchDirFinderImpl {
+  val rootDirPath = environment.config.property("store.local").getString()
+  return ResearchDirFinderImpl(rootDirPath)
+}
+
+private fun Application.dockerConfigModel(): DockerConfigModel {
   val dockerHost = environment.config.property("docker.host").getString()
   val dockerUserName = environment.config.property("docker.user").getString()
   val dockerPassword = environment.config.property("docker.password").getString()
-  return SessionRepositoryFactory(
+  val dockerDataStorePath = environment.config.property("docker.store_path").getString()
+  return DockerConfigModel(
     dockerHost = dockerHost,
     dockerUserName = dockerUserName,
     dockerUserPassword = dockerPassword,
-    researchDirFinder = researchDirFinder,
-    context = GlobalScope.coroutineContext
-  ).build()
+    dockerDataStorePath = dockerDataStorePath
+  )
 }
 
 private fun Application.jwtConfig(): JwtConfig {

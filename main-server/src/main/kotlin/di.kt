@@ -1,5 +1,4 @@
 import dao.*
-import kotlinx.coroutines.GlobalScope
 import repository.*
 
 val userDao = UserDao()
@@ -18,5 +17,3 @@ val multiPlanarMarksDao = MultiPlanarMarksDao()
 val planarMarksDao = PlanarMarksDao()
 val multiPlanarMarksRepository = MultiPlanarMarksRepositoryImpl(multiPlanarMarksDao)
 val planarMarksRepository = PlanarMarksRepositoryImpl(planarMarksDao)
-
-val researchDirFinder = ResearchDirFinderImpl()

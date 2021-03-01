@@ -35,15 +35,6 @@ const val TYPE_SAGITTAL = "SAGITTAL"
 
 const val DEFAULT_USER_NAME = "doctor"
 
-//mac
-const val localDataStorePath = "/Users/max/Documents/test"
-//win
-//const val localDataStorePath = "C:\\dicom\\test"
-
-//deploy
-//const val localDataStorePath = "/data/fantom/dx2"
-const val dockerDataStorePath = "/app/dicom"
-
 const val ID_FIELD = "id"
 
 const val noValue = -1

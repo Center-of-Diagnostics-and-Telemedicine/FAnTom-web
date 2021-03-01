@@ -8,21 +8,19 @@ import com.github.dockerjava.api.model.Volume
 import com.github.dockerjava.core.DefaultDockerClientConfig
 import com.github.dockerjava.core.DockerClientImpl
 import com.github.dockerjava.jaxrs.JerseyDockerCmdExecFactory
-import model.dockerDataStorePath
+import model.DockerConfigModel
 import model.libraryServerPort
 import repository.ContainerCreator
 import java.io.File
 
 class ContainerCreatorImpl(
-  dockerHost: String,
-  dockerUserName: String,
-  dockerUserPassword: String
+  private val dockerConfigModel: DockerConfigModel
 ) : ContainerCreator {
 
   private val config = DefaultDockerClientConfig.createDefaultConfigBuilder()
-    .withDockerHost(dockerHost)
-    .withRegistryUsername(dockerUserName)
-    .withRegistryPassword(dockerUserPassword)
+    .withDockerHost(dockerConfigModel.dockerHost)
+    .withRegistryUsername(dockerConfigModel.dockerUserName)
+    .withRegistryPassword(dockerConfigModel.dockerUserPassword)
     .build()
 
   private val execFactory = JerseyDockerCmdExecFactory()
@@ -60,7 +58,7 @@ class ContainerCreatorImpl(
     val portOutsideContainer = Ports.Binding("0.0.0.0", port.toString())
     portBindings.bind(portInsideContainer, portOutsideContainer)
 
-    val researchPath = "$dockerDataStorePath/${researchDir.name}"
+    val researchPath = "${dockerConfigModel.dockerDataStorePath}/${researchDir.name}"
     val dirWithResearchInsideContainer = Volume(researchPath)
     debugLog("research path = ${researchDir.path}, dirWithResearchInsideContainer = $dirWithResearchInsideContainer")
 
