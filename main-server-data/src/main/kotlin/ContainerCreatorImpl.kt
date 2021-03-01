@@ -9,7 +9,6 @@ import com.github.dockerjava.core.DefaultDockerClientConfig
 import com.github.dockerjava.core.DockerClientImpl
 import com.github.dockerjava.jaxrs.JerseyDockerCmdExecFactory
 import model.DockerConfigModel
-import model.libraryServerPort
 import repository.ContainerCreator
 import java.io.File
 
@@ -54,7 +53,7 @@ class ContainerCreatorImpl(
   ): CreateContainerCmd {
 
     val portBindings = Ports()
-    val portInsideContainer = ExposedPort.tcp(libraryServerPort)
+    val portInsideContainer = ExposedPort.tcp(dockerConfigModel.dockerContainerAppConfigModel.port)
     val portOutsideContainer = Ports.Binding("0.0.0.0", port.toString())
     portBindings.bind(portInsideContainer, portOutsideContainer)
 
@@ -64,11 +63,11 @@ class ContainerCreatorImpl(
 
     val bindDir = Bind(researchDir.path, dirWithResearchInsideContainer)
     return dockerClient
-      .createContainerCmd("fantom")
+      .createContainerCmd(dockerConfigModel.dockerContainerAppConfigModel.name)
       .withCmd(
-        "./FantomWebServer",
+        dockerConfigModel.dockerContainerAppConfigModel.mainFile,
         researchPath,
-        "/app/webserver.ini"
+        dockerConfigModel.dockerContainerAppConfigModel.configFile
       )
       .withExposedPorts(portInsideContainer)
       .withPortBindings(portBindings)

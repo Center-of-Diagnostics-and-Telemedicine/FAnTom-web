@@ -10,7 +10,10 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.server.netty.*
 import kotlinx.coroutines.GlobalScope
-import model.*
+import model.DATABASE_DRIVER
+import model.DockerConfigModel
+import model.DockerContainerAppConfigModel
+import model.ID_FIELD
 import org.apache.http.auth.AuthenticationException
 import org.jetbrains.exposed.sql.Database
 import org.slf4j.event.Level
@@ -28,12 +31,7 @@ fun main(args: Array<String>): Unit = EngineMain.main(args)
 
 fun Application.module(testing: Boolean = false) {
 
-  Database.connect(
-    url = DATABASE_URL,
-    driver = DATABASE_DRIVER,
-    user = DATABASE_USER,
-    password = DATABASE_PASSWORD
-  )
+  connectToDatabase()
 
   // Serialize json
   install(ContentNegotiation) {
@@ -122,6 +120,23 @@ fun Application.module(testing: Boolean = false) {
 
 }
 
+private fun Application.connectToDatabase() {
+  val user = environment.config.property("database.user").getString()
+  val password = environment.config.property("database.password").getString()
+
+  val host = environment.config.property("database.host").getString()
+  val port = environment.config.property("database.port").getString()
+  val name = environment.config.property("database.name").getString()
+  val url = "jdbc:mysql://$host:$port/$name?characterEncoding=utf8&useUnicode=true&useSSL=false"
+
+  Database.connect(
+    url = url,
+    driver = DATABASE_DRIVER,
+    user = user,
+    password = password
+  )
+}
+
 private fun Application.sessionRepository(): SessionRepository {
   return SessionRepositoryFactory(
     dockerConfigModel = dockerConfigModel(),
@@ -140,11 +155,27 @@ private fun Application.dockerConfigModel(): DockerConfigModel {
   val dockerUserName = environment.config.property("docker.user").getString()
   val dockerPassword = environment.config.property("docker.password").getString()
   val dockerDataStorePath = environment.config.property("docker.store_path").getString()
+
   return DockerConfigModel(
     dockerHost = dockerHost,
     dockerUserName = dockerUserName,
     dockerUserPassword = dockerPassword,
-    dockerDataStorePath = dockerDataStorePath
+    dockerDataStorePath = dockerDataStorePath,
+    dockerContainerAppConfigModel = dockerContainerAppConfigModel()
+  )
+}
+
+private fun Application.dockerContainerAppConfigModel(): DockerContainerAppConfigModel {
+  val port = environment.config.property("docker.app.port").getString().toInt()
+  val name = environment.config.property("docker.app.name").getString()
+  val mainFile = environment.config.property("docker.app.main_file").getString()
+  val configFile = environment.config.property("docker.app.config_file").getString()
+
+  return DockerContainerAppConfigModel(
+    port = port,
+    name = name,
+    mainFile = mainFile,
+    configFile = configFile,
   )
 }
 

@@ -6,14 +6,7 @@ const val LOCALHOST = "http://localhost"
 const val MAIN_SERVER_PORT = 8081
 const val MAIN_SERVER_URL = "$LOCALHOST:$MAIN_SERVER_PORT"
 
-const val DATABASE_NAME = "fantom_mg"
-const val DATABASE_HOST = "localhost"
-const val DATABASE_PORT = 3306
-const val DATABASE_URL =
-  "jdbc:mysql://$DATABASE_HOST:$DATABASE_PORT/$DATABASE_NAME?characterEncoding=utf8&useUnicode=true&useSSL=false"
 const val DATABASE_DRIVER = "com.mysql.jdbc.Driver"
-const val DATABASE_USER = "root"
-const val DATABASE_PASSWORD = ""
 
 const val LOGIN_ROUTE: String = "login"
 const val RESEARCH_ROUTE: String = "research"
@@ -40,10 +33,6 @@ const val ID_FIELD = "id"
 const val noValue = -1
 
 const val tenMinutes: Long = 600000
-
-const val libraryServerPort: Int = 5555
-const val libraryServerSchema: String = "http://"
-const val libraryServerDomain: String = "localhost"
 
 const val protocolsPath = "C:\\Users\\max\\Downloads\\protocol"
 
