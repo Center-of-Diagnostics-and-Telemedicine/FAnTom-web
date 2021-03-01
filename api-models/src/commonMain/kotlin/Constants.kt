@@ -6,6 +6,15 @@ const val LOCALHOST = "http://localhost"
 const val MAIN_SERVER_PORT = 8081
 const val MAIN_SERVER_URL = "$LOCALHOST:$MAIN_SERVER_PORT"
 
+const val DATABASE_NAME = "fantom_mg"
+const val DATABASE_HOST = "localhost"
+const val DATABASE_PORT = 3306
+const val DATABASE_URL =
+  "jdbc:mysql://$DATABASE_HOST:$DATABASE_PORT/$DATABASE_NAME?characterEncoding=utf8&useUnicode=true&useSSL=false"
+const val DATABASE_DRIVER = "com.mysql.jdbc.Driver"
+const val DATABASE_USER = "root"
+const val DATABASE_PASSWORD = ""
+
 const val LOGIN_ROUTE: String = "login"
 const val RESEARCH_ROUTE: String = "research"
 const val MARK_ROUTE: String = "mark"
@@ -27,9 +36,9 @@ const val TYPE_SAGITTAL = "SAGITTAL"
 const val DEFAULT_USER_NAME = "doctor"
 
 //mac
-//const val localDataStorePath = "/Users/max/Documents/test"
+const val localDataStorePath = "/Users/max/Documents/test"
 //win
-const val localDataStorePath = "C:\\dicom\\test"
+//const val localDataStorePath = "C:\\dicom\\test"
 
 //deploy
 //const val localDataStorePath = "/data/fantom/dx2"
