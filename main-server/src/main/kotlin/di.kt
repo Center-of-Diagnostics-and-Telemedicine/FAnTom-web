@@ -19,10 +19,4 @@ val planarMarksDao = PlanarMarksDao()
 val multiPlanarMarksRepository = MultiPlanarMarksRepositoryImpl(multiPlanarMarksDao)
 val planarMarksRepository = PlanarMarksRepositoryImpl(planarMarksDao)
 
-val creator = ContainerCreatorImpl()
 val researchDirFinder = ResearchDirFinderImpl()
-val sessionRepository = SessionRepositoryImpl(
-  creator,
-  researchDirFinder,
-  GlobalScope.coroutineContext
-)

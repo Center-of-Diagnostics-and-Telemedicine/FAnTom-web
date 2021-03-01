@@ -1,6 +1,3 @@
-import com.auth0.jwt.JWT
-import com.auth0.jwt.JWTVerifier
-import com.auth0.jwt.algorithms.Algorithm
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.auth.jwt.*
@@ -12,10 +9,13 @@ import io.ktor.locations.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.server.netty.*
+import kotlinx.coroutines.GlobalScope
 import model.*
 import org.apache.http.auth.AuthenticationException
 import org.jetbrains.exposed.sql.Database
 import org.slf4j.event.Level
+import repository.SessionRepository
+import repository.SessionRepositoryFactory
 import useCases.*
 
 /**
@@ -84,6 +84,8 @@ fun Application.module(testing: Boolean = false) {
   //create tables if not exists
   init()
 
+  val sessionRepository = sessionRepository()
+
   routing {
     static {
       resource(ROOT, RESOURCE_INDEX)
@@ -118,6 +120,19 @@ fun Application.module(testing: Boolean = false) {
 
   }
 
+}
+
+private fun Application.sessionRepository(): SessionRepository {
+  val dockerHost = environment.config.property("docker.host").getString()
+  val dockerUserName = environment.config.property("docker.user").getString()
+  val dockerPassword = environment.config.property("docker.password").getString()
+  return SessionRepositoryFactory(
+    dockerHost = dockerHost,
+    dockerUserName = dockerUserName,
+    dockerUserPassword = dockerPassword,
+    researchDirFinder = researchDirFinder,
+    context = GlobalScope.coroutineContext
+  ).build()
 }
 
 private fun Application.jwtConfig(): JwtConfig {
