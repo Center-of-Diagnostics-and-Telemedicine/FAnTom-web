@@ -8,34 +8,18 @@ import com.github.dockerjava.api.model.Volume
 import com.github.dockerjava.core.DefaultDockerClientConfig
 import com.github.dockerjava.core.DockerClientImpl
 import com.github.dockerjava.jaxrs.JerseyDockerCmdExecFactory
-import model.dockerDataStorePath
-import model.libraryServerPort
+import model.DockerConfigModel
 import repository.ContainerCreator
 import java.io.File
 
-class ContainerCreatorImpl : ContainerCreator {
+class ContainerCreatorImpl(
+  private val dockerConfigModel: DockerConfigModel
+) : ContainerCreator {
 
   private val config = DefaultDockerClientConfig.createDefaultConfigBuilder()
-    /**
-     * for mac
-     **/
-//    .withDockerHost("unix:///var/run/docker.sock")
-//    .withRegistryUsername("max")
-//    .withRegistryPassword(" ")
-
-    /**
-     * for linux server
-     **/
-//     .withDockerHost("unix:///var/run/docker.sock")
-//    .withRegistryUsername("m.gusev")
-//    .withRegistryPassword("8vkWq8%T")
-
-    /**
-     * for windows
-     **/
-    .withDockerHost("tcp://localhost:2375")
-//    .withRegistryUsername("m.gusev")
-//    .withRegistryPassword("Gusev!8")
+    .withDockerHost(dockerConfigModel.dockerHost)
+    .withRegistryUsername(dockerConfigModel.dockerUserName)
+    .withRegistryPassword(dockerConfigModel.dockerUserPassword)
     .build()
 
   private val execFactory = JerseyDockerCmdExecFactory()
@@ -69,21 +53,21 @@ class ContainerCreatorImpl : ContainerCreator {
   ): CreateContainerCmd {
 
     val portBindings = Ports()
-    val portInsideContainer = ExposedPort.tcp(libraryServerPort)
+    val portInsideContainer = ExposedPort.tcp(dockerConfigModel.dockerContainerAppConfigModel.port)
     val portOutsideContainer = Ports.Binding("0.0.0.0", port.toString())
     portBindings.bind(portInsideContainer, portOutsideContainer)
 
-    val researchPath = "$dockerDataStorePath/${researchDir.name}"
+    val researchPath = "${dockerConfigModel.dockerDataStorePath}/${researchDir.name}"
     val dirWithResearchInsideContainer = Volume(researchPath)
     debugLog("research path = ${researchDir.path}, dirWithResearchInsideContainer = $dirWithResearchInsideContainer")
 
     val bindDir = Bind(researchDir.path, dirWithResearchInsideContainer)
     return dockerClient
-      .createContainerCmd("fantom")
+      .createContainerCmd(dockerConfigModel.dockerContainerAppConfigModel.name)
       .withCmd(
-        "./FantomWebServer",
+        dockerConfigModel.dockerContainerAppConfigModel.mainFile,
         researchPath,
-        "/app/webserver.ini"
+        dockerConfigModel.dockerContainerAppConfigModel.configFile
       )
       .withExposedPorts(portInsideContainer)
       .withPortBindings(portBindings)

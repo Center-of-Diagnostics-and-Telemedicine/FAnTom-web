@@ -12,7 +12,7 @@ import repository.UserRepository
 import util.Login
 import util.userNameValid
 
-fun Route.login(repository: UserRepository) {
+fun Route.login(repository: UserRepository, makeToken: (userModel: UserModel) -> String) {
 
   post<Login> {
     val credentials = call.receive<UserPasswordCredential>()
@@ -31,7 +31,7 @@ fun Route.login(repository: UserRepository) {
         )
       )
     } else {
-      val token = JwtConfig.makeToken(userModel = user)
+      val token = makeToken(user)
       call.respond(
         AuthorizationResponse(
           response = AuthorizationModel(token = token)

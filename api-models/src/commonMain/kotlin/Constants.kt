@@ -6,6 +6,8 @@ const val LOCALHOST = "http://localhost"
 const val MAIN_SERVER_PORT = 8081
 const val MAIN_SERVER_URL = "$LOCALHOST:$MAIN_SERVER_PORT"
 
+const val DATABASE_DRIVER = "com.mysql.jdbc.Driver"
+
 const val LOGIN_ROUTE: String = "login"
 const val RESEARCH_ROUTE: String = "research"
 const val MARK_ROUTE: String = "mark"
@@ -26,24 +28,11 @@ const val TYPE_SAGITTAL = "SAGITTAL"
 
 const val DEFAULT_USER_NAME = "doctor"
 
-//mac
-//const val localDataStorePath = "/Users/max/Documents/test"
-//win
-const val localDataStorePath = "C:\\dicom\\test"
-
-//deploy
-//const val localDataStorePath = "/data/fantom/dx2"
-const val dockerDataStorePath = "/app/dicom"
-
 const val ID_FIELD = "id"
 
 const val noValue = -1
 
 const val tenMinutes: Long = 600000
-
-const val libraryServerPort: Int = 5555
-const val libraryServerSchema: String = "http://"
-const val libraryServerDomain: String = "localhost"
 
 const val protocolsPath = "C:\\Users\\max\\Downloads\\protocol"
 

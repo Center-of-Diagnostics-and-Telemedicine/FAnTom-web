@@ -1,12 +1,10 @@
 package repository
 
+import debugLog
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import model.LOCALHOST
-import model.localDataStorePath
 import remote.FantomLibraryDataSourceImpl
-import debugLog
-import java.io.File
 import kotlin.coroutines.CoroutineContext
 
 class SessionRepositoryImpl(
@@ -26,7 +24,7 @@ class SessionRepositoryImpl(
     userId: Int,
     accessionNumber: String
   ): RemoteLibraryRepository {
-    val researchDir = researchDirFinder.getResearchPath(accessionNumber, File(localDataStorePath))
+    val researchDir = researchDirFinder.getResearchPath(accessionNumber)
     portsCounter += 1
 
     val containerId = creator
