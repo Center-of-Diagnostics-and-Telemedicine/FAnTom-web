@@ -81,7 +81,7 @@ class MarkItemView(prps: MarkItemProps) : RComponent<MarkItemProps, MarkItemStat
           mMenu(
             state.selectedMenuIndex == area.id,
             anchorElement = anchorElement,
-            onClose = { _, reason -> handleOnClose() }) {
+            onClose = { _, _ -> handleOnClose() }) {
 
             props.markTypes.forEach { markType ->
               mMenuItem(
@@ -107,7 +107,7 @@ class MarkItemView(prps: MarkItemProps) : RComponent<MarkItemProps, MarkItemStat
       if (area.selected) {
         mTableRow {
           if (state.writing) {
-            mTableCell(colSpan = 5) {
+            mTableCell(colSpan = 7) {
               styledDiv {
                 css {
                   display = Display.flex
@@ -156,7 +156,7 @@ class MarkItemView(prps: MarkItemProps) : RComponent<MarkItemProps, MarkItemStat
     event.stopPropagation()
     val currentTarget = event.currentTarget
     setState {
-      anchorElement = currentTarget.asDynamic()
+      anchorElement = currentTarget.asDynamic() as? Node
       selectedMenuIndex = menuIndex
     }
   }
