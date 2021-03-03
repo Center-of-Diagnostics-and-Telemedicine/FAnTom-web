@@ -26,7 +26,7 @@
 It is a [Kotlin Multiplatform](https://kotlinlang.org/docs/reference/multiplatform.html) project.
 
 It uses:
-- [XRAD](https://github.com/Center-of-Diagnostics-and-Telemedicine/xrad) for DICOM processing.
+- [FAnTom](https://github.com/Center-of-Diagnostics-and-Telemedicine/FAnTom) web-service for DICOM processing.
 - `kotlin-multiplatform`, `kotlin-js` and `kotlin-jvm` plugins for Kotlin compilation;
 - [Ktor framework](https://ktor.io) as a web server;
 - [Exposed](https://github.com/JetBrains/Exposed) and MySQL;
