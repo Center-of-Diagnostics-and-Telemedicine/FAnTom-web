@@ -10,6 +10,11 @@
   * [Main Backend Server](main-server) &mdash; Main Server with MySQL. Depends on [Api Models Library](api-models), [Backend Models Library](api-models).
   * [KotlinJs React](frontend) &mdash; Frontend Js app built on KotlinJs. Depends on [Api Models Library](api-models).
 
+
+## Configuration
+
+- Add all needed data (passwords, DB config etc.) in [application.conf](main-server/src/main/resources/application.conf)
+
 ## Run application
 
 - `./gradlew :main-server:run` will run development [Main Backend Server](main-server)
