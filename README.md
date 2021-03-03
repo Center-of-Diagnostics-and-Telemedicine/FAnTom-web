@@ -10,6 +10,11 @@
   * [Main Backend Server](main-server) &mdash; Main Server with MySQL. Depends on [Api Models Library](api-models), [Backend Models Library](api-models).
   * [KotlinJs React](frontend) &mdash; Frontend Js app built on KotlinJs. Depends on [Api Models Library](api-models).
 
+
+## Configuration
+
+- Add all needed data (passwords, DB config etc.) in [application.conf](main-server/src/main/resources/application.conf)
+
 ## Run application
 
 - `./gradlew :main-server:run` will run development [Main Backend Server](main-server)
@@ -26,7 +31,7 @@
 It is a [Kotlin Multiplatform](https://kotlinlang.org/docs/reference/multiplatform.html) project.
 
 It uses:
-- [XRAD](https://github.com/Center-of-Diagnostics-and-Telemedicine/xrad) for DICOM processing.
+- [FAnTom](https://github.com/Center-of-Diagnostics-and-Telemedicine/FAnTom) web-service for DICOM processing.
 - `kotlin-multiplatform`, `kotlin-js` and `kotlin-jvm` plugins for Kotlin compilation;
 - [Ktor framework](https://ktor.io) as a web server;
 - [Exposed](https://github.com/JetBrains/Exposed) and MySQL;
