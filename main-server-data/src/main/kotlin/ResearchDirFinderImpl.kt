@@ -1,7 +1,9 @@
 import repository.ResearchDirFinder
 import java.io.File
 
-class ResearchDirFinderImpl : ResearchDirFinder {
+class ResearchDirFinderImpl(
+  override val rootDirPath: String
+) : ResearchDirFinder {
 
   override fun getResearchPath(accessionName: String, rootDir: File): File {
 
@@ -13,7 +15,7 @@ class ResearchDirFinderImpl : ResearchDirFinder {
             debugLog("file contains $accessionName")
             return file
           }
-        } else if(file.isFile) {
+        } else if (file.isFile) {
           if (file.name.contains(accessionName)) {
             debugLog("file contains $accessionName")
             return file
