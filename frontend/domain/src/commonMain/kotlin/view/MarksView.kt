@@ -21,7 +21,7 @@ interface MarksView : MviView<Model, Event> {
     data class ChangeMarkType(val type: MarkTypeModel, val markId: Int) : Event()
     data class ChangeVisibility(val mark: MarkModel) : Event()
 
-    object DissmissError : Event()
+    object DismissError : Event()
   }
 }
 

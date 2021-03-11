@@ -10,6 +10,7 @@ import com.ccfraser.muirwik.components.mTextField
 import com.ccfraser.muirwik.components.mTypography
 import com.ccfraser.muirwik.components.menu.mMenu
 import com.ccfraser.muirwik.components.menu.mMenuItem
+import com.ccfraser.muirwik.components.styles.Theme
 import com.ccfraser.muirwik.components.table.MTableCellAlign
 import com.ccfraser.muirwik.components.table.MTableCellPadding
 import com.ccfraser.muirwik.components.table.mTableCell
@@ -39,99 +40,127 @@ class MarkItemView(prps: MarkItemProps) : RComponent<MarkItemProps, MarkItemStat
 
   override fun RBuilder.render() {
     themeContext.Consumer { theme ->
-      val area = props.mark
-      mTableRow(
-        key = area.id,
-        onClick = { props.eventOutput(MarksView.Event.SelectItem(area)) }
-      ) {
-        if (area.selected) {
-          css {
-            backgroundColor = Color(theme.palette.primary.main)
+      markDataRow(theme)
+      markCommentRow(selected = props.mark.selected)
+    }
+  }
+
+  private fun RBuilder.markCommentRow(selected: Boolean) {
+    if (selected) {
+      mTableRow {
+        if (state.writing) {
+          mTableCell(colSpan = 7) {
+            comment(props.mark)
           }
-        }
-        mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.checkbox) {
-          mIconButton(
-            if (area.visible) "visibility" else "visibility_off",
-            onClick = {
-              it.stopPropagation()
-              props.eventOutput(MarksView.Event.ChangeVisibility(area))
-            },
-            size = MIconButtonSize.small
-          )
-        }
-        tableCell("${round(area.markData.x)}")
-        tableCell("${round(area.markData.y)}")
-        if (props.isPlanar) {
-          tableCell("${round(area.markData.sizeVertical)}")
-          tableCell("${round(area.markData.sizeHorizontal)}")
         } else {
-          tableCell("${round(area.markData.z)}")
-          tableCell("${round(area.markData.sizeHorizontal)}")
-        }
-
-        mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) {
-          mButton(
-            caption = if (area.type == null) "тип" else area.type!!.ru.take(3),
-            onClick = {
-              it.stopPropagation()
-              handleShowMenuClick(it, area.id)
-            },
-            size = MButtonSize.small
-          )
-          mMenu(
-            state.selectedMenuIndex == area.id,
-            anchorElement = anchorElement,
-            onClose = { _, _ -> handleOnClose() }) {
-
-            props.markTypes.forEach { markType ->
-              mMenuItem(
-                primaryText = markType.ru,
-                onClick = {
-                  it.stopPropagation()
-                  handleSimpleClick(markType)
-                })
-            }
+          mTableCell(colSpan = 6) {
+            commentText()
           }
-        }
-        mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.checkbox) {
-          mIconButton(
-            "close",
-            onClick = {
-              it.stopPropagation()
-              props.eventOutput(MarksView.Event.DeleteItem(area))
-            },
-            size = MIconButtonSize.small
-          )
-        }
-      }
-      if (area.selected) {
-        mTableRow {
-          if (state.writing) {
-            mTableCell(colSpan = 7) {
-              styledDiv {
-                css {
-                  display = Display.flex
-                  flexDirection = FlexDirection.row
-                  alignItems = Align.center
-                  justifyContent = JustifyContent.spaceBetween
-                }
-                commentInput()
-                mIconButton("done", onClick = {
-                  debugLog(state.comment)
-                  props.eventOutput(MarksView.Event.ItemCommentChanged(area, state.comment))
-                  setState { writing = false }
-                })
-              }
-            }
-          } else {
-            mTableCell(colSpan = 6) {
-              commentText()
-            }
-          }
-
         }
       }
     }
+  }
+
+  private fun RBuilder.markDataRow(theme: Theme) {
+    val area = props.mark
+    mTableRow(
+      key = area.id,
+      onClick = { props.eventOutput(MarksView.Event.SelectItem(area)) }
+    ) {
+      if (area.selected) {
+        css {
+          backgroundColor = Color(theme.palette.primary.main)
+        }
+      }
+      mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.checkbox) {
+        visibilityButton(area)
+      }
+      tableCell("${round(area.markData.x)}")
+      tableCell("${round(area.markData.y)}")
+      if (props.isPlanar) {
+        tableCell("${round(area.markData.sizeVertical)}")
+        tableCell("${round(area.markData.sizeHorizontal)}")
+      } else {
+        tableCell("${round(area.markData.z)}")
+        tableCell("${round(area.markData.sizeHorizontal)}")
+      }
+
+      mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.none) {
+        menuButton(area)
+        menu(area)
+      }
+      mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.checkbox) {
+        closeButton(area)
+      }
+    }
+  }
+
+  private fun RBuilder.comment(area: MarkModel) {
+    styledDiv {
+      css {
+        display = Display.flex
+        flexDirection = FlexDirection.row
+        alignItems = Align.center
+        justifyContent = JustifyContent.spaceBetween
+      }
+      commentInput()
+      mIconButton("done", onClick = {
+        debugLog(state.comment)
+        props.eventOutput(MarksView.Event.ItemCommentChanged(area, state.comment))
+        setState { writing = false }
+      })
+    }
+  }
+
+  private fun RBuilder.closeButton(area: MarkModel) {
+    mIconButton(
+      "close",
+      onClick = {
+        it.stopPropagation()
+        props.eventOutput(MarksView.Event.DeleteItem(area))
+      },
+      size = MIconButtonSize.small
+    )
+  }
+
+  private fun RBuilder.menu(area: MarkModel) {
+    mMenu(
+      state.selectedMenuIndex == area.id,
+      anchorElement = anchorElement,
+      onClose = { _, _ -> handleOnClose() }
+    ) {
+
+      props.markTypes.forEach { markType ->
+        mMenuItem(
+          primaryText = markType.ru,
+          onClick = {
+            it.stopPropagation()
+            handleSimpleClick(markType)
+          })
+      }
+    }
+  }
+
+  private fun RBuilder.menuButton(area: MarkModel) {
+    mButton(
+      caption = if (area.type == null) "тип" else area.type!!.ru.take(3),
+      onClick = {
+        it.stopPropagation()
+        handleShowMenuClick(it, area.id)
+      },
+      size = MButtonSize.small
+    )
+  }
+
+  private fun RBuilder.visibilityButton(area: MarkModel) {
+    mIconButton(
+      if (area.visible) "visibility" else "visibility_off",
+      onClick = {
+        it.stopPropagation()
+        props.eventOutput(MarksView.Event.ChangeVisibility(area))
+      },
+      size = MIconButtonSize.small
+    )
   }
 
   private fun RBuilder.commentInput() {

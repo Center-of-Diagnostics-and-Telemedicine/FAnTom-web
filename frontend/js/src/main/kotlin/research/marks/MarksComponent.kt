@@ -63,7 +63,7 @@ class MarksComponent(prps: MarksProps) : RComponent<MarksProps, MarksState>(prps
       alert(
         message = state.model.error,
         open = state.model.error.isNotEmpty(),
-        handleClose = { marksViewDelegate.dispatch(MarksView.Event.DissmissError) }
+        handleClose = { marksViewDelegate.dispatch(MarksView.Event.DismissError) }
       )
       mDivider()
 
@@ -116,8 +116,8 @@ class MarksComponent(prps: MarksProps) : RComponent<MarksProps, MarksState>(prps
     val marksInput: Observable<MarksController.Input>
     val marksRepository: MarksRepository
     val research: Research
-    val isPlanar: Boolean
     val data: ResearchSlicesSizesDataNew
+    val isPlanar: Boolean
   }
 }
 

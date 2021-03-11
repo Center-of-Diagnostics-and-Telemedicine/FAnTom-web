@@ -45,31 +45,3 @@ fun RBuilder.covidMarkView(
     }
   }
 }
-
-//fun RBuilder.covidMarkView(model: LungLobeModel, handleChange: (Int) -> Unit) {
-//  val htmlId = "${model.shortName}-input"
-//  mInputLabel(caption = model.shortName, htmlFor = htmlId)
-//
-//  // Method 1, using input props
-//  val inputProps: RProps = jsObject { }
-//  inputProps.asDynamic().name = htmlId
-//  inputProps.asDynamic().id = htmlId
-//  mTooltip(title = model.fullName, placement = TooltipPlacement.left) {
-//    mSelect(
-//      model.value?.value ?: 0,
-//      name = "left",
-//      variant = MFormControlVariant.outlined,
-//      onChange = { event, _ -> handleChange(event.targetValue.toString().toInt()) }) {
-//      attrs.inputProps = inputProps
-//      model.availableValues.forEach {
-//        mTooltip(title = it.description, placement = TooltipPlacement.left) {
-//          mMenuItem(primaryText = it.name, value = it.value.toString())
-//        }
-//      }
-//    }
-//  }
-//}
-//
-//private fun handleLeft(event: Event) {
-//  val value = event.targetValue
-//}

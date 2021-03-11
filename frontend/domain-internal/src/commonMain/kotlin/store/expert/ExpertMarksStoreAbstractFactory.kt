@@ -1,18 +1,20 @@
-package store.covid
+package store.expert
 
 import com.arkivanov.mvikotlin.core.store.*
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.badoo.reaktive.utils.ensureNeverFrozen
-import model.LungLobeModel
-import store.covid.CovidMarksStore.*
+import model.ExpertQuestion
+import model.MarkModel
+import model.expertQuestionsList
+import store.expert.ExpertMarksStore.*
 
-abstract class CovidMarksStoreAbstractFactory(
+abstract class ExpertMarksStoreAbstractFactory(
   private val storeFactory: StoreFactory
 ) {
 
-  fun create(): CovidMarksStore =
-    object : CovidMarksStore, Store<Intent, State, Label> by storeFactory.create(
-      name = "CovidMarksStore",
+  fun create(): ExpertMarksStore =
+    object : ExpertMarksStore, Store<Intent, State, Label> by storeFactory.create(
+      name = "ExpertMarksStore",
       initialState = State(),
       bootstrapper = SimpleBootstrapper(Unit),
       executorFactory = ::createExecutor,
@@ -27,7 +29,13 @@ abstract class CovidMarksStoreAbstractFactory(
 
   protected sealed class Result : JvmSerializable {
     object Loading : Result()
-    data class Loaded(val covidLungLobes: Map<Int, LungLobeModel>) : Result()
+    data class Loaded(val marks: List<MarkModel>) : Result()
+    data class ChangeCurrentMark(val markModel: MarkModel) : Result()
+    data class UpdateQuestions(
+      val markModel: MarkModel,
+      val questionsAnswers: List<ExpertQuestion<*>>
+    ) : Result()
+
     data class Error(val error: String) : Result()
     object DismissErrorRequested : Result()
   }
@@ -36,7 +44,9 @@ abstract class CovidMarksStoreAbstractFactory(
     override fun State.reduce(result: Result): State =
       when (result) {
         is Result.Loading -> copy(loading = true)
-        is Result.Loaded -> copy(covidLungLobes = result.covidLungLobes)
+        is Result.Loaded -> copy(marks = result.marks)
+        is Result.ChangeCurrentMark -> copy(current = result.markModel to expertQuestionsList)
+        is Result.UpdateQuestions -> copy(current = result.markModel to result.questionsAnswers)
         is Result.DismissErrorRequested -> copy(error = "")
         is Result.Error -> copy(error = result.error, loading = false)
       }

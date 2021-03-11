@@ -13,7 +13,7 @@ val covidMarksStateToModel: State.() -> Model = {
 val covidMarksEventToIntent: Event.() -> Intent? = {
   when (this) {
     is Event.VariantChosen -> Intent.ChangeVariant(lungLobeModel, variant)
-    Event.DissmissError -> Intent.DismissError
+    Event.DismissError -> Intent.DismissError
   }
 }
 

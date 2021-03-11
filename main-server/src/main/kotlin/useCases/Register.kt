@@ -1,14 +1,16 @@
 package useCases
 
 import io.ktor.application.*
-import io.ktor.http.HttpStatusCode
-import io.ktor.locations.post
-import io.ktor.request.receive
-import io.ktor.response.respond
-import io.ktor.routing.Route
+import io.ktor.http.*
+import io.ktor.locations.*
+import io.ktor.request.*
+import io.ktor.response.*
+import io.ktor.routing.*
 import model.*
 import repository.UserRepository
-import util.*
+import util.Register
+import util.user
+import util.userNameValid
 
 fun Route.register(repository: UserRepository) {
 
@@ -27,7 +29,7 @@ fun Route.register(repository: UserRepository) {
     when {
       params.name.length < 3 -> respondError(ErrorStringCode.INVALID_AUTH_CREDENTIALS)
       params.password.length < 4 -> respondError(ErrorStringCode.INVALID_REGISTER_LOGIN)
-      params.role < 0 -> respondError(ErrorStringCode.INVALID_REGISTER_ROLE)
+      params.role < 0 || params.role > 3 -> respondError(ErrorStringCode.INVALID_REGISTER_ROLE)
       !userNameValid(params.name) -> respondError(ErrorStringCode.INVALID_REGISTER_LOGIN)
       repository.getUser(
         params.name,

@@ -82,7 +82,7 @@ const val MR_RESEARCH_CATEGORY = "MR"
 const val MG_RESEARCH_CATEGORY = "MG"
 const val DX_RESEARCH_CATEGORY = "DX"
 const val COVID_RESEARCH_CATEGORY = "Covid"
-const val EXPERT_CATEGORY = "EXPERT"
+const val EXPERT_RESEARCH_CATEGORY = "Expert"
 const val ALL_RESEARCH_CATEGORY = "Все"
 
 
@@ -200,7 +200,7 @@ enum class Position {
 enum class UserRole(val value: Int) {
   ADMIN(0),
   DOCTOR(1),
-  EXPERT(2)
+  ARBITER(2)
 }
 
 enum class CTType {

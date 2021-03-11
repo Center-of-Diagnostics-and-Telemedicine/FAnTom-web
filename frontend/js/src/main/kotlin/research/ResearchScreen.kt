@@ -22,6 +22,7 @@ import repository.*
 import research.ResearchScreen.ResearchStyles.appFrameContainerStyle
 import research.covid.CovidMarksComponent
 import research.covid.covidMarks
+import research.expert.ExpertMarksComponent
 import research.gridcontainer.CutsContainerViewComponent
 import research.gridcontainer.cuts
 import research.marks.MarksComponent
@@ -53,14 +54,13 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
     BehaviorSubject<CovidMarksController.Input>(CovidMarksController.Input.Idle)
   private val toolsInputObservable =
     BehaviorSubject<ToolsController.Input>(ToolsController.Input.Idle)
-
-  private var confirmationDialogValue: String = ""
-  private var confirmationDialogSelectedValue: String = ""
-  private var confirmationDialogOpen: Boolean = false
-  private var confirmationDialogScrollOpen: Boolean = false
+  private val expertMarksInputObservable =
+    BehaviorSubject<ExpertMarksController.Input>(ExpertMarksController.Input.Idle)
 
   private val drawerBigMargin = 16.spacingUnits
   private val drawerLittleMargin = 8.spacingUnits
+
+  private val category = props.dependencies.research.getCategoryByString()
 
   init {
     state = ResearchState(
@@ -109,8 +109,7 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
       if (model.data != null) {
         leftMenu(model)
         contentWithCuts(model)
-
-        when (props.dependencies.research.getCategoryByString()) {
+        when (category) {
           Category.Covid -> {
 
             rightMenu(drawerBigMargin) {
@@ -197,6 +196,16 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
       override val covidMarksInput: Observable<CovidMarksController.Input> =
         this@ResearchScreen.covidMarksInputObservable
       override val data: ResearchSlicesSizesDataNew = model.data!!
+      override val open: Boolean = state.marksOpen
+    }
+
+  private fun expertMarksDependencies(model: ResearchView.Model) =
+    object : ExpertMarksComponent.Dependencies,
+      Dependencies by props.dependencies {
+      override val expertMarksOutput: (ExpertMarksController.Output) -> Unit = ::expertMarksOutput
+      override val data: ResearchSlicesSizesDataNew = model.data!!
+      override val expertMarksInput: Observable<ExpertMarksController.Input> =
+        this@ResearchScreen.expertMarksInputObservable
       override val open: Boolean = state.marksOpen
     }
 
@@ -292,6 +301,12 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
     when (output) {
       CovidMarksController.Output.CloseResearch ->
         researchViewDelegate.dispatch(ResearchView.Event.Close)
+    }
+  }
+
+  private fun expertMarksOutput(output: ExpertMarksController.Output) {
+    when (output) {
+
     }
   }
 

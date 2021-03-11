@@ -65,7 +65,7 @@ class CovidMarksComponent(prps: CovidMarksProps) :
     alert(
       message = state.model.error,
       open = state.model.error.isNotEmpty(),
-      handleClose = { marksViewDelegate.dispatch(CovidMarksView.Event.DissmissError) }
+      handleClose = { marksViewDelegate.dispatch(CovidMarksView.Event.DismissError) }
     )
     mDivider()
 

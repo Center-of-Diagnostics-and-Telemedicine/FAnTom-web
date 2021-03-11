@@ -88,6 +88,11 @@ fun init() {
         it[password] = hash("92fl")
         it[role] = UserRole.DOCTOR.value
       }
+      UserVos.insertIgnore {
+        it[name] = "Arbiter"
+        it[password] = hash("1234")
+        it[role] = UserRole.ARBITER.value
+      }
     }
   }
 
