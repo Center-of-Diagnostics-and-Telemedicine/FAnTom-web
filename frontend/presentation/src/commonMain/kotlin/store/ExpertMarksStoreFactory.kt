@@ -10,6 +10,7 @@ import com.badoo.reaktive.single.map
 import com.badoo.reaktive.single.observeOn
 import com.badoo.reaktive.single.subscribeOn
 import model.*
+import repository.ExpertMarksRepository
 import repository.MarksRepository
 import store.expert.ExpertMarksStore.*
 import store.expert.ExpertMarksStoreAbstractFactory
@@ -18,7 +19,8 @@ internal class ExpertMarksStoreFactory(
   storeFactory: StoreFactory,
   val research: Research,
   val data: ResearchSlicesSizesDataNew,
-  val marksRepository: MarksRepository
+  val marksRepository: MarksRepository,
+  val expertMarksRepository: ExpertMarksRepository
 ) : ExpertMarksStoreAbstractFactory(
   storeFactory = storeFactory
 ) {

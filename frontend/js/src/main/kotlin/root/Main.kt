@@ -5,10 +5,7 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import local.LoginLocalDataSource
 import local.ResearchLocalDataSource
 import react.dom.render
-import remote.CovidMarksRemoteDataSource
-import remote.LoginRemoteDataSource
-import remote.MarksRemoteDataSource
-import remote.ResearchRemoteDataSource
+import remote.*
 import repository.*
 import storeFactoryInstance
 import kotlin.browser.document
@@ -40,6 +37,11 @@ private class Application {
     token = getToken
   )
 
+  val expertMarkRepository = ExpertMarksRepositoryImpl(
+    remote = ExpertMarksRemoteDataSource,
+    token = getToken
+  )
+
   val covidMarkRepository = CovidMarksRepositoryImpl(
     remote = CovidMarksRemoteDataSource,
     token = getToken
@@ -56,6 +58,7 @@ private class Application {
           override val loginRepository: LoginRepository = authRepository
           override val researchRepository: ResearchRepository = researchesRepository
           override val marksRepository: MarksRepository = markRepository
+          override val expertMarksRepository: ExpertMarksRepository = expertMarkRepository
           override val brightnessRepository: BrightnessRepository = brightnesRepository
           override val mipRepository: MipRepository = mippRepository
           override val covidMarksRepository: CovidMarksRepository = covidMarkRepository

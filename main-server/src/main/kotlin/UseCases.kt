@@ -15,7 +15,8 @@ fun init() {
       UserResearchVos,
       CovidMarksVos,
       MultiPlanarMarksVos,
-      PlanarMarksVos
+      PlanarMarksVos,
+      ExpertMarksVos
     )
     SchemaUtils.createMissingTablesAndColumns(
       UserVos,
@@ -23,7 +24,8 @@ fun init() {
       UserResearchVos,
       CovidMarksVos,
       MultiPlanarMarksVos,
-      PlanarMarksVos
+      PlanarMarksVos,
+      ExpertMarksVos
     )
 
 

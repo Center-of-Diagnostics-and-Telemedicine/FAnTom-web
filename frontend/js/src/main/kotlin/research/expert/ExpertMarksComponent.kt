@@ -12,6 +12,7 @@ import destroy
 import model.Research
 import model.ResearchSlicesSizesDataNew
 import react.*
+import repository.ExpertMarksRepository
 import repository.MarksRepository
 import resume
 import view.ExpertMarksView
@@ -98,6 +99,7 @@ class ExpertMarksComponent(prps: ExpertMarksProps) :
     val data: ResearchSlicesSizesDataNew
     val expertMarksInput: Observable<ExpertMarksController.Input>
     val marksRepository: MarksRepository
+    val expertMarksRepository: ExpertMarksRepository
     val open: Boolean
     val research: Research
   }

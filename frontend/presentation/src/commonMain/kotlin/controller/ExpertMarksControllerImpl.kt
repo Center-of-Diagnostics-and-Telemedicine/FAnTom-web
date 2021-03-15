@@ -24,7 +24,8 @@ class ExpertMarksControllerImpl(val dependencies: ExpertMarksController.Dependen
     storeFactory = dependencies.storeFactory,
     research = dependencies.research,
     data = dependencies.data,
-    marksRepository = dependencies.marksRepository
+    marksRepository = dependencies.marksRepository,
+    expertMarksRepository = dependencies.expertMarksRepository
   ).create()
 
   private val inputRelay: Relay<ExpertMarksController.Input> = PublishSubject()

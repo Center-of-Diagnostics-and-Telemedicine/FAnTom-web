@@ -82,7 +82,6 @@ private fun mPaperProps(open: Boolean, drawerWidth: LinearDimension): MPaperProp
   pp.asDynamic().style = kotlinext.js.js {
     height = 100.pct
     minHeight = 100.vh
-    overflowX = "hidden"
     width = drawerWidth + 1.px
   }
   return pp

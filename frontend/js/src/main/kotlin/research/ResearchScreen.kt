@@ -23,6 +23,7 @@ import research.ResearchScreen.ResearchStyles.appFrameContainerStyle
 import research.covid.CovidMarksComponent
 import research.covid.covidMarks
 import research.expert.ExpertMarksComponent
+import research.expert.expertMarks
 import research.gridcontainer.CutsContainerViewComponent
 import research.gridcontainer.cuts
 import research.marks.MarksComponent
@@ -111,9 +112,13 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
         contentWithCuts(model)
         when (category) {
           Category.Covid -> {
-
             rightMenu(drawerBigMargin) {
               covidMarks(dependencies = covidMarksDependencies(model))
+            }
+          }
+          Category.Expert -> {
+            rightMenu(drawerLittleMargin) {
+              expertMarks(dependencies = expertMarksDependencies(model))
             }
           }
           else -> {
@@ -130,7 +135,7 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
   private fun RBuilder.contentWithCuts(model: ResearchView.Model) {
     mainContent(
       marginnLeft = if (state.toolsOpen) drawerWidth.px else drawerLittleMargin,
-      marginnRight = if (state.marksOpen) drawerWidth.px else drawerBigMargin
+      marginnRight = if (state.marksOpen) drawerWidth.px else drawerLittleMargin
     ) {
       cuts(dependencies = cutsDependencies(model))
     }
@@ -346,6 +351,7 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
     val storeFactory: StoreFactory
     val researchRepository: ResearchRepository
     val marksRepository: MarksRepository
+    val expertMarksRepository: ExpertMarksRepository
     val covidMarksRepository: CovidMarksRepository
     val brightnessRepository: BrightnessRepository
     val mipRepository: MipRepository

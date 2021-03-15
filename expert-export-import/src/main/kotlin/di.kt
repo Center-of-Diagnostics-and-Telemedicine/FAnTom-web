@@ -1,7 +1,11 @@
-import dao.*
-import kotlinx.coroutines.GlobalScope
-import repository.*
-import repository.repository.ExportedMarksRepository
+import dao.ExportedMarksDao
+import dao.ResearchDao
+import dao.UserDao
+import dao.UserResearchDao
+import repository.ExportedMarksRepositoryImpl
+import repository.ResearchRepositoryImpl
+import repository.UserRepositoryImpl
+import repository.UserResearchRepositoryImpl
 
 val userDao = UserDao()
 val userRepository = UserRepositoryImpl(userDao)

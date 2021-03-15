@@ -4,6 +4,7 @@ import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import model.Research
 import model.ResearchSlicesSizesDataNew
+import repository.ExpertMarksRepository
 import repository.MarksRepository
 import view.ExpertMarksView
 
@@ -23,6 +24,7 @@ interface ExpertMarksController {
     val research: Research
     val data: ResearchSlicesSizesDataNew
     val marksRepository: MarksRepository
+    val expertMarksRepository: ExpertMarksRepository
   }
 
   sealed class Output {
