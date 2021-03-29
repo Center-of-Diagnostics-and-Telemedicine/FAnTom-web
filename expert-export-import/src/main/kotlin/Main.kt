@@ -1,4 +1,3 @@
-import model.UserRole
 import model.hash
 import model.macProtocolsPath
 import org.jetbrains.exposed.sql.Database
@@ -52,87 +51,7 @@ suspend fun doseReports() {
   )
 
   createRois(researches, doseReports, exportedRoisRepository)
-
-
-//  val jsonFileModels = getFiles(macProtocolsPath)
-//  jsonFileModels.forEach { jsonModel ->
-//    val doctorIds = jsonModel.doctorComments.map { it.id }
-//    val users = createDoctors(
-//      doctorsIds = doctorIds,
-//      userRepository = userRepository
-//    )
-//    val research = createResearch(
-//      researchData = jsonModel.ids,
-//      researchRepository = researchRepository
-//    )
-//    val userResearches = createUsersResearchRelationModel(
-//      userModels = users,
-//      researchModels = listOf(research),
-//      repository = userResearchRepository
-//    )
-//    val userToNodule = mapNodules(jsonModel, users)
-//
-//    createMarks(
-//      usersToNodules = userToNodule,
-//      users = users,
-//      research = research,
-//      repository = exportedMarksRepository
-//    )
-//  }
 }
-
-//private suspend fun export() {
-//  val researchId = 308
-//  val userIds = userResearchRepository.getUsersForResearch(researchId).map { it.userId }
-//  val marks = userIds.map { it to multiPlanarMarksRepository.getAll(it, researchId) }
-//  val comments = marks.map { pair ->
-//    val (userId, marks) = pair
-//
-//  }
-//  val doctorsModels =
-//
-//
-//  val researches = userIds.mapNotNull { researchRepository.getResearch(it.researchId) }
-//  val researchMarksMap = researches.map { it to multiPlanarMarksRepository.getAll(userId, it.id) }
-//  val comments = researchMarksMap.forEach { pair ->
-//    val (researchModel, marks) = pair
-//
-//  }
-//  val files = researches.map {
-//    JsonFileModel(
-//      doctorComments = listOf()
-//    )
-//  }
-//
-//}
-//
-//private suspend fun import() {
-//  val jsonFileModels = getFiles(protocolsPath)
-//  jsonFileModels.forEach { jsonModel ->
-//    val doctorIds = jsonModel.doctorComments.map { it.id }
-//    val users = createDoctors(
-//      doctorsIds = doctorIds,
-//      userRepository = userRepository
-//    )
-//    val research = createResearch(
-//      researchData = jsonModel.ids,
-//      researchRepository = researchRepository
-//    )
-//    val userResearches = createUsersResearchRelationModel(
-//      userModels = users,
-//      researchModels = listOf(research),
-//      repository = userResearchRepository
-//    )
-//    val userToNodule = mapNodules(jsonModel, users)
-//
-//    createMarks(
-//      usersToNodules = userToNodule,
-//      users = users,
-//      research = research,
-//      repository = exportedMarksRepository
-//    )
-//  }
-//}
 
 private fun connectToDatabase() {
   Database.connect(

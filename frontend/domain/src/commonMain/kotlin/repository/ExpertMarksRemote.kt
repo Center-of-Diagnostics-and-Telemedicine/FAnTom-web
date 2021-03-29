@@ -1,6 +1,5 @@
 package repository
 
-import model.CovidMarkEntity
 import model.ExpertMarkEntity
 import model.ExpertMarksResponse
 
