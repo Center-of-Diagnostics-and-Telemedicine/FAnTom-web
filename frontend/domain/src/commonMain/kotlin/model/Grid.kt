@@ -32,12 +32,12 @@ sealed class Grid(val types: List<CutType>) {
   ) : Grid(listOf(topLeft, topRight, bottomLeft, bottomRight))
 
   companion object {
-    fun build(type: GridType, researchType: ResearchType): Grid {
+    fun build(type: GridType, researchType: ResearchType, doseReport: Boolean): Grid {
       return when (type) {
         GridType.Single -> initialSingleGrid(researchType)
         GridType.TwoVertical -> initialTwoVerticalGrid(researchType)
         GridType.TwoHorizontal -> initialTwoHorizontalGrid(researchType)
-        GridType.Four -> initialFourGrid(researchType)
+        GridType.Four -> initialFourGrid(researchType, doseReport)
       }
     }
   }
@@ -67,7 +67,7 @@ fun initialTwoHorizontalGrid(researchType: ResearchType): Grid {
   }
 }
 
-fun initialFourGrid(researchType: ResearchType): Grid {
+fun initialFourGrid(researchType: ResearchType, doseReport: Boolean): Grid {
   return when (researchType) {
     ResearchType.CT -> Grid.Four(
       topLeft = CutType.CT_AXIAL,
@@ -75,12 +75,23 @@ fun initialFourGrid(researchType: ResearchType): Grid {
       bottomLeft = CutType.CT_FRONTAL,
       bottomRight = CutType.CT_SAGITTAL
     )
-    ResearchType.MG -> Grid.Four(
-      topLeft = CutType.MG_RCC,
-      topRight = CutType.MG_LCC,
-      bottomLeft = CutType.MG_RMLO,
-      bottomRight = CutType.MG_LMLO
-    )
+    ResearchType.MG -> {
+      if (doseReport) {
+        Grid.Four(
+          topLeft = CutType.CT_0,
+          topRight = CutType.CT_1,
+          bottomLeft = CutType.CT_2,
+          bottomRight = CutType.EMPTY
+        )
+      } else {
+        Grid.Four(
+          topLeft = CutType.MG_RCC,
+          topRight = CutType.MG_LCC,
+          bottomLeft = CutType.MG_RMLO,
+          bottomRight = CutType.MG_LMLO
+        )
+      }
+    }
     ResearchType.DX -> Grid.Four(
       topLeft = CutType.DX_GENERIC,
       topRight = CutType.DX_POSTERO_ANTERIOR,
@@ -108,6 +119,12 @@ private val dxCuts = listOf(
   CutType.DX_POSTERO_ANTERIOR,
   CutType.DX_LEFT_LATERAL,
   CutType.DX_RIGHT_LATERAL
+)
+
+private val doseReportCuts = listOf(
+  CutType.CT_0,
+  CutType.CT_1,
+  CutType.CT_2
 )
 
 fun Grid.buildCuts(data: ResearchSlicesSizesDataNew): List<Cut> =
@@ -143,6 +160,9 @@ private fun buildSingleCut(type: CutType, data: ResearchSlicesSizesDataNew): Cut
     CutType.DX_POSTERO_ANTERIOR -> dxPosteroAnterior(data, dxCuts.filter { it != type })
     CutType.DX_LEFT_LATERAL -> dxLeftLateral(data, dxCuts.filter { it != type })
     CutType.DX_RIGHT_LATERAL -> dxRightLateral(data, dxCuts.filter { it != type })
+    CutType.CT_0 -> ct0(data, doseReportCuts.filter { it != type })
+    CutType.CT_1 -> ct1(data, doseReportCuts.filter { it != type })
+    CutType.CT_2 -> ct2(data, doseReportCuts.filter { it != type })
   }
 
 
@@ -176,6 +196,9 @@ private fun buildEmptySingleCut(type: CutType, data: ResearchSlicesSizesDataNew)
     CutType.DX_POSTERO_ANTERIOR -> dxPosteroAnterior(data, list)
     CutType.DX_LEFT_LATERAL -> dxLeftLateral(data, list)
     CutType.DX_RIGHT_LATERAL -> dxRightLateral(data, list)
+    CutType.CT_0 -> ct0(data, list)
+    CutType.CT_1 -> ct1(data, list)
+    CutType.CT_2 -> ct2(data, list)
   }
 }
 
@@ -199,6 +222,9 @@ private fun cutWithTwoTypes(
       dxCuts.filter { it != main && it != second })
     CutType.DX_LEFT_LATERAL -> dxLeftLateral(data, dxCuts.filter { it != main && it != second })
     CutType.DX_RIGHT_LATERAL -> dxRightLateral(data, dxCuts.filter { it != main && it != second })
+    CutType.CT_0 -> ct0(data, doseReportCuts.filter { it != main && it != second })
+    CutType.CT_2 -> ct1(data, doseReportCuts.filter { it != main && it != second })
+    CutType.CT_1 -> ct2(data, doseReportCuts.filter { it != main && it != second })
   }
 }
 
@@ -370,6 +396,39 @@ private fun dxRightLateral(data: ResearchSlicesSizesDataNew, types: List<CutType
     horizontalCutData = null,
     researchType = data.type,
     availableCutsForChange = listOf()
+  )
+
+private fun ct0(data: ResearchSlicesSizesDataNew, types: List<CutType>): Cut =
+  Cut(
+    type = CutType.CT_0,
+    data = data.modalities[SLICE_TYPE_CT_0]!!,
+    color = axialColor,
+    verticalCutData = null,
+    horizontalCutData = null,
+    researchType = data.type,
+    availableCutsForChange = types
+  )
+
+private fun ct1(data: ResearchSlicesSizesDataNew, types: List<CutType>): Cut =
+  Cut(
+    type = CutType.CT_1,
+    data = data.modalities[SLICE_TYPE_CT_1]!!,
+    color = frontalColor,
+    verticalCutData = null,
+    horizontalCutData = null,
+    researchType = data.type,
+    availableCutsForChange = types
+  )
+
+private fun ct2(data: ResearchSlicesSizesDataNew, types: List<CutType>): Cut =
+  Cut(
+    type = CutType.CT_2,
+    data = data.modalities[SLICE_TYPE_CT_2]!!,
+    color = sagittalColor,
+    verticalCutData = null,
+    horizontalCutData = null,
+    researchType = data.type,
+    availableCutsForChange = types
   )
 
 

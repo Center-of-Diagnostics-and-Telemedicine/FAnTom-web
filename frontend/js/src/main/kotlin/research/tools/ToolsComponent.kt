@@ -8,7 +8,10 @@ import com.badoo.reaktive.observable.Observable
 import com.badoo.reaktive.observable.subscribe
 import com.ccfraser.muirwik.components.MColor
 import com.ccfraser.muirwik.components.button.mButton
-import com.ccfraser.muirwik.components.dialog.*
+import com.ccfraser.muirwik.components.dialog.mDialog
+import com.ccfraser.muirwik.components.dialog.mDialogActions
+import com.ccfraser.muirwik.components.dialog.mDialogContent
+import com.ccfraser.muirwik.components.dialog.mDialogTitle
 import com.ccfraser.muirwik.components.list.mList
 import com.ccfraser.muirwik.components.list.mListItemWithIcon
 import com.ccfraser.muirwik.components.mDivider
@@ -25,7 +28,6 @@ import repository.MipRepository
 import research.tools.ToolsComponent.ToolsStyles.dialogListItemContainer
 import research.tools.ToolsComponent.ToolsStyles.dialogListItemLeft
 import research.tools.ToolsComponent.ToolsStyles.dialogListItemRight
-import research.tools.ToolsComponent.ToolsStyles.headerStyle
 import research.tools.brightness.BrightnessViewProxy
 import research.tools.brightness.renderBrightness
 import research.tools.grid.GridViewProxy
@@ -52,7 +54,10 @@ class ToolsComponent(prps: ToolsProps) : RComponent<ToolsProps, ToolsState>(prps
   init {
     state = ToolsState(
       toolsModel = initialToolsModel(),
-      gridModel = initialGridModel(props.dependencies.data.type),
+      gridModel = initialGridModel(
+        type = props.dependencies.data.type,
+        doseReport = props.dependencies.data.doseReport
+      ),
       mipModel = initialMipModel(),
       brightnessModel = initialBrightnessModel(),
       presetModel = initialPresetModel(),

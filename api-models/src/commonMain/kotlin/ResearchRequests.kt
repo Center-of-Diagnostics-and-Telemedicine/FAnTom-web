@@ -82,6 +82,9 @@ fun getSliceStringType(type: Int): String {
     SLICE_TYPE_DX_POSTERO_ANTERIOR -> "dx_postero_anterior"
     SLICE_TYPE_DX_LEFT_LATERAL -> "dx_left_lateral"
     SLICE_TYPE_DX_RIGHT_LATERAL -> "dx_right_lateral"
+    SLICE_TYPE_CT_0 -> "ct0"
+    SLICE_TYPE_CT_1 -> "ct1"
+    SLICE_TYPE_CT_2 -> "ct2"
     else -> throw NotImplementedError("Not implemented sliceType for type $type")
   }
 }
@@ -98,6 +101,9 @@ fun getMipMethodStringType(type: Int): String {
 
 fun getModalityStringType(type: Int): String {
   return when (type) {
+    SLICE_TYPE_CT_0,
+    SLICE_TYPE_CT_1,
+    SLICE_TYPE_CT_2,
     SLICE_TYPE_CT_AXIAL,
     SLICE_TYPE_CT_FRONTAL,
     SLICE_TYPE_CT_SAGITTAL -> CT_RESEARCH_MODALITY

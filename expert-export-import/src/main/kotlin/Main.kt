@@ -3,7 +3,10 @@ import model.*
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
-import useCase.*
+import useCase.createDoctors
+import useCase.createMarks
+import useCase.createResearch
+import useCase.createUsersResearchRelationModel
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -14,9 +17,39 @@ suspend fun main() {
 //  initDb()
 
 
+//  import()
+  export()
+}
+
+private suspend fun export() {
+  val researchId = 308
+  val userIds = userResearchRepository.getUsersForResearch(researchId).map { it.userId }
+  val marks = userIds.map { it to multiPlanarMarksRepository.getAll(it, researchId) }
+  val comments = marks.map { pair ->
+    val (userId, marks) = pair
+
+  }
+  val doctorsModels =
+
+
+  val researches = userIds.mapNotNull { researchRepository.getResearch(it.researchId) }
+  val researchMarksMap = researches.map { it to multiPlanarMarksRepository.getAll(userId, it.id) }
+  val comments = researchMarksMap.forEach { pair ->
+    val (researchModel, marks) = pair
+
+  }
+  val files = researches.map {
+    JsonFileModel(
+      doctorComments = listOf()
+    )
+  }
+
+}
+
+private suspend fun import() {
   val jsonFileModels = getFiles(protocolsPath)
   jsonFileModels.forEach { jsonModel ->
-    val doctorIds = jsonModel.doctors.map { it.id }
+    val doctorIds = jsonModel.doctorComments.map { it.id }
     val users = createDoctors(
       doctorsIds = doctorIds,
       userRepository = userRepository
@@ -25,7 +58,7 @@ suspend fun main() {
       researchData = jsonModel.ids,
       researchRepository = researchRepository
     )
-    val userResearches = createUserResearches(
+    val userResearches = createUsersResearchRelationModel(
       userModels = users,
       researchModels = listOf(research),
       repository = userResearchRepository
@@ -39,27 +72,6 @@ suspend fun main() {
       repository = exportedMarksRepository
     )
   }
-}
-
-fun mapNodules(
-  jsonFileModel: JsonFileModel,
-  users: List<UserModel>
-): List<Map<UserModel, NoduleModel?>> {
-  val nodules = mutableListOf<Map<UserModel, NoduleModel?>>()
-
-  jsonFileModel.nodules?.firstOrNull()?.let { nodulesParent ->
-    val mapToAdd = mutableMapOf<UserModel, NoduleModel?>()
-    nodulesParent.firstOrNull()?.let { map ->
-      map.forEach { doctorId, noduleModel ->
-        val userLogin = DEFAULT_USER_NAME + "_" + doctorId
-        val user = users.first { it.name == userLogin }
-        mapToAdd[user] = noduleModel
-      }
-    }
-    nodules.add(mapToAdd)
-  }
-
-  return nodules
 }
 
 fun getFiles(protocolsPath: String): List<JsonFileModel> {
@@ -77,7 +89,6 @@ fun getFiles(protocolsPath: String): List<JsonFileModel> {
     val message = sanitized.substring(startPosition)
     Json.parse(JsonFileModel.serializer(), message)
   }
-
 }
 
 private fun connectToDatabase() {
@@ -101,13 +112,6 @@ fun initDb() {
     )
   }
 
-}
-
-fun getFileExtension(fullName: String?): String? {
-  checkNotNull(fullName)
-  val fileName = File(fullName).name
-  val dotIndex = fileName.lastIndexOf('.')
-  return if (dotIndex == -1) "" else fileName.substring(dotIndex + 1)
 }
 
 

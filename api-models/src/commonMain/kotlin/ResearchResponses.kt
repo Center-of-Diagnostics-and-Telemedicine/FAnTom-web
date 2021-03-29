@@ -44,9 +44,12 @@ data class MarkTypeEntity(
 
 @Serializable
 data class CTInitModel(
-  val ct_axial: ModalityModel,
-  val ct_frontal: ModalityModel,
-  val ct_sagittal: ModalityModel,
+  val ct_axial: ModalityModel? = null,
+  val ct_frontal: ModalityModel? = null,
+  val ct_sagittal: ModalityModel? = null,
+  val CT0: ModalityModel? = null,
+  val CT1: ModalityModel? = null,
+  val CT2: ModalityModel? = null,
   val reversed: Boolean
 )
 
@@ -69,11 +72,11 @@ data class DXInitModel(
 data class ModalityModel(
   val dicom_size_h: Int,
   val dicom_size_v: Int,
-  val dicom_step_h: Double,
-  val dicom_step_v: Double,
+  val dicom_step_h: Double = 1.0,
+  val dicom_step_v: Double = 1.0,
   val n_images: Int,
-  val screen_size_h: Int,
-  val screen_size_v: Int,
+  val screen_size_h: Int = 512,
+  val screen_size_v: Int = 512,
   val reversed: Boolean? = null
 )
 

@@ -17,7 +17,7 @@ abstract class CutsContainerStoreAbstractFactory(
 
   val initialState: State = State(
     cuts = listOf(),
-    grid = initialFourGrid(data.type)
+    grid = initialFourGrid(data.type, data.doseReport)
   )
 
   fun create(): CutsContainerStore =

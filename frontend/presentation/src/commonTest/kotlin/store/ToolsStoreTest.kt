@@ -6,14 +6,13 @@ import com.badoo.reaktive.test.scheduler.TestScheduler
 import com.badoo.reaktive.utils.reaktiveUncaughtErrorHandler
 import com.badoo.reaktive.utils.resetReaktiveUncaughtErrorHandler
 import model.toResearchSlicesSizesData
-import repository.TestResearchRepository
 import store.tools.ToolsStore
 import testResearchInitModelCT
 import kotlin.test.*
 
 class ToolsStoreTest {
 
-  private val testData = testResearchInitModelCT.toResearchSlicesSizesData()
+  private val testData = testResearchInitModelCT.toResearchSlicesSizesData(doseReport)
 
   private lateinit var store: ToolsStore
 

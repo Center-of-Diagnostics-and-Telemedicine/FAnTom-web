@@ -1,11 +1,5 @@
-import dao.ExportedMarksDao
-import dao.ResearchDao
-import dao.UserDao
-import dao.UserResearchDao
-import repository.ExportedMarksRepositoryImpl
-import repository.ResearchRepositoryImpl
-import repository.UserRepositoryImpl
-import repository.UserResearchRepositoryImpl
+import dao.*
+import repository.*
 
 val userDao = UserDao()
 val userRepository = UserRepositoryImpl(userDao)
@@ -18,3 +12,10 @@ val userResearchRepository = UserResearchRepositoryImpl(userResearchDao)
 
 val exportedMarksDao = ExportedMarksDao()
 val exportedMarksRepository = ExportedMarksRepositoryImpl(exportedMarksDao)
+
+
+val planarMarksDao = PlanarMarksDao()
+val planarMarksRepository = PlanarMarksRepositoryImpl(planarMarksDao)
+
+val multiPlanarMarksDao = MultiPlanarMarksDao()
+val multiPlanarMarksRepository = MultiPlanarMarksRepositoryImpl(multiPlanarMarksDao)

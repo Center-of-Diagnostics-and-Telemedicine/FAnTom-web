@@ -25,7 +25,7 @@ class ToolsControllerTest {
 
   private val lifecycle = LifecycleRegistry()
   private val output = ArrayList<ToolsController.Output>()
-  private val researchData = testResearchInitModelCT.toResearchSlicesSizesData()
+  private val researchData = testResearchInitModelCT.toResearchSlicesSizesData(doseReport)
 
   private val dependencies =
     object : ToolsController.Dependencies {

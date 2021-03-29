@@ -15,7 +15,7 @@ interface CutsContainerView : MviView<Model, Nothing> {
   )
 }
 
-fun initialCutsContainerModel(type: ResearchType): Model = Model(
+fun initialCutsContainerModel(type: ResearchType, doseReport: Boolean): Model = Model(
   items = listOf(),
-  grid = initialFourGrid(type)
+  grid = initialFourGrid(type, doseReport)
 )

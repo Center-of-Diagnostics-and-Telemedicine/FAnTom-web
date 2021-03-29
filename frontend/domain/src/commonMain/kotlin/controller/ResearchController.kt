@@ -2,6 +2,7 @@ package controller
 
 import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.store.StoreFactory
+import model.Research
 import repository.ResearchRepository
 import view.ResearchView
 
@@ -16,7 +17,7 @@ interface ResearchController {
     val storeFactory: StoreFactory
     val lifecycle: Lifecycle
     val researchRepository: ResearchRepository
-    val researchId: Int
+    val research: Research
     val researchOutput: (Output) -> Unit
   }
 

@@ -19,7 +19,8 @@ data class ResearchSlicesSizesDataNew(
   val type: ResearchType,
   val researchId: Int = -1,
   val reversed: Boolean,
-  val markTypes: Map<String, MarkTypeEntity>
+  val markTypes: Map<String, MarkTypeEntity>,
+  val doseReport: Boolean = false
 )
 
 fun initialResearchSlicesSizesData(): ResearchSlicesSizesData {
@@ -56,20 +57,36 @@ fun ResearchInitModel.toResearchSlicesSizesData(): ResearchSlicesSizesData {
   )
 }
 
-fun ResearchInitModelNew.toResearchSlicesSizesData(): ResearchSlicesSizesDataNew {
+fun ResearchInitModelNew.toResearchSlicesSizesData(doseReport: Boolean): ResearchSlicesSizesDataNew {
   return when {
     CT != null -> {
-      val modalities = mapOf(
-        SLICE_TYPE_CT_AXIAL to CT.ct_axial.copy(reversed = CT.reversed),
-        SLICE_TYPE_CT_FRONTAL to CT.ct_frontal.copy(reversed = CT.reversed),
-        SLICE_TYPE_CT_SAGITTAL to CT.ct_sagittal.copy(reversed = CT.reversed),
-      )
-      ResearchSlicesSizesDataNew(
-        modalities = modalities,
-        reversed = CT.reversed,
-        type = ResearchType.CT,
-        markTypes = dictionary!!
-      )
+      if (doseReport) {
+        println(dictionary)
+        val modalities = mutableMapOf<Int, ModalityModel>()
+        CT.CT0?.copy(reversed = CT.reversed)?.let { modalities[SLICE_TYPE_CT_0] = it }
+        CT.CT1?.copy(reversed = CT.reversed)?.let { modalities[SLICE_TYPE_CT_1] = it }
+        CT.CT2?.copy(reversed = CT.reversed)?.let { modalities[SLICE_TYPE_CT_2] = it }
+        println(modalities.size)
+        ResearchSlicesSizesDataNew(
+          modalities = modalities,
+          reversed = CT.reversed,
+          type = ResearchType.MG,
+          markTypes = dictionary!!,
+          doseReport = true
+        )
+      } else {
+        val modalities = mapOf(
+          SLICE_TYPE_CT_AXIAL to CT.ct_axial!!.copy(reversed = CT.reversed),
+          SLICE_TYPE_CT_FRONTAL to CT.ct_frontal!!.copy(reversed = CT.reversed),
+          SLICE_TYPE_CT_SAGITTAL to CT.ct_sagittal!!.copy(reversed = CT.reversed),
+        )
+        ResearchSlicesSizesDataNew(
+          modalities = modalities,
+          reversed = CT.reversed,
+          type = ResearchType.CT,
+          markTypes = dictionary!!
+        )
+      }
     }
     MG != null -> {
       val modalities = mapOf(

@@ -21,7 +21,7 @@ class ResearchControllerImpl(val dependencies: ResearchController.Dependencies) 
     ResearchStoreFactory(
       storeFactory = dependencies.storeFactory,
       repository = dependencies.researchRepository,
-      researchId = dependencies.researchId
+      research = dependencies.research
     ).create()
 
   init {

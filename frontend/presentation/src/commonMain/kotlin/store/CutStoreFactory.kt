@@ -179,7 +179,7 @@ internal class CutStoreFactory(
             white = white!!,
             gamma = gamma!!,
             mipMethod = mipMethod!!,
-            sliceNumber = sliceNumber!!,
+            sliceNumber = getSliceNumber(sliceNumber),
             aproxSize = aproxSize!!,
             width = cut.data.screen_size_h,
             height = 0
@@ -194,6 +194,17 @@ internal class CutStoreFactory(
             onError = ::handleError
           )
       }
+    }
+
+    private fun getSliceNumber(sliceNumber: Int?): Int {
+      return if (cut.type.isDoseReport()) {
+        when (cut.type) {
+          CutType.CT_0 -> 0
+          CutType.CT_1 -> 1
+          CutType.CT_2 -> 2
+          else -> sliceNumber!!
+        }
+      } else sliceNumber!!
     }
 
     private fun handleError(error: Throwable) {

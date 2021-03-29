@@ -26,7 +26,7 @@ class CovidMarksControllerTest {
 
   private val lifecycle = LifecycleRegistry()
   private val output = ArrayList<CovidMarksController.Output>()
-  private val researchData = testResearchInitModelCT.toResearchSlicesSizesData()
+  private val researchData = testResearchInitModelCT.toResearchSlicesSizesData(doseReport)
 
   private val dependencies =
     object : CovidMarksController.Dependencies {

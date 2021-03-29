@@ -22,7 +22,7 @@ class CutContainerControllerTest {
 
   private val lifecycle = LifecycleRegistry()
   private val output = ArrayList<CutsContainerController.Output>()
-  private val researchData = testResearchInitModelCT.toResearchSlicesSizesData()
+  private val researchData = testResearchInitModelCT.toResearchSlicesSizesData(doseReport)
 
   private val dependencies =
     object : CutsContainerController.Dependencies {

@@ -3,7 +3,10 @@ package useCase
 import model.*
 import repository.UserRepository
 
-suspend fun createDoctors(doctorsIds: List<String>, userRepository: UserRepository): List<UserModel> {
+suspend fun createDoctors(
+  doctorsIds: List<String>,
+  userRepository: UserRepository
+): List<UserModel> {
   val users = mutableListOf<UserModel>()
 
   doctorsIds.forEach { id ->
@@ -14,7 +17,7 @@ suspend fun createDoctors(doctorsIds: List<String>, userRepository: UserReposito
     if (existingUser != null) {
       users.add(existingUser)
     } else {
-      userRepository.createUser(login, password, UserRole.DOCTOR.value)
+      userRepository.createUser(login, password, UserRole.TAGGER.value)
       userRepository.getUser(login, password)?.let { users.add(it) }
     }
   }

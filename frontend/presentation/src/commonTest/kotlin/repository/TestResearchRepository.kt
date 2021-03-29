@@ -31,13 +31,13 @@ class TestResearchRepository : ResearchRepository {
     }
   }
 
-  override suspend fun initResearch(researchId: Int): ResearchSlicesSizesDataNew {
+  override suspend fun initResearch(researchId: Int, doseReport: Boolean): ResearchSlicesSizesDataNew {
     val research = testResearches.firstOrNull { it.id == researchId }
       ?: throw ResearchInitializationException
     return when (research.modality) {
-      CT_RESEARCH_MODALITY -> testResearchInitModelCT.toResearchSlicesSizesData()
-      DX_RESEARCH_MODALITY -> testResearchInitModelDX.toResearchSlicesSizesData()
-      MG_RESEARCH_MODALITY -> testResearchInitModelMG.toResearchSlicesSizesData()
+      CT_RESEARCH_MODALITY -> testResearchInitModelCT.toResearchSlicesSizesData(doseReport)
+      DX_RESEARCH_MODALITY -> testResearchInitModelDX.toResearchSlicesSizesData(doseReport)
+      MG_RESEARCH_MODALITY -> testResearchInitModelMG.toResearchSlicesSizesData(doseReport)
       else -> throw NotImplementedError("your modality not implemented")
     }
   }

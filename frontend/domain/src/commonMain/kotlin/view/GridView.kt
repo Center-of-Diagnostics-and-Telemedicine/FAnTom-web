@@ -20,7 +20,7 @@ interface GridView : MviView<Model, Event> {
   }
 }
 
-fun initialGridModel(type: ResearchType): Model = Model(
+fun initialGridModel(type: ResearchType, doseReport: Boolean): Model = Model(
   items = listOf(),
-  current = initialFourGrid(type)
+  current = initialFourGrid(type, doseReport)
 )

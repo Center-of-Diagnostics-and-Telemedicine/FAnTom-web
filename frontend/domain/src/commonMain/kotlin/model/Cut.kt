@@ -19,6 +19,9 @@ enum class CutType(val intType: Int) {
   CT_AXIAL(SLICE_TYPE_CT_AXIAL),
   CT_FRONTAL(SLICE_TYPE_CT_FRONTAL),
   CT_SAGITTAL(SLICE_TYPE_CT_SAGITTAL),
+  CT_0(SLICE_TYPE_CT_0),
+  CT_1(SLICE_TYPE_CT_1),
+  CT_2(SLICE_TYPE_CT_2),
   MG_RCC(SLICE_TYPE_MG_RCC),
   MG_LCC(SLICE_TYPE_MG_LCC),
   MG_RMLO(SLICE_TYPE_MG_RMLO),
@@ -26,7 +29,16 @@ enum class CutType(val intType: Int) {
   DX_GENERIC(SLICE_TYPE_DX_GENERIC),
   DX_POSTERO_ANTERIOR(SLICE_TYPE_DX_POSTERO_ANTERIOR),
   DX_LEFT_LATERAL(SLICE_TYPE_DX_LEFT_LATERAL),
-  DX_RIGHT_LATERAL(SLICE_TYPE_DX_RIGHT_LATERAL),
+  DX_RIGHT_LATERAL(SLICE_TYPE_DX_RIGHT_LATERAL), ;
+}
+
+fun CutType.isDoseReport(): Boolean {
+  return when (this) {
+    CutType.CT_0,
+    CutType.CT_1,
+    CutType.CT_2 -> true
+    else -> false
+  }
 }
 
 fun CutType.getName(): String? =
@@ -43,6 +55,9 @@ fun CutType.getName(): String? =
     CutType.DX_POSTERO_ANTERIOR -> "DX_POSTERO_ANTERIOR"
     CutType.DX_LEFT_LATERAL -> "DX_LEFT_LATERAL"
     CutType.DX_RIGHT_LATERAL -> "DX_RIGHT_LATERAL"
+    CutType.CT_0 -> "CT0"
+    CutType.CT_1 -> "CT1"
+    CutType.CT_2 -> "CT2"
   }
 
 
@@ -78,6 +93,9 @@ fun getColorByCutType(cutType: CutType): String {
     CutType.DX_POSTERO_ANTERIOR -> pink
     CutType.DX_LEFT_LATERAL -> blue
     CutType.DX_RIGHT_LATERAL -> green
+    CutType.CT_0 -> yellow
+    CutType.CT_1 -> pink
+    CutType.CT_2 -> blue
   }
 }
 
@@ -119,6 +137,9 @@ fun Cut.getPosition(dicomX: Double, dicomY: Double, sliceNumber: Int): PointPosi
       CutType.DX_GENERIC,
       CutType.DX_POSTERO_ANTERIOR,
       CutType.DX_LEFT_LATERAL,
+      CutType.CT_0,
+      CutType.CT_1,
+      CutType.CT_2,
       CutType.DX_RIGHT_LATERAL -> PlanarPointPosition(x = dicomX, y = dicomY)
     }
   }
@@ -181,6 +202,9 @@ fun Cut.getMarkToSave(shape: Shape, sliceNumber: Int): MarkData? {
       CutType.MG_RCC,
       CutType.MG_LCC,
       CutType.MG_RMLO,
+      CutType.CT_0,
+      CutType.CT_1,
+      CutType.CT_2,
       CutType.MG_LMLO -> {
         MarkData(
           x = shape.dicomCenterX,
@@ -212,6 +236,9 @@ fun Cut.getSliceNumberByMark(mark: MarkModel): Int? {
     CutType.DX_POSTERO_ANTERIOR -> null
     CutType.DX_LEFT_LATERAL -> null
     CutType.DX_RIGHT_LATERAL -> null
+    CutType.CT_0 -> null
+    CutType.CT_1 -> null
+    CutType.CT_2 -> null
   }
 }
 
@@ -256,6 +283,9 @@ fun Cut.updateCoordinates(mark: MarkModel, deltaX: Double, deltaY: Double): Mark
     CutType.MG_RCC,
     CutType.MG_LCC,
     CutType.MG_RMLO,
+    CutType.CT_0,
+    CutType.CT_1,
+    CutType.CT_2,
     CutType.MG_LMLO -> {
       mark.copy(
         markData = markData.copy(
@@ -335,6 +365,9 @@ fun Cut.updateCoordinatesByRect(
     CutType.MG_RCC,
     CutType.MG_LCC,
     CutType.MG_RMLO,
+    CutType.CT_0,
+    CutType.CT_1,
+    CutType.CT_2,
     CutType.MG_LMLO -> {
       when (rect.type) {
         MoveRectType.TOP -> {

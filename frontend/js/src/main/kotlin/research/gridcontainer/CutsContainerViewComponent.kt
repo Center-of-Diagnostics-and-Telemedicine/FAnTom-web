@@ -23,6 +23,7 @@ import research.cut.cutContainer
 import research.gridcontainer.CutsContainerViewComponent.GridContainerStyles.columnOfRowsStyle
 import research.gridcontainer.CutsContainerViewComponent.GridContainerStyles.rowOfColumnsStyle
 import resume
+import root.debugLog
 import styled.StyleSheet
 import styled.css
 import styled.styledDiv
@@ -39,7 +40,12 @@ class CutsContainerViewComponent(prps: CutsContainerProps) :
   private val disposable = CompositeDisposable()
 
   init {
-    state = CutsContainerState(initialCutsContainerModel(props.dependencies.data.type))
+    state = CutsContainerState(
+      initialCutsContainerModel(
+        type = props.dependencies.data.type,
+        doseReport = props.dependencies.data.doseReport
+      )
+    )
   }
 
   override fun componentDidMount() {
@@ -84,7 +90,7 @@ class CutsContainerViewComponent(prps: CutsContainerProps) :
 
   private fun RBuilder.twoHorizontalCutsContainer(items: List<Cut>) {
     styledDiv {
-      css{
+      css {
         flex(1.0)
         display = Display.flex
       }
@@ -99,7 +105,7 @@ class CutsContainerViewComponent(prps: CutsContainerProps) :
 
   private fun RBuilder.twoVerticalCutsContainer(items: List<Cut>) {
     styledDiv {
-      css{
+      css {
         flex(1.0)
         display = Display.flex
         flexDirection = FlexDirection.column
@@ -117,6 +123,7 @@ class CutsContainerViewComponent(prps: CutsContainerProps) :
   }
 
   private fun RBuilder.fourCutsContainer(items: List<Cut>) {
+    debugLog(items.toString())
     val leftTop = items[0]
     val rightTop = items[1]
     val leftBottom = items[2]
@@ -150,7 +157,18 @@ class CutsContainerViewComponent(prps: CutsContainerProps) :
         css(rowOfColumnsStyle)
 
         cutContainer(dependencies = dependencies(leftBottom))
-        cutContainer(dependencies = dependencies(rightBottom))
+        if (rightBottom.type == CutType.EMPTY) {
+          styledDiv {
+            css {
+              display = Display.flex
+              flexDirection = FlexDirection.row
+              position = Position.relative
+              width = 50.pct
+            }
+          }
+        } else {
+          cutContainer(dependencies = dependencies(rightBottom))
+        }
       }
     }
   }
@@ -159,7 +177,8 @@ class CutsContainerViewComponent(prps: CutsContainerProps) :
     object : CutContainer.Dependencies, Dependencies by props.dependencies {
       override val cut: Cut = cut
       override val cutOutput: (CutController.Output) -> Unit = ::cutOutput
-      override val cutsInput: Observable<CutController.Input> = this@CutsContainerViewComponent.cutsInputObservable
+      override val cutsInput: Observable<CutController.Input> =
+        this@CutsContainerViewComponent.cutsInputObservable
     }
 
   private fun cutOutput(output: CutController.Output) {
@@ -177,7 +196,11 @@ class CutsContainerViewComponent(prps: CutsContainerProps) :
       }
       is CutController.Output.RectangleDrawn -> {
         props.dependencies.cutsContainerOutput(
-          CutsContainerController.Output.RectangleDrawn(output.rectangle, output.sliceNumber, output.cut)
+          CutsContainerController.Output.RectangleDrawn(
+            output.rectangle,
+            output.sliceNumber,
+            output.cut
+          )
         )
       }
       is CutController.Output.SelectMark -> {

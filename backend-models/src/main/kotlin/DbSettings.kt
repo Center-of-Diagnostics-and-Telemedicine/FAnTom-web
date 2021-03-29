@@ -9,7 +9,7 @@ object UserVos : Table(name = USER_TABLE) {
   val id: Column<Int> = integer(name = ID_FIELD).autoIncrement()
   val name: Column<String> = varchar(name = NAME_FIELD, length = 100).uniqueIndex()
   val password: Column<String> = varchar(name = PASSWORD_FIELD, length = 200)
-  val role: Column<Int> = integer(name = ROLE_FIELD).default(UserRole.DOCTOR.value)
+  val role: Column<Int> = integer(name = ROLE_FIELD).default(UserRole.TAGGER.value)
   override val primaryKey = PrimaryKey(id, name = "UserPKConstraintName")
 }
 

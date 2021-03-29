@@ -88,7 +88,7 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
     val researchControllerDependencies =
       object : ResearchController.Dependencies, Dependencies by dependencies {
         override val lifecycle: Lifecycle = lifecycleRegistry
-        override val researchId: Int = props.dependencies.research.id
+        override val research: Research = props.dependencies.research
       }
     return ResearchControllerImpl(researchControllerDependencies)
   }
@@ -117,6 +117,11 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
             }
           }
           Category.Expert -> {
+            rightMenu(drawerLittleMargin) {
+              expertMarks(dependencies = expertMarksDependencies(model))
+            }
+          }
+          Category.DoseReport -> {
             rightMenu(drawerLittleMargin) {
               expertMarks(dependencies = expertMarksDependencies(model))
             }

@@ -157,6 +157,9 @@ private fun MarkModel.toCircle(cut: Cut, sliceNumber: Int): Circle? {
       CutType.MG_RCC,
       CutType.MG_LCC,
       CutType.MG_RMLO,
+      CutType.CT_0,
+      CutType.CT_1,
+      CutType.CT_2,
       CutType.MG_LMLO -> {
         return if (markData.cutType == cut.type.intType) Circle(
           dicomCenterX = x,
@@ -171,7 +174,6 @@ private fun MarkModel.toCircle(cut: Cut, sliceNumber: Int): Circle? {
       }
     }
   }
-//  return null
 }
 
 private fun MarkModel.toRectangle(cut: Cut): Rectangle? {
@@ -188,6 +190,9 @@ private fun MarkModel.toRectangle(cut: Cut): Rectangle? {
       CutType.DX_GENERIC,
       CutType.DX_POSTERO_ANTERIOR,
       CutType.DX_LEFT_LATERAL,
+      CutType.CT_0,
+      CutType.CT_1,
+      CutType.CT_2,
       CutType.DX_RIGHT_LATERAL -> {
         return if (markData.cutType == cut.type.intType) Rectangle(
           dicomCenterX = x,

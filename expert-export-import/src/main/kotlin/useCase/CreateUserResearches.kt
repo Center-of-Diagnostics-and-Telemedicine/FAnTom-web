@@ -5,24 +5,21 @@ import model.UserModel
 import model.UserResearchModel
 import repository.UserResearchRepository
 
-fun createUserResearches(
+suspend fun createUsersResearchRelationModel(
   userModels: List<UserModel>,
-  researchModels: List<ResearchModel>,
+  research: ResearchModel,
   repository: UserResearchRepository
 ): List<UserResearchModel> {
-  val userResearches = mutableListOf<UserResearchModel>()
-
-  userModels.forEach { user ->
-    researchModels.forEach { research ->
+  return userModels
+    .map { user ->
       repository.createUserResearch(userResearchModel(user, research))
-      userResearches.add(repository.getResearchesForUser(user.id))
+      repository.getUsersForResearch(user.id)
     }
-  }
-
-  return userResearches
+    .flatten()
+    .distinct()
 }
 
-private suspend fun userResearchModel(
+private fun userResearchModel(
   user: UserModel,
   research: ResearchModel
 ) = UserResearchModel(

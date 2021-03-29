@@ -36,6 +36,7 @@ const val noValue = -1
 const val tenMinutes: Long = 600000
 
 const val protocolsPath = "C:\\Users\\max\\Downloads\\protocol"
+const val macProtocolsPath = "/Users/max/Documents/protocols"
 
 const val defaultUserPassword = "password"
 
@@ -53,6 +54,9 @@ const val SLICE_TYPE_DX_GENERIC: Int = 7
 const val SLICE_TYPE_DX_POSTERO_ANTERIOR: Int = 8
 const val SLICE_TYPE_DX_LEFT_LATERAL: Int = 9
 const val SLICE_TYPE_DX_RIGHT_LATERAL: Int = 10
+const val SLICE_TYPE_CT_0: Int = 11
+const val SLICE_TYPE_CT_1: Int = 12
+const val SLICE_TYPE_CT_2: Int = 13
 
 const val SHAPE_TYPE_CIRCLE = 0
 const val SHAPE_TYPE_RECTANGLE = 1
@@ -84,6 +88,7 @@ const val MG_RESEARCH_CATEGORY = "MG"
 const val DX_RESEARCH_CATEGORY = "DX"
 const val COVID_RESEARCH_CATEGORY = "Covid"
 const val EXPERT_RESEARCH_CATEGORY = "Expert"
+const val DOSE_REPORT_RESEARCH_CATEGORY = "DoseReport"
 const val ALL_RESEARCH_CATEGORY = "Все"
 
 
@@ -200,7 +205,7 @@ enum class Position {
 
 enum class UserRole(val value: Int) {
   ADMIN(0),
-  DOCTOR(1),
+  TAGGER(1),
   ARBITER(2)
 }
 

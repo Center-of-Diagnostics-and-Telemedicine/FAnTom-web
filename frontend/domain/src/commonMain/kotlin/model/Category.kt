@@ -28,6 +28,10 @@ sealed class Category(
     name = EXPERT_RESEARCH_CATEGORY
   )
 
+  object DoseReport: Category(
+    name = DOSE_REPORT_RESEARCH_CATEGORY
+  )
+
   object All : Category(
     name = ALL_RESEARCH_CATEGORY
   )
@@ -40,7 +44,8 @@ val allCategories = listOf(
   Category.MG,
   Category.DX,
   Category.Covid,
-  Category.Expert
+  Category.Expert,
+  Category.DoseReport
 )
 
 fun Research.getCategoryByString(): Category {
@@ -51,6 +56,7 @@ fun Research.getCategoryByString(): Category {
     DX_RESEARCH_CATEGORY -> Category.DX
     COVID_RESEARCH_CATEGORY -> Category.Covid
     EXPERT_RESEARCH_CATEGORY -> Category.Expert
+    DOSE_REPORT_RESEARCH_CATEGORY -> Category.DoseReport
     else -> Category.All
   }
 }

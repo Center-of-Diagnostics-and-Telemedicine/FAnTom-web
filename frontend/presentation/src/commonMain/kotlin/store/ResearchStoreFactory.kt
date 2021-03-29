@@ -9,7 +9,10 @@ import com.badoo.reaktive.scheduler.mainScheduler
 import com.badoo.reaktive.single.map
 import com.badoo.reaktive.single.observeOn
 import com.badoo.reaktive.single.subscribeOn
+import com.badoo.reaktive.utils.printStack
 import model.BASE_ERROR
+import model.DOSE_REPORT_RESEARCH_CATEGORY
+import model.Research
 import model.ResearchApiExceptions
 import repository.ResearchRepository
 import store.research.ResearchStore.*
@@ -18,7 +21,8 @@ import store.research.ResearchStoreAbstractFactory
 internal class ResearchStoreFactory(
   storeFactory: StoreFactory,
   private val repository: ResearchRepository,
-  private val researchId: Int
+  private val research: Research,
+  private val researchId: Int = research.id
 ) : ResearchStoreAbstractFactory(
   storeFactory = storeFactory
 ) {
@@ -55,7 +59,7 @@ internal class ResearchStoreFactory(
     private fun handleCloseResearch() {
       singleFromCoroutine {
         repository.closeResearch(researchId = researchId)
-        repository.closeSession(researchId)
+        repository.closeSession(researchId = researchId)
       }
         .subscribeOn(ioScheduler)
         .observeOn(mainScheduler)
@@ -69,7 +73,10 @@ internal class ResearchStoreFactory(
     private fun load() {
       dispatch(Result.Loading)
       singleFromCoroutine {
-        repository.initResearch(researchId = researchId)
+        repository.initResearch(
+          researchId = researchId,
+          doseReport = research.category == DOSE_REPORT_RESEARCH_CATEGORY
+        )
       }
         .subscribeOn(ioScheduler)
         .map(Result::Loaded)
@@ -85,6 +92,7 @@ internal class ResearchStoreFactory(
       val result = when (error) {
         is ResearchApiExceptions -> Result.Error(error.error)
         else -> {
+          println(error.printStack())
           println("login: other exception ${error.message}")
           Result.Error(BASE_ERROR)
         }

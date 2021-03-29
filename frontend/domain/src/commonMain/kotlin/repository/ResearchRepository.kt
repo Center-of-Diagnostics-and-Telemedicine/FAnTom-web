@@ -8,7 +8,7 @@ interface ResearchRepository {
 
   suspend fun getResearches(): List<Research>
   suspend fun getFiltered(filter: Filter, category: Category): List<Research>
-  suspend fun initResearch(researchId: Int): ResearchSlicesSizesDataNew
+  suspend fun initResearch(researchId: Int, doseReport: Boolean): ResearchSlicesSizesDataNew
   suspend fun getSlice(
     researchId: Int,
     black: Int,

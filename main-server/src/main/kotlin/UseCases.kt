@@ -43,52 +43,52 @@ fun init() {
       UserVos.insertIgnore {
         it[name] = "Expert1"
         it[password] = hash("4qmp")
-        it[role] = UserRole.DOCTOR.value
+        it[role] = UserRole.TAGGER.value
       }
       UserVos.insertIgnore {
         it[name] = "Expert2"
         it[password] = hash("2b1p")
-        it[role] = UserRole.DOCTOR.value
+        it[role] = UserRole.TAGGER.value
       }
       UserVos.insertIgnore {
         it[name] = "Expert3"
         it[password] = hash("nxsr")
-        it[role] = UserRole.DOCTOR.value
+        it[role] = UserRole.TAGGER.value
       }
       UserVos.insertIgnore {
         it[name] = "Expert4"
         it[password] = hash("y7br")
-        it[role] = UserRole.DOCTOR.value
+        it[role] = UserRole.TAGGER.value
       }
       UserVos.insertIgnore {
         it[name] = "Expert5"
         it[password] = hash("2h92")
-        it[role] = UserRole.DOCTOR.value
+        it[role] = UserRole.TAGGER.value
       }
       UserVos.insertIgnore {
         it[name] = "Expert6"
         it[password] = hash("x43d")
-        it[role] = UserRole.DOCTOR.value
+        it[role] = UserRole.TAGGER.value
       }
       UserVos.insertIgnore {
         it[name] = "Expert7"
         it[password] = hash("07dt")
-        it[role] = UserRole.DOCTOR.value
+        it[role] = UserRole.TAGGER.value
       }
       UserVos.insertIgnore {
         it[name] = "Expert8"
         it[password] = hash("g6pz")
-        it[role] = UserRole.DOCTOR.value
+        it[role] = UserRole.TAGGER.value
       }
       UserVos.insertIgnore {
         it[name] = "Expert9"
         it[password] = hash("shf2")
-        it[role] = UserRole.DOCTOR.value
+        it[role] = UserRole.TAGGER.value
       }
       UserVos.insertIgnore {
         it[name] = "Expert10"
         it[password] = hash("92fl")
-        it[role] = UserRole.DOCTOR.value
+        it[role] = UserRole.TAGGER.value
       }
       UserVos.insertIgnore {
         it[name] = "Arbiter"

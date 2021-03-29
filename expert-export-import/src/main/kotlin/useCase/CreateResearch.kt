@@ -1,8 +1,8 @@
 package useCase
 
-import IdsModel
 import model.CT_RESEARCH_CATEGORY
 import model.CT_RESEARCH_MODALITY
+import model.IdsModel
 import model.ResearchModel
 import repository.ResearchRepositoryImpl
 
@@ -16,21 +16,26 @@ suspend fun createResearch(
     existingResearch != null -> existingResearch
     else -> {
       val studyID = researchData.studyId
-      val researchModelToSave = researchModel(accessionNumber, studyID)
+      val studyInstanceUid = researchData.studyInstanceUid
+      val researchModelToSave = researchModel(
+        accessionNumber = accessionNumber,
+        studyID = studyID,
+        studyInstanceUid = studyInstanceUid
+      )
       researchRepository.createResearch(researchModelToSave)
-      researchRepository
-        .getResearchByAccessionNumber(accessionNumber)!!
+      researchRepository.getResearchByAccessionNumber(accessionNumber)!!
     }
   }
 }
 
 private fun researchModel(
   accessionNumber: String,
-  studyID: String
+  studyID: String,
+  studyInstanceUid: String,
 ) = ResearchModel(
   id = -1,
   accessionNumber = accessionNumber,
-  studyInstanceUID = studyID,
+  studyInstanceUID = studyInstanceUid,
   studyID = studyID,
   protocol = "",
   accessionNumberBase = accessionNumber,

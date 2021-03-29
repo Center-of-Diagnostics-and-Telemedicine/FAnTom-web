@@ -26,9 +26,9 @@ internal class CutsContainerStoreFactory(
   private inner class ExecutorImpl : ReaktiveExecutor<Intent, Unit, State, Result, Nothing>() {
     override fun executeAction(action: Unit, getState: () -> State) {
       singleFromFunction {
-        val grid = when(data.type){
+        val grid = when (data.type) {
           ResearchType.CT,
-          ResearchType.MG -> initialFourGrid(data.type)
+          ResearchType.MG -> initialFourGrid(data.type, data.doseReport)
           ResearchType.DX -> initialSingleGrid(data.type)
         }
         Result.Loaded(items = grid.buildCuts(data), grid = grid)
