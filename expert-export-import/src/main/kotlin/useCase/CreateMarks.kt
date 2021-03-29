@@ -9,18 +9,18 @@ suspend fun createMarks(
   research: ResearchModel,
   repository: ExportedMarksRepository
 ) {
-  usersToNodules.forEach { usersToNodulesMap ->
-    usersToNodulesMap.forEach { user, nodule ->
-      if (nodule != null) {
-        createMark(
-          repository = repository,
-          nodule = nodule,
-          user = user,
-          research = research
-        )
-      }
-    }
-  }
+//  usersToNodules.forEach { usersToNodulesMap ->
+//    usersToNodulesMap.forEach { user, nodule ->
+//      if (nodule != null) {
+//        createMark(
+//          repository = repository,
+//          nodule = nodule,
+//          user = user,
+//          research = research
+//        )
+//      }
+//    }
+//  }
 }
 
 private suspend fun createMark(

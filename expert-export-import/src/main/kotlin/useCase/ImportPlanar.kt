@@ -1,13 +1,13 @@
 package useCase
 
 import exportedMarksRepository
-import model.protocolsPath
+import model.macProtocolsPath
 import researchRepository
 import userRepository
 import userResearchRepository
 
 suspend fun importPlanar() {
-  val jsonFileModels = getFiles(protocolsPath)
+  val jsonFileModels = getFiles(macProtocolsPath)
   jsonFileModels
     .filter { it.ids != null }
     .filter { it.taggers != null }
@@ -28,24 +28,24 @@ suspend fun importPlanar() {
       val marks = jsonFileModel.instances!!
 
 
-      val doctorIds = jsonModel.doctorComments.map { it.id }
-      val users = createDoctors(
-        doctorsIds = doctorIds,
-        userRepository = userRepository
-      )
-
-      val userResearches = createUsersResearchRelationModel(
-        userModels = users,
-        researchModels = listOf(research),
-        repository = userResearchRepository
-      )
-      val userToNodule = mapNodules(jsonModel, users)
-
-      createMarks(
-        usersToNodules = userToNodule,
-        users = users,
-        research = research,
-        repository = exportedMarksRepository
-      )
+//      val doctorIds = jsonModel.doctorComments.map { it.id }
+//      val users = createDoctors(
+//        doctorsIds = doctorIds,
+//        userRepository = userRepository
+//      )
+//
+//      val userResearches = createUsersResearchRelationModel(
+//        userModels = users,
+//        researchModels = listOf(research),
+//        repository = userResearchRepository
+//      )
+//      val userToNodule = mapNodules(jsonModel, users)
+//
+//      createMarks(
+//        usersToNodules = userToNodule,
+//        users = users,
+//        research = research,
+//        repository = exportedMarksRepository
+//      )
     }
 }

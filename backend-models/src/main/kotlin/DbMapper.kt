@@ -91,3 +91,25 @@ fun ResultRow.toExportedMarkModel(): ExportedMarkModel = ExportedMarkModel(
   expertDecisionProperSize = this[ExpertMarksVos.expertDecisionProperSize] == 1,
   expertDecisionType = this[ExpertMarksVos.expertDecisionType],
 )
+
+fun ResultRow.toExportedInstanceModel(): ExportedRoiModel = ExportedRoiModel(
+  id = this[ExpertRoisVos.id],
+  researchId = this[ExpertRoisVos.researchId],
+  acquisitionNumber = this[ExpertRoisVos.acquisitionNumber],
+  dcmFilename = this[ExpertRoisVos.dcmFilename],
+  instanceNumber = this[ExpertRoisVos.instanceNumber],
+  seriesNumber = this[ExpertRoisVos.seriesNumber],
+  sopInstanceUid = this[ExpertRoisVos.sopInstanceUid],
+  anatomicalLocation = this[ExpertRoisVos.anatomicalLocation],
+  confidence = this[ExpertRoisVos.confidence],
+  roiFilename = this[ExpertRoisVos.roiFilename],
+  roiShape = this[ExpertRoisVos.roiShape],
+  roiType = this[ExpertRoisVos.roiType],
+  roiTypeIndex = this[ExpertRoisVos.roiTypeIndex],
+  taggerId = this[ExpertRoisVos.taggerId],
+  xCenter = this[ExpertRoisVos.xCenter],
+  xSize = this[ExpertRoisVos.xSize],
+  yCenter = this[ExpertRoisVos.yCenter],
+  ySize = this[ExpertRoisVos.ySize],
+  text = this[ExpertRoisVos.text],
+)

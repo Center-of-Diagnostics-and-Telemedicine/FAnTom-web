@@ -1,9 +1,6 @@
 package useCase
 
-import model.CT_RESEARCH_CATEGORY
-import model.CT_RESEARCH_MODALITY
-import model.IdsModel
-import model.ResearchModel
+import model.*
 import repository.ResearchRepositoryImpl
 
 suspend fun createResearch(
@@ -45,5 +42,5 @@ private fun researchModel(
   doctor2 = "",
   posInBlock = "",
   modality = CT_RESEARCH_MODALITY,
-  category = CT_RESEARCH_CATEGORY,
+  category = DOSE_REPORT_RESEARCH_CATEGORY,
 )

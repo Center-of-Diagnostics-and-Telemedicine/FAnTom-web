@@ -35,8 +35,8 @@ const val noValue = -1
 
 const val tenMinutes: Long = 600000
 
-const val protocolsPath = "C:\\Users\\max\\Downloads\\protocol"
-const val macProtocolsPath = "/Users/max/Documents/protocols"
+//const val protocolsPath = "C:\\Users\\max\\Downloads\\protocol"
+const val macProtocolsPath = "/Users/max/Documents/separated"
 
 const val defaultUserPassword = "password"
 

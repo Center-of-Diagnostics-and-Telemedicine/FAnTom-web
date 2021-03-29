@@ -45,12 +45,11 @@ data class RoiModel(
   @SerialName("roi_shape") val roiShape: String,
   @SerialName("roi_type") val roiType: String,
   @SerialName("roi_type_index") val roiTypeIndex: Int,
-  @SerialName("tagging_system_id") val taggingSystemId: String,
+  @SerialName("tagger_id") val taggerId: String,
   @SerialName("x_center") val xCenter: Double,
   @SerialName("x_size") val xSize: Double,
   @SerialName("y_center") val yCenter: Double,
-  @SerialName("y_size") val ySize: String,
-  @SerialName("tagger_id") val taggerId: String,
+  @SerialName("y_size") val ySize: Double,
   val text: String,
 )
 
@@ -71,8 +70,8 @@ data class DoctorCommentModel(
 
 @Serializable
 data class IdsModel(
-  @SerialName("accessionnumber") val accessionNumber: String,
-  @SerialName("studyid") val studyId: String,
+  @SerialName("accession_number") val accessionNumber: String,
+  @SerialName("study_id") val studyId: String,
   @SerialName("study_instance_uid") val studyInstanceUid: String
 )
 

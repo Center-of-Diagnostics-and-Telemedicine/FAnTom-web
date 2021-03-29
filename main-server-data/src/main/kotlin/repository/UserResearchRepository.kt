@@ -15,10 +15,13 @@ class UserResearchRepositoryImpl(private val userResearchDaoFacade: UserResearch
   }
 
   override suspend fun createUserResearch(userResearchModel: UserResearchModel) {
-    checkUserResearchExistence(
+    val existingUserResearch = userResearchDaoFacade.getUserResearch(
       userId = userResearchModel.userId,
       researchId = userResearchModel.researchId
     )
+    if (existingUserResearch != null) {
+      throw IllegalStateException("user exists")
+    }
     userResearchDaoFacade.createUserResearch(userResearchModel)
   }
 

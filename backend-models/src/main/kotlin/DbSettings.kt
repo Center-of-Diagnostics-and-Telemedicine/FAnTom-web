@@ -98,11 +98,40 @@ object ExpertMarksVos : Table(EXPERT_MARKS_TABLE) {
   val y: Column<Double> = double(Y_FIELD)
   val z: Column<Double> = double(Z_FIELD)
   val zType: Column<String> = varchar(name = Z_TYPE_FIELD, length = 20)
-  val expertDecisionMachineLearning: Column<Int?> = integer(name = MACHINE_LEARNING_FIELD).nullable()
+  val expertDecisionMachineLearning: Column<Int?> =
+    integer(name = MACHINE_LEARNING_FIELD).nullable()
   val expertDecision: Column<String?> = varchar(name = DECISION_FIELD, length = 20).nullable()
   val expertDecisionId: Column<String?> = varchar(name = DECISION_ID_FIELD, length = 20).nullable()
-  val expertDecisionComment: Column<String?> = varchar(name = DECISION_COMMENT_FIELD, length = 200).nullable()
+  val expertDecisionComment: Column<String?> =
+    varchar(name = DECISION_COMMENT_FIELD, length = 200).nullable()
   val expertDecisionProperSize: Column<Int?> = integer(name = DECISION_PROPER_SIZE_FIELD).nullable()
-  val expertDecisionType: Column<String?> = varchar(name = DECISION_TYPE_FIELD, length = 20).nullable()
+  val expertDecisionType: Column<String?> =
+    varchar(name = DECISION_TYPE_FIELD, length = 20).nullable()
   override val primaryKey = PrimaryKey(id, name = "ExportMarkPKConstraintName")
 }
+
+object ExpertRoisVos : Table(EXPERT_INSTANCES_TABLE) {
+  val id: Column<Int> = integer(name = ID_FIELD).autoIncrement()
+  val researchId: Column<Int> = integer(name = RESEARCH_ID_FIELD)
+  val acquisitionNumber: Column<String> = varchar("acquisition_number", 100)
+  val dcmFilename: Column<String> = varchar("dcm_filename", 200)
+  val instanceNumber: Column<Int> = integer("instance_number")
+  val seriesNumber: Column<Int> = integer("series_number")
+  val sopInstanceUid: Column<String> = varchar("sop_instance_uid", 200)
+  val anatomicalLocation: Column<String> = varchar("anatomical_location", 200)
+  val confidence: Column<Double> = double("confidence")
+  val roiFilename: Column<String> = varchar("roi_filename", 200)
+  val roiShape: Column<String> = varchar("roi_shape", 100)
+  val roiType: Column<String> = varchar("roi_type", 100)
+  val roiTypeIndex: Column<Int> = integer("roi_type_index")
+  val taggerId: Column<String> = varchar("tagger_id", 100)
+  val xCenter: Column<Double> = double("x_center")
+  val xSize: Column<Double> = double("x_size")
+  val yCenter: Column<Double> = double("y_center")
+  val ySize: Column<Double> = double("y_size")
+  val text: Column<String> = varchar("text", 200)
+
+  override val primaryKey = PrimaryKey(id, name = "ExpertRoisPKConstraintName")
+}
+
+

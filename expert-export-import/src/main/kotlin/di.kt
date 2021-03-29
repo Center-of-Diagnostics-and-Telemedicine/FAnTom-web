@@ -13,6 +13,9 @@ val userResearchRepository = UserResearchRepositoryImpl(userResearchDao)
 val exportedMarksDao = ExportedMarksDao()
 val exportedMarksRepository = ExportedMarksRepositoryImpl(exportedMarksDao)
 
+val exportedRoisDao = ExportedRoisDao()
+val exportedRoisRepository = ExportedRoisRepositoryImpl(exportedRoisDao)
+
 
 val planarMarksDao = PlanarMarksDao()
 val planarMarksRepository = PlanarMarksRepositoryImpl(planarMarksDao)
