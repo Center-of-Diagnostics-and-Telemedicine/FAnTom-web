@@ -42,6 +42,7 @@ interface CutController {
     data class SliceNumberChanged(val sliceNumber: Int) : Input()
     data class ExternalSliceNumberChanged(val sliceNumber: Int, val cut: Cut) : Input()
     data class Marks(val list: List<MarkModel>) : Input()
+    data class ExpertMarks(val list: List<RoiExpertQuestionsModel>): Input()
     data class ChangeSliceNumberByMarkCenter(val mark: MarkModel) : Input()
 
     object Idle : Input()

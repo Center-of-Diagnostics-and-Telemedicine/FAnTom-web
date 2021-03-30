@@ -37,6 +37,7 @@ val inputToCutIntent: Input.() -> Intent? = {
     is Input.ExternalSliceNumberChanged ->
       Intent.HandleExternalSliceNumberChanged(externalCut = cut, sliceNumber = sliceNumber)
     is Input.Marks -> Intent.HandleMarks(list)
+    is Input.ExpertMarks -> Intent.HandleExpertMarks(list)
     is Input.ChangeSliceNumberByMarkCenter -> Intent.ChangeSliceNumberByMarkCenter(mark)
     Input.Idle -> null
   }
@@ -57,6 +58,7 @@ val cutLabelToCutOutput: Label.() -> Output? = {
     is Label.StartClick -> null
     is Label.ExternalSliceNumberChanged -> null
     is Label.Marks -> null
+    is Label.ExpertMarks -> null
     Label.StopMoving -> null
   }
 }

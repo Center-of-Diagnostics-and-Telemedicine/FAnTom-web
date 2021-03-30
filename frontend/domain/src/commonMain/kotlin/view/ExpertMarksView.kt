@@ -2,6 +2,7 @@ package view
 
 import com.arkivanov.mvikotlin.core.view.MviView
 import model.ExpertQuestion
+import model.ExpertRoiEntity
 import model.RoiExpertQuestionsModel
 import view.ExpertMarksView.Event
 import view.ExpertMarksView.Model
@@ -9,22 +10,19 @@ import view.ExpertMarksView.Model
 interface ExpertMarksView : MviView<Model, Event> {
 
   data class Model(
-    val loading: Boolean,
-    val rois: List<RoiExpertQuestionsModel>,
-    val error: String
+          val loading: Boolean,
+          val models: List<RoiExpertQuestionsModel>,
+          val error: String
   )
 
   sealed class Event {
     object DismissError : Event()
-    data class VariantChosen<VariantType>(
-      val question: ExpertQuestion<VariantType>,
-      val variant: VariantType
-    ) : Event()
+    data class VariantChosen(val roi: ExpertRoiEntity, val question: ExpertQuestion<*>) : Event()
   }
 }
 
 fun initialExpertMarksModel(): Model = Model(
-  rois = listOf(),
+  models = listOf(),
   loading = false,
   error = ""
 )

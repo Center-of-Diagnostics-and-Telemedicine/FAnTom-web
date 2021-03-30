@@ -33,6 +33,7 @@ interface CutStore : Store<Intent, State, Label> {
     data class HandleMarkUpdateWithSave(val mark: MarkModel) : Intent()
     data class HandleStartClick(val startDicomX: Double, val startDicomY: Double) : Intent()
     data class HandleChangeCutType(val cutType: CutType) : Intent()
+    data class HandleExpertMarks(val list: List<RoiExpertQuestionsModel>) : Intent()
 
     object ContrasBrightnessChanged : Intent()
     object HandleStopMoving : Intent()
@@ -65,6 +66,7 @@ interface CutStore : Store<Intent, State, Label> {
     ) : Label()
 
     data class Marks(val list: List<MarkModel>) : Label()
+    data class ExpertMarks(val list: List<RoiExpertQuestionsModel>) : Label()
     data class SelectMark(val mark: MarkModel) : Label()
     data class UnselectMark(val mark: MarkModel) : Label()
     data class ContrastBrightnessChanged(val black: Int, val white: Int) : Label()

@@ -86,6 +86,9 @@ internal class CutStoreFactory(
         is Intent.HandleMarks -> {
           publish(Label.Marks(intent.list))
         }
+        is Intent.HandleExpertMarks -> {
+          publish(Label.ExpertMarks(intent.list))
+        }
         is Intent.HandleMarkSelected -> {
           publish(Label.SelectMark(intent.mark))
         }

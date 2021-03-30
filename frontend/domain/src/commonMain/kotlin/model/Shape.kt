@@ -194,6 +194,8 @@ private fun MarkModel.toRectangle(cut: Cut): Rectangle? {
       CutType.CT_1,
       CutType.CT_2,
       CutType.DX_RIGHT_LATERAL -> {
+        println("${markData.cutType} == ${cut.type.intType}")
+        println(markData.cutType == cut.type.intType)
         return if (markData.cutType == cut.type.intType) Rectangle(
           dicomCenterX = x,
           dicomCenterY = y,

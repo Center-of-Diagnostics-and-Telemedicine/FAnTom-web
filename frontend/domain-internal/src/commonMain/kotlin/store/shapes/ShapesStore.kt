@@ -15,6 +15,7 @@ interface ShapesStore : Store<Intent, State, Label> {
     data class HandleMoveInClick(val deltaX: Double, val deltaY: Double) : Intent()
     data class HandleStartClick(val startDicomX: Double, val startDicomY: Double) : Intent()
     data class HandleChangeCutType(val value: CutType) : Intent()
+    data class HandleExpertMarks(val list: List<RoiExpertQuestionsModel>) : Intent()
 
     object HandleStopMoving : Intent()
   }
@@ -28,6 +29,7 @@ interface ShapesStore : Store<Intent, State, Label> {
     val rects: List<Rect>,
     val hounsfield: Int?,
     val marks: List<MarkModel>,
+    val expertMarks: List<RoiExpertQuestionsModel>,
     val moveRect: Rect?
   ) : JvmSerializable
 

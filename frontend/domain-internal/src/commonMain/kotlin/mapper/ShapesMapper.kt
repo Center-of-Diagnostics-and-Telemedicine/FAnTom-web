@@ -69,6 +69,7 @@ val cutLabelToShapesIntent: CutStore.Label.() -> Intent? = {
       Intent.HandleExternalSliceNumberChanged(sliceNumber, externalCut)
     }
     is CutStore.Label.Marks -> Intent.HandleMarks(list)
+    is CutStore.Label.ExpertMarks -> Intent.HandleExpertMarks(list)
     is CutStore.Label.StopMoving -> Intent.HandleStopMoving
     is CutStore.Label.StartClick -> Intent.HandleStartClick(startDicomX, startDicomY)
     is CutStore.Label.CircleDrawn -> null

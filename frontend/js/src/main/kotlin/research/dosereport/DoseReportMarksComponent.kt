@@ -78,14 +78,21 @@ class DoseReportMarksComponent(prps: DoseReportMarksProps) :
         flexDirection = FlexDirection.column
       }
       mList {
-        state.model.rois.forEach { lungLobeModel ->
-          debugLog(lungLobeModel.roiModel.toString())
-          val panelName = "panel_${lungLobeModel.roiModel.id}"
+        state.model.models.forEach { model ->
+          debugLog(model.roiModel.toString())
+          val panelName = "panel_${model.roiModel.id}"
 
           expertMarkItem(
-            model = lungLobeModel,
+            model = model,
             handlePanelClick = { expandClick(panelName) },
-            handleVariantClick = {  },
+            handleAnswerChanged = { expertQuestion ->
+              marksViewDelegate.dispatch(
+                ExpertMarksView.Event.VariantChosen(
+                  roi = model.roiModel,
+                  question = expertQuestion
+                )
+              )
+            },
             expand = expandedItem == panelName,
             fullWidth = props.dependencies.open
           )

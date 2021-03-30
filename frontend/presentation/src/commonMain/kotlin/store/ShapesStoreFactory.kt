@@ -41,6 +41,8 @@ internal class ShapesStoreFactory(
 
         is Intent.HandleMarks -> handleMarks(intent.list, getState)
 
+        is Intent.HandleExpertMarks -> handleExpertMarks(intent.list, getState)
+
         is Intent.HandleMoveInClick -> handleMoveInClick(intent.deltaX, intent.deltaY, getState)
 
         is Intent.HandleStopMoving -> handleStopMoving(getState)
@@ -110,6 +112,14 @@ internal class ShapesStoreFactory(
     private fun handleMarks(list: List<MarkModel>, state: () -> State) {
       dispatch(Result.Marks(list))
       updateShapes(list, state)
+    }
+
+    private fun handleExpertMarks(
+      list: List<RoiExpertQuestionsModel>,
+      state: () -> State
+    ) {
+      dispatch(Result.ExpertMarks(list))
+      updateShapes(list.map(RoiExpertQuestionsModel::toMarkModel), state)
     }
 
     private fun handleStopMoving(getState: () -> State) {

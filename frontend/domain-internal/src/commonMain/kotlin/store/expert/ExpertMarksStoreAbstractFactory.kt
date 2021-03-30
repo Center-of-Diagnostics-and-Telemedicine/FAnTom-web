@@ -3,10 +3,7 @@ package store.expert
 import com.arkivanov.mvikotlin.core.store.*
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.badoo.reaktive.utils.ensureNeverFrozen
-import model.ExpertQuestion
-import model.MarkModel
 import model.RoiExpertQuestionsModel
-import model.expertQuestionsList
 import store.expert.ExpertMarksStore.*
 
 abstract class ExpertMarksStoreAbstractFactory(
@@ -30,7 +27,7 @@ abstract class ExpertMarksStoreAbstractFactory(
 
   protected sealed class Result : JvmSerializable {
     object Loading : Result()
-    data class Loaded(val questions: List<RoiExpertQuestionsModel>) : Result()
+    data class Loaded(val models: List<RoiExpertQuestionsModel>) : Result()
 //    data class ChangeCurrentMark(val markModel: MarkModel) : Result()
 //    data class UpdateQuestions(
 //      val markModel: MarkModel,
@@ -45,7 +42,7 @@ abstract class ExpertMarksStoreAbstractFactory(
     override fun State.reduce(result: Result): State =
       when (result) {
         is Result.Loading -> copy(loading = true)
-        is Result.Loaded -> copy(roisQuestions = result.questions)
+        is Result.Loaded -> copy(models = result.models)
 //        is Result.ChangeCurrentMark -> copy(current = result.markModel to expertQuestionsList)
 //        is Result.UpdateQuestions -> copy(current = result.markModel to result.questionsAnswers)
         is Result.DismissErrorRequested -> copy(error = "")

@@ -328,7 +328,9 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
 
   private fun expertMarksOutput(output: ExpertMarksController.Output) {
     when (output) {
-
+      is ExpertMarksController.Output.Marks ->
+        cutsInputObservable.onNext(CutController.Input.ExpertMarks(output.models))
+      ExpertMarksController.Output.CloseResearch -> TODO()
     }
   }
 

@@ -24,8 +24,9 @@ abstract class ShapesStoreAbstractFactory(
     shapes = listOf(),
     hounsfield = null,
     marks = listOf(),
+    expertMarks = listOf(),
     rects = listOf(),
-    moveRect = null
+    moveRect = null,
   )
 
   fun create(): ShapesStore =
@@ -54,6 +55,7 @@ abstract class ShapesStoreAbstractFactory(
     data class PointPositionChanged(val position: PointPosition?) : Result()
     data class HounsfieldChanged(val hu: Double) : Result()
     data class Marks(val marks: List<MarkModel>) : Result()
+    data class ExpertMarks(val marks: List<RoiExpertQuestionsModel>) : Result()
     data class Shapes(val shapes: List<Shape>) : Result()
     data class Rects(val rects: List<Rect>) : Result()
     data class SideRectInMove(val moveRect: Rect?) : Result()
@@ -70,6 +72,7 @@ abstract class ShapesStoreAbstractFactory(
         is Result.Rects -> copy(rects = result.rects)
         is Result.HounsfieldChanged -> copy(hounsfield = result.hu.toInt())
         is Result.Marks -> copy(marks = result.marks)
+        is Result.ExpertMarks -> copy(expertMarks = result.marks)
         is Result.SideRectInMove -> copy(moveRect = result.moveRect)
       }
   }

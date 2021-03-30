@@ -40,25 +40,22 @@ internal class ExpertMarksStoreFactory(
         .observeOn(mainScheduler)
         .subscribeScoped(
           isThreadLocal = true,
-          onSuccess = ::dispatch,
+          onSuccess = {
+            dispatch(it)
+            publish(Label.Marks(it.models))
+          },
           onError = ::handleError
         )
     }
 
     override fun executeIntent(intent: Intent, getState: () -> State) {
       when (intent) {
-        is Intent.ChangeVariant<*> -> {
-        }
-//          handleChangeVariant(
-//            lungLobeModel = intent.lungLobeModel,
-//            variant = intent.variant,
-//            getState = getState
-//          )
+        is Intent.ChangeVariant -> handleChangeVariant(getState, intent.question, intent.roi)
         Intent.DismissError -> dispatch(Result.DismissErrorRequested)
         is Intent.ChangeVariantText -> TODO()
         Intent.ReloadRequested -> null
         Intent.HandleCloseResearch -> handleCloseResearch(getState)
-      }.let {}
+      }
     }
 
     private fun handleCloseResearch(getState: () -> State) {
@@ -72,10 +69,11 @@ internal class ExpertMarksStoreFactory(
     }
 
     private fun handleChangeVariant(
-      lungLobeModel: LungLobeModel,
-      variant: Any,
-      getState: () -> State
+      getState: () -> State,
+      question: ExpertQuestion<*>,
+      roi: ExpertRoiEntity
     ) {
+
 //      singleFromCoroutine {
 //        val newModel = lungLobeModel.changeValue(variant)
 //        val newMap = getState().covidLungLobes.toMutableMap()

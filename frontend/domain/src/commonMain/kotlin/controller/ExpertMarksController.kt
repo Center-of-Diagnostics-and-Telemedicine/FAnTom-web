@@ -4,6 +4,7 @@ import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import model.Research
 import model.ResearchSlicesSizesDataNew
+import model.RoiExpertQuestionsModel
 import repository.ExpertMarksRepository
 import repository.ExpertRoiRepository
 import repository.MarksRepository
@@ -29,6 +30,8 @@ interface ExpertMarksController {
   }
 
   sealed class Output {
+    data class Marks(val models: List<RoiExpertQuestionsModel>) : Output()
+
     object CloseResearch : Output()
   }
 
