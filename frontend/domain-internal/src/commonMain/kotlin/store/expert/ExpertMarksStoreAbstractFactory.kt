@@ -5,6 +5,7 @@ import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.badoo.reaktive.utils.ensureNeverFrozen
 import model.ExpertQuestion
 import model.MarkModel
+import model.RoiExpertQuestionsModel
 import model.expertQuestionsList
 import store.expert.ExpertMarksStore.*
 
@@ -29,12 +30,12 @@ abstract class ExpertMarksStoreAbstractFactory(
 
   protected sealed class Result : JvmSerializable {
     object Loading : Result()
-    data class Loaded(val marks: List<MarkModel>) : Result()
-    data class ChangeCurrentMark(val markModel: MarkModel) : Result()
-    data class UpdateQuestions(
-      val markModel: MarkModel,
-      val questionsAnswers: List<ExpertQuestion<*>>
-    ) : Result()
+    data class Loaded(val questions: List<RoiExpertQuestionsModel>) : Result()
+//    data class ChangeCurrentMark(val markModel: MarkModel) : Result()
+//    data class UpdateQuestions(
+//      val markModel: MarkModel,
+//      val questionsAnswers: List<ExpertQuestion<*>>
+//    ) : Result()
 
     data class Error(val error: String) : Result()
     object DismissErrorRequested : Result()
@@ -44,9 +45,9 @@ abstract class ExpertMarksStoreAbstractFactory(
     override fun State.reduce(result: Result): State =
       when (result) {
         is Result.Loading -> copy(loading = true)
-        is Result.Loaded -> copy(marks = result.marks)
-        is Result.ChangeCurrentMark -> copy(current = result.markModel to expertQuestionsList)
-        is Result.UpdateQuestions -> copy(current = result.markModel to result.questionsAnswers)
+        is Result.Loaded -> copy(roisQuestions = result.questions)
+//        is Result.ChangeCurrentMark -> copy(current = result.markModel to expertQuestionsList)
+//        is Result.UpdateQuestions -> copy(current = result.markModel to result.questionsAnswers)
         is Result.DismissErrorRequested -> copy(error = "")
         is Result.Error -> copy(error = result.error, loading = false)
       }

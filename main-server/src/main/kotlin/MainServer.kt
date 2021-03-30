@@ -113,6 +113,9 @@ fun Application.module(testing: Boolean = false) {
       createMark(multiPlanarMarksRepository, planarMarksRepository, researchRepository)
       deleteMark(multiPlanarMarksRepository, planarMarksRepository, researchRepository)
       updateMark(multiPlanarMarksRepository, planarMarksRepository, researchRepository)
+
+      getRois(expertRoisRepository, researchRepository)
+      getExpertMarks(expertMarksRepository, researchRepository)
     }
 
   }

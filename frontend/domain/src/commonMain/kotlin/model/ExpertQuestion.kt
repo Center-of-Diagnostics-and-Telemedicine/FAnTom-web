@@ -40,12 +40,12 @@ sealed class ExpertQuestion<ValueType>(
   )
 
   class NoduleExpertComment(value: String? = null) : ExpertQuestion<String>(
-    questionText = "Комментарий (можно оставить поле пустым)",
+    questionText = "Комментарий",
     variants = TextAnswerVariant("комментарий (можно оставить пустым)"),
     value = value
   )
 
-  private companion object {
+  companion object {
     val yesNoVariants = mapOf(
       0 to "Да",
       1 to "Нет"
@@ -57,12 +57,28 @@ sealed class ExpertQuestion<ValueType>(
       3 to "полностью согласен",
     )
     val noduleTypeVariants = mapOf(
-      0 to "Солидный (С)",
-      1 to "Полусолидный (П)",
-      2 to "Матовое стекло (М)"
+      0 to "Patient Sex",
+      1 to "Patient Name",
+      2 to "Patient Age",
+      3 to "Accession Number",
+      4 to "Study ID",
+      5 to "Patient ID",
+      6 to "Patient Birth Date",
+      7 to "OTHER"
     )
   }
 }
+
+fun ExpertMarkEntity.toExpertQuestionsList(): List<ExpertQuestion<*>> = listOf(
+  ExpertQuestion.NoduleExistence(expertDecision),
+  ExpertQuestion.NoduleType(expertDecisionType),
+  ExpertQuestion.NoduleDimensions(expertDecisionProperSize?.toInt()),
+  ExpertQuestion.NoduleML(expertDecisionMachineLearning?.toInt()),
+  ExpertQuestion.NoduleExpertComment(expertDecisionComment)
+)
+
+private fun Boolean.toInt() = if (this) 1 else 0
+
 
 interface AnswerVariant
 

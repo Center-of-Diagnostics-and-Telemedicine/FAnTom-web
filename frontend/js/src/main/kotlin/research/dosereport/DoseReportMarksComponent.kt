@@ -1,4 +1,4 @@
-package research.expert
+package research.dosereport
 
 import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.lifecycle.LifecycleRegistry
@@ -21,16 +21,17 @@ import model.ResearchSlicesSizesDataNew
 import react.*
 import repository.ExpertMarksRepository
 import repository.ExpertRoiRepository
-import repository.MarksRepository
+import research.expert.ExpertMarksViewProxy
+import research.expert.expertMarkItem
 import resume
-import styled.StyledComponents.css
+import root.debugLog
 import styled.css
 import styled.styledDiv
 import view.ExpertMarksView
 import view.initialExpertMarksModel
 
-class ExpertMarksComponent(prps: ExpertMarksProps) :
-  RComponent<ExpertMarksProps, ExpertMarksState>(prps) {
+class DoseReportMarksComponent(prps: DoseReportMarksProps) :
+  RComponent<DoseReportMarksProps, DoseReportMarksState>(prps) {
 
   private var expandedItem: String? = null
 
@@ -39,7 +40,7 @@ class ExpertMarksComponent(prps: ExpertMarksProps) :
   private lateinit var controller: ExpertMarksController
 
   init {
-    state = ExpertMarksState(initialExpertMarksModel())
+    state = DoseReportMarksState(initialExpertMarksModel())
   }
 
   override fun componentDidMount() {
@@ -64,34 +65,33 @@ class ExpertMarksComponent(prps: ExpertMarksProps) :
   }
 
   override fun RBuilder.render() {
-//    alert(
-//      message = state.model.error,
-//      open = state.model.error.isNotEmpty(),
-//      handleClose = { marksViewDelegate.dispatch(ExpertMarksView.Event.DismissError) }
-//    )
-//    mDivider()
-//
-//    styledDiv {
-//      css {
-//        display = Display.flex
-//        flexDirection = FlexDirection.column
-//      }
-//      mList {
-//        state.model..values.forEach { lungLobeModel ->
-//          val panelName = "panel${lungLobeModel.shortName}"
-//
-//          expertMarkView(
-//            model = lungLobeModel,
-//            handlePanelClick = { expandClick(panelName) },
-//            handleVariantClick = {
-//              marksViewDelegate.dispatch(ExpertMarksView.Event.VariantChosen(lungLobeModel, it))
-//            },
-//            expand = expandedItem == panelName,
-//            fullWidth = props.dependencies.open
-//          )
-//        }
-//      }
-//    }
+    alert(
+      message = state.model.error,
+      open = state.model.error.isNotEmpty(),
+      handleClose = { marksViewDelegate.dispatch(ExpertMarksView.Event.DismissError) }
+    )
+    mDivider()
+
+    styledDiv {
+      css {
+        display = Display.flex
+        flexDirection = FlexDirection.column
+      }
+      mList {
+        state.model.rois.forEach { lungLobeModel ->
+          debugLog(lungLobeModel.roiModel.toString())
+          val panelName = "panel_${lungLobeModel.roiModel.id}"
+
+          expertMarkItem(
+            model = lungLobeModel,
+            handlePanelClick = { expandClick(panelName) },
+            handleVariantClick = {  },
+            expand = expandedItem == panelName,
+            fullWidth = props.dependencies.open
+          )
+        }
+      }
+    }
   }
 
   private fun expandClick(panelName: String) =
@@ -109,20 +109,20 @@ class ExpertMarksComponent(prps: ExpertMarksProps) :
     val expertMarksOutput: (ExpertMarksController.Output) -> Unit
     val data: ResearchSlicesSizesDataNew
     val expertMarksInput: Observable<ExpertMarksController.Input>
-    val expertRoiRepository: ExpertRoiRepository
     val expertMarksRepository: ExpertMarksRepository
+    val expertRoiRepository: ExpertRoiRepository
     val open: Boolean
     val research: Research
   }
 }
 
-class ExpertMarksState(var model: ExpertMarksView.Model) : RState
+class DoseReportMarksState(var model: ExpertMarksView.Model) : RState
 
-interface ExpertMarksProps : RProps {
-  var dependencies: ExpertMarksComponent.Dependencies
+interface DoseReportMarksProps : RProps {
+  var dependencies: DoseReportMarksComponent.Dependencies
 }
 
-fun RBuilder.expertMarks(dependencies: ExpertMarksComponent.Dependencies) =
-  child(ExpertMarksComponent::class) {
+fun RBuilder.doseReportMarks(dependencies: DoseReportMarksComponent.Dependencies) =
+  child(DoseReportMarksComponent::class) {
     attrs.dependencies = dependencies
   }

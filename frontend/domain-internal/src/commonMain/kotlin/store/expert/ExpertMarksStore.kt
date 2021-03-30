@@ -3,7 +3,7 @@ package store.expert
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import model.ExpertQuestion
-import model.MarkModel
+import model.RoiExpertQuestionsModel
 import store.expert.ExpertMarksStore.*
 
 interface ExpertMarksStore : Store<Intent, State, Label> {
@@ -21,8 +21,8 @@ interface ExpertMarksStore : Store<Intent, State, Label> {
   }
 
   data class State(
-    val marks: List<MarkModel> = listOf(),
-    val current: Pair<MarkModel, List<ExpertQuestion<*>>>? = null,
+    val roisQuestions: List<RoiExpertQuestionsModel> = listOf(),
+    val current: RoiExpertQuestionsModel? = null,
     val loading: Boolean = false,
     val error: String = ""
   ) : JvmSerializable

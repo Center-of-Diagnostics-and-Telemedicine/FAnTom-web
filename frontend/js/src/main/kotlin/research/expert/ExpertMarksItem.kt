@@ -1,4 +1,91 @@
 package research.expert
 
-class ExpertMarksItem {
+import com.ccfraser.muirwik.components.*
+import com.ccfraser.muirwik.components.form.MFormControlMargin
+import com.ccfraser.muirwik.components.form.MFormControlVariant
+import com.ccfraser.muirwik.components.list.mList
+import com.ccfraser.muirwik.components.list.mListItem
+import com.ccfraser.muirwik.components.list.mListItemText
+import com.ccfraser.muirwik.components.transitions.mCollapse
+import kotlinx.css.paddingLeft
+import kotlinx.css.paddingRight
+import kotlinx.css.px
+import model.CheckboxAnswerVariant
+import model.ExpertQuestion
+import model.RoiExpertQuestionsModel
+import model.TextAnswerVariant
+import react.RBuilder
+import react.dom.span
+import styled.css
+import styled.styledDiv
+
+private val builder2 = RBuilder()
+
+fun RBuilder.expertMarkItem(
+  model: RoiExpertQuestionsModel,
+  handlePanelClick: () -> Unit,
+  handleVariantClick: (Int) -> Unit,
+  expand: Boolean,
+  fullWidth: Boolean
+) {
+  mListItem(
+    primaryText = model.roiModel.roiType,
+    secondaryText = model.roiModel.text,
+    onClick = { handlePanelClick() },
+    selected = expand
+  ) {
+    if (expand) mIcon("expand_less") else mIcon("expand_more")
+  }
+
+  mCollapse(show = expand && fullWidth) {
+    mList(disablePadding = true) {
+      model.expertQuestions.forEach { expertQuestion ->
+        mListItem(
+          onClick = { /*handleVariantClick(expertQuestion.value)*/ },
+          selected = false/*model.value == expertQuestion*/
+        ) {
+          mListItemText(primary = builder2.span { +"${expertQuestion.questionText}" })
+        }
+        styledDiv {
+          css {
+            paddingLeft = 4.spacingUnits
+            paddingRight = 4.spacingUnits
+          }
+          when (expertQuestion) {
+            is ExpertQuestion.NoduleExistence -> checkBoxAnswers(
+              expertQuestion.variants as CheckboxAnswerVariant,
+              expertQuestion.value
+            )
+            is ExpertQuestion.NoduleType -> checkBoxAnswers(
+              expertQuestion.variants as CheckboxAnswerVariant,
+              expertQuestion.value
+            )
+            is ExpertQuestion.NoduleDimensions -> checkBoxAnswers(
+              expertQuestion.variants as CheckboxAnswerVariant,
+              expertQuestion.value
+            )
+            is ExpertQuestion.NoduleML -> checkBoxAnswers(
+              expertQuestion.variants as CheckboxAnswerVariant,
+              expertQuestion.value
+            )
+            is ExpertQuestion.NoduleExpertComment -> {
+              mTextField(
+                value = "",
+                variant = MFormControlVariant.outlined,
+                fullWidth = true,
+                label = (expertQuestion.variants as TextAnswerVariant).label,
+                onChange = null/*::onCommentChanged*/,
+                margin = MFormControlMargin.normal
+              )
+            }
+          }
+          mDivider()
+        }
+      }
+    }
+  }
+}
+
+fun RBuilder.checkBoxAnswers(variants: CheckboxAnswerVariant, value: Int?) {
+  variants.variants.forEach { mCheckboxWithLabel(label = it.value, checked = it.key == value) }
 }

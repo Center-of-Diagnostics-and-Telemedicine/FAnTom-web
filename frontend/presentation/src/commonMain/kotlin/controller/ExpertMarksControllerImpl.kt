@@ -24,7 +24,7 @@ class ExpertMarksControllerImpl(val dependencies: ExpertMarksController.Dependen
     storeFactory = dependencies.storeFactory,
     research = dependencies.research,
     data = dependencies.data,
-    marksRepository = dependencies.marksRepository,
+    expertRoiRepository = dependencies.expertRoiRepository,
     expertMarksRepository = dependencies.expertMarksRepository
   ).create()
 
@@ -41,16 +41,16 @@ class ExpertMarksControllerImpl(val dependencies: ExpertMarksController.Dependen
   }
 
   override fun onViewCreated(
-    marksView: ExpertMarksView,
+    expertMarksView: ExpertMarksView,
     viewLifecycle: Lifecycle
   ) {
     bind(viewLifecycle, BinderLifecycleMode.CREATE_DESTROY) {
       marksStore.labels.mapNotNull(expertMarksLabelToMarksOutput) bindTo dependencies.expertMarksOutput
-      marksView.events.mapNotNull(expertMarksEventToIntent) bindTo marksStore
+      expertMarksView.events.mapNotNull(expertMarksEventToIntent) bindTo marksStore
     }
 
     bind(viewLifecycle, BinderLifecycleMode.START_STOP) {
-      marksStore.states.mapNotNull(expertMarksStateToModel) bindTo marksView
+      marksStore.states.mapNotNull(expertMarksStateToModel) bindTo expertMarksView
     }
   }
 }

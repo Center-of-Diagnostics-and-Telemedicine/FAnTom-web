@@ -5,6 +5,7 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import model.Research
 import model.ResearchSlicesSizesDataNew
 import repository.ExpertMarksRepository
+import repository.ExpertRoiRepository
 import repository.MarksRepository
 import view.ExpertMarksView
 
@@ -13,7 +14,7 @@ interface ExpertMarksController {
   val input: (Input) -> Unit
 
   fun onViewCreated(
-    marksView: ExpertMarksView,
+    expertMarksView: ExpertMarksView,
     viewLifecycle: Lifecycle
   )
 
@@ -23,7 +24,7 @@ interface ExpertMarksController {
     val expertMarksOutput: (Output) -> Unit
     val research: Research
     val data: ResearchSlicesSizesDataNew
-    val marksRepository: MarksRepository
+    val expertRoiRepository: ExpertRoiRepository
     val expertMarksRepository: ExpertMarksRepository
   }
 

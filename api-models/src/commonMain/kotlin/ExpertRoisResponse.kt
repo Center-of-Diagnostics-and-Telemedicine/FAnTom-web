@@ -29,4 +29,7 @@ data class ExpertRoiEntity(
   val yCenter: Double,
   val ySize: Double,
   val text: String,
-)
+) {
+  val prettyPrint: String
+    get() = "x:$xCenter,y:$yCenter,w:$xSize,h$ySize"
+}

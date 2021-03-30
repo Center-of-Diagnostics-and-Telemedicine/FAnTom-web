@@ -75,15 +75,13 @@ fun ResultRow.toPlanarMark(): MarkEntity = MarkEntity(
   comment = this[PlanarMarksVos.comment],
 )
 
-fun ResultRow.toExportedMarkModel(): ExportedMarkModel = ExportedMarkModel(
+fun ResultRow.toExportedMarkModel(): ExpertMarkModel = ExpertMarkModel(
   id = this[ExpertMarksVos.id],
-  diameterMm = this[ExpertMarksVos.diameterMm],
-  type = this[ExpertMarksVos.type],
-  version = this[ExpertMarksVos.version],
-  x = this[ExpertMarksVos.x],
-  y = this[ExpertMarksVos.y],
-  z = this[ExpertMarksVos.z],
-  zType = this[ExpertMarksVos.zType],
+  roiId = this[ExpertMarksVos.roiId],
+  xCenter = this[ExpertMarksVos.xCenter],
+  yCenter = this[ExpertMarksVos.yCenter],
+  xSize = this[ExpertMarksVos.xSize],
+  ySize = this[ExpertMarksVos.ySize],
   expertDecision = this[ExpertMarksVos.expertDecision],
   expertDecisionId = this[ExpertMarksVos.expertDecisionId],
   expertDecisionComment = this[ExpertMarksVos.expertDecisionComment],

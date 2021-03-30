@@ -8,8 +8,7 @@ val expertMarksStateToModel: ExpertMarksStore.State.() -> ExpertMarksView.Model 
   ExpertMarksView.Model(
     loading = loading,
     error = error,
-    questions = current?.second,
-    mark = current?.first
+    rois = roisQuestions
   )
 }
 

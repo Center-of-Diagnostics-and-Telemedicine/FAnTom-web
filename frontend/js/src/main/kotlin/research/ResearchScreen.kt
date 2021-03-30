@@ -22,6 +22,8 @@ import repository.*
 import research.ResearchScreen.ResearchStyles.appFrameContainerStyle
 import research.covid.CovidMarksComponent
 import research.covid.covidMarks
+import research.dosereport.DoseReportMarksComponent
+import research.dosereport.doseReportMarks
 import research.expert.ExpertMarksComponent
 import research.expert.expertMarks
 import research.gridcontainer.CutsContainerViewComponent
@@ -123,7 +125,7 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
           }
           Category.DoseReport -> {
             rightMenu(drawerLittleMargin) {
-              expertMarks(dependencies = expertMarksDependencies(model))
+              doseReportMarks(dependencies = doseReportMarksDependencies(model))
             }
           }
           else -> {
@@ -211,6 +213,16 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
 
   private fun expertMarksDependencies(model: ResearchView.Model) =
     object : ExpertMarksComponent.Dependencies,
+      Dependencies by props.dependencies {
+      override val expertMarksOutput: (ExpertMarksController.Output) -> Unit = ::expertMarksOutput
+      override val data: ResearchSlicesSizesDataNew = model.data!!
+      override val expertMarksInput: Observable<ExpertMarksController.Input> =
+        this@ResearchScreen.expertMarksInputObservable
+      override val open: Boolean = state.marksOpen
+    }
+
+  private fun doseReportMarksDependencies(model: ResearchView.Model) =
+    object : DoseReportMarksComponent.Dependencies,
       Dependencies by props.dependencies {
       override val expertMarksOutput: (ExpertMarksController.Output) -> Unit = ::expertMarksOutput
       override val data: ResearchSlicesSizesDataNew = model.data!!

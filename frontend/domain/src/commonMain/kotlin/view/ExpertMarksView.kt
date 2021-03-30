@@ -2,7 +2,7 @@ package view
 
 import com.arkivanov.mvikotlin.core.view.MviView
 import model.ExpertQuestion
-import model.MarkModel
+import model.RoiExpertQuestionsModel
 import view.ExpertMarksView.Event
 import view.ExpertMarksView.Model
 
@@ -10,8 +10,7 @@ interface ExpertMarksView : MviView<Model, Event> {
 
   data class Model(
     val loading: Boolean,
-    val questions: List<ExpertQuestion<*>>?,
-    val mark: MarkModel?,
+    val rois: List<RoiExpertQuestionsModel>,
     val error: String
   )
 
@@ -25,8 +24,7 @@ interface ExpertMarksView : MviView<Model, Event> {
 }
 
 fun initialExpertMarksModel(): Model = Model(
-  questions = listOf(),
-  mark = null,
+  rois = listOf(),
   loading = false,
   error = ""
 )

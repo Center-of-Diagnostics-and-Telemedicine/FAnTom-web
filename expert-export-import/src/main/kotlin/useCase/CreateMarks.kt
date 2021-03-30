@@ -1,13 +1,13 @@
 package useCase
 
 import model.*
-import repository.repository.ExportedMarksRepository
+import repository.repository.ExpertMarksRepository
 
 suspend fun createMarks(
   usersToNodules: List<Map<UserModel, NoduleModel?>>,
   users: List<UserModel>,
   research: ResearchModel,
-  repository: ExportedMarksRepository
+  repository: ExpertMarksRepository
 ) {
 //  usersToNodules.forEach { usersToNodulesMap ->
 //    usersToNodulesMap.forEach { user, nodule ->
@@ -24,14 +24,14 @@ suspend fun createMarks(
 }
 
 private suspend fun createMark(
-  repository: ExportedMarksRepository,
+  repository: ExpertMarksRepository,
   nodule: NoduleModel,
   user: UserModel,
   research: ResearchModel
 ) {
   val expertDecisionModel = nodule.expertDecision?.firstOrNull()
   repository.create(
-    mark = ExportedMarkModel(
+    mark = ExpertMarkModel(
       id = -1,
       diameterMm = nodule.diameterMm,
       type = nodule.type,

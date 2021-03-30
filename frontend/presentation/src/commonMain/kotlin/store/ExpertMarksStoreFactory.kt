@@ -11,7 +11,7 @@ import com.badoo.reaktive.single.observeOn
 import com.badoo.reaktive.single.subscribeOn
 import model.*
 import repository.ExpertMarksRepository
-import repository.MarksRepository
+import repository.ExpertRoiRepository
 import store.expert.ExpertMarksStore.*
 import store.expert.ExpertMarksStoreAbstractFactory
 
@@ -19,7 +19,7 @@ internal class ExpertMarksStoreFactory(
   storeFactory: StoreFactory,
   val research: Research,
   val data: ResearchSlicesSizesDataNew,
-  val marksRepository: MarksRepository,
+  val expertRoiRepository: ExpertRoiRepository,
   val expertMarksRepository: ExpertMarksRepository
 ) : ExpertMarksStoreAbstractFactory(
   storeFactory = storeFactory
@@ -31,9 +31,10 @@ internal class ExpertMarksStoreFactory(
 
     override fun executeAction(action: Unit, getState: () -> State) {
       singleFromCoroutine {
-        marksRepository.getMarks(research.id)
+        val rois = expertRoiRepository.getRois(research.id)
+        val expertMarks = expertMarksRepository.getMarks(research.id)
+        buildRoisToExpertMarks(rois, expertMarks)
       }
-        .map { list -> list.map { it.toMarkModel(data.markTypes) } }
         .subscribeOn(ioScheduler)
         .map(Result::Loaded)
         .observeOn(mainScheduler)

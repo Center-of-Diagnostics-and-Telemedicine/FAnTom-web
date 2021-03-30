@@ -34,6 +34,12 @@ class CloseResearch(val id: Int)
 @Location("/$RESEARCH_ROUTE/{id}/$COVID_MARK_ROUTE")
 class CovidMark(val id: Int)
 
+@Location("/$RESEARCH_ROUTE/{id}/$EXPERT_ROI_ROUTE")
+class RoisMarks(val id: Int)
+
+@Location("/$RESEARCH_ROUTE/{id}/$EXPERT_MARK_ROUTE")
+class ExpertMarks(val id: Int)
+
 @Location("/$RESEARCH_ROUTE/{id}/$MARK_ROUTE")
 class CreateMark(val id: Int)
 
