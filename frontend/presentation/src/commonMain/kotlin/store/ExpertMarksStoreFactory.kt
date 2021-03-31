@@ -61,8 +61,10 @@ internal class ExpertMarksStoreFactory(
 
     private fun handleSelectMark(state: () -> State, id: Int) {
       val list = state().models
+      val mark = list.firstOrNull { it.roiModel.id == id }
+      val markSelected = mark?.selected
       list.map { it.selected = false }
-      list.firstOrNull { it.roiModel.id == id }?.selected = true
+      mark?.let { it.selected = markSelected?.not() ?: true }
       dispatch(Result.Loaded(list))
       publish(Label.Marks(list))
     }
