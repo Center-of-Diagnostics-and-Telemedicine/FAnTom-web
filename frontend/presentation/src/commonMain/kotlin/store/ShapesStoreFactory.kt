@@ -119,7 +119,10 @@ internal class ShapesStoreFactory(
       state: () -> State
     ) {
       dispatch(Result.ExpertMarks(list))
-      updateShapes(list.map(RoiExpertQuestionsModel::toMarkModel), state)
+      val models = list
+        .filter { it.roiModel.cutType == cut.type.intType }
+        .map(RoiExpertQuestionsModel::toMarkModel)
+      updateShapes(models, state)
     }
 
     private fun handleStopMoving(getState: () -> State) {

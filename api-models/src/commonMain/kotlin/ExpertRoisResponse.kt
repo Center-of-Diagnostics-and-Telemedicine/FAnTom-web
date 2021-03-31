@@ -32,9 +32,9 @@ data class ExpertRoiEntity(
 ) {
   val cutType: Int
     get() = when (instanceNumber) {
-      0 -> SLICE_TYPE_CT_0
-      1 -> SLICE_TYPE_CT_1
-      2 -> SLICE_TYPE_CT_2
+      1 -> SLICE_TYPE_CT_0
+      2 -> SLICE_TYPE_CT_1
+      3 -> SLICE_TYPE_CT_2
       else -> SLICE_TYPE_CT_0
     }
 
