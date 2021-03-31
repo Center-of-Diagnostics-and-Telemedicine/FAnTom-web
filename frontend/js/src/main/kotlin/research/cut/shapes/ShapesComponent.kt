@@ -212,20 +212,20 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
   private fun drawPlanarRectangle(rectangle: Rectangle, context: CanvasRenderingContext2D) {
     val color = rectangle.color
     context.fillStyle = if (color.isEmpty()) defaultMarkColor else color
-    if (rectangle.highlight) {
-      context.lineWidth = 2.0
-    } else {
-      context.lineWidth = 1.0
-    }
 
     val x = (rectangle.dicomCenterX - rectangle.dicomRadiusHorizontal) / horizontalRatio
     val y = (rectangle.dicomCenterY - rectangle.dicomRadiusVertical) / verticalRatio
     val w = rectangle.dicomRadiusHorizontal / horizontalRatio * 2
     val h = rectangle.dicomRadiusVertical / verticalRatio * 2
-    context.globalAlpha = 0.3
+    context.globalAlpha = if (rectangle.highlight) 0.5 else 0.3
     context.fillRect(x, y, w, h)
     context.globalAlpha = 1.0
 
+    if (rectangle.highlight) {
+      context.strokeStyle = if (color.isEmpty()) defaultMarkColor else color
+      context.lineWidth = 2.0
+      context.rect(x, y, w, h)
+    }
   }
 
   private fun drawSphere(context: CanvasRenderingContext2D, circle: Circle) {

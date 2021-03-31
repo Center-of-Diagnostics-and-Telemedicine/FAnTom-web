@@ -18,6 +18,7 @@ interface ExpertMarksView : MviView<Model, Event> {
   sealed class Event {
     object DismissError : Event()
     data class VariantChosen(val roi: ExpertRoiEntity, val question: ExpertQuestion<*>) : Event()
+    data class SelectMark(val id: Int): Event()
   }
 }
 

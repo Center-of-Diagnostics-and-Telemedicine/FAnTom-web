@@ -55,7 +55,16 @@ internal class ExpertMarksStoreFactory(
         is Intent.ChangeVariantText -> TODO()
         Intent.ReloadRequested -> null
         Intent.HandleCloseResearch -> handleCloseResearch(getState)
+        is Intent.SelectMark -> handleSelectMark(getState, intent.id)
       }
+    }
+
+    private fun handleSelectMark(state: () -> State, id: Int) {
+      val list = state().models
+      list.map { it.selected = false }
+      list.firstOrNull { it.roiModel.id == id }?.selected = true
+      dispatch(Result.Loaded(list))
+      publish(Label.Marks(list))
     }
 
     private fun handleCloseResearch(getState: () -> State) {

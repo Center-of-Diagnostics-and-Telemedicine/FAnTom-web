@@ -4,7 +4,9 @@ data class RoiExpertQuestionsModel(
   val roiModel: ExpertRoiEntity,
   val expertQuestions: List<ExpertQuestion<*>>,
   val color: String
-)
+) {
+  var selected: Boolean = false
+}
 
 fun RoiExpertQuestionsModel.toMarkModel(): MarkModel {
 
@@ -28,7 +30,10 @@ fun RoiExpertQuestionsModel.toMarkModel(): MarkModel {
       color = color
     ),
     comment = ""
-  )
+  ).also {
+    it.selected = selected
+    it.editable = false
+  }
 }
 
 fun buildRoisToExpertMarks(

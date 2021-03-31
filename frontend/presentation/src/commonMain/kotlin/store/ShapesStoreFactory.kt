@@ -150,7 +150,7 @@ internal class ShapesStoreFactory(
         .filter { it.visible }
         .mapNotNull { it.toShape(cut, state().sliceNumber) }
       val selectedShape = shapes.firstOrNull { it.highlight }
-      val rectangles = if (selectedShape != null && selectedShape.isCenter) {
+      val rectangles = if (selectedShape != null && selectedShape.isCenter && selectedShape.editable) {
         selectedShape.toRects(cut)
       } else {
         listOf()

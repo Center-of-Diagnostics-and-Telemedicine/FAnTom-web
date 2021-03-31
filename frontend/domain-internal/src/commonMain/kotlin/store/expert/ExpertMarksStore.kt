@@ -13,6 +13,8 @@ interface ExpertMarksStore : Store<Intent, State, Label> {
     data class ChangeVariant(val roi: ExpertRoiEntity,val question: ExpertQuestion<*>) : Intent()
 
     data class ChangeVariantText(val question: ExpertQuestion<*>, val variant: String) : Intent()
+    data class SelectMark(val id: Int) : Intent()
+
     object DismissError : Intent()
     object ReloadRequested : Intent()
     object HandleCloseResearch : Intent()

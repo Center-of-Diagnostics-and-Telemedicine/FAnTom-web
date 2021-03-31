@@ -79,12 +79,14 @@ class DoseReportMarksComponent(prps: DoseReportMarksProps) :
       }
       mList {
         state.model.models.forEach { model ->
-          debugLog(model.roiModel.toString())
           val panelName = "panel_${model.roiModel.id}"
 
           expertMarkItem(
             model = model,
-            handlePanelClick = { expandClick(panelName) },
+            handlePanelClick = {
+              marksViewDelegate.dispatch(ExpertMarksView.Event.SelectMark(model.roiModel.id))
+              expandClick(panelName)
+            },
             handleAnswerChanged = { expertQuestion ->
               marksViewDelegate.dispatch(
                 ExpertMarksView.Event.VariantChosen(

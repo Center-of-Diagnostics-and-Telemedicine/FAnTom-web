@@ -16,6 +16,7 @@ interface Shape {
   val highlight: Boolean
   val isCenter: Boolean
   val color: String
+  val editable: Boolean
 }
 
 fun Shape.getType(): Int {
@@ -34,7 +35,8 @@ data class Circle(
   override val id: Int,
   override val highlight: Boolean,
   override val isCenter: Boolean,
-  override val color: String
+  override val color: String,
+  override val editable: Boolean = true
 ) : Shape
 
 data class Rectangle(
@@ -45,7 +47,8 @@ data class Rectangle(
   override val id: Int,
   override val highlight: Boolean,
   override val isCenter: Boolean,
-  override val color: String
+  override val color: String,
+  override val editable: Boolean = true
 ) : Shape
 
 fun MarkModel.toShape(cut: Cut, sliceNumber: Int): Shape? {
@@ -202,7 +205,8 @@ private fun MarkModel.toRectangle(cut: Cut): Rectangle? {
           id = id,
           highlight = selected,
           isCenter = true,
-          color = type?.color ?: ""
+          color = type?.color ?: "",
+          editable = editable
         ) else null
       }
     }

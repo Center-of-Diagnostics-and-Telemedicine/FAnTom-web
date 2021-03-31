@@ -39,6 +39,7 @@ data class MarkModel(
 ) {
   var visible: Boolean = true
   var selected: Boolean = false
+  var editable: Boolean = true
 }
 
 data class MarkTypeModel(

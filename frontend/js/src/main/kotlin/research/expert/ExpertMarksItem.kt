@@ -8,8 +8,8 @@ import com.ccfraser.muirwik.components.list.mList
 import com.ccfraser.muirwik.components.list.mListItem
 import com.ccfraser.muirwik.components.list.mListItemText
 import com.ccfraser.muirwik.components.transitions.mCollapse
-import kotlinx.css.paddingLeft
-import kotlinx.css.paddingRight
+import kotlinx.css.*
+import kotlinx.css.properties.border
 import model.*
 import org.w3c.dom.HTMLInputElement
 import react.RBuilder
@@ -26,80 +26,83 @@ fun RBuilder.expertMarkItem(
   expand: Boolean,
   fullWidth: Boolean
 ) {
-  mListItem(
-    primaryText = model.roiModel.roiType,
-    secondaryText = model.roiModel.text,
-    onClick = { handlePanelClick() },
-    selected = expand
-  ) {
-    if (expand) mIcon("expand_less") else mIcon("expand_more")
-  }
+  styledDiv {
+    css {
+      boxSizing = BoxSizing.borderBox
+      border(2.px, BorderStyle.solid, Color(model.color))
+    }
+    mListItem(
+      primaryText = model.roiModel.roiType,
+      secondaryText = model.roiModel.text,
+      onClick = { handlePanelClick() },
+      selected = expand
+    ) {
+      if (expand) mIcon("expand_less") else mIcon("expand_more")
+    }
 
-  mCollapse(show = expand && fullWidth) {
-    mList(disablePadding = true) {
-      model.expertQuestions.forEach { expertQuestion ->
-        mListItem(
-          onClick = { /*handleVariantClick(expertQuestion.value)*/ },
-          selected = false/*model.value == expertQuestion*/
-        ) {
-          mListItemText(primary = builder2.span { +"${expertQuestion.questionText}" })
-        }
-        styledDiv {
-          css {
-            paddingLeft = 4.spacingUnits
-            paddingRight = 4.spacingUnits
+    mCollapse(show = expand && fullWidth) {
+      mList(disablePadding = true) {
+        model.expertQuestions.forEach { expertQuestion ->
+          mListItem(selected = false) {
+            mListItemText(primary = builder2.span { +"${expertQuestion.questionText}" })
           }
-          when (expertQuestion) {
-            is ExpertQuestion.MarkApprove -> buttonsAnswers(
-              expertQuestion.variants as ButtonsAnswerVariant,
-              expertQuestion.value
-            ) { key, value -> handleAnswerChanged(ExpertQuestion.MarkApprove(key)) }
-
-            is ExpertQuestion.DrawNewMark -> buttonsAnswers(
-              expertQuestion.variants as ButtonsAnswerVariant,
-              expertQuestion.value
-            ) { key, value -> handleAnswerChanged(ExpertQuestion.DrawNewMark(key)) }
-
-            is ExpertQuestion.NoduleExistence -> checkBoxAnswers(
-              expertQuestion.variants as CheckboxAnswerVariant,
-              expertQuestion.value
-            ) { key, value -> handleAnswerChanged(ExpertQuestion.NoduleExistence(key)) }
-
-            is ExpertQuestion.NoduleType -> checkBoxAnswers(
-              expertQuestion.variants as CheckboxAnswerVariant,
-              expertQuestion.value
-            ) { key, value -> handleAnswerChanged(ExpertQuestion.NoduleType(key)) }
-
-            is ExpertQuestion.NoduleDimensions -> checkBoxAnswers(
-              expertQuestion.variants as CheckboxAnswerVariant,
-              expertQuestion.value
-            ) { key, value -> handleAnswerChanged(ExpertQuestion.NoduleDimensions(key)) }
-
-            is ExpertQuestion.NoduleML -> checkBoxAnswers(
-              expertQuestion.variants as CheckboxAnswerVariant,
-              expertQuestion.value
-            ) { key, value -> handleAnswerChanged(ExpertQuestion.NoduleML(key)) }
-
-            is ExpertQuestion.MarkApprove -> checkBoxAnswers(
-              expertQuestion.variants as CheckboxAnswerVariant,
-              expertQuestion.value
-            ) { key, value -> handleAnswerChanged(ExpertQuestion.NoduleML(key)) }
-
-            is ExpertQuestion.NoduleExpertComment -> {
-              mTextField(
-                value = "",
-                variant = MFormControlVariant.outlined,
-                fullWidth = true,
-                label = (expertQuestion.variants as TextAnswerVariant).label,
-                onChange = {
-                  val target = it.target as HTMLInputElement
-                  handleAnswerChanged(ExpertQuestion.NoduleExpertComment(target.value))
-                },
-                margin = MFormControlMargin.normal
-              )
+          styledDiv {
+            css {
+              paddingLeft = 4.spacingUnits
+              paddingRight = 4.spacingUnits
             }
-          }.let {}
-          mDivider()
+            when (expertQuestion) {
+              is ExpertQuestion.MarkApprove -> buttonsAnswers(
+                expertQuestion.variants as ButtonsAnswerVariant,
+                expertQuestion.value
+              ) { key, value -> handleAnswerChanged(ExpertQuestion.MarkApprove(key)) }
+
+              is ExpertQuestion.DrawNewMark -> buttonsAnswers(
+                expertQuestion.variants as ButtonsAnswerVariant,
+                expertQuestion.value
+              ) { key, value -> handleAnswerChanged(ExpertQuestion.DrawNewMark(key)) }
+
+              is ExpertQuestion.NoduleExistence -> checkBoxAnswers(
+                expertQuestion.variants as CheckboxAnswerVariant,
+                expertQuestion.value
+              ) { key, value -> handleAnswerChanged(ExpertQuestion.NoduleExistence(key)) }
+
+              is ExpertQuestion.NoduleType -> checkBoxAnswers(
+                expertQuestion.variants as CheckboxAnswerVariant,
+                expertQuestion.value
+              ) { key, value -> handleAnswerChanged(ExpertQuestion.NoduleType(key)) }
+
+              is ExpertQuestion.NoduleDimensions -> checkBoxAnswers(
+                expertQuestion.variants as CheckboxAnswerVariant,
+                expertQuestion.value
+              ) { key, value -> handleAnswerChanged(ExpertQuestion.NoduleDimensions(key)) }
+
+              is ExpertQuestion.NoduleML -> checkBoxAnswers(
+                expertQuestion.variants as CheckboxAnswerVariant,
+                expertQuestion.value
+              ) { key, value -> handleAnswerChanged(ExpertQuestion.NoduleML(key)) }
+
+              is ExpertQuestion.MarkApprove -> checkBoxAnswers(
+                expertQuestion.variants as CheckboxAnswerVariant,
+                expertQuestion.value
+              ) { key, value -> handleAnswerChanged(ExpertQuestion.NoduleML(key)) }
+
+              is ExpertQuestion.NoduleExpertComment -> {
+                mTextField(
+                  value = "",
+                  variant = MFormControlVariant.outlined,
+                  fullWidth = true,
+                  label = (expertQuestion.variants as TextAnswerVariant).label,
+                  onChange = {
+                    val target = it.target as HTMLInputElement
+                    handleAnswerChanged(ExpertQuestion.NoduleExpertComment(target.value))
+                  },
+                  margin = MFormControlMargin.normal
+                )
+              }
+            }.let {}
+            mDivider()
+          }
         }
       }
     }
