@@ -26,10 +26,12 @@ fun RBuilder.expertMarkItem(
   expand: Boolean,
   fullWidth: Boolean
 ) {
+  val color = Color(model.color)
   styledDiv {
     css {
       boxSizing = BoxSizing.borderBox
-      border(2.px, BorderStyle.solid, Color(model.color))
+      border(2.px, BorderStyle.solid, color)
+      backgroundColor = color.darken(30)
     }
     mListItem(
       primaryText = model.roiModel.roiType,
@@ -37,6 +39,11 @@ fun RBuilder.expertMarkItem(
       onClick = { handlePanelClick() },
       selected = expand
     ) {
+      css{
+        if(expand){
+          backgroundColor = color.lighten(10)
+        }
+      }
       if (expand) mIcon("expand_less") else mIcon("expand_more")
     }
 
