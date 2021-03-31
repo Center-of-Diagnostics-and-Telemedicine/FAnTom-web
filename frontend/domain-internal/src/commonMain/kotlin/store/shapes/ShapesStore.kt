@@ -29,7 +29,7 @@ interface ShapesStore : Store<Intent, State, Label> {
     val rects: List<Rect>,
     val hounsfield: Int?,
     val marks: List<MarkModel>,
-    val expertMarks: List<RoiExpertQuestionsModel>,
+    val expertMarks: List<MarkModel>,
     val moveRect: Rect?
   ) : JvmSerializable
 

@@ -7,6 +7,7 @@ import com.ccfraser.muirwik.components.form.MFormControlVariant
 import com.ccfraser.muirwik.components.list.mList
 import com.ccfraser.muirwik.components.list.mListItem
 import com.ccfraser.muirwik.components.list.mListItemText
+import com.ccfraser.muirwik.components.list.mListItemWithIcon
 import com.ccfraser.muirwik.components.transitions.mCollapse
 import kotlinx.css.*
 import kotlinx.css.properties.border
@@ -33,14 +34,15 @@ fun RBuilder.expertMarkItem(
       border(2.px, BorderStyle.solid, color)
       backgroundColor = color.darken(30)
     }
-    mListItem(
+    mListItemWithIcon(
       primaryText = model.roiModel.roiType,
       secondaryText = model.roiModel.text,
       onClick = { handlePanelClick() },
-      selected = expand
+      selected = expand,
+      iconName = ""//""done"
     ) {
-      css{
-        if(expand){
+      css {
+        if (expand) {
           backgroundColor = color.lighten(10)
         }
       }

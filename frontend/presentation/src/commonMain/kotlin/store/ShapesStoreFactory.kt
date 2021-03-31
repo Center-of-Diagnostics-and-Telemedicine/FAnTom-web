@@ -111,18 +111,18 @@ internal class ShapesStoreFactory(
 
     private fun handleMarks(list: List<MarkModel>, state: () -> State) {
       dispatch(Result.Marks(list))
-      updateShapes(list, state)
+      updateShapes(state().expertMarks.plus(list), state().sliceNumber)
     }
 
     private fun handleExpertMarks(
       list: List<RoiExpertQuestionsModel>,
       state: () -> State
     ) {
-      dispatch(Result.ExpertMarks(list))
       val models = list
         .filter { it.roiModel.cutType == cut.type.intType }
         .map(RoiExpertQuestionsModel::toMarkModel)
-      updateShapes(models, state)
+      dispatch(Result.ExpertMarks(models))
+      updateShapes(state().marks.plus(models), state().sliceNumber)
     }
 
     private fun handleStopMoving(getState: () -> State) {
@@ -142,13 +142,13 @@ internal class ShapesStoreFactory(
         cut.horizontalCutData?.type == externalCut.type ->
           updateHorizontalCoefficient(sliceNumber, externalCut)
       }
-      updateShapes(getState().marks, getState)
+      updateShapes(getState().marks.plus(getState().expertMarks), getState().sliceNumber)
     }
 
-    private fun updateShapes(list: List<MarkModel>, state: () -> State) {
-      val shapes = list
+    private fun updateShapes(marks: List<MarkModel>, sliceNumber: Int) {
+      val shapes = marks
         .filter { it.visible }
-        .mapNotNull { it.toShape(cut, state().sliceNumber) }
+        .mapNotNull { it.toShape(cut, sliceNumber) }
       val selectedShape = shapes.firstOrNull { it.highlight }
       val rectangles = if (selectedShape != null && selectedShape.isCenter && selectedShape.editable) {
         selectedShape.toRects(cut)

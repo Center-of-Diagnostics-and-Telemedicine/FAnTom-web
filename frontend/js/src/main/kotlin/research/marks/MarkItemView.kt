@@ -132,7 +132,7 @@ class MarkItemView(prps: MarkItemProps) : RComponent<MarkItemProps, MarkItemStat
 
       props.markTypes.forEach { markType ->
         mMenuItem(
-          primaryText = markType.ru,
+          primaryText = markType.en,
           onClick = {
             it.stopPropagation()
             handleSimpleClick(markType)

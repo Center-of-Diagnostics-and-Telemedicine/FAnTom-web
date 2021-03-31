@@ -125,6 +125,7 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
           }
           Category.DoseReport -> {
             rightMenu(drawerLittleMargin) {
+              marks(dependencies = marksDependencies(model.data))
               doseReportMarks(dependencies = doseReportMarksDependencies(model))
             }
           }
