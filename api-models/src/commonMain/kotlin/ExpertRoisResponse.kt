@@ -28,7 +28,7 @@ data class ExpertRoiEntity(
   val xSize: Double,
   val yCenter: Double,
   val ySize: Double,
-  val text: String,
+  val text: String
 ) {
   val cutType: Int
     get() = when (instanceNumber) {

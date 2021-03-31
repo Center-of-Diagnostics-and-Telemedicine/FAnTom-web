@@ -33,7 +33,7 @@ internal class ExpertMarksStoreFactory(
       singleFromCoroutine {
         val rois = expertRoiRepository.getRois(research.id)
         val expertMarks = expertMarksRepository.getMarks(research.id)
-        buildRoisToExpertMarks(rois, expertMarks)
+        buildRoisToExpertMarks(rois, expertMarks, data.markTypes)
       }
         .subscribeOn(ioScheduler)
         .map(Result::Loaded)

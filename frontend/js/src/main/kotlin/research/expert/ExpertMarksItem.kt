@@ -1,6 +1,7 @@
 package research.expert
 
 import com.ccfraser.muirwik.components.*
+import com.ccfraser.muirwik.components.button.mButton
 import com.ccfraser.muirwik.components.form.MFormControlMargin
 import com.ccfraser.muirwik.components.form.MFormControlVariant
 import com.ccfraser.muirwik.components.list.mList
@@ -9,10 +10,7 @@ import com.ccfraser.muirwik.components.list.mListItemText
 import com.ccfraser.muirwik.components.transitions.mCollapse
 import kotlinx.css.paddingLeft
 import kotlinx.css.paddingRight
-import model.CheckboxAnswerVariant
-import model.ExpertQuestion
-import model.RoiExpertQuestionsModel
-import model.TextAnswerVariant
+import model.*
 import org.w3c.dom.HTMLInputElement
 import react.RBuilder
 import react.dom.span
@@ -52,6 +50,16 @@ fun RBuilder.expertMarkItem(
             paddingRight = 4.spacingUnits
           }
           when (expertQuestion) {
+            is ExpertQuestion.MarkApprove -> buttonsAnswers(
+              expertQuestion.variants as ButtonsAnswerVariant,
+              expertQuestion.value
+            ) { key, value -> handleAnswerChanged(ExpertQuestion.MarkApprove(key)) }
+
+            is ExpertQuestion.DrawNewMark -> buttonsAnswers(
+              expertQuestion.variants as ButtonsAnswerVariant,
+              expertQuestion.value
+            ) { key, value -> handleAnswerChanged(ExpertQuestion.DrawNewMark(key)) }
+
             is ExpertQuestion.NoduleExistence -> checkBoxAnswers(
               expertQuestion.variants as CheckboxAnswerVariant,
               expertQuestion.value
@@ -72,6 +80,11 @@ fun RBuilder.expertMarkItem(
               expertQuestion.value
             ) { key, value -> handleAnswerChanged(ExpertQuestion.NoduleML(key)) }
 
+            is ExpertQuestion.MarkApprove -> checkBoxAnswers(
+              expertQuestion.variants as CheckboxAnswerVariant,
+              expertQuestion.value
+            ) { key, value -> handleAnswerChanged(ExpertQuestion.NoduleML(key)) }
+
             is ExpertQuestion.NoduleExpertComment -> {
               mTextField(
                 value = "",
@@ -85,11 +98,24 @@ fun RBuilder.expertMarkItem(
                 margin = MFormControlMargin.normal
               )
             }
-          }
+          }.let {}
           mDivider()
         }
       }
     }
+  }
+}
+
+fun RBuilder.buttonsAnswers(
+  variants: ButtonsAnswerVariant,
+  value: Int?,
+  onChangeVariant: (Int, String) -> Unit
+) {
+  variants.variants.forEach {
+    mButton(
+      caption = it.value,
+      onClick = { _ -> if (it.key != value) onChangeVariant(it.key, it.value) }
+    )
   }
 }
 

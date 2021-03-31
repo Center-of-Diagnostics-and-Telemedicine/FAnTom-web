@@ -2,7 +2,8 @@ package model
 
 data class RoiExpertQuestionsModel(
   val roiModel: ExpertRoiEntity,
-  val expertQuestions: List<ExpertQuestion<*>>
+  val expertQuestions: List<ExpertQuestion<*>>,
+  val color: String
 )
 
 fun RoiExpertQuestionsModel.toMarkModel(): MarkModel {
@@ -24,7 +25,7 @@ fun RoiExpertQuestionsModel.toMarkModel(): MarkModel {
       typeId = roiModel.roiType,
       en = roiModel.roiType,
       ru = roiModel.roiType,
-      color = defaultMarkColor
+      color = color
     ),
     comment = ""
   )
@@ -32,19 +33,22 @@ fun RoiExpertQuestionsModel.toMarkModel(): MarkModel {
 
 fun buildRoisToExpertMarks(
   rois: List<ExpertRoiEntity>,
-  expertMarks: List<ExpertMarkEntity>
+  expertMarks: List<ExpertMarkEntity>,
+  markTypes: Map<String, MarkTypeEntity>
 ): List<RoiExpertQuestionsModel> {
   return rois.map { roi ->
     val existingExpertMark = expertMarks.firstOrNull { it.roiId == roi.id }
     if (existingExpertMark == null) {
       RoiExpertQuestionsModel(
         roiModel = roi,
-        expertQuestions = expertQuestionsList
+        expertQuestions = expertQuestionsList,
+        color = markTypes[roi.roiType]?.CLR ?: defaultMarkColor
       )
     } else {
       RoiExpertQuestionsModel(
         roiModel = roi,
-        expertQuestions = existingExpertMark.toExpertQuestionsList()
+        expertQuestions = existingExpertMark.toExpertQuestionsList(),
+        color = markTypes[roi.roiType]?.CLR ?: defaultMarkColor
       )
     }
   }
