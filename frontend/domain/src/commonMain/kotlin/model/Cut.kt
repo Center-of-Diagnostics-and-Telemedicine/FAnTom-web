@@ -30,6 +30,11 @@ enum class CutType(val intType: Int) {
   DX_POSTERO_ANTERIOR(SLICE_TYPE_DX_POSTERO_ANTERIOR),
   DX_LEFT_LATERAL(SLICE_TYPE_DX_LEFT_LATERAL),
   DX_RIGHT_LATERAL(SLICE_TYPE_DX_RIGHT_LATERAL), ;
+
+  companion object {
+    private val VALUES = values()
+    fun getByValue(value: Int) = VALUES.first { it.intType == value }
+  }
 }
 
 fun CutType.isDoseReport(): Boolean {

@@ -32,12 +32,12 @@ sealed class Grid(val types: List<CutType>) {
   ) : Grid(listOf(topLeft, topRight, bottomLeft, bottomRight))
 
   companion object {
-    fun build(type: GridType, researchType: ResearchType, doseReport: Boolean): Grid {
+    fun build(type: GridType, researchType: ResearchType, doseReport: Boolean, data: ResearchSlicesSizesDataNew): Grid {
       return when (type) {
         GridType.Single -> initialSingleGrid(researchType)
         GridType.TwoVertical -> initialTwoVerticalGrid(researchType)
         GridType.TwoHorizontal -> initialTwoHorizontalGrid(researchType)
-        GridType.Four -> initialFourGrid(researchType, doseReport)
+        GridType.Four -> initialFourGrid(researchType, doseReport, data.modalities)
       }
     }
   }
@@ -67,7 +67,11 @@ fun initialTwoHorizontalGrid(researchType: ResearchType): Grid {
   }
 }
 
-fun initialFourGrid(researchType: ResearchType, doseReport: Boolean): Grid {
+fun initialFourGrid(
+  researchType: ResearchType,
+  doseReport: Boolean,
+  modalities: Map<Int, ModalityModel>
+): Grid {
   return when (researchType) {
     ResearchType.CT -> Grid.Four(
       topLeft = CutType.CT_AXIAL,
@@ -77,12 +81,20 @@ fun initialFourGrid(researchType: ResearchType, doseReport: Boolean): Grid {
     )
     ResearchType.MG -> {
       if (doseReport) {
-        Grid.Four(
-          topLeft = CutType.CT_0,
-          topRight = CutType.CT_1,
-          bottomLeft = CutType.CT_2,
-          bottomRight = CutType.EMPTY
-        )
+        when (modalities.size) {
+          1 -> Grid.Single(CutType.getByValue(modalities.entries.first().key))
+          2 -> Grid.TwoHorizontal(
+            left = CutType.getByValue(modalities.entries.first().key),
+            right = CutType.getByValue(modalities.entries.last().key)
+          )
+          3 -> Grid.Four(
+            topLeft = CutType.CT_0,
+            topRight = CutType.CT_1,
+            bottomLeft = CutType.CT_2,
+            bottomRight = CutType.EMPTY
+          )
+          else -> throw NotImplementedError("initialFourGrid doseReport no variants")
+        }
       } else {
         Grid.Four(
           topLeft = CutType.MG_RCC,
@@ -223,8 +235,8 @@ private fun cutWithTwoTypes(
     CutType.DX_LEFT_LATERAL -> dxLeftLateral(data, dxCuts.filter { it != main && it != second })
     CutType.DX_RIGHT_LATERAL -> dxRightLateral(data, dxCuts.filter { it != main && it != second })
     CutType.CT_0 -> ct0(data, doseReportCuts.filter { it != main && it != second })
-    CutType.CT_2 -> ct1(data, doseReportCuts.filter { it != main && it != second })
-    CutType.CT_1 -> ct2(data, doseReportCuts.filter { it != main && it != second })
+    CutType.CT_1 -> ct1(data, doseReportCuts.filter { it != main && it != second })
+    CutType.CT_2 -> ct2(data, doseReportCuts.filter { it != main && it != second })
   }
 }
 

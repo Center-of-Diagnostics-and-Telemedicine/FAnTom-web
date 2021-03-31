@@ -28,7 +28,7 @@ internal class CutsContainerStoreFactory(
       singleFromFunction {
         val grid = when (data.type) {
           ResearchType.CT,
-          ResearchType.MG -> initialFourGrid(data.type, data.doseReport)
+          ResearchType.MG -> initialFourGrid(data.type, data.doseReport, data.modalities)
           ResearchType.DX -> initialSingleGrid(data.type)
         }
         Result.Loaded(items = grid.buildCuts(data), grid = grid)

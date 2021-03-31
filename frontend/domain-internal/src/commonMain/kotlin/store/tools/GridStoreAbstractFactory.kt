@@ -19,9 +19,9 @@ abstract class GridStoreAbstractFactory(
       initialSingleGrid(data.type),
       initialTwoVerticalGrid(data.type),
       initialTwoHorizontalGrid(data.type),
-      initialFourGrid(data.type, data.doseReport)
+      initialFourGrid(data.type, data.doseReport, data.modalities)
     ),
-    current = initialFourGrid(data.type, data.doseReport),
+    current = initialFourGrid(data.type, data.doseReport, data.modalities),
     previous = null
   )
 

@@ -56,7 +56,8 @@ class ToolsComponent(prps: ToolsProps) : RComponent<ToolsProps, ToolsState>(prps
       toolsModel = initialToolsModel(),
       gridModel = initialGridModel(
         type = props.dependencies.data.type,
-        doseReport = props.dependencies.data.doseReport
+        doseReport = props.dependencies.data.doseReport,
+        data = props.dependencies.data
       ),
       mipModel = initialMipModel(),
       brightnessModel = initialBrightnessModel(),

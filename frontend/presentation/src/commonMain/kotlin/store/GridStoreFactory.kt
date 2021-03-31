@@ -52,7 +52,7 @@ internal class GridStoreFactory(
     }
 
     private fun changeFilter(gridType: GridType) {
-      val grid = Grid.build(gridType, data.type, data.doseReport)
+      val grid = Grid.build(gridType, data.type, data.doseReport, data)
       dispatch(Result.GridChanged(grid))
       publish(Label.GridChanged(grid))
     }

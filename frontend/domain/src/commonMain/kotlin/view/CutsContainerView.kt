@@ -1,10 +1,7 @@
 package view
 
 import com.arkivanov.mvikotlin.core.view.MviView
-import model.Cut
-import model.Grid
-import model.ResearchType
-import model.initialFourGrid
+import model.*
 import view.CutsContainerView.Model
 
 interface CutsContainerView : MviView<Model, Nothing> {
@@ -15,7 +12,7 @@ interface CutsContainerView : MviView<Model, Nothing> {
   )
 }
 
-fun initialCutsContainerModel(type: ResearchType, doseReport: Boolean): Model = Model(
+fun initialCutsContainerModel(type: ResearchType, doseReport: Boolean, data: ResearchSlicesSizesDataNew): Model = Model(
   items = listOf(),
-  grid = initialFourGrid(type, doseReport)
+  grid = initialFourGrid(type, doseReport, data.modalities)
 )

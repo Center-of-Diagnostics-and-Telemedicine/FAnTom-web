@@ -77,7 +77,9 @@ data class ModalityModel(
   val n_images: Int,
   val screen_size_h: Int = 512,
   val screen_size_v: Int = 512,
-  val reversed: Boolean? = null
+  val reversed: Boolean? = null,
+  val SOPInstanceUID: String? = null,
+  val file: String? = null
 )
 
 @Serializable

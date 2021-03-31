@@ -1,10 +1,7 @@
 package view
 
 import com.arkivanov.mvikotlin.core.view.MviView
-import model.Grid
-import model.GridType
-import model.ResearchType
-import model.initialFourGrid
+import model.*
 import view.GridView.Event
 import view.GridView.Model
 
@@ -20,7 +17,7 @@ interface GridView : MviView<Model, Event> {
   }
 }
 
-fun initialGridModel(type: ResearchType, doseReport: Boolean): Model = Model(
+fun initialGridModel(type: ResearchType, doseReport: Boolean, data: ResearchSlicesSizesDataNew): Model = Model(
   items = listOf(),
-  current = initialFourGrid(type, doseReport)
+  current = initialFourGrid(type, doseReport, data.modalities)
 )
