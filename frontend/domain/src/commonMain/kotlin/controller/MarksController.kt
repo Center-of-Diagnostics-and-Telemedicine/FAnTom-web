@@ -27,6 +27,7 @@ interface MarksController {
   sealed class Output {
     data class Marks(val list: List<MarkModel>) : Output()
     data class CenterSelectedMark(val mark: MarkModel) : Output()
+    data class AcceptMark(val mark: MarkModel) : Output()
 
     object CloseResearch : Output()
   }

@@ -20,6 +20,7 @@ interface MarksView : MviView<Model, Event> {
     data class DeleteItem(val mark: MarkModel) : Event()
     data class ChangeMarkType(val type: MarkTypeModel, val markId: Int) : Event()
     data class ChangeVisibility(val mark: MarkModel) : Event()
+    data class OnAcceptClick(val mark: MarkModel) : Event()
 
     object DismissError : Event()
   }

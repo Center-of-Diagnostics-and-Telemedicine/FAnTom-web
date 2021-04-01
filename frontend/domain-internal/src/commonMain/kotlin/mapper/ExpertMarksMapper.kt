@@ -23,6 +23,7 @@ val expertMarksEventToIntent: ExpertMarksView.Event.() -> ExpertMarksStore.Inten
 
 val inputToExpertMarksIntent: ExpertMarksController.Input.() -> ExpertMarksStore.Intent? = {
   when (this) {
+    is ExpertMarksController.Input.AcceptMark -> ExpertMarksStore.Intent.AcceptMark(mark)
     ExpertMarksController.Input.CloseResearchRequested -> ExpertMarksStore.Intent.HandleCloseResearch
     ExpertMarksController.Input.Idle -> null
   }

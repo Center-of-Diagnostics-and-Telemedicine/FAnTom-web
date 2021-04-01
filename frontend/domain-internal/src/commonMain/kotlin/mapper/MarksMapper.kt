@@ -17,6 +17,7 @@ val marksEventToIntent: Event.() -> Intent? = {
     is Event.DeleteItem -> Intent.DeleteMark(mark)
     is Event.ChangeMarkType -> Intent.ChangeMarkType(type, markId)
     is Event.ChangeVisibility -> Intent.ChangeVisibility(mark)
+    is Event.OnAcceptClick -> Intent.AcceptMark(mark)
     Event.DismissError -> Intent.DismissError
   }
 }
@@ -37,6 +38,7 @@ val inputToMarksIntent: Input.() -> Intent? = {
 val marksLabelToMarksOutput: Label.() -> Output? = {
   when (this) {
     is Label.MarksLoaded -> Output.Marks(list)
+    is Label.AcceptMark -> Output.AcceptMark(mark)
     Label.CloseResearch -> Output.CloseResearch
     is Label.CenterSelectedMark -> Output.CenterSelectedMark(mark)
   }

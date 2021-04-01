@@ -30,3 +30,19 @@ fun ExpertMarkModel.toExpertMarkEntity(): ExpertMarkEntity =
     expertDecisionProperSize = expertDecisionProperSize,
     expertDecisionType = expertDecisionType,
   )
+
+fun ExpertMarkEntity.toExpertMarkModel(): ExpertMarkModel =
+  ExpertMarkModel(
+    id = id,
+    roiId = roiId,
+    xCenter = xCenter,
+    yCenter = yCenter,
+    xSize = xSize,
+    ySize = ySize,
+    expertDecision = expertDecision,
+    expertDecisionId = expertDecisionId,
+    expertDecisionComment = expertDecisionComment,
+    expertDecisionMachineLearning = expertDecisionMachineLearning,
+    expertDecisionProperSize = expertDecisionProperSize,
+    expertDecisionType = expertDecisionType,
+  )

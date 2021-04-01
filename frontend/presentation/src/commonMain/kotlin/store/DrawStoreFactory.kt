@@ -4,6 +4,7 @@ import com.arkivanov.mvikotlin.core.store.Executor
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
 import model.Cut
+import model.DOSE_REPORT_RESEARCH_CATEGORY
 import model.Research
 import model.isPlanar
 import store.draw.DrawStore.*
@@ -25,7 +26,11 @@ internal class DrawStoreFactory(
 
     override fun executeIntent(intent: Intent, getState: () -> State) {
       when (intent) {
-        is Intent.StartDrawEllipse -> handleStartDrawEllipse(intent.startDicomX, intent.startDicomY)
+        is Intent.StartDrawEllipse -> {
+          if (research.category != DOSE_REPORT_RESEARCH_CATEGORY) {
+            handleStartDrawEllipse(intent.startDicomX, intent.startDicomY)
+          } else null
+        }
         is Intent.StartDrawRectangle -> handleStartDrawRectangle(
           intent.startDicomX,
           intent.startDicomY

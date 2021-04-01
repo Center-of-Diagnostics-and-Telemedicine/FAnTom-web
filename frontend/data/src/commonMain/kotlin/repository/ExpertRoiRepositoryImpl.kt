@@ -17,10 +17,10 @@ class ExpertRoiRepositoryImpl(
     }
   }
 
-  override suspend fun saveRoi(markToSave: ExpertRoiEntity, researchId: Int) {
+  override suspend fun saveRoi(markToSave: ExpertRoiEntity, researchId: Int): ExpertRoiEntity {
     val response = remote.save(request = markToSave, researchId = researchId, token = token())
-    when {
-      response.response != null -> response.response!!
+    return when {
+      response.response != null -> response.response!!.first()
       response.error != null -> handleErrorResponse(response.error!!)
       else -> throw ResearchApiExceptions.MarkUpdateException
     }

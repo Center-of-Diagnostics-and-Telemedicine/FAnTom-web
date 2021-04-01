@@ -44,3 +44,26 @@ fun ExportedRoiModel.toExportedRoiEntity(): ExpertRoiEntity =
     ySize = ySize,
     text = text,
   )
+
+fun ExpertRoiEntity.toExportedRoiModel(): ExportedRoiModel =
+  ExportedRoiModel(
+    id = id,
+    researchId = researchId,
+    acquisitionNumber = acquisitionNumber,
+    dcmFilename = dcmFilename,
+    instanceNumber = instanceNumber,
+    seriesNumber = seriesNumber,
+    sopInstanceUid = sopInstanceUid,
+    anatomicalLocation = anatomicalLocation,
+    confidence = confidence,
+    roiFilename = roiFilename,
+    roiShape = roiShape,
+    roiType = roiType,
+    roiTypeIndex = roiTypeIndex,
+    taggerId = taggerId,
+    xCenter = xCenter,
+    xSize = xSize,
+    yCenter = yCenter,
+    ySize = ySize,
+    text = text,
+  )

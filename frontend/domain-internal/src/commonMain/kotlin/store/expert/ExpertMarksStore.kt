@@ -4,6 +4,7 @@ import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import model.ExpertQuestion
 import model.ExpertRoiEntity
+import model.MarkModel
 import model.RoiExpertQuestionsModel
 import store.expert.ExpertMarksStore.*
 
@@ -14,6 +15,7 @@ interface ExpertMarksStore : Store<Intent, State, Label> {
 
     data class ChangeVariantText(val question: ExpertQuestion<*>, val variant: String) : Intent()
     data class SelectMark(val id: Int) : Intent()
+    data class AcceptMark(val mark: MarkModel) : Intent()
 
     object DismissError : Intent()
     object ReloadRequested : Intent()

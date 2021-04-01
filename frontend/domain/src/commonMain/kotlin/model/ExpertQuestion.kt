@@ -88,7 +88,7 @@ sealed class ExpertQuestion<ValueType>(
 }
 
 fun ExpertMarkEntity.toExpertQuestionsList(): List<ExpertQuestion<*>> = listOf(
-  ExpertQuestion.NoduleExistence(expertDecision),
+  ExpertQuestion.MarkApprove(expertDecision),
 //  ExpertQuestion.NoduleType(expertDecisionType),
 //  ExpertQuestion.NoduleDimensions(expertDecisionProperSize?.toInt()),
 //  ExpertQuestion.NoduleML(expertDecisionMachineLearning?.toInt()),

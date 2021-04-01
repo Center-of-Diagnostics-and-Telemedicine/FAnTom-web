@@ -115,7 +115,10 @@ fun Application.module(testing: Boolean = false) {
       updateMark(multiPlanarMarksRepository, planarMarksRepository, researchRepository)
 
       getRois(expertRoisRepository, researchRepository)
+      saveRoi(expertRoisRepository, researchRepository)
+
       getExpertMarks(expertMarksRepository, researchRepository)
+      saveExpertMark(expertMarksRepository, researchRepository)
     }
 
   }

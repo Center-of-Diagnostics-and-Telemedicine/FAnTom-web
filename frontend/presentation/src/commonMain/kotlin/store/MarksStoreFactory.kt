@@ -61,7 +61,17 @@ internal class MarksStoreFactory(
         Intent.ReloadRequested -> TODO()
         Intent.DismissError -> dispatch(Result.DismissErrorRequested)
         is Intent.ChangeVisibility -> handleChangeVisibility(intent.mark, getState)
+        is Intent.AcceptMark -> handleAcceptMark(intent.mark, getState)
       }.let {}
+    }
+
+    private fun handleAcceptMark(mark: MarkModel, state: () -> State) {
+      if (mark.type == null) {
+        dispatch(Result.Error(error = "Выберите тип отметки"))
+      } else {
+        deleteMark(mark, state)
+        publish(Label.AcceptMark(mark))
+      }
     }
 
     private fun handleChangeVisibility(mark: MarkModel, state: () -> State) {

@@ -68,7 +68,7 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
   init {
     state = ResearchState(
       toolsOpen = false,
-      marksOpen = false,
+      marksOpen = props.dependencies.research.category == DOSE_REPORT_RESEARCH_CATEGORY,
       dialogOpen = false,
       researchModel = initialResearchModel()
     )
@@ -317,6 +317,8 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
         cutsInputObservable.onNext(CutController.Input.ChangeSliceNumberByMarkCenter(output.mark))
         setState { dialogOpen = true }
       }
+      is MarksController.Output.AcceptMark ->
+        expertMarksInputObservable.onNext(ExpertMarksController.Input.AcceptMark(output.mark))
     }.let { }
   }
 

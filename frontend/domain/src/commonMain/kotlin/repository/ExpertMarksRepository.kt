@@ -7,6 +7,6 @@ interface ExpertMarksRepository {
   val token: suspend () -> String
 
   suspend fun getMarks(researchId: Int): List<ExpertMarkEntity>
-  suspend fun saveMark(markToSave: ExpertMarkEntity, researchId: Int)
+  suspend fun saveMark(markToSave: ExpertMarkEntity, researchId: Int): ExpertMarkEntity
 
 }

@@ -17,10 +17,10 @@ class ExpertMarksRepositoryImpl(
     }
   }
 
-  override suspend fun saveMark(markToSave: ExpertMarkEntity, researchId: Int) {
+  override suspend fun saveMark(markToSave: ExpertMarkEntity, researchId: Int): ExpertMarkEntity {
     val response = remote.save(request = markToSave, researchId = researchId, token = token())
-    when {
-      response.response != null -> response.response!!
+    return when {
+      response.response != null -> response.response!!.first()
       response.error != null -> handleErrorResponse(response.error!!)
       else -> throw ResearchApiExceptions.MarkUpdateException
     }

@@ -71,10 +71,10 @@ class MarksComponent(prps: MarksProps) : RComponent<MarksProps, MarksState>(prps
         mTable {
           mTableHead {
             mTableRow {
-              mTableCell(align = MTableCellAlign.center) {
-                css { padding = "8px" }
-                mIcon("visibility")
-              }
+//              mTableCell(align = MTableCellAlign.center) {
+//                css { padding = "8px" }
+//                mIcon("visibility")
+//              }
               tableCell("X")
               tableCell("Y")
 

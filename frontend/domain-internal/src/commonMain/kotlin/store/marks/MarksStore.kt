@@ -20,6 +20,7 @@ interface MarksStore : Store<Intent, State, Label> {
     data class UpdateComment(val mark: MarkModel, val comment: String) : Intent()
     data class ChangeMarkType(val type: MarkTypeModel, val markId: Int) : Intent()
     data class ChangeVisibility(val mark: MarkModel) : Intent()
+    data class AcceptMark(val mark: MarkModel) : Intent()
 
     object DismissError : Intent()
     object ReloadRequested : Intent()
@@ -38,5 +39,6 @@ interface MarksStore : Store<Intent, State, Label> {
     object CloseResearch : Label()
     data class MarksLoaded(val list: List<MarkModel>) : Label()
     data class CenterSelectedMark(val mark: MarkModel) : Label()
+    data class AcceptMark(val mark: MarkModel) : Label()
   }
 }

@@ -56,7 +56,33 @@ internal class ExpertMarksStoreFactory(
         Intent.ReloadRequested -> null
         Intent.HandleCloseResearch -> handleCloseResearch(getState)
         is Intent.SelectMark -> handleSelectMark(getState, intent.id)
+        is Intent.AcceptMark -> handleAcceptMark(getState, intent.mark)
+      }?.let { }
+    }
+
+    private fun handleAcceptMark(state: () -> State, mark: MarkModel) {
+      singleFromCoroutine {
+        val sameRoi = state().models.first { it.roiModel.cutType == mark.markData.cutType }
+        val newRoi = expertRoiRepository.saveRoi(
+          markToSave = mark.toExpertRoiEntity(research.id, sameRoi.roiModel),
+          researchId = research.id
+        )
+        expertMarksRepository.saveMark(mark.toEmptyExpertMarkEntity(newRoi), research.id)
+        val rois = expertRoiRepository.getRois(research.id)
+        val expertMarks = expertMarksRepository.getMarks(research.id)
+        buildRoisToExpertMarks(rois, expertMarks, data.markTypes)
       }
+        .subscribeOn(ioScheduler)
+        .map(Result::Loaded)
+        .observeOn(mainScheduler)
+        .subscribeScoped(
+          isThreadLocal = true,
+          onSuccess = {
+            dispatch(it)
+            publish(Label.Marks(it.models))
+          },
+          onError = ::handleError
+        )
     }
 
     private fun handleSelectMark(state: () -> State, id: Int) {

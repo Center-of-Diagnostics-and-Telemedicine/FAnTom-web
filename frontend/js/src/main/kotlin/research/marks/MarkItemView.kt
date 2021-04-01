@@ -1,13 +1,9 @@
 package research.marks
 
-import com.ccfraser.muirwik.components.button.MButtonSize
-import com.ccfraser.muirwik.components.button.MIconButtonSize
-import com.ccfraser.muirwik.components.button.mButton
-import com.ccfraser.muirwik.components.button.mIconButton
+import com.ccfraser.muirwik.components.*
+import com.ccfraser.muirwik.components.button.*
 import com.ccfraser.muirwik.components.form.MFormControlMargin
 import com.ccfraser.muirwik.components.form.MFormControlVariant
-import com.ccfraser.muirwik.components.mTextField
-import com.ccfraser.muirwik.components.mTypography
 import com.ccfraser.muirwik.components.menu.mMenu
 import com.ccfraser.muirwik.components.menu.mMenuItem
 import com.ccfraser.muirwik.components.styles.Theme
@@ -15,7 +11,6 @@ import com.ccfraser.muirwik.components.table.MTableCellAlign
 import com.ccfraser.muirwik.components.table.MTableCellPadding
 import com.ccfraser.muirwik.components.table.mTableCell
 import com.ccfraser.muirwik.components.table.mTableRow
-import com.ccfraser.muirwik.components.themeContext
 import kotlinx.css.*
 import model.MarkModel
 import model.MarkTypeModel
@@ -41,7 +36,26 @@ class MarkItemView(prps: MarkItemProps) : RComponent<MarkItemProps, MarkItemStat
   override fun RBuilder.render() {
     themeContext.Consumer { theme ->
       markDataRow(theme)
-      markCommentRow(selected = props.mark.selected)
+      markAcceptRow(selected = props.mark.selected)
+//      markCommentRow(selected = props.mark.selected)
+    }
+  }
+
+  private fun RBuilder.markAcceptRow(selected: Boolean) {
+    if (selected) {
+      mTableRow {
+        mTableCell(colSpan = 6) {
+          mButton(
+            caption = "Сохранить",
+            variant = MButtonVariant.contained,
+            size = MButtonSize.large,
+            onClick = { props.eventOutput(MarksView.Event.OnAcceptClick(props.mark)) }
+          ) {
+            attrs.startIcon = mIcon("done", fontSize = MIconFontSize.small, addAsChild = false)
+            attrs.fullWidth = true
+          }
+        }
+      }
     }
   }
 
@@ -72,9 +86,9 @@ class MarkItemView(prps: MarkItemProps) : RComponent<MarkItemProps, MarkItemStat
           backgroundColor = Color(theme.palette.primary.main)
         }
       }
-      mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.checkbox) {
-        visibilityButton(area)
-      }
+//      mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.checkbox) {
+//        visibilityButton(area)
+//      }
       tableCell("${round(area.markData.x)}")
       tableCell("${round(area.markData.y)}")
       if (props.isPlanar) {
