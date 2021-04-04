@@ -1,23 +1,23 @@
 package view
 
 import com.arkivanov.mvikotlin.core.view.MviView
+import model.ExpertMarkEntity
 import model.ExpertQuestion
-import model.ExpertRoiEntity
-import model.RoiExpertQuestionsModel
+import model.ExpertQuestionsModel
 import view.ExpertMarksView.Event
 import view.ExpertMarksView.Model
 
 interface ExpertMarksView : MviView<Model, Event> {
 
   data class Model(
-          val loading: Boolean,
-          val models: List<RoiExpertQuestionsModel>,
-          val error: String
+    val loading: Boolean,
+    val models: List<ExpertQuestionsModel>,
+    val error: String
   )
 
   sealed class Event {
     object DismissError : Event()
-    data class VariantChosen(val roi: ExpertRoiEntity, val question: ExpertQuestion<*>) : Event()
+    data class VariantChosen(val expertMarkEntity: ExpertMarkEntity, val question: ExpertQuestion<*>) : Event()
     data class SelectMark(val id: Int): Event()
   }
 }

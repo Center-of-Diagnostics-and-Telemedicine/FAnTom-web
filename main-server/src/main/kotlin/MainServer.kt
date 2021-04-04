@@ -114,11 +114,12 @@ fun Application.module(testing: Boolean = false) {
       deleteMark(multiPlanarMarksRepository, planarMarksRepository, researchRepository)
       updateMark(multiPlanarMarksRepository, planarMarksRepository, researchRepository)
 
-      getRois(expertRoisRepository, researchRepository)
-      saveRoi(expertRoisRepository, researchRepository)
 
       getExpertMarks(expertMarksRepository, researchRepository)
       saveExpertMark(expertMarksRepository, researchRepository)
+      updateExpertMark(expertMarksRepository, researchRepository)
+//      deleteExpertMarkByRoiId(expertMarksRepository, expertRoisRepository, researchRepository)
+//      confirmExpertMarkByRoi(expertMarksRepository, expertRoisRepository, researchRepository)
     }
 
   }

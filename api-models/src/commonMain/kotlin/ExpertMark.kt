@@ -5,57 +5,60 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ExpertMarkEntity(
   val id: Int,
-  val roiId: Int,
+  val roiId: Int?,
   val xCenter: Double,
   val yCenter: Double,
   val xSize: Double,
   val ySize: Double,
-  val expertDecision: Int? = null,
-  val expertDecisionId: String? = null,
-  val expertDecisionComment: String? = null,
-  val expertDecisionMachineLearning: Boolean? = null,
-  val expertDecisionProperSize: Boolean? = null,
-  val expertDecisionType: Int? = null
-)
+  val researchId: Int,
+  val acquisitionNumber: String,
+  val dcmFilename: String,
+  val instanceNumber: Int,
+  val seriesNumber: Int,
+  val sopInstanceUid: String,
+  val anatomicalLocation: String,
+  val confidence: Double,
+  val roiFilename: String,
+  val roiShape: String,
+  val roiType: String,
+  val roiTypeIndex: Int,
+  val taggerId: String,
+  val text: String,
+  val confirmed: Boolean? = null
+){
+  val cutType: Int
+    get() = when (instanceNumber) {
+      1 -> SLICE_TYPE_CT_0
+      2 -> SLICE_TYPE_CT_1
+      3 -> SLICE_TYPE_CT_2
+      else -> SLICE_TYPE_CT_0
+    }
 
-fun MarkModel.toEmptyExpertMarkEntity(roi: ExpertRoiEntity): ExpertMarkEntity =
+  val prettyPrint: String
+    get() = "x:$xCenter,y:$yCenter,w:$xSize,h$ySize"
+}
+
+fun MarkModel.toEmptyExpertMarkEntity(saveMarkEntity: ExpertMarkEntity): ExpertMarkEntity =
   ExpertMarkEntity(
     id = -1,
-    roiId = roi.id,
+    roiId = -1,
+    researchId = saveMarkEntity.researchId,
     xCenter = markData.x,
     yCenter = markData.y,
     xSize = markData.sizeHorizontal,
     ySize = markData.sizeVertical,
-    expertDecision = null,
-    expertDecisionId = null,
-    expertDecisionComment = null,
-    expertDecisionMachineLearning = null,
-    expertDecisionProperSize = null,
-    expertDecisionType = null,
-  )
-
-fun MarkModel.toExpertRoiEntity(
-  researchId: Int,
-  sameRoi: ExpertRoiEntity
-): ExpertRoiEntity =
-  ExpertRoiEntity(
-    id = id,
-    researchId = researchId,
-    acquisitionNumber = sameRoi.acquisitionNumber,
-    dcmFilename = sameRoi.dcmFilename,
-    instanceNumber = sameRoi.instanceNumber,
-    seriesNumber = sameRoi.seriesNumber,
-    sopInstanceUid = sameRoi.sopInstanceUid,
-    anatomicalLocation = sameRoi.anatomicalLocation,
-    confidence = 1.0,
-    roiFilename = sameRoi.roiFilename,
-    roiShape = sameRoi.roiShape,
-    roiType = type!!.typeId,
-    roiTypeIndex = 1,
-    taggerId = "",
-    xCenter = markData.x,
-    xSize = markData.sizeHorizontal,
-    yCenter = markData.y,
-    ySize = markData.sizeVertical,
-    text = "",
+    acquisitionNumber = saveMarkEntity.acquisitionNumber,
+    dcmFilename = saveMarkEntity.dcmFilename,
+    instanceNumber = saveMarkEntity.instanceNumber,
+    seriesNumber = saveMarkEntity.seriesNumber,
+    sopInstanceUid = saveMarkEntity.sopInstanceUid,
+    anatomicalLocation = saveMarkEntity.anatomicalLocation,
+    confidence = saveMarkEntity.confidence,
+    roiFilename = saveMarkEntity.roiFilename,
+    roiShape = saveMarkEntity.roiShape,
+    roiType = saveMarkEntity.roiType,
+    roiTypeIndex = saveMarkEntity.roiTypeIndex,
+    taggerId = saveMarkEntity.taggerId,
+    confirmed = null,
+    text = ""
   )

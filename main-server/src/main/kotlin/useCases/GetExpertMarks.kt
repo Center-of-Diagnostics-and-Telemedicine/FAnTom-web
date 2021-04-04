@@ -21,7 +21,7 @@ fun Route.getExpertMarks(
     }
 
     val user = call.user
-    val research = researchRepository.getResearch(it.id)
+    val research = researchRepository.getResearch(it.researchId)
 
     if (research == null) {
       respondError(ErrorStringCode.RESEARCH_NOT_FOUND)
@@ -30,7 +30,7 @@ fun Route.getExpertMarks(
 
     try {
       val entities = repository
-        .getAll(user.id, it.id)
+        .getAll(user.id, it.researchId)
         .map(ExpertMarkModel::toExpertMarkEntity)
 
       when (entities) {

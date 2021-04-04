@@ -4,6 +4,7 @@ import model.ExpertMarkModel
 
 interface ExpertMarksDaoFacade {
   suspend fun get(id: Int): ExpertMarkModel?
+  suspend fun getByRoiId(roiId: Int): ExpertMarkModel?
   suspend fun getAll(userId: Int, researchId: Int): List<ExpertMarkModel>
   suspend fun save(mark: ExpertMarkModel, userrId: Int, researchhId: Int): Int
   suspend fun update(mark: ExpertMarkModel)

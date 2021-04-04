@@ -1,3 +1,4 @@
+import model.UserRole
 import model.hash
 import model.macProtocolsPath
 import org.jetbrains.exposed.sql.Database
@@ -22,18 +23,18 @@ suspend fun main() {
 suspend fun doseReports() {
   val doseReports = getDoseReports(macProtocolsPath)
 
-//  //создаем пользователей
-//  userRepository.createUser(
-//    login = "#tagger_01",
-//    hashedPassword = hash("text_detector_v01"),
-//    role = UserRole.TAGGER.value
-//  )
-//  userRepository.createUser(
-//    login = "arbiter",
-//    hashedPassword = hash("doseReportsArbiter"),
-//    role = UserRole.ARBITER.value
-//  )
-//  val tagger = userRepository.getUser("#tagger_01", hash("text_detector_v01"))!!
+  //создаем пользователей
+  userRepository.createUser(
+    login = "#tagger_01",
+    hashedPassword = hash("text_detector_v01"),
+    role = UserRole.TAGGER.value
+  )
+  userRepository.createUser(
+    login = "arbiter",
+    hashedPassword = hash("doseReportsArbiter"),
+    role = UserRole.ARBITER.value
+  )
+  val tagger = userRepository.getUser("#tagger_01", hash("text_detector_v01"))!!
   val expert = userRepository.getUser("arbiter", hash("doseReportsArbiter"))!!
 
   //создаем исследования
@@ -50,7 +51,7 @@ suspend fun doseReports() {
     repository = userResearchRepository
   )
 
-  createRois(researches, doseReports, exportedRoisRepository)
+  createRois(researches, doseReports, exportedRoisRepository, exportedMarksRepository, tagger.id)
 }
 
 private fun connectToDatabase() {

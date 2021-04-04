@@ -12,6 +12,10 @@ class ExpertMarksRepositoryImpl(
     return expertMarksDao.get(id)
   }
 
+  override suspend fun getByRoiId(roiId: Int): ExpertMarkModel? {
+    return expertMarksDao.getByRoiId(roiId)
+  }
+
   override suspend fun getAll(userId: Int, researchId: Int): List<ExpertMarkModel> {
     return expertMarksDao.getAll(userId, researchId)
   }

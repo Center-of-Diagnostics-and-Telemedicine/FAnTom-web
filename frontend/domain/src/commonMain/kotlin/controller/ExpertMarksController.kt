@@ -5,10 +5,8 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import model.MarkModel
 import model.Research
 import model.ResearchSlicesSizesDataNew
-import model.RoiExpertQuestionsModel
+import model.ExpertQuestionsModel
 import repository.ExpertMarksRepository
-import repository.ExpertRoiRepository
-import repository.MarksRepository
 import view.ExpertMarksView
 
 interface ExpertMarksController {
@@ -26,12 +24,11 @@ interface ExpertMarksController {
     val expertMarksOutput: (Output) -> Unit
     val research: Research
     val data: ResearchSlicesSizesDataNew
-    val expertRoiRepository: ExpertRoiRepository
     val expertMarksRepository: ExpertMarksRepository
   }
 
   sealed class Output {
-    data class Marks(val models: List<RoiExpertQuestionsModel>) : Output()
+    data class Marks(val models: List<ExpertQuestionsModel>) : Output()
 
     object CloseResearch : Output()
   }

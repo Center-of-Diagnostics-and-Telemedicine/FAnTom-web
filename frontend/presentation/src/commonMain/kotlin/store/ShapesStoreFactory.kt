@@ -115,12 +115,12 @@ internal class ShapesStoreFactory(
     }
 
     private fun handleExpertMarks(
-      list: List<RoiExpertQuestionsModel>,
+      list: List<ExpertQuestionsModel>,
       state: () -> State
     ) {
       val models = list
-        .filter { it.roiModel.cutType == cut.type.intType }
-        .map(RoiExpertQuestionsModel::toMarkModel)
+        .filter { it.expertMarkEntity.cutType == cut.type.intType }
+        .map(ExpertQuestionsModel::toMarkModel)
       dispatch(Result.ExpertMarks(models))
       updateShapes(state().marks.plus(models), state().sliceNumber)
     }

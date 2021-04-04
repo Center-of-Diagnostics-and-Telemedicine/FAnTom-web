@@ -7,36 +7,36 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import model.*
 import repository.ResearchRepository
-import repository.repository.ExportedRoisRepository
-import util.CreateRoi
+import repository.repository.ExpertMarksRepository
+import util.ExpertMark
 import util.user
 
-fun Route.saveRoi(
-  repository: ExportedRoisRepository,
+fun Route.updateExpertMark(
+  repository: ExpertMarksRepository,
   researchRepository: ResearchRepository
 ) {
 
-  post<CreateRoi> {
+  patch<ExpertMark> {
 
     suspend fun respondError(errorCode: ErrorStringCode) {
-      call.respond(ExpertRoisResponse(error = ErrorModel(errorCode.value)))
+      call.respond(BaseResponse(error = ErrorModel(errorCode.value)))
     }
 
     val user = call.user
-    val markModel = call.receive<ExpertRoiEntity>()
-    val research = researchRepository.getResearch(it.id)
+    val markModel = call.receive<ExpertMarkEntity>()
+    val research = researchRepository.getResearch(it.researchId)
 
     if (research == null) {
       respondError(ErrorStringCode.RESEARCH_NOT_FOUND)
-      return@post
+      return@patch
     }
 
     try {
 
-      val mark = repository.create(markModel.toExportedRoiModel(), it.id)
+      val mark = repository.update(markModel.toExpertMarkModel())
 
       if (mark != null) {
-        call.respond(ExpertRoisResponse(response = listOf(mark.toExportedRoiEntity())))
+        call.respond(BaseResponse(OK))
       } else {
         respondError(ErrorStringCode.CREATE_MARK_FAILED)
       }

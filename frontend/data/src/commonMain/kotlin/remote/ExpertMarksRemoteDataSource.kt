@@ -40,6 +40,18 @@ object ExpertMarksRemoteDataSource : ExpertMarksRemote {
     }
   }
 
+  override suspend fun update(
+    request: ExpertMarkEntity,
+    researchId: Int,
+    token: String
+  ): BaseResponse {
+    return client.post {
+      authHeader(token)
+      apiUrl("$RESEARCH_ROUTE/$researchId/$EXPERT_MARK_ROUTE")
+      body = Json.stringify(ExpertMarkEntity.serializer(), request)
+    }
+  }
+
   private fun HttpRequestBuilder.authHeader(token: String) {
     header("Authorization", "Bearer $token")
   }

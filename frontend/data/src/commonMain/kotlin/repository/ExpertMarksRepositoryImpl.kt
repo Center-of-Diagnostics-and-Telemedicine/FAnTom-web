@@ -26,6 +26,15 @@ class ExpertMarksRepositoryImpl(
     }
   }
 
+  override suspend fun updateMark(markToSave: ExpertMarkEntity, researchId: Int) {
+    val response = remote.update(request = markToSave, researchId = researchId, token = token())
+    when {
+      response.response != null -> response.response!!
+      response.error != null -> handleErrorResponse(response.error!!)
+      else -> throw ResearchApiExceptions.MarkUpdateException
+    }
+  }
+
   private fun <T : Any> handleErrorResponse(response: ErrorModel): T {
     when (response.error) {
       ErrorStringCode.RESEARCH_NOT_FOUND.value -> throw ResearchApiExceptions.ResearchNotFoundException

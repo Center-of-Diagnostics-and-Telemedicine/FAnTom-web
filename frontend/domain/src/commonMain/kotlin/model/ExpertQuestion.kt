@@ -2,10 +2,6 @@ package model
 
 val expertQuestionsList = listOf<ExpertQuestion<*>>(
   ExpertQuestion.MarkApprove(),
-//  ExpertQuestion.NoduleType(),
-//  ExpertQuestion.NoduleDimensions(),
-//  ExpertQuestion.NoduleML(),
-//  ExpertQuestion.NoduleExpertComment()
 )
 
 sealed class ExpertQuestion<ValueType>(
@@ -13,13 +9,6 @@ sealed class ExpertQuestion<ValueType>(
   val variants: AnswerVariant,
   val value: ValueType?
 ) {
-
-  class NoduleExistence(value: Int? = null) :
-    ExpertQuestion<Int>(
-      questionText = "Согласны ли вы с наличием очага в указанном месте?",
-      variants = CheckboxAnswerVariant(variants = noduleExistenceVariants),
-      value = value
-    )
 
   class MarkApprove(value: Int? = null) :
     ExpertQuestion<Int>(
@@ -32,6 +21,13 @@ sealed class ExpertQuestion<ValueType>(
     ExpertQuestion<Int>(
       questionText = "Рисуем новую?",
       variants = ButtonsAnswerVariant(variants = drawNewVariants),
+      value = value
+    )
+
+  class NoduleExistence(value: Int? = null) :
+    ExpertQuestion<Int>(
+      questionText = "Согласны ли вы с наличием очага в указанном месте?",
+      variants = CheckboxAnswerVariant(variants = noduleExistenceVariants),
       value = value
     )
 
@@ -88,11 +84,7 @@ sealed class ExpertQuestion<ValueType>(
 }
 
 fun ExpertMarkEntity.toExpertQuestionsList(): List<ExpertQuestion<*>> = listOf(
-  ExpertQuestion.MarkApprove(expertDecision),
-//  ExpertQuestion.NoduleType(expertDecisionType),
-//  ExpertQuestion.NoduleDimensions(expertDecisionProperSize?.toInt()),
-//  ExpertQuestion.NoduleML(expertDecisionMachineLearning?.toInt()),
-//  ExpertQuestion.NoduleExpertComment(expertDecisionComment)
+  ExpertQuestion.MarkApprove(confirmed?.toInt()),
 )
 
 private fun Boolean.toInt() = if (this) 1 else 0

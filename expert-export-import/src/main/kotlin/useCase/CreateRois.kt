@@ -1,12 +1,15 @@
 package useCase
 
 import model.*
+import repository.repository.ExpertMarksRepository
 import repository.repository.ExportedRoisRepository
 
 suspend fun createRois(
   researches: List<ResearchModel>,
   doseReports: List<JsonFileModel>,
-  repository: ExportedRoisRepository
+  repository: ExportedRoisRepository,
+  expertMarksRepository: ExpertMarksRepository,
+  taggerId: Int
 ): List<ExportedRoiModel> {
   val result = mutableListOf<ExportedRoiModel>()
   doseReports.forEach { fileModel ->
@@ -24,6 +27,12 @@ suspend fun createRois(
           researchId
         )?.let {
           result.add(it)
+          createMark(
+            repository = expertMarksRepository,
+            roiModel = it,
+            researchId = researchId,
+            taggerId = taggerId
+          )
         }
       }
     }
@@ -59,6 +68,41 @@ private suspend fun createRoi(
       ySize = roiModel.ySize,
       text = roiModel.text,
     ),
+    researchId = researchId
+  )
+}
+
+private suspend fun createMark(
+  repository: ExpertMarksRepository,
+  roiModel: ExportedRoiModel,
+  researchId: Int,
+  taggerId: Int
+): ExpertMarkModel? {
+  return repository.create(
+    mark = ExpertMarkModel(
+      id = -1,
+      roiId = roiModel.id,
+      xCenter = roiModel.xCenter,
+      yCenter = roiModel.yCenter,
+      xSize = roiModel.xSize,
+      ySize = roiModel.ySize,
+      researchId = researchId,
+      acquisitionNumber = roiModel.acquisitionNumber,
+      dcmFilename = roiModel.dcmFilename,
+      instanceNumber = roiModel.instanceNumber,
+      seriesNumber = roiModel.seriesNumber,
+      sopInstanceUid = roiModel.sopInstanceUid,
+      anatomicalLocation = roiModel.anatomicalLocation,
+      confidence = roiModel.confidence,
+      roiFilename = roiModel.roiFilename,
+      roiShape = roiModel.roiShape,
+      roiType = roiModel.roiType,
+      roiTypeIndex = roiModel.roiTypeIndex,
+      taggerId = roiModel.taggerId,
+      text = roiModel.text,
+      confirmed = null,
+    ),
+    userId = taggerId,
     researchId = researchId
   )
 }

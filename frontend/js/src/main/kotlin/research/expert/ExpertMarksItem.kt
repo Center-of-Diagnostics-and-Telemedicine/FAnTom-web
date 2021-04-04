@@ -21,7 +21,7 @@ import styled.styledDiv
 private val builder2 = RBuilder()
 
 fun RBuilder.expertMarkItem(
-  model: RoiExpertQuestionsModel,
+  model: ExpertQuestionsModel,
   handlePanelClick: () -> Unit,
   handleAnswerChanged: (ExpertQuestion<*>) -> Unit,
   expand: Boolean,
@@ -34,12 +34,17 @@ fun RBuilder.expertMarkItem(
       border(2.px, BorderStyle.solid, color)
       backgroundColor = color.darken(30)
     }
+    val shouldShowIcon = model.confirmed != null
     mListItemWithIcon(
-      primaryText = model.roiModel.roiType,
-      secondaryText = model.roiModel.text,
+      primaryText = model.expertMarkEntity.roiType,
+      secondaryText = model.expertMarkEntity.text,
       onClick = { handlePanelClick() },
       selected = expand,
-      iconName = ""//""done"
+      iconName = when (model.confirmed) {
+        null -> ""
+        true -> "done"
+        false -> "close"
+      }
     ) {
       css {
         if (expand) {

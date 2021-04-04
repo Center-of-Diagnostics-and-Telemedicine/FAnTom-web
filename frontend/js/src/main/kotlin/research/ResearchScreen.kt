@@ -377,7 +377,6 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
     val covidMarksRepository: CovidMarksRepository
     val brightnessRepository: BrightnessRepository
     val mipRepository: MipRepository
-    val expertRoiRepository: ExpertRoiRepository
     val researchOutput: (ResearchController.Output) -> Unit
     val research: Research
   }

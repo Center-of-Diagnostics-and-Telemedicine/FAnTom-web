@@ -1,32 +1,33 @@
 package model
 
-data class RoiExpertQuestionsModel(
-  val roiModel: ExpertRoiEntity,
+data class ExpertQuestionsModel(
+  val expertMarkEntity: ExpertMarkEntity,
   val expertQuestions: List<ExpertQuestion<*>>,
-  val color: String
+  val color: String,
+  val confirmed: Boolean? = null
 ) {
   var selected: Boolean = false
 }
 
-fun RoiExpertQuestionsModel.toMarkModel(): MarkModel {
+fun ExpertQuestionsModel.toMarkModel(): MarkModel {
 
   return MarkModel(
-    id = roiModel.id,
+    id = expertMarkEntity.id,
     markData = MarkData(
-      x = roiModel.xCenter,
-      y = roiModel.yCenter,
+      x = expertMarkEntity.xCenter,
+      y = expertMarkEntity.yCenter,
       z = -1.0,
-      radiusHorizontal = roiModel.xSize / 2,
-      radiusVertical = roiModel.ySize / 2,
-      sizeHorizontal = roiModel.xSize,
-      sizeVertical = roiModel.ySize,
-      cutType = roiModel.cutType,
+      radiusHorizontal = expertMarkEntity.xSize / 2,
+      radiusVertical = expertMarkEntity.ySize / 2,
+      sizeHorizontal = expertMarkEntity.xSize,
+      sizeVertical = expertMarkEntity.ySize,
+      cutType = expertMarkEntity.cutType,
       shapeType = SHAPE_TYPE_RECTANGLE
     ),
     type = MarkTypeModel(
-      typeId = roiModel.roiType,
-      en = roiModel.roiType,
-      ru = roiModel.roiType,
+      typeId = expertMarkEntity.roiType,
+      en = expertMarkEntity.roiType,
+      ru = expertMarkEntity.roiType,
       color = color
     ),
     comment = ""
@@ -36,24 +37,23 @@ fun RoiExpertQuestionsModel.toMarkModel(): MarkModel {
   }
 }
 
-fun buildRoisToExpertMarks(
-  rois: List<ExpertRoiEntity>,
+fun buildMarksQuestions(
   expertMarks: List<ExpertMarkEntity>,
   markTypes: Map<String, MarkTypeEntity>
-): List<RoiExpertQuestionsModel> {
-  return rois.map { roi ->
-    val existingExpertMark = expertMarks.firstOrNull { it.roiId == roi.id }
-    if (existingExpertMark == null) {
-      RoiExpertQuestionsModel(
-        roiModel = roi,
+): List<ExpertQuestionsModel> {
+  return expertMarks.map {
+    if (it.confirmed == true) {
+      ExpertQuestionsModel(
+        expertMarkEntity = it,
         expertQuestions = expertQuestionsList,
-        color = markTypes[roi.roiType]?.CLR ?: defaultMarkColor
+        color = markTypes[it.roiType]?.CLR ?: defaultMarkColor,
       )
     } else {
-      RoiExpertQuestionsModel(
-        roiModel = roi,
-        expertQuestions = existingExpertMark.toExpertQuestionsList(),
-        color = markTypes[roi.roiType]?.CLR ?: defaultMarkColor
+      ExpertQuestionsModel(
+        expertMarkEntity = it,
+        confirmed = it.confirmed,
+        expertQuestions = it.toExpertQuestionsList(),
+        color = markTypes[it.roiType]?.CLR ?: defaultMarkColor
       )
     }
   }

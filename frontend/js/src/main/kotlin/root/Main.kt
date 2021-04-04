@@ -42,11 +42,6 @@ private class Application {
     token = getToken
   )
 
-  val expertRoisRepository = ExpertRoiRepositoryImpl(
-    remote = ExpertRoisRemoteDataSource,
-    token = getToken
-  )
-
   val covidMarkRepository = CovidMarksRepositoryImpl(
     remote = CovidMarksRemoteDataSource,
     token = getToken
@@ -67,7 +62,6 @@ private class Application {
           override val brightnessRepository: BrightnessRepository = brightnesRepository
           override val mipRepository: MipRepository = mippRepository
           override val covidMarksRepository: CovidMarksRepository = covidMarkRepository
-          override val expertRoiRepository: ExpertRoiRepository = expertRoisRepository
         })
       }
     }

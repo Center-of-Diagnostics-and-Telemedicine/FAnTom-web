@@ -11,7 +11,6 @@ import com.badoo.reaktive.single.observeOn
 import com.badoo.reaktive.single.subscribeOn
 import model.*
 import repository.ExpertMarksRepository
-import repository.ExpertRoiRepository
 import store.expert.ExpertMarksStore.*
 import store.expert.ExpertMarksStoreAbstractFactory
 
@@ -19,7 +18,6 @@ internal class ExpertMarksStoreFactory(
   storeFactory: StoreFactory,
   val research: Research,
   val data: ResearchSlicesSizesDataNew,
-  val expertRoiRepository: ExpertRoiRepository,
   val expertMarksRepository: ExpertMarksRepository
 ) : ExpertMarksStoreAbstractFactory(
   storeFactory = storeFactory
@@ -31,9 +29,8 @@ internal class ExpertMarksStoreFactory(
 
     override fun executeAction(action: Unit, getState: () -> State) {
       singleFromCoroutine {
-        val rois = expertRoiRepository.getRois(research.id)
         val expertMarks = expertMarksRepository.getMarks(research.id)
-        buildRoisToExpertMarks(rois, expertMarks, data.markTypes)
+        buildMarksQuestions(expertMarks, data.markTypes)
       }
         .subscribeOn(ioScheduler)
         .map(Result::Loaded)
@@ -50,27 +47,25 @@ internal class ExpertMarksStoreFactory(
 
     override fun executeIntent(intent: Intent, getState: () -> State) {
       when (intent) {
-        is Intent.ChangeVariant -> handleChangeVariant(getState, intent.question, intent.roi)
+        is Intent.ChangeVariant -> handleChangeVariant(getState, intent.question, intent.markEntity)
         Intent.DismissError -> dispatch(Result.DismissErrorRequested)
         is Intent.ChangeVariantText -> TODO()
         Intent.ReloadRequested -> null
         Intent.HandleCloseResearch -> handleCloseResearch(getState)
         is Intent.SelectMark -> handleSelectMark(getState, intent.id)
-        is Intent.AcceptMark -> handleAcceptMark(getState, intent.mark)
+        is Intent.AcceptMark -> handleAcceptEmptyNewMark(getState, intent.mark)
       }?.let { }
     }
 
-    private fun handleAcceptMark(state: () -> State, mark: MarkModel) {
+    private fun handleAcceptEmptyNewMark(state: () -> State, mark: MarkModel) {
       singleFromCoroutine {
-        val sameRoi = state().models.first { it.roiModel.cutType == mark.markData.cutType }
-        val newRoi = expertRoiRepository.saveRoi(
-          markToSave = mark.toExpertRoiEntity(research.id, sameRoi.roiModel),
-          researchId = research.id
+        val sameRoi = state().models.first { it.expertMarkEntity.cutType == mark.markData.cutType }
+        expertMarksRepository.saveMark(
+          mark.toEmptyExpertMarkEntity(sameRoi.expertMarkEntity),
+          research.id
         )
-        expertMarksRepository.saveMark(mark.toEmptyExpertMarkEntity(newRoi), research.id)
-        val rois = expertRoiRepository.getRois(research.id)
         val expertMarks = expertMarksRepository.getMarks(research.id)
-        buildRoisToExpertMarks(rois, expertMarks, data.markTypes)
+        buildMarksQuestions(expertMarks, data.markTypes)
       }
         .subscribeOn(ioScheduler)
         .map(Result::Loaded)
@@ -87,7 +82,7 @@ internal class ExpertMarksStoreFactory(
 
     private fun handleSelectMark(state: () -> State, id: Int) {
       val list = state().models
-      val mark = list.firstOrNull { it.roiModel.id == id }
+      val mark = list.firstOrNull { it.expertMarkEntity.id == id }
       val markSelected = mark?.selected
       list.map { it.selected = false }
       mark?.let { it.selected = markSelected?.not() ?: true }
@@ -108,24 +103,60 @@ internal class ExpertMarksStoreFactory(
     private fun handleChangeVariant(
       getState: () -> State,
       question: ExpertQuestion<*>,
-      roi: ExpertRoiEntity
+      expertMarkEntity: ExpertMarkEntity
     ) {
+      when (question) {
+        is ExpertQuestion.MarkApprove -> {
+          when (question.value) {
+            0 -> {
+              approveMark(getState, expertMarkEntity)
+            }
+            1 -> {
+              disapproveMark(getState, expertMarkEntity)
+            }
+          }
+        }
+        else -> throw NotImplementedError("not implemented in handleChangeVariant")
+      }
+    }
 
-//      singleFromCoroutine {
-//        val newModel = lungLobeModel.changeValue(variant)
-//        val newMap = getState().covidLungLobes.toMutableMap()
-//        newMap[lungLobeModel.id] = newModel
-//        repository.saveMark(newMap.toExpertMarkEntity(), research.id)
-//        return@singleFromCoroutine newMap
-//      }
-//        .subscribeOn(ioScheduler)
-//        .map(Result::Loaded)
-//        .observeOn(mainScheduler)
-//        .subscribeScoped(
-//          isThreadLocal = true,
-//          onSuccess = ::dispatch,
-//          onError = ::handleError
-//        )
+    private fun disapproveMark(state: () -> State, expertMarkEntity: ExpertMarkEntity) {
+      singleFromCoroutine {
+        expertMarksRepository.updateMark(expertMarkEntity.copy(confirmed = false), research.id)
+        val expertMarks = expertMarksRepository.getMarks(research.id)
+        buildMarksQuestions(expertMarks, data.markTypes)
+      }
+        .subscribeOn(ioScheduler)
+        .map(Result::Loaded)
+        .observeOn(mainScheduler)
+        .subscribeScoped(
+          isThreadLocal = true,
+          onSuccess = {
+            dispatch(it)
+            publish(Label.Marks(it.models))
+          },
+          onError = ::handleError
+        )
+    }
+
+
+    private fun approveMark(state: () -> State, expertMarkEntity: ExpertMarkEntity) {
+      singleFromCoroutine {
+        expertMarksRepository.updateMark(expertMarkEntity.copy(confirmed = true), research.id)
+        val expertMarks = expertMarksRepository.getMarks(research.id)
+        buildMarksQuestions(expertMarks, data.markTypes)
+      }
+        .subscribeOn(ioScheduler)
+        .map(Result::Loaded)
+        .observeOn(mainScheduler)
+        .subscribeScoped(
+          isThreadLocal = true,
+          onSuccess = {
+            dispatch(it)
+            publish(Label.Marks(it.models))
+          },
+          onError = ::handleError
+        )
     }
 
     private fun handleError(error: Throwable) {

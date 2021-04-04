@@ -20,11 +20,9 @@ import model.Research
 import model.ResearchSlicesSizesDataNew
 import react.*
 import repository.ExpertMarksRepository
-import repository.ExpertRoiRepository
 import research.expert.ExpertMarksViewProxy
 import research.expert.expertMarkItem
 import resume
-import root.debugLog
 import styled.css
 import styled.styledDiv
 import view.ExpertMarksView
@@ -79,18 +77,18 @@ class DoseReportMarksComponent(prps: DoseReportMarksProps) :
       }
       mList {
         state.model.models.forEach { model ->
-          val panelName = "panel_${model.roiModel.id}"
+          val panelName = "panel_${model.expertMarkEntity.id}"
 
           expertMarkItem(
             model = model,
             handlePanelClick = {
-              marksViewDelegate.dispatch(ExpertMarksView.Event.SelectMark(model.roiModel.id))
+              marksViewDelegate.dispatch(ExpertMarksView.Event.SelectMark(model.expertMarkEntity.id))
               expandClick(panelName)
             },
             handleAnswerChanged = { expertQuestion ->
               marksViewDelegate.dispatch(
                 ExpertMarksView.Event.VariantChosen(
-                  roi = model.roiModel,
+                  expertMarkEntity = model.expertMarkEntity,
                   question = expertQuestion
                 )
               )
@@ -119,7 +117,6 @@ class DoseReportMarksComponent(prps: DoseReportMarksProps) :
     val data: ResearchSlicesSizesDataNew
     val expertMarksInput: Observable<ExpertMarksController.Input>
     val expertMarksRepository: ExpertMarksRepository
-    val expertRoiRepository: ExpertRoiRepository
     val open: Boolean
     val research: Research
   }

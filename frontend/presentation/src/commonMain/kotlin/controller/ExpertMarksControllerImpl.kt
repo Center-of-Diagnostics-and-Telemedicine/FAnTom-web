@@ -24,7 +24,6 @@ class ExpertMarksControllerImpl(val dependencies: ExpertMarksController.Dependen
     storeFactory = dependencies.storeFactory,
     research = dependencies.research,
     data = dependencies.data,
-    expertRoiRepository = dependencies.expertRoiRepository,
     expertMarksRepository = dependencies.expertMarksRepository
   ).create()
 

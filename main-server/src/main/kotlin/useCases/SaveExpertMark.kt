@@ -8,7 +8,7 @@ import io.ktor.routing.*
 import model.*
 import repository.ResearchRepository
 import repository.repository.ExpertMarksRepository
-import util.CreateExpertMark
+import util.ExpertMark
 import util.user
 
 fun Route.saveExpertMark(
@@ -16,15 +16,15 @@ fun Route.saveExpertMark(
   researchRepository: ResearchRepository
 ) {
 
-  post<CreateExpertMark> {
+  post<ExpertMark> {
 
     suspend fun respondError(errorCode: ErrorStringCode) {
-      call.respond(ExpertRoisResponse(error = ErrorModel(errorCode.value)))
+      call.respond(ExpertMarksResponse(error = ErrorModel(errorCode.value)))
     }
 
     val user = call.user
     val markModel = call.receive<ExpertMarkEntity>()
-    val research = researchRepository.getResearch(it.id)
+    val research = researchRepository.getResearch(it.researchId)
 
     if (research == null) {
       respondError(ErrorStringCode.RESEARCH_NOT_FOUND)
@@ -33,7 +33,7 @@ fun Route.saveExpertMark(
 
     try {
 
-      val mark = repository.create(markModel.toExpertMarkModel(), user.id, it.id)
+      val mark = repository.create(markModel.toExpertMarkModel(), user.id, it.researchId)
 
       if (mark != null) {
         call.respond(ExpertMarksResponse(response = listOf(mark.toExpertMarkEntity())))

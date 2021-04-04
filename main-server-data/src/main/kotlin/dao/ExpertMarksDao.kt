@@ -17,6 +17,15 @@ class ExpertMarksDao : ExpertMarksDaoFacade {
     }
   }
 
+  override suspend fun getByRoiId(roiId: Int): ExpertMarkModel? {
+    return transaction {
+      ExpertMarksVos
+        .select { ExpertMarksVos.roiId eq roiId }
+        .firstOrNull()
+        ?.toExportedMarkModel()
+    }
+  }
+
   override suspend fun getAll(userId: Int, researchId: Int): List<ExpertMarkModel> {
     return transaction {
       ExpertMarksVos
@@ -39,12 +48,20 @@ class ExpertMarksDao : ExpertMarksDaoFacade {
         it[yCenter] = mark.yCenter
         it[xSize] = mark.xSize
         it[ySize] = mark.ySize
-        it[expertDecisionMachineLearning] = if (mark.expertDecisionMachineLearning == true) 1 else 0
-        it[expertDecisionProperSize] = if (mark.expertDecisionProperSize == true) 1 else 0
-        it[expertDecision] = mark.expertDecision
-        it[expertDecisionId] = mark.expertDecisionId
-        it[expertDecisionComment] = mark.expertDecisionComment
-        it[expertDecisionType] = mark.expertDecisionType
+        it[acquisitionNumber] = mark.acquisitionNumber
+        it[dcmFilename] = mark.dcmFilename
+        it[instanceNumber] = mark.instanceNumber
+        it[seriesNumber] = mark.seriesNumber
+        it[sopInstanceUid] = mark.sopInstanceUid
+        it[anatomicalLocation] = mark.anatomicalLocation
+        it[confidence] = mark.confidence
+        it[roiFilename] = mark.roiFilename
+        it[roiShape] = mark.roiShape
+        it[roiType] = mark.roiType
+        it[roiTypeIndex] = mark.roiTypeIndex
+        it[taggerId] = mark.taggerId
+        it[text] = mark.text
+        it[confirmed] = mark.confirmed
       } get ExpertMarksVos.id
     }
   }
@@ -52,17 +69,24 @@ class ExpertMarksDao : ExpertMarksDaoFacade {
   override suspend fun update(mark: ExpertMarkModel) {
     return transaction {
       ExpertMarksVos.update(where = { ExpertMarksVos.id eq mark.id }) {
-        it[roiId] = mark.roiId
         it[xCenter] = mark.xCenter
         it[yCenter] = mark.yCenter
         it[xSize] = mark.xSize
         it[ySize] = mark.ySize
-        it[expertDecisionMachineLearning] = if (mark.expertDecisionMachineLearning == true) 1 else 0
-        it[expertDecisionProperSize] = if (mark.expertDecisionProperSize == true) 1 else 0
-        it[expertDecision] = mark.expertDecision
-        it[expertDecisionId] = mark.expertDecisionId
-        it[expertDecisionComment] = mark.expertDecisionComment
-        it[expertDecisionType] = mark.expertDecisionType
+        it[acquisitionNumber] = mark.acquisitionNumber
+        it[dcmFilename] = mark.dcmFilename
+        it[instanceNumber] = mark.instanceNumber
+        it[seriesNumber] = mark.seriesNumber
+        it[sopInstanceUid] = mark.sopInstanceUid
+        it[anatomicalLocation] = mark.anatomicalLocation
+        it[confidence] = mark.confidence
+        it[roiFilename] = mark.roiFilename
+        it[roiShape] = mark.roiShape
+        it[roiType] = mark.roiType
+        it[roiTypeIndex] = mark.roiTypeIndex
+        it[taggerId] = mark.taggerId
+        it[text] = mark.text
+        it[confirmed] = mark.confirmed
       }
     }
   }

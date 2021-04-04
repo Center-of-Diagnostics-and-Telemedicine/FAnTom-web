@@ -15,7 +15,7 @@ val expertMarksStateToModel: ExpertMarksStore.State.() -> ExpertMarksView.Model 
 val expertMarksEventToIntent: ExpertMarksView.Event.() -> ExpertMarksStore.Intent? = {
   when (this) {
     is ExpertMarksView.Event.VariantChosen ->
-      ExpertMarksStore.Intent.ChangeVariant(roi, question)
+      ExpertMarksStore.Intent.ChangeVariant(expertMarkEntity, question)
     is ExpertMarksView.Event.SelectMark -> ExpertMarksStore.Intent.SelectMark(id)
     ExpertMarksView.Event.DismissError -> ExpertMarksStore.Intent.DismissError
   }

@@ -6,26 +6,14 @@ import com.arkivanov.mvikotlin.core.lifecycle.doOnDestroy
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.observable.Observable
 import com.badoo.reaktive.observable.subscribe
-import com.ccfraser.muirwik.components.list.mList
-import com.ccfraser.muirwik.components.mDivider
-import components.alert
 import controller.ExpertMarksController
 import controller.ExpertMarksControllerImpl
 import destroy
-import kotlinx.css.Display
-import kotlinx.css.FlexDirection
-import kotlinx.css.display
-import kotlinx.css.flexDirection
 import model.Research
 import model.ResearchSlicesSizesDataNew
 import react.*
 import repository.ExpertMarksRepository
-import repository.ExpertRoiRepository
-import repository.MarksRepository
 import resume
-import styled.StyledComponents.css
-import styled.css
-import styled.styledDiv
 import view.ExpertMarksView
 import view.initialExpertMarksModel
 
@@ -109,7 +97,6 @@ class ExpertMarksComponent(prps: ExpertMarksProps) :
     val expertMarksOutput: (ExpertMarksController.Output) -> Unit
     val data: ResearchSlicesSizesDataNew
     val expertMarksInput: Observable<ExpertMarksController.Input>
-    val expertRoiRepository: ExpertRoiRepository
     val expertMarksRepository: ExpertMarksRepository
     val open: Boolean
     val research: Research
