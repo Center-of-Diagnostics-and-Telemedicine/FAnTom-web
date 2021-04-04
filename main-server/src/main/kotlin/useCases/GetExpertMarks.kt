@@ -7,12 +7,14 @@ import io.ktor.routing.*
 import model.*
 import repository.ResearchRepository
 import repository.repository.ExpertMarksRepository
+import repository.repository.UserExpertMarkRepository
 import util.ExpertMarks
 import util.user
 
 fun Route.getExpertMarks(
   repository: ExpertMarksRepository,
-  researchRepository: ResearchRepository
+  researchRepository: ResearchRepository,
+  userExpertMarkRepository: UserExpertMarkRepository
 ) {
 
   get<ExpertMarks> {
@@ -29,9 +31,14 @@ fun Route.getExpertMarks(
     }
 
     try {
-      val entities = repository
-        .getAll(user.id, it.researchId)
-        .map(ExpertMarkModel::toExpertMarkEntity)
+      val userExpertMarks = userExpertMarkRepository.getUserExpertMarks(
+        userId = user.id,
+        researchId = research.id
+      )
+
+      val entities = userExpertMarks.mapNotNull { userExpertMarkModel ->
+        repository.get(userExpertMarkModel.markId)?.toExpertMarkEntity()
+      }
 
       when (entities) {
         null -> call.respond(ExpertMarksResponse(response = emptyList()))

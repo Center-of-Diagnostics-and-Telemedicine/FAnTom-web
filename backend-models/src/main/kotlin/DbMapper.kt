@@ -120,3 +120,9 @@ fun ResultRow.toExportedInstanceModel(): ExportedRoiModel = ExportedRoiModel(
   ySize = this[ExpertRoisVos.ySize],
   text = this[ExpertRoisVos.text],
 )
+
+fun ResultRow.toUserExpertMark(): UserExpertMarkModel = UserExpertMarkModel(
+  userId = this[UserExpertMarkVos.userId],
+  researchId = this[UserExpertMarkVos.researchId],
+  markId = this[UserExpertMarkVos.expertMarkId]
+)

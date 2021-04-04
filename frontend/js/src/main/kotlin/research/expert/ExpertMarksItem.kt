@@ -15,6 +15,7 @@ import model.*
 import org.w3c.dom.HTMLInputElement
 import react.RBuilder
 import react.dom.span
+import root.debugLog
 import styled.css
 import styled.styledDiv
 
@@ -34,17 +35,17 @@ fun RBuilder.expertMarkItem(
       border(2.px, BorderStyle.solid, color)
       backgroundColor = color.darken(30)
     }
-    val shouldShowIcon = model.confirmed != null
+    val iconName = when (model.confirmed) {
+      null -> ""
+      true -> "done"
+      false -> "close"
+    }
     mListItemWithIcon(
       primaryText = model.expertMarkEntity.roiType,
       secondaryText = model.expertMarkEntity.text,
       onClick = { handlePanelClick() },
       selected = expand,
-      iconName = when (model.confirmed) {
-        null -> ""
-        true -> "done"
-        false -> "close"
-      }
+      iconName = iconName
     ) {
       css {
         if (expand) {

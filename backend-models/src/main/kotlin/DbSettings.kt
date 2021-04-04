@@ -114,6 +114,13 @@ object ExpertMarksVos : Table(EXPERT_MARKS_TABLE) {
   override val primaryKey = PrimaryKey(id, name = "ExportMarkPKConstraintName")
 }
 
+object UserExpertMarkVos : Table("user_expert_mark") {
+  val userId: Column<Int> = integer("user_$ID_FIELD")
+  val researchId: Column<Int> = integer("research_$ID_FIELD")
+  val expertMarkId: Column<Int> = integer("expert_mark_$ID_FIELD")
+  override val primaryKey = PrimaryKey(userId, expertMarkId, name = "UserExpertMarkPKConstraintName")
+}
+
 object ExpertRoisVos : Table(EXPERT_INSTANCES_TABLE) {
   val id: Column<Int> = integer(name = ID_FIELD).autoIncrement()
   val researchId: Column<Int> = integer(name = RESEARCH_ID_FIELD)

@@ -1,11 +1,9 @@
 import io.ktor.auth.*
-import model.DX_RESEARCH_MODALITY
 import model.UserModel
 import model.UserRole
 import model.hash
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
-import java.io.File
 
 fun init() {
   transaction {
@@ -16,7 +14,8 @@ fun init() {
       CovidMarksVos,
       MultiPlanarMarksVos,
       PlanarMarksVos,
-      ExpertMarksVos
+      ExpertMarksVos,
+      UserExpertMarkVos
     )
     SchemaUtils.createMissingTablesAndColumns(
       UserVos,
@@ -25,7 +24,8 @@ fun init() {
       CovidMarksVos,
       MultiPlanarMarksVos,
       PlanarMarksVos,
-      ExpertMarksVos
+      ExpertMarksVos,
+      UserExpertMarkVos
     )
 
 

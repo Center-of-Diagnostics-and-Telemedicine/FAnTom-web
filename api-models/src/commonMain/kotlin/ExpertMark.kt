@@ -56,7 +56,7 @@ fun MarkModel.toEmptyExpertMarkEntity(saveMarkEntity: ExpertMarkEntity): ExpertM
     confidence = saveMarkEntity.confidence,
     roiFilename = saveMarkEntity.roiFilename,
     roiShape = saveMarkEntity.roiShape,
-    roiType = saveMarkEntity.roiType,
+    roiType = type!!.en.replace("\\s".toRegex(), ""),
     roiTypeIndex = saveMarkEntity.roiTypeIndex,
     taggerId = saveMarkEntity.taggerId,
     confirmed = null,

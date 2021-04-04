@@ -115,8 +115,8 @@ fun Application.module(testing: Boolean = false) {
       updateMark(multiPlanarMarksRepository, planarMarksRepository, researchRepository)
 
 
-      getExpertMarks(expertMarksRepository, researchRepository)
-      saveExpertMark(expertMarksRepository, researchRepository)
+      getExpertMarks(expertMarksRepository, researchRepository, userExpertMarkRepository)
+      saveExpertMark(expertMarksRepository, researchRepository, userExpertMarkRepository)
       updateExpertMark(expertMarksRepository, researchRepository)
 //      deleteExpertMarkByRoiId(expertMarksRepository, expertRoisRepository, researchRepository)
 //      confirmExpertMarkByRoi(expertMarksRepository, expertRoisRepository, researchRepository)

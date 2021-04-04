@@ -36,9 +36,9 @@ fun Route.updateExpertMark(
       val mark = repository.update(markModel.toExpertMarkModel())
 
       if (mark != null) {
-        call.respond(BaseResponse(OK))
+        call.respond(BaseResponse(OK()))
       } else {
-        respondError(ErrorStringCode.CREATE_MARK_FAILED)
+        respondError(ErrorStringCode.UPDATE_MARK_FAILED)
       }
 
     } catch (e: Exception) {

@@ -81,9 +81,9 @@ internal class ShapesStoreFactory(
           publish(Label.UnselectMark(it))
         }
 
-        val circle = shapes.getShapeByPosition(dicomX = startDicomX, dicomY = startDicomY)
-        if (circle != null) {
-          state.marks.firstOrNull { it.id == circle.id }?.let {
+        val shape = shapes.getShapeByPosition(dicomX = startDicomX, dicomY = startDicomY)
+        if (shape != null) {
+          state.marks.firstOrNull { it.id == shape.id }?.let {
             publish(Label.SelectMark(it))
           }
         }
@@ -150,6 +150,9 @@ internal class ShapesStoreFactory(
         .filter { it.visible }
         .mapNotNull { it.toShape(cut, sliceNumber) }
       val selectedShape = shapes.firstOrNull { it.highlight }
+      println("MY: selectedShape != null ${selectedShape != null}")
+      println("MY: selectedShape.isCenter ${selectedShape?.isCenter}")
+      println("MY: selectedShape.editable ${selectedShape?.editable}")
       val rectangles = if (selectedShape != null && selectedShape.isCenter && selectedShape.editable) {
         selectedShape.toRects(cut)
       } else {

@@ -16,6 +16,8 @@ val exportedMarksRepository = ExpertMarksRepositoryImpl(exportedMarksDao)
 val exportedRoisDao = ExportedRoisDao()
 val exportedRoisRepository = ExportedRoisRepositoryImpl(exportedRoisDao)
 
+val userExpertMarkDao = UserExpertMarkDao()
+val userExpertMarkRepository = UserExpertMarkRepositoryImpl(userExpertMarkDao)
 
 val planarMarksDao = PlanarMarksDao()
 val planarMarksRepository = PlanarMarksRepositoryImpl(planarMarksDao)

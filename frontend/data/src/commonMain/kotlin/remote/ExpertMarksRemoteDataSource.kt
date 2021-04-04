@@ -45,7 +45,7 @@ object ExpertMarksRemoteDataSource : ExpertMarksRemote {
     researchId: Int,
     token: String
   ): BaseResponse {
-    return client.post {
+    return client.patch {
       authHeader(token)
       apiUrl("$RESEARCH_ROUTE/$researchId/$EXPERT_MARK_ROUTE")
       body = Json.stringify(ExpertMarkEntity.serializer(), request)

@@ -8,12 +8,14 @@ import io.ktor.routing.*
 import model.*
 import repository.ResearchRepository
 import repository.repository.ExpertMarksRepository
+import repository.repository.UserExpertMarkRepository
 import util.ExpertMark
 import util.user
 
 fun Route.saveExpertMark(
   repository: ExpertMarksRepository,
-  researchRepository: ResearchRepository
+  researchRepository: ResearchRepository,
+  userExpertMarkRepository: UserExpertMarkRepository
 ) {
 
   post<ExpertMark> {
@@ -34,12 +36,18 @@ fun Route.saveExpertMark(
     try {
 
       val mark = repository.create(markModel.toExpertMarkModel(), user.id, it.researchId)
-
-      if (mark != null) {
-        call.respond(ExpertMarksResponse(response = listOf(mark.toExpertMarkEntity())))
-      } else {
+      if (mark == null) {
         respondError(ErrorStringCode.CREATE_MARK_FAILED)
+        return@post
       }
+      userExpertMarkRepository.createUserExpertMark(
+        UserExpertMarkModel(
+          userId = user.id,
+          researchId = research.id,
+          markId = mark.id
+        )
+      )
+      call.respond(ExpertMarksResponse(response = listOf(mark.toExpertMarkEntity())))
 
     } catch (e: Exception) {
       application.log.error("Failed to createRoi", e)

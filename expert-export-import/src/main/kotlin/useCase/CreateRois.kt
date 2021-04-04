@@ -3,13 +3,16 @@ package useCase
 import model.*
 import repository.repository.ExpertMarksRepository
 import repository.repository.ExportedRoisRepository
+import repository.repository.UserExpertMarkRepository
 
 suspend fun createRois(
   researches: List<ResearchModel>,
   doseReports: List<JsonFileModel>,
   repository: ExportedRoisRepository,
   expertMarksRepository: ExpertMarksRepository,
-  taggerId: Int
+  userExpertMarkRepository: UserExpertMarkRepository,
+  taggerId: Int,
+  arbiterIds: List<Int>
 ): List<ExportedRoiModel> {
   val result = mutableListOf<ExportedRoiModel>()
   doseReports.forEach { fileModel ->
@@ -25,14 +28,23 @@ suspend fun createRois(
           instanceModel = instanceModel,
           roiModel = roiModel,
           researchId
-        )?.let {
-          result.add(it)
+        )?.let { roi ->
+          result.add(roi)
           createMark(
             repository = expertMarksRepository,
-            roiModel = it,
+            roiModel = roi,
             researchId = researchId,
             taggerId = taggerId
-          )
+          )?.let { mark ->
+            arbiterIds.forEach { arbiterId ->
+              createUserExpertMark(
+                repository = userExpertMarkRepository,
+                expertMarkId = mark.id,
+                userId = arbiterId,
+                researchId = researchId
+              )
+            }
+          }
         }
       }
     }
@@ -104,5 +116,20 @@ private suspend fun createMark(
     ),
     userId = taggerId,
     researchId = researchId
+  )
+}
+
+private suspend fun createUserExpertMark(
+  repository: UserExpertMarkRepository,
+  expertMarkId: Int,
+  userId: Int,
+  researchId: Int
+) {
+  repository.createUserExpertMark(
+    UserExpertMarkModel(
+      userId = userId,
+      researchId = researchId,
+      markId = expertMarkId
+    )
   )
 }

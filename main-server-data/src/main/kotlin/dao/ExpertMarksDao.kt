@@ -17,19 +17,10 @@ class ExpertMarksDao : ExpertMarksDaoFacade {
     }
   }
 
-  override suspend fun getByRoiId(roiId: Int): ExpertMarkModel? {
+  override suspend fun getAll(researchId: Int): List<ExpertMarkModel> {
     return transaction {
       ExpertMarksVos
-        .select { ExpertMarksVos.roiId eq roiId }
-        .firstOrNull()
-        ?.toExportedMarkModel()
-    }
-  }
-
-  override suspend fun getAll(userId: Int, researchId: Int): List<ExpertMarkModel> {
-    return transaction {
-      ExpertMarksVos
-        .select { ExpertMarksVos.researchId.eq(researchId).and(ExpertMarksVos.userId.eq(userId)) }
+        .select { ExpertMarksVos.researchId.eq(researchId) }
         .map(ResultRow::toExportedMarkModel)
     }
   }

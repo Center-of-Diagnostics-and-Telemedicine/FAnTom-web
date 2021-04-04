@@ -18,8 +18,8 @@ val planarMarksDao = PlanarMarksDao()
 val multiPlanarMarksRepository = MultiPlanarMarksRepositoryImpl(multiPlanarMarksDao)
 val planarMarksRepository = PlanarMarksRepositoryImpl(planarMarksDao)
 
-val exportedRoisDao = ExportedRoisDao()
-val expertRoisRepository = ExportedRoisRepositoryImpl(exportedRoisDao)
+val userExpertMarkDao = UserExpertMarkDao()
+val userExpertMarkRepository = UserExpertMarkRepositoryImpl(userExpertMarkDao)
 
 val exportedMarksDao = ExpertMarksDao()
 val expertMarksRepository = ExpertMarksRepositoryImpl(exportedMarksDao)

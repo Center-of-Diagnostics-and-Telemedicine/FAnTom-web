@@ -157,7 +157,7 @@ class MarkItemView(prps: MarkItemProps) : RComponent<MarkItemProps, MarkItemStat
 
   private fun RBuilder.menuButton(area: MarkModel) {
     mButton(
-      caption = if (area.type == null) "тип" else area.type!!.ru.take(3),
+      caption = if (area.type == null) "тип" else area.type!!.en.take(3),
       onClick = {
         it.stopPropagation()
         handleShowMenuClick(it, area.id)

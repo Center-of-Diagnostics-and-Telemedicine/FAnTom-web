@@ -42,20 +42,12 @@ fun buildMarksQuestions(
   markTypes: Map<String, MarkTypeEntity>
 ): List<ExpertQuestionsModel> {
   return expertMarks.map {
-    if (it.confirmed == true) {
-      ExpertQuestionsModel(
-        expertMarkEntity = it,
-        expertQuestions = expertQuestionsList,
-        color = markTypes[it.roiType]?.CLR ?: defaultMarkColor,
-      )
-    } else {
-      ExpertQuestionsModel(
-        expertMarkEntity = it,
-        confirmed = it.confirmed,
-        expertQuestions = it.toExpertQuestionsList(),
-        color = markTypes[it.roiType]?.CLR ?: defaultMarkColor
-      )
-    }
+    ExpertQuestionsModel(
+      expertMarkEntity = it,
+      confirmed = it.confirmed,
+      expertQuestions = it.toExpertQuestionsList(),
+      color = markTypes[it.roiType]?.CLR ?: defaultMarkColor
+    )
   }
 }
 

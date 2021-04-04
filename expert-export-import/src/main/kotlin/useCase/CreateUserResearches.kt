@@ -24,15 +24,18 @@ suspend fun createUserResearchesRelationModel(
   researches: List<ResearchModel>,
   repository: UserResearchRepository
 ): List<UserResearchModel> {
+  val userResearches = mutableListOf<UserResearchModel>()
   usersModels.forEach { user ->
-    return researches.map { research ->
-      repository.createUserResearch(userResearchModel(user, research))
-      repository.getUsersForResearch(user.id)
-    }
-      .flatten()
-      .distinct()
+    userResearches.addAll(
+      researches.map { research ->
+        repository.createUserResearch(userResearchModel(user, research))
+        repository.getUsersForResearch(user.id)
+      }
+        .flatten()
+        .distinct()
+    )
   }
-  return emptyList()
+  return userResearches
 }
 
 private fun userResearchModel(
