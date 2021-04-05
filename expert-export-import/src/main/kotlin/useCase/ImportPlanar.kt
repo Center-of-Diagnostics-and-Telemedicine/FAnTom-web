@@ -1,13 +1,13 @@
 package useCase
 
 import exportedMarksRepository
-import model.macProtocolsPath
+import model.protocolsPath
 import researchRepository
 import userRepository
 import userResearchRepository
 
 suspend fun importPlanar() {
-  val jsonFileModels = getFiles(macProtocolsPath)
+  val jsonFileModels = getFiles(protocolsPath)
   jsonFileModels
     .filter { it.ids != null }
     .filter { it.taggers != null }

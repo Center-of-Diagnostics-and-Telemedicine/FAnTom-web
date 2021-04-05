@@ -44,6 +44,6 @@ private fun userResearchModel(
 ) = UserResearchModel(
   userId = user.id,
   researchId = research.id,
-  seen = true,
-  done = true
+  seen = false,
+  done = false
 )

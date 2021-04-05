@@ -1,7 +1,4 @@
-import model.UserModel
-import model.UserRole
-import model.hash
-import model.macProtocolsPath
+import model.*
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -22,7 +19,7 @@ suspend fun main() {
 }
 
 suspend fun doseReports() {
-  val doseReports = getDoseReports(macProtocolsPath)
+  val doseReports = getDoseReports(protocolsPath)
 
   //создаем пользователей
   userRepository.createUser(

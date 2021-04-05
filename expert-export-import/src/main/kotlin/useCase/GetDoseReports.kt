@@ -1,10 +1,8 @@
 package useCase
 
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.toUtf8Bytes
 import model.JSON_TYPE
 import model.JsonFileModel
-import model.macProtocolsPath
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths

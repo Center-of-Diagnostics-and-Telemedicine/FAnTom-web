@@ -4,7 +4,8 @@ const val TOKEN = "api_token"
 const val END_POINT: String = "https://fantom.npcmr.ru"
 const val LOCALHOST = "http://localhost"
 const val MAIN_SERVER_PORT = 8081
-const val MAIN_SERVER_URL = "$LOCALHOST:$MAIN_SERVER_PORT"
+//const val MAIN_SERVER_URL = "$LOCALHOST:$MAIN_SERVER_PORT"
+const val MAIN_SERVER_URL = "172.16.20.118:8081"
 
 const val DATABASE_DRIVER = "com.mysql.jdbc.Driver"
 
@@ -35,8 +36,8 @@ const val noValue = -1
 
 const val tenMinutes: Long = 600000
 
-//const val protocolsPath = "C:\\Users\\max\\Downloads\\protocol"
-const val macProtocolsPath = "/Users/max/Documents/separated"
+const val protocolsPath = "C:\\separated"
+//const val macProtocolsPath = "/Users/max/Documents/separated"
 
 const val defaultUserPassword = "password"
 
