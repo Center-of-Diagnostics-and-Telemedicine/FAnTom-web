@@ -45,7 +45,7 @@ fun RBuilder.expertMarkItem(
       secondaryText = model.expertMarkEntity.text,
       onClick = { handlePanelClick() },
       selected = expand,
-      iconName = iconName
+      iconName = iconName,
     ) {
       css {
         if (expand) {
@@ -132,7 +132,7 @@ fun RBuilder.buttonsAnswers(
   variants.variants.forEach {
     mButton(
       caption = it.value,
-      onClick = { _ -> if (it.key != value) onChangeVariant(it.key, it.value) }
+      onClick = { _ -> onChangeVariant(it.key, it.value) }
     )
   }
 }

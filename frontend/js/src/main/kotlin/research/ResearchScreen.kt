@@ -286,9 +286,10 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
       is CutsContainerController.Output.RectangleDrawn -> marksInputObservable.onNext(
         MarksController.Input.AddNewMark(output.rectangle, output.sliceNumber, output.cut)
       )
-      is CutsContainerController.Output.SelectMark -> marksInputObservable.onNext(
-        MarksController.Input.SelectMark(output.mark)
-      )
+      is CutsContainerController.Output.SelectMark -> {
+        marksInputObservable.onNext(MarksController.Input.SelectMark(output.mark))
+        expertMarksInputObservable.onNext(ExpertMarksController.Input.SelectMark(output.mark))
+      }
       is CutsContainerController.Output.UnselectMark -> marksInputObservable.onNext(
         MarksController.Input.UnselectMark(output.mark)
       )

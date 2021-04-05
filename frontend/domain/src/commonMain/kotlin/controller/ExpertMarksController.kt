@@ -35,6 +35,7 @@ interface ExpertMarksController {
 
   sealed class Input {
     data class AcceptMark(val mark: MarkModel) : Input()
+    data class SelectMark(val mark: MarkModel) : Input()
 
     object Idle : Input()
     object CloseResearchRequested : Input()

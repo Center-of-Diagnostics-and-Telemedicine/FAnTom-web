@@ -31,8 +31,6 @@ import view.initialExpertMarksModel
 class DoseReportMarksComponent(prps: DoseReportMarksProps) :
   RComponent<DoseReportMarksProps, DoseReportMarksState>(prps) {
 
-  private var expandedItem: String? = null
-
   private val marksViewDelegate = ExpertMarksViewProxy(::updateState)
   private val lifecycleRegistry = LifecycleRegistry()
   private lateinit var controller: ExpertMarksController
@@ -83,7 +81,6 @@ class DoseReportMarksComponent(prps: DoseReportMarksProps) :
             model = model,
             handlePanelClick = {
               marksViewDelegate.dispatch(ExpertMarksView.Event.SelectMark(model.expertMarkEntity.id))
-              expandClick(panelName)
             },
             handleAnswerChanged = { expertQuestion ->
               marksViewDelegate.dispatch(
@@ -93,17 +90,13 @@ class DoseReportMarksComponent(prps: DoseReportMarksProps) :
                 )
               )
             },
-            expand = expandedItem == panelName,
+            expand = model.selected,
             fullWidth = props.dependencies.open
           )
         }
       }
     }
   }
-
-  private fun expandClick(panelName: String) =
-    setState { expandedItem = if (expandedItem == panelName) null else panelName }
-
 
   private fun updateState(marksModel: ExpertMarksView.Model) = setState { model = marksModel }
 
