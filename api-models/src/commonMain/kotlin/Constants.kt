@@ -5,7 +5,7 @@ const val END_POINT: String = "https://fantom.npcmr.ru"
 const val LOCALHOST = "http://localhost"
 const val MAIN_SERVER_PORT = 8081
 //const val MAIN_SERVER_URL = "$LOCALHOST:$MAIN_SERVER_PORT"
-const val MAIN_SERVER_URL = "172.16.20.118:8081"
+const val MAIN_SERVER_URL = "http://pc368.corp.npcmr.ru:8081"
 
 const val DATABASE_DRIVER = "com.mysql.jdbc.Driver"
 

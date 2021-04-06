@@ -6,10 +6,7 @@ import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.serialization.json.Json
-import model.AUTH_CHECK_ROUTE
-import model.AuthorizationRequest
-import model.AuthorizationResponse
-import model.LOGIN_ROUTE
+import model.*
 import repository.LoginRemote
 
 object LoginRemoteDataSource : LoginRemote {
@@ -35,7 +32,7 @@ object LoginRemoteDataSource : LoginRemote {
 
   private fun HttpRequestBuilder.apiUrl(path: String) {
     url {
-      takeFrom(model.MAIN_SERVER_URL)
+      takeFrom(MAIN_SERVER_URL)
       encodedPath = path
     }
   }
