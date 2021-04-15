@@ -9,4 +9,5 @@ interface UserResearchRepository {
   suspend fun updateUserResearch(userResearchModel: UserResearchModel)
   suspend fun deleteUserResearch(userId: Int, researchId: Int)
   suspend fun markSeen(userId: Int, researchId: Int)
+  suspend fun getAll(): List<UserResearchModel>
 }

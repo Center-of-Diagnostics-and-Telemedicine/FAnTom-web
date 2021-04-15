@@ -8,6 +8,14 @@ import toUserResearch
 
 class UserResearchDao() : UserResearchDaoFacade {
 
+  override suspend fun getAll(): List<UserResearchModel> {
+    return transaction {
+      UserResearchVos
+        .selectAll()
+        .map(ResultRow::toUserResearch)
+    }
+  }
+
   override suspend fun getUserResearch(userId: Int, researchId: Int): UserResearchModel? {
     return transaction {
       UserResearchVos

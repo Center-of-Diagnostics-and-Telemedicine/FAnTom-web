@@ -7,6 +7,10 @@ class ResearchRepositoryImpl(
   private val researchDaoFacade: ResearchDaoFacade
 ) : ResearchRepository {
 
+  override suspend fun getAll(): List<ResearchModel> {
+    return researchDaoFacade.getAll()
+  }
+
   override suspend fun getResearch(researchId: Int): ResearchModel? {
     return researchDaoFacade.getResearchById(researchId)
   }

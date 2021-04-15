@@ -96,7 +96,8 @@ fun ResultRow.toExportedMarkModel(): ExpertMarkModel = ExpertMarkModel(
   roiTypeIndex = this[ExpertMarksVos.roiTypeIndex],
   taggerId = this[ExpertMarksVos.taggerId],
   confirmed = this[ExpertMarksVos.confirmed],
-  text = this[ExpertMarksVos.text]
+  text = this[ExpertMarksVos.text],
+  userId = this[ExpertMarksVos.userId]
 )
 
 fun ResultRow.toExportedInstanceModel(): ExportedRoiModel = ExportedRoiModel(

@@ -6,6 +6,10 @@ import model.UserResearchModel
 class UserResearchRepositoryImpl(private val userResearchDaoFacade: UserResearchDaoFacade) :
   UserResearchRepository {
 
+  override suspend fun getAll(): List<UserResearchModel> {
+    return userResearchDaoFacade.getAll()
+  }
+
   override suspend fun getResearchesForUser(userId: Int): List<UserResearchModel> {
     return userResearchDaoFacade.getResearchesForUser(userId)
   }

@@ -21,7 +21,23 @@ data class ExpertMarkModel(
   val roiTypeIndex: Int,
   val taggerId: String,
   val text: String,
-  val confirmed: Boolean?
+  val confirmed: Boolean?,
+  val userId: Int? = null
+)
+
+fun ExpertMarkModel.toRoiModel(taggerId: String) = RoiModel(
+  anatomicalLocation = anatomicalLocation,
+  confidence = confidence,
+  roiFilename = roiFilename,
+  roiShape = roiShape,
+  roiType = roiType,
+  roiTypeIndex = roiTypeIndex,
+  taggerId = taggerId,
+  xCenter = xCenter,
+  xSize = xSize,
+  yCenter = yCenter,
+  ySize = ySize,
+  text = text,
 )
 
 fun ExpertMarkModel.toExpertMarkEntity(): ExpertMarkEntity =

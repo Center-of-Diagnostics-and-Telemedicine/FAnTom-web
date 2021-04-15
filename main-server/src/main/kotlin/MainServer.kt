@@ -100,7 +100,7 @@ fun Application.module(testing: Boolean = false) {
 
       researchesList(researchRepository, userResearchRepository, covidMarksRepository)
       initResearch(researchRepository, sessionRepository, userResearchRepository)
-      closeResearch(sessionRepository, researchRepository, userResearchRepository)
+      closeResearch(researchRepository, userResearchRepository)
 
       getSlice(researchRepository, sessionRepository)
       hounsfield(sessionRepository)
@@ -118,8 +118,6 @@ fun Application.module(testing: Boolean = false) {
       getExpertMarks(expertMarksRepository, researchRepository, userExpertMarkRepository)
       saveExpertMark(expertMarksRepository, researchRepository, userExpertMarkRepository)
       updateExpertMark(expertMarksRepository, researchRepository)
-//      deleteExpertMarkByRoiId(expertMarksRepository, expertRoisRepository, researchRepository)
-//      confirmExpertMarkByRoi(expertMarksRepository, expertRoisRepository, researchRepository)
     }
 
   }

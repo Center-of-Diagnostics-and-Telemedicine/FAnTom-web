@@ -1,6 +1,5 @@
 package useCase
 
-import exportedMarksRepository
 import model.protocolsPath
 import researchRepository
 import userRepository

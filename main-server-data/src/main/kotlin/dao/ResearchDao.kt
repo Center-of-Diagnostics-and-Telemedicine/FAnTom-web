@@ -1,13 +1,21 @@
 package dao
 
 import ResearchVos
+import model.ResearchModel
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import toResearch
 
-import model.ResearchModel
-
 class ResearchDao() : ResearchDaoFacade {
+
+  override suspend fun getAll(): List<ResearchModel> {
+    return transaction {
+      ResearchVos
+        .selectAll()
+        .map(ResultRow::toResearch)
+    }
+  }
+
   override suspend fun getResearchById(researchId: Int): ResearchModel? {
     return transaction {
       ResearchVos

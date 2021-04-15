@@ -66,4 +66,12 @@ class UserDao() : UserDaoFacade {
     }
   }
 
+  override suspend fun getAll(): List<UserModel> {
+    return transaction {
+      UserVos
+        .selectAll()
+        .map(ResultRow::toUser)
+    }
+  }
+
 }

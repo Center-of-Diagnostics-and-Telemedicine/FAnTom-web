@@ -33,6 +33,10 @@ class UserRepositoryImpl(private val userDaoFacade: UserDaoFacade) : UserReposit
     userDaoFacade.updateUser(userId, login, hashedPassword, role.value)
   }
 
+  override suspend fun getAll(): List<UserModel> {
+    return userDaoFacade.getAll()
+  }
+
   private suspend fun checkUserExistence(userId: Int) =
     userDaoFacade.getUserById(userId)
       ?: throw IllegalStateException("user not found")

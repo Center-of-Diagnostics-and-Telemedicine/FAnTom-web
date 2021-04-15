@@ -10,8 +10,8 @@ val researchRepository = ResearchRepositoryImpl(researchDao)
 val userResearchDao = UserResearchDao()
 val userResearchRepository = UserResearchRepositoryImpl(userResearchDao)
 
-val exportedMarksDao = ExpertMarksDao()
-val exportedMarksRepository = ExpertMarksRepositoryImpl(exportedMarksDao)
+val expertMarksDao = ExpertMarksDao()
+val expertMarksRepository = ExpertMarksRepositoryImpl(expertMarksDao)
 
 val exportedRoisDao = ExportedRoisDao()
 val exportedRoisRepository = ExportedRoisRepositoryImpl(exportedRoisDao)

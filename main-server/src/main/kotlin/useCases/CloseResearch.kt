@@ -12,7 +12,6 @@ import util.CloseResearch
 import util.user
 
 fun Route.closeResearch(
-  sessionRepository: SessionRepository,
   researchRepository: ResearchRepository,
   userResearchRepository: UserResearchRepository
 ) {
@@ -25,24 +24,17 @@ fun Route.closeResearch(
 
     val userId = call.user.id
     val research = researchRepository.getResearch(it.id)
-    val session = sessionRepository.getSession(userId)
 
-    when {
-      research == null -> {
-        respondError(ErrorStringCode.RESEARCH_NOT_FOUND)
-        return@get
-      }
-      session == null -> {
-        respondError(ErrorStringCode.SESSION_EXPIRED)
-        return@get
-      }
+    if(research == null){
+      respondError(ErrorStringCode.RESEARCH_NOT_FOUND)
+      return@get
     }
 
     try {
       userResearchRepository.updateUserResearch(
         UserResearchModel(
           userId = userId,
-          researchId = research!!.id,
+          researchId = research.id,
           seen = true,
           done = true
         )

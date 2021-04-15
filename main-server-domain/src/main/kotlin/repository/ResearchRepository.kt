@@ -8,4 +8,5 @@ interface ResearchRepository {
   suspend fun createResearch(researchModel: ResearchModel)
   suspend fun deleteResearch(researchId: Int)
   suspend fun updateResearch(researchModel: ResearchModel)
+  suspend fun getAll(): List<ResearchModel>
 }

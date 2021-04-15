@@ -9,5 +9,6 @@ interface UserDaoFacade {
   suspend fun createUser(login: String, hashedPassword: String, userRole: Int)
   suspend fun deleteUser(userId: Int)
   suspend fun updateUser(userId: Int, login: String, hashedPassword: String, userRole: Int)
+  suspend fun getAll(): List<UserModel>
 }
 

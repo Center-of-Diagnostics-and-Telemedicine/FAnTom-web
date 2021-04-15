@@ -8,5 +8,6 @@ interface UserRepository {
   suspend fun createUser(login: String, hashedPassword: String, role: Int)
   suspend fun deleteUser(userId: Int)
   suspend fun updateUser(userId: Int, login: String, hashedPassword: String, role: UserRole)
+  suspend fun getAll(): List<UserModel>
 }
 
