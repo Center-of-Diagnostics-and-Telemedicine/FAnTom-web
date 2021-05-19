@@ -34,7 +34,12 @@ fun Application.module(testing: Boolean = false) {
   connectToDatabase()
 
   // Serialize json
-  install(ContentNegotiation) { gson {} }
+  install(ContentNegotiation) {
+    register(ContentType("[*", "*]"), GsonConverter())
+    register(ContentType("*", "*"), GsonConverter())
+    register(ContentType("text", "plain"), GsonConverter())
+    gson {}
+  }
   install(CORS) {
     method(HttpMethod.Options)
     method(HttpMethod.Get)

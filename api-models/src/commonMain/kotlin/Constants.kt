@@ -3,7 +3,7 @@ package model
 const val TOKEN = "api_token"
 const val END_POINT: String = "https://fantom.npcmr.ru"
 const val LOCALHOST = "http://localhost"
-const val MAIN_SERVER_PORT = 8080
+const val MAIN_SERVER_PORT = 8081
 const val MAIN_SERVER_URL = "$LOCALHOST:$MAIN_SERVER_PORT"
 //const val MAIN_SERVER_URL = END_POINT
 

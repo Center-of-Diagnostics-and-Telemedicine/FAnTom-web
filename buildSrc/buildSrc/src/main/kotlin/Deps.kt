@@ -6,7 +6,7 @@ This file is licensed under BSD-3-Clause license. See LICENSE file for details.
 
 object Deps {
 
-  const val kotlinVersion = "1.4.30"
+  const val kotlinVersion = "1.5.0"
 
   object Jetbrains {
     object Kotlin : Group(name = "org.jetbrains.kotlin") {
@@ -50,9 +50,9 @@ object Deps {
     }
 
     object Wrappers : Group(name = "org.jetbrains") {
-      private const val kotlinJsVersion = "pre.148-kotlin-$kotlinVersion"
-      private const val kotlinReactVersion = "17.0.1-$kotlinJsVersion"
-      private const val styledVersion = "5.2.1-$kotlinJsVersion"
+      private const val kotlinJsVersion = "pre.156-kotlin-$kotlinVersion"
+      private const val kotlinReactVersion = "17.0.2-$kotlinJsVersion"
+      private const val styledVersion = "5.3.0-$kotlinJsVersion"
       private const val extensionsVersion = "1.0.1-$kotlinJsVersion"
 
       object React {

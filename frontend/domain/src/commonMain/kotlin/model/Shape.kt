@@ -72,7 +72,7 @@ fun List<Shape>.getShapeByPosition(dicomX: Double, dicomY: Double): Shape? {
       val inHorizontalBound = dicomX < right && dicomX > left
       inVerticalBound && inHorizontalBound
     }
-    .minBy {
+    .minByOrNull {
       if (it.dicomRadiusHorizontal < it.dicomRadiusVertical) {
         it.dicomRadiusHorizontal
       } else {

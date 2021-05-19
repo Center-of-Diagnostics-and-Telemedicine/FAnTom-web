@@ -24,10 +24,6 @@ kotlin {
   }
 }
 
-repositories {
-  maven("https://dl.bintray.com/kotlin/kotlin-js-wrappers")
-}
-
 dependencies {
   implementation(Deps.Jetbrains.Kotlin.StdLib.Js)
   implementation(Deps.Jetbrains.Wrappers.React.Core)
