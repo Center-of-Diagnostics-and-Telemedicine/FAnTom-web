@@ -6,6 +6,7 @@ import io.ktor.gson.*
 import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.locations.*
+import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.server.netty.*
@@ -33,12 +34,7 @@ fun Application.module(testing: Boolean = false) {
   connectToDatabase()
 
   // Serialize json
-  install(ContentNegotiation) {
-    register(ContentType("[*", "*]"), GsonConverter())
-    register(ContentType("*", "*"), GsonConverter())
-    register(ContentType("text", "plain"), GsonConverter())
-    gson {}
-  }
+  install(ContentNegotiation) { gson {} }
   install(CORS) {
     method(HttpMethod.Options)
     method(HttpMethod.Get)
@@ -60,11 +56,11 @@ fun Application.module(testing: Boolean = false) {
   }
   install(DefaultHeaders)
   install(CallLogging) {
-    level = Level.DEBUG
+    level = Level.INFO
+    filter { call -> call.request.path().startsWith("/") }
   }
   install(ConditionalHeaders)
   install(Locations)
-
 
   val jwtConfig = jwtConfig()
 
