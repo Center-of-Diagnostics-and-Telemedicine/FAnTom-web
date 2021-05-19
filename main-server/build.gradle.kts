@@ -19,50 +19,45 @@ application {
 //}
 
 dependencies {
-    val ktor_version = "1.3.2"
     val logbackVersion = "1.2.3"
-    val reaktiveVersion = "1.1.13"
 
     implementation(kotlin("stdlib"))
 
-    implementation("org.jetbrains.exposed:exposed-core:0.22.1")
-    implementation("org.jetbrains.exposed:exposed-dao:0.22.1")
-    implementation("org.jetbrains.exposed:exposed-jdbc:0.22.1")
+    implementation(Deps.Jetbrains.Exposed.Core)
+    implementation(Deps.Jetbrains.Exposed.Dao)
+    implementation(Deps.Jetbrains.Exposed.Jdbc)
+    implementation(Deps.Jetbrains.Exposed.Time)
 
-    implementation("io.ktor:ktor-server-core:$ktor_version")
-    implementation("io.ktor:ktor-server-netty:$ktor_version")
+    implementation(Deps.Ktor.Server.Core)
+    implementation(Deps.Ktor.Server.Netty)
 
-    implementation("io.ktor:ktor-client-apache:$ktor_version")
-    implementation("io.ktor:ktor-client-serialization-jvm:$ktor_version")
-    implementation("io.ktor:ktor-client-json-jvm:$ktor_version")
-    implementation("io.ktor:ktor-client-logging-jvm:$ktor_version")
+    implementation(Deps.Ktor.Client.Apache) // todo(check if this really needed)
+    implementation(Deps.Ktor.Client.Serialization.Jvm)
+    implementation(Deps.Ktor.Client.Json.Jvm)
+    implementation(Deps.Ktor.Client.Logging)
 
-    implementation("io.ktor:ktor-html-builder:$ktor_version")
-    implementation("io.ktor:ktor-auth:$ktor_version")
-    implementation("io.ktor:ktor-auth-jwt:$ktor_version")
+    implementation(Deps.Ktor.Auth.Core)
+    implementation(Deps.Ktor.Auth.Jwt)
 
-    implementation("io.ktor:ktor-jackson:$ktor_version")
-    implementation("io.ktor:ktor-serialization:$ktor_version")
-    implementation("io.ktor:ktor-gson:$ktor_version")
+    implementation(Deps.Ktor.Gson)
+    implementation(Deps.Ktor.Locations)
 
-    implementation("io.ktor:ktor-locations:$ktor_version")
+    implementation(Deps.Badoo.Reaktive.Jvm)
 
-    implementation("ch.qos.logback:logback-classic:$logbackVersion")
+    implementation(Deps.Logback.Classic)
 
-    implementation("mysql:mysql-connector-java:5.1.46")
+    implementation(Deps.Mysql.Connector)
+
+    implementation(Deps.FlyWay.Core)
+
+    implementation(Deps.Docker.Java)
 
     implementation(project(":api-models"))
     implementation(project(":backend-models"))
     implementation(project(":main-server-domain"))
     implementation(project(":main-server-data"))
 
-    implementation("org.flywaydb:flyway-core:6.2.0")
-    compile("com.github.docker-java:docker-java:3.2.1")
-    implementation("com.badoo.reaktive:reaktive-jvm:$reaktiveVersion")
-    // https://mvnrepository.com/artifact/commons-cli/commons-cli
     implementation("commons-cli:commons-cli:1.4")
-
-
 }
 
 //compileKotlin {

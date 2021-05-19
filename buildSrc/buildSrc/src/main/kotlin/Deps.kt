@@ -93,43 +93,37 @@ object Deps {
 
         object Json :
           Dependency(group = Kotlinx, name = "kotlinx-serialization-json", version = version)
-
-//        object Runtime {
-//          object Core :
-//            Dependency(group = Kotlinx, name = "kotlinx-serialization-runtime", version = version)
-//
-//          object Common :
-//            Dependency(
-//              group = Kotlinx,
-//              name = "kotlinx-serialization-runtime-common",
-//              version = version
-//            )
-//
-//          object Native :
-//            Dependency(
-//              group = Kotlinx,
-//              name = "kotlinx-serialization-runtime-native",
-//              version = version
-//            )
-//
-//          object Js :
-//            Dependency(
-//              group = Kotlinx,
-//              name = "kotlinx-serialization-runtime-js",
-//              version = version
-//            )
-//        }
       }
+    }
+
+    object Exposed : Group(name = "org.jetbrains.exposed") {
+      private val version = "0.22.1"
+
+      object Core : Dependency(group = Exposed, name = "exposed-core", version = version)
+      object Dao : Dependency(group = Exposed, name = "exposed-dao", version = version)
+      object Jdbc : Dependency(group = Exposed, name = "exposed-jdbc", version = version)
+      object Time : Dependency(group = Exposed, name = "exposed-java-time", version = version)
     }
   }
 
   object Ktor : Group(name = "io.ktor") {
-    private const val version = "1.5.1"
+    private const val version = "1.5.4"
+
+    object Gson : Dependency(group = Ktor, name = "ktor-gson", version = version)
+    object Locations : Dependency(group = Ktor, name = "ktor-locations", version = version)
+
+    object Auth {
+      object Core : Dependency(group = Ktor, name = "ktor-auth", version = version)
+      object Jwt : Dependency(group = Ktor, name = "ktor-auth-jwt", version = version)
+    }
 
     object Client {
 
       object Common : Dependency(group = Ktor, name = "ktor-client-core", version = version)
       object Js : Dependency(group = Ktor, name = "ktor-client-js", version = version)
+      object Apache : Dependency(group = Ktor, name = "ktor-client-apache", version = version)
+
+      object Logging : Dependency(group = Ktor, name = "ktor-client-logging-jvm", version = version)
 
       object Json {
         object Common : Dependency(group = Ktor, name = "ktor-client-json", version = version)
@@ -147,6 +141,11 @@ object Deps {
         object Js :
           Dependency(group = Ktor, name = "ktor-client-serialization-js", version = version)
       }
+    }
+
+    object Server {
+      object Core : Dependency(group = Ktor, name = "ktor-server-core", version = version)
+      object Netty : Dependency(group = Ktor, name = "ktor-server-netty", version = version)
     }
   }
 
@@ -187,6 +186,22 @@ object Deps {
     private const val version = "0.6.7"
 
     object Components : Dependency(group = Muirwik, name = "muirwik-components", version = version)
+  }
+
+  object Logback: Group(name = "ch.qos.logback"){
+    object Classic : Dependency(group = Logback, name = "logback-classic", version = "1.2.3")
+  }
+
+  object Mysql : Group(name = "mysql"){
+    object Connector : Dependency(group = Mysql, name = "mysql-connector-java", version = "5.1.46")
+  }
+
+  object FlyWay : Group(name = "org.flywaydb"){
+    object Core : Dependency(group = FlyWay, name = "flyway-core", version = "6.2.0")
+  }
+
+  object Docker : Group(name = "com.github.docker-java"){
+    object Java : Dependency(group = Docker, name = "docker-java", version = "3.2.1")
   }
 
   object TouchLab : Group(name = "co.touchlab") {

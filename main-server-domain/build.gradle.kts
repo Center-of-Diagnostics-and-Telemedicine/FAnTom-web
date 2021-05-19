@@ -1,6 +1,6 @@
 plugins {
   id("java")
-  id("org.jetbrains.kotlin.jvm")
+  kotlin("jvm")
 }
 
 version = "unspecified"
