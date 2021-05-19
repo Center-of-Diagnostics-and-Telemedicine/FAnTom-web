@@ -85,7 +85,6 @@ inline fun <reified T : BuildTarget> ExtensionAware.doIfBuildTargetAvailable(blo
 val Project.isAnyTargetAvailable: Boolean
   get() = buildType.buildTargets.any { it in buildTargets }
 
-@ExperimentalDceDsl
 fun Project.setupMultiplatform() {
 
   if (!isAnyTargetAvailable) {
@@ -199,10 +198,6 @@ fun Project.android(block: BaseExtension.() -> Unit) {
 
 fun Project.js(block: Kotlin2JsProjectExtension.() -> Unit) {
   extensions.getByType<Kotlin2JsProjectExtension>().block()
-}
-
-fun Project.kotlinProject(block: KotlinMultiplatformExtension.() -> Unit) {
-  extensions.getByType<KotlinMultiplatformExtension>().block()
 }
 
 fun Project.kotlinCompat(block: KotlinMultiplatformExtension.() -> Unit) {

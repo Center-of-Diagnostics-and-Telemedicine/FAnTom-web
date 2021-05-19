@@ -17,10 +17,7 @@ kotlinCompat {
     jsMain {
       dependencies {
         implementation(Deps.Ktor.Client.Js)
-        implementation(Deps.Ktor.Client.Json.Js)
         implementation(Deps.Ktor.Client.Serialization.Js)
-
-        implementation(npm("text-encoding", "0.7.0"))
       }
     }
     jvmMain {
