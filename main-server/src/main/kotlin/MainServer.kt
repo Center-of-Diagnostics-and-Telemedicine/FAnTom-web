@@ -93,6 +93,9 @@ fun Application.module(testing: Boolean = false) {
         resources(RESOURCE_STATIC)
       }
     }
+    get("/hello"){
+      call.respond("hello world")
+    }
 
     login(userRepository, jwtConfig::makeToken)
 

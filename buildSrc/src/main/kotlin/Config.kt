@@ -99,11 +99,7 @@ fun Project.setupMultiplatform() {
     doIfBuildTargetAvailable<BuildTarget.Js> {
       js {
         nodejs()
-        browser {
-          dceTask {
-            keep("ktor-ktor-io.\$\$importsForInline\$\$.ktor-ktor-io.io.ktor.utils.io")
-          }
-        }
+        browser()
 
         compilations.all {
           compileKotlinTask.kotlinOptions {

@@ -11,16 +11,16 @@ repositories {
   mavenCentral()
 }
 
-val ktor_version = "1.3.2"
-val kotlinx_serialization_version = "1.1.0"
-
 dependencies {
-  implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-  implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinx_serialization_version")
+  implementation(kotlin("stdlib"))
 
-  implementation("org.jetbrains.exposed:exposed-core:0.22.1")
-  implementation("org.jetbrains.exposed:exposed-dao:0.22.1")
-  implementation("org.jetbrains.exposed:exposed-jdbc:0.22.1")
-  implementation("io.ktor:ktor-auth:$ktor_version")
+  implementation(Deps.Jetbrains.Kotlinx.Serialization.Json)
+
+  implementation(Deps.Jetbrains.Exposed.Core)
+  implementation(Deps.Jetbrains.Exposed.Dao)
+  implementation(Deps.Jetbrains.Exposed.Jdbc)
+
+  implementation(Deps.Ktor.Auth.Core)
+
   api(project(":api-models"))
 }

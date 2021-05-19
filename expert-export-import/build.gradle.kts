@@ -10,26 +10,25 @@ repositories {
   mavenCentral()
 }
 
-val ktor_version = "1.3.2"
-val kotlinx_serialization_version = "1.1.0"
-val logback_version = "1.2.3"
-
 dependencies {
-  implementation("org.jetbrains.kotlin:kotlin-stdlib")
-  implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinx_serialization_version")
+  implementation(kotlin("stdlib"))
 
-  implementation("org.jetbrains.exposed:exposed-core:0.22.1")
-  implementation("org.jetbrains.exposed:exposed-dao:0.22.1")
-  implementation("org.jetbrains.exposed:exposed-jdbc:0.22.1")
+  implementation(Deps.Jetbrains.Kotlinx.Serialization.Json)
 
-  implementation("ch.qos.logback:logback-classic:$logback_version")
-  implementation("mysql:mysql-connector-java:5.1.46")
+  implementation(Deps.Jetbrains.Exposed.Core)
+  implementation(Deps.Jetbrains.Exposed.Dao)
+  implementation(Deps.Jetbrains.Exposed.Jdbc)
 
-  implementation("io.ktor:ktor-auth:$ktor_version")
+  implementation(Deps.Logback.Classic)
+
+  implementation(Deps.Mysql.Connector)
+
+  implementation(Deps.Ktor.Auth.Core)
+
+  implementation(Deps.FlyWay.Core)
 
   implementation(project(":api-models"))
   implementation(project(":backend-models"))
   implementation(project(":main-server-domain"))
   implementation(project(":main-server-data"))
-  implementation("org.flywaydb:flyway-core:6.2.0")
 }

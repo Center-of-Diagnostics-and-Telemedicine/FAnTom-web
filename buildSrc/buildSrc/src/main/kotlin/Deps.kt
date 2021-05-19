@@ -97,7 +97,7 @@ object Deps {
     }
 
     object Exposed : Group(name = "org.jetbrains.exposed") {
-      private val version = "0.22.1"
+      private val version = "0.31.1"
 
       object Core : Dependency(group = Exposed, name = "exposed-core", version = version)
       object Dao : Dependency(group = Exposed, name = "exposed-dao", version = version)
