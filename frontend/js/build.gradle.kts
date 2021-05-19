@@ -1,20 +1,35 @@
 plugins {
-  id("org.jetbrains.kotlin.js")
+  kotlin("js")
 }
 
 kotlin {
-  target {
+  js(LEGACY) {
     useCommonJs()
-    produceExecutable()
     browser {
-      dceTask {
-        keep("ktor-ktor-io.\$\$importsForInline\$\$.ktor-ktor-io.io.ktor.utils.io")
+      webpackTask {
+        cssSupport.enabled = true
+      }
+
+      runTask {
+        cssSupport.enabled = true
+      }
+
+      testTask {
+        useKarma {
+          useChromeHeadless()
+          webpackConfig.cssSupport.enabled = true
+        }
       }
     }
   }
 }
 
+repositories {
+  maven("https://dl.bintray.com/kotlin/kotlin-js-wrappers")
+}
+
 dependencies {
+  implementation(Deps.Jetbrains.Kotlin.StdLib.Js)
   implementation(Deps.Jetbrains.Wrappers.React.Core)
   implementation(Deps.Jetbrains.Wrappers.React.ReactDom)
   implementation(Deps.Jetbrains.Wrappers.Styled)
@@ -31,14 +46,7 @@ dependencies {
   implementation(project(":frontend:data"))
   implementation(project(":frontend:presentation"))
 
-  implementation(npm("core-js", "2.6.5"))
-  implementation(npm("svg-inline-loader", "0.8.0"))
-  implementation(npm("abort-controller"))
-  implementation(npm("react", Deps.reactVersion))
-  implementation(npm("react-dom", Deps.reactVersion))
-  implementation(npm("react-is", Deps.reactVersion))
-  implementation(npm("inline-style-prefixer", "5.1.0"))
-  implementation(npm("styled-components", "4.3.2"))
-  implementation(npm("@material-ui/core", "4.9.14"))
-  implementation(npm("@material-ui/icons", "4.9.1"))
+  implementation(npm("@material-ui/core", "^4.11.0"))
+  implementation(npm("@material-ui/lab", "4.0.0-alpha.56"))
+  implementation(npm("@material-ui/icons", "^4.9.1"))
 }

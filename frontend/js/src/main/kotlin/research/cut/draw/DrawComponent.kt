@@ -21,7 +21,7 @@ import styled.css
 import styled.styledCanvas
 import styled.styledDiv
 import view.DrawView
-import kotlin.browser.document
+import kotlinx.browser.document
 import kotlin.math.*
 
 class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {

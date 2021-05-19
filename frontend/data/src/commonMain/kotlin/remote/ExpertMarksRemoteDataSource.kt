@@ -36,7 +36,7 @@ object ExpertMarksRemoteDataSource : ExpertMarksRemote {
     return client.post {
       authHeader(token)
       apiUrl("$RESEARCH_ROUTE/$researchId/$EXPERT_MARK_ROUTE")
-      body = Json.stringify(ExpertMarkEntity.serializer(), request)
+      body = Json.encodeToString(ExpertMarkEntity.serializer(), request)
     }
   }
 
@@ -48,7 +48,7 @@ object ExpertMarksRemoteDataSource : ExpertMarksRemote {
     return client.patch {
       authHeader(token)
       apiUrl("$RESEARCH_ROUTE/$researchId/$EXPERT_MARK_ROUTE")
-      body = Json.stringify(ExpertMarkEntity.serializer(), request)
+      body = Json.encodeToString(ExpertMarkEntity.serializer(), request)
     }
   }
 

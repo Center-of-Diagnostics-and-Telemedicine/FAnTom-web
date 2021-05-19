@@ -2,14 +2,14 @@ package root
 
 import DEBUG
 import com.arkivanov.mvikotlin.core.store.StoreFactory
+import kotlinx.browser.document
+import kotlinx.browser.window
 import local.LoginLocalDataSource
 import local.ResearchLocalDataSource
 import react.dom.render
 import remote.*
 import repository.*
 import storeFactoryInstance
-import kotlin.browser.document
-import kotlin.browser.window
 
 /**
 Copyright (c) 2021, Moscow Center for Diagnostics & Telemedicine

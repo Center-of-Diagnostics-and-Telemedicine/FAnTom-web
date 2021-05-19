@@ -34,7 +34,7 @@ import research.cut.slider.sliderView
 import styled.StyleSheet
 import styled.css
 import styled.styledDiv
-import kotlin.browser.window
+import kotlinx.browser.window
 
 class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
 

@@ -4,18 +4,17 @@ import com.badoo.reaktive.observable.debounce
 import com.badoo.reaktive.observable.subscribe
 import com.badoo.reaktive.scheduler.computationScheduler
 import com.badoo.reaktive.subject.publish.PublishSubject
+import debugLog
 import io.ktor.client.*
 import io.ktor.client.features.*
-import io.ktor.client.features.json.*
+import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.serializer.*
 import io.ktor.client.features.logging.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonConfiguration
 import model.*
 import repository.FantomLibraryDataSource
-import debugLog
 
 class FantomLibraryDataSourceImpl(
   override val endPoint: String,
@@ -26,7 +25,7 @@ class FantomLibraryDataSourceImpl(
 
   private val client: HttpClient = HttpClient {
     install(JsonFeature) {
-      serializer = KotlinxSerializer(Json(JsonConfiguration(ignoreUnknownKeys = true)))
+      serializer = KotlinxSerializer(Json { ignoreUnknownKeys = true })
     }
     install(HttpTimeout) {
       requestTimeoutMillis = 600000
@@ -67,8 +66,7 @@ class FantomLibraryDataSourceImpl(
   ): SliceResponse {
     return client.post {
       apiUrl("/$RESEARCH_ROUTE/$SLICE_ROUTE")
-      val stringify = Json.stringify(SliceRequestNew.serializer(), sliceRequest)
-      body = stringify
+      body = Json.encodeToString(SliceRequestNew.serializer(), sliceRequest)
     }
   }
 
@@ -77,7 +75,7 @@ class FantomLibraryDataSourceImpl(
   ): HounsfieldResponse {
     return client.post {
       apiUrl("$RESEARCH_ROUTE/$BRIGHTNESS_ROUTE")
-      body = Json.stringify(HounsfieldRequestNew.serializer(), request)
+      body = Json.encodeToString(HounsfieldRequestNew.serializer(), request)
     }
   }
 

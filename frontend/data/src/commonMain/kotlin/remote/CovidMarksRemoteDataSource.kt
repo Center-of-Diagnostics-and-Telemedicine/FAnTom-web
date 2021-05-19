@@ -7,7 +7,6 @@ import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.parse
 import model.*
 import repository.CovidMarksRemote
 
@@ -37,7 +36,7 @@ object CovidMarksRemoteDataSource : CovidMarksRemote {
     return client.post {
       authHeader(token)
       apiUrl("$RESEARCH_ROUTE/$researchId/$COVID_MARK_ROUTE")
-      body = Json.stringify(CovidMarkEntity.serializer(), request)
+      body = Json.encodeToString(CovidMarkEntity.serializer(), request)
     }
   }
 

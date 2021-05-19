@@ -1,10 +1,10 @@
 package local
 
+import kotlinx.browser.localStorage
 import model.TOKEN
 import org.w3c.dom.get
 import org.w3c.dom.set
 import repository.LoginLocal
-import kotlin.browser.localStorage
 
 actual object LoginLocalDataSource : LoginLocal {
 

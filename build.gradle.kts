@@ -1,6 +1,15 @@
 plugins {
-  kotlin("multiplatform")
-  kotlin("plugin.serialization") version "1.4-M1"
+  `kotlin-dsl`
+  kotlin("plugin.serialization") version "1.4.30"
+}
+
+buildscript {
+  repositories { mavenCentral() }
+
+  dependencies {
+    val kotlinVersion = "1.4.30"
+    classpath(kotlin("serialization", version = kotlinVersion))
+  }
 }
 
 allprojects {

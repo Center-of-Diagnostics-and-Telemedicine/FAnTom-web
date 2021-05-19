@@ -14,7 +14,7 @@ import styled.css
 import styled.styledCanvas
 import styled.styledDiv
 import view.ShapesView
-import kotlin.browser.document
+import kotlinx.browser.document
 import kotlin.math.*
 
 class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(prps) {

@@ -7,6 +7,6 @@ import java.io.File
 fun saveDoseReports(destinationPath: String, doseReports: List<JsonFileModel>) {
   doseReports.forEach {
     val file = File("${destinationPath}/${it.ids!!.accessionNumber}_${it.ids!!.studyId}.json")
-    file.writeText(Json.stringify(JsonFileModel.serializer(), it))
+    file.writeText(Json.encodeToString(JsonFileModel.serializer(), it))
   }
 }

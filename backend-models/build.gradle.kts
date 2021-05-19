@@ -12,11 +12,11 @@ repositories {
 }
 
 val ktor_version = "1.3.2"
-val kotlinx_serialization_version = "0.20.0"
+val kotlinx_serialization_version = "1.1.0"
 
 dependencies {
   implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-  implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:$kotlinx_serialization_version")
+  implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinx_serialization_version")
 
   implementation("org.jetbrains.exposed:exposed-core:0.22.1")
   implementation("org.jetbrains.exposed:exposed-dao:0.22.1")

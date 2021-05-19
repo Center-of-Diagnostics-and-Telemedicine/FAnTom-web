@@ -11,7 +11,7 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalDceDsl
 
 enum class BuildType {
-  ALL, METADATA, NON_NATIVE, LINUX, IOS
+  ALL, METADATA, NON_NATIVE, ANDROID, JVM, JS, LINUX, IOS, MAC_OS
 }
 
 val ExtensionAware.buildType: BuildType
@@ -58,7 +58,8 @@ private val BUILD_TYPE_TO_BUILD_TARGETS: Map<BuildType, Set<BuildTarget>> =
   mapOf(
     BuildType.ALL to ALL_BUILD_TARGETS,
     BuildType.METADATA to ALL_BUILD_TARGETS,
-    BuildType.NON_NATIVE to setOf(BuildTarget.Android, BuildTarget.Jvm, BuildTarget.Js)
+    BuildType.NON_NATIVE to setOf(BuildTarget.Android, BuildTarget.Jvm, BuildTarget.Js),
+    BuildType.JS to setOf(BuildTarget.Js)
 //        BuildType.LINUX to setOf(BuildTarget.LinuxX64)
 //        BuildType.IOS to setOf(BuildTarget.IosX64, BuildTarget.IosArm64)
   )
@@ -81,12 +82,20 @@ inline fun <reified T : BuildTarget> ExtensionAware.doIfBuildTargetAvailable(blo
   }
 }
 
+val Project.isAnyTargetAvailable: Boolean
+  get() = buildType.buildTargets.any { it in buildTargets }
+
 @ExperimentalDceDsl
 fun Project.setupMultiplatform() {
+
+  if (!isAnyTargetAvailable) {
+    return
+  }
+
   plugins.apply("kotlin-multiplatform")
   plugins.apply("kotlinx-serialization")
 
-  kotlinProject {
+  kotlinCompat {
     doIfBuildTargetAvailable<BuildTarget.Js> {
       js {
         nodejs()
@@ -116,7 +125,7 @@ fun Project.setupMultiplatform() {
       commonMain {
         dependencies {
           implementation(Deps.Jetbrains.Kotlin.StdLib.Common)
-          implementation(Deps.Jetbrains.Kotlinx.Serialization.Runtime.Common)
+          implementation(Deps.Jetbrains.Kotlinx.Serialization.Json)
         }
       }
 
@@ -130,17 +139,24 @@ fun Project.setupMultiplatform() {
       jsNativeCommonMain.dependsOn(commonMain)
       jsNativeCommonTest.dependsOn(commonTest)
 
+      jvmNativeCommonMain.dependsOn(commonMain)
+      jvmNativeCommonTest.dependsOn(commonTest)
+
+      jvmJsCommonMain.dependsOn(commonMain)
+      jvmJsCommonTest.dependsOn(commonTest)
+
       jvmCommonMain {
-        dependsOn(commonMain)
+        dependsOn(jvmNativeCommonMain)
+        dependsOn(jvmJsCommonMain)
 
         dependencies {
           implementation(Deps.Jetbrains.Kotlin.StdLib.Jdk7)
-          implementation(Deps.Jetbrains.Kotlinx.Serialization.Runtime.Core)
         }
       }
 
       jvmCommonTest {
-        dependsOn(commonTest)
+        dependsOn(jvmNativeCommonTest)
+        dependsOn(jvmJsCommonTest)
 
         dependencies {
           implementation(Deps.Jetbrains.Kotlin.Test.Junit)
@@ -152,19 +168,30 @@ fun Project.setupMultiplatform() {
 
       jsMain {
         dependsOn(jsNativeCommonMain)
+        dependsOn(jvmJsCommonMain)
 
         dependencies {
           implementation(Deps.Jetbrains.Kotlin.StdLib.Js)
-          implementation(Deps.Jetbrains.Kotlinx.Serialization.Runtime.Js)
         }
       }
 
       jsTest {
         dependsOn(jsNativeCommonTest)
+        dependsOn(jvmJsCommonTest)
 
         dependencies {
           implementation(Deps.Jetbrains.Kotlin.Test.Js)
         }
+      }
+
+      nativeCommonMain {
+        dependsOn(jsNativeCommonMain)
+        dependsOn(jvmNativeCommonMain)
+      }
+
+      nativeCommonTest {
+        dependsOn(jsNativeCommonTest)
+        dependsOn(jvmNativeCommonTest)
       }
     }
   }
@@ -180,6 +207,12 @@ fun Project.js(block: Kotlin2JsProjectExtension.() -> Unit) {
 
 fun Project.kotlinProject(block: KotlinMultiplatformExtension.() -> Unit) {
   extensions.getByType<KotlinMultiplatformExtension>().block()
+}
+
+fun Project.kotlinCompat(block: KotlinMultiplatformExtension.() -> Unit) {
+  if (isAnyTargetAvailable) {
+    extensions.getByType<KotlinMultiplatformExtension>().block()
+  }
 }
 
 fun Project.jvm(block: KotlinJvmProjectExtension.() -> Unit) {
@@ -220,6 +253,34 @@ val SourceSets.jsNativeCommonTest: KotlinSourceSet get() = getOrCreate("jsNative
 
 fun SourceSets.jsNativeCommonTest(block: KotlinSourceSet.() -> Unit) {
   jsNativeCommonTest.apply(block)
+}
+
+// jvmNativeCommon
+
+val SourceSets.jvmNativeCommonMain: KotlinSourceSet get() = getOrCreate("jvmNativeCommonMain")
+
+fun SourceSets.jvmNativeCommonMain(block: KotlinSourceSet.() -> Unit) {
+  jvmNativeCommonMain.apply(block)
+}
+
+val SourceSets.jvmNativeCommonTest: KotlinSourceSet get() = getOrCreate("jvmNativeCommonTest")
+
+fun SourceSets.jvmNativeCommonTest(block: KotlinSourceSet.() -> Unit) {
+  jvmNativeCommonTest.apply(block)
+}
+
+// jvmJsCommon
+
+val SourceSets.jvmJsCommonMain: KotlinSourceSet get() = getOrCreate("jvmJsCommonMain")
+
+fun SourceSets.jvmJsCommonMain(block: KotlinSourceSet.() -> Unit) {
+  jvmJsCommonMain.apply(block)
+}
+
+val SourceSets.jvmJsCommonTest: KotlinSourceSet get() = getOrCreate("jvmJsCommonTest")
+
+fun SourceSets.jvmJsCommonTest(block: KotlinSourceSet.() -> Unit) {
+  jvmJsCommonTest.apply(block)
 }
 
 // jvmCommon
@@ -360,4 +421,18 @@ val SourceSets.iosArm64Test: KotlinSourceSet get() = getOrCreate("iosArm64Test")
 
 fun SourceSets.iosArm64Test(block: KotlinSourceSet.() -> Unit) {
   iosArm64Test.apply(block)
+}
+
+// macosX64
+
+val SourceSets.macosX64Main: KotlinSourceSet get() = getOrCreate("macosX64Main")
+
+fun SourceSets.macosX64Main(block: KotlinSourceSet.() -> Unit) {
+  macosX64Main.apply(block)
+}
+
+val SourceSets.macosX64Test: KotlinSourceSet get() = getOrCreate("macosX64Test")
+
+fun SourceSets.macosX64Test(block: KotlinSourceSet.() -> Unit) {
+  macosX64Test.apply(block)
 }

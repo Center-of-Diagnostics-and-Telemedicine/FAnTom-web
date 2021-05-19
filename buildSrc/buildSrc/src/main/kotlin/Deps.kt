@@ -6,43 +6,54 @@ This file is licensed under BSD-3-Clause license. See LICENSE file for details.
 
 object Deps {
 
-  const val reactVersion = "16.13.0"
+  const val kotlinVersion = "1.4.30"
 
   object Jetbrains {
     object Kotlin : Group(name = "org.jetbrains.kotlin") {
-      private const val version = "1.4-M1"
 
       object Plugin {
-        object Gradle : Dependency(group = Kotlin, name = "kotlin-gradle-plugin", version = version)
-//        object Serialization: Dependency(group = Kotlin, name = "plugin.serialization", version = version)
+        object Gradle :
+          Dependency(group = Kotlin, name = "kotlin-gradle-plugin", version = kotlinVersion)
+//        object Serialization: Dependency(group = Kotlin, name = "plugin.serialization", version = _root_ide_package_.Deps.kotlinVersion)
       }
 
       object StdLib {
-        object Common : Dependency(group = Kotlin, name = "kotlin-stdlib-common", version = version)
-        object Jdk7 : Dependency(group = Kotlin, name = "kotlin-stdlib-jdk7", version = version)
+        object Common :
+          Dependency(group = Kotlin, name = "kotlin-stdlib-common", version = kotlinVersion)
+
+        object Jdk7 :
+          Dependency(group = Kotlin, name = "kotlin-stdlib-jdk7", version = kotlinVersion)
+
         object Jvm : Dependency(group = Kotlin, name = "kotlin-stdlib-jdk8", version = "")
-        object Js : Dependency(group = Kotlin, name = "kotlin-stdlib-js", version = version)
+        object Js : Dependency(group = Kotlin, name = "kotlin-stdlib-js", version = kotlinVersion)
       }
 
-      object Reflect : Dependency(group = Kotlin, name = "kotlin-reflect", version = version)
+      object Reflect : Dependency(group = Kotlin, name = "kotlin-reflect", version = kotlinVersion)
 
       object Test {
-        object Common : Dependency(group = Kotlin, name = "kotlin-test-common", version = version)
-        object Js : Dependency(group = Kotlin, name = "kotlin-test-js", version = version)
-        object Junit : Dependency(group = Kotlin, name = "kotlin-test-junit", version = version)
+        object Common :
+          Dependency(group = Kotlin, name = "kotlin-test-common", version = kotlinVersion)
+
+        object Js : Dependency(group = Kotlin, name = "kotlin-test-js", version = kotlinVersion)
+        object Junit :
+          Dependency(group = Kotlin, name = "kotlin-test-junit", version = kotlinVersion)
       }
 
       object TestAnnotations {
         object Common :
-          Dependency(group = Kotlin, name = "kotlin-test-annotations-common", version = version)
+          Dependency(
+            group = Kotlin,
+            name = "kotlin-test-annotations-common",
+            version = kotlinVersion
+          )
       }
     }
 
     object Wrappers : Group(name = "org.jetbrains") {
-      private const val kotlinVersion = "pre.94-kotlin-1.3.70"
-      private const val kotlinReactVersion = "$reactVersion-$kotlinVersion"
-      private const val styledVersion = "1.0.0-$kotlinVersion"
-      private const val extensionsVersion = "1.0.1-$kotlinVersion"
+      private const val kotlinJsVersion = "pre.148-kotlin-$kotlinVersion"
+      private const val kotlinReactVersion = "17.0.1-$kotlinJsVersion"
+      private const val styledVersion = "5.2.1-$kotlinJsVersion"
+      private const val extensionsVersion = "1.0.1-$kotlinJsVersion"
 
       object React {
         object Core :
@@ -59,7 +70,7 @@ object Deps {
 
     object Kotlinx : Group(name = "org.jetbrains.kotlinx") {
       object Coroutines {
-        private const val version = "1.3.5-1.4-M1"
+        private const val version = "1.4.2"
 
         object Core :
           Dependency(group = Kotlinx, name = "kotlinx-coroutines-core", version = version) {
@@ -78,39 +89,42 @@ object Deps {
       }
 
       object Serialization {
-        private const val version = "0.20.0-1.4-M1"
+        private const val version = "1.1.0"
 
-        object Runtime {
-          object Core :
-            Dependency(group = Kotlinx, name = "kotlinx-serialization-runtime", version = version)
+        object Json :
+          Dependency(group = Kotlinx, name = "kotlinx-serialization-json", version = version)
 
-          object Common :
-            Dependency(
-              group = Kotlinx,
-              name = "kotlinx-serialization-runtime-common",
-              version = version
-            )
-
-          object Native :
-            Dependency(
-              group = Kotlinx,
-              name = "kotlinx-serialization-runtime-native",
-              version = version
-            )
-
-          object Js :
-            Dependency(
-              group = Kotlinx,
-              name = "kotlinx-serialization-runtime-js",
-              version = version
-            )
-        }
+//        object Runtime {
+//          object Core :
+//            Dependency(group = Kotlinx, name = "kotlinx-serialization-runtime", version = version)
+//
+//          object Common :
+//            Dependency(
+//              group = Kotlinx,
+//              name = "kotlinx-serialization-runtime-common",
+//              version = version
+//            )
+//
+//          object Native :
+//            Dependency(
+//              group = Kotlinx,
+//              name = "kotlinx-serialization-runtime-native",
+//              version = version
+//            )
+//
+//          object Js :
+//            Dependency(
+//              group = Kotlinx,
+//              name = "kotlinx-serialization-runtime-js",
+//              version = version
+//            )
+//        }
       }
     }
   }
 
   object Ktor : Group(name = "io.ktor") {
-    private const val version = "1.3.2-1.4-M1"
+    private const val version = "1.5.1"
 
     object Client {
 
@@ -138,7 +152,7 @@ object Deps {
 
   object Badoo {
     object Reaktive : Group(name = "com.badoo.reaktive") {
-      private const val version = "1.1.19"
+      private const val version = "1.1.21"
 
       object Reaktive : Dependency(group = Badoo.Reaktive, name = "reaktive", version = version)
       object Jvm : Dependency(group = Badoo.Reaktive, name = "reaktive-jvm", version = version)
@@ -156,7 +170,7 @@ object Deps {
   }
 
   object MVIKotlin : Group(name = "com.arkivanov.mvikotlin") {
-    private const val version = "2.0.0"
+    private const val version = "2.0.3"
 
     object Core : Dependency(group = MVIKotlin, name = "mvikotlin", version = version)
     object Main : Dependency(group = MVIKotlin, name = "mvikotlin-main", version = version)
@@ -170,7 +184,7 @@ object Deps {
   }
 
   object Muirwik : Group(name = "com.ccfraser.muirwik") {
-    private const val version = "0.4.1"
+    private const val version = "0.6.7"
 
     object Components : Dependency(group = Muirwik, name = "muirwik-components", version = version)
   }

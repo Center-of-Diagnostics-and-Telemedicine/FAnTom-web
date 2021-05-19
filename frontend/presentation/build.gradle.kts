@@ -1,6 +1,8 @@
+buildTargets = setOf(BuildTarget.Js)
+
 setupMultiplatform()
 
-kotlinProject {
+kotlinCompat {
   sourceSets {
     commonMain {
       dependencies {

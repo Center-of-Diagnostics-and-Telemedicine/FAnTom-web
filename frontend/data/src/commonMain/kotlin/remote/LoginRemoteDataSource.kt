@@ -20,7 +20,7 @@ object LoginRemoteDataSource : LoginRemote {
   override suspend fun auth(request: AuthorizationRequest): AuthorizationResponse {
     return client.post {
       apiUrl(LOGIN_ROUTE)
-      body = Json.stringify(AuthorizationRequest.serializer(), request)
+      body = Json.encodeToString(AuthorizationRequest.serializer(), request)
     }
   }
 

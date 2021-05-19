@@ -1,13 +1,15 @@
+buildTargets = setOf(BuildTarget.Js)
+
 setupMultiplatform()
 
-kotlinProject {
-    sourceSets {
-        commonMain {
-            dependencies {
-                implementation(Deps.MVIKotlin.Core)
-                api(project(":frontend:domain"))
-                implementation(Deps.Badoo.Reaktive.Utils)
-            }
-        }
+kotlinCompat {
+  sourceSets {
+    commonMain {
+      dependencies {
+        implementation(Deps.MVIKotlin.Core)
+        api(project(":frontend:domain"))
+        implementation(Deps.Badoo.Reaktive.Utils)
+      }
     }
+  }
 }

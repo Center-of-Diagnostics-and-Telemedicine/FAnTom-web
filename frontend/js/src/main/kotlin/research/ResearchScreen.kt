@@ -38,7 +38,7 @@ import styled.css
 import styled.styledDiv
 import view.ResearchView
 import view.initialResearchModel
-import kotlin.browser.window
+import kotlinx.browser.window
 
 class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchState>(prps) {
 
