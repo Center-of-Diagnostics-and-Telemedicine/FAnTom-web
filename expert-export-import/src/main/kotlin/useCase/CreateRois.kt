@@ -1,9 +1,9 @@
 package useCase
 
 import model.*
-import repository.repository.ExpertMarksRepository
-import repository.repository.ExportedRoisRepository
-import repository.repository.UserExpertMarkRepository
+import repository.ExpertMarksRepository
+import repository.ExportedRoisRepository
+import repository.UserExpertMarkRepository
 
 suspend fun createRois(
   researches: List<ResearchModel>,

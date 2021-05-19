@@ -1,5 +1,4 @@
 plugins {
-  id("java")
   kotlin("jvm")
 }
 
@@ -8,8 +7,6 @@ version = "unspecified"
 repositories {
   mavenCentral()
 }
-
-val ktor_version = "1.3.2"
 
 dependencies {
   implementation(kotlin("stdlib"))
@@ -22,7 +19,7 @@ dependencies {
   implementation(Deps.FlyWay.Core)
 
   implementation(Deps.Ktor.Client.Apache) // todo(check if this really needed)
-  implementation("io.ktor:ktor-client-logging-jvm:$ktor_version")
+  implementation(Deps.Ktor.Client.Logging)
   implementation(Deps.Ktor.Client.Serialization.Jvm)
   implementation(Deps.Ktor.Client.Json.Jvm)
 

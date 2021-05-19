@@ -4,7 +4,6 @@ import ExpertMarksVos
 import model.ExpertMarkModel
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
-import repository.dao.ExpertMarksDaoFacade
 import toExportedMarkModel
 
 class ExpertMarksDao : ExpertMarksDaoFacade {

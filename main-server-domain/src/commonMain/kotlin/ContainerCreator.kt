@@ -1,14 +1,12 @@
 package repository
 
 
-import java.io.File
-
 interface ContainerCreator {
   suspend fun createContainer(
     userId: Int,
     accessionNumber: String,
     port: Int,
-    researchDir: File,
+    researchDir: String,
     onClose: () -> Unit
   ): String
 

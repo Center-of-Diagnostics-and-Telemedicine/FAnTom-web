@@ -1,17 +1,15 @@
-plugins {
-  id("java")
-  kotlin("jvm")
-}
+buildTargets = setOf(BuildTarget.Jvm)
 
-version = "unspecified"
+setupMultiplatform()
 
-repositories {
-  mavenCentral()
-}
-
-dependencies {
-  implementation(Deps.Jetbrains.Kotlin.StdLib.Jvm)
-  implementation(Deps.Jetbrains.Kotlinx.Coroutines.Core)
-  api(project(":api-models"))
-  api(project(":backend-models"))
+kotlinCompat {
+  sourceSets {
+    commonMain {
+      dependencies {
+        implementation(Deps.Jetbrains.Kotlinx.Coroutines.Core)
+        api(project(":api-models"))
+        api(project(":backend-models"))
+      }
+    }
+  }
 }

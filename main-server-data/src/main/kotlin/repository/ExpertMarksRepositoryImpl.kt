@@ -1,8 +1,7 @@
 package repository
 
 import model.ExpertMarkModel
-import repository.dao.ExpertMarksDaoFacade
-import repository.repository.ExpertMarksRepository
+import dao.ExpertMarksDaoFacade
 
 class ExpertMarksRepositoryImpl(
   private val expertMarksDao: ExpertMarksDaoFacade

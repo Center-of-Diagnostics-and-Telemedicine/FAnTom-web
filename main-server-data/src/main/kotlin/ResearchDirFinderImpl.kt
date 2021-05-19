@@ -5,20 +5,20 @@ class ResearchDirFinderImpl(
   override val rootDirPath: String
 ) : ResearchDirFinder {
 
-  override fun getResearchPath(accessionName: String, rootDir: File): File {
+  override fun getResearchPath(accessionName: String): String {
 
-    val listFiles = rootDir.listFiles()
+    val listFiles = File(rootDirPath).listFiles()
     if (listFiles != null) {
       for (file in listFiles) {
         if (file.isDirectory) {
           if (file.name.contains(accessionName)) {
             debugLog("file contains $accessionName")
-            return file
+            return file.path
           }
         } else if (file.isFile) {
           if (file.name.contains(accessionName)) {
             debugLog("file contains $accessionName")
-            return file
+            return file.path
           }
         }
       }

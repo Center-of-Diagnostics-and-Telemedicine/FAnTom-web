@@ -19,7 +19,6 @@ application {
 //}
 
 dependencies {
-    val logbackVersion = "1.2.3"
 
     implementation(kotlin("stdlib"))
 

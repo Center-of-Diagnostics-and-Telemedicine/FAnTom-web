@@ -34,11 +34,11 @@ class ContainerCreatorImpl(
     userId: Int,
     accessionNumber: String,
     port: Int,
-    researchDir: File,
+    researchDir: String,
     onClose: () -> Unit
   ): String {
 
-    val createResponse = createContainerRequest(port, researchDir).exec()
+    val createResponse = createContainerRequest(port, File(researchDir)).exec()
     debugLog("call start container cmd")
     dockerClient.startContainerCmd(createResponse.id).exec()
     debugLog("call wait container cmd")

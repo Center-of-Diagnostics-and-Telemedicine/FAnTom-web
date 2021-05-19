@@ -6,8 +6,8 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import model.*
 import repository.ResearchRepository
-import repository.repository.ExpertMarksRepository
-import repository.repository.UserExpertMarkRepository
+import repository.ExpertMarksRepository
+import repository.UserExpertMarkRepository
 import util.ExpertMarks
 import util.user
 

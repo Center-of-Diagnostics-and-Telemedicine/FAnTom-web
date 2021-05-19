@@ -1,8 +1,7 @@
 package repository
 
 import model.ExportedRoiModel
-import repository.dao.ExportedRoisDaoFacade
-import repository.repository.ExportedRoisRepository
+import dao.ExportedRoisDaoFacade
 
 class ExportedRoisRepositoryImpl(
   private val exportedMarksDao: ExportedRoisDaoFacade

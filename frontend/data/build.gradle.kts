@@ -28,7 +28,6 @@ kotlinCompat {
         implementation(Deps.Ktor.Client.Common)
         implementation(Deps.Ktor.Client.Json.Jvm)
         implementation(Deps.Ktor.Client.Serialization.Jvm)
-
       }
     }
   }

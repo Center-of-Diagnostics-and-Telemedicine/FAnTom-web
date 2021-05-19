@@ -4,7 +4,6 @@ import ExpertRoisVos
 import model.ExportedRoiModel
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
-import repository.dao.ExportedRoisDaoFacade
 import toExportedInstanceModel
 
 class ExportedRoisDao : ExportedRoisDaoFacade {

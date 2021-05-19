@@ -1,4 +1,4 @@
-package repository.dao
+package dao
 
 import model.ExpertMarkModel
 
