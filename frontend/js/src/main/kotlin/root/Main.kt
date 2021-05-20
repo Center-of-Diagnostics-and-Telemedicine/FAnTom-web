@@ -69,9 +69,9 @@ private class Application {
 
 }
 
-fun main() {
-  Application().start()
-}
+//fun main() {
+//  Application().start()
+//}
 
 fun Any.debugLog(text: String?) {
   if (text.isNullOrEmpty().not() && DEBUG)
