@@ -10,9 +10,6 @@ fun main() {
   render(document.getElementById("app")) {
     mStylesProvider("jss-insertion-point") {
       mThemeProvider {
-        br {}
-        br {}
-
         child(App::class) {}
       }
     }

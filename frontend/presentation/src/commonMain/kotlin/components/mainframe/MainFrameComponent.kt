@@ -2,6 +2,7 @@ package components.mainframe
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.RouterState
+import com.arkivanov.decompose.push
 import com.arkivanov.decompose.router
 import com.arkivanov.decompose.statekeeper.Parcelable
 import com.arkivanov.decompose.value.Value
@@ -9,13 +10,15 @@ import com.badoo.reaktive.base.Consumer
 import components.Consumer
 import components.listroot.ListRoot
 import components.mainframe.MainFrame.Child
+import components.mainframe.MainFrame.Dependencies
 import components.research.Research
 
 internal class MainFrameComponent(
   componentContext: ComponentContext,
+  dependencies: Dependencies,
   private val research: (ComponentContext, researchId: Int, Consumer<Research.Output>) -> Research,
   private val list: (ComponentContext, Consumer<ListRoot.Output>) -> ListRoot,
-) : MainFrame, ComponentContext by componentContext {
+) : MainFrame, ComponentContext by componentContext, Dependencies by dependencies {
 
   private val router =
     router<Configuration, Child>(
@@ -34,12 +37,17 @@ internal class MainFrameComponent(
         )
     }
 
-  private fun onListOutput(any: Any) {
-    TODO("Not yet implemented")
+  private fun onListOutput(output: ListRoot.Output) {
+    when (output) {
+      is ListRoot.Output.NavigateToResearch ->
+        router.push(Configuration.Research(output.researchId))
+    }
   }
 
-  private fun onResearchOutput(any: Any) {
-    TODO("Not yet implemented")
+  private fun onResearchOutput(output: Research.Output) {
+    when (output) {
+      else -> throw NotImplementedError("onResearchOutput not impelmented $output")
+    }
   }
 
   private sealed class Configuration : Parcelable {

@@ -26,8 +26,6 @@ class MainFrameUi(props: Props<MainFrame>) : RenderableComponent<MainFrame, Stat
   override fun RBuilder.render() {
     mCssBaseline()
 
-    val model = state.routerState
-
     themeContext.Consumer { theme ->
       styledDiv {
         when (val child = state.routerState.activeChild.instance) {

@@ -9,12 +9,14 @@ import com.badoo.reaktive.base.Consumer
 import components.Consumer
 import components.list.ResearchList
 import components.listfilters.ListFilters
+import components.listroot.ListRoot.Dependencies
 
 internal class ListRootComponent(
   componentContext: ComponentContext,
+  dependencies: Dependencies,
   private val filter: (ComponentContext, Consumer<ListFilters.Output>) -> ListFilters,
   private val list: (ComponentContext, Consumer<ResearchList.Output>) -> ResearchList,
-) : ListRoot, ComponentContext by componentContext {
+) : ListRoot, ComponentContext by componentContext, Dependencies by dependencies {
 
   private val filtersRouter =
     router(
@@ -29,17 +31,22 @@ internal class ListRootComponent(
     router(
       initialConfiguration = Configuration.List,
       key = "ListRouter",
-      childFactory = { conf, ctx -> ListRoot.List(list(ctx, Consumer(::onEditOutput))) }
+      childFactory = { conf, ctx -> ListRoot.List(list(ctx, Consumer(::onListOutput))) }
     )
 
   override val listRouterState: Value<RouterState<*, ListRoot.List>> = listRouter.state
 
-  private fun onFilterOutput(any: Any) {
-    TODO("Not yet implemented")
+  private fun onFilterOutput(output: ListFilters.Output) {
+    when (output) {
+      else -> throw NotImplementedError("onFilterOutput not implemented $output")
+    }
   }
 
-  private fun onEditOutput(any: Any) {
-    TODO("Not yet implemented")
+  private fun onListOutput(output: ResearchList.Output) {
+    when (output) {
+      is ResearchList.Output.ItemSelected ->
+        listRootOutput.onNext(ListRoot.Output.NavigateToResearch(output.researchId))
+    }
   }
 
   private sealed class Configuration : Parcelable {

@@ -6,9 +6,7 @@ import com.arkivanov.decompose.lifecycle.destroy
 import com.arkivanov.decompose.lifecycle.resume
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
-import com.ccfraser.muirwik.components.mContainer
 import com.ccfraser.muirwik.components.mCssBaseline
-import com.ccfraser.muirwik.components.styles.Breakpoint
 import components.root.MyRoot
 import decompose.myroot.MyRootUi
 import local.LoginLocalDataSource
@@ -56,9 +54,6 @@ class App : RComponent<RProps, RState>() {
 
   override fun RBuilder.render() {
     mCssBaseline()
-
-    mContainer(maxWidth = Breakpoint.xs) {
-      renderableChild(MyRootUi::class, myRoot)
-    }
+    renderableChild(MyRootUi::class, myRoot)
   }
 }

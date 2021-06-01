@@ -16,7 +16,7 @@ interface ListFilters {
 
   data class Model(
     val items: List<Filter>,
-    val current: Filter
+    val current: Filter,
   )
 
   interface Dependencies {
@@ -25,7 +25,6 @@ interface ListFilters {
   }
 
   sealed class Output {
-    data class ItemSelected(val researchId: Int) : Output()
   }
 }
 

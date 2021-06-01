@@ -5,9 +5,7 @@ import com.arkivanov.decompose.value.Value
 import com.arkivanov.decompose.value.operator.map
 import components.asValue
 import components.getStore
-import components.list.ResearchList.Dependencies
-import components.list.ResearchList.Model
-import components.list.ResearchList.Output
+import components.list.ResearchList.*
 import store.list.ListStore.Intent
 
 internal class ListResearchComponent(
@@ -24,6 +22,7 @@ internal class ListResearchComponent(
     }
 
   override val models: Value<Model> = store.asValue().map(stateToModel)
+
   override fun reload() {
     store.accept(Intent.ReloadRequested)
   }

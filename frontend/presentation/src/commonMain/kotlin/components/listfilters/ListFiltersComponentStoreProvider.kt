@@ -8,6 +8,8 @@ import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
 import com.badoo.reaktive.utils.ensureNeverFrozen
 import model.Category
 import model.Filter
+import model.allCategories
+import model.allFilters
 import store.list.FilterStore
 import store.list.FilterStore.*
 
@@ -15,10 +17,17 @@ internal class ListFiltersComponentStoreProvider(
   private val storeFactory: StoreFactory,
 ) {
 
+  val initialState: State = State(
+    filters = allFilters,
+    currentFilter = Filter.All,
+    categories = allCategories,
+    currentCategory = Category.All
+  )
+
   fun provide(): FilterStore =
     object : FilterStore, Store<Intent, State, Label> by storeFactory.create(
       name = "FilterStore",
-      initialState = State(),
+      initialState = initialState,
       executorFactory = ::ExecutorImpl,
       reducer = ReducerImpl
     ) {

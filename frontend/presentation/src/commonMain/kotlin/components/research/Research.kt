@@ -24,7 +24,6 @@ interface Research {
   }
 
   sealed class Output {
-    data class ItemSelected(val researchId: Int) : Output()
   }
 }
 

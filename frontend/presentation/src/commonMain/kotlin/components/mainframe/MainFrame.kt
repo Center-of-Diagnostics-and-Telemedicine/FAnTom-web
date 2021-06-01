@@ -36,6 +36,7 @@ interface MainFrame {
 fun MainFrame(componentContext: ComponentContext, dependencies: Dependencies): MainFrame =
   MainFrameComponent(
     componentContext = componentContext,
+    dependencies = dependencies,
     list = { childContext, output ->
       ListRoot(
         componentContext = childContext,

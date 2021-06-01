@@ -11,10 +11,6 @@ import components.listroot.ListRoot.Dependencies
 import repository.LoginRepository
 import repository.ResearchRepository
 
-//todo make main frame
-//todo there (in main frame) will be list and research screens
-//todo make this for proper navigation
-
 interface ListRoot {
 
   val filtersRouterState: Value<RouterState<*, Filters>>
@@ -35,7 +31,7 @@ interface ListRoot {
   data class List(val component: ResearchList)
 
   sealed class Output {
-
+    data class NavigateToResearch(val researchId: Int) : Output()
   }
 }
 
@@ -43,6 +39,7 @@ interface ListRoot {
 fun ListRoot(componentContext: ComponentContext, dependencies: Dependencies): ListRoot =
   ListRootComponent(
     componentContext = componentContext,
+    dependencies = dependencies,
     filter = { childContext, output ->
       ListFilters(
         componentContext = childContext,
