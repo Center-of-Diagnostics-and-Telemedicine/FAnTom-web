@@ -8,7 +8,6 @@ import kotlinx.css.*
 import list.*
 import react.RBuilder
 import react.RState
-import styled.styledDiv
 
 class ListResearchUi(props: Props<ResearchList>) : RenderableComponent<ResearchList, State>(
   props = props,
@@ -20,9 +19,7 @@ class ListResearchUi(props: Props<ResearchList>) : RenderableComponent<ResearchL
   }
 
   override fun RBuilder.render() {
-    styledDiv {
-      mTypography { +"this is research list ui" }
-    }
+    researchList(state.model.items, onClick = { component.onItemClick(it.id) })
   }
 
 

@@ -13,7 +13,7 @@ import model.allFilters
 import store.list.FilterStore
 import store.list.FilterStore.*
 
-internal class ListFiltersComponentStoreProvider(
+internal class ListFiltersStoreProvider(
   private val storeFactory: StoreFactory,
 ) {
 

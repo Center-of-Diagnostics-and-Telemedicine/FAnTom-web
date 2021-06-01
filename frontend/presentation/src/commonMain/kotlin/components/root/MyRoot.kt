@@ -8,8 +8,7 @@ import com.badoo.reaktive.base.Consumer
 import components.login.Login
 import components.mainframe.MainFrame
 import components.root.MyRoot.Dependencies
-import repository.LoginRepository
-import repository.ResearchRepository
+import repository.*
 
 interface MyRoot {
 
@@ -22,8 +21,11 @@ interface MyRoot {
 
   interface Dependencies {
     val storeFactory: StoreFactory
-    val repository: LoginRepository
     val researchRepository: ResearchRepository
+    val mipRepository: MipRepository
+    val brightnessRepository: BrightnessRepository
+    val loginRepository: LoginRepository
+    val marksRepository: MarksRepository
   }
 }
 

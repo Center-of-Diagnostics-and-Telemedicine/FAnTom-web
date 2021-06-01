@@ -28,7 +28,7 @@ fun RBuilder.researchList(items: List<Research>, onClick: (Research) -> Unit) {
   }
 }
 
-private fun StyledElementBuilder<MGridProps>.researchCard(
+private fun RBuilder.researchCard(
   breakpoints: MGridBreakpoints,
   onClick: (Research) -> Unit,
   research: Research

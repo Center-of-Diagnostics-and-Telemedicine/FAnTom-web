@@ -22,7 +22,6 @@ interface ListRoot {
 
   interface Dependencies {
     val storeFactory: StoreFactory
-    val repository: LoginRepository
     val researchRepository: ResearchRepository
     val listRootOutput: Consumer<Output>
   }

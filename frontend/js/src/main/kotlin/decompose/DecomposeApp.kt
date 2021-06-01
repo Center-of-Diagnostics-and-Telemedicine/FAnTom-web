@@ -16,11 +16,9 @@ import react.RComponent
 import react.RProps
 import react.RState
 import remote.LoginRemoteDataSource
+import remote.MarksRemoteDataSource
 import remote.ResearchRemoteDataSource
-import repository.LoginRepository
-import repository.LoginRepositoryImpl
-import repository.ResearchRepository
-import repository.ResearchRepositoryImpl
+import repository.*
 
 
 class App : RComponent<RProps, RState>() {
@@ -38,10 +36,20 @@ class App : RComponent<RProps, RState>() {
     token = loginRepositoryImpl.local::getToken
   )
 
+  val mipRepositoryImpl = MipRepositoryImpl()
+  val brightnessRepositoryImpl = BrightnessRepositoryImpl()
+  val marksRepositoryImpl = MarksRepositoryImpl(
+    remote = MarksRemoteDataSource,
+    token = loginRepositoryImpl.local::getToken
+  )
+
   private val myRoot = MyRoot(ctx, dependencies = object : MyRoot.Dependencies {
     override val storeFactory: StoreFactory = DefaultStoreFactory
-    override val repository: LoginRepository = loginRepositoryImpl
+    override val loginRepository: LoginRepository = loginRepositoryImpl
     override val researchRepository: ResearchRepository = researchRepositoryImpl
+    override val mipRepository: MipRepository = mipRepositoryImpl
+    override val brightnessRepository: BrightnessRepository = brightnessRepositoryImpl
+    override val marksRepository: MarksRepository = marksRepositoryImpl
   })
 
   override fun componentDidMount() {

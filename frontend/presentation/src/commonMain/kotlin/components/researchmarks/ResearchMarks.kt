@@ -1,13 +1,14 @@
-package components.research
+package components.researchmarks
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.base.Consumer
-import components.research.Research.Dependencies
+import components.researchmarks.ResearchMarks.Dependencies
+import repository.MarksRepository
 import repository.ResearchRepository
 
-interface Research {
+interface ResearchMarks {
 
   val models: Value<Model>
 
@@ -19,14 +20,16 @@ interface Research {
   interface Dependencies {
     val storeFactory: StoreFactory
     val researchRepository: ResearchRepository
-    val researchOutput: Consumer<Output>
+    val marksRepository: MarksRepository
+    val marksOutput: Consumer<Output>
     val researchId: Int
   }
 
   sealed class Output {
+    object Unauthorized : Output()
   }
 }
 
 @Suppress("FunctionName") // Factory function
-fun Research(componentContext: ComponentContext, dependencies: Dependencies): Research =
-  ResearchComponent(componentContext, dependencies)
+fun ResearchMarks(componentContext: ComponentContext, dependencies: Dependencies): ResearchMarks =
+  ResearchMarksComponent(componentContext, dependencies)

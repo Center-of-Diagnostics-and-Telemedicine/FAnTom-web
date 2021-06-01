@@ -21,7 +21,7 @@ internal class LoginComponent(
   private val store: LoginStore = instanceKeeper.getStore {
     LoginStoreProvider(
       storeFactory = storeFactory,
-      repository = dependencies.repository
+      repository = dependencies.loginRepository
     ).provide()
   }
 

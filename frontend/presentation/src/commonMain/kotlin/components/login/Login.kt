@@ -27,7 +27,7 @@ interface Login {
   interface Dependencies {
     val storeFactory: StoreFactory
     val loginOutput: Consumer<Output>
-    val repository: LoginRepository
+    val loginRepository: LoginRepository
   }
 
   sealed class Output {

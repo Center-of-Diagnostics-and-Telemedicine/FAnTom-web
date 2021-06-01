@@ -1,9 +1,6 @@
 package components.mainframe
 
-import com.arkivanov.decompose.ComponentContext
-import com.arkivanov.decompose.RouterState
-import com.arkivanov.decompose.push
-import com.arkivanov.decompose.router
+import com.arkivanov.decompose.*
 import com.arkivanov.decompose.statekeeper.Parcelable
 import com.arkivanov.decompose.value.Value
 import com.badoo.reaktive.base.Consumer
@@ -11,12 +8,12 @@ import components.Consumer
 import components.listroot.ListRoot
 import components.mainframe.MainFrame.Child
 import components.mainframe.MainFrame.Dependencies
-import components.research.Research
+import components.research.ResearchRoot
 
 internal class MainFrameComponent(
   componentContext: ComponentContext,
   dependencies: Dependencies,
-  private val research: (ComponentContext, researchId: Int, Consumer<Research.Output>) -> Research,
+  private val researchRoot: (ComponentContext, researchId: Int, Consumer<ResearchRoot.Output>) -> ResearchRoot,
   private val list: (ComponentContext, Consumer<ListRoot.Output>) -> ListRoot,
 ) : MainFrame, ComponentContext by componentContext, Dependencies by dependencies {
 
@@ -33,7 +30,7 @@ internal class MainFrameComponent(
       is Configuration.List -> Child.List(list(componentContext, Consumer(::onListOutput)))
       is Configuration.Research ->
         Child.Research(
-          research(componentContext, configuration.researchId, Consumer(::onResearchOutput))
+          researchRoot(componentContext, configuration.researchId, Consumer(::onResearchOutput))
         )
     }
 
@@ -44,8 +41,9 @@ internal class MainFrameComponent(
     }
   }
 
-  private fun onResearchOutput(output: Research.Output) {
+  private fun onResearchOutput(output: ResearchRoot.Output) {
     when (output) {
+      ResearchRoot.Output.Back -> router.pop()
       else -> throw NotImplementedError("onResearchOutput not impelmented $output")
     }
   }

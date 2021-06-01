@@ -8,7 +8,7 @@ import decompose.RenderableComponent
 import decompose.list.ListRootUi
 import decompose.mainframe.MainFrameUi.State
 import decompose.renderableChild
-import decompose.research.ResearchUi
+import decompose.research.ResearchRootUi
 import kotlinx.css.*
 import react.RBuilder
 import react.RState
@@ -30,7 +30,7 @@ class MainFrameUi(props: Props<MainFrame>) : RenderableComponent<MainFrame, Stat
       styledDiv {
         when (val child = state.routerState.activeChild.instance) {
           is Child.List -> renderableChild(ListRootUi::class, child.component)
-          is Child.Research -> renderableChild(ResearchUi::class, child.component)
+          is Child.Research -> renderableChild(ResearchRootUi::class, child.component)
         }
       }
     }

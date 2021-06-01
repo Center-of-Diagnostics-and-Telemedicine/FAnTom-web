@@ -14,12 +14,14 @@ import com.badoo.reaktive.single.observeOn
 import com.badoo.reaktive.single.subscribeOn
 import com.badoo.reaktive.utils.ensureNeverFrozen
 import com.badoo.reaktive.utils.printStack
-import model.*
+import model.BASE_ERROR
+import model.ResearchApiExceptions
+import model.ResearchSlicesSizesDataNew
 import repository.ResearchRepository
 import store.research.ResearchStore
 import store.research.ResearchStore.*
 
-internal class ResearchComponentStoreProvider(
+internal class ResearchStoreProvider(
   private val storeFactory: StoreFactory,
   private val repository: ResearchRepository,
   private val researchId: Int

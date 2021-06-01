@@ -1,7 +1,7 @@
 package components.research
 
-import components.research.Research.Model
-import components.research.Research.Output
+import components.research.ResearchRoot.Model
+import components.research.ResearchRoot.Output
 import store.research.ResearchStore.Label
 import store.research.ResearchStore.State
 

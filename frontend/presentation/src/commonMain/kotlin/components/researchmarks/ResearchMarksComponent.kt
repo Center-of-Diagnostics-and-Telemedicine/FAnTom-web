@@ -1,30 +1,27 @@
-package components.listfilters
+package components.researchmarks
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.decompose.value.operator.map
 import components.asValue
 import components.getStore
-import components.listfilters.ListFilters.Dependencies
-import components.listfilters.ListFilters.Model
-import model.Filter
-import store.list.FilterStore.Intent
+import components.researchmarks.ResearchMarks.Dependencies
+import components.researchmarks.ResearchMarks.Model
 
-internal class ListFiltersComponent(
+internal class ResearchMarksComponent(
   componentContext: ComponentContext,
   dependencies: Dependencies
-) : ListFilters, ComponentContext by componentContext, Dependencies by dependencies {
+) : ResearchMarks, ComponentContext by componentContext, Dependencies by dependencies {
 
   private val store =
     instanceKeeper.getStore {
-      ListFiltersStoreProvider(
+      ResearchMarksStoreProvider(
         storeFactory = storeFactory,
+        researchRepository = researchRepository,
+        marksRepository = marksRepository,
+        researchId = researchId
       ).provide()
     }
 
   override val models: Value<Model> = store.asValue().map(stateToModel)
-
-  override fun onItemClick(filter: Filter) {
-    store.accept(Intent.HandleFilterClick(filter))
-  }
 }

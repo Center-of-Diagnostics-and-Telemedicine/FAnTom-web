@@ -7,9 +7,8 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.base.Consumer
 import components.listroot.ListRoot
 import components.mainframe.MainFrame.Dependencies
-import components.research.Research
-import repository.LoginRepository
-import repository.ResearchRepository
+import components.research.ResearchRoot
+import repository.*
 
 interface MainFrame {
 
@@ -17,13 +16,16 @@ interface MainFrame {
 
   sealed class Child {
     data class List(val component: ListRoot) : Child()
-    data class Research(val component: components.research.Research) : Child()
+    data class Research(val component: components.research.ResearchRoot) : Child()
   }
 
   interface Dependencies {
     val storeFactory: StoreFactory
-    val repository: LoginRepository
+    val loginRepository: LoginRepository
     val researchRepository: ResearchRepository
+    val mipRepository: MipRepository
+    val brightnessRepository: BrightnessRepository
+    val marksRepository: MarksRepository
     val mainFrameOutput: Consumer<Output>
   }
 
@@ -45,11 +47,11 @@ fun MainFrame(componentContext: ComponentContext, dependencies: Dependencies): M
         }
       )
     },
-    research = { childContext, researchId, output ->
-      Research(
+    researchRoot = { childContext, researchId, output ->
+      ResearchRoot(
         componentContext = childContext,
-        dependencies = object : Research.Dependencies, Dependencies by dependencies {
-          override val researchOutput: Consumer<Research.Output> = output
+        dependencies = object : ResearchRoot.Dependencies, Dependencies by dependencies {
+          override val researchOutput: Consumer<ResearchRoot.Output> = output
           override val researchId: Int = researchId
         }
       )
