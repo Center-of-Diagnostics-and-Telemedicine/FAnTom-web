@@ -5,12 +5,11 @@ import com.arkivanov.decompose.value.Value
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.base.Consumer
 import components.login.Login.Dependencies
-import controller.LoginController
 import repository.LoginRepository
 
 interface Login {
 
-  val models: Value<Model>
+  val model: Value<Model>
 
   fun auth()
 
@@ -27,7 +26,7 @@ interface Login {
 
   interface Dependencies {
     val storeFactory: StoreFactory
-    val mainOutput: Consumer<Output>
+    val loginOutput: Consumer<Output>
     val repository: LoginRepository
   }
 

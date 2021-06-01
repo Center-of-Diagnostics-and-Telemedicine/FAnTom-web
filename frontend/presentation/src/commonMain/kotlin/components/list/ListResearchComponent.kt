@@ -10,7 +10,7 @@ import components.list.ResearchList.Model
 import components.list.ResearchList.Output
 import store.list.ListStore.Intent
 
-internal class ResearchListComponent(
+internal class ListResearchComponent(
   componentContext: ComponentContext,
   dependencies: Dependencies
 ) : ResearchList, ComponentContext by componentContext, Dependencies by dependencies {
@@ -29,6 +29,6 @@ internal class ResearchListComponent(
   }
 
   override fun onItemClick(researchId: Int) {
-    listOutput.onNext(Output.ItemSelected(researchId))
+    researchListOutput.onNext(Output.ItemSelected(researchId))
   }
 }

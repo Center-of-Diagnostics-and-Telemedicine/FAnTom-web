@@ -9,8 +9,8 @@ import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.ccfraser.muirwik.components.mContainer
 import com.ccfraser.muirwik.components.mCssBaseline
 import com.ccfraser.muirwik.components.styles.Breakpoint
-import decompose.myroot.MyRoot
-import decompose.myroot.MyRootR
+import components.root.MyRoot
+import decompose.myroot.MyRootUi
 import local.LoginLocalDataSource
 import local.ResearchLocalDataSource
 import react.RBuilder
@@ -58,7 +58,7 @@ class App : RComponent<RProps, RState>() {
     mCssBaseline()
 
     mContainer(maxWidth = Breakpoint.xs) {
-      renderableChild(MyRootR::class, myRoot)
+      renderableChild(MyRootUi::class, myRoot)
     }
   }
 }

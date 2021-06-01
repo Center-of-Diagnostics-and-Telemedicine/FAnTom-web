@@ -1,23 +1,17 @@
-package components.list
+package components.research
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.base.Consumer
-import components.list.ResearchList.Dependencies
-import model.Research
+import components.research.Research.Dependencies
 import repository.ResearchRepository
 
-interface ResearchList {
+interface Research {
 
   val models: Value<Model>
 
-  fun reload()
-
-  fun onItemClick(researchId: Int)
-
   data class Model(
-    val items: List<Research>,
     val error: String,
     val loading: Boolean
   )
@@ -25,7 +19,8 @@ interface ResearchList {
   interface Dependencies {
     val storeFactory: StoreFactory
     val researchRepository: ResearchRepository
-    val listOutput: Consumer<Output>
+    val researchOutput: Consumer<Output>
+    val researchId: Int
   }
 
   sealed class Output {
@@ -34,5 +29,5 @@ interface ResearchList {
 }
 
 @Suppress("FunctionName") // Factory function
-fun ResearchList(componentContext: ComponentContext, dependencies: Dependencies): ResearchList =
-  ResearchListComponent(componentContext, dependencies)
+fun Research(componentContext: ComponentContext, dependencies: Dependencies): Research =
+  ResearchComponent(componentContext, dependencies)

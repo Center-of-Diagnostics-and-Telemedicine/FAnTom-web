@@ -7,8 +7,9 @@ import com.ccfraser.muirwik.components.button.mButton
 import com.ccfraser.muirwik.components.form.MFormControlMargin
 import com.ccfraser.muirwik.components.form.MFormControlVariant
 import components.login.Login
+import components.login.Login.Model
 import decompose.RenderableComponent
-import decompose.login.LoginR.State
+import decompose.login.LoginUi.State
 import kotlinx.css.*
 import kotlinx.html.InputType
 import org.w3c.dom.HTMLInputElement
@@ -21,13 +22,13 @@ import styled.css
 import styled.styledDiv
 import styled.styledForm
 
-class LoginR(props: Props<Login>) : RenderableComponent<Login, State>(
+class LoginUi(props: Props<Login>) : RenderableComponent<Login, State>(
   props = props,
-  initialState = State(model = props.component.models.value)
+  initialState = State(model = props.component.model.value)
 ) {
 
   init {
-    component.models.bindToState { model = it }
+    component.model.bindToState { model = it }
   }
 
   override fun RBuilder.render() {
@@ -155,6 +156,6 @@ class LoginR(props: Props<Login>) : RenderableComponent<Login, State>(
   }
 
   class State(
-    var model: Login.Model,
+    var model: Model,
   ) : RState
 }

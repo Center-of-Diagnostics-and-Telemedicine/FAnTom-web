@@ -26,10 +26,10 @@ internal class LoginComponent(
   }
 
   init {
-    store.labels.mapNotNull(labelsToOutput).subscribe(onNext = mainOutput::onNext)
+    store.labels.mapNotNull(labelsToOutput).subscribe(onNext = loginOutput::onNext)
   }
 
-  override val models: Value<Model> = store.asValue().map(stateToModel)
+  override val model: Value<Model> = store.asValue().map(stateToModel)
 
   override fun auth() {
     store.accept(Intent.Auth)
