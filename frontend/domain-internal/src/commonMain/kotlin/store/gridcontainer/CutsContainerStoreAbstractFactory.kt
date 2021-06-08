@@ -4,15 +4,15 @@ import com.arkivanov.mvikotlin.core.store.*
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.badoo.reaktive.utils.ensureNeverFrozen
 import model.Cut
-import model.Grid
-import model.ResearchSlicesSizesDataNew
+import model.GridModel
+import model.ResearchData
 import model.initialFourGrid
 import store.gridcontainer.CutsContainerStore.Intent
 import store.gridcontainer.CutsContainerStore.State
 
 abstract class CutsContainerStoreAbstractFactory(
   private val storeFactory: StoreFactory,
-  data: ResearchSlicesSizesDataNew
+  data: ResearchData
 ) {
 
   val initialState: State = State(
@@ -36,7 +36,7 @@ abstract class CutsContainerStoreAbstractFactory(
   protected abstract fun createExecutor(): Executor<Intent, Unit, State, Result, Nothing>
 
   protected sealed class Result : JvmSerializable {
-    data class Loaded(val items: List<Cut>, val grid: Grid) : Result()
+    data class Loaded(val items: List<Cut>, val grid: GridModel) : Result()
   }
 
   private object ReducerImpl : Reducer<State, Result> {

@@ -17,11 +17,11 @@ interface CutsContainerController {
   interface Dependencies {
     val storeFactory: StoreFactory
     val lifecycle: Lifecycle
-    val data: ResearchSlicesSizesDataNew
+    val data: ResearchData
   }
 
   sealed class Input {
-    data class ChangeGrid(val grid: Grid) : Input()
+    data class ChangeGrid(val grid: GridModel) : Input()
     data class ChangeCutType(val cutType: CutType, val cut: Cut) : Input()
 
     object Idle : Input()

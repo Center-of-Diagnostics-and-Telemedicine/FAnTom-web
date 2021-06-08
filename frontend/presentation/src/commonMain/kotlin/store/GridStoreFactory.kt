@@ -3,15 +3,15 @@ package store
 import com.arkivanov.mvikotlin.core.store.Executor
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
-import model.Grid
+import model.GridModel
 import model.GridType
-import model.ResearchSlicesSizesDataNew
+import model.ResearchData
 import store.tools.GridStore.*
 import store.tools.GridStoreAbstractFactory
 
 internal class GridStoreFactory(
   storeFactory: StoreFactory,
-  private val data: ResearchSlicesSizesDataNew
+  private val data: ResearchData
 ) : GridStoreAbstractFactory(
   storeFactory = storeFactory,
   data = data
@@ -36,7 +36,7 @@ internal class GridStoreFactory(
       intent: Intent.HandleOpenFullCut
     ) {
       if (getState().previous == null) {
-        val grid = Grid.Single(intent.cut.type)
+        val grid = GridModel.Single(intent.cut.type)
         dispatch(Result.GridChangedTemporary(previous = getState().current, current = grid))
         publish(Label.GridChanged(grid))
       } else {
@@ -52,7 +52,7 @@ internal class GridStoreFactory(
     }
 
     private fun changeFilter(gridType: GridType) {
-      val grid = Grid.build(gridType, data.type, data.doseReport, data)
+      val grid = GridModel.build(gridType, data.type, data.doseReport, data)
       dispatch(Result.GridChanged(grid))
       publish(Label.GridChanged(grid))
     }

@@ -9,30 +9,60 @@ sealed class GridType {
   object Four : GridType()
 }
 
-sealed class Grid(val types: List<CutType>) {
+sealed interface MyGrid {
+  val types: List<CutType>
+}
+
+interface SingleGrid : MyGrid {
+  val cut: CutType
+}
+
+interface TwoVerticalGrid : MyGrid {
+  val top: CutType
+  val bottom: CutType
+}
+
+interface TwoHorizontalGrid : MyGrid {
+  val left: CutType
+  val right: CutType
+}
+
+interface FourGrid : MyGrid {
+  val topLeft: CutType
+  val topRight: CutType
+  val bottomLeft: CutType
+  val bottomRight: CutType
+}
+
+sealed class GridModel(override val types: List<CutType>) : MyGrid {
   data class Single(
-    val cut: CutType
-  ) : Grid(listOf(cut))
+    override val cut: CutType
+  ) : GridModel(listOf(cut)), SingleGrid
 
   data class TwoVertical(
-    val top: CutType,
-    val bottom: CutType
-  ) : Grid(listOf(top, bottom))
+    override val top: CutType,
+    override val bottom: CutType
+  ) : GridModel(listOf(top, bottom)), TwoVerticalGrid
 
   data class TwoHorizontal(
-    val left: CutType,
-    val right: CutType
-  ) : Grid(listOf(left, right))
+    override val left: CutType,
+    override val right: CutType
+  ) : GridModel(listOf(left, right)), TwoHorizontalGrid
 
   data class Four(
-    val topLeft: CutType,
-    val topRight: CutType,
-    val bottomLeft: CutType,
-    val bottomRight: CutType
-  ) : Grid(listOf(topLeft, topRight, bottomLeft, bottomRight))
+    override val topLeft: CutType,
+    override val topRight: CutType,
+    override val bottomLeft: CutType,
+    override val bottomRight: CutType
+  ) : GridModel(listOf(topLeft, topRight, bottomLeft, bottomRight)), FourGrid
 
   companion object {
-    fun build(type: GridType, researchType: ResearchType, doseReport: Boolean, data: ResearchSlicesSizesDataNew): Grid {
+    fun build(
+      type: GridType,
+      researchType: ResearchType,
+      doseReport: Boolean,
+      data: ResearchData
+    ): GridModel {
       return when (type) {
         GridType.Single -> initialSingleGrid(researchType)
         GridType.TwoVertical -> initialTwoVerticalGrid(researchType)
@@ -43,27 +73,27 @@ sealed class Grid(val types: List<CutType>) {
   }
 }
 
-fun initialSingleGrid(researchType: ResearchType): Grid {
+fun initialSingleGrid(researchType: ResearchType): GridModel {
   return when (researchType) {
-    ResearchType.CT -> Grid.Single(CutType.CT_AXIAL)
-    ResearchType.MG -> Grid.Single(CutType.MG_RCC)
-    ResearchType.DX -> Grid.Single(CutType.DX_GENERIC)
+    ResearchType.CT -> GridModel.Single(CutType.CT_AXIAL)
+    ResearchType.MG -> GridModel.Single(CutType.MG_RCC)
+    ResearchType.DX -> GridModel.Single(CutType.DX_GENERIC)
   }
 }
 
-fun initialTwoVerticalGrid(researchType: ResearchType): Grid {
+fun initialTwoVerticalGrid(researchType: ResearchType): GridModel {
   return when (researchType) {
-    ResearchType.CT -> Grid.TwoVertical(CutType.CT_AXIAL, CutType.CT_FRONTAL)
-    ResearchType.MG -> Grid.TwoVertical(CutType.MG_RCC, CutType.MG_LCC)
-    ResearchType.DX -> Grid.TwoVertical(CutType.DX_GENERIC, CutType.DX_LEFT_LATERAL)
+    ResearchType.CT -> GridModel.TwoVertical(CutType.CT_AXIAL, CutType.CT_FRONTAL)
+    ResearchType.MG -> GridModel.TwoVertical(CutType.MG_RCC, CutType.MG_LCC)
+    ResearchType.DX -> GridModel.TwoVertical(CutType.DX_GENERIC, CutType.DX_LEFT_LATERAL)
   }
 }
 
-fun initialTwoHorizontalGrid(researchType: ResearchType): Grid {
+fun initialTwoHorizontalGrid(researchType: ResearchType): GridModel {
   return when (researchType) {
-    ResearchType.CT -> Grid.TwoHorizontal(CutType.CT_FRONTAL, CutType.CT_SAGITTAL)
-    ResearchType.MG -> Grid.TwoHorizontal(CutType.MG_RCC, CutType.MG_LCC)
-    ResearchType.DX -> Grid.TwoHorizontal(CutType.DX_GENERIC, CutType.DX_LEFT_LATERAL)
+    ResearchType.CT -> GridModel.TwoHorizontal(CutType.CT_FRONTAL, CutType.CT_SAGITTAL)
+    ResearchType.MG -> GridModel.TwoHorizontal(CutType.MG_RCC, CutType.MG_LCC)
+    ResearchType.DX -> GridModel.TwoHorizontal(CutType.DX_GENERIC, CutType.DX_LEFT_LATERAL)
   }
 }
 
@@ -71,9 +101,9 @@ fun initialFourGrid(
   researchType: ResearchType,
   doseReport: Boolean,
   modalities: Map<Int, ModalityModel>
-): Grid {
+): GridModel {
   return when (researchType) {
-    ResearchType.CT -> Grid.Four(
+    ResearchType.CT -> GridModel.Four(
       topLeft = CutType.CT_AXIAL,
       topRight = CutType.EMPTY,
       bottomLeft = CutType.CT_FRONTAL,
@@ -82,12 +112,12 @@ fun initialFourGrid(
     ResearchType.MG -> {
       if (doseReport) {
         when (modalities.size) {
-          1 -> Grid.Single(CutType.getByValue(modalities.entries.first().key))
-          2 -> Grid.TwoHorizontal(
+          1 -> GridModel.Single(CutType.getByValue(modalities.entries.first().key))
+          2 -> GridModel.TwoHorizontal(
             left = CutType.getByValue(modalities.entries.first().key),
             right = CutType.getByValue(modalities.entries.last().key)
           )
-          3 -> Grid.Four(
+          3 -> GridModel.Four(
             topLeft = CutType.CT_0,
             topRight = CutType.CT_1,
             bottomLeft = CutType.CT_2,
@@ -96,7 +126,7 @@ fun initialFourGrid(
           else -> throw NotImplementedError("initialFourGrid doseReport no variants")
         }
       } else {
-        Grid.Four(
+        GridModel.Four(
           topLeft = CutType.MG_RCC,
           topRight = CutType.MG_LCC,
           bottomLeft = CutType.MG_RMLO,
@@ -104,7 +134,7 @@ fun initialFourGrid(
         )
       }
     }
-    ResearchType.DX -> Grid.Four(
+    ResearchType.DX -> GridModel.Four(
       topLeft = CutType.DX_GENERIC,
       topRight = CutType.DX_POSTERO_ANTERIOR,
       bottomLeft = CutType.DX_LEFT_LATERAL,
@@ -139,26 +169,26 @@ private val doseReportCuts = listOf(
   CutType.CT_2
 )
 
-fun Grid.buildCuts(data: ResearchSlicesSizesDataNew): List<Cut> =
+fun GridModel.buildCuts(data: ResearchData): List<Cut> =
   when (this) {
-    is Grid.Single -> listOf(buildSingleCut(types.first(), data))
-    is Grid.TwoVertical,
-    is Grid.TwoHorizontal -> buildTwoCuts(types, data)
-    is Grid.Four -> buildFourCuts(types, data)
+    is GridModel.Single -> listOf(buildSingleCut(types.first(), data))
+    is GridModel.TwoVertical,
+    is GridModel.TwoHorizontal -> buildTwoCuts(types, data)
+    is GridModel.Four -> buildFourCuts(types, data)
   }
 
-fun Grid.updateCuts(data: ResearchSlicesSizesDataNew, oldCut: Cut, newCutType: CutType): List<Cut> {
+fun GridModel.updateCuts(data: ResearchData, oldCut: Cut, newCutType: CutType): List<Cut> {
   val newTypes = types.replace(newValue = newCutType) { it == oldCut.type }
   return when (this) {
-    is Grid.Single -> listOf(buildSingleCut(newCutType, data))
-    is Grid.TwoVertical,
-    is Grid.TwoHorizontal -> buildTwoCuts(newTypes, data)
-    is Grid.Four -> buildFourCuts(newTypes, data)
+    is GridModel.Single -> listOf(buildSingleCut(newCutType, data))
+    is GridModel.TwoVertical,
+    is GridModel.TwoHorizontal -> buildTwoCuts(newTypes, data)
+    is GridModel.Four -> buildFourCuts(newTypes, data)
   }
 }
 
 
-private fun buildSingleCut(type: CutType, data: ResearchSlicesSizesDataNew): Cut =
+private fun buildSingleCut(type: CutType, data: ResearchData): Cut =
   when (type) {
     CutType.EMPTY -> emptyCut(data)
     CutType.CT_AXIAL -> axialCut(data, ctCuts.filter { it != type })
@@ -178,7 +208,7 @@ private fun buildSingleCut(type: CutType, data: ResearchSlicesSizesDataNew): Cut
   }
 
 
-private fun buildTwoCuts(types: List<CutType>, data: ResearchSlicesSizesDataNew): List<Cut> {
+private fun buildTwoCuts(types: List<CutType>, data: ResearchData): List<Cut> {
   val first = types.first()
   val second = types.last()
 
@@ -188,12 +218,12 @@ private fun buildTwoCuts(types: List<CutType>, data: ResearchSlicesSizesDataNew)
   return listOf(firstResult, secondResult)
 }
 
-private fun buildFourCuts(types: List<CutType>, data: ResearchSlicesSizesDataNew): List<Cut> =
+private fun buildFourCuts(types: List<CutType>, data: ResearchData): List<Cut> =
   types.map {
     buildEmptySingleCut(it, data)
   }
 
-private fun buildEmptySingleCut(type: CutType, data: ResearchSlicesSizesDataNew): Cut {
+private fun buildEmptySingleCut(type: CutType, data: ResearchData): Cut {
   val list = listOf<CutType>()
   return when (type) {
     CutType.EMPTY -> emptyCut(data)
@@ -217,7 +247,7 @@ private fun buildEmptySingleCut(type: CutType, data: ResearchSlicesSizesDataNew)
 private fun cutWithTwoTypes(
   main: CutType,
   second: CutType,
-  data: ResearchSlicesSizesDataNew,
+  data: ResearchData,
 ): Cut {
   return when (main) {
     CutType.EMPTY -> emptyCut(data)
@@ -241,7 +271,7 @@ private fun cutWithTwoTypes(
 }
 
 
-private fun emptyCut(data: ResearchSlicesSizesDataNew): Cut =
+private fun emptyCut(data: ResearchData): Cut =
   Cut(
     type = CutType.EMPTY,
     data = ModalityModel(0, 0, 0.0, 0.0, 0, 0, 0),
@@ -252,7 +282,7 @@ private fun emptyCut(data: ResearchSlicesSizesDataNew): Cut =
     availableCutsForChange = listOf()
   )
 
-private fun axialCut(data: ResearchSlicesSizesDataNew, types: List<CutType>): Cut =
+private fun axialCut(data: ResearchData, types: List<CutType>): Cut =
   Cut(
     type = CutType.CT_AXIAL,
     data = data.modalities[SLICE_TYPE_CT_AXIAL]
@@ -274,7 +304,7 @@ private fun axialCut(data: ResearchSlicesSizesDataNew, types: List<CutType>): Cu
     availableCutsForChange = types
   )
 
-private fun frontalCut(data: ResearchSlicesSizesDataNew, types: List<CutType>): Cut =
+private fun frontalCut(data: ResearchData, types: List<CutType>): Cut =
   Cut(
     type = CutType.CT_FRONTAL,
     data = data.modalities[SLICE_TYPE_CT_FRONTAL]
@@ -296,7 +326,7 @@ private fun frontalCut(data: ResearchSlicesSizesDataNew, types: List<CutType>): 
     availableCutsForChange = types
   )
 
-private fun sagittalCut(data: ResearchSlicesSizesDataNew, types: List<CutType>): Cut =
+private fun sagittalCut(data: ResearchData, types: List<CutType>): Cut =
   Cut(
     type = CutType.CT_SAGITTAL,
     data = data.modalities[SLICE_TYPE_CT_SAGITTAL]
@@ -318,7 +348,7 @@ private fun sagittalCut(data: ResearchSlicesSizesDataNew, types: List<CutType>):
     availableCutsForChange = types
   )
 
-private fun mgRcc(data: ResearchSlicesSizesDataNew, types: List<CutType>): Cut =
+private fun mgRcc(data: ResearchData, types: List<CutType>): Cut =
   Cut(
     type = CutType.MG_RCC,
     data = data.modalities[SLICE_TYPE_MG_RCC]
@@ -330,7 +360,7 @@ private fun mgRcc(data: ResearchSlicesSizesDataNew, types: List<CutType>): Cut =
     availableCutsForChange = types
   )
 
-private fun mgLcc(data: ResearchSlicesSizesDataNew, types: List<CutType>): Cut =
+private fun mgLcc(data: ResearchData, types: List<CutType>): Cut =
   Cut(
     type = CutType.MG_LCC,
     data = data.modalities[SLICE_TYPE_MG_LCC]
@@ -342,7 +372,7 @@ private fun mgLcc(data: ResearchSlicesSizesDataNew, types: List<CutType>): Cut =
     availableCutsForChange = types
   )
 
-private fun mgRmlo(data: ResearchSlicesSizesDataNew, types: List<CutType>): Cut =
+private fun mgRmlo(data: ResearchData, types: List<CutType>): Cut =
   Cut(
     type = CutType.MG_RMLO,
     data = data.modalities[SLICE_TYPE_MG_RMLO]
@@ -354,7 +384,7 @@ private fun mgRmlo(data: ResearchSlicesSizesDataNew, types: List<CutType>): Cut 
     availableCutsForChange = types
   )
 
-private fun mgLmlo(data: ResearchSlicesSizesDataNew, types: List<CutType>): Cut =
+private fun mgLmlo(data: ResearchData, types: List<CutType>): Cut =
   Cut(
     type = CutType.MG_LMLO,
     data = data.modalities[SLICE_TYPE_MG_LMLO]
@@ -366,7 +396,7 @@ private fun mgLmlo(data: ResearchSlicesSizesDataNew, types: List<CutType>): Cut 
     availableCutsForChange = types
   )
 
-private fun dxGeneric(data: ResearchSlicesSizesDataNew, types: List<CutType>): Cut =
+private fun dxGeneric(data: ResearchData, types: List<CutType>): Cut =
   Cut(
     type = CutType.DX_GENERIC,
     data = data.modalities[SLICE_TYPE_DX_GENERIC]!!,
@@ -377,7 +407,7 @@ private fun dxGeneric(data: ResearchSlicesSizesDataNew, types: List<CutType>): C
     availableCutsForChange = types
   )
 
-private fun dxPosteroAnterior(data: ResearchSlicesSizesDataNew, types: List<CutType>): Cut =
+private fun dxPosteroAnterior(data: ResearchData, types: List<CutType>): Cut =
   Cut(
     type = CutType.DX_POSTERO_ANTERIOR,
     data = data.modalities[SLICE_TYPE_DX_POSTERO_ANTERIOR]!!,
@@ -388,7 +418,7 @@ private fun dxPosteroAnterior(data: ResearchSlicesSizesDataNew, types: List<CutT
     availableCutsForChange = listOf()
   )
 
-private fun dxLeftLateral(data: ResearchSlicesSizesDataNew, types: List<CutType>): Cut =
+private fun dxLeftLateral(data: ResearchData, types: List<CutType>): Cut =
   Cut(
     type = CutType.DX_LEFT_LATERAL,
     data = data.modalities[SLICE_TYPE_DX_LEFT_LATERAL]!!,
@@ -399,7 +429,7 @@ private fun dxLeftLateral(data: ResearchSlicesSizesDataNew, types: List<CutType>
     availableCutsForChange = listOf()
   )
 
-private fun dxRightLateral(data: ResearchSlicesSizesDataNew, types: List<CutType>): Cut =
+private fun dxRightLateral(data: ResearchData, types: List<CutType>): Cut =
   Cut(
     type = CutType.DX_RIGHT_LATERAL,
     data = data.modalities[SLICE_TYPE_DX_RIGHT_LATERAL]!!,
@@ -410,7 +440,7 @@ private fun dxRightLateral(data: ResearchSlicesSizesDataNew, types: List<CutType
     availableCutsForChange = listOf()
   )
 
-private fun ct0(data: ResearchSlicesSizesDataNew, types: List<CutType>): Cut =
+private fun ct0(data: ResearchData, types: List<CutType>): Cut =
   Cut(
     type = CutType.CT_0,
     data = data.modalities[SLICE_TYPE_CT_0]!!,
@@ -421,7 +451,7 @@ private fun ct0(data: ResearchSlicesSizesDataNew, types: List<CutType>): Cut =
     availableCutsForChange = types
   )
 
-private fun ct1(data: ResearchSlicesSizesDataNew, types: List<CutType>): Cut =
+private fun ct1(data: ResearchData, types: List<CutType>): Cut =
   Cut(
     type = CutType.CT_1,
     data = data.modalities[SLICE_TYPE_CT_1]!!,
@@ -432,7 +462,7 @@ private fun ct1(data: ResearchSlicesSizesDataNew, types: List<CutType>): Cut =
     availableCutsForChange = types
   )
 
-private fun ct2(data: ResearchSlicesSizesDataNew, types: List<CutType>): Cut =
+private fun ct2(data: ResearchData, types: List<CutType>): Cut =
   Cut(
     type = CutType.CT_2,
     data = data.modalities[SLICE_TYPE_CT_2]!!,

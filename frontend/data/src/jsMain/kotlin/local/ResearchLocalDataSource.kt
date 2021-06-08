@@ -11,6 +11,8 @@ actual object ResearchLocalDataSource : ResearchLocal {
 
   override suspend fun getAll(): List<Research> = map.value.values.toList()
 
+  override suspend fun get(researchId: Int): Research = map.value[researchId.toString()]!!
+
   override suspend fun save(research: Research) {
     val id = research.id.toString()
     map.update {

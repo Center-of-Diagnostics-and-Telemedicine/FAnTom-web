@@ -33,7 +33,7 @@ class MarksControllerTest {
       override val marksRepository: MarksRepository = TestMarksRepository()
       override val marksOutput: (MarksController.Output) -> Unit = { output += it }
       override val research: Research = testResearches.first()
-      override val data: ResearchSlicesSizesDataNew = researchData
+      override val data: ResearchData = researchData
     }
 
   private val marksView = TestMarksView()

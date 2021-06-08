@@ -4,7 +4,7 @@ import com.arkivanov.mvikotlin.core.store.*
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.badoo.reaktive.utils.ensureNeverFrozen
 import model.Presets
-import model.ResearchSlicesSizesDataNew
+import model.ResearchData
 import model.initialPreset
 import model.initialPresets
 import store.tools.PresetStore.*
@@ -12,7 +12,7 @@ import store.tools.PresetStore.*
 
 abstract class PresetStoreAbstractFactory(
   private val storeFactory: StoreFactory,
-  private val data: ResearchSlicesSizesDataNew
+  private val data: ResearchData
 ) {
 
   fun create(): PresetStore =

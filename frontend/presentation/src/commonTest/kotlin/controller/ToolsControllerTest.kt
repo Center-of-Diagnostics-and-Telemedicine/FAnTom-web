@@ -32,7 +32,7 @@ class ToolsControllerTest {
       override val storeFactory: StoreFactory = DefaultStoreFactory
       override val lifecycle: Lifecycle = this@ToolsControllerTest.lifecycle
       override val toolsOutput: (ToolsController.Output) -> Unit = { output += it }
-      override val data: ResearchSlicesSizesDataNew = researchData
+      override val data: ResearchData = researchData
       override val mipRepository: MipRepository = TestMipRepository()
       override val brightnessRepository: BrightnessRepository = TestBrightnessRepository()
     }

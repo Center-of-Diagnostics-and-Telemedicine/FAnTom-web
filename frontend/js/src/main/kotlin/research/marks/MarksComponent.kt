@@ -7,7 +7,6 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.observable.Observable
 import com.badoo.reaktive.observable.subscribe
 import com.ccfraser.muirwik.components.mDivider
-import com.ccfraser.muirwik.components.mIcon
 import com.ccfraser.muirwik.components.mPaper
 import com.ccfraser.muirwik.components.table.*
 import com.ccfraser.muirwik.components.themeContext
@@ -15,13 +14,11 @@ import components.alert
 import controller.MarksController
 import controller.MarksControllerImpl
 import destroy
-import kotlinx.css.padding
 import model.Research
-import model.ResearchSlicesSizesDataNew
+import model.ResearchData
 import react.*
 import repository.MarksRepository
 import resume
-import styled.css
 import view.MarksView
 import view.MarksView.Model
 import view.initialMarksModel
@@ -116,7 +113,7 @@ class MarksComponent(prps: MarksProps) : RComponent<MarksProps, MarksState>(prps
     val marksInput: Observable<MarksController.Input>
     val marksRepository: MarksRepository
     val research: Research
-    val data: ResearchSlicesSizesDataNew
+    val data: ResearchData
     val isPlanar: Boolean
   }
 }

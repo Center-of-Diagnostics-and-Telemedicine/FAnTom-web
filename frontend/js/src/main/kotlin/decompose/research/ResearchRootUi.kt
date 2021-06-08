@@ -10,10 +10,10 @@ import components.screenLoading
 import decompose.RenderableComponent
 import decompose.renderableChild
 import decompose.research.ResearchRootUi.State
+import decompose.research.cuts.CutsContainerUi
 import decompose.research.marks.MarksUi
 import decompose.research.tools.ToolsUi
-import kotlinx.css.LinearDimension
-import kotlinx.css.px
+import kotlinx.css.*
 import react.RBuilder
 import react.RState
 import react.setState
@@ -27,6 +27,7 @@ class ResearchRootUi(props: Props<ResearchRoot>) : RenderableComponent<ResearchR
     model = props.component.models.value,
     toolsRouterState = props.component.toolsRouterState.value,
     marksRouterState = props.component.marksRouterState.value,
+    cutsContainerRouterState = props.component.cutsContainerRouterState.value,
     toolsOpen = true,
     marksOpen = true
   )
@@ -40,6 +41,7 @@ class ResearchRootUi(props: Props<ResearchRoot>) : RenderableComponent<ResearchR
     component.models.bindToState { model = it }
     component.toolsRouterState.bindToState { toolsRouterState = it }
     component.marksRouterState.bindToState { marksRouterState = it }
+    component.cutsContainerRouterState.bindToState { cutsContainerRouterState = it }
   }
 
   override fun RBuilder.render() {
@@ -52,37 +54,30 @@ class ResearchRootUi(props: Props<ResearchRoot>) : RenderableComponent<ResearchR
         css(ResearchScreen.ResearchStyles.appFrameContainerStyle)
 //        if (state.model.data != null) {
         leftMenu()
-        //          contentWithCuts(state.model)
-//        rightMenu(drawerLittleMargin) {
-//          renderableChild(MarksUi::class, state.marksRouterState.activeChild.instance.component)
-//        }
-//          when (category) {
-//            Category.Covid -> {
-//              rightMenu(drawerBigMargin) {
-//                covidMarks(dependencies = covidMarksDependencies(state.model))
-//              }
-//            }
-//            Category.Expert -> {
-//              rightMenu(drawerLittleMargin) {
-//                expertMarks(dependencies = expertMarksDependencies(state.model))
-//              }
-//            }
-//            Category.DoseReport -> {
-//              rightMenu(drawerLittleMargin) {
-//                marks(dependencies = marksDependencies(state.model.data))
-//                doseReportMarks(dependencies = doseReportMarksDependencies(state.model))
-//              }
-//            }
-//            else -> {
-//              rightMenu(drawerLittleMargin) {
-//                marks(dependencies = marksDependencies(state.model.data))
-//              }
-//            }
-//          }
-//        }
 
+        contentWithCuts()
+        rightMenu(drawerLittleMargin) {
+          when (val marksInstance = state.marksRouterState.activeChild.instance) {
+            is MarksChild.Data -> renderableChild(MarksUi::class, marksInstance.component)
+          }
+        }
+      }
+    }
+  }
+
+  private fun RBuilder.contentWithCuts() {
+    styledDiv {
+      css {
+        display = Display.flex
+        height = 100.pct
+        minHeight = 100.vh
+        marginLeft = if (state.toolsOpen) drawerWidth.px else drawerLittleMargin
+        marginRight = if (state.marksOpen) drawerWidth.px else drawerLittleMargin
       }
 
+      when (val cutsInstance = state.cutsContainerRouterState.activeChild.instance) {
+        is CutsChild.Data -> renderableChild(CutsContainerUi::class, cutsInstance.component)
+      }
     }
   }
 
@@ -97,7 +92,9 @@ class ResearchRootUi(props: Props<ResearchRoot>) : RenderableComponent<ResearchR
         open = state.toolsOpen,
         onClick = { setState { toolsOpen = !state.toolsOpen } }
       )
-      renderableChild(ToolsUi::class, state.toolsRouterState.activeChild.instance.component)
+      when (val toolsInstance = state.toolsRouterState.activeChild.instance) {
+        is ToolsChild.Data -> renderableChild(ToolsUi::class, toolsInstance.component)
+      }
     }
   }
 
@@ -126,8 +123,9 @@ class ResearchRootUi(props: Props<ResearchRoot>) : RenderableComponent<ResearchR
 
   class State(
     var model: Model,
-    var toolsRouterState: RouterState<*, Tools>,
-    var marksRouterState: RouterState<*, Marks>,
+    var toolsRouterState: RouterState<*, ToolsChild>,
+    var marksRouterState: RouterState<*, MarksChild>,
+    var cutsContainerRouterState: RouterState<*, CutsChild>,
     var toolsOpen: Boolean,
     var marksOpen: Boolean,
   ) : RState

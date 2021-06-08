@@ -6,7 +6,6 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.observable.Observable
 import com.badoo.reaktive.subject.behavior.BehaviorSubject
 import com.ccfraser.muirwik.components.*
-import com.ccfraser.muirwik.components.dialog.*
 import components.alert
 import components.screenLoading
 import controller.*
@@ -189,17 +188,17 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
       override val toolsInput: Observable<ToolsController.Input> =
         this@ResearchScreen.toolsInputObservable
       override val open: Boolean = state.toolsOpen
-      override val data: ResearchSlicesSizesDataNew = model.data!!
+      override val data: ResearchData = model.data!!
     }
 
-  private fun marksDependencies(sizesData: ResearchSlicesSizesDataNew?) =
+  private fun marksDependencies(sizesData: ResearchData?) =
     object : MarksComponent.Dependencies,
       Dependencies by props.dependencies {
       override val marksOutput: (MarksController.Output) -> Unit = ::marksOutput
       override val marksInput: Observable<MarksController.Input> =
         this@ResearchScreen.marksInputObservable
       override val isPlanar: Boolean = sizesData!!.type.isPlanar()
-      override val data: ResearchSlicesSizesDataNew = sizesData!!
+      override val data: ResearchData = sizesData!!
     }
 
   private fun covidMarksDependencies(model: ResearchView.Model) =
@@ -208,7 +207,7 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
       override val covidMarksOutput: (CovidMarksController.Output) -> Unit = ::covidMarksOutput
       override val covidMarksInput: Observable<CovidMarksController.Input> =
         this@ResearchScreen.covidMarksInputObservable
-      override val data: ResearchSlicesSizesDataNew = model.data!!
+      override val data: ResearchData = model.data!!
       override val open: Boolean = state.marksOpen
     }
 
@@ -216,7 +215,7 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
     object : ExpertMarksComponent.Dependencies,
       Dependencies by props.dependencies {
       override val expertMarksOutput: (ExpertMarksController.Output) -> Unit = ::expertMarksOutput
-      override val data: ResearchSlicesSizesDataNew = model.data!!
+      override val data: ResearchData = model.data!!
       override val expertMarksInput: Observable<ExpertMarksController.Input> =
         this@ResearchScreen.expertMarksInputObservable
       override val open: Boolean = state.marksOpen
@@ -226,7 +225,7 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
     object : DoseReportMarksComponent.Dependencies,
       Dependencies by props.dependencies {
       override val expertMarksOutput: (ExpertMarksController.Output) -> Unit = ::expertMarksOutput
-      override val data: ResearchSlicesSizesDataNew = model.data!!
+      override val data: ResearchData = model.data!!
       override val expertMarksInput: Observable<ExpertMarksController.Input> =
         this@ResearchScreen.expertMarksInputObservable
       override val open: Boolean = state.marksOpen
@@ -235,7 +234,7 @@ class ResearchScreen(prps: ResearchProps) : RComponent<ResearchProps, ResearchSt
   private fun cutsDependencies(model: ResearchView.Model) =
     object : CutsContainerViewComponent.Dependencies,
       Dependencies by props.dependencies {
-      override val data: ResearchSlicesSizesDataNew = model.data!!
+      override val data: ResearchData = model.data!!
       override val cutsContainerInputs: Observable<CutsContainerController.Input> =
         this@ResearchScreen.cutsContainerInputObservable
       override val cutsContainerOutput: (CutsContainerController.Output) -> Unit =

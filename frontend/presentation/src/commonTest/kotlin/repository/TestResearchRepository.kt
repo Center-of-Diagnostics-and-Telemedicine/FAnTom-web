@@ -31,7 +31,7 @@ class TestResearchRepository : ResearchRepository {
     }
   }
 
-  override suspend fun initResearch(researchId: Int, doseReport: Boolean): ResearchSlicesSizesDataNew {
+  override suspend fun initResearch(researchId: Int, doseReport: Boolean): ResearchData {
     val research = testResearches.firstOrNull { it.id == researchId }
       ?: throw ResearchInitializationException
     return when (research.modality) {

@@ -8,7 +8,7 @@ import kotlinx.css.properties.transition
 import kotlinx.html.js.onClickFunction
 import kotlinx.html.js.onMouseOutFunction
 import kotlinx.html.js.onMouseOverFunction
-import model.Grid
+import model.GridModel
 import model.GridType
 import react.*
 import react.dom.div
@@ -137,7 +137,7 @@ class CutsGridComponent : RComponent<CutsGridProps, CutsGridState>() {
 }
 
 interface CutsGridProps : RProps {
-  var current: Grid
+  var current: GridModel
   var onClick: (GridType) -> Unit
 }
 
@@ -149,7 +149,7 @@ class CutsGridState(
 ) : RState
 
 fun RBuilder.grid(
-  current: Grid,
+  current: GridModel,
   onClick: (GridType) -> Unit
 ) = child(CutsGridComponent::class) {
   attrs.onClick = onClick

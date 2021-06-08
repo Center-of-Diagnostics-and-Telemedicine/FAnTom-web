@@ -73,10 +73,10 @@ class CutsContainerViewComponent(prps: CutsContainerProps) :
       styledDiv {
         css(columnOfRowsStyle)
         when (cutsModel.grid) {
-          is Grid.Single -> singleCutContainer(cutsModel.items.first())
-          is Grid.TwoVertical -> twoVerticalCutsContainer(cutsModel.items)
-          is Grid.TwoHorizontal -> twoHorizontalCutsContainer(cutsModel.items)
-          is Grid.Four -> fourCutsContainer(cutsModel.items)
+          is GridModel.Single -> singleCutContainer(cutsModel.items.first())
+          is GridModel.TwoVertical -> twoVerticalCutsContainer(cutsModel.items)
+          is GridModel.TwoHorizontal -> twoHorizontalCutsContainer(cutsModel.items)
+          is GridModel.Four -> fourCutsContainer(cutsModel.items)
         }
       }
     }
@@ -251,7 +251,7 @@ class CutsContainerViewComponent(prps: CutsContainerProps) :
 
   interface Dependencies {
     val storeFactory: StoreFactory
-    val data: ResearchSlicesSizesDataNew
+    val data: ResearchData
     val cutsContainerInputs: Observable<CutsContainerController.Input>
     val cutsContainerOutput: (CutsContainerController.Output) -> Unit
     val cutsInput: Observable<CutController.Input>

@@ -21,7 +21,11 @@ internal class MipStoreProvider(
   fun provide(): MipStore =
     object : MipStore, Store<Intent, State, Label> by storeFactory.create(
       name = "MipStore",
-      initialState = State(),
+      initialState = State(
+        list = listOf(Mip.No, Mip.Average(), Mip.Max()),
+        current = mipRepository.getMip(),
+        currentValue = null
+      ),
 //      bootstrapper = SimpleBootstrapper(Unit),
       executorFactory = ::ExecutorImpl,
       reducer = ReducerImpl

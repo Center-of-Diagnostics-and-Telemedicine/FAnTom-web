@@ -3,7 +3,7 @@ package store.research
 import com.arkivanov.mvikotlin.core.store.*
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.badoo.reaktive.utils.ensureNeverFrozen
-import model.ResearchSlicesSizesDataNew
+import model.ResearchData
 import store.research.ResearchStore.*
 
 abstract class ResearchStoreAbstractFactory(
@@ -27,7 +27,7 @@ abstract class ResearchStoreAbstractFactory(
 
   protected sealed class Result : JvmSerializable {
     object Loading : Result()
-    data class Loaded(val data: ResearchSlicesSizesDataNew) : Result()
+    data class Loaded(val data: ResearchData) : Result()
     data class Error(val error: String) : Result()
 
     object DismissErrorRequested : Result()

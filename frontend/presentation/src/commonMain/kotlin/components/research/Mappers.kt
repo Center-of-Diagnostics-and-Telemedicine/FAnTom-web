@@ -9,7 +9,8 @@ internal val stateToModel: (State) -> Model =
   {
     Model(
       error = it.error,
-      loading = it.loading
+      loading = it.loading,
+      data = it.data
     )
   }
 

@@ -20,7 +20,7 @@ import controller.ToolsController
 import controller.ToolsControllerImpl
 import destroy
 import kotlinx.css.*
-import model.ResearchSlicesSizesDataNew
+import model.ResearchData
 import model.Tool
 import react.*
 import repository.BrightnessRepository
@@ -230,7 +230,7 @@ class ToolsComponent(prps: ToolsProps) : RComponent<ToolsProps, ToolsState>(prps
     val brightnessRepository: BrightnessRepository
     val mipRepository: MipRepository
     val open: Boolean
-    val data: ResearchSlicesSizesDataNew
+    val data: ResearchData
   }
 
   object ToolsStyles : StyleSheet("ToolsStyles", isStatic = true) {

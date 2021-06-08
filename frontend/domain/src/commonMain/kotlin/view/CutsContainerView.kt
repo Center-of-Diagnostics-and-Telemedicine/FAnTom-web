@@ -8,11 +8,11 @@ interface CutsContainerView : MviView<Model, Nothing> {
 
   data class Model(
     val items: List<Cut>,
-    val grid: Grid
+    val grid: GridModel
   )
 }
 
-fun initialCutsContainerModel(type: ResearchType, doseReport: Boolean, data: ResearchSlicesSizesDataNew): Model = Model(
+fun initialCutsContainerModel(type: ResearchType, doseReport: Boolean, data: ResearchData): Model = Model(
   items = listOf(),
   grid = initialFourGrid(type, doseReport, data.modalities)
 )

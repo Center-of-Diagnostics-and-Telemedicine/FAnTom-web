@@ -3,7 +3,7 @@ package controller
 import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import model.Research
-import model.ResearchSlicesSizesDataNew
+import model.ResearchData
 import repository.CovidMarksRepository
 import view.CovidMarksView
 
@@ -22,7 +22,7 @@ interface CovidMarksController {
     val covidMarksRepository: CovidMarksRepository
     val covidMarksOutput: (Output) -> Unit
     val research: Research
-    val data: ResearchSlicesSizesDataNew
+    val data: ResearchData
   }
 
   sealed class Output {

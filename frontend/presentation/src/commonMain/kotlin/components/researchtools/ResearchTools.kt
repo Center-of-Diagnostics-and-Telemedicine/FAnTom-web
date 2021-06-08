@@ -5,18 +5,21 @@ import com.arkivanov.decompose.value.Value
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.base.Consumer
 import components.brightness.Brightness
+import components.grid.Grid
 import components.mip.Mip
 import components.researchtools.ResearchTools.Dependencies
-import model.MyTool
+import model.ResearchData
 import model.Tool
 import repository.BrightnessRepository
 import repository.MipRepository
 
 interface ResearchTools {
 
+  val grid: Grid
   val mip: Mip
   val brightness: Brightness
-//  val preset: Preset
+
+  //  val preset: Preset
   val models: Value<Model>
 
   fun onBackClick()
@@ -32,10 +35,11 @@ interface ResearchTools {
     val toolsOutput: Consumer<Output>
     val mipRepository: MipRepository
     val brightnessRepository: BrightnessRepository
+    val data: ResearchData
   }
 
   sealed class Output {
-    object Back: Output()
+    object Back : Output()
   }
 }
 
@@ -56,6 +60,13 @@ fun ResearchTools(componentContext: ComponentContext, dependencies: Dependencies
         componentContext = childContext,
         dependencies = object : Brightness.Dependencies, Dependencies by dependencies {
           override val brightnessOutput: Consumer<Brightness.Output> = output
+        })
+    },
+    gridFactory = { childContext, output ->
+      Grid(
+        componentContext = childContext,
+        dependencies = object : Grid.Dependencies, Dependencies by dependencies {
+          override val gridOutput: Consumer<Grid.Output> = output
         })
     },
   )

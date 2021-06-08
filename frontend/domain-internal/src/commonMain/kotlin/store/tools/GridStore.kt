@@ -3,7 +3,7 @@ package store.tools
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import model.Cut
-import model.Grid
+import model.GridModel
 import model.GridType
 import store.tools.GridStore.*
 
@@ -16,12 +16,12 @@ interface GridStore : Store<Intent, State, Label> {
   }
 
   data class State(
-    val list: List<Grid> = listOf(),
-    val current: Grid,
-    val previous: Grid?
+    val list: List<GridModel> = listOf(),
+    val current: GridModel,
+    val previous: GridModel?
   ) : JvmSerializable
 
   sealed class Label : JvmSerializable {
-    data class GridChanged(val item: Grid) : Label()
+    data class GridChanged(val item: GridModel) : Label()
   }
 }

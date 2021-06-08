@@ -4,14 +4,14 @@ import com.arkivanov.mvikotlin.core.store.Executor
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
 import model.Presets
-import model.ResearchSlicesSizesDataNew
+import model.ResearchData
 import repository.BrightnessRepository
 import store.tools.PresetStore.*
 import store.tools.PresetStoreAbstractFactory
 
 internal class PresetStoreFactory(
   storeFactory: StoreFactory,
-  data: ResearchSlicesSizesDataNew,
+  data: ResearchData,
   private val brightnessRepository: BrightnessRepository
 ) : PresetStoreAbstractFactory(
   storeFactory = storeFactory,

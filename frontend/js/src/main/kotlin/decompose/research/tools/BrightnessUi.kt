@@ -7,11 +7,15 @@ import com.ccfraser.muirwik.components.transitions.mCollapse
 import components.brightness.Brightness
 import decompose.RenderableComponent
 import decompose.research.tools.BrightnessUi.State
+import kotlinx.css.paddingLeft
 import kotlinx.html.InputType
+import kotlinx.html.js.onClickFunction
+import org.w3c.dom.events.Event
 import react.RBuilder
 import react.RState
-import research.tools.ToolsComponent
+import react.setState
 import styled.css
+import styled.styledDiv
 
 class BrightnessUi(props: Props<Brightness>) : RenderableComponent<Brightness, State>(
   props = props,
@@ -26,17 +30,20 @@ class BrightnessUi(props: Props<Brightness>) : RenderableComponent<Brightness, S
   }
 
   override fun RBuilder.render() {
-    mCollapse(show = state.open) {
-      mList {
-        css(ToolsComponent.ToolsStyles.nested)
-        mListItem {
-          white(state.model.whiteValue, component::onWhiteChanged)
-        }
-        mListItem {
-          black(state.model.blackValue, component::onBlackChanged)
-        }
-        mListItem {
-          gamma(state.model.gammaValue, component::onGammaChanged)
+    styledDiv {
+      attrs.onClickFunction = { setState { open = !state.open } }
+      mCollapse(show = state.open) {
+        mList {
+          css { paddingLeft = 4.spacingUnits }
+          mListItem {
+            white(state.model.whiteValue, component::onWhiteChanged)
+          }
+          mListItem {
+            black(state.model.blackValue, component::onBlackChanged)
+          }
+          mListItem {
+            gamma(state.model.gammaValue, component::onGammaChanged)
+          }
         }
       }
     }
@@ -68,6 +75,8 @@ class BrightnessUi(props: Props<Brightness>) : RenderableComponent<Brightness, S
       onChange = { val value = it.targetInputValue; gammaChanged(value.toDouble()) }
     )
   }
+
+  private fun changeVisibility(event: Event) = setState { open = !open }
 
   class State(
     var model: Brightness.Model,

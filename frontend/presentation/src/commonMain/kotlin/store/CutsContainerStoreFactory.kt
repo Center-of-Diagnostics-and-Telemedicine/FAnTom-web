@@ -15,7 +15,7 @@ import store.gridcontainer.CutsContainerStoreAbstractFactory
 
 internal class CutsContainerStoreFactory(
   storeFactory: StoreFactory,
-  val data: ResearchSlicesSizesDataNew
+  val data: ResearchData
 ) : CutsContainerStoreAbstractFactory(
   storeFactory = storeFactory,
   data = data

@@ -17,7 +17,7 @@ import kotlinx.css.FlexDirection
 import kotlinx.css.display
 import kotlinx.css.flexDirection
 import model.Research
-import model.ResearchSlicesSizesDataNew
+import model.ResearchData
 import react.*
 import repository.ExpertMarksRepository
 import research.expert.ExpertMarksViewProxy
@@ -107,7 +107,7 @@ class DoseReportMarksComponent(prps: DoseReportMarksProps) :
   interface Dependencies {
     val storeFactory: StoreFactory
     val expertMarksOutput: (ExpertMarksController.Output) -> Unit
-    val data: ResearchSlicesSizesDataNew
+    val data: ResearchData
     val expertMarksInput: Observable<ExpertMarksController.Input>
     val expertMarksRepository: ExpertMarksRepository
     val open: Boolean

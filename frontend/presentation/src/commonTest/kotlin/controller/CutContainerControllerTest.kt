@@ -8,8 +8,8 @@ import com.badoo.reaktive.scheduler.overrideSchedulers
 import com.badoo.reaktive.test.scheduler.TestScheduler
 import com.badoo.reaktive.utils.reaktiveUncaughtErrorHandler
 import com.badoo.reaktive.utils.resetReaktiveUncaughtErrorHandler
-import model.Grid
-import model.ResearchSlicesSizesDataNew
+import model.GridModel
+import model.ResearchData
 import model.toResearchSlicesSizesData
 import resume
 import testCut
@@ -28,7 +28,7 @@ class CutContainerControllerTest {
     object : CutsContainerController.Dependencies {
       override val storeFactory: StoreFactory = DefaultStoreFactory
       override val lifecycle: Lifecycle = this@CutContainerControllerTest.lifecycle
-      override val data: ResearchSlicesSizesDataNew = researchData
+      override val data: ResearchData = researchData
     }
 
   private val cutsContainerView = TestCutContainerView()
@@ -55,15 +55,15 @@ class CutContainerControllerTest {
   @Test
   fun shows_new_grid_WHEN_grid_changed() {
     createController()
-    controller.input(CutsContainerController.Input.ChangeGrid(Grid.Single(testCutType)))
+    controller.input(CutsContainerController.Input.ChangeGrid(GridModel.Single(testCutType)))
 
-    assertTrue { cutsContainerView.model.grid is Grid.Single }
+    assertTrue { cutsContainerView.model.grid is GridModel.Single }
   }
 
   @Test
   fun shows_axial_grid_type_WHEN_grid_changed_to_single() {
     createController()
-    controller.input(CutsContainerController.Input.ChangeGrid(Grid.Single(testCutType)))
+    controller.input(CutsContainerController.Input.ChangeGrid(GridModel.Single(testCutType)))
 
     assertEquals(cutsContainerView.model.grid.types.first(), testCutType)
   }

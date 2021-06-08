@@ -10,7 +10,7 @@ import com.badoo.reaktive.test.scheduler.TestScheduler
 import com.badoo.reaktive.utils.reaktiveUncaughtErrorHandler
 import com.badoo.reaktive.utils.resetReaktiveUncaughtErrorHandler
 import model.Research
-import model.ResearchSlicesSizesDataNew
+import model.ResearchData
 import model.toResearchSlicesSizesData
 import repository.CovidMarksRepository
 import resume
@@ -35,7 +35,7 @@ class CovidMarksControllerTest {
       override val covidMarksRepository: CovidMarksRepository = TestCovidMarksRepository()
       override val covidMarksOutput: (CovidMarksController.Output) -> Unit = { output += it }
       override val research: Research = testResearches.first()
-      override val data: ResearchSlicesSizesDataNew = researchData
+      override val data: ResearchData = researchData
     }
 
   private val covidMarksView = TestCovidMarksView()

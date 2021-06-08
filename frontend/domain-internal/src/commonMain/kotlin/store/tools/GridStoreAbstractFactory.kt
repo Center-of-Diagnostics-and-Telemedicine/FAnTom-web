@@ -11,7 +11,7 @@ import store.tools.GridStore.*
 
 abstract class GridStoreAbstractFactory(
   private val storeFactory: StoreFactory,
-  data: ResearchSlicesSizesDataNew
+  data: ResearchData
 ) {
 
   val initialState: State = State(
@@ -39,8 +39,8 @@ abstract class GridStoreAbstractFactory(
 
   protected abstract fun createExecutor(): Executor<Intent, Nothing, State, Result, Label>
   protected sealed class Result : JvmSerializable {
-    data class GridChanged(val grid: Grid) : Result()
-    data class GridChangedTemporary(val previous: Grid, val current: Grid) : Result()
+    data class GridChanged(val grid: GridModel) : Result()
+    data class GridChangedTemporary(val previous: GridModel, val current: GridModel) : Result()
   }
 
   private object ReducerImpl : Reducer<State, Result> {

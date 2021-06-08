@@ -17,7 +17,7 @@ import kotlinx.css.FlexDirection
 import kotlinx.css.display
 import kotlinx.css.flexDirection
 import model.Research
-import model.ResearchSlicesSizesDataNew
+import model.ResearchData
 import react.*
 import repository.CovidMarksRepository
 import resume
@@ -106,7 +106,7 @@ class CovidMarksComponent(prps: CovidMarksProps) :
     val storeFactory: StoreFactory
     val covidMarksRepository: CovidMarksRepository
     val covidMarksOutput: (CovidMarksController.Output) -> Unit
-    val data: ResearchSlicesSizesDataNew
+    val data: ResearchData
     val covidMarksInput: Observable<CovidMarksController.Input>
     val open: Boolean
     val research: Research

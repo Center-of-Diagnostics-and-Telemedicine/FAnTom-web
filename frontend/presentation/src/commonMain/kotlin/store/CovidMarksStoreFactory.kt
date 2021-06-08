@@ -18,7 +18,7 @@ internal class CovidMarksStoreFactory(
   storeFactory: StoreFactory,
   val repository: CovidMarksRepository,
   val research: Research,
-  val data: ResearchSlicesSizesDataNew
+  val data: ResearchData
 ) : CovidMarksStoreAbstractFactory(
   storeFactory = storeFactory
 ) {

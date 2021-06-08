@@ -24,13 +24,13 @@ interface ToolsController {
     val storeFactory: StoreFactory
     val lifecycle: Lifecycle
     val toolsOutput: (Output) -> Unit
-    val data: ResearchSlicesSizesDataNew
+    val data: ResearchData
     val mipRepository: MipRepository
     val brightnessRepository: BrightnessRepository
   }
 
   sealed class Output {
-    data class GridChanged(val grid: Grid) : Output()
+    data class GridChanged(val grid: GridModel) : Output()
     data class BlackChanged(val value: Int) : Output()
     data class WhiteChanged(val value: Int) : Output()
     data class GammaChanged(val value: Double) : Output()

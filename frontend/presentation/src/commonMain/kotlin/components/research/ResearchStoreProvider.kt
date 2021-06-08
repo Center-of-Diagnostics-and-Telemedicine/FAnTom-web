@@ -16,7 +16,7 @@ import com.badoo.reaktive.utils.ensureNeverFrozen
 import com.badoo.reaktive.utils.printStack
 import model.BASE_ERROR
 import model.ResearchApiExceptions
-import model.ResearchSlicesSizesDataNew
+import model.ResearchData
 import repository.ResearchRepository
 import store.research.ResearchStore
 import store.research.ResearchStore.*
@@ -42,7 +42,7 @@ internal class ResearchStoreProvider(
 
   private sealed class Result : JvmSerializable {
     object Loading : Result()
-    data class Loaded(val data: ResearchSlicesSizesDataNew) : Result()
+    data class Loaded(val data: ResearchData) : Result()
     data class Error(val error: String) : Result()
 
     object DismissErrorRequested : Result()

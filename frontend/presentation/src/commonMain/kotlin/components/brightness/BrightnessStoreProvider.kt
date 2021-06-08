@@ -21,7 +21,7 @@ internal class BrightnessStoreProvider(
 
   fun provide(): BrightnessStore =
     object : BrightnessStore, Store<Intent, State, Label> by storeFactory.create(
-      name = "BrightnessStore",
+      name = "BrightnessStore_$researchId",
       initialState = State(INITIAL_BLACK.toInt(), INITIAL_WHITE.toInt(), INITIAL_GAMMA),
 //      bootstrapper = SimpleBootstrapper(Unit),
       executorFactory = ::ExecutorImpl,

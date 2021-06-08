@@ -17,7 +17,7 @@ import store.expert.ExpertMarksStoreAbstractFactory
 internal class ExpertMarksStoreFactory(
   storeFactory: StoreFactory,
   val research: Research,
-  val data: ResearchSlicesSizesDataNew,
+  val data: ResearchData,
   val expertMarksRepository: ExpertMarksRepository
 ) : ExpertMarksStoreAbstractFactory(
   storeFactory = storeFactory

@@ -6,7 +6,7 @@ import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.badoo.reaktive.utils.ensureNeverFrozen
-import model.ResearchSlicesSizesDataNew
+import model.ResearchData
 import model.ResearchType
 import model.Tool
 import store.tools.ToolsStore.Intent
@@ -14,7 +14,7 @@ import store.tools.ToolsStore.State
 
 abstract class ToolsStoreAbstractFactory(
   private val storeFactory: StoreFactory,
-  private val data: ResearchSlicesSizesDataNew
+  private val data: ResearchData
 ) {
 
   fun create(): ToolsStore =

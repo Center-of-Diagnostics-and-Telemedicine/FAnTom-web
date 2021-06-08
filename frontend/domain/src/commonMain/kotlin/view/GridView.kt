@@ -8,8 +8,8 @@ import view.GridView.Model
 interface GridView : MviView<Model, Event> {
 
   data class Model(
-    val items: List<Grid>,
-    val current: Grid
+    val items: List<GridModel>,
+    val current: GridModel
   )
 
   sealed class Event {
@@ -17,7 +17,7 @@ interface GridView : MviView<Model, Event> {
   }
 }
 
-fun initialGridModel(type: ResearchType, doseReport: Boolean, data: ResearchSlicesSizesDataNew): Model = Model(
+fun initialGridModel(type: ResearchType, doseReport: Boolean, data: ResearchData): Model = Model(
   items = listOf(),
   current = initialFourGrid(type, doseReport, data.modalities)
 )

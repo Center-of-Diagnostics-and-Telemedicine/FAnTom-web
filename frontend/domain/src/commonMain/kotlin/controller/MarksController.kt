@@ -21,7 +21,7 @@ interface MarksController {
     val marksRepository: MarksRepository
     val marksOutput: (Output) -> Unit
     val research: Research
-    val data: ResearchSlicesSizesDataNew
+    val data: ResearchData
   }
 
   sealed class Output {

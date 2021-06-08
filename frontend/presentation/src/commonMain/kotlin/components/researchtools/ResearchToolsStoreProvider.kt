@@ -20,7 +20,7 @@ internal class ResearchToolsStoreProvider(
     object : ToolsStore,
       Store<Intent, State, Nothing> by storeFactory.create(
         name = "MarksStore",
-        initialState = State(),
+        initialState = State(list = listOf(Tool.MIP, Tool.Brightness, Tool.Preset)),
         bootstrapper = SimpleBootstrapper(Unit),
         executorFactory = ::ExecutorImpl,
         reducer = ReducerImpl

@@ -9,10 +9,13 @@ import components.researchtools.ResearchTools
 import decompose.RenderableComponent
 import decompose.renderableChild
 import decompose.research.tools.ToolsUi.State
+import decompose.research.tools.ToolsUi.ToolsStyles.headerStyle
 import kotlinx.css.*
 import model.Tool
 import react.RBuilder
 import react.RState
+import research.tools.grid.grid
+import root.debugLog
 import styled.StyleSheet
 import styled.css
 import styled.styledDiv
@@ -29,7 +32,12 @@ class ToolsUi(props: Props<ResearchTools>) : RenderableComponent<ResearchTools, 
   }
 
   override fun RBuilder.render() {
+    debugLog("render size = ${state.model.list.size}")
     themeContext.Consumer { theme ->
+      styledDiv {
+        css(headerStyle)
+        renderableChild(GridUi::class, component.grid)
+      }
       mDivider()
 
       styledDiv {
@@ -143,10 +151,6 @@ class ToolsUi(props: Props<ResearchTools>) : RenderableComponent<ResearchTools, 
       display = Display.flex
       alignItems = Align.center
       justifyContent = JustifyContent.left
-    }
-
-    val nested by css {
-      paddingLeft = 4.spacingUnits
     }
 
     val dialogListItemContainer by css {

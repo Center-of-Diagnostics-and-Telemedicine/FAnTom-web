@@ -10,7 +10,7 @@ import controller.ExpertMarksController
 import controller.ExpertMarksControllerImpl
 import destroy
 import model.Research
-import model.ResearchSlicesSizesDataNew
+import model.ResearchData
 import react.*
 import repository.ExpertMarksRepository
 import resume
@@ -95,7 +95,7 @@ class ExpertMarksComponent(prps: ExpertMarksProps) :
   interface Dependencies {
     val storeFactory: StoreFactory
     val expertMarksOutput: (ExpertMarksController.Output) -> Unit
-    val data: ResearchSlicesSizesDataNew
+    val data: ResearchData
     val expertMarksInput: Observable<ExpertMarksController.Input>
     val expertMarksRepository: ExpertMarksRepository
     val open: Boolean
