@@ -16,7 +16,6 @@ import components.cut.Cut
 import components.cutscontainer.CutsContainer.*
 import components.fourcutscontainer.FourCutsContainer
 import components.getStore
-import components.grid.GridStoreProvider
 import components.singlecutcontainer.SingleCutContainer
 import components.twohorizontalcutscontainer.TwoHorizontalCutsContainer
 import components.twoverticalcutscontainer.TwoVerticalCutsContainer
@@ -36,14 +35,7 @@ class CutsContainerComponent(
       storeFactory = storeFactory,
       researchId = researchId,
       researchRepository = researchRepository,
-      data = data
-    ).provide()
-  }
-
-  private val gridStore = instanceKeeper.getStore {
-    GridStoreProvider(
-      storeFactory = storeFactory,
-      researchId = researchId,
+      gridRepository = gridRepository,
       data = data
     ).provide()
   }
@@ -60,14 +52,8 @@ class CutsContainerComponent(
   override val model: Value<Model> = store.asValue().map(stateToModel)
 
   init {
-    gridStore.asValue().observe(lifecycle) {
-      println("CutsContainerComponent gridStore.state income")
-      println("router.state.value.activeChild.configuration = ${router.state.value.activeChild.configuration}")
-      println("it.grid.toConfig() = ${it.grid.toConfig()}")
-      if (router.state.value.activeChild.configuration != it.grid.toConfig()) {
-        println("CutsContainerComponent activeChild.config != grid.gridType")
-        changeGrid(it.grid)
-      }
+    store.asValue().observe(lifecycle) {
+      changeGrid(it.gridType)
     }
   }
 

@@ -5,5 +5,5 @@ import store.gridcontainer.MyCutsContainerStore.State
 
 internal val stateToModel: (State) -> Model =
   {
-    Model(a = it.cuts)
+    Model(gridType = it.gridType)
   }

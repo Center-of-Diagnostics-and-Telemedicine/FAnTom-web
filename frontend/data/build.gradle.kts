@@ -12,6 +12,7 @@ kotlinCompat {
         implementation(Deps.Ktor.Client.Json.Common)
         implementation(Deps.Ktor.Client.Serialization.Common)
         implementation(Deps.Badoo.Reaktive.Utils)
+        implementation(Deps.Badoo.Reaktive.Reaktive)
       }
     }
     jsMain {

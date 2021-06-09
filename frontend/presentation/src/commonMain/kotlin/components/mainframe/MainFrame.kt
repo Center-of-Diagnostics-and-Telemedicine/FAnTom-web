@@ -25,6 +25,7 @@ interface MainFrame {
     val researchRepository: ResearchRepository
     val mipRepository: MipRepository
     val brightnessRepository: BrightnessRepository
+    val gridRepository: GridRepository
     val marksRepository: MarksRepository
     val mainFrameOutput: Consumer<Output>
   }

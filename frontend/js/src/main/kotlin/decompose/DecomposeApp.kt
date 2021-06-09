@@ -44,6 +44,8 @@ class App : RComponent<RProps, RState>() {
     token = loginRepositoryImpl.local::getToken
   )
 
+  val gridRepositoryImpl = GridRepositoryImpl()
+
   private val myRoot = MyRoot(ctx, dependencies = object : MyRoot.Dependencies {
     override val storeFactory: StoreFactory = LoggingStoreFactory(DefaultStoreFactory)
     override val loginRepository: LoginRepository = loginRepositoryImpl
@@ -51,6 +53,7 @@ class App : RComponent<RProps, RState>() {
     override val mipRepository: MipRepository = mipRepositoryImpl
     override val brightnessRepository: BrightnessRepository = brightnessRepositoryImpl
     override val marksRepository: MarksRepository = marksRepositoryImpl
+    override val gridRepository: GridRepository = gridRepositoryImpl
   })
 
   override fun componentDidMount() {

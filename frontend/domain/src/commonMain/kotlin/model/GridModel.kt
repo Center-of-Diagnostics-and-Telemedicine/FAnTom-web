@@ -26,6 +26,10 @@ sealed class GridType {
       return "GridType.Four"
     }
   }
+
+  companion object {
+    val initial = Four
+  }
 }
 
 sealed interface MyGrid {

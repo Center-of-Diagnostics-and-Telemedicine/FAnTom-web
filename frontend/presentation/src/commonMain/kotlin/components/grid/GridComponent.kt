@@ -16,24 +16,18 @@ class GridComponent(
   dependencies: Dependencies,
 ) : Grid, ComponentContext by componentContext, Dependencies by dependencies {
 
-  private val store = instanceKeeper.getStore {
+  private val store = instanceKeeper.getStore("MyGridStore") {
     GridStoreProvider(
       storeFactory = storeFactory,
       researchId = researchId,
-      data = data
+      data = data,
+      gridRepository = gridRepository
     ).provide()
   }
 
   override val model: Value<Model> = store.asValue().map(stateToModel)
 
-  init {
-    store.asValue().observe(lifecycle) {
-      println("GridComponent store.asValue().observe(lifecycle) called")
-    }
-  }
-
   override fun changeGrid(gridType: GridType) {
-    println("changeGrid called")
     store.accept(Intent.ChangeGrid(gridType))
   }
 }

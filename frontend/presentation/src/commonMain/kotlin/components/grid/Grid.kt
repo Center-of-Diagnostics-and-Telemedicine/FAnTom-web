@@ -6,8 +6,8 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.base.Consumer
 import components.grid.Grid.Dependencies
 import model.GridType
-import model.MyGrid
 import model.ResearchData
+import repository.GridRepository
 
 interface Grid {
 
@@ -21,6 +21,7 @@ interface Grid {
 
   interface Dependencies {
     val storeFactory: StoreFactory
+    val gridRepository: GridRepository
     val gridOutput: Consumer<Output>
     val data: ResearchData
     val researchId: Int
@@ -33,15 +34,4 @@ interface Grid {
 
 @Suppress("FunctionName") // Factory function
 fun Grid(componentContext: ComponentContext, dependencies: Dependencies): Grid =
-  GridComponent(
-    componentContext = componentContext,
-    dependencies = dependencies,
-//    cut = { childContext, output ->
-//      Cut(
-//        componentContext = childContext,
-//        dependencies = object : Cut.Dependencies, Dependencies by dependencies {
-//          override val cutOutput: Consumer<Cut.Output> = output
-//        }
-//      )
-//    }
-  )
+  GridComponent(componentContext, dependencies)

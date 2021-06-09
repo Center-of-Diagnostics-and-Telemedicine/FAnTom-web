@@ -12,6 +12,7 @@ import components.twohorizontalcutscontainer.TwoHorizontalCutsContainer
 import components.twoverticalcutscontainer.TwoVerticalCutsContainer
 import model.GridType
 import model.ResearchData
+import repository.GridRepository
 import repository.ResearchRepository
 
 interface CutsContainer {
@@ -23,13 +24,14 @@ interface CutsContainer {
   fun changeGrid(gridType: GridType)
 
   data class Model(
-    val a: Any
+    val gridType: GridType
   )
 
   interface Dependencies {
     val storeFactory: StoreFactory
     val cutsContainerOutput: Consumer<Output>
     val researchRepository: ResearchRepository
+    val gridRepository: GridRepository
     val data: ResearchData
     val researchId: Int
   }

@@ -10,10 +10,7 @@ import components.research.ResearchRoot.Dependencies
 import components.researchmarks.ResearchMarks
 import components.researchtools.ResearchTools
 import model.ResearchData
-import repository.BrightnessRepository
-import repository.MarksRepository
-import repository.MipRepository
-import repository.ResearchRepository
+import repository.*
 
 interface ResearchRoot {
 
@@ -35,6 +32,7 @@ interface ResearchRoot {
     val marksRepository: MarksRepository
     val mipRepository: MipRepository
     val brightnessRepository: BrightnessRepository
+    val gridRepository: GridRepository
     val researchOutput: Consumer<Output>
     val researchId: Int
   }
