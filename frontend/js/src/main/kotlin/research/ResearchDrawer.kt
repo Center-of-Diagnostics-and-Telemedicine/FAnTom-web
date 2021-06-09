@@ -73,6 +73,9 @@ private fun RBuilder.drawer(
     MDrawerVariant.permanent,
     paperProps = mPaperProps(open, drawerWidth = drawerWidth)
   ) {
+    css{
+      width = drawerWidth
+    }
     block()
   }
 }

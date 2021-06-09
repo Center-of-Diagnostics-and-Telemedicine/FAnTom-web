@@ -16,7 +16,7 @@ class GridComponent(
   dependencies: Dependencies,
 ) : Grid, ComponentContext by componentContext, Dependencies by dependencies {
 
-  private val store = instanceKeeper.getStore("MyGridStore") {
+  private val store = instanceKeeper.getStore {
     GridStoreProvider(
       storeFactory = storeFactory,
       researchId = researchId,

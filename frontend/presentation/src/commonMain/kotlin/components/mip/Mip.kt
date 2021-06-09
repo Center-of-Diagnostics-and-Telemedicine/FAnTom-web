@@ -6,6 +6,7 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.base.Consumer
 import components.mip.Mip.Dependencies
 import repository.MipRepository
+import repository.MyMipRepository
 
 interface Mip {
 
@@ -22,7 +23,7 @@ interface Mip {
 
   interface Dependencies {
     val storeFactory: StoreFactory
-    val mipRepository: MipRepository
+    val mipRepository: MyMipRepository
     val mipOutput: Consumer<Output>
     val researchId: Int
   }

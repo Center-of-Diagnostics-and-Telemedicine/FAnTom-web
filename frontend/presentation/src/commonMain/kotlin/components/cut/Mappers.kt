@@ -1,7 +1,7 @@
 package components.cut
 
 import components.cut.Cut.Model
-import store.cut.CutStore.State
+import store.cut.MyCutStore.State
 
 internal val stateToModel: (State) -> Model =
   {

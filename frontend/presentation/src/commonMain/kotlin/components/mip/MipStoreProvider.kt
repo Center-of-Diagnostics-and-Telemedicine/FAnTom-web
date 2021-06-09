@@ -8,14 +8,14 @@ import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
 import com.badoo.reaktive.utils.ensureNeverFrozen
 import model.HasIntValue
 import model.Mip
-import repository.MipRepository
+import repository.MyMipRepository
 import store.tools.MipStore
 import store.tools.MipStore.*
 
 internal class MipStoreProvider(
   private val storeFactory: StoreFactory,
   private val researchId: Int,
-  private val mipRepository: MipRepository
+  private val mipRepository: MyMipRepository
 ) {
 
   fun provide(): MipStore =
@@ -23,7 +23,7 @@ internal class MipStoreProvider(
       name = "MipStore",
       initialState = State(
         list = listOf(Mip.No, Mip.Average(), Mip.Max()),
-        current = mipRepository.getMip(),
+        current = Mip.No,
         currentValue = null
       ),
 //      bootstrapper = SimpleBootstrapper(Unit),
@@ -43,7 +43,7 @@ internal class MipStoreProvider(
 
   private fun getInitialState(): State = State(
     list = listOf(Mip.No, Mip.Average(), Mip.Max()),
-    current = mipRepository.getMip(),
+    current = Mip.initial,
     currentValue = null
   )
 

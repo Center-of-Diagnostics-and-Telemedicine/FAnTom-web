@@ -29,6 +29,9 @@ sealed class Mip(
   ), HasIntValue
 
   companion object {
+
+    val initial = No
+
     fun build(valueName: String): Mip {
       return when (valueName) {
         NO_MIP -> No

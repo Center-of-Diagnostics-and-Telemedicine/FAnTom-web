@@ -10,9 +10,7 @@ import components.mip.Mip
 import components.researchtools.ResearchTools.Dependencies
 import model.ResearchData
 import model.Tool
-import repository.BrightnessRepository
-import repository.GridRepository
-import repository.MipRepository
+import repository.*
 
 interface ResearchTools {
 
@@ -34,8 +32,8 @@ interface ResearchTools {
     val storeFactory: StoreFactory
     val researchId: Int
     val toolsOutput: Consumer<Output>
-    val mipRepository: MipRepository
-    val brightnessRepository: BrightnessRepository
+    val mipRepository: MyMipRepository
+    val brightnessRepository: MyBrightnessRepository
     val gridRepository: GridRepository
     val data: ResearchData
   }

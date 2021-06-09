@@ -9,6 +9,8 @@ import components.cut.Cut
 import components.twoverticalcutscontainer.TwoVerticalCutsContainer.Dependencies
 import model.CutType
 import model.ResearchData
+import repository.MyBrightnessRepository
+import repository.MyMipRepository
 import repository.ResearchRepository
 
 interface TwoVerticalCutsContainer {
@@ -27,6 +29,8 @@ interface TwoVerticalCutsContainer {
     val storeFactory: StoreFactory
     val twoVerticalCutsContainerOutput: Consumer<Output>
     val researchRepository: ResearchRepository
+    val brightnessRepository: MyBrightnessRepository
+    val mipRepository: MyMipRepository
     val data: ResearchData
     val researchId: Int
   }
@@ -55,4 +59,4 @@ fun TwoVerticalCutsContainer(
         })
     },
 
-  )
+    )

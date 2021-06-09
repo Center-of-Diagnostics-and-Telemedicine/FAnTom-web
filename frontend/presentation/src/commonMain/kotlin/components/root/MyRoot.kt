@@ -22,8 +22,8 @@ interface MyRoot {
   interface Dependencies {
     val storeFactory: StoreFactory
     val researchRepository: ResearchRepository
-    val mipRepository: MipRepository
-    val brightnessRepository: BrightnessRepository
+    val brightnessRepository: MyBrightnessRepository
+    val mipRepository: MyMipRepository
     val loginRepository: LoginRepository
     val marksRepository: MarksRepository
     val gridRepository: GridRepository

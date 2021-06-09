@@ -6,6 +6,7 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.base.Consumer
 import components.brightness.Brightness.Dependencies
 import repository.BrightnessRepository
+import repository.MyBrightnessRepository
 
 interface Brightness {
 
@@ -23,7 +24,7 @@ interface Brightness {
 
   interface Dependencies {
     val storeFactory: StoreFactory
-    val brightnessRepository: BrightnessRepository
+    val brightnessRepository: MyBrightnessRepository
     val brightnessOutput: Consumer<Output>
     val researchId: Int
   }

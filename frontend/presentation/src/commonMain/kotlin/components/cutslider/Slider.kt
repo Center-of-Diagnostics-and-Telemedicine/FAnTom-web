@@ -3,6 +3,7 @@ package components.cutslider
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.mvikotlin.core.store.StoreFactory
+import com.badoo.reaktive.base.Consumer
 import controller.SliderController
 import components.cutslider.Slider.Dependencies
 
@@ -21,7 +22,7 @@ interface Slider {
   interface Dependencies {
     val storeFactory: StoreFactory
 //    val cutRepository: CutRepository
-    val sliderOutput: (SliderController.Output) -> Unit
+    val sliderOutput: Consumer<Output>
     val researchId: Int
   }
 

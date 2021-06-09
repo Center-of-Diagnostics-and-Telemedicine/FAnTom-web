@@ -1,13 +1,20 @@
 package decompose.research.cuts
 
 import com.arkivanov.decompose.RouterState
-import com.ccfraser.muirwik.components.mTypography
 import components.fourcutscontainer.FourCutsContainer
 import components.fourcutscontainer.FourCutsContainer.Child
 import decompose.RenderableComponent
+import decompose.renderableChild
+import decompose.research.cut.CutUi
+import decompose.research.cuts.FourCutsContainerUi.FourCutsContainerStyles.columnOfRowsStyle
+import decompose.research.cuts.FourCutsContainerUi.FourCutsContainerStyles.rowOfColumnsStyle
 import decompose.research.cuts.FourCutsContainerUi.State
+import kotlinx.css.*
 import react.RBuilder
 import react.RState
+import styled.StyleSheet
+import styled.css
+import styled.styledDiv
 
 class FourCutsContainerUi(props: Props<FourCutsContainer>) :
   RenderableComponent<FourCutsContainer, State>(
@@ -30,7 +37,55 @@ class FourCutsContainerUi(props: Props<FourCutsContainer>) :
   }
 
   override fun RBuilder.render() {
-    mTypography { +"fourCutsContainer" }
+    styledDiv {
+      css(columnOfRowsStyle)
+
+      styledDiv {
+        css(rowOfColumnsStyle)
+        cutContainer {
+          renderableChild(CutUi::class, state.topLeftRouterState.activeChild.instance.component)
+        }
+        cutContainer {
+          renderableChild(CutUi::class, state.topRightRouterState.activeChild.instance.component)
+        }
+      }
+
+      styledDiv {
+        css(rowOfColumnsStyle)
+        cutContainer {
+          renderableChild(CutUi::class, state.bottomLeftRouterState.activeChild.instance.component)
+        }
+        cutContainer {
+          renderableChild(CutUi::class, state.bottomRightRouterState.activeChild.instance.component)
+        }
+      }
+    }
+
+  }
+
+  private fun RBuilder.cutContainer(block: RBuilder.() -> Unit) {
+    styledDiv {
+      css {
+        display = Display.flex
+        flex(1.0, 1.0, FlexBasis.auto)
+      }
+      block()
+    }
+  }
+
+  object FourCutsContainerStyles : StyleSheet("FourCutsContainerStyles", isStatic = true) {
+
+    val columnOfRowsStyle by css {
+      flex(1.0)
+      display = Display.flex
+      flexDirection = FlexDirection.column
+    }
+
+    val rowOfColumnsStyle by css {
+      flex(1.0)
+      display = Display.flex
+      flexDirection = FlexDirection.row
+    }
   }
 
   class State(

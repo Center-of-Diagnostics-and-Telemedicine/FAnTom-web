@@ -9,6 +9,8 @@ import components.cut.Cut
 import components.fourcutscontainer.FourCutsContainer.Dependencies
 import model.CutType
 import model.ResearchData
+import repository.MyBrightnessRepository
+import repository.MyMipRepository
 import repository.ResearchRepository
 
 interface FourCutsContainer {
@@ -31,6 +33,8 @@ interface FourCutsContainer {
     val storeFactory: StoreFactory
     val fourCutsContainerOutput: Consumer<Output>
     val researchRepository: ResearchRepository
+    val brightnessRepository: MyBrightnessRepository
+    val mipRepository: MyMipRepository
     val data: ResearchData
     val researchId: Int
   }

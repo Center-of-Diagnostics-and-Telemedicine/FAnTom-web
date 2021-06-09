@@ -30,8 +30,8 @@ interface ResearchRoot {
     val storeFactory: StoreFactory
     val researchRepository: ResearchRepository
     val marksRepository: MarksRepository
-    val mipRepository: MipRepository
-    val brightnessRepository: BrightnessRepository
+    val brightnessRepository: MyBrightnessRepository
+    val mipRepository: MyMipRepository
     val gridRepository: GridRepository
     val researchOutput: Consumer<Output>
     val researchId: Int

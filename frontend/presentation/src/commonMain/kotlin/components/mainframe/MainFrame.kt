@@ -23,8 +23,8 @@ interface MainFrame {
     val storeFactory: StoreFactory
     val loginRepository: LoginRepository
     val researchRepository: ResearchRepository
-    val mipRepository: MipRepository
-    val brightnessRepository: BrightnessRepository
+    val brightnessRepository: MyBrightnessRepository
+    val mipRepository: MyMipRepository
     val gridRepository: GridRepository
     val marksRepository: MarksRepository
     val mainFrameOutput: Consumer<Output>

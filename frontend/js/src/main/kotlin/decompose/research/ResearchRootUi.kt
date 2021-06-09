@@ -52,15 +52,21 @@ class ResearchRootUi(props: Props<ResearchRoot>) : RenderableComponent<ResearchR
 
       styledDiv {
         css(ResearchScreen.ResearchStyles.appFrameContainerStyle)
-//        if (state.model.data != null) {
-        leftMenu()
+
+        leftMenu {
+          when (val toolsInstance = state.toolsRouterState.activeChild.instance) {
+            is ToolsChild.Data -> renderableChild(ToolsUi::class, toolsInstance.component)
+          }
+        }
 
         contentWithCuts()
-        rightMenu(drawerLittleMargin) {
+
+        rightMenu {
           when (val marksInstance = state.marksRouterState.activeChild.instance) {
             is MarksChild.Data -> renderableChild(MarksUi::class, marksInstance.component)
           }
         }
+
       }
     }
   }
@@ -71,8 +77,7 @@ class ResearchRootUi(props: Props<ResearchRoot>) : RenderableComponent<ResearchR
         display = Display.flex
         height = 100.pct
         minHeight = 100.vh
-        marginLeft = if (state.toolsOpen) drawerWidth.px else drawerLittleMargin
-        marginRight = if (state.marksOpen) drawerWidth.px else drawerLittleMargin
+        width = 100.pct
       }
 
       when (val cutsInstance = state.cutsContainerRouterState.activeChild.instance) {
@@ -81,7 +86,9 @@ class ResearchRootUi(props: Props<ResearchRoot>) : RenderableComponent<ResearchR
     }
   }
 
-  private fun RBuilder.leftMenu() {
+  private fun RBuilder.leftMenu(
+    block: RBuilder.() -> Unit
+  ) {
     leftDrawer(
       open = state.toolsOpen,
       drawerWidth = if (state.toolsOpen) drawerWidth.px else drawerLittleMargin,
@@ -92,19 +99,16 @@ class ResearchRootUi(props: Props<ResearchRoot>) : RenderableComponent<ResearchR
         open = state.toolsOpen,
         onClick = { setState { toolsOpen = !state.toolsOpen } }
       )
-      when (val toolsInstance = state.toolsRouterState.activeChild.instance) {
-        is ToolsChild.Data -> renderableChild(ToolsUi::class, toolsInstance.component)
-      }
+      block()
     }
   }
 
   private fun RBuilder.rightMenu(
-    drawerMargin: LinearDimension,
     block: RBuilder.() -> Unit
   ) {
     rightDrawer(
       open = state.marksOpen,
-      drawerWidth = if (state.marksOpen) drawerWidth.px else drawerMargin,
+      drawerWidth = if (state.marksOpen) drawerWidth.px else drawerLittleMargin,
       onOpen = ::openMarks,
       onClose = ::closeMarks
     ) {

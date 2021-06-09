@@ -9,6 +9,8 @@ import components.cut.Cut
 import components.singlecutcontainer.SingleCutContainer.Dependencies
 import model.CutType
 import model.ResearchData
+import repository.MyBrightnessRepository
+import repository.MyMipRepository
 import repository.ResearchRepository
 
 interface SingleCutContainer {
@@ -25,6 +27,8 @@ interface SingleCutContainer {
     val storeFactory: StoreFactory
     val singleCutContainerOutput: Consumer<Output>
     val researchRepository: ResearchRepository
+    val brightnessRepository: MyBrightnessRepository
+    val mipRepository: MyMipRepository
     val data: ResearchData
     val researchId: Int
   }
