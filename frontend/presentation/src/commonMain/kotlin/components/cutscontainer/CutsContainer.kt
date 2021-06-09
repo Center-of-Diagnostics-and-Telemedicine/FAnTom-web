@@ -1,17 +1,26 @@
 package components.cutscontainer
 
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.RouterState
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.base.Consumer
-import components.cut.Cut
 import components.cutscontainer.CutsContainer.Dependencies
+import components.fourcutscontainer.FourCutsContainer
+import components.singlecutcontainer.SingleCutContainer
+import components.twohorizontalcutscontainer.TwoHorizontalCutsContainer
+import components.twoverticalcutscontainer.TwoVerticalCutsContainer
+import model.GridType
 import model.ResearchData
 import repository.ResearchRepository
 
 interface CutsContainer {
 
   val model: Value<Model>
+
+  val routerState: Value<RouterState<*, Child>>
+
+  fun changeGrid(gridType: GridType)
 
   data class Model(
     val a: Any
@@ -26,15 +35,10 @@ interface CutsContainer {
   }
 
   sealed class Child {
-    data class Single(val component: Cut) : Child()
-    data class TwoVertical(val leftComponent: Cut, val rightComponent: Cut) : Child()
-    data class TwoHorizontal(val topComponent: Cut, val bottomComponent: Cut) : Child()
-    data class Four(
-      val topLeftComponent: Cut,
-      val topRightComponent: Cut,
-      val bottomLeftComponent: Cut,
-      val bottomRightComponent: Cut,
-    ) : Child()
+    data class Single(val component: SingleCutContainer) : Child()
+    data class TwoVertical(val component: TwoVerticalCutsContainer) : Child()
+    data class TwoHorizontal(val component: TwoHorizontalCutsContainer) : Child()
+    data class Four(val component: FourCutsContainer) : Child()
   }
 
   sealed class Output {
@@ -46,10 +50,32 @@ fun CutsContainer(componentContext: ComponentContext, dependencies: Dependencies
   CutsContainerComponent(
     componentContext = componentContext,
     dependencies = dependencies,
-    cut = { childContext, output ->
-      Cut(componentContext = childContext,
-        dependencies = object : Cut.Dependencies, Dependencies by dependencies {
-          override val cutOutput: Consumer<Cut.Output> = output
+    singleCutContainerFactory = { childContext, output ->
+      SingleCutContainer(
+        componentContext = childContext,
+        dependencies = object : SingleCutContainer.Dependencies, Dependencies by dependencies {
+          override val singleCutContainerOutput: Consumer<SingleCutContainer.Output> = output
+        })
+    },
+    twoVerticalCutsContainerFactory = { childContext, output ->
+      TwoVerticalCutsContainer(
+        componentContext = childContext,
+        dependencies = object : TwoVerticalCutsContainer.Dependencies, Dependencies by dependencies {
+          override val twoVerticalCutsContainerOutput: Consumer<TwoVerticalCutsContainer.Output> = output
+        })
+    },
+    twoHorizontalCutsContainerFactory = {childContext, output ->
+      TwoHorizontalCutsContainer(
+        componentContext = childContext,
+        dependencies = object : TwoHorizontalCutsContainer.Dependencies, Dependencies by dependencies {
+          override val twoHorizontalCutsContainerOutput: Consumer<TwoHorizontalCutsContainer.Output> = output
+        })
+    },
+    fourCutsContainerFactory = {childContext, output ->
+      FourCutsContainer(
+        componentContext = childContext,
+        dependencies = object : FourCutsContainer.Dependencies, Dependencies by dependencies {
+          override val fourCutsContainerOutput: Consumer<FourCutsContainer.Output> = output
         })
     }
   )

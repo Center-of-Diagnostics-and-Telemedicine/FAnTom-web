@@ -2,6 +2,7 @@ package components.mainframe
 
 import com.arkivanov.decompose.*
 import com.arkivanov.decompose.statekeeper.Parcelable
+import com.arkivanov.decompose.statekeeper.Parcelize
 import com.arkivanov.decompose.value.Value
 import com.badoo.reaktive.base.Consumer
 import components.Consumer
@@ -49,10 +50,10 @@ internal class MainFrameComponent(
   }
 
   private sealed class Configuration : Parcelable {
-    //    @Parcelize
+    @Parcelize
     class Research(val researchId: Int) : Configuration()
 
-    //    @Parcelize
+    @Parcelize
     object List : Configuration()
   }
 }

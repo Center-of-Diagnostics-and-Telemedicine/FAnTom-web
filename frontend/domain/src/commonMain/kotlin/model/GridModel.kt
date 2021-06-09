@@ -3,10 +3,29 @@ package model
 import replace
 
 sealed class GridType {
-  object Single : GridType()
-  object TwoVertical : GridType()
-  object TwoHorizontal : GridType()
-  object Four : GridType()
+  object Single : GridType() {
+    override fun toString(): String {
+      return "GridType.Single"
+    }
+  }
+
+  object TwoVertical : GridType() {
+    override fun toString(): String {
+      return "GridType.TwoVertical"
+    }
+  }
+
+  object TwoHorizontal : GridType() {
+    override fun toString(): String {
+      return "GridType.TwoHorizontal"
+    }
+  }
+
+  object Four : GridType() {
+    override fun toString(): String {
+      return "GridType.Four"
+    }
+  }
 }
 
 sealed interface MyGrid {

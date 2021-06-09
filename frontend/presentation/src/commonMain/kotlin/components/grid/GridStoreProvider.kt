@@ -6,7 +6,8 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
 import com.badoo.reaktive.utils.ensureNeverFrozen
-import model.*
+import model.GridType
+import model.ResearchData
 import store.tools.MyGridStore
 import store.tools.MyGridStore.*
 
@@ -17,18 +18,12 @@ internal class GridStoreProvider(
 ) {
 
   val initialState = State(
-    grid = initialFourGrid(data.type, data.doseReport, data.modalities),
-    availableGrids = listOf(
-      initialSingleGrid(data.type),
-      initialTwoVerticalGrid(data.type),
-      initialTwoHorizontalGrid(data.type),
-      initialFourGrid(data.type, data.doseReport, data.modalities)
-    ),
+    grid = GridType.Four,
   )
 
   fun provide(): MyGridStore {
     return object : MyGridStore, Store<Intent, State, Label> by storeFactory.create(
-      name = "MyGridStore_$researchId",
+      name = "MyGridStore",
       initialState = initialState,
       executorFactory = ::ExecutorImpl,
       reducer = ReducerImpl
@@ -40,7 +35,7 @@ internal class GridStoreProvider(
   }
 
   private sealed class Result : JvmSerializable {
-    data class GridChanged(val grid: MyGrid) : Result()
+    data class GridChanged(val grid: GridType) : Result()
   }
 
   private inner class ExecutorImpl : ReaktiveExecutor<Intent, Nothing, State, Result, Label>() {
@@ -52,9 +47,8 @@ internal class GridStoreProvider(
     }
 
     private fun changeGrid(gridType: GridType) {
-      val grid = model.GridModel.build(gridType, data.type, data.doseReport, data)
-      dispatch(Result.GridChanged(grid))
-      publish(Label.GridChanged(grid))
+      dispatch(Result.GridChanged(gridType))
+      publish(Label.GridChanged(gridType))
     }
   }
 

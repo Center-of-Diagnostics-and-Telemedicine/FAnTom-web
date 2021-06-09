@@ -1,23 +1,34 @@
 package components.cutscontainer
 
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.RouterState
+import com.arkivanov.decompose.replaceCurrent
 import com.arkivanov.decompose.router
 import com.arkivanov.decompose.statekeeper.Parcelable
+import com.arkivanov.decompose.statekeeper.Parcelize
 import com.arkivanov.decompose.value.Value
+import com.arkivanov.decompose.value.observe
 import com.arkivanov.decompose.value.operator.map
 import com.badoo.reaktive.base.Consumer
 import components.Consumer
 import components.asValue
 import components.cut.Cut
 import components.cutscontainer.CutsContainer.*
+import components.fourcutscontainer.FourCutsContainer
 import components.getStore
-import model.buildCuts
-import model.initialSingleGrid
+import components.grid.GridStoreProvider
+import components.singlecutcontainer.SingleCutContainer
+import components.twohorizontalcutscontainer.TwoHorizontalCutsContainer
+import components.twoverticalcutscontainer.TwoVerticalCutsContainer
+import model.GridType
 
 class CutsContainerComponent(
   componentContext: ComponentContext,
   dependencies: Dependencies,
-  private val cut: (ComponentContext, Consumer<Cut.Output>) -> Cut,
+  private val singleCutContainerFactory: (ComponentContext, Consumer<SingleCutContainer.Output>) -> SingleCutContainer,
+  private val twoVerticalCutsContainerFactory: (ComponentContext, Consumer<TwoVerticalCutsContainer.Output>) -> TwoVerticalCutsContainer,
+  private val twoHorizontalCutsContainerFactory: (ComponentContext, Consumer<TwoHorizontalCutsContainer.Output>) -> TwoHorizontalCutsContainer,
+  private val fourCutsContainerFactory: (ComponentContext, Consumer<FourCutsContainer.Output>) -> FourCutsContainer,
 ) : CutsContainer, ComponentContext by componentContext, Dependencies by dependencies {
 
   private val store = instanceKeeper.getStore {
@@ -29,34 +40,91 @@ class CutsContainerComponent(
     ).provide()
   }
 
+  private val gridStore = instanceKeeper.getStore {
+    GridStoreProvider(
+      storeFactory = storeFactory,
+      researchId = researchId,
+      data = data
+    ).provide()
+  }
+
   private val router =
     router<Configuration, Child>(
-      initialConfiguration = Configuration.Single(
-        initialSingleGrid(data.type).buildCuts(data).first()
-      ),
+      initialConfiguration = Configuration.Four,
       handleBackButton = false,
       childFactory = ::createChild
     )
 
+  override val routerState: Value<RouterState<*, Child>> = router.state
+
   override val model: Value<Model> = store.asValue().map(stateToModel)
 
-  private fun createChild(configuration: Configuration, componentContext: ComponentContext): Child {
-    val componentFactory = cut(componentContext, Consumer(::onCutOutput))
-    return when (configuration) {
-      is Configuration.Single -> Child.Single(component = componentFactory)
-      is Configuration.TwoVertical ->
-        Child.TwoVertical(leftComponent = componentFactory, rightComponent = componentFactory)
-      is Configuration.TwoHorizontal ->
-        Child.TwoHorizontal(topComponent = componentFactory, bottomComponent = componentFactory)
-      is Configuration.Four -> {
-        Child.Four(
-          topLeftComponent = componentFactory,
-          topRightComponent = componentFactory,
-          bottomLeftComponent = componentFactory,
-          bottomRightComponent = componentFactory,
-        )
+  init {
+    gridStore.asValue().observe(lifecycle) {
+      println("CutsContainerComponent gridStore.state income")
+      println("router.state.value.activeChild.configuration = ${router.state.value.activeChild.configuration}")
+      println("it.grid.toConfig() = ${it.grid.toConfig()}")
+      if (router.state.value.activeChild.configuration != it.grid.toConfig()) {
+        println("CutsContainerComponent activeChild.config != grid.gridType")
+        changeGrid(it.grid)
       }
     }
+  }
+
+  override fun changeGrid(gridType: GridType) {
+    router.replaceCurrent(gridType.toConfig())
+  }
+
+  private fun createChild(configuration: Configuration, componentContext: ComponentContext): Child {
+    return when (configuration) {
+      is Configuration.Single -> Child.Single(
+        component = singleCutContainerFactory(
+          componentContext,
+          Consumer(::onSingleCutContainerOutput)
+        )
+      )
+      Configuration.TwoVertical -> Child.TwoVertical(
+        component = twoVerticalCutsContainerFactory(
+          componentContext,
+          Consumer(::onTwoVerticalCutsContainerOutput)
+        )
+      )
+      Configuration.TwoHorizontal -> Child.TwoHorizontal(
+        component = twoHorizontalCutsContainerFactory(
+          componentContext,
+          Consumer(::onTwoHorizontalCutsContainerOutput)
+        )
+      )
+      Configuration.Four -> Child.Four(
+        component = fourCutsContainerFactory(
+          componentContext,
+          Consumer(::onFourCutsContainerOutput)
+        )
+      )
+    }
+  }
+
+  private fun GridType.toConfig(): Configuration = when (this) {
+    GridType.Single -> Configuration.Single
+    GridType.TwoVertical -> Configuration.TwoVertical
+    GridType.TwoHorizontal -> Configuration.TwoHorizontal
+    GridType.Four -> Configuration.Four
+  }
+
+  private fun onSingleCutContainerOutput(output: SingleCutContainer.Output) {
+
+  }
+
+  private fun onTwoVerticalCutsContainerOutput(output: TwoVerticalCutsContainer.Output) {
+
+  }
+
+  private fun onTwoHorizontalCutsContainerOutput(output: TwoHorizontalCutsContainer.Output) {
+
+  }
+
+  private fun onFourCutsContainerOutput(output: FourCutsContainer.Output) {
+
   }
 
   private fun onCutOutput(output: Cut.Output): Unit =
@@ -65,27 +133,32 @@ class CutsContainerComponent(
     }
 
   private sealed class Configuration : Parcelable {
-    //    @Parcelize
-    data class Single(
-      val cut: model.Cut
-    ) : Configuration()
+    @Parcelize
+    object Single : Configuration() {
+      override fun toString(): String {
+        return "Configuration.Single"
+      }
+    }
 
-    //    @Parcelize
-    data class TwoVertical(
-      val leftCut: model.Cut,
-      val rightCut: model.Cut,
-    ) : Configuration()
+    @Parcelize
+    object TwoVertical : Configuration() {
+      override fun toString(): String {
+        return "Configuration.TwoVertical"
+      }
+    }
 
-    data class TwoHorizontal(
-      val topCut: model.Cut,
-      val bottomCut: model.Cut,
-    ) : Configuration()
+    @Parcelize
+    object TwoHorizontal : Configuration() {
+      override fun toString(): String {
+        return "Configuration.TwoHorizontal"
+      }
+    }
 
-    data class Four(
-      val topLeftCut: model.Cut,
-      val topRightCut: model.Cut,
-      val bottomLeftCut: model.Cut,
-      val bottomRightCut: model.Cut,
-    ) : Configuration()
+    @Parcelize
+    object Four : Configuration() {
+      override fun toString(): String {
+        return "Configuration.Four"
+      }
+    }
   }
 }

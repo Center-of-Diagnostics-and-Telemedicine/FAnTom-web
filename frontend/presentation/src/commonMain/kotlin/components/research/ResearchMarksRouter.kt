@@ -2,6 +2,7 @@ package components.research
 
 import com.arkivanov.decompose.*
 import com.arkivanov.decompose.statekeeper.Parcelable
+import com.arkivanov.decompose.statekeeper.Parcelize
 import com.arkivanov.decompose.value.Value
 import com.badoo.reaktive.base.Consumer
 import components.research.ResearchRoot.MarksChild
@@ -36,10 +37,10 @@ internal class ResearchMarksRouter(
   }
 
   sealed class Config : Parcelable {
-    //    @Parcelize
+    @Parcelize
     data class Marks(val data: ResearchData) : Config()
 
-    //    @Parcelize
+    @Parcelize
     object None : Config()
   }
 }

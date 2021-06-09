@@ -7,6 +7,5 @@ internal val stateToModel: (State) -> Model =
   {
     Model(
       grid = it.grid,
-      availableGrids = it.availableGrids
     )
   }

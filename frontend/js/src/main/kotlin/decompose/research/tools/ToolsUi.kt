@@ -32,7 +32,6 @@ class ToolsUi(props: Props<ResearchTools>) : RenderableComponent<ResearchTools, 
   }
 
   override fun RBuilder.render() {
-    debugLog("render size = ${state.model.list.size}")
     themeContext.Consumer { theme ->
       styledDiv {
         css(headerStyle)

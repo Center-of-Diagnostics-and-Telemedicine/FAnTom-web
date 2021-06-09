@@ -4,6 +4,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.RouterState
 import com.arkivanov.decompose.router
 import com.arkivanov.decompose.statekeeper.Parcelable
+import com.arkivanov.decompose.statekeeper.Parcelize
 import com.arkivanov.decompose.value.Value
 import com.badoo.reaktive.base.Consumer
 import components.Consumer
@@ -50,10 +51,10 @@ internal class ListRootComponent(
   }
 
   private sealed class Configuration : Parcelable {
-    //    @Parcelize
+        @Parcelize
     object Filters : Configuration()
 
-    //    @Parcelize
+        @Parcelize
     object List : Configuration()
   }
 }

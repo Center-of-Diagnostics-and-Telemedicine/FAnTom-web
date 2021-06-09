@@ -2,6 +2,7 @@ package components.root
 
 import com.arkivanov.decompose.*
 import com.arkivanov.decompose.statekeeper.Parcelable
+import com.arkivanov.decompose.statekeeper.Parcelize
 import com.arkivanov.decompose.value.Value
 import com.badoo.reaktive.base.Consumer
 import components.Consumer
@@ -44,10 +45,10 @@ internal class MyRootComponent(
     }
 
   private sealed class Configuration : Parcelable {
-    //    @Parcelize
+    @Parcelize
     object Login : Configuration()
 
-    //    @Parcelize
+    @Parcelize
     object Main : Configuration()
   }
 }

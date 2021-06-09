@@ -13,11 +13,10 @@ interface MyGridStore : Store<Intent, State, Label> {
   }
 
   data class State(
-    val grid: MyGrid,
-    val availableGrids: List<MyGrid>
+    val grid: GridType
   ) : JvmSerializable
 
   sealed class Label : JvmSerializable {
-    data class GridChanged(val item: MyGrid) : Label()
+    data class GridChanged(val item: GridType) : Label()
   }
 }

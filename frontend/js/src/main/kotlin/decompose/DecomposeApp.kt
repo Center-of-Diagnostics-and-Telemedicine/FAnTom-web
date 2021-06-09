@@ -5,6 +5,7 @@ import com.arkivanov.decompose.lifecycle.LifecycleRegistry
 import com.arkivanov.decompose.lifecycle.destroy
 import com.arkivanov.decompose.lifecycle.resume
 import com.arkivanov.mvikotlin.core.store.StoreFactory
+import com.arkivanov.mvikotlin.logging.store.LoggingStoreFactory
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.ccfraser.muirwik.components.mCssBaseline
 import components.root.MyRoot
@@ -44,7 +45,7 @@ class App : RComponent<RProps, RState>() {
   )
 
   private val myRoot = MyRoot(ctx, dependencies = object : MyRoot.Dependencies {
-    override val storeFactory: StoreFactory = DefaultStoreFactory
+    override val storeFactory: StoreFactory = LoggingStoreFactory(DefaultStoreFactory)
     override val loginRepository: LoginRepository = loginRepositoryImpl
     override val researchRepository: ResearchRepository = researchRepositoryImpl
     override val mipRepository: MipRepository = mipRepositoryImpl

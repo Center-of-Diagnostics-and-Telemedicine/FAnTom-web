@@ -6,6 +6,7 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.base.Consumer
 import components.cutslider.Slider
 import components.cut.Cut.Dependencies
+import model.CutType
 import model.Mip
 
 interface Cut {
@@ -30,6 +31,7 @@ interface Cut {
   interface Dependencies {
     val storeFactory: StoreFactory
     val cutOutput: Consumer<Output>
+    val cutType: CutType
   }
 
   sealed class Output {
