@@ -12,7 +12,7 @@ import com.arkivanov.decompose.value.operator.map
 import com.badoo.reaktive.base.Consumer
 import components.Consumer
 import components.asValue
-import components.cut.Cut
+import components.cutcontainer.CutContainer
 import components.cutscontainer.CutsContainer.*
 import components.fourcutscontainer.FourCutsContainer
 import components.getStore
@@ -113,7 +113,7 @@ class CutsContainerComponent(
 
   }
 
-  private fun onCutOutput(output: Cut.Output): Unit =
+  private fun onCutOutput(output: CutContainer.Output): Unit =
     when (output) {
       else -> throw NotImplementedError("onCutOutput not implemented $output")
     }

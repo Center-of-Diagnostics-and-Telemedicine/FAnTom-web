@@ -22,6 +22,8 @@ interface ResearchRepository {
     height: Int
   ): String
 
+  suspend fun getSlice(model: GetSliceModel): String
+
   suspend fun getHounsfieldData(
     sliceNumber: Int,
     type: Int,
@@ -43,3 +45,16 @@ interface ResearchRepository {
   suspend fun closeSession(researchId: Int)
   suspend fun closeResearch(researchId: Int)
 }
+
+data class GetSliceModel(
+  val researchId: Int,
+  val black: Int,
+  val white: Int,
+  val gamma: Double,
+  val type: Int,
+  val mipMethod: Int,
+  val sliceNumber: Int,
+  val aproxSize: Int,
+  val width: Int,
+  val height: Int
+)

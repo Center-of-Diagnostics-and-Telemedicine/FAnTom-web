@@ -9,7 +9,7 @@ import com.arkivanov.decompose.statekeeper.Parcelize
 import com.arkivanov.decompose.value.Value
 import com.badoo.reaktive.base.Consumer
 import components.Consumer
-import components.cut.Cut
+import components.cutcontainer.CutContainer
 import components.singlecutcontainer.SingleCutContainer.Child
 import components.singlecutcontainer.SingleCutContainer.Dependencies
 import model.CutType
@@ -17,7 +17,7 @@ import model.CutType
 class SingleCutContainerComponent(
   componentContext: ComponentContext,
   dependencies: Dependencies,
-  private val cutFactory: (ComponentContext, CutType, Consumer<Cut.Output>) -> Cut,
+  private val cutContainerFactory: (ComponentContext, CutType, Consumer<CutContainer.Output>) -> CutContainer,
 ) : SingleCutContainer, ComponentContext by componentContext, Dependencies by dependencies {
 
   private val router =
@@ -36,9 +36,9 @@ class SingleCutContainerComponent(
   private fun resolveChild(
     configuration: ChildConfiguration,
     componentContext: ComponentContext
-  ): Child = Child(cutFactory(componentContext, configuration.cutType, Consumer(::onCutOutput)))
+  ): Child = Child(cutContainerFactory(componentContext, configuration.cutType, Consumer(::onCutOutput)))
 
-  private fun onCutOutput(output: Cut.Output): Unit =
+  private fun onCutOutput(output: CutContainer.Output): Unit =
     when (output) {
       else -> throw NotImplementedError("onCutOutput not implemented $output")
     }

@@ -5,7 +5,7 @@ import com.arkivanov.decompose.RouterState
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.base.Consumer
-import components.cut.Cut
+import components.cutcontainer.CutContainer
 import components.twohorizontalcutscontainer.TwoHorizontalCutsContainer.Dependencies
 import model.CutType
 import model.ResearchData
@@ -36,7 +36,7 @@ interface TwoHorizontalCutsContainer {
   }
 
   data class Child(
-    val component: Cut,
+    val component: CutContainer,
   )
 
   sealed class Output {
@@ -51,10 +51,10 @@ fun TwoHorizontalCutsContainer(
   TwoHorizontalCutsContainerComponent(
     componentContext = componentContext,
     dependencies = dependencies,
-    cutFactory = { childContext, cutType, output ->
-      Cut(componentContext = childContext,
-        dependencies = object : Cut.Dependencies, Dependencies by dependencies {
-          override val cutOutput: Consumer<Cut.Output> = output
+    cutContainerFactory = { childContext, cutType, output ->
+      CutContainer(componentContext = childContext,
+        dependencies = object : CutContainer.Dependencies, Dependencies by dependencies {
+          override val cutContainerOutput: Consumer<CutContainer.Output> = output
           override val cutType: CutType = cutType
         })
     },

@@ -5,7 +5,7 @@ import com.arkivanov.decompose.statekeeper.Parcelable
 import com.arkivanov.decompose.statekeeper.Parcelize
 import com.arkivanov.decompose.value.Value
 import com.badoo.reaktive.base.Consumer
-import components.cut.Cut.DrawChild
+import components.cutcontainer.CutContainer.DrawChild
 import components.draw.Draw.Output
 
 internal class DrawRouter(
@@ -16,7 +16,7 @@ internal class DrawRouter(
 
   private val router =
     routerFactory.router<Config, DrawChild>(
-      initialConfiguration = Config.None,
+      initialConfiguration = Config.Draw,
       key = "DrawRouter",
       childFactory = ::createChild
     )

@@ -26,7 +26,8 @@ abstract class DrawStoreAbstractFactory(
     dicomRadiusVertical = 0.0,
     isDrawingEllipse = false,
     isMoving = false,
-    isContrastBrightness = false
+    isContrastBrightness = false,
+    cutType = cut.type
   )
 
   fun create(): DrawStore =

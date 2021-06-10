@@ -2,6 +2,8 @@ package components.cutslider
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.Value
+import com.arkivanov.decompose.value.operator.map
+import components.asValue
 import components.cutslider.Slider.Dependencies
 import components.getStore
 
@@ -17,8 +19,7 @@ class SliderComponent(
     ).provide()
   }
 
-  override val model: Value<Slider.Model>
-    get() = TODO("Not yet implemented")
+  override val model: Value<Slider.Model> = store.asValue().map(stateToModel)
 
   override fun onValueChange(value: Int) {
     TODO("Not yet implemented")

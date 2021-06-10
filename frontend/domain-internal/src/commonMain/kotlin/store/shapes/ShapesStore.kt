@@ -30,7 +30,8 @@ interface ShapesStore : Store<Intent, State, Label> {
     val hounsfield: Int?,
     val marks: List<MarkModel>,
     val expertMarks: List<MarkModel>,
-    val moveRect: Rect?
+    val moveRect: Rect?,
+    val cutType: CutType,
   ) : JvmSerializable
 
   sealed class Label {

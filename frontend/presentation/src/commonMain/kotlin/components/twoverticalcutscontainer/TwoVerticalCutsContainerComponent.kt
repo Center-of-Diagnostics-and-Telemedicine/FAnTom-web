@@ -6,7 +6,7 @@ import com.arkivanov.decompose.statekeeper.Parcelize
 import com.arkivanov.decompose.value.Value
 import com.badoo.reaktive.base.Consumer
 import components.Consumer
-import components.cut.Cut
+import components.cutcontainer.CutContainer
 import components.twoverticalcutscontainer.TwoVerticalCutsContainer.Child
 import components.twoverticalcutscontainer.TwoVerticalCutsContainer.Dependencies
 import model.CutType
@@ -14,7 +14,7 @@ import model.CutType
 class TwoVerticalCutsContainerComponent(
   componentContext: ComponentContext,
   dependencies: Dependencies,
-  private val cutFactory: (ComponentContext, CutType, Consumer<Cut.Output>) -> Cut,
+  private val cutContainerFactory: (ComponentContext, CutType, Consumer<CutContainer.Output>) -> CutContainer,
 ) : TwoVerticalCutsContainer, ComponentContext by componentContext, Dependencies by dependencies {
 
   private val topRouter: Router<ChildConfiguration, Child> = routerBuilder("TopRouter")
@@ -41,9 +41,9 @@ class TwoVerticalCutsContainerComponent(
     config: ChildConfiguration,
     componentContext: ComponentContext
   ): Child =
-    Child(component = cutFactory(componentContext, config.cutType, Consumer(::onCutOutput)))
+    Child(component = cutContainerFactory(componentContext, config.cutType, Consumer(::onCutOutput)))
 
-  private fun onCutOutput(output: Cut.Output): Unit =
+  private fun onCutOutput(output: CutContainer.Output): Unit =
     when (output) {
       else -> throw NotImplementedError("onCutOutput not implemented $output")
     }

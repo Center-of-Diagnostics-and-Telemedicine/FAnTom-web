@@ -128,7 +128,7 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
       }
       styledCanvas {
         attrs {
-          classes += "shape_canvas_${props.cut.type.intType}"
+          classes = classes + "shape_canvas_${props.cut.type.intType}"
           width = resultWidth.toString()
           height = resultHeight.toString()
         }

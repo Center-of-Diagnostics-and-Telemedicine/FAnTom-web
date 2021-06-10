@@ -27,6 +27,7 @@ abstract class ShapesStoreAbstractFactory(
     expertMarks = listOf(),
     rects = listOf(),
     moveRect = null,
+    cutType = cut.type
   )
 
   fun create(): ShapesStore =

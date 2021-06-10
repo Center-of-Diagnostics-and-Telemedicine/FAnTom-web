@@ -16,5 +16,6 @@ internal val stateToModel: (State) -> Model =
       marks = it.marks,
       expertMarks = it.expertMarks,
       moveRect = it.moveRect,
+      cutType = it.cutType
     )
   }

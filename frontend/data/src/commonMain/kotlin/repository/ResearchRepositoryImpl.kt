@@ -91,6 +91,36 @@ class ResearchRepositoryImpl(
     }
   }
 
+  override suspend fun getSlice(model: GetSliceModel): String {
+    val response = remote.getSlice(
+      token = token(),
+      request = SliceRequestNew(
+        image = ImageModel(
+          modality = getModalityStringType(model.type),
+          type = getSliceStringType(model.type),
+          number = model.sliceNumber,
+          mip = MipModel(
+            mip_method = getMipMethodStringType(model.mipMethod),
+            mip_value = model.aproxSize
+          ),
+          width = model.width,
+          height = model.height
+        ),
+        brightness = BrightnessModel(
+          black = model.black,
+          white = model.white,
+          gamma = model.gamma
+        )
+      ),
+      researchId = model.researchId
+    )
+    return when {
+      response.response != null -> response.response!!.image.removeSuffix("\\u003d")
+      response.error != null -> handleErrorResponse(response.error!!)
+      else -> throw SliceFetchException
+    }
+  }
+
   override suspend fun getHounsfieldData(
     sliceNumber: Int,
     type: Int,

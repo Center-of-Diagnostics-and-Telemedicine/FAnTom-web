@@ -14,19 +14,42 @@ sealed class Mip(
     name = "Без",
     valueName = NO_MIP,
     intValue = 2
-  )
+  ) {
+    override fun toString(): String {
+      return "Mip.No: " +
+        "name = \"Без\"," +
+        "valueName = NO_MIP," +
+        "intValue = 2"
+    }
+  }
 
   data class Average(override val value: Int = 0) : Mip(
     name = "Среднее",
     valueName = AVERAGE,
     intValue = 0
-  ), HasIntValue
+  ), HasIntValue {
+    override fun toString(): String {
+      return "Mip.Average: " +
+        "name = \"Среднее\"," +
+        "valueName = AVERAGE," +
+        "intValue = 0," +
+        "value = $value"
+    }
+  }
 
   data class Max(override val value: Int = 0) : Mip(
     name = "Максимальное",
     valueName = MAXVALUE,
     intValue = 1
-  ), HasIntValue
+  ), HasIntValue {
+    override fun toString(): String {
+      return "Mip.Max: " +
+        "name = \"Максимальное\"," +
+        "valueName = MAXVALUE," +
+        "intValue = 1" +
+        "value = $value"
+    }
+  }
 
   companion object {
 

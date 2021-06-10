@@ -2,6 +2,7 @@ package store.draw
 
 import com.arkivanov.mvikotlin.core.store.Store
 import model.Circle
+import model.CutType
 import model.Rectangle
 import model.defaultMarkColor
 import store.draw.DrawStore.*
@@ -18,6 +19,7 @@ interface DrawStore : Store<Intent, State, Label> {
     val isDrawingRectangle: Boolean = false,
     val isMoving: Boolean = false,
     val isContrastBrightness: Boolean = false,
+    val cutType: CutType,
   ) {
     fun circle(planar: Boolean): Circle {
       return if (planar) {

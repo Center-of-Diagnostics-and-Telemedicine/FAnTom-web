@@ -1,7 +1,6 @@
 package decompose.research.cut
 
-import com.arkivanov.decompose.RouterState
-import com.ccfraser.muirwik.components.mTypography
+import com.ccfraser.muirwik.components.*
 import components.cut.Cut
 import components.cut.Cut.Model
 import decompose.RenderableComponent
@@ -9,61 +8,39 @@ import decompose.research.cut.CutUi.State
 import kotlinx.css.*
 import react.RBuilder
 import react.RState
-import styled.StyleSheet
 import styled.css
 import styled.styledDiv
 
-class CutUi(props: Props<Cut>) :
-  RenderableComponent<Cut, State>(
-    props = props,
-    initialState = State(
-      model = props.component.model.value,
-      sliderRouterState = props.component.sliderRouterState.value,
-      drawRouterState = props.component.drawRouterState.value,
-      shapesRouterState = props.component.shapesRouterState.value,
-
-      )
-  ) {
+class CutUi(props: Props<Cut>) : RenderableComponent<Cut, State>(
+  props = props,
+  initialState = State(model = props.component.model.value)
+) {
 
   init {
-//    component.model.bindToState { model = it }
-    component.sliderRouterState.bindToState { sliderRouterState = it }
-    component.drawRouterState.bindToState { drawRouterState = it }
-    component.shapesRouterState.bindToState { shapesRouterState = it }
+    component.model.bindToState { model = it }
   }
 
   override fun RBuilder.render() {
-    mTypography { +"cut + ${state.model}" }
-  }
-
-  private fun RBuilder.emptyContainer() {
     styledDiv {
       css {
-        display = Display.flex
-        flex(1.0, 1.0, FlexBasis.auto)
+        position = Position.relative
+        zIndex = 0
+        width = 100.pct
+        height = 100.pct
+        backgroundImage = Image("url(\"data:image/bmp;base64,${state.model.slice}\")")
+        backgroundSize = "contain"
+        backgroundPosition = "center"
+        backgroundRepeat = BackgroundRepeat.noRepeat
+      }
+      if (state.model.loading) {
+        mLinearProgress(color = MLinearProgressColor.secondary) {
+          css {
+            width = 100.pct
+          }
+        }
       }
     }
   }
 
-  object CutStyles : StyleSheet("CutStyles", isStatic = true) {
-
-    val columnOfRowsStyle by css {
-      flex(1.0)
-      display = Display.flex
-      flexDirection = FlexDirection.column
-    }
-
-    val rowOfColumnsStyle by css {
-      flex(1.0)
-      display = Display.flex
-      flexDirection = FlexDirection.row
-    }
-  }
-
-  class State(
-    val model: Model,
-    var sliderRouterState: RouterState<*, Cut.SliderChild>,
-    var drawRouterState: RouterState<*, Cut.DrawChild>,
-    var shapesRouterState: RouterState<*, Cut.ShapesChild>,
-  ) : RState
+  class State(var model: Model) : RState
 }

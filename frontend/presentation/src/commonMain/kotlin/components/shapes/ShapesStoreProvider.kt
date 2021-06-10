@@ -30,6 +30,7 @@ internal class ShapesStoreProvider(
         expertMarks = listOf(),
         rects = listOf(),
         moveRect = null,
+        cutType = cutType,
       ),
 //      bootstrapper = SimpleBootstrapper(Unit),
       executorFactory = ::ExecutorImpl,

@@ -5,7 +5,7 @@ import com.arkivanov.decompose.statekeeper.Parcelable
 import com.arkivanov.decompose.statekeeper.Parcelize
 import com.arkivanov.decompose.value.Value
 import com.badoo.reaktive.base.Consumer
-import components.cut.Cut.SliderChild
+import components.cutcontainer.CutContainer.SliderChild
 import components.cutslider.Slider.Output
 
 internal class SliderRouter(
@@ -16,7 +16,7 @@ internal class SliderRouter(
 
   private val router =
     routerFactory.router<Config, SliderChild>(
-      initialConfiguration = Config.None,
+      initialConfiguration = Config.Slider,
       key = "SliderRouter",
       childFactory = ::createChild
     )
@@ -29,9 +29,15 @@ internal class SliderRouter(
       is Config.None -> SliderChild.None
     }
 
-  fun update() {
+  fun show() {
     if (state.value.activeChild.instance is SliderChild.None) {
-      router.push(Config.Slider)
+      router.replaceCurrent(Config.Slider)
+    }
+  }
+
+  fun hide() {
+    if (state.value.activeChild.instance is SliderChild.Data) {
+      router.replaceCurrent(Config.None)
     }
   }
 

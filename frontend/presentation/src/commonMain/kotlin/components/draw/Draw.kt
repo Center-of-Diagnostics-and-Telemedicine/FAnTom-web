@@ -13,8 +13,6 @@ interface Draw {
 
   val model: Value<Model>
 
-//  fun onValueChange(value: Int)
-
   data class Model(
     val startDicomX: Double,
     val startDicomY: Double,
@@ -24,6 +22,7 @@ interface Draw {
     val isDrawingRectangle: Boolean = false,
     val isMoving: Boolean = false,
     val isContrastBrightness: Boolean = false,
+    val cutType: CutType,
   )
 
   interface Dependencies {

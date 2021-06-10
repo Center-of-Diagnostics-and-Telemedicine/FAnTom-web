@@ -5,7 +5,7 @@ import components.fourcutscontainer.FourCutsContainer
 import components.fourcutscontainer.FourCutsContainer.Child
 import decompose.RenderableComponent
 import decompose.renderableChild
-import decompose.research.cut.CutUi
+import decompose.research.cut.CutContainerUi
 import decompose.research.cuts.FourCutsContainerUi.FourCutsContainerStyles.columnOfRowsStyle
 import decompose.research.cuts.FourCutsContainerUi.FourCutsContainerStyles.rowOfColumnsStyle
 import decompose.research.cuts.FourCutsContainerUi.State
@@ -42,35 +42,17 @@ class FourCutsContainerUi(props: Props<FourCutsContainer>) :
 
       styledDiv {
         css(rowOfColumnsStyle)
-        cutContainer {
-          renderableChild(CutUi::class, state.topLeftRouterState.activeChild.instance.component)
-        }
-        cutContainer {
-          renderableChild(CutUi::class, state.topRightRouterState.activeChild.instance.component)
-        }
+        renderableChild(CutContainerUi::class, state.topLeftRouterState.activeChild.instance.component)
+        renderableChild(CutContainerUi::class, state.topRightRouterState.activeChild.instance.component)
       }
 
       styledDiv {
         css(rowOfColumnsStyle)
-        cutContainer {
-          renderableChild(CutUi::class, state.bottomLeftRouterState.activeChild.instance.component)
-        }
-        cutContainer {
-          renderableChild(CutUi::class, state.bottomRightRouterState.activeChild.instance.component)
-        }
+        renderableChild(CutContainerUi::class, state.bottomLeftRouterState.activeChild.instance.component)
+        renderableChild(CutContainerUi::class, state.bottomRightRouterState.activeChild.instance.component)
       }
     }
 
-  }
-
-  private fun RBuilder.cutContainer(block: RBuilder.() -> Unit) {
-    styledDiv {
-      css {
-        display = Display.flex
-        flex(1.0, 1.0, FlexBasis.auto)
-      }
-      block()
-    }
   }
 
   object FourCutsContainerStyles : StyleSheet("FourCutsContainerStyles", isStatic = true) {

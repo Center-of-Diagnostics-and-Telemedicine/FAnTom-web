@@ -1,13 +1,19 @@
 package decompose.research.cuts
 
 import com.arkivanov.decompose.RouterState
-import com.ccfraser.muirwik.components.mTypography
 import components.twohorizontalcutscontainer.TwoHorizontalCutsContainer
 import components.twohorizontalcutscontainer.TwoHorizontalCutsContainer.Child
 import decompose.RenderableComponent
+import decompose.renderableChild
+import decompose.research.cut.CutContainerUi
 import decompose.research.cuts.TwoHorizontalCutsContainerUi.State
+import decompose.research.cuts.TwoHorizontalCutsContainerUi.TwoHorizontalCutsContainerStyles.rowOfColumnsStyle
+import kotlinx.css.*
 import react.RBuilder
 import react.RState
+import styled.StyleSheet
+import styled.css
+import styled.styledDiv
 
 class TwoHorizontalCutsContainerUi(props: Props<TwoHorizontalCutsContainer>) :
   RenderableComponent<TwoHorizontalCutsContainer, State>(
@@ -26,7 +32,20 @@ class TwoHorizontalCutsContainerUi(props: Props<TwoHorizontalCutsContainer>) :
   }
 
   override fun RBuilder.render() {
-    mTypography { +"TwoHorizontalCutsContainerUi" }
+    styledDiv {
+      css(rowOfColumnsStyle)
+      renderableChild(CutContainerUi::class, state.leftRouterState.activeChild.instance.component)
+      renderableChild(CutContainerUi::class, state.rightRouterState.activeChild.instance.component)
+    }
+  }
+
+  object TwoHorizontalCutsContainerStyles :
+    StyleSheet("TwoHorizontalCutsContainerStyles", isStatic = true) {
+    val rowOfColumnsStyle by css {
+      flex(1.0)
+      display = Display.flex
+      flexDirection = FlexDirection.row
+    }
   }
 
   class State(

@@ -28,7 +28,8 @@ internal class DrawStoreProvider(
         dicomRadiusVertical = 0.0,
         isDrawingEllipse = false,
         isMoving = false,
-        isContrastBrightness = false
+        isContrastBrightness = false,
+        cutType = cutType,
       ),
 //      bootstrapper = SimpleBootstrapper(Unit),
       executorFactory = ::ExecutorImpl,

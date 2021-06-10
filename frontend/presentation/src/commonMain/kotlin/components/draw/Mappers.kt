@@ -14,5 +14,6 @@ internal val stateToModel: (State) -> Model =
       isDrawingRectangle = it.isDrawingRectangle,
       isMoving = it.isMoving,
       isContrastBrightness = it.isContrastBrightness,
+      cutType = it.cutType
     )
   }
