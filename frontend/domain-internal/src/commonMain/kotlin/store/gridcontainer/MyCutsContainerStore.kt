@@ -2,7 +2,6 @@ package store.gridcontainer
 
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
-import model.Cut
 import model.GridModel
 import model.GridType
 import store.gridcontainer.MyCutsContainerStore.Intent
@@ -14,6 +13,7 @@ interface MyCutsContainerStore : Store<Intent, State, Nothing> {
   }
 
   data class State(
-    val gridType: GridType
+    val gridType: GridType,
+    val gridModel: GridModel
   ) : JvmSerializable
 }

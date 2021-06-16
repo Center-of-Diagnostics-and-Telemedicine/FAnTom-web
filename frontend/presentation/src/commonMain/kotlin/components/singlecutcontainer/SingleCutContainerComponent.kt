@@ -13,6 +13,7 @@ import components.cutcontainer.CutContainer
 import components.singlecutcontainer.SingleCutContainer.Child
 import components.singlecutcontainer.SingleCutContainer.Dependencies
 import model.CutType
+import model.initialSingleGrid
 
 class SingleCutContainerComponent(
   componentContext: ComponentContext,
@@ -20,10 +21,12 @@ class SingleCutContainerComponent(
   private val cutContainerFactory: (ComponentContext, CutType, Consumer<CutContainer.Output>) -> CutContainer,
 ) : SingleCutContainer, ComponentContext by componentContext, Dependencies by dependencies {
 
+  private val grid = initialSingleGrid(data.type)
+
   private val router =
     router(
-      initialConfiguration = ChildConfiguration(CutType.getByValue(data.modalities.keys.first())),
-      handleBackButton = true,
+      initialConfiguration = ChildConfiguration(grid.cut),
+      handleBackButton = false,
       childFactory = ::resolveChild
     )
 
@@ -36,7 +39,8 @@ class SingleCutContainerComponent(
   private fun resolveChild(
     configuration: ChildConfiguration,
     componentContext: ComponentContext
-  ): Child = Child(cutContainerFactory(componentContext, configuration.cutType, Consumer(::onCutOutput)))
+  ): Child =
+    Child(cutContainerFactory(componentContext, configuration.cutType, Consumer(::onCutOutput)))
 
   private fun onCutOutput(output: CutContainer.Output): Unit =
     when (output) {

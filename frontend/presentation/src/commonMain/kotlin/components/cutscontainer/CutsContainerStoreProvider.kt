@@ -10,6 +10,7 @@ import com.badoo.reaktive.observable.map
 import com.badoo.reaktive.utils.ensureNeverFrozen
 import model.GridType
 import model.ResearchData
+import model.buildModel
 import repository.GridRepository
 import repository.ResearchRepository
 import store.gridcontainer.MyCutsContainerStore
@@ -28,7 +29,8 @@ internal class CutsContainerStoreProvider(
     object : MyCutsContainerStore, Store<Intent, State, Nothing> by storeFactory.create(
       name = "MyCutsContainerStore_$researchId",
       initialState = State(
-        gridType = GridType.initial
+        gridType = GridType.initial,
+        gridModel = GridType.initial.buildModel(data)
       ),
       bootstrapper = SimpleBootstrapper(Unit),
       executorFactory = ::ExecutorImpl,

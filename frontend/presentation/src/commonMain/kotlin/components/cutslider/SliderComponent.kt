@@ -15,7 +15,8 @@ class SliderComponent(
   private val store = instanceKeeper.getStore {
     SliderStoreProvider(
       storeFactory = storeFactory,
-      researchId = researchId
+      researchId = researchId,
+      cutType = cutType,
     ).provide()
   }
 

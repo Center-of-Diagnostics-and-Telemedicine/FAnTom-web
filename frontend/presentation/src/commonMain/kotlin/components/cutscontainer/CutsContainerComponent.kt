@@ -58,7 +58,11 @@ class CutsContainerComponent(
   }
 
   override fun changeGrid(gridType: GridType) {
-    router.replaceCurrent(gridType.toConfig())
+    val newConfig = gridType.toConfig()
+    val oldConfig = router.state.value.activeChild.configuration
+    if (oldConfig != newConfig) {
+      router.replaceCurrent(newConfig)
+    }
   }
 
   private fun createChild(configuration: Configuration, componentContext: ComponentContext): Child {

@@ -10,6 +10,7 @@ import components.cutcontainer.CutContainer
 import components.fourcutscontainer.FourCutsContainer.Child
 import components.fourcutscontainer.FourCutsContainer.Dependencies
 import model.CutType
+import model.initialFourGrid
 
 class FourCutsContainerComponent(
   componentContext: ComponentContext,
@@ -17,18 +18,36 @@ class FourCutsContainerComponent(
   private val cutContainerFactory: (ComponentContext, CutType, Consumer<CutContainer.Output>) -> CutContainer,
 ) : FourCutsContainer, ComponentContext by componentContext, Dependencies by dependencies {
 
-  private val topLeftRouter: Router<ChildConfiguration, Child> = routerBuilder("TopLeftRouter")
+  val grid = initialFourGrid(data.type)
+
+  private val topLeftRouter: Router<ChildConfiguration, Child> = router(
+    initialConfiguration = ChildConfiguration(grid.topLeft),
+    key = "TopLeftRouter",
+    childFactory = ::resolveChild
+  )
   override val topLeftRouterState: Value<RouterState<*, Child>> = topLeftRouter.state
 
-  private val topRightRouter: Router<ChildConfiguration, Child> = routerBuilder("TopRightRouter")
+  private val topRightRouter: Router<ChildConfiguration, Child> = router(
+    initialConfiguration = ChildConfiguration(grid.topRight),
+    key = "TopRightRouter",
+    childFactory = ::resolveChild
+  )
   override val topRightRouterState: Value<RouterState<*, Child>> = topRightRouter.state
 
   private val bottomLeftRouter: Router<ChildConfiguration, Child> =
-    routerBuilder("BottomLeftRouter")
+    router(
+      initialConfiguration = ChildConfiguration(grid.bottomLeft),
+      key = "BottomLeftRouter",
+      childFactory = ::resolveChild
+    )
   override val bottomLeftRouterState: Value<RouterState<*, Child>> = bottomLeftRouter.state
 
   private val bottomRightRouter: Router<ChildConfiguration, Child> =
-    routerBuilder("BottomRightRouter")
+    router(
+      initialConfiguration = ChildConfiguration(grid.bottomRight),
+      key = "BottomRightRouter",
+      childFactory = ::resolveChild
+    )
   override val bottomRightRouterState: Value<RouterState<*, Child>> = bottomRightRouter.state
 
   override fun changeTopLeftCutType(cutType: CutType) {
@@ -47,17 +66,12 @@ class FourCutsContainerComponent(
     bottomRightRouter.replaceCurrent(ChildConfiguration(cutType))
   }
 
-  private fun routerBuilder(key: String) = router(
-    initialConfiguration = ChildConfiguration(CutType.EMPTY),
-    key = key,
-    childFactory = ::resolveChild
-  )
-
   private fun resolveChild(
     config: ChildConfiguration,
     componentContext: ComponentContext
-  ): Child =
-    Child(component = cutContainerFactory(componentContext, config.cutType, Consumer(::onCutOutput)))
+  ): Child = Child(
+    component = cutContainerFactory(componentContext, config.cutType, Consumer(::onCutOutput))
+  )
 
   private fun onCutOutput(output: CutContainer.Output): Unit =
     when (output) {

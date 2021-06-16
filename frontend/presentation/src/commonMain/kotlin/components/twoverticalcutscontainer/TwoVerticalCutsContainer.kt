@@ -21,10 +21,6 @@ interface TwoVerticalCutsContainer {
   fun changeTopCutType(cutType: CutType)
   fun changeBottomCutType(cutType: CutType)
 
-//  data class Model(
-//    val cutType: CutType
-//  )
-
   interface Dependencies {
     val storeFactory: StoreFactory
     val twoVerticalCutsContainerOutput: Consumer<Output>

@@ -36,8 +36,6 @@ class GridUi(props: Props<Grid>) : RenderableComponent<Grid, State>(
   }
 
   override fun RBuilder.render() {
-    debugLog("GridUi render called")
-    debugLog(state.model.grid.toString())
     themeContext.Consumer { theme ->
       mPaper {
         div {

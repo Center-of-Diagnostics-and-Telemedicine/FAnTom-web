@@ -2,26 +2,26 @@ package model
 
 import replace
 
-sealed class GridType {
-  object Single : GridType() {
+sealed interface GridType {
+  object Single : GridType {
     override fun toString(): String {
       return "GridType.Single"
     }
   }
 
-  object TwoVertical : GridType() {
+  object TwoVertical : GridType {
     override fun toString(): String {
       return "GridType.TwoVertical"
     }
   }
 
-  object TwoHorizontal : GridType() {
+  object TwoHorizontal : GridType {
     override fun toString(): String {
       return "GridType.TwoHorizontal"
     }
   }
 
-  object Four : GridType() {
+  object Four : GridType {
     override fun toString(): String {
       return "GridType.Four"
     }
@@ -96,7 +96,16 @@ sealed class GridModel(override val types: List<CutType>) : MyGrid {
   }
 }
 
-fun initialSingleGrid(researchType: ResearchType): GridModel {
+fun GridType.buildModel(data: ResearchData): GridModel {
+  return when (this) {
+    GridType.Single -> initialSingleGrid(data.type)
+    GridType.TwoVertical -> initialTwoVerticalGrid(data.type)
+    GridType.TwoHorizontal -> initialTwoHorizontalGrid(data.type)
+    GridType.Four -> initialFourGrid(data.type)
+  }
+}
+
+fun initialSingleGrid(researchType: ResearchType): GridModel.Single {
   return when (researchType) {
     ResearchType.CT -> GridModel.Single(CutType.CT_AXIAL)
     ResearchType.MG -> GridModel.Single(CutType.MG_RCC)
@@ -104,7 +113,7 @@ fun initialSingleGrid(researchType: ResearchType): GridModel {
   }
 }
 
-fun initialTwoVerticalGrid(researchType: ResearchType): GridModel {
+fun initialTwoVerticalGrid(researchType: ResearchType): GridModel.TwoVertical {
   return when (researchType) {
     ResearchType.CT -> GridModel.TwoVertical(CutType.CT_AXIAL, CutType.CT_FRONTAL)
     ResearchType.MG -> GridModel.TwoVertical(CutType.MG_RCC, CutType.MG_LCC)
@@ -112,7 +121,7 @@ fun initialTwoVerticalGrid(researchType: ResearchType): GridModel {
   }
 }
 
-fun initialTwoHorizontalGrid(researchType: ResearchType): GridModel {
+fun initialTwoHorizontalGrid(researchType: ResearchType): GridModel.TwoHorizontal {
   return when (researchType) {
     ResearchType.CT -> GridModel.TwoHorizontal(CutType.CT_FRONTAL, CutType.CT_SAGITTAL)
     ResearchType.MG -> GridModel.TwoHorizontal(CutType.MG_RCC, CutType.MG_LCC)
@@ -156,6 +165,33 @@ fun initialFourGrid(
           bottomRight = CutType.MG_LMLO
         )
       }
+    }
+    ResearchType.DX -> GridModel.Four(
+      topLeft = CutType.DX_GENERIC,
+      topRight = CutType.DX_POSTERO_ANTERIOR,
+      bottomLeft = CutType.DX_LEFT_LATERAL,
+      bottomRight = CutType.DX_RIGHT_LATERAL
+    )
+  }
+}
+
+fun initialFourGrid(
+  researchType: ResearchType,
+): GridModel.Four {
+  return when (researchType) {
+    ResearchType.CT -> GridModel.Four(
+      topLeft = CutType.CT_AXIAL,
+      topRight = CutType.EMPTY,
+      bottomLeft = CutType.CT_FRONTAL,
+      bottomRight = CutType.CT_SAGITTAL
+    )
+    ResearchType.MG -> {
+      GridModel.Four(
+        topLeft = CutType.MG_RCC,
+        topRight = CutType.MG_LCC,
+        bottomLeft = CutType.MG_RMLO,
+        bottomRight = CutType.MG_LMLO
+      )
     }
     ResearchType.DX -> GridModel.Four(
       topLeft = CutType.DX_GENERIC,

@@ -19,9 +19,9 @@ interface SingleCutContainer {
 
   fun changeCutType(cutType: CutType)
 
-  data class Model(
-    val cutType: CutType
-  )
+//  data class Model(
+//    val cutType: CutType
+//  )
 
   interface Dependencies {
     val storeFactory: StoreFactory

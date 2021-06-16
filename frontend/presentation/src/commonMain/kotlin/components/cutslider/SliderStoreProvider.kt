@@ -6,6 +6,7 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
 import com.badoo.reaktive.utils.ensureNeverFrozen
+import model.CutType
 import store.slider.SliderStore
 import store.slider.SliderStore.Intent
 import store.slider.SliderStore.State
@@ -13,11 +14,12 @@ import store.slider.SliderStore.State
 internal class SliderStoreProvider(
   private val storeFactory: StoreFactory,
   private val researchId: Int,
+  private val cutType: CutType
 ) {
 
   fun provide(): SliderStore =
     object : SliderStore, Store<Intent, State, Nothing> by storeFactory.create(
-      name = "SliderStore",
+      name = "SliderStore_${researchId}_${cutType.intType}",
       initialState = State(
         currentValue = 1,
         maxValue = 100,

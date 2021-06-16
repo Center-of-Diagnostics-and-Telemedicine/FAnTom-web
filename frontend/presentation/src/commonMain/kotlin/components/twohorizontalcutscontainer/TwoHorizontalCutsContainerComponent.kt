@@ -10,6 +10,7 @@ import components.cutcontainer.CutContainer
 import components.twohorizontalcutscontainer.TwoHorizontalCutsContainer.Child
 import components.twohorizontalcutscontainer.TwoHorizontalCutsContainer.Dependencies
 import model.CutType
+import model.initialTwoHorizontalGrid
 
 class TwoHorizontalCutsContainerComponent(
   componentContext: ComponentContext,
@@ -17,10 +18,21 @@ class TwoHorizontalCutsContainerComponent(
   private val cutContainerFactory: (ComponentContext, CutType, Consumer<CutContainer.Output>) -> CutContainer,
 ) : TwoHorizontalCutsContainer, ComponentContext by componentContext, Dependencies by dependencies {
 
-  private val leftRouter: Router<ChildConfiguration, Child> = routerBuilder("LeftRouter")
+  val grid = initialTwoHorizontalGrid(data.type)
+
+  private val leftRouter: Router<ChildConfiguration, Child> =
+    router(
+      initialConfiguration = ChildConfiguration(grid.left),
+      key = "LeftRouter",
+      childFactory = ::resolveChild
+    )
   override val leftRouterState: Value<RouterState<*, Child>> = leftRouter.state
 
-  private val rightRouter: Router<ChildConfiguration, Child> = routerBuilder("RightRouter")
+  private val rightRouter: Router<ChildConfiguration, Child> = router(
+    initialConfiguration = ChildConfiguration(grid.right),
+    key = "RightRouter",
+    childFactory = ::resolveChild
+  )
   override val rightRouterState: Value<RouterState<*, Child>> = rightRouter.state
 
   override fun changeLeftCutType(cutType: CutType) {
@@ -31,17 +43,17 @@ class TwoHorizontalCutsContainerComponent(
     rightRouter.replaceCurrent(ChildConfiguration(cutType))
   }
 
-  private fun routerBuilder(key: String) = router(
-    initialConfiguration = ChildConfiguration(CutType.EMPTY),
-    key = key,
-    childFactory = ::resolveChild
-  )
-
   private fun resolveChild(
     config: ChildConfiguration,
     componentContext: ComponentContext
   ): Child =
-    Child(component = cutContainerFactory(componentContext, config.cutType, Consumer(::onCutOutput)))
+    Child(
+      component = cutContainerFactory(
+        componentContext,
+        config.cutType,
+        Consumer(::onCutOutput)
+      )
+    )
 
   private fun onCutOutput(output: CutContainer.Output): Unit =
     when (output) {
