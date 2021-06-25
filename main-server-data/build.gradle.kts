@@ -26,6 +26,7 @@ dependencies {
   implementation(Deps.Ktor.Auth.Core)
 
   implementation(Deps.Docker.Java)
+  implementation(Deps.Docker.TransportJersey)
 
   implementation(Deps.Badoo.Reaktive.Jvm)
 

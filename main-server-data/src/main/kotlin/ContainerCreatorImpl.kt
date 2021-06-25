@@ -1,13 +1,10 @@
 import com.github.dockerjava.api.DockerClient
 import com.github.dockerjava.api.command.CreateContainerCmd
 import com.github.dockerjava.api.command.WaitContainerResultCallback
-import com.github.dockerjava.api.model.Bind
-import com.github.dockerjava.api.model.ExposedPort
-import com.github.dockerjava.api.model.Ports
-import com.github.dockerjava.api.model.Volume
+import com.github.dockerjava.api.model.*
 import com.github.dockerjava.core.DefaultDockerClientConfig
 import com.github.dockerjava.core.DockerClientImpl
-import com.github.dockerjava.jaxrs.JerseyDockerCmdExecFactory
+import com.github.dockerjava.jaxrs.JerseyDockerHttpClient
 import model.DockerConfigModel
 import repository.ContainerCreator
 import java.io.File
@@ -22,13 +19,13 @@ class ContainerCreatorImpl(
     .withRegistryPassword(dockerConfigModel.dockerUserPassword)
     .build()
 
-  private val execFactory = JerseyDockerCmdExecFactory()
-    .withReadTimeout(20000)
-    .withConnectTimeout(20000)
+  private val execFactory = JerseyDockerHttpClient.Builder()
+    .readTimeout(20000)
+    .connectTimeout(20000)
+    .dockerHost(config.dockerHost)
+    .build()
 
-  private val dockerClient: DockerClient = DockerClientImpl
-    .getInstance(config)
-    .withDockerCmdExecFactory(execFactory)
+  private val dockerClient: DockerClient = DockerClientImpl.getInstance(config, execFactory)
 
   override suspend fun createContainer(
     userId: Int,
@@ -60,21 +57,19 @@ class ContainerCreatorImpl(
     val researchPath = "${dockerConfigModel.dockerDataStorePath}/${researchDir.name}"
     val dirWithResearchInsideContainer = Volume(researchPath)
     debugLog("research path = ${researchDir.path}, dirWithResearchInsideContainer = $dirWithResearchInsideContainer")
-
     val bindDir = Bind(researchDir.path, dirWithResearchInsideContainer)
+    val hostConfig = HostConfig.newHostConfig().withPortBindings(portBindings).withBinds(bindDir)
+
     return dockerClient
       .createContainerCmd(dockerConfigModel.dockerContainerAppConfigModel.name)
       .withCmd(
         dockerConfigModel.dockerContainerAppConfigModel.mainFile,
         researchPath,
         dockerConfigModel.dockerContainerAppConfigModel.configFile,
-//        "-r"
       )
+      .withHostConfig(hostConfig)
       .withExposedPorts(portInsideContainer)
-      .withPortBindings()
-      .withPublishAllPorts(true)
       .withVolumes(dirWithResearchInsideContainer)
-      .withBinds(bindDir)
   }
 
   override suspend fun deleteLibrary(containerId: String) {

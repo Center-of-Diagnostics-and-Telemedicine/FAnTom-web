@@ -207,7 +207,9 @@ object Deps {
   }
 
   object Docker : Group(name = "com.github.docker-java") {
-    object Java : Dependency(group = Docker, name = "docker-java", version = "3.2.1")
+    private const val version = "3.2.10"
+    object Java : Dependency(group = Docker, name = "docker-java", version = version)
+    object TransportJersey : Dependency(group = Docker, name = "docker-java-transport-jersey", version = version)
   }
 
   object TouchLab : Group(name = "co.touchlab") {

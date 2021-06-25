@@ -14,7 +14,7 @@ class SessionRepositoryImpl(
 ) : SessionRepository {
 
   private val sessions: MutableMap<Int, RemoteLibraryRepository> = mutableMapOf()
-  private var portsCounter: Int = 30000
+  private var portsCounter: Int = 49999
 
   override suspend fun getSession(userId: Int): RemoteLibraryRepository? {
     return sessions[userId]

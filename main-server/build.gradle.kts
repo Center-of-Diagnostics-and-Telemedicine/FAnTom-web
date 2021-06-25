@@ -50,6 +50,7 @@ dependencies {
     implementation(Deps.FlyWay.Core)
 
     implementation(Deps.Docker.Java)
+    implementation(Deps.Docker.TransportJersey)
 
     implementation(project(":api-models"))
     implementation(project(":backend-models"))
