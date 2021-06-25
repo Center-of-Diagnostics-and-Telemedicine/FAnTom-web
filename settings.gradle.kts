@@ -1,7 +1,7 @@
 rootProject.name = "FantomWeb"
 
-include("main-server")
 include("api-models")
+
 include("frontend:domain-internal")
 include("frontend:domain")
 include("frontend:presentation")
@@ -9,10 +9,11 @@ doIfJsTargetAvailable {
   include("frontend:js")
 }
 include("frontend:data")
+
+include("backend:jvm")
+include("backend:data")
+include("backend:domain")
 include("expert-export-import")
-include("backend-models")
-include("main-server-domain")
-include("main-server-data")
 
 enum class BuildType {
   ALL, METADATA, NON_NATIVE, ANDROID, JVM, JS, LINUX, IOS, MAC_OS
