@@ -6,6 +6,7 @@ import decompose.RenderableComponent
 import decompose.research.cut.SliderUi.State
 import react.RBuilder
 import react.RState
+import decompose.Props
 
 class SliderUi(props: Props<Slider>) : RenderableComponent<Slider, State>(
   props = props,

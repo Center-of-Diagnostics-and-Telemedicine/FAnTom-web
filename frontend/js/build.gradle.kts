@@ -3,7 +3,7 @@ plugins {
 }
 
 kotlin {
-  js(LEGACY) {
+  js(IR) {
     useCommonJs()
     browser {
       webpackTask {
@@ -21,6 +21,7 @@ kotlin {
         }
       }
     }
+    binaries.executable()
   }
 }
 
@@ -33,16 +34,17 @@ dependencies {
 
   implementation(Deps.Muirwik.Components)
 
+
   implementation(Deps.MVIKotlin.Core)
   implementation(Deps.MVIKotlin.Main)
   implementation(Deps.MVIKotlin.TimeTravel)
   implementation(Deps.MVIKotlin.Logging)
   implementation(Deps.MVIKotlin.Rx)
+  implementation(Deps.Decompose.Core)
   implementation(Deps.Badoo.Reaktive.Reaktive)
   implementation(project(":frontend:data"))
   implementation(project(":frontend:presentation"))
 
-  implementation("com.arkivanov.decompose:decompose:0.2.4")
 
   implementation(npm("@material-ui/core", "^4.11.0"))
   implementation(npm("@material-ui/lab", "4.0.0-alpha.56"))

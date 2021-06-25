@@ -4,7 +4,7 @@ import io.ktor.application.*
 import io.ktor.locations.*
 import io.ktor.request.*
 import io.ktor.response.*
-import io.ktor.routing.*
+import io.ktor.routing.Route
 import model.*
 import repository.ResearchRepository
 import repository.SessionRepository
@@ -43,7 +43,7 @@ fun Route.getSlice(
       )
     } catch (e: Exception) {
       application.log.error("Failed to get slice", e)
-      if(e is ConnectException){
+      if (e is ConnectException) {
         respondError(ErrorStringCode.SESSION_EXPIRED)
       } else {
         respondError(ErrorStringCode.GET_SLICE_FAILED)

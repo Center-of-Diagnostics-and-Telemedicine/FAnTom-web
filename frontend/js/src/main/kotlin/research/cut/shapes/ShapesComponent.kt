@@ -15,6 +15,7 @@ import styled.styledCanvas
 import styled.styledDiv
 import view.ShapesView
 import kotlinx.browser.document
+import react.dom.attrs
 import kotlin.math.*
 
 class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(prps) {
@@ -127,7 +128,7 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
         left = resultLeft.px
       }
       styledCanvas {
-        attrs {
+        this@styledCanvas.attrs {
           classes = classes + "shape_canvas_${props.cut.type.intType}"
           width = resultWidth.toString()
           height = resultHeight.toString()

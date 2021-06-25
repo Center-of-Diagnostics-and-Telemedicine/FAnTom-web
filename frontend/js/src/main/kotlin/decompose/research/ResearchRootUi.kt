@@ -20,6 +20,7 @@ import react.setState
 import research.*
 import styled.css
 import styled.styledDiv
+import decompose.Props
 
 class ResearchRootUi(props: Props<ResearchRoot>) : RenderableComponent<ResearchRoot, State>(
   props = props,

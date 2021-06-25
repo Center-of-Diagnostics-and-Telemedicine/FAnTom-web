@@ -5,7 +5,7 @@ import io.ktor.http.*
 import io.ktor.locations.*
 import io.ktor.request.*
 import io.ktor.response.*
-import io.ktor.routing.*
+import io.ktor.routing.Route
 import model.*
 import repository.UserRepository
 import util.Register

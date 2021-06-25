@@ -5,6 +5,7 @@ import com.ccfraser.muirwik.components.*
 import com.ccfraser.muirwik.components.styles.ThemeOptions
 import com.ccfraser.muirwik.components.styles.createMuiTheme
 import components.root.MyRoot
+import decompose.Props
 import decompose.RenderableComponent
 import decompose.login.LoginUi
 import decompose.mainframe.MainFrameUi

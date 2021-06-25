@@ -18,6 +18,7 @@ import react.RState
 import react.setState
 import styled.css
 import styled.styledDiv
+import decompose.Props
 
 class MipUi(props: Props<Mip>) : RenderableComponent<Mip, State>(
   props = props,

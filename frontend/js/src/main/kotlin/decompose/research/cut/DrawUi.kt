@@ -9,9 +9,11 @@ import kotlinx.html.classes
 import kotlinx.html.js.*
 import react.RBuilder
 import react.RState
+import react.dom.attrs
 import styled.css
 import styled.styledCanvas
 import styled.styledDiv
+import decompose.Props
 
 class DrawUi(props: Props<Draw>) : RenderableComponent<Draw, State>(
   props = props,
@@ -31,7 +33,7 @@ class DrawUi(props: Props<Draw>) : RenderableComponent<Draw, State>(
         zIndex = 2
       }
       styledCanvas {
-        attrs {
+        this@styledCanvas.attrs {
           classes = classes + "draw_canvas_${state.model.cutType}"
 //          width = resultWidth.toString()
 //          height = resultHeight.toString()

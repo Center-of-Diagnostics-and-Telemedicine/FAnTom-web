@@ -16,7 +16,7 @@ kotlinCompat {
         implementation(Deps.Badoo.Reaktive.Utils)
         implementation(Deps.Badoo.Reaktive.CoroutinesInterop)
 
-        implementation("com.arkivanov.decompose:decompose:0.2.4")
+        implementation(Deps.Decompose.Core)
       }
     }
 

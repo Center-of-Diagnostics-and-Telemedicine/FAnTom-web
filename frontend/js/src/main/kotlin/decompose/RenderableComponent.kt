@@ -6,7 +6,10 @@ import react.RComponent
 import react.RProps
 import react.RState
 import react.setState
-import decompose.RenderableComponent.Props
+
+external interface Props<T : Any> : RProps {
+  var component: T
+}
 
 abstract class RenderableComponent<T : Any, S : RState>(props: Props<T>, initialState: S) : RComponent<Props<T>, S>(props) {
 
@@ -35,10 +38,6 @@ abstract class RenderableComponent<T : Any, S : RState>(props: Props<T>, initial
 
   protected fun <T : Any> Value<T>.bindToState(buildState: S.(T) -> Unit) {
     subscriptions += Subscription(this) { data -> setState { buildState(data) } }
-  }
-
-  interface Props<T : Any> : RProps {
-    var component: T
   }
 
   protected class Subscription<T : Any>(

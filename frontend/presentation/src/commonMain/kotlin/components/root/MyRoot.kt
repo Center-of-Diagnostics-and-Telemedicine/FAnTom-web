@@ -9,6 +9,7 @@ import components.login.Login
 import components.mainframe.MainFrame
 import components.root.MyRoot.Dependencies
 import repository.*
+import kotlin.js.JsName
 
 interface MyRoot {
 

@@ -6,7 +6,7 @@ This file is licensed under BSD-3-Clause license. See LICENSE file for details.
 
 object Deps {
 
-  const val kotlinVersion = "1.5.0"
+  const val kotlinVersion = "1.5.20"
 
   object Jetbrains {
     object Kotlin : Group(name = "org.jetbrains.kotlin") {
@@ -49,8 +49,8 @@ object Deps {
       }
     }
 
-    object Wrappers : Group(name = "org.jetbrains") {
-      private const val kotlinJsVersion = "pre.156-kotlin-$kotlinVersion"
+    object Wrappers : Group(name = "org.jetbrains.kotlin-wrappers") {
+      private const val kotlinJsVersion = "pre.213-kotlin-$kotlinVersion"
       private const val kotlinReactVersion = "17.0.2-$kotlinJsVersion"
       private const val styledVersion = "5.3.0-$kotlinJsVersion"
       private const val extensionsVersion = "1.0.1-$kotlinJsVersion"
@@ -70,7 +70,7 @@ object Deps {
 
     object Kotlinx : Group(name = "org.jetbrains.kotlinx") {
       object Coroutines {
-        private const val version = "1.4.2"
+        private const val version = "1.5.0"
 
         object Core :
           Dependency(group = Kotlinx, name = "kotlinx-coroutines-core", version = version) {
@@ -89,7 +89,7 @@ object Deps {
       }
 
       object Serialization {
-        private const val version = "1.1.0"
+        private const val version = "1.2.1"
 
         object Json :
           Dependency(group = Kotlinx, name = "kotlinx-serialization-json", version = version)
@@ -107,7 +107,7 @@ object Deps {
   }
 
   object Ktor : Group(name = "io.ktor") {
-    private const val version = "1.5.4"
+    private const val version = "1.6.0"
 
     object Gson : Dependency(group = Ktor, name = "ktor-gson", version = version)
     object Locations : Dependency(group = Ktor, name = "ktor-locations", version = version)
@@ -151,7 +151,7 @@ object Deps {
 
   object Badoo {
     object Reaktive : Group(name = "com.badoo.reaktive") {
-      private const val version = "1.1.21"
+      private const val version = "1.2.0"
 
       object Reaktive : Dependency(group = Badoo.Reaktive, name = "reaktive", version = version)
       object Jvm : Dependency(group = Badoo.Reaktive, name = "reaktive-jvm", version = version)
@@ -182,25 +182,31 @@ object Deps {
       Dependency(group = MVIKotlin, name = "mvikotlin-extensions-reaktive", version = version)
   }
 
+  object Decompose : Group(name = "com.arkivanov.decompose") {
+    private const val version = "0.2.6"
+
+    object Core : Dependency(group = Decompose, name = "decompose", version = version)
+  }
+
   object Muirwik : Group(name = "com.ccfraser.muirwik") {
-    private const val version = "0.6.7"
+    private const val version = "0.8.0"
 
     object Components : Dependency(group = Muirwik, name = "muirwik-components", version = version)
   }
 
-  object Logback: Group(name = "ch.qos.logback"){
+  object Logback : Group(name = "ch.qos.logback") {
     object Classic : Dependency(group = Logback, name = "logback-classic", version = "1.2.3")
   }
 
-  object Mysql : Group(name = "mysql"){
+  object Mysql : Group(name = "mysql") {
     object Connector : Dependency(group = Mysql, name = "mysql-connector-java", version = "5.1.46")
   }
 
-  object FlyWay : Group(name = "org.flywaydb"){
+  object FlyWay : Group(name = "org.flywaydb") {
     object Core : Dependency(group = FlyWay, name = "flyway-core", version = "6.2.0")
   }
 
-  object Docker : Group(name = "com.github.docker-java"){
+  object Docker : Group(name = "com.github.docker-java") {
     object Java : Dependency(group = Docker, name = "docker-java", version = "3.2.1")
   }
 

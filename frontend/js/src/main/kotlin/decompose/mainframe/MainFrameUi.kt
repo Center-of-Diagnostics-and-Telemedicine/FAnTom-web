@@ -13,6 +13,7 @@ import kotlinx.css.*
 import react.RBuilder
 import react.RState
 import styled.styledDiv
+import decompose.Props
 
 class MainFrameUi(props: Props<MainFrame>) : RenderableComponent<MainFrame, State>(
   props = props,

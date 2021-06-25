@@ -11,6 +11,7 @@ import kotlinx.html.js.onMouseOverFunction
 import model.GridModel
 import model.GridType
 import react.*
+import react.dom.attrs
 import react.dom.div
 import research.tools.grid.CutsGridComponent.GridStyles.squareCss
 import research.tools.grid.CutsGridComponent.GridStyles.squareHoverCss
@@ -26,7 +27,7 @@ class CutsGridComponent : RComponent<CutsGridProps, CutsGridState>() {
     themeContext.Consumer { theme ->
       mPaper {
         div {
-          attrs {
+          this@div.attrs {
             onMouseOutFunction = {
               setState {
                 firstHover = false

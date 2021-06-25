@@ -19,6 +19,7 @@ import react.setState
 import styled.StyleSheet
 import styled.css
 import styled.styledDiv
+import decompose.Props
 
 class ListRootUi(props: Props<ListRoot>) : RenderableComponent<ListRoot, State>(
   props = props,

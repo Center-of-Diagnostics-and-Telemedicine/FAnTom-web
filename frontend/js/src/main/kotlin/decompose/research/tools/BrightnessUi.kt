@@ -16,6 +16,7 @@ import react.RState
 import react.setState
 import styled.css
 import styled.styledDiv
+import decompose.Props
 
 class BrightnessUi(props: Props<Brightness>) : RenderableComponent<Brightness, State>(
   props = props,

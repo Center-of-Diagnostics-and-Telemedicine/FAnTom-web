@@ -11,6 +11,7 @@ import react.RBuilder
 import react.RState
 import research.marks.tableCell
 import decompose.research.marks.MarksUi.State
+import decompose.Props
 
 class MarksUi(props: Props<ResearchMarks>) : RenderableComponent<ResearchMarks, State>(
   props = props,

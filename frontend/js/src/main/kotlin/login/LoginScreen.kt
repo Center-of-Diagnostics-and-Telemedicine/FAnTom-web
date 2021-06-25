@@ -13,12 +13,14 @@ import components.alert
 import controller.LoginController
 import controller.LoginControllerImpl
 import destroy
+import kotlinext.js.jsObject
 import kotlinx.css.*
 import kotlinx.html.InputType
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.MouseEvent
 import react.*
+import react.dom.attrs
 import repository.LoginRepository
 import resume
 import styled.css
@@ -98,7 +100,7 @@ class LoginScreen(
               width = 100.pct
               marginTop = 1.spacingUnits
             }
-            attrs {
+            this@styledForm.attrs {
               novalidate = true
             }
             mTextField(
@@ -114,8 +116,8 @@ class LoginScreen(
               attrs {
                 required = true
                 onChange = ::onLoginChanged
-                inputLabelProps = object : RProps {
-                  val shrink = true
+                inputLabelProps = jsObject {
+                  this.asDynamic().shrink = true
                 }
               }
             }
@@ -132,8 +134,8 @@ class LoginScreen(
               attrs {
                 required = true
                 onChange = ::onPasswordChanged
-                inputLabelProps = object : RProps {
-                  val shrink = true
+                inputLabelProps = jsObject {
+                  this.asDynamic().shrink = true
                 }
               }
             }

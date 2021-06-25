@@ -1,11 +1,10 @@
 package useCases
 
-import io.ktor.application.application
-import io.ktor.application.call
-import io.ktor.application.log
-import io.ktor.locations.get
-import io.ktor.response.respond
-import io.ktor.routing.Route
+import debugLog
+import io.ktor.application.*
+import io.ktor.locations.*
+import io.ktor.response.*
+import io.ktor.routing.*
 import kotlinx.coroutines.delay
 import model.ErrorModel
 import model.ErrorStringCode
@@ -15,7 +14,6 @@ import repository.ResearchRepository
 import repository.SessionRepository
 import repository.UserResearchRepository
 import util.InitResearch
-import debugLog
 import util.user
 import java.net.ConnectException
 

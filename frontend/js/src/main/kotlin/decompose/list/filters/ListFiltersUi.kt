@@ -11,6 +11,7 @@ import kotlinx.css.*
 import react.RBuilder
 import react.RState
 import styled.css
+import decompose.Props
 
 class ListFiltersUi(props: Props<ListFilters>) :
   RenderableComponent<ListFilters, State>(

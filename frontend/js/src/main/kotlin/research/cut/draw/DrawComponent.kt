@@ -22,6 +22,7 @@ import styled.styledCanvas
 import styled.styledDiv
 import view.DrawView
 import kotlinx.browser.document
+import react.dom.attrs
 import kotlin.math.*
 
 class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
@@ -83,8 +84,8 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
           zIndex = 3
         }
         styledCanvas {
-          attrs {
-            classes += "draw_canvas_${props.cut.type.intType}"
+          this@styledCanvas.attrs {
+            classes = classes + "draw_canvas_${props.cut.type.intType}"
             width = resultWidth.toString()
             height = resultHeight.toString()
             onMouseDownFunction = { event ->

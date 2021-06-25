@@ -19,6 +19,7 @@ import root.debugLog
 import styled.StyleSheet
 import styled.css
 import styled.styledDiv
+import decompose.Props
 
 class ToolsUi(props: Props<ResearchTools>) : RenderableComponent<ResearchTools, State>(
   props = props,

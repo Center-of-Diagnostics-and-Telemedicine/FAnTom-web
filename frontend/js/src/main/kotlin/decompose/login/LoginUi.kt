@@ -18,9 +18,12 @@ import org.w3c.dom.events.MouseEvent
 import react.RBuilder
 import react.RProps
 import react.RState
+import react.dom.attrs
 import styled.css
 import styled.styledDiv
 import styled.styledForm
+import decompose.Props
+import kotlinext.js.jsObject
 
 class LoginUi(props: Props<Login>) : RenderableComponent<Login, State>(
   props = props,
@@ -66,7 +69,7 @@ class LoginUi(props: Props<Login>) : RenderableComponent<Login, State>(
               width = 100.pct
               marginTop = 1.spacingUnits
             }
-            attrs {
+            this@styledForm.attrs {
               novalidate = true
             }
             mTextField(
@@ -82,8 +85,8 @@ class LoginUi(props: Props<Login>) : RenderableComponent<Login, State>(
               attrs {
                 required = true
                 onChange = ::onLoginChanged
-                inputLabelProps = object : RProps {
-                  val shrink = true
+                inputLabelProps = jsObject {
+                  this.asDynamic().shrink = true
                 }
               }
             }
@@ -100,8 +103,8 @@ class LoginUi(props: Props<Login>) : RenderableComponent<Login, State>(
               attrs {
                 required = true
                 onChange = ::onPasswordChanged
-                inputLabelProps = object : RProps {
-                  val shrink = true
+                inputLabelProps = jsObject {
+                  this.asDynamic().shrink = true
                 }
               }
             }

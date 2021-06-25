@@ -22,7 +22,7 @@ import remote.ResearchRemoteDataSource
 import repository.*
 
 
-class App : RComponent<RProps, RState>() {
+class App() : RComponent<RProps, RState>() {
 
   private val lifecycle = LifecycleRegistry()
   private val ctx = DefaultComponentContext(lifecycle = lifecycle)

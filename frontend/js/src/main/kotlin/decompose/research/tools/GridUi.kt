@@ -16,13 +16,14 @@ import kotlinx.html.js.onMouseOverFunction
 import model.GridType
 import react.RBuilder
 import react.RState
+import react.dom.attrs
 import react.dom.div
 import react.setState
-import root.debugLog
 import styled.StyleSheet
 import styled.StyledElementBuilder
 import styled.css
 import styled.styledDiv
+import decompose.Props
 
 class GridUi(props: Props<Grid>) : RenderableComponent<Grid, State>(
   props = props,
@@ -39,7 +40,7 @@ class GridUi(props: Props<Grid>) : RenderableComponent<Grid, State>(
     themeContext.Consumer { theme ->
       mPaper {
         div {
-          attrs {
+          this@div.attrs {
             onMouseOutFunction = {
               setState {
                 firstHover = false//state.model.grid.types.isNotEmpty()

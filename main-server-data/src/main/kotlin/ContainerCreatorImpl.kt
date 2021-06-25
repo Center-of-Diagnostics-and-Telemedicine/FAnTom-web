@@ -71,7 +71,7 @@ class ContainerCreatorImpl(
 //        "-r"
       )
       .withExposedPorts(portInsideContainer)
-      .withPortBindings(portBindings)
+      .withPortBindings()
       .withPublishAllPorts(true)
       .withVolumes(dirWithResearchInsideContainer)
       .withBinds(bindDir)

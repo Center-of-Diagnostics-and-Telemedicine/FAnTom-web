@@ -6,7 +6,6 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import model.*
 import repository.ResearchRepository
-import repository.SessionRepository
 import repository.UserResearchRepository
 import util.CloseResearch
 import util.user
@@ -25,7 +24,7 @@ fun Route.closeResearch(
     val userId = call.user.id
     val research = researchRepository.getResearch(it.id)
 
-    if(research == null){
+    if (research == null) {
       respondError(ErrorStringCode.RESEARCH_NOT_FOUND)
       return@get
     }

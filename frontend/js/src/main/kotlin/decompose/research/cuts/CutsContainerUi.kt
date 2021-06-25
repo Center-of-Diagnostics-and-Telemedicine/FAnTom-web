@@ -9,6 +9,7 @@ import decompose.renderableChild
 import decompose.research.cuts.CutsContainerUi.State
 import react.RBuilder
 import react.RState
+import decompose.Props
 
 class CutsContainerUi(props: Props<CutsContainer>) : RenderableComponent<CutsContainer, State>(
   props = props,

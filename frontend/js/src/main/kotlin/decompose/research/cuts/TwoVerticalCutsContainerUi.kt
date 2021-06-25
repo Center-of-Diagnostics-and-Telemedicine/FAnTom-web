@@ -14,6 +14,7 @@ import react.RState
 import styled.StyleSheet
 import styled.css
 import styled.styledDiv
+import decompose.Props
 
 class TwoVerticalCutsContainerUi(props: Props<TwoVerticalCutsContainer>) :
   RenderableComponent<TwoVerticalCutsContainer, State>(

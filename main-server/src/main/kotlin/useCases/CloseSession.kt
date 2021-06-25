@@ -1,16 +1,13 @@
 package useCases
 
-import io.ktor.application.application
-import io.ktor.application.call
-import io.ktor.application.log
-import io.ktor.locations.get
-import io.ktor.response.respond
-import io.ktor.routing.Route
+import io.ktor.application.*
+import io.ktor.locations.*
+import io.ktor.response.*
+import io.ktor.routing.*
 import model.BaseResponse
 import model.ErrorModel
 import model.ErrorStringCode
 import model.OK
-import repository.ResearchRepository
 import repository.SessionRepository
 import util.CloseSession
 import util.user

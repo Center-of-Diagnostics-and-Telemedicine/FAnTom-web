@@ -8,6 +8,7 @@ import kotlinx.css.*
 import list.*
 import react.RBuilder
 import react.RState
+import decompose.Props
 
 class ListResearchUi(props: Props<ResearchList>) : RenderableComponent<ResearchList, State>(
   props = props,

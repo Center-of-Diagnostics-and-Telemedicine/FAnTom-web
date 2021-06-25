@@ -9,6 +9,7 @@ import decompose.research.cut.CutContainerUi
 import decompose.research.cuts.SingleCutContainerUi.State
 import react.RBuilder
 import react.RState
+import decompose.Props
 
 class SingleCutContainerUi(props: Props<SingleCutContainer>) :
   RenderableComponent<SingleCutContainer, State>(

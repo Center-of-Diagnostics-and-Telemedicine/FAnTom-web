@@ -12,6 +12,7 @@ import react.RState
 import styled.StyleSheet
 import styled.css
 import styled.styledDiv
+import decompose.Props
 
 class CutContainerUi(props: Props<CutContainer>) :
   RenderableComponent<CutContainer, State>(

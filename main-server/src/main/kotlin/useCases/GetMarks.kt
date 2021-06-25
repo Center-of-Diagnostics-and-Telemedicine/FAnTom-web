@@ -31,11 +31,12 @@ fun Route.getMarks(
 
     try {
 
-      val marks = if (research.modality == CT_RESEARCH_MODALITY && research.category != DOSE_REPORT_RESEARCH_CATEGORY) {
-        multiPlanarMarksRepository.getAll(user.id, it.id)
-      } else {
-        planarMarksRepository.getAll(user.id, it.id)
-      }
+      val marks =
+        if (research.modality == CT_RESEARCH_MODALITY && research.category != DOSE_REPORT_RESEARCH_CATEGORY) {
+          multiPlanarMarksRepository.getAll(user.id, it.id)
+        } else {
+          planarMarksRepository.getAll(user.id, it.id)
+        }
 
       call.respond(MarksResponseNew(MarksModel(marks)))
 

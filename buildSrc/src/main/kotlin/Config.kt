@@ -96,7 +96,7 @@ fun Project.setupMultiplatform() {
 
   kotlinCompat {
     doIfBuildTargetAvailable<BuildTarget.Js> {
-      js {
+      js(IR) {
         nodejs()
         browser()
 
@@ -109,6 +109,7 @@ fun Project.setupMultiplatform() {
             main = "call"
           }
         }
+        binaries.executable()
       }
     }
 

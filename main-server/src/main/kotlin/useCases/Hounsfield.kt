@@ -32,7 +32,7 @@ fun Route.hounsfield(sessionRepository: SessionRepository) {
       call.respond(HounsfieldResponse(HounsfieldModel(existingSession.hounsfield(params))))
     } catch (e: Exception) {
       application.log.error("Failed to get hounsfield", e)
-      if(e is ConnectException){
+      if (e is ConnectException) {
         respondError(ErrorStringCode.SESSION_EXPIRED)
       } else {
         respondError(ErrorStringCode.HOUNSFIELD_ERROR)

@@ -1,7 +1,5 @@
 rootProject.name = "FantomWeb"
 
-enableFeaturePreview("GRADLE_METADATA")
-
 include("main-server")
 include("api-models")
 include("frontend:domain-internal")

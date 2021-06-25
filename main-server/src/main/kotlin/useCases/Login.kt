@@ -1,11 +1,10 @@
 package useCases
 
-import JwtConfig
-import io.ktor.application.call
-import io.ktor.auth.UserPasswordCredential
+import io.ktor.application.*
+import io.ktor.auth.*
 import io.ktor.locations.post
-import io.ktor.request.receive
-import io.ktor.response.respond
+import io.ktor.request.*
+import io.ktor.response.*
 import io.ktor.routing.Route
 import model.*
 import repository.UserRepository

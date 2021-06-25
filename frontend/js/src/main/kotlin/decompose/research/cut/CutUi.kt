@@ -10,6 +10,7 @@ import react.RBuilder
 import react.RState
 import styled.css
 import styled.styledDiv
+import decompose.Props
 
 class CutUi(props: Props<Cut>) : RenderableComponent<Cut, State>(
   props = props,
