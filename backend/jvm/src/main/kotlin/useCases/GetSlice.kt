@@ -6,8 +6,8 @@ import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.Route
 import model.*
-import repository.repository.ResearchRepository
-import repository.repository.SessionRepository
+import repository.ResearchRepository
+import repository.SessionRepository
 import util.GetSlice
 import util.user
 import java.net.ConnectException

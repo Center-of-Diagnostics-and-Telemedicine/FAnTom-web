@@ -32,31 +32,6 @@ fun initialResearchSlicesSizesData(): ResearchSlicesSizesData {
   )
 }
 
-fun ResearchInitModel.toResearchSlicesSizesData(): ResearchSlicesSizesData {
-  return ResearchSlicesSizesData(
-    axial = SliceSizeData(
-      maxFramesSize = axialReal,
-      height = frontalInterpolated,
-      pixelLength = pixelLength,
-      reversed = reversed
-    ),
-    frontal = SliceSizeData(
-      maxFramesSize = frontalReal,
-      height = axialInterpolated,
-      pixelLength = pixelLength,
-      reversed = reversed
-    ),
-    sagittal = SliceSizeData(
-      maxFramesSize = sagittalReal,
-      height = axialInterpolated,
-      pixelLength = pixelLength,
-      reversed = reversed
-    ),
-    pixelLength = pixelLength,
-    reversed = reversed
-  )
-}
-
 fun ResearchInitModelNew.toResearchSlicesSizesData(doseReport: Boolean): ResearchData {
   return when {
     CT != null -> {

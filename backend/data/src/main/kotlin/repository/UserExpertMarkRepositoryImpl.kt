@@ -2,7 +2,6 @@ package repository
 
 import model.UserExpertMarkModel
 import repository.dao.UserExpertMarkDaoFacade
-import repository.repository.UserExpertMarkRepository
 
 class UserExpertMarkRepositoryImpl(private val daoFacade: UserExpertMarkDaoFacade) :
   UserExpertMarkRepository {

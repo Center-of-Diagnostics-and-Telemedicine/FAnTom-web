@@ -3,7 +3,6 @@ package repository
 import repository.dao.MarksDaoFacade
 import model.MarkData
 import model.MarkEntity
-import repository.repository.MarksRepository
 
 class PlanarMarksRepositoryImpl(
   private val marksDaoFacade: MarksDaoFacade

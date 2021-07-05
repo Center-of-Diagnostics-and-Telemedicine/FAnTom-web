@@ -2,7 +2,6 @@ package repository
 
 import repository.dao.ResearchDaoFacade
 import model.ResearchModel
-import repository.repository.ResearchRepository
 
 class ResearchRepositoryImpl(
   private val researchDaoFacade: ResearchDaoFacade

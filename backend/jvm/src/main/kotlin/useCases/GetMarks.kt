@@ -5,8 +5,8 @@ import io.ktor.locations.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import model.*
-import repository.repository.MarksRepository
-import repository.repository.ResearchRepository
+import repository.MarksRepository
+import repository.ResearchRepository
 import util.GetMarks
 import util.user
 

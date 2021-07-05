@@ -2,7 +2,6 @@ package repository
 
 import repository.dao.CovidMarkDaoFacade
 import model.CovidMarkModel
-import repository.repository.CovidMarksRepository
 
 class CovidMarksRepositoryImpl(private val covidMarkDaoFacade: CovidMarkDaoFacade) :
   CovidMarksRepository {

@@ -8,7 +8,7 @@ import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.Route
 import model.*
-import repository.repository.UserRepository
+import repository.UserRepository
 import util.Register
 import util.user
 import util.userNameValid

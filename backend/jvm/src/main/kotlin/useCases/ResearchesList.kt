@@ -5,9 +5,9 @@ import io.ktor.locations.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import model.*
-import repository.repository.CovidMarksRepository
-import repository.repository.ResearchRepository
-import repository.repository.UserResearchRepository
+import repository.CovidMarksRepository
+import repository.ResearchRepository
+import repository.UserResearchRepository
 import util.ResearchesList
 import util.user
 

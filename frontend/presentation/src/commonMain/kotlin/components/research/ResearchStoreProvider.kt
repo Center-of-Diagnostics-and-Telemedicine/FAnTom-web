@@ -95,7 +95,7 @@ internal class ResearchStoreProvider(
       singleFromCoroutine {
         repository.initResearch(
           researchId = researchId,
-          doseReport = false//research.category == DOSE_REPORT_RESEARCH_CATEGORY
+          doseReport = false
         )
       }
         .subscribeOn(ioScheduler)

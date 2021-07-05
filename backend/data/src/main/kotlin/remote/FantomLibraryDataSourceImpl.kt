@@ -14,7 +14,9 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.serialization.json.Json
 import model.*
-import repository.repository.FantomLibraryDataSource
+import model.fantom.FantomHounsfieldResponse
+import model.fantom.FantomResearchInitResponse
+import model.fantom.FantomSliceResponse
 
 class FantomLibraryDataSourceImpl(
   override val endPoint: String,
@@ -25,7 +27,7 @@ class FantomLibraryDataSourceImpl(
 
   private val client: HttpClient = HttpClient {
     install(JsonFeature) {
-      serializer = KotlinxSerializer(Json { ignoreUnknownKeys = true })
+      serializer = KotlinxSerializer(kotlinx.serialization.json.Json { ignoreUnknownKeys = true })
     }
     install(HttpTimeout) {
       requestTimeoutMillis = 600000
@@ -54,7 +56,7 @@ class FantomLibraryDataSourceImpl(
     }
   }
 
-  override suspend fun initResearch(accessionNumber: String): ResearchInitResponseNew {
+  override suspend fun initResearch(accessionNumber: String): FantomResearchInitResponse {
     return client.get {
       apiUrl("$RESEARCH_ROUTE/$INIT_ROUTE")
     }
@@ -63,7 +65,7 @@ class FantomLibraryDataSourceImpl(
   override suspend fun getSlice(
     sliceRequest: SliceRequestNew,
     researchName: String
-  ): SliceResponse {
+  ): FantomSliceResponse {
     return client.post {
       apiUrl("/$RESEARCH_ROUTE/$SLICE_ROUTE")
       body = Json.encodeToString(SliceRequestNew.serializer(), sliceRequest)
@@ -72,7 +74,7 @@ class FantomLibraryDataSourceImpl(
 
   override suspend fun getHounsfield(
     request: HounsfieldRequestNew
-  ): HounsfieldResponse {
+  ): FantomHounsfieldResponse {
     return client.post {
       apiUrl("$RESEARCH_ROUTE/$BRIGHTNESS_ROUTE")
       body = Json.encodeToString(HounsfieldRequestNew.serializer(), request)

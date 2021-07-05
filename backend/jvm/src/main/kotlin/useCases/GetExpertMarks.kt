@@ -8,9 +8,9 @@ import model.ErrorModel
 import model.ErrorStringCode
 import model.ExpertMarksResponse
 import model.toExpertMarkEntity
-import repository.repository.ExpertMarksRepository
-import repository.repository.ResearchRepository
-import repository.repository.UserExpertMarkRepository
+import repository.ExpertMarksRepository
+import repository.ResearchRepository
+import repository.UserExpertMarkRepository
 import util.ExpertMarks
 import util.user
 

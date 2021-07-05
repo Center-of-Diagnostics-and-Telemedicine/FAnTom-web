@@ -17,7 +17,7 @@ import model.ID_FIELD
 import org.apache.http.auth.AuthenticationException
 import org.jetbrains.exposed.sql.Database
 import org.slf4j.event.Level
-import repository.repository.SessionRepository
+import repository.SessionRepository
 import repository.SessionRepositoryFactory
 import useCases.*
 
@@ -93,7 +93,7 @@ fun Application.module(testing: Boolean = false) {
         resources(RESOURCE_STATIC)
       }
     }
-    get("/hello"){
+    get("/hello") {
       call.respond("hello world")
     }
 
@@ -150,7 +150,7 @@ private fun Application.sessionRepository(): SessionRepository {
     dockerConfigModel = dockerConfigModel(),
     researchDirFinder = researchDirFinder(),
     context = coroutineContext
-  ).build()
+  )
 }
 
 private fun Application.researchDirFinder(): ResearchDirFinderImpl {

@@ -3,7 +3,6 @@ package repository
 import repository.dao.UserDaoFacade
 import model.UserModel
 import model.UserRole
-import repository.repository.UserRepository
 
 class UserRepositoryImpl(private val userDaoFacade: UserDaoFacade) : UserRepository {
 

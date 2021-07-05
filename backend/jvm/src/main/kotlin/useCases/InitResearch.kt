@@ -10,9 +10,9 @@ import model.ErrorModel
 import model.ErrorStringCode
 import model.ResearchInitResponse
 import model.ResearchInitResponseNew
-import repository.repository.ResearchRepository
-import repository.repository.SessionRepository
-import repository.repository.UserResearchRepository
+import repository.ResearchRepository
+import repository.SessionRepository
+import repository.UserResearchRepository
 import util.InitResearch
 import util.user
 import java.net.ConnectException
@@ -52,7 +52,7 @@ fun Route.initResearch(
       debugLog("delaying for 2secs")
       delay(2000)
       val response = session.initResearch(research.accessionNumber)
-      call.respond(ResearchInitResponseNew(response = response))
+      call.respond(ResearchInitResponse(response = response))
     } catch (e: Exception) {
       application.log.error("Failed to init research", e)
       if (e is ConnectException) {

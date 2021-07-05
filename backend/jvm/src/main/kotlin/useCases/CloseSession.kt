@@ -8,7 +8,7 @@ import model.BaseResponse
 import model.ErrorModel
 import model.ErrorStringCode
 import model.OK
-import repository.repository.SessionRepository
+import repository.SessionRepository
 import util.CloseSession
 import util.user
 

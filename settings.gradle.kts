@@ -2,18 +2,15 @@ rootProject.name = "FantomWeb"
 
 include("api-models")
 
+include("frontend:data")
 include("frontend:domain-internal")
 include("frontend:domain")
 include("frontend:presentation")
-doIfJsTargetAvailable {
-  include("frontend:js")
-}
-include("frontend:data")
+include("frontend:js")
 
 include("backend:jvm")
 include("backend:data")
 include("backend:domain")
-include("expert-export-import")
 
 enum class BuildType {
   ALL, METADATA, NON_NATIVE, ANDROID, JVM, JS, LINUX, IOS, MAC_OS

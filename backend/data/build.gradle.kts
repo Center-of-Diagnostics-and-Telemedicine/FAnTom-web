@@ -18,7 +18,7 @@ dependencies {
 
   implementation(Deps.FlyWay.Core)
 
-  implementation(Deps.Ktor.Client.Apache) // todo(check if this really needed)
+  implementation(Deps.Ktor.Client.Apache)
   implementation(Deps.Ktor.Client.Logging)
   implementation(Deps.Ktor.Client.Serialization.Jvm)
   implementation(Deps.Ktor.Client.Json.Jvm)

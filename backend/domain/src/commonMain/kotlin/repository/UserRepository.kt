@@ -1,4 +1,4 @@
-package repository.repository
+package repository
 
 import model.UserModel
 import model.UserRole

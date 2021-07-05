@@ -6,7 +6,7 @@ import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.Route
 import model.*
-import repository.repository.SessionRepository
+import repository.SessionRepository
 import util.Hounsfield
 import util.user
 import java.net.ConnectException

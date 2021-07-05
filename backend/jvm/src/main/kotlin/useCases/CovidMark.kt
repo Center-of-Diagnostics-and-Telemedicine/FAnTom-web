@@ -7,7 +7,7 @@ import io.ktor.response.*
 import io.ktor.routing.Route
 import model.*
 import model.toCovidMarkModel
-import repository.repository.CovidMarksRepository
+import repository.CovidMarksRepository
 import util.CovidMark
 import util.user
 

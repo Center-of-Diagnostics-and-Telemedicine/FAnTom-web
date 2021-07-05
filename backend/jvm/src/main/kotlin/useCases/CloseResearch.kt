@@ -5,8 +5,8 @@ import io.ktor.locations.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import model.*
-import repository.repository.ResearchRepository
-import repository.repository.UserResearchRepository
+import repository.ResearchRepository
+import repository.UserResearchRepository
 import util.CloseResearch
 import util.user
 

@@ -3,8 +3,9 @@ package repository
 import kotlinx.coroutines.delay
 import model.*
 import debugLog
-import repository.repository.FantomLibraryDataSource
-import repository.repository.RemoteLibraryRepository
+import model.fantom.FantomMarkTypeEntity
+import model.fantom.FantomResearchInitModel
+import remote.FantomLibraryDataSource
 import java.awt.Color
 
 class RemoteLibraryRepositoryImpl(
@@ -12,7 +13,7 @@ class RemoteLibraryRepositoryImpl(
   override val libraryContainerId: String
 ) : RemoteLibraryRepository {
 
-  override suspend fun initResearch(accessionNumber: String): ResearchInitModelNew {
+  override suspend fun initResearch(accessionNumber: String): FantomResearchInitModel {
     val response = try {
       remoteDataSource.initResearch(accessionNumber)
     } catch (e: Exception) {
@@ -22,12 +23,10 @@ class RemoteLibraryRepositoryImpl(
       debugLog("calling to initialize again")
       return initResearch(accessionNumber)
     }
-
-//    debugLog(response.toString())
     return when {
       response.response != null -> {
         debugLog("ResearchInitResponse income")
-        val resultMarkTypes = mutableMapOf<String, MarkTypeEntity>()
+        val resultMarkTypes = mutableMapOf<String, FantomMarkTypeEntity>()
         response.dictionary?.first()?.map { maps ->
           maps.map { entry ->
             resultMarkTypes[entry.key] = transformMarkEntity(entry.value)
@@ -54,8 +53,8 @@ class RemoteLibraryRepositoryImpl(
   }
 
   private fun transformMarkEntity(
-    value: MarkTypeEntity
-  ): MarkTypeEntity {
+    value: FantomMarkTypeEntity
+  ): FantomMarkTypeEntity {
     val rgb = value.CLR?.replace("\\s".toRegex(), "")?.split(",")
     return if (rgb != null && rgb.size > 1) {
       val red = rgb[0]

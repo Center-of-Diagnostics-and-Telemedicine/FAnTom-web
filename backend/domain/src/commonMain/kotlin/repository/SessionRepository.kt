@@ -1,6 +1,7 @@
-package repository.repository
+package repository
 
 import kotlinx.coroutines.CoroutineScope
+import repository.RemoteLibraryRepository
 
 interface SessionRepository : CoroutineScope {
   suspend fun getSession(userId: Int): RemoteLibraryRepository?
