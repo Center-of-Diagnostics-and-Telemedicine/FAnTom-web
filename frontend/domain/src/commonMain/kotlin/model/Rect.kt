@@ -10,7 +10,7 @@ data class Rect(
 )
 
 fun Shape.toRects(cut: Cut): List<Rect> {
-  val sideLength = cut.data.screen_size_h.toDouble() / 100
+  val sideLength = cut.data.screenSizeH.toDouble() / 100
   return when (cut.researchType) {
     ResearchType.CT -> {
       mainRects(sideLength)

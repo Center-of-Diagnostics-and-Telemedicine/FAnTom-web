@@ -16,7 +16,6 @@ import react.RBuilder
 import react.RComponent
 import react.RProps
 import react.RState
-import root.debugLog
 import styled.css
 import styled.styledCanvas
 import styled.styledDiv
@@ -54,8 +53,8 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
 
   override fun RBuilder.render() {
     themeContext.Consumer { theme ->
-      val dicomWidth = props.cut.data.screen_size_h
-      val dicomHeight = props.cut.data.screen_size_v
+      val dicomWidth = props.cut.data.screenSizeH
+      val dicomHeight = props.cut.data.screenSizeV
       val ri = dicomWidth.toDouble() / dicomHeight
       val rs = props.width.toDouble() / props.height
       if (rs > ri) {

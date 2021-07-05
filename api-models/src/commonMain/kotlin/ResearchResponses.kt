@@ -1,5 +1,6 @@
 package model
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -26,39 +27,46 @@ data class MarkTypeEntity(
 
 @Serializable
 data class CTInitModel(
-  val ct_axial: ModalityModel? = null,
-  val ct_frontal: ModalityModel? = null,
-  val ct_sagittal: ModalityModel? = null,
-  val CT0: ModalityModel? = null,
-  val CT1: ModalityModel? = null,
-  val CT2: ModalityModel? = null,
+  val ct_axial: PlaneModel? = null,
+  val ct_frontal: PlaneModel? = null,
+  val ct_sagittal: PlaneModel? = null,
+  val CT0: PlaneModel? = null,
+  val CT1: PlaneModel? = null,
+  val CT2: PlaneModel? = null,
   val reversed: Boolean
 )
 
 @Serializable
 data class MGInitModel(
-  val mg_lcc: ModalityModel,
-  val mg_lmlo: ModalityModel,
-  val mg_rcc: ModalityModel,
-  val mg_rmlo: ModalityModel,
+  val mg_lcc: PlaneModel,
+  val mg_lmlo: PlaneModel,
+  val mg_rcc: PlaneModel,
+  val mg_rmlo: PlaneModel,
   val reversed: Boolean
 )
 
 @Serializable
 data class DXInitModel(
-  val dx0: ModalityModel,
+  val dx0: PlaneModel,
   val reversed: Boolean
 )
 
 @Serializable
-data class ModalityModel(
-  val dicom_size_h: Int,
-  val dicom_size_v: Int,
-  val dicom_step_h: Double = 1.0,
-  val dicom_step_v: Double = 1.0,
-  val n_images: Int,
-  val screen_size_h: Int = 512,
-  val screen_size_v: Int = 512,
+data class PlaneModel(
+  @SerialName("dicom_size_h")
+  val dicomSizeH: Int,
+  @SerialName("dicom_size_v")
+  val dicomSizeV: Int,
+  @SerialName("dicom_step_h")
+  val dicomStepH: Double = 1.0,
+  @SerialName("dicom_step_v")
+  val dicomStepV: Double = 1.0,
+  @SerialName("n_images")
+  val nImages: Int,
+  @SerialName("screen_size_h")
+  val screenSizeH: Int = 512,
+  @SerialName("screen_size_v")
+  val screenSizeV: Int = 512,
   val reversed: Boolean? = null,
   val SOPInstanceUID: String? = null,
   val file: String? = null

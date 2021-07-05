@@ -93,7 +93,7 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
             }
           }
         }
-        if (props.dependencies.cut.data.n_images > 1) {
+        if (props.dependencies.cut.data.nImages > 1) {
           styledDiv {
             css {
               width = 100.pct

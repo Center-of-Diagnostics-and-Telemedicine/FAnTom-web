@@ -86,32 +86,32 @@ val ctMarkTypes = mapOf(
     CLR = ""
   )
 )
-val testCtAxialModalityModel = ModalityModel(
-  dicom_size_h = 512,
-  dicom_size_v = 512,
-  dicom_step_h = 0.698,
-  dicom_step_v = 0.698,
-  n_images = 357,
-  screen_size_h = 512,
-  screen_size_v = 512
+val testCtAxialModalityModel = PlaneModel(
+  dicomSizeH = 512,
+  dicomSizeV = 512,
+  dicomStepH = 0.698,
+  dicomStepV = 0.698,
+  nImages = 357,
+  screenSizeH = 512,
+  screenSizeV = 512
 )
-val testCtFrontalModalityModel = ModalityModel(
-  dicom_size_h = 512,
-  dicom_size_v = 357,
-  dicom_step_h = 0.698,
-  dicom_step_v = 0.7977563025210084,
-  n_images = 512,
-  screen_size_h = 512,
-  screen_size_v = 408
+val testCtFrontalModalityModel = PlaneModel(
+  dicomSizeH = 512,
+  dicomSizeV = 357,
+  dicomStepH = 0.698,
+  dicomStepV = 0.7977563025210084,
+  nImages = 512,
+  screenSizeH = 512,
+  screenSizeV = 408
 )
-val testCtSagittalModalityModel = ModalityModel(
-  dicom_size_h = 512,
-  dicom_size_v = 357,
-  dicom_step_h = 0.698,
-  dicom_step_v = 0.7977563025210084,
-  n_images = 512,
-  screen_size_h = 512,
-  screen_size_v = 408,
+val testCtSagittalModalityModel = PlaneModel(
+  dicomSizeH = 512,
+  dicomSizeV = 357,
+  dicomStepH = 0.698,
+  dicomStepV = 0.7977563025210084,
+  nImages = 512,
+  screenSizeH = 512,
+  screenSizeV = 408,
 )
 val testResearchInitModelCT = ResearchInitModelNew(
   CT = CTInitModel(
@@ -157,41 +157,41 @@ val mgMarkTypes = mapOf(
 )
 val testResearchInitModelMG = ResearchInitModelNew(
   MG = MGInitModel(
-    mg_lcc = ModalityModel(
-      dicom_size_h = 1770,
-      dicom_size_v = 2370,
-      dicom_step_h = 0.10000000149011612,
-      dicom_step_v = 0.10000000149011612,
-      n_images = 1,
-      screen_size_h = 1770,
-      screen_size_v = 2370
+    mg_lcc = PlaneModel(
+      dicomSizeH = 1770,
+      dicomSizeV = 2370,
+      dicomStepH = 0.10000000149011612,
+      dicomStepV = 0.10000000149011612,
+      nImages = 1,
+      screenSizeH = 1770,
+      screenSizeV = 2370
     ),
-    mg_lmlo = ModalityModel(
-      dicom_size_h = 1770,
-      dicom_size_v = 2370,
-      dicom_step_h = 0.10000000149011612,
-      dicom_step_v = 0.10000000149011612,
-      n_images = 1,
-      screen_size_h = 1770,
-      screen_size_v = 2370,
+    mg_lmlo = PlaneModel(
+      dicomSizeH = 1770,
+      dicomSizeV = 2370,
+      dicomStepH = 0.10000000149011612,
+      dicomStepV = 0.10000000149011612,
+      nImages = 1,
+      screenSizeH = 1770,
+      screenSizeV = 2370,
     ),
-    mg_rcc = ModalityModel(
-      dicom_size_h = 1770,
-      dicom_size_v = 2370,
-      dicom_step_h = 0.10000000149011612,
-      dicom_step_v = 0.10000000149011612,
-      n_images = 1,
-      screen_size_h = 1770,
-      screen_size_v = 2370
+    mg_rcc = PlaneModel(
+      dicomSizeH = 1770,
+      dicomSizeV = 2370,
+      dicomStepH = 0.10000000149011612,
+      dicomStepV = 0.10000000149011612,
+      nImages = 1,
+      screenSizeH = 1770,
+      screenSizeV = 2370
     ),
-    mg_rmlo = ModalityModel(
-      dicom_size_h = 1770,
-      dicom_size_v = 2370,
-      dicom_step_h = 0.10000000149011612,
-      dicom_step_v = 0.10000000149011612,
-      n_images = 1,
-      screen_size_h = 1770,
-      screen_size_v = 2370
+    mg_rmlo = PlaneModel(
+      dicomSizeH = 1770,
+      dicomSizeV = 2370,
+      dicomStepH = 0.10000000149011612,
+      dicomStepV = 0.10000000149011612,
+      nImages = 1,
+      screenSizeH = 1770,
+      screenSizeV = 2370
     ),
     reversed = false
   ),
@@ -200,14 +200,14 @@ val testResearchInitModelMG = ResearchInitModelNew(
 
 val testResearchInitModelDX = ResearchInitModelNew(
   DX = DXInitModel(
-    dx0 = ModalityModel(
-      dicom_size_h = 1024,
-      dicom_size_v = 1024,
-      dicom_step_h = 0.171,
-      dicom_step_v = 0.171,
-      n_images = 1,
-      screen_size_h = 1024,
-      screen_size_v = 1024
+    dx0 = PlaneModel(
+      dicomSizeH = 1024,
+      dicomSizeV = 1024,
+      dicomStepH = 0.171,
+      dicomStepV = 0.171,
+      nImages = 1,
+      screenSizeH = 1024,
+      screenSizeV = 1024
     ),
     reversed = false
   ),
@@ -301,7 +301,7 @@ val testCut = Cut(
 )
 
 val testCutType = CutType.CT_AXIAL
-val testSliceNumber = testCut.data.n_images / 2
+val testSliceNumber = testCut.data.nImages / 2
 val testCircle = Circle(
   dicomCenterX = 10.0,
   dicomCenterY = 10.0,

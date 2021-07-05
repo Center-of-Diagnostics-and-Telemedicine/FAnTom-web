@@ -56,14 +56,14 @@ class SliderControllerTest {
   fun shows_middle_slice_number_of_range_WHEN_created() {
     createController()
 
-    assertEquals(testCut.data.n_images / 2, sliderView.model.currentValue)
+    assertEquals(testCut.data.nImages / 2, sliderView.model.currentValue)
   }
 
   @Test
   fun shows_max_slice_number_WHEN_created() {
     createController()
 
-    assertEquals(testCut.data.n_images, sliderView.model.maxValue)
+    assertEquals(testCut.data.nImages, sliderView.model.maxValue)
   }
 
   @Test

@@ -20,7 +20,7 @@ abstract class CutStoreAbstractFactory(
 ) {
 
   val initialState: State = State(
-    sliceNumber = if(cut.data.n_images > 1) cut.data.n_images / 2 else 0,
+    sliceNumber = if(cut.data.nImages > 1) cut.data.nImages / 2 else 0,
     slice = "",
     black = brightnessRepository.getBlackValue(),
     white = brightnessRepository.getWhiteValue(),

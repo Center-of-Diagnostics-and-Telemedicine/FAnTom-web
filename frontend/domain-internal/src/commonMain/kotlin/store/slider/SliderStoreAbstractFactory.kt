@@ -18,8 +18,8 @@ abstract class SliderStoreAbstractFactory(
 ) {
 
   val initialState: State = State(
-    currentValue = cut.data!!.n_images / 2,
-    maxValue = cut.data!!.n_images,
+    currentValue = cut.data!!.nImages / 2,
+    maxValue = cut.data!!.nImages,
     defaultValue = 1
   )
 

@@ -1,19 +1,20 @@
 package repository
 
-import kotlinx.coroutines.delay
-import model.*
 import debugLog
-import model.fantom.FantomMarkTypeEntity
-import model.fantom.FantomResearchInitModel
+import kotlinx.coroutines.delay
+import model.ErrorStringCode
+import model.HounsfieldRequestNew
+import model.ResearchInitModel
+import model.SliceRequestNew
 import remote.FantomLibraryDataSource
-import java.awt.Color
+import remote.mappers.toResponse
 
 class RemoteLibraryRepositoryImpl(
   private val remoteDataSource: FantomLibraryDataSource,
   override val libraryContainerId: String
 ) : RemoteLibraryRepository {
 
-  override suspend fun initResearch(accessionNumber: String): FantomResearchInitModel {
+  override suspend fun initResearch(accessionNumber: String): ResearchInitModel {
     val response = try {
       remoteDataSource.initResearch(accessionNumber)
     } catch (e: Exception) {
@@ -24,16 +25,7 @@ class RemoteLibraryRepositoryImpl(
       return initResearch(accessionNumber)
     }
     return when {
-      response.response != null -> {
-        debugLog("ResearchInitResponse income")
-        val resultMarkTypes = mutableMapOf<String, FantomMarkTypeEntity>()
-        response.dictionary?.first()?.map { maps ->
-          maps.map { entry ->
-            resultMarkTypes[entry.key] = transformMarkEntity(entry.value)
-          }
-        }
-        return response.response!!.copy(dictionary = resultMarkTypes)
-      }
+      response.response != null -> response.response!!.toResponse(response.dictionary)
       response.error != null -> {
         when (response.error!!.error) {
           ErrorStringCode.NOT_INITIALIZED_YET.value -> {
@@ -50,22 +42,6 @@ class RemoteLibraryRepositoryImpl(
       }
       else -> throw IllegalStateException("RemoteLibraryRepositoryImpl initResearch unrecognized response")
     }
-  }
-
-  private fun transformMarkEntity(
-    value: FantomMarkTypeEntity
-  ): FantomMarkTypeEntity {
-    val rgb = value.CLR?.replace("\\s".toRegex(), "")?.split(",")
-    return if (rgb != null && rgb.size > 1) {
-      val red = rgb[0]
-      val green = rgb[1]
-      val blue = rgb[2]
-      if (red.isEmpty().not() && green.isEmpty().not() && blue.isEmpty().not()) {
-        val color = Color(red.toInt(), green.toInt(), blue.toInt())
-        val hex = "#" + Integer.toHexString(color.rgb).substring(2)
-        value.copy(CLR = hex)
-      } else value
-    } else value
   }
 
   override suspend fun getSlice(request: SliceRequestNew, researchName: String): String {

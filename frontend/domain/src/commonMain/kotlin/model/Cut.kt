@@ -4,7 +4,7 @@ import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 
 data class Cut(
   val type: CutType,
-  val data: ModalityModel,
+  val data: PlaneModel,
   val color: String,
   val horizontalCutData: CutData?,
   val verticalCutData: CutData?,
@@ -68,7 +68,7 @@ fun CutType.getName(): String? =
 
 data class CutData(
   val type: CutType,
-  val data: ModalityModel,
+  val data: PlaneModel,
   val color: String
 )
 
@@ -118,8 +118,8 @@ fun Cut.getPosition(dicomX: Double, dicomY: Double, sliceNumber: Int): PointPosi
         )
       }
       CutType.CT_FRONTAL -> {
-        val verticalRatio = verticalCutData!!.data.n_images.toDouble() / data.screen_size_v
-        val horizontalRatio = horizontalCutData!!.data.n_images.toDouble() / data.screen_size_h
+        val verticalRatio = verticalCutData!!.data.nImages.toDouble() / data.screenSizeV
+        val horizontalRatio = horizontalCutData!!.data.nImages.toDouble() / data.screenSizeH
         MultiPlanarPointPosition(
           x = dicomX * horizontalRatio,
           y = sliceNumber.toDouble(),
@@ -127,8 +127,8 @@ fun Cut.getPosition(dicomX: Double, dicomY: Double, sliceNumber: Int): PointPosi
         )
       }
       CutType.CT_SAGITTAL -> {
-        val verticalRatio = verticalCutData!!.data.n_images.toDouble() / data.screen_size_v
-        val horizontalRatio = horizontalCutData!!.data.n_images.toDouble() / data.screen_size_h
+        val verticalRatio = verticalCutData!!.data.nImages.toDouble() / data.screenSizeV
+        val horizontalRatio = horizontalCutData!!.data.nImages.toDouble() / data.screenSizeH
         MultiPlanarPointPosition(
           x = sliceNumber.toDouble(),
           y = dicomX * horizontalRatio,
@@ -164,38 +164,38 @@ fun Cut.getMarkToSave(shape: Shape, sliceNumber: Int): MarkData? {
           z = sliceNumber.toDouble(),
           radiusHorizontal = shape.dicomRadiusHorizontal,
           radiusVertical = shape.dicomRadiusHorizontal,
-          sizeVertical = shape.dicomRadiusHorizontal * data.dicom_step_h,
-          sizeHorizontal = shape.dicomRadiusHorizontal * data.dicom_step_h,
+          sizeVertical = shape.dicomRadiusHorizontal * data.dicomStepH,
+          sizeHorizontal = shape.dicomRadiusHorizontal * data.dicomStepH,
           cutType = type.intType,
           shapeType = shape.getType()
         )
       }
       CutType.CT_FRONTAL -> {
-        val verticalRatio = verticalCutData!!.data.n_images.toDouble() / data.screen_size_v
-        val horizontalRatio = horizontalCutData!!.data.n_images.toDouble() / data.screen_size_h
+        val verticalRatio = verticalCutData!!.data.nImages.toDouble() / data.screenSizeV
+        val horizontalRatio = horizontalCutData!!.data.nImages.toDouble() / data.screenSizeH
         MarkData(
           x = (shape.dicomCenterX * horizontalRatio),
           y = sliceNumber.toDouble(),
           z = (shape.dicomCenterY * verticalRatio),
           radiusHorizontal = shape.dicomRadiusHorizontal,
           radiusVertical = shape.dicomRadiusHorizontal,
-          sizeVertical = shape.dicomRadiusHorizontal * data.dicom_step_h,
-          sizeHorizontal = shape.dicomRadiusHorizontal * data.dicom_step_h,
+          sizeVertical = shape.dicomRadiusHorizontal * data.dicomStepH,
+          sizeHorizontal = shape.dicomRadiusHorizontal * data.dicomStepH,
           cutType = type.intType,
           shapeType = shape.getType()
         )
       }
       CutType.CT_SAGITTAL -> {
-        val verticalRatio = verticalCutData!!.data.n_images.toDouble() / data.screen_size_v
-        val horizontalRatio = horizontalCutData!!.data.n_images.toDouble() / data.screen_size_h
+        val verticalRatio = verticalCutData!!.data.nImages.toDouble() / data.screenSizeV
+        val horizontalRatio = horizontalCutData!!.data.nImages.toDouble() / data.screenSizeH
         MarkData(
           x = sliceNumber.toDouble(),
           y = (shape.dicomCenterX * horizontalRatio),
           z = (shape.dicomCenterY * verticalRatio),
           radiusHorizontal = shape.dicomRadiusHorizontal,
           radiusVertical = shape.dicomRadiusHorizontal,
-          sizeVertical = shape.dicomRadiusHorizontal * data.dicom_step_h,
-          sizeHorizontal = shape.dicomRadiusHorizontal * data.dicom_step_h,
+          sizeVertical = shape.dicomRadiusHorizontal * data.dicomStepH,
+          sizeHorizontal = shape.dicomRadiusHorizontal * data.dicomStepH,
           cutType = type.intType,
           shapeType = shape.getType()
         )
@@ -217,8 +217,8 @@ fun Cut.getMarkToSave(shape: Shape, sliceNumber: Int): MarkData? {
           z = -1.0,
           radiusHorizontal = shape.dicomRadiusHorizontal,
           radiusVertical = shape.dicomRadiusVertical,
-          sizeVertical = shape.dicomRadiusVertical * data.dicom_step_v * 2,
-          sizeHorizontal = shape.dicomRadiusHorizontal * data.dicom_step_h * 2,
+          sizeVertical = shape.dicomRadiusVertical * data.dicomStepV * 2,
+          sizeHorizontal = shape.dicomRadiusHorizontal * data.dicomStepH * 2,
           cutType = type.intType,
           shapeType = shape.getType()
         )
@@ -252,8 +252,8 @@ fun Cut.updateCoordinates(mark: MarkModel, deltaX: Double, deltaY: Double): Mark
   return when (type) {
     CutType.EMPTY -> null
     CutType.CT_AXIAL -> {
-      val verticalRatio = verticalCutData!!.data.n_images.toDouble() / data.screen_size_v
-      val horizontalRatio = horizontalCutData!!.data.n_images.toDouble() / data.screen_size_h
+      val verticalRatio = verticalCutData!!.data.nImages.toDouble() / data.screenSizeV
+      val horizontalRatio = horizontalCutData!!.data.nImages.toDouble() / data.screenSizeH
       mark.copy(
         markData = markData.copy(
           x = markData.x + deltaX * horizontalRatio,
@@ -262,8 +262,8 @@ fun Cut.updateCoordinates(mark: MarkModel, deltaX: Double, deltaY: Double): Mark
       ).also { it.selected = true }
     }
     CutType.CT_FRONTAL -> {
-      val verticalRatio = verticalCutData!!.data.n_images.toDouble() / data.screen_size_v
-      val horizontalRatio = horizontalCutData!!.data.n_images.toDouble() / data.screen_size_h
+      val verticalRatio = verticalCutData!!.data.nImages.toDouble() / data.screenSizeV
+      val horizontalRatio = horizontalCutData!!.data.nImages.toDouble() / data.screenSizeH
       mark.copy(
         markData = markData.copy(
           x = markData.x + deltaX * horizontalRatio,
@@ -272,8 +272,8 @@ fun Cut.updateCoordinates(mark: MarkModel, deltaX: Double, deltaY: Double): Mark
       ).also { it.selected = true }
     }
     CutType.CT_SAGITTAL -> {
-      val verticalRatio = verticalCutData!!.data.n_images.toDouble() / data.screen_size_v
-      val horizontalRatio = horizontalCutData!!.data.n_images.toDouble() / data.screen_size_h
+      val verticalRatio = verticalCutData!!.data.nImages.toDouble() / data.screenSizeV
+      val horizontalRatio = horizontalCutData!!.data.nImages.toDouble() / data.screenSizeH
       mark.copy(
         markData = markData.copy(
           y = markData.y + deltaX * horizontalRatio,
@@ -314,8 +314,8 @@ fun Cut.updateCoordinatesByRect(
     CutType.CT_AXIAL,
     CutType.CT_FRONTAL,
     CutType.CT_SAGITTAL -> {
-      val verticalRatio = verticalCutData!!.data.n_images.toDouble() / data.screen_size_v
-      val horizontalRatio = horizontalCutData!!.data.n_images.toDouble() / data.screen_size_h
+      val verticalRatio = verticalCutData!!.data.nImages.toDouble() / data.screenSizeV
+      val horizontalRatio = horizontalCutData!!.data.nImages.toDouble() / data.screenSizeH
       when (rect.type) {
         MoveRectType.TOP -> {
           val radius = markData.radiusVertical - deltaY * verticalRatio
@@ -382,7 +382,7 @@ fun Cut.updateCoordinatesByRect(
             markData = markData.copy(
               radiusVertical = radius,
               y = newY,
-              sizeVertical = radius * data.dicom_step_v * 2
+              sizeVertical = radius * data.dicomStepV * 2
             ),
           ).also { it.selected = true }
         }
@@ -393,7 +393,7 @@ fun Cut.updateCoordinatesByRect(
             markData = markData.copy(
               radiusVertical = radius,
               y = newY,
-              sizeVertical = radius * data.dicom_step_v * 2
+              sizeVertical = radius * data.dicomStepV * 2
             )
           ).also { it.selected = true }
         }
@@ -404,7 +404,7 @@ fun Cut.updateCoordinatesByRect(
             markData = markData.copy(
               radiusHorizontal = radius,
               x = newX,
-              sizeHorizontal = radius * data.dicom_step_h * 2
+              sizeHorizontal = radius * data.dicomStepH * 2
 //                size = (it.radius + deltaX) * 2 * axialSlicesSizesDataObservable.value.pixelLength
             )
           ).also { it.selected = true }
@@ -416,7 +416,7 @@ fun Cut.updateCoordinatesByRect(
             markData = markData.copy(
               radiusHorizontal = radius,
               x = newX,
-              sizeHorizontal = radius * data.dicom_step_h * 2
+              sizeHorizontal = radius * data.dicomStepH * 2
 //                size = (it.radius - deltaX) * 2 * axialSlicesSizesDataObservable.value.pixelLength
             )
           ).also { it.selected = true }
@@ -432,8 +432,8 @@ fun Cut.updateCoordinatesByRect(
               radiusVertical = radiusVertical,
               x = newX,
               y = newY,
-              sizeVertical = radiusVertical * data.dicom_step_v * 2,
-              sizeHorizontal = radiusHorizontal * data.dicom_step_h * 2
+              sizeVertical = radiusVertical * data.dicomStepV * 2,
+              sizeHorizontal = radiusHorizontal * data.dicomStepH * 2
             )
           ).also { it.selected = true }
         }
@@ -448,8 +448,8 @@ fun Cut.updateCoordinatesByRect(
               radiusVertical = radiusVertical,
               x = newX,
               y = newY,
-              sizeVertical = radiusVertical * data.dicom_step_v * 2,
-              sizeHorizontal = radiusHorizontal * data.dicom_step_h * 2
+              sizeVertical = radiusVertical * data.dicomStepV * 2,
+              sizeHorizontal = radiusHorizontal * data.dicomStepH * 2
 //                size = (it.radius + deltaX) * 2 * axialSlicesSizesDataObservable.value.pixelLength
             )
           ).also { it.selected = true }
@@ -465,8 +465,8 @@ fun Cut.updateCoordinatesByRect(
               radiusVertical = radiusVertical,
               x = newX,
               y = newY,
-              sizeVertical = radiusVertical * data.dicom_step_v * 2,
-              sizeHorizontal = radiusHorizontal * data.dicom_step_h * 2
+              sizeVertical = radiusVertical * data.dicomStepV * 2,
+              sizeHorizontal = radiusHorizontal * data.dicomStepH * 2
 //                size = (it.radius - deltaX) * 2 * axialSlicesSizesDataObservable.value.pixelLength
             )
           ).also { it.selected = true }
@@ -482,8 +482,8 @@ fun Cut.updateCoordinatesByRect(
               radiusVertical = radiusVertical,
               x = newX,
               y = newY,
-              sizeVertical = radiusVertical * data.dicom_step_v * 2,
-              sizeHorizontal = radiusHorizontal * data.dicom_step_h * 2
+              sizeVertical = radiusVertical * data.dicomStepV * 2,
+              sizeHorizontal = radiusHorizontal * data.dicomStepH * 2
 //                size = (it.radius + deltaX) * 2 * axialSlicesSizesDataObservable.value.pixelLength
             )
           ).also { it.selected = true }

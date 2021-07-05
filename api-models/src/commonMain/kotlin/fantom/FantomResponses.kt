@@ -27,32 +27,32 @@ data class FantomMarkTypeEntity(
 
 @Serializable
 data class FantomCTInitModel(
-  val ct_axial: FantomModalityModel? = null,
-  val ct_frontal: FantomModalityModel? = null,
-  val ct_sagittal: FantomModalityModel? = null,
-  val CT0: FantomModalityModel? = null,
-  val CT1: FantomModalityModel? = null,
-  val CT2: FantomModalityModel? = null,
+  val ct_axial: FantomPlaneModel? = null,
+  val ct_frontal: FantomPlaneModel? = null,
+  val ct_sagittal: FantomPlaneModel? = null,
+  val CT0: FantomPlaneModel? = null,
+  val CT1: FantomPlaneModel? = null,
+  val CT2: FantomPlaneModel? = null,
   val reversed: Boolean
 )
 
 @Serializable
 data class FantomMGInitModel(
-  val mg_lcc: FantomModalityModel,
-  val mg_lmlo: FantomModalityModel,
-  val mg_rcc: FantomModalityModel,
-  val mg_rmlo: FantomModalityModel,
+  val mg_lcc: FantomPlaneModel,
+  val mg_lmlo: FantomPlaneModel,
+  val mg_rcc: FantomPlaneModel,
+  val mg_rmlo: FantomPlaneModel,
   val reversed: Boolean
 )
 
 @Serializable
 data class FantomDXInitModel(
-  val dx0: FantomModalityModel,
+  val dx0: FantomPlaneModel,
   val reversed: Boolean
 )
 
 @Serializable
-data class FantomModalityModel(
+data class FantomPlaneModel(
   val dicom_size_h: Int,
   val dicom_size_v: Int,
   val dicom_step_h: Double = 1.0,

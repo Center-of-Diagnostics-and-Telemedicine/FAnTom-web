@@ -47,7 +47,7 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
         if (props.loading.not()) {
           props.shapesModel.shapes.let { drawShapes(it, context) }
           props.shapesModel.rects.let { drawRects(it, context) }
-          if (props.cut.data.n_images > 1) {
+          if (props.cut.data.nImages > 1) {
             drawLines(
               horizontal = props.shapesModel.verticalCoefficient * resultHeight,
               vertical = props.shapesModel.horizontalCoefficient * resultWidth,
@@ -63,8 +63,8 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
   override fun RBuilder.render() {
     mCssBaseline()
     themeContext.Consumer { theme ->
-      val dicomWidth = props.cut.data.screen_size_h
-      val dicomHeight = props.cut.data.screen_size_v
+      val dicomWidth = props.cut.data.screenSizeH
+      val dicomHeight = props.cut.data.screenSizeV
       val ri = dicomWidth.toDouble() / dicomHeight
       val rs = props.width.toDouble() / props.height
       if (rs > ri) {
@@ -100,7 +100,7 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
 
       sliceNumber(
         sliceNumber = props.shapesModel.sliceNumber,
-        imagesCount = props.cut.data.n_images
+        imagesCount = props.cut.data.nImages
       )
 
       when (props.cut.researchType) {

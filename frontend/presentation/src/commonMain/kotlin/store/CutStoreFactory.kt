@@ -135,7 +135,7 @@ internal class CutStoreFactory(
     private fun changeSliceNumber(sliceNumber: Int, getState: () -> State) {
       val resultSliceNumber = when {
         sliceNumber < 1 -> 1
-        sliceNumber > cut.data.n_images -> cut.data.n_images
+        sliceNumber > cut.data.nImages -> cut.data.nImages
         else -> sliceNumber
       }
 
@@ -184,7 +184,7 @@ internal class CutStoreFactory(
             mipMethod = mipMethod!!,
             sliceNumber = getSliceNumber(sliceNumber),
             aproxSize = aproxSize!!,
-            width = cut.data.screen_size_h,
+            width = cut.data.screenSizeH,
             height = 0
           )
         }
@@ -221,7 +221,7 @@ internal class CutStoreFactory(
       dispatch(result)
     }
 
-    private fun inBounds(sliceNumber: Int) = sliceNumber <= cut.data.n_images && sliceNumber > 0
+    private fun inBounds(sliceNumber: Int) = sliceNumber <= cut.data.nImages && sliceNumber > 0
   }
 
 }

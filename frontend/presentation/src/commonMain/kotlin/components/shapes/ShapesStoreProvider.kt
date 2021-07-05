@@ -194,12 +194,12 @@ internal class ShapesStoreProvider(
     }
 
     private fun updateHorizontalCoefficient(sliceNumber: Int, externalCut: Cut) {
-      val coefficient = sliceNumber.toDouble() / externalCut.data.n_images
+      val coefficient = sliceNumber.toDouble() / externalCut.data.nImages
       dispatch(Result.HorizontalCoefficientChanged(coefficient))
     }
 
     private fun updateVerticalCoefficient(sliceNumber: Int, externalCut: Cut) {
-      val coefficient = sliceNumber.toDouble() / externalCut.data.n_images
+      val coefficient = sliceNumber.toDouble() / externalCut.data.nImages
       dispatch(Result.VerticalCoefficientChanged(coefficient))
     }
 

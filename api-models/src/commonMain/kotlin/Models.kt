@@ -15,7 +15,7 @@ data class ResearchSlicesSizesData(
 
 @Serializable
 data class ResearchData(
-  val modalities: Map<Int, ModalityModel>,
+  val modalities: Map<Int, PlaneModel>,
   val type: ResearchType,
   val researchId: Int = -1,
   val reversed: Boolean,
@@ -37,7 +37,7 @@ fun ResearchInitModelNew.toResearchSlicesSizesData(doseReport: Boolean): Researc
     CT != null -> {
       if (doseReport) {
         println(dictionary)
-        val modalities = mutableMapOf<Int, ModalityModel>()
+        val modalities = mutableMapOf<Int, PlaneModel>()
         CT.CT0?.copy(reversed = CT.reversed)?.let { modalities[SLICE_TYPE_CT_0] = it }
         CT.CT1?.copy(reversed = CT.reversed)?.let { modalities[SLICE_TYPE_CT_1] = it }
         CT.CT2?.copy(reversed = CT.reversed)?.let { modalities[SLICE_TYPE_CT_2] = it }

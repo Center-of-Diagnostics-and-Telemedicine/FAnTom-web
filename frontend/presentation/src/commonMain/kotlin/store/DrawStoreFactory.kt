@@ -48,7 +48,7 @@ internal class DrawStoreFactory(
     }
 
     private fun handleMouseData(intent: Intent.MouseWheel) =
-      if (cut.data.n_images > 1) {
+      if (cut.data.nImages > 1) {
         publish(Label.ChangeSlice(intent.deltaDicomY))
       } else null
 

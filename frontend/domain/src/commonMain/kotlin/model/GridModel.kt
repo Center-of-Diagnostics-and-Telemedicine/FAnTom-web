@@ -132,7 +132,7 @@ fun initialTwoHorizontalGrid(researchType: ResearchType): GridModel.TwoHorizonta
 fun initialFourGrid(
   researchType: ResearchType,
   doseReport: Boolean,
-  modalities: Map<Int, ModalityModel>
+  modalities: Map<Int, PlaneModel>
 ): GridModel {
   return when (researchType) {
     ResearchType.CT -> GridModel.Four(
@@ -333,7 +333,7 @@ private fun cutWithTwoTypes(
 private fun emptyCut(data: ResearchData): Cut =
   Cut(
     type = CutType.EMPTY,
-    data = ModalityModel(0, 0, 0.0, 0.0, 0, 0, 0),
+    data = PlaneModel(0, 0, 0.0, 0.0, 0, 0, 0),
     color = "",
     verticalCutData = null,
     horizontalCutData = null,

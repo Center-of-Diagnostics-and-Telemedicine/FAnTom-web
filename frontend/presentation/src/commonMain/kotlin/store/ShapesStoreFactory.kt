@@ -161,12 +161,12 @@ internal class ShapesStoreFactory(
     }
 
     private fun updateHorizontalCoefficient(sliceNumber: Int, externalCut: Cut) {
-      val coefficient = sliceNumber.toDouble() / externalCut.data.n_images
+      val coefficient = sliceNumber.toDouble() / externalCut.data.nImages
       dispatch(Result.HorizontalCoefficientChanged(coefficient))
     }
 
     private fun updateVerticalCoefficient(sliceNumber: Int, externalCut: Cut) {
-      val coefficient = sliceNumber.toDouble() / externalCut.data.n_images
+      val coefficient = sliceNumber.toDouble() / externalCut.data.nImages
       dispatch(Result.VerticalCoefficientChanged(coefficient))
     }
 
@@ -200,7 +200,7 @@ internal class ShapesStoreFactory(
           type = cut.type.intType,
           mipMethod = MIP_METHOD_TYPE_NO_MIP,
           mipValue = 0,
-          width = cut.data.screen_size_h,
+          width = cut.data.screenSizeH,
           height = 0
         )
       }
