@@ -1,6 +1,9 @@
-package model
+package model.init
 
 import kotlinx.serialization.Serializable
+import model.ErrorModel
+import model.MarkTypeEntity
+import model.PlaneModel
 
 @Serializable
 data class ResearchInitResponse(

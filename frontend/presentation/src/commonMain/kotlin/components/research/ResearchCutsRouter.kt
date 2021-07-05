@@ -8,10 +8,11 @@ import com.badoo.reaktive.base.Consumer
 import components.cutscontainer.CutsContainer
 import components.research.ResearchRoot.CutsChild
 import model.ResearchData
+import model.ResearchDataModel
 
 internal class ResearchCutsRouter(
   routerFactory: RouterFactory,
-  private val cutsFactory: (ComponentContext, ResearchData, Consumer<CutsContainer.Output>) -> CutsContainer,
+  private val cutsFactory: (ComponentContext, ResearchDataModel, Consumer<CutsContainer.Output>) -> CutsContainer,
   private val cutsOutput: Consumer<CutsContainer.Output>
 ) {
 
@@ -33,7 +34,7 @@ internal class ResearchCutsRouter(
       is Config.None -> CutsChild.None
     }
 
-  fun update(data: ResearchData) {
+  fun update(data: ResearchDataModel) {
     if (state.value.activeChild.instance is CutsChild.None) {
       router.push(Config.Marks(data))
     }
@@ -41,7 +42,7 @@ internal class ResearchCutsRouter(
 
   sealed class Config : Parcelable {
     @Parcelize
-    data class Marks(val data: ResearchData) : Config()
+    data class Marks(val data: ResearchDataModel) : Config()
 
     @Parcelize
     object None : Config()

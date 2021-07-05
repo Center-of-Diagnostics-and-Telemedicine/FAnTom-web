@@ -8,6 +8,7 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.serialization.json.Json
 import model.*
+import model.init.ResearchInitResponse
 import repository.ResearchRemote
 
 object ResearchRemoteDataSource : ResearchRemote {
@@ -31,7 +32,7 @@ object ResearchRemoteDataSource : ResearchRemote {
   override suspend fun init(
     token: String,
     id: Int
-  ): ResearchInitResponseNew {
+  ): ResearchInitResponse {
     return client.get {
       authHeader(token)
       apiUrl("$RESEARCH_ROUTE/$INIT_ROUTE/$id")

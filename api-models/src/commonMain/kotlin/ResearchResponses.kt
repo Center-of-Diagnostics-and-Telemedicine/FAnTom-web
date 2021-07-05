@@ -53,19 +53,12 @@ data class DXInitModel(
 
 @Serializable
 data class PlaneModel(
-  @SerialName("dicom_size_h")
   val dicomSizeH: Int,
-  @SerialName("dicom_size_v")
   val dicomSizeV: Int,
-  @SerialName("dicom_step_h")
   val dicomStepH: Double = 1.0,
-  @SerialName("dicom_step_v")
   val dicomStepV: Double = 1.0,
-  @SerialName("n_images")
   val nImages: Int,
-  @SerialName("screen_size_h")
   val screenSizeH: Int = 512,
-  @SerialName("screen_size_v")
   val screenSizeV: Int = 512,
   val reversed: Boolean? = null,
   val SOPInstanceUID: String? = null,

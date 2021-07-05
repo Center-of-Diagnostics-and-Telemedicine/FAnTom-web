@@ -7,7 +7,7 @@ import view.ResearchView.Model
 
 val researchStateToResearchModel: State.() -> Model? = {
   Model(
-    data = data,
+//    data = data,
     error = error,
     loading = loading
   )

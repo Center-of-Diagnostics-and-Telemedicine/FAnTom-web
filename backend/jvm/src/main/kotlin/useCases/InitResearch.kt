@@ -8,8 +8,7 @@ import io.ktor.routing.*
 import kotlinx.coroutines.delay
 import model.ErrorModel
 import model.ErrorStringCode
-import model.ResearchInitResponse
-import model.ResearchInitResponseNew
+import model.init.ResearchInitResponse
 import repository.ResearchRepository
 import repository.SessionRepository
 import repository.UserResearchRepository

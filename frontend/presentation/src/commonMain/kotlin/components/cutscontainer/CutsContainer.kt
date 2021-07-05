@@ -12,6 +12,7 @@ import components.twohorizontalcutscontainer.TwoHorizontalCutsContainer
 import components.twoverticalcutscontainer.TwoVerticalCutsContainer
 import model.GridType
 import model.ResearchData
+import model.ResearchDataModel
 import repository.GridRepository
 import repository.MyBrightnessRepository
 import repository.MyMipRepository
@@ -36,7 +37,7 @@ interface CutsContainer {
     val gridRepository: GridRepository
     val brightnessRepository: MyBrightnessRepository
     val mipRepository: MyMipRepository
-    val data: ResearchData
+    val data: ResearchDataModel
     val researchId: Int
   }
 

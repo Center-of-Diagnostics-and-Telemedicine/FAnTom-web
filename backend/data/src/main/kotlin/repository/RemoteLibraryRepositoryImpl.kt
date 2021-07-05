@@ -4,7 +4,7 @@ import debugLog
 import kotlinx.coroutines.delay
 import model.ErrorStringCode
 import model.HounsfieldRequestNew
-import model.ResearchInitModel
+import model.init.ResearchInitModel
 import model.SliceRequestNew
 import remote.FantomLibraryDataSource
 import remote.mappers.toResponse

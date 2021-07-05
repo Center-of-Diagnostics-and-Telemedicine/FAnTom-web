@@ -9,6 +9,7 @@ import components.grid.Grid
 import components.mip.Mip
 import components.researchtools.ResearchTools.Dependencies
 import model.ResearchData
+import model.ResearchDataModel
 import model.Tool
 import repository.*
 
@@ -35,7 +36,7 @@ interface ResearchTools {
     val mipRepository: MyMipRepository
     val brightnessRepository: MyBrightnessRepository
     val gridRepository: GridRepository
-    val data: ResearchData
+    val data: ResearchDataModel
   }
 
   sealed class Output {

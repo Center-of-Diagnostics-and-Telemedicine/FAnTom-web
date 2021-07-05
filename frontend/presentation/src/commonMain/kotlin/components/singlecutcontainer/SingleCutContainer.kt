@@ -9,6 +9,7 @@ import components.cutcontainer.CutContainer
 import components.singlecutcontainer.SingleCutContainer.Dependencies
 import model.CutType
 import model.ResearchData
+import model.ResearchDataModel
 import repository.MyBrightnessRepository
 import repository.MyMipRepository
 import repository.ResearchRepository
@@ -29,7 +30,7 @@ interface SingleCutContainer {
     val researchRepository: ResearchRepository
     val brightnessRepository: MyBrightnessRepository
     val mipRepository: MyMipRepository
-    val data: ResearchData
+    val data: ResearchDataModel
     val researchId: Int
   }
 

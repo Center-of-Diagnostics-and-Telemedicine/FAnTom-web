@@ -7,6 +7,7 @@ import com.badoo.reaktive.base.Consumer
 import components.grid.Grid.Dependencies
 import model.GridType
 import model.ResearchData
+import model.ResearchDataModel
 import repository.GridRepository
 
 interface Grid {
@@ -23,7 +24,7 @@ interface Grid {
     val storeFactory: StoreFactory
     val gridRepository: GridRepository
     val gridOutput: Consumer<Output>
-    val data: ResearchData
+    val data: ResearchDataModel
     val researchId: Int
   }
 

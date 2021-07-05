@@ -1,10 +1,11 @@
 package repository
 
 import model.*
+import model.init.ResearchInitResponse
 
 interface ResearchRemote {
   suspend fun getAll(token: String): ResearchesResponse
-  suspend fun init(token: String, id: Int): ResearchInitResponseNew
+  suspend fun init(token: String, id: Int): ResearchInitResponse
   suspend fun getSlice(
     token: String,
     request: SliceRequestNew,

@@ -1,10 +1,8 @@
 package repository
 
 import model.HounsfieldRequestNew
-import model.ResearchInitModel
-import model.ResearchInitModelNew
+import model.init.ResearchInitModel
 import model.SliceRequestNew
-import model.fantom.FantomResearchInitModel
 
 interface RemoteLibraryRepository {
   val libraryContainerId: String

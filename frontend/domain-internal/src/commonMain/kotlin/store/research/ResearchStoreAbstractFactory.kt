@@ -37,7 +37,7 @@ abstract class ResearchStoreAbstractFactory(
     override fun State.reduce(result: Result): State =
       when (result) {
         is Result.Loading -> copy(loading = true)
-        is Result.Loaded -> copy(data = result.data, loading = false)
+        is Result.Loaded -> this//copy(data = result.data, loading = false)
         is Result.Error -> copy(error = result.error, loading = false)
         is Result.DismissErrorRequested -> copy(error = "")
       }

@@ -3,6 +3,7 @@ package store.research
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import model.ResearchData
+import model.ResearchDataModel
 import store.research.ResearchStore.Intent
 import store.research.ResearchStore.State
 import store.research.ResearchStore.Label
@@ -17,7 +18,7 @@ interface ResearchStore : Store<Intent, State, Label> {
   }
 
   data class State(
-    val data: ResearchData? = null,
+    val data: ResearchDataModel? = null,
     val loading: Boolean = false,
     val error: String = ""
   ) : JvmSerializable

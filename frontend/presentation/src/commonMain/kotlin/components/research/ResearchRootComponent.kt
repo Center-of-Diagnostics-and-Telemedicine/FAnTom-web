@@ -13,14 +13,14 @@ import components.getStore
 import components.research.ResearchRoot.*
 import components.researchmarks.ResearchMarks
 import components.researchtools.ResearchTools
-import model.ResearchData
+import model.ResearchDataModel
 
 internal class ResearchRootComponent(
   componentContext: ComponentContext,
   dependencies: Dependencies,
-  tools: (ComponentContext, ResearchData, Consumer<ResearchTools.Output>) -> ResearchTools,
-  marks: (ComponentContext, ResearchData, Consumer<ResearchMarks.Output>) -> ResearchMarks,
-  cuts: (ComponentContext, ResearchData, Consumer<CutsContainer.Output>) -> CutsContainer,
+  tools: (ComponentContext, ResearchDataModel, Consumer<ResearchTools.Output>) -> ResearchTools,
+  marks: (ComponentContext, ResearchDataModel, Consumer<ResearchMarks.Output>) -> ResearchMarks,
+  cuts: (ComponentContext, ResearchDataModel, Consumer<CutsContainer.Output>) -> CutsContainer,
 ) : ResearchRoot, ComponentContext by componentContext, Dependencies by dependencies {
 
   private val store =

@@ -10,6 +10,7 @@ import com.badoo.reaktive.observable.map
 import com.badoo.reaktive.utils.ensureNeverFrozen
 import model.GridType
 import model.ResearchData
+import model.ResearchDataModel
 import repository.GridRepository
 import store.tools.MyGridStore
 import store.tools.MyGridStore.*
@@ -17,7 +18,7 @@ import store.tools.MyGridStore.*
 internal class GridStoreProvider(
   private val storeFactory: StoreFactory,
   private val gridRepository: GridRepository,
-  private val data: ResearchData,
+  private val data: ResearchDataModel,
   private val researchId: Int,
 ) {
 

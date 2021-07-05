@@ -6,6 +6,7 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.base.Consumer
 import components.researchmarks.ResearchMarks.Dependencies
 import model.ResearchData
+import model.ResearchDataModel
 import repository.MarksRepository
 import repository.ResearchRepository
 
@@ -24,7 +25,7 @@ interface ResearchMarks {
     val marksRepository: MarksRepository
     val marksOutput: Consumer<Output>
     val researchId: Int
-    val data: ResearchData
+    val data: ResearchDataModel
   }
 
   sealed class Output {

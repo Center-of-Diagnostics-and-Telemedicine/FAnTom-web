@@ -72,20 +72,20 @@ internal class ResearchStoreFactory(
 
     private fun load() {
       dispatch(Result.Loading)
-      singleFromCoroutine {
-        repository.initResearch(
-          researchId = researchId,
-          doseReport = research.category == DOSE_REPORT_RESEARCH_CATEGORY
-        )
-      }
-        .subscribeOn(ioScheduler)
-        .map(Result::Loaded)
-        .observeOn(mainScheduler)
-        .subscribeScoped(
-          isThreadLocal = true,
-          onSuccess = ::dispatch,
-          onError = ::handleError
-        )
+//      singleFromCoroutine {
+//        repository.initResearch(
+//          researchId = researchId,
+//          doseReport = research.category == DOSE_REPORT_RESEARCH_CATEGORY
+//        )
+//      }
+//        .subscribeOn(ioScheduler)
+//        .map(Result::Loaded)
+//        .observeOn(mainScheduler)
+//        .subscribeScoped(
+//          isThreadLocal = true,
+//          onSuccess = ::dispatch,
+//          onError = ::handleError
+//        )
     }
 
     private fun handleError(error: Throwable) {

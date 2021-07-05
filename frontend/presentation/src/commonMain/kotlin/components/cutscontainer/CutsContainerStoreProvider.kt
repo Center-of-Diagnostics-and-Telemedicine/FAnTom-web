@@ -10,6 +10,7 @@ import com.badoo.reaktive.observable.map
 import com.badoo.reaktive.utils.ensureNeverFrozen
 import model.GridType
 import model.ResearchData
+import model.ResearchDataModel
 import model.buildModel
 import repository.GridRepository
 import repository.ResearchRepository
@@ -22,7 +23,7 @@ internal class CutsContainerStoreProvider(
   private val researchRepository: ResearchRepository,
   private val gridRepository: GridRepository,
   private val researchId: Int,
-  private val data: ResearchData,
+  private val data: ResearchDataModel,
 ) {
 
   fun provide(): MyCutsContainerStore =

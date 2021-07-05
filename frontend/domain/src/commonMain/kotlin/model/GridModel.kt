@@ -96,7 +96,7 @@ sealed class GridModel(override val types: List<CutType>) : MyGrid {
   }
 }
 
-fun GridType.buildModel(data: ResearchData): GridModel {
+fun GridType.buildModel(data: ResearchDataModel): GridModel {
   return when (this) {
     GridType.Single -> initialSingleGrid(data.type)
     GridType.TwoVertical -> initialTwoVerticalGrid(data.type)

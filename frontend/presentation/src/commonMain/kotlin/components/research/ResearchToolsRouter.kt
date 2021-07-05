@@ -8,10 +8,11 @@ import com.badoo.reaktive.base.Consumer
 import components.research.ResearchRoot.ToolsChild
 import components.researchtools.ResearchTools
 import model.ResearchData
+import model.ResearchDataModel
 
 internal class ResearchToolsRouter(
   routerFactory: RouterFactory,
-  private val toolsFactory: (ComponentContext, ResearchData, Consumer<ResearchTools.Output>) -> ResearchTools,
+  private val toolsFactory: (ComponentContext, ResearchDataModel, Consumer<ResearchTools.Output>) -> ResearchTools,
   private val toolsOutput: Consumer<ResearchTools.Output>
 ) {
 
@@ -30,7 +31,7 @@ internal class ResearchToolsRouter(
       is Config.None -> ToolsChild.None
     }
 
-  fun update(data: ResearchData) {
+  fun update(data: ResearchDataModel) {
     if (state.value.activeChild.instance is ToolsChild.None) {
       router.push(Config.Tools(data))
     }
@@ -38,7 +39,7 @@ internal class ResearchToolsRouter(
 
   sealed class Config : Parcelable {
     @Parcelize
-    data class Tools(val data: ResearchData) : Config()
+    data class Tools(val data: ResearchDataModel) : Config()
 
     @Parcelize
     object None : Config()

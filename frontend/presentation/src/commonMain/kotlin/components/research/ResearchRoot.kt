@@ -10,6 +10,7 @@ import components.research.ResearchRoot.Dependencies
 import components.researchmarks.ResearchMarks
 import components.researchtools.ResearchTools
 import model.ResearchData
+import model.ResearchDataModel
 import repository.*
 
 interface ResearchRoot {
@@ -23,7 +24,7 @@ interface ResearchRoot {
   data class Model(
     val error: String,
     val loading: Boolean,
-    val data: ResearchData?
+    val data: ResearchDataModel?
   )
 
   interface Dependencies {
@@ -67,7 +68,7 @@ fun ResearchRoot(componentContext: ComponentContext, dependencies: Dependencies)
         componentContext = childContext,
         dependencies = object : ResearchTools.Dependencies, Dependencies by dependencies {
           override val toolsOutput: Consumer<ResearchTools.Output> = output
-          override val data: ResearchData = researchData
+          override val data: ResearchDataModel = researchData
         }
       )
     },
@@ -76,7 +77,7 @@ fun ResearchRoot(componentContext: ComponentContext, dependencies: Dependencies)
         componentContext = childContext,
         dependencies = object : ResearchMarks.Dependencies, Dependencies by dependencies {
           override val marksOutput: Consumer<ResearchMarks.Output> = output
-          override val data: ResearchData = researchData
+          override val data: ResearchDataModel = researchData
         }
       )
     },
@@ -85,7 +86,7 @@ fun ResearchRoot(componentContext: ComponentContext, dependencies: Dependencies)
         componentContext = childContext,
         dependencies = object : CutsContainer.Dependencies, Dependencies by dependencies {
           override val cutsContainerOutput: Consumer<CutsContainer.Output> = output
-          override val data: ResearchData = researchData
+          override val data: ResearchDataModel = researchData
         }
       )
 

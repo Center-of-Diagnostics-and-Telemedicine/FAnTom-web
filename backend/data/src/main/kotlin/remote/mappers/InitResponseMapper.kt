@@ -2,9 +2,9 @@ package remote.mappers
 
 import debugLog
 import model.MarkTypeEntity
-import model.ModalityModel
+import model.init.ModalityModel
 import model.PlaneModel
-import model.ResearchInitModel
+import model.init.ResearchInitModel
 import model.fantom.*
 import java.awt.Color
 
