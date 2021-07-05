@@ -20,7 +20,7 @@ import store.list.ListStore.Intent
 import store.list.ListStore.State
 import kotlin.collections.List
 
-internal class ListComponentStoreProvider(
+internal class ListStoreProvider(
   private val storeFactory: StoreFactory,
   private val repository: ResearchRepository
 ) {

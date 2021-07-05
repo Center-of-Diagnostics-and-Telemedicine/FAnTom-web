@@ -19,7 +19,7 @@ internal class ResearchToolsStoreProvider(
   fun provide(): ToolsStore =
     object : ToolsStore,
       Store<Intent, State, Nothing> by storeFactory.create(
-        name = "MarksStore",
+        name = "ToolsStore",
         initialState = State(list = listOf(Tool.MIP, Tool.Brightness, Tool.Preset)),
         bootstrapper = SimpleBootstrapper(Unit),
         executorFactory = ::ExecutorImpl,

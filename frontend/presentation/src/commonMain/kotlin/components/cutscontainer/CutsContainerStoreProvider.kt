@@ -28,7 +28,7 @@ internal class CutsContainerStoreProvider(
 
   fun provide(): MyCutsContainerStore =
     object : MyCutsContainerStore, Store<Intent, State, Nothing> by storeFactory.create(
-      name = "MyCutsContainerStore_$researchId",
+      name = "CutsContainerStore_$researchId",
       initialState = State(
         gridType = GridType.initial,
         gridModel = GridType.initial.buildModel(data)

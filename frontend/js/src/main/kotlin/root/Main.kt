@@ -75,5 +75,5 @@ private class Application {
 
 fun Any.debugLog(text: String?) {
   if (text.isNullOrEmpty().not() && DEBUG)
-    console.log("${this::class.simpleName?.toUpperCase()}: $text")
+    console.log("${this::class.simpleName?.uppercase()}: $text")
 }

@@ -7,16 +7,18 @@ import com.arkivanov.decompose.value.Value
 import com.badoo.reaktive.base.Consumer
 import components.cutcontainer.CutContainer.ShapesChild
 import components.shapes.Shapes.Output
+import model.CutType
 
 internal class ShapesRouter(
   routerFactory: RouterFactory,
   private val shapesFactory: (ComponentContext, Consumer<Output>) -> Shapes,
-  private val shapesOutput: Consumer<Output>
+  private val shapesOutput: Consumer<Output>,
+  cutType: CutType
 ) {
 
   private val router =
-    routerFactory.router<Config, ShapesChild>(
-      initialConfiguration = Config.Shapes,
+    routerFactory.router(
+      initialConfiguration = if (cutType == CutType.EMPTY) Config.None else Config.Shapes,
       key = "ShapesRouter",
       childFactory = ::createChild
     )
@@ -29,9 +31,15 @@ internal class ShapesRouter(
       is Config.None -> ShapesChild.None
     }
 
-  fun update() {
+  fun show() {
     if (state.value.activeChild.instance is ShapesChild.None) {
       router.push(Config.Shapes)
+    }
+  }
+
+  fun hide() {
+    if (state.value.activeChild.instance is ShapesChild.Data) {
+      router.replaceCurrent(Config.None)
     }
   }
 

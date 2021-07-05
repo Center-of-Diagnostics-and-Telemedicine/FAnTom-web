@@ -30,7 +30,7 @@ internal class ResearchMarksStoreProvider(
   fun provide(): MarksStore =
     object : MarksStore,
       Store<Intent, State, Label> by storeFactory.create(
-        name = "ResearchStore",
+        name = "ResearchMarksStore",
         initialState = State(),
         bootstrapper = SimpleBootstrapper(Unit),
         executorFactory = ::ExecutorImpl,

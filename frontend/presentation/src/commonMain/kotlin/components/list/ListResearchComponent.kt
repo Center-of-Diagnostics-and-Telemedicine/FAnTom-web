@@ -15,7 +15,7 @@ internal class ListResearchComponent(
 
   private val store =
     instanceKeeper.getStore {
-      ListComponentStoreProvider(
+      ListStoreProvider(
         storeFactory = storeFactory,
         repository = researchRepository
       ).provide()

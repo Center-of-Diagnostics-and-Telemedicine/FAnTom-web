@@ -28,7 +28,7 @@ internal class GridStoreProvider(
 
   fun provide(): MyGridStore {
     return object : MyGridStore, Store<Intent, State, Label> by storeFactory.create(
-      name = "MyGridStore_${researchId}",
+      name = "GridStore_${researchId}",
       initialState = initialState,
       bootstrapper = SimpleBootstrapper(Unit),
       executorFactory = ::ExecutorImpl,

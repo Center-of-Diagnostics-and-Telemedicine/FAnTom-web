@@ -30,7 +30,8 @@ class CutContainerComponent(
     SliderRouter(
       routerFactory = this,
       sliderFactory = slider,
-      sliderOutput = Consumer(::onSliderOutput)
+      sliderOutput = Consumer(::onSliderOutput),
+      cutType = cutType
     )
 
   override val sliderRouterState: Value<RouterState<*, SliderChild>> = sliderRouter.state
@@ -39,7 +40,8 @@ class CutContainerComponent(
     DrawRouter(
       routerFactory = this,
       drawFactory = draw,
-      drawOutput = Consumer(::onDrawOutput)
+      drawOutput = Consumer(::onDrawOutput),
+      cutType = cutType
     )
   override val drawRouterState: Value<RouterState<*, DrawChild>> = drawRouter.state
 
@@ -48,7 +50,8 @@ class CutContainerComponent(
     ShapesRouter(
       routerFactory = this,
       shapesFactory = shapes,
-      shapesOutput = Consumer(::onShapesOutput)
+      shapesOutput = Consumer(::onShapesOutput),
+      cutType = cutType
     )
 
   override val shapesRouterState: Value<RouterState<*, ShapesChild>> = shapesRouter.state
@@ -57,7 +60,8 @@ class CutContainerComponent(
     CutRouter(
       routerFactory = this,
       cutFactory = cut,
-      cutOutput = Consumer(::onCutOutput)
+      cutOutput = Consumer(::onCutOutput),
+      cutType = cutType
     )
 
   override val cutRouterState: Value<RouterState<*, CutChild>> = cutRouter.state

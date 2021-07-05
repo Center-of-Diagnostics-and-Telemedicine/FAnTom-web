@@ -7,16 +7,18 @@ import com.arkivanov.decompose.value.Value
 import com.badoo.reaktive.base.Consumer
 import components.cut.Cut.Output
 import components.cutcontainer.CutContainer.CutChild
+import model.CutType
 
 internal class CutRouter(
   routerFactory: RouterFactory,
   private val cutFactory: (ComponentContext, Consumer<Output>) -> Cut,
-  private val cutOutput: Consumer<Output>
+  private val cutOutput: Consumer<Output>,
+  private val cutType: CutType
 ) {
 
   private val router =
-    routerFactory.router<Config, CutChild>(
-      initialConfiguration = Config.Cut,
+    routerFactory.router(
+      initialConfiguration = if (cutType == CutType.EMPTY) Config.None else Config.Cut,
       key = "CutRouter",
       childFactory = ::createChild
     )

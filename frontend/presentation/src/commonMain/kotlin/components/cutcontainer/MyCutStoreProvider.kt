@@ -30,7 +30,7 @@ class MyCutStoreProvider(
 
   fun provide(): MyCutStore =
     object : MyCutStore, Store<Intent, State, Label> by storeFactory.create(
-      name = "MyCutStore_${researchId}_${cutType.intType}",
+      name = "CutStore_${researchId}_${cutType.intType}",
       initialState = State(),
       bootstrapper = SimpleBootstrapper(Unit),
       executorFactory = ::ExecutorImpl,

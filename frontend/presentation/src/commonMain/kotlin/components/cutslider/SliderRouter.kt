@@ -7,16 +7,18 @@ import com.arkivanov.decompose.value.Value
 import com.badoo.reaktive.base.Consumer
 import components.cutcontainer.CutContainer.SliderChild
 import components.cutslider.Slider.Output
+import model.CutType
 
 internal class SliderRouter(
   routerFactory: RouterFactory,
   private val sliderFactory: (ComponentContext, Consumer<Output>) -> Slider,
-  private val sliderOutput: Consumer<Output>
+  private val sliderOutput: Consumer<Output>,
+  cutType: CutType
 ) {
 
   private val router =
-    routerFactory.router<Config, SliderChild>(
-      initialConfiguration = Config.Slider,
+    routerFactory.router(
+      initialConfiguration = if (cutType == CutType.EMPTY) Config.None else Config.Slider,
       key = "SliderRouter",
       childFactory = ::createChild
     )
