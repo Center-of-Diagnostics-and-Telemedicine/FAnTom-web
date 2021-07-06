@@ -25,5 +25,6 @@ class SliderComponent(
 
   override fun onValueChange(value: Int) {
     store.accept(SliderStore.Intent.HandleChange(value))
+    sliderOutput.onNext(Slider.Output.SliceNumberChanged(value))
   }
 }

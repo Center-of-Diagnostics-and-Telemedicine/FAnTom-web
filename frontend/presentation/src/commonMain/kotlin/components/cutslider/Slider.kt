@@ -5,7 +5,6 @@ import com.arkivanov.decompose.value.Value
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.base.Consumer
 import components.cutslider.Slider.Dependencies
-import model.CutType
 import model.Plane
 
 interface Slider {
@@ -28,10 +27,12 @@ interface Slider {
   }
 
   sealed class Output {
-    data class SliceNumberChanged(val sliceNumber: Int)
+    data class SliceNumberChanged(val sliceNumber: Int): Output()
   }
 }
 
 @Suppress("FunctionName") // Factory function
-fun Slider(componentContext: ComponentContext, dependencies: Dependencies): Slider =
-  SliderComponent(componentContext, dependencies)
+fun Slider(
+  componentContext: ComponentContext,
+  dependencies: Dependencies
+): Slider = SliderComponent(componentContext, dependencies)

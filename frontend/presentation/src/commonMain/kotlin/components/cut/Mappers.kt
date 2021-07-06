@@ -1,6 +1,8 @@
 package components.cut
 
+import components.cut.Cut.Input
 import components.cut.Cut.Model
+import store.cut.MyCutStore.Intent
 import store.cut.MyCutStore.State
 
 internal val stateToModel: (State) -> Model =
@@ -11,3 +13,9 @@ internal val stateToModel: (State) -> Model =
       error = it.error,
     )
   }
+
+internal val inputToIntent: (Input) -> Intent = {
+  when (it){
+    is Input.SliceNumberChanged -> Intent.HandleChangeSliceNumber(it.value)
+  }
+}

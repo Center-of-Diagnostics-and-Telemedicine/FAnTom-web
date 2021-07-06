@@ -3,13 +3,17 @@ package components.cutcontainer
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.RouterState
 import com.arkivanov.decompose.value.Value
-import com.arkivanov.decompose.value.observe
 import com.badoo.reaktive.base.Consumer
+import com.badoo.reaktive.subject.Subject
+import com.badoo.reaktive.subject.publish.PublishSubject
 import components.Consumer
-import components.asValue
 import components.cut.Cut
 import components.cut.CutRouter
-import components.cutcontainer.CutContainer.*
+import components.cutcontainer.CutContainer.CutChild
+import components.cutcontainer.CutContainer.Dependencies
+import components.cutcontainer.CutContainer.DrawChild
+import components.cutcontainer.CutContainer.ShapesChild
+import components.cutcontainer.CutContainer.SliderChild
 import components.cutslider.Slider
 import components.cutslider.SliderRouter
 import components.draw.Draw
@@ -21,11 +25,24 @@ import components.shapes.ShapesRouter
 class CutContainerComponent(
   componentContext: ComponentContext,
   dependencies: Dependencies,
-  cut: (ComponentContext, Consumer<Cut.Output>) -> Cut,
+  cut: (ComponentContext, Consumer<Cut.Input>, Consumer<Cut.Output>) -> Cut,
   slider: (ComponentContext, Consumer<Slider.Output>) -> Slider,
   draw: (ComponentContext, Consumer<Draw.Output>) -> Draw,
   shapes: (ComponentContext, Consumer<Shapes.Output>) -> Shapes,
 ) : CutContainer, ComponentContext by componentContext, Dependencies by dependencies {
+
+  private val cutInput: Subject<Cut.Input> = PublishSubject()
+
+  val store = instanceKeeper.getStore {
+    CutContainerStoreProvider(
+      storeFactory = storeFactory,
+      brightnessRepository = brightnessRepository,
+      mipRepository = mipRepository,
+      researchId = researchId,
+      researchRepository = researchRepository,
+      plane = plane
+    ).provide()
+  }
 
   private val sliderRouter =
     SliderRouter(
@@ -62,30 +79,15 @@ class CutContainerComponent(
       routerFactory = this,
       cutFactory = cut,
       cutOutput = Consumer(::onCutOutput),
+      cutInput = cutInput,
       cutType = cutType
     )
 
   override val cutRouterState: Value<RouterState<*, CutChild>> = cutRouter.state
 
-  val store = instanceKeeper.getStore {
-    CutContainerStoreProvider(
-      storeFactory = storeFactory,
-      brightnessRepository = brightnessRepository,
-      mipRepository = mipRepository,
-      researchId = researchId,
-      researchRepository = researchRepository,
-      plane = plane
-    ).provide()
-  }
-
-  init {
-    store.asValue().observe(lifecycle) {
-
-    }
-  }
-
   private fun onSliderOutput(output: Slider.Output) {
     when (output) {
+      is Slider.Output.SliceNumberChanged -> cutInput.onNext(Cut.Input.SliceNumberChanged(output.sliceNumber))
       else -> throw NotImplementedError("onSliderOutput in CutComponent not implemented for $output")
     }
   }

@@ -13,7 +13,6 @@ import components.shapes.Shapes
 import model.CutType
 import model.Plane
 import model.ResearchDataModel
-import model.buildPlane
 import repository.MyBrightnessRepository
 import repository.MyMipRepository
 import repository.ResearchRepository
@@ -87,11 +86,12 @@ fun CutContainer(componentContext: ComponentContext, dependencies: Dependencies)
           override val shapesOutput: Consumer<Shapes.Output> = output
         })
     },
-    cut = { childContext, output ->
+    cut = { childContext, input, output ->
       Cut(
         componentContext = childContext,
         dependencies = object : Cut.Dependencies, Dependencies by dependencies {
           override val cutOutput: Consumer<Cut.Output> = output
+          override val input: Consumer<Cut.Input> = input
         })
     },
   )

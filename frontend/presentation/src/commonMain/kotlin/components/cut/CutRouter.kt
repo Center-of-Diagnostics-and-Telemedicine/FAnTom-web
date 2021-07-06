@@ -1,6 +1,10 @@
 package components.cut
 
-import com.arkivanov.decompose.*
+import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.RouterFactory
+import com.arkivanov.decompose.RouterState
+import com.arkivanov.decompose.replaceCurrent
+import com.arkivanov.decompose.router
 import com.arkivanov.decompose.statekeeper.Parcelable
 import com.arkivanov.decompose.statekeeper.Parcelize
 import com.arkivanov.decompose.value.Value
@@ -8,14 +12,13 @@ import com.badoo.reaktive.base.Consumer
 import components.cut.Cut.Output
 import components.cutcontainer.CutContainer.CutChild
 import model.CutType
-import model.Plane
 
 internal class CutRouter(
   routerFactory: RouterFactory,
-  private val cutFactory: (ComponentContext, Consumer<Output>) -> Cut,
+  private val cutFactory: (ComponentContext, Consumer<Cut.Input>, Consumer<Output>) -> Cut,
   private val cutOutput: Consumer<Output>,
-  private val cutInput:
-  private val cutType: CutType
+  private val cutType: CutType,
+  private val cutInput: Consumer<Cut.Input>
 ) {
 
   private val router =
@@ -29,7 +32,7 @@ internal class CutRouter(
 
   private fun createChild(config: Config, componentContext: ComponentContext): CutChild =
     when (config) {
-      is Config.Cut -> CutChild.Data(cutFactory(componentContext, cutOutput))
+      is Config.Cut -> CutChild.Data(cutFactory(componentContext, cutInput, cutOutput))
       is Config.None -> CutChild.None
     }
 

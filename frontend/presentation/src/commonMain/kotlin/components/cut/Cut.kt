@@ -5,7 +5,6 @@ import com.arkivanov.decompose.value.Value
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.base.Consumer
 import components.cut.Cut.Dependencies
-import model.CutType
 import model.Plane
 import repository.MyBrightnessRepository
 import repository.MyMipRepository
@@ -27,11 +26,16 @@ interface Cut {
     val researchRepository: ResearchRepository
     val mipRepository: MyMipRepository
     val cutOutput: Consumer<Output>
+    val input: Consumer<Input>
     val plane: Plane
     val researchId: Int
   }
 
   sealed class Output {
+  }
+
+  sealed class Input {
+    data class SliceNumberChanged(val value: Int) : Input()
   }
 }
 

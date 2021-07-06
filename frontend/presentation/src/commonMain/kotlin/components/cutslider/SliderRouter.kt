@@ -1,6 +1,10 @@
 package components.cutslider
 
-import com.arkivanov.decompose.*
+import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.RouterFactory
+import com.arkivanov.decompose.RouterState
+import com.arkivanov.decompose.replaceCurrent
+import com.arkivanov.decompose.router
 import com.arkivanov.decompose.statekeeper.Parcelable
 import com.arkivanov.decompose.statekeeper.Parcelize
 import com.arkivanov.decompose.value.Value
@@ -27,7 +31,9 @@ internal class SliderRouter(
 
   private fun createChild(config: Config, componentContext: ComponentContext): SliderChild =
     when (config) {
-      is Config.Slider -> SliderChild.Data(sliderFactory(componentContext, sliderOutput))
+      is Config.Slider -> SliderChild.Data(
+        sliderFactory(componentContext, sliderOutput)
+      )
       is Config.None -> SliderChild.None
     }
 
