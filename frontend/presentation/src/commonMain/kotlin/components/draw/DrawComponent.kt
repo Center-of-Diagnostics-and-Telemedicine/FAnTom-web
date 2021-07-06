@@ -17,7 +17,7 @@ class DrawComponent(
     DrawStoreProvider(
       storeFactory = storeFactory,
       researchId = researchId,
-      cutType = cutType
+      plane = plane
     ).provide()
   }
 

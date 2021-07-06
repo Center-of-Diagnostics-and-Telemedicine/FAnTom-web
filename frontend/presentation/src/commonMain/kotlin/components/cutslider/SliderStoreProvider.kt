@@ -1,12 +1,13 @@
 package components.cutslider
 
 import com.arkivanov.mvikotlin.core.store.Reducer
+import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
 import com.badoo.reaktive.utils.ensureNeverFrozen
-import model.CutType
+import model.Plane
 import store.slider.SliderStore
 import store.slider.SliderStore.Intent
 import store.slider.SliderStore.State
@@ -14,18 +15,20 @@ import store.slider.SliderStore.State
 internal class SliderStoreProvider(
   private val storeFactory: StoreFactory,
   private val researchId: Int,
-  private val cutType: CutType
+  private val plane: Plane
 ) {
+
+  val initialState: State = State(
+    currentValue = plane.data.nImages / 2,
+    maxValue = plane.data.nImages,
+    defaultValue = 1
+  )
 
   fun provide(): SliderStore =
     object : SliderStore, Store<Intent, State, Nothing> by storeFactory.create(
-      name = "SliderStore_${researchId}_${cutType.intType}",
-      initialState = State(
-        currentValue = 1,
-        maxValue = 100,
-        defaultValue = 1,
-      ),
-//      bootstrapper = SimpleBootstrapper(Unit),
+      name = "SliderStore_${researchId}_${plane.type.intType}",
+      initialState = initialState,
+      bootstrapper = SimpleBootstrapper(Unit),
       executorFactory = ::ExecutorImpl,
       reducer = ReducerImpl
     ) {
@@ -39,7 +42,7 @@ internal class SliderStoreProvider(
   }
 
   private inner class ExecutorImpl :
-    ReaktiveExecutor<Intent, Nothing, State, Result, Nothing>() {
+    ReaktiveExecutor<Intent, Unit, State, Result, Nothing>() {
 
     override fun executeIntent(intent: Intent, getState: () -> State) {
       when (intent) {
@@ -54,4 +57,5 @@ internal class SliderStoreProvider(
         is Result.ValueChanged -> copy(currentValue = result.value)
       }
   }
+
 }

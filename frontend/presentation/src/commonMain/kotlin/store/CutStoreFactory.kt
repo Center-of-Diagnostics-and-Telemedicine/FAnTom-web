@@ -18,7 +18,7 @@ import store.cut.CutStoreAbstractFactory
 
 internal class CutStoreFactory(
   storeFactory: StoreFactory,
-  val cut: Cut,
+  val cut: Plane,
   val repository: ResearchRepository,
   val research: Research,
   brightnessRepository: BrightnessRepository,

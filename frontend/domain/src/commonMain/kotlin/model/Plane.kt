@@ -2,17 +2,17 @@ package model
 
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 
-data class Cut(
+data class Plane(
   val type: CutType,
   val data: PlaneModel,
   val color: String,
+  val researchType: ResearchType,
   val horizontalCutData: CutData?,
   val verticalCutData: CutData?,
-  val researchType: ResearchType,
   val availableCutsForChange: List<CutType>
 ) : JvmSerializable
 
-fun Cut.isPlanar(): Boolean = researchType != ResearchType.CT
+fun Plane.isPlanar(): Boolean = researchType != ResearchType.CT
 
 enum class CutType(val intType: Int) {
   EMPTY(-1),
@@ -104,7 +104,7 @@ fun getColorByCutType(cutType: CutType): String {
   }
 }
 
-fun Cut.getPosition(dicomX: Double, dicomY: Double, sliceNumber: Int): PointPosition? {
+fun Plane.getPosition(dicomX: Double, dicomY: Double, sliceNumber: Int): PointPosition? {
   if (dicomX < 0.0 || dicomY < 0.0) {
     return null
   } else {
@@ -150,7 +150,7 @@ fun Cut.getPosition(dicomX: Double, dicomY: Double, sliceNumber: Int): PointPosi
   }
 }
 
-fun Cut.getMarkToSave(shape: Shape, sliceNumber: Int): MarkData? {
+fun Plane.getMarkToSave(shape: Shape, sliceNumber: Int): MarkData? {
   return if (shape.dicomCenterX < 0.0 || shape.dicomCenterY < 0.0) {
     null
   } else {
@@ -227,7 +227,7 @@ fun Cut.getMarkToSave(shape: Shape, sliceNumber: Int): MarkData? {
   }
 }
 
-fun Cut.getSliceNumberByMark(mark: MarkModel): Int? {
+fun Plane.getSliceNumberByMark(mark: MarkModel): Int? {
   return when (type) {
     CutType.EMPTY -> null
     CutType.CT_AXIAL -> mark.markData.z.toInt()
@@ -247,7 +247,7 @@ fun Cut.getSliceNumberByMark(mark: MarkModel): Int? {
   }
 }
 
-fun Cut.updateCoordinates(mark: MarkModel, deltaX: Double, deltaY: Double): MarkModel? {
+fun Plane.updateCoordinates(mark: MarkModel, deltaX: Double, deltaY: Double): MarkModel? {
   val markData = mark.markData
   return when (type) {
     CutType.EMPTY -> null
@@ -302,7 +302,7 @@ fun Cut.updateCoordinates(mark: MarkModel, deltaX: Double, deltaY: Double): Mark
   }
 }
 
-fun Cut.updateCoordinatesByRect(
+fun Plane.updateCoordinatesByRect(
   mark: MarkModel,
   deltaX: Double,
   deltaY: Double,
@@ -492,3 +492,251 @@ fun Cut.updateCoordinatesByRect(
     }
   }
 }
+
+
+private val ctCuts = listOf(
+  CutType.CT_AXIAL,
+  CutType.CT_FRONTAL,
+  CutType.CT_SAGITTAL
+)
+
+private val mgCuts = listOf(
+  CutType.MG_RCC,
+  CutType.MG_LCC,
+  CutType.MG_LMLO,
+  CutType.MG_RMLO
+)
+
+private val dxCuts = listOf(
+  CutType.DX_GENERIC,
+  CutType.DX_POSTERO_ANTERIOR,
+  CutType.DX_LEFT_LATERAL,
+  CutType.DX_RIGHT_LATERAL
+)
+
+private val doseReportCuts = listOf(
+  CutType.CT_0,
+  CutType.CT_1,
+  CutType.CT_2
+)
+
+fun buildPlane(type: CutType, data: ResearchDataModel): Plane =
+  when (type) {
+    CutType.EMPTY -> emptyCut(data)
+    CutType.CT_AXIAL -> axialCut(data, ctCuts.filter { it != type })
+    CutType.CT_FRONTAL -> frontalCut(data, ctCuts.filter { it != type })
+    CutType.CT_SAGITTAL -> sagittalCut(data, ctCuts.filter { it != type })
+    CutType.MG_RCC -> mgRcc(data, mgCuts.filter { it != type })
+    CutType.MG_LCC -> mgLcc(data, mgCuts.filter { it != type })
+    CutType.MG_RMLO -> mgRmlo(data, mgCuts.filter { it != type })
+    CutType.MG_LMLO -> mgLmlo(data, mgCuts.filter { it != type })
+    CutType.DX_GENERIC -> dxGeneric(data, dxCuts.filter { it != type })
+    CutType.DX_POSTERO_ANTERIOR -> dxPosteroAnterior(data, dxCuts.filter { it != type })
+    CutType.DX_LEFT_LATERAL -> dxLeftLateral(data, dxCuts.filter { it != type })
+    CutType.DX_RIGHT_LATERAL -> dxRightLateral(data, dxCuts.filter { it != type })
+    CutType.CT_0 -> ct0(data, doseReportCuts.filter { it != type })
+    CutType.CT_1 -> ct1(data, doseReportCuts.filter { it != type })
+    CutType.CT_2 -> ct2(data, doseReportCuts.filter { it != type })
+  }
+
+private fun emptyCut(data: ResearchDataModel): Plane =
+  Plane(
+    type = CutType.EMPTY,
+    data = PlaneModel(0, 0, 0.0, 0.0, 0, 0, 0),
+    color = "",
+    verticalCutData = null,
+    horizontalCutData = null,
+    researchType = data.type,
+    availableCutsForChange = listOf()
+  )
+
+private fun axialCut(data: ResearchDataModel, types: List<CutType>): Plane =
+  Plane(
+    type = CutType.CT_AXIAL,
+    data = data.planes[CT_AXIAL_STRING]
+      ?: error("CutsContainerStoreFactory: AXIAL NOT FOUND IN DATA"),
+    color = axialColor,
+    verticalCutData = CutData(
+      type = CutType.CT_FRONTAL,
+      data = data.planes[CT_FRONTAL_STRING]
+        ?: error("CutsContainerStoreFactory: FRONTAL NOT FOUND IN DATA"),
+      color = frontalColor
+    ),
+    horizontalCutData = CutData(
+      type = CutType.CT_SAGITTAL,
+      data = data.planes[CT_SAGITTAL_STRING]
+        ?: error("CutsContainerStoreFactory: SAGITTAL NOT FOUND IN DATA"),
+      color = sagittalColor
+    ),
+    researchType = data.type,
+    availableCutsForChange = types
+  )
+
+private fun frontalCut(data: ResearchDataModel, types: List<CutType>): Plane =
+  Plane(
+    type = CutType.CT_FRONTAL,
+    data = data.planes[CT_FRONTAL_STRING]
+      ?: error("CutsContainerStoreFactory: FRONTAL NOT FOUND IN DATA"),
+    color = frontalColor,
+    verticalCutData = CutData(
+      type = CutType.CT_AXIAL,
+      data = data.planes[CT_AXIAL_STRING]
+        ?: error("CutsContainerStoreFactory: AXIAL NOT FOUND IN DATA"),
+      color = axialColor
+    ),
+    horizontalCutData = CutData(
+      type = CutType.CT_SAGITTAL,
+      data = data.planes[CT_SAGITTAL_STRING]
+        ?: error("CutsContainerStoreFactory: SAGITTAL NOT FOUND IN DATA"),
+      color = sagittalColor
+    ),
+    researchType = data.type,
+    availableCutsForChange = types
+  )
+
+private fun sagittalCut(data: ResearchDataModel, types: List<CutType>): Plane =
+  Plane(
+    type = CutType.CT_SAGITTAL,
+    data = data.planes[CT_SAGITTAL_STRING]
+      ?: error("CutsContainerStoreFactory: SAGITTAL NOT FOUND IN DATA"),
+    color = sagittalColor,
+    verticalCutData = CutData(
+      type = CutType.CT_AXIAL,
+      data = data.planes[CT_AXIAL_STRING]
+        ?: error("CutsContainerStoreFactory: AXIAL NOT FOUND IN DATA"),
+      color = axialColor
+    ),
+    horizontalCutData = CutData(
+      type = CutType.CT_FRONTAL,
+      data = data.planes[CT_FRONTAL_STRING]
+        ?: error("CutsContainerStoreFactory: FRONTAL NOT FOUND IN DATA"),
+      color = frontalColor
+    ),
+    researchType = data.type,
+    availableCutsForChange = types
+  )
+
+private fun mgRcc(data: ResearchDataModel, types: List<CutType>): Plane =
+  Plane(
+    type = CutType.MG_RCC,
+    data = data.planes[MG_RCC_STRING]
+      ?: error("CutsContainerStoreFactory: MG_RCC NOT FOUND IN DATA"),
+    color = rcc_color,
+    verticalCutData = null,
+    horizontalCutData = null,
+    researchType = data.type,
+    availableCutsForChange = types
+  )
+
+private fun mgLcc(data: ResearchDataModel, types: List<CutType>): Plane =
+  Plane(
+    type = CutType.MG_LCC,
+    data = data.planes[MG_LCC_STRING]
+      ?: error("CutsContainerStoreFactory: MG_LCC NOT FOUND IN DATA"),
+    color = lcc_color,
+    verticalCutData = null,
+    horizontalCutData = null,
+    researchType = data.type,
+    availableCutsForChange = types
+  )
+
+private fun mgRmlo(data: ResearchDataModel, types: List<CutType>): Plane =
+  Plane(
+    type = CutType.MG_RMLO,
+    data = data.planes[MG_RMLO_STRING]
+      ?: error("CutsContainerStoreFactory: MG_RMLO NOT FOUND IN DATA"),
+    color = rmlo_color,
+    verticalCutData = null,
+    horizontalCutData = null,
+    researchType = data.type,
+    availableCutsForChange = types
+  )
+
+private fun mgLmlo(data: ResearchDataModel, types: List<CutType>): Plane =
+  Plane(
+    type = CutType.MG_LMLO,
+    data = data.planes[MG_LMLO_STRING]
+      ?: error("CutsContainerStoreFactory: MG_LMLO NOT FOUND IN DATA"),
+    color = lmlo_color,
+    verticalCutData = null,
+    horizontalCutData = null,
+    researchType = data.type,
+    availableCutsForChange = types
+  )
+
+private fun dxGeneric(data: ResearchDataModel, types: List<CutType>): Plane =
+  Plane(
+    type = CutType.DX_GENERIC,
+    data = data.planes[DX_GENERIC_STRING]!!,
+    color = generic_color,
+    verticalCutData = null,
+    horizontalCutData = null,
+    researchType = data.type,
+    availableCutsForChange = types
+  )
+
+private fun dxPosteroAnterior(data: ResearchDataModel, types: List<CutType>): Plane =
+  Plane(
+    type = CutType.DX_POSTERO_ANTERIOR,
+    data = data.planes[DX_POSTERO_ANTERIOR_STRING]!!,
+    color = postero_color,
+    verticalCutData = null,
+    horizontalCutData = null,
+    researchType = data.type,
+    availableCutsForChange = listOf()
+  )
+
+private fun dxLeftLateral(data: ResearchDataModel, types: List<CutType>): Plane =
+  Plane(
+    type = CutType.DX_LEFT_LATERAL,
+    data = data.planes[DX_LEFT_LATERAL_STRING]!!,
+    color = left_lateral_color,
+    verticalCutData = null,
+    horizontalCutData = null,
+    researchType = data.type,
+    availableCutsForChange = listOf()
+  )
+
+private fun dxRightLateral(data: ResearchDataModel, types: List<CutType>): Plane =
+  Plane(
+    type = CutType.DX_RIGHT_LATERAL,
+    data = data.planes[DX_RIGHT_LATERAL_STRING]!!,
+    color = right_lateral_color,
+    verticalCutData = null,
+    horizontalCutData = null,
+    researchType = data.type,
+    availableCutsForChange = listOf()
+  )
+
+private fun ct0(data: ResearchDataModel, types: List<CutType>): Plane =
+  Plane(
+    type = CutType.CT_0,
+    data = data.planes[CT_0_STRING]!!,
+    color = axialColor,
+    verticalCutData = null,
+    horizontalCutData = null,
+    researchType = data.type,
+    availableCutsForChange = types
+  )
+
+private fun ct1(data: ResearchDataModel, types: List<CutType>): Plane =
+  Plane(
+    type = CutType.CT_1,
+    data = data.planes[CT_1_STRING]!!,
+    color = frontalColor,
+    verticalCutData = null,
+    horizontalCutData = null,
+    researchType = data.type,
+    availableCutsForChange = types
+  )
+
+private fun ct2(data: ResearchDataModel, types: List<CutType>): Plane =
+  Plane(
+    type = CutType.CT_2,
+    data = data.planes[CT_2_STRING]!!,
+    color = sagittalColor,
+    verticalCutData = null,
+    horizontalCutData = null,
+    researchType = data.type,
+    availableCutsForChange = types
+  )

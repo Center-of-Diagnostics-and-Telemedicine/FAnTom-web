@@ -14,7 +14,7 @@ import controller.CutController
 import controller.CutControllerImpl
 import destroy
 import kotlinx.css.*
-import model.Cut
+import model.Plane
 import model.Research
 import react.*
 import repository.BrightnessRepository
@@ -138,7 +138,7 @@ class CutParentComponent(prps: CutParentProps) : RComponent<CutParentProps, CutP
 
   interface Dependencies {
     val storeFactory: StoreFactory
-    val cut: Cut
+    val cut: Plane
     val cutsInput: Observable<CutController.Input>
     val cutOutput: (CutController.Output) -> Unit
     val researchRepository: ResearchRepository

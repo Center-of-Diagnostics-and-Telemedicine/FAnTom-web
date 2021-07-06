@@ -1,8 +1,9 @@
 package repository
 
 import com.badoo.reaktive.observable.Observable
+import com.badoo.reaktive.observable.subscribe
 import com.badoo.reaktive.subject.behavior.BehaviorSubject
-import model.GridType
+import model.*
 
 class GridRepositoryImpl : GridRepository {
 

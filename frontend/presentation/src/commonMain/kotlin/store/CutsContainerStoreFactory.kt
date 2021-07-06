@@ -48,7 +48,7 @@ internal class CutsContainerStoreFactory(
       }.let {}
     }
 
-    private fun handleChangeCutType(getState: () -> State, oldCut: Cut, newCutType: CutType) {
+    private fun handleChangeCutType(getState: () -> State, oldCut: Plane, newCutType: CutType) {
       val items = getState().grid.updateCuts(data = data, oldCut = oldCut, newCutType = newCutType)
       dispatch(Result.Loaded(items = items, grid = getState().grid))
     }

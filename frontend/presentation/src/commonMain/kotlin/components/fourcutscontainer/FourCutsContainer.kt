@@ -7,9 +7,7 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.base.Consumer
 import components.cutcontainer.CutContainer
 import components.fourcutscontainer.FourCutsContainer.Dependencies
-import model.CutType
-import model.ResearchData
-import model.ResearchDataModel
+import model.*
 import repository.MyBrightnessRepository
 import repository.MyMipRepository
 import repository.ResearchRepository
@@ -62,6 +60,7 @@ fun FourCutsContainer(
         dependencies = object : CutContainer.Dependencies, Dependencies by dependencies {
           override val cutContainerOutput: Consumer<CutContainer.Output> = output
           override val cutType: CutType = cutType
+          override val plane: Plane = buildPlane(cutType, data)
         })
     }
   )

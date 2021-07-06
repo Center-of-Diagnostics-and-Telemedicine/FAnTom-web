@@ -4,7 +4,7 @@ import com.arkivanov.mvikotlin.core.store.*
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.badoo.reaktive.utils.atomic.AtomicInt
 import com.badoo.reaktive.utils.ensureNeverFrozen
-import model.Cut
+import model.Plane
 import model.Mip
 import model.Research
 import repository.BrightnessRepository
@@ -13,7 +13,7 @@ import store.cut.CutStore.*
 
 abstract class CutStoreAbstractFactory(
   private val storeFactory: StoreFactory,
-  private val cut: Cut,
+  private val cut: Plane,
   private val research: Research,
   private val brightnessRepository: BrightnessRepository,
   private val mipRepository: MipRepository

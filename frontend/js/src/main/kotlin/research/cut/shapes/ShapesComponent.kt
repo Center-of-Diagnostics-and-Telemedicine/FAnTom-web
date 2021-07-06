@@ -308,7 +308,7 @@ class ShapesState(
 ) : RState
 
 interface ShapesProps : RProps {
-  var cut: Cut
+  var cut: Plane
   var width: Int
   var height: Int
   var shapesModel: ShapesView.Model
@@ -317,7 +317,7 @@ interface ShapesProps : RProps {
 }
 
 fun RBuilder.shapesView(
-  cut: Cut,
+  cut: Plane,
   width: Int,
   height: Int,
   shapesModel: ShapesView.Model,

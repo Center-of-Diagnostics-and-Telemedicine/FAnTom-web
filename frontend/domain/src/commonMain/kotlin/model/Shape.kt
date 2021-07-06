@@ -51,7 +51,7 @@ data class Rectangle(
   override val editable: Boolean = true
 ) : Shape
 
-fun MarkModel.toShape(cut: Cut, sliceNumber: Int): Shape? {
+fun MarkModel.toShape(cut: Plane, sliceNumber: Int): Shape? {
   markData.apply {
     return when (shapeType) {
       SHAPE_TYPE_CIRCLE -> toCircle(cut, sliceNumber)
@@ -81,7 +81,7 @@ fun List<Shape>.getShapeByPosition(dicomX: Double, dicomY: Double): Shape? {
     }
 }
 
-private fun MarkModel.toCircle(cut: Cut, sliceNumber: Int): Circle? {
+private fun MarkModel.toCircle(cut: Plane, sliceNumber: Int): Circle? {
   markData.apply {
     when (cut.type) {
       CutType.EMPTY -> return null
@@ -179,7 +179,7 @@ private fun MarkModel.toCircle(cut: Cut, sliceNumber: Int): Circle? {
   }
 }
 
-private fun MarkModel.toRectangle(cut: Cut): Rectangle? {
+private fun MarkModel.toRectangle(cut: Plane): Rectangle? {
   markData.apply {
     when (cut.type) {
       CutType.EMPTY,

@@ -11,13 +11,14 @@ import components.cutslider.Slider
 import components.draw.Draw
 import components.shapes.Shapes
 import model.CutType
+import model.Plane
+import model.ResearchDataModel
+import model.buildPlane
 import repository.MyBrightnessRepository
 import repository.MyMipRepository
 import repository.ResearchRepository
 
 interface CutContainer {
-
-//  val model: Value<Model>
 
   val sliderRouterState: Value<RouterState<*, SliderChild>>
   val drawRouterState: Value<RouterState<*, DrawChild>>
@@ -32,6 +33,8 @@ interface CutContainer {
     val cutContainerOutput: Consumer<Output>
     val cutType: CutType
     val researchId: Int
+    val data: ResearchDataModel
+    val plane: Plane
   }
 
   sealed class SliderChild {

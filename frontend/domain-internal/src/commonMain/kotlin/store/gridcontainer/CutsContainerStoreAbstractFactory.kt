@@ -3,7 +3,7 @@ package store.gridcontainer
 import com.arkivanov.mvikotlin.core.store.*
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.badoo.reaktive.utils.ensureNeverFrozen
-import model.Cut
+import model.Plane
 import model.GridModel
 import model.ResearchData
 import model.initialFourGrid
@@ -36,7 +36,7 @@ abstract class CutsContainerStoreAbstractFactory(
   protected abstract fun createExecutor(): Executor<Intent, Unit, State, Result, Nothing>
 
   protected sealed class Result : JvmSerializable {
-    data class Loaded(val items: List<Cut>, val grid: GridModel) : Result()
+    data class Loaded(val items: List<Plane>, val grid: GridModel) : Result()
   }
 
   private object ReducerImpl : Reducer<State, Result> {

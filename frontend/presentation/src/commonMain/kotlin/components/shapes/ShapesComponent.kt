@@ -17,7 +17,7 @@ class ShapesComponent(
     ShapesStoreProvider(
       storeFactory = storeFactory,
       researchId = researchId,
-      cutType = cutType
+      plane = plane
     ).provide()
   }
 

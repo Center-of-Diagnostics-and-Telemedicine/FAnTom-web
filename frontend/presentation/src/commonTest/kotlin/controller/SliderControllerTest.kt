@@ -8,7 +8,7 @@ import com.badoo.reaktive.scheduler.overrideSchedulers
 import com.badoo.reaktive.test.scheduler.TestScheduler
 import com.badoo.reaktive.utils.reaktiveUncaughtErrorHandler
 import com.badoo.reaktive.utils.resetReaktiveUncaughtErrorHandler
-import model.Cut
+import model.Plane
 import model.Research
 import resume
 import testCut
@@ -26,7 +26,7 @@ class SliderControllerTest {
     object : SliderController.Dependencies {
       override val storeFactory: StoreFactory = DefaultStoreFactory
       override val lifecycle: Lifecycle = this@SliderControllerTest.lifecycle
-      override val cut: Cut = testCut
+      override val cut: Plane = testCut
       override val research: Research = testResearch
       override val sliderOutput: (SliderController.Output) -> Unit = { output += it }
     }

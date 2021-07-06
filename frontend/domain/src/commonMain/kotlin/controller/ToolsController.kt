@@ -43,8 +43,8 @@ interface ToolsController {
 
   sealed class Input {
     data class ContrastBrightnessChanged(val black: Int, val white: Int) : Input()
-    data class OpenFullCut(val cut: Cut) : Input()
-    data class ReturnPreviousGrid(val cut: Cut) : Input()
+    data class OpenFullCut(val cut: Plane) : Input()
+    data class ReturnPreviousGrid(val cut: Plane) : Input()
     object Idle : Input()
   }
 }

@@ -2,7 +2,7 @@ package store.marks
 
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
-import model.Cut
+import model.Plane
 import model.MarkModel
 import model.MarkTypeModel
 import model.Shape
@@ -11,7 +11,7 @@ import store.marks.MarksStore.*
 interface MarksStore : Store<Intent, State, Label> {
 
   sealed class Intent : JvmSerializable {
-    data class HandleNewMark(val shape: Shape, val sliceNumber: Int, val cut: Cut) : Intent()
+    data class HandleNewMark(val shape: Shape, val sliceNumber: Int, val cut: Plane) : Intent()
     data class SelectMark(val mark: MarkModel) : Intent()
     data class UnselectMark(val mark: MarkModel) : Intent()
     data class UpdateMarkWithoutSaving(val markToUpdate: MarkModel) : Intent()

@@ -9,7 +9,6 @@ import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
 import com.badoo.reaktive.observable.map
 import com.badoo.reaktive.utils.ensureNeverFrozen
 import model.GridType
-import model.ResearchData
 import model.ResearchDataModel
 import repository.GridRepository
 import store.tools.MyGridStore

@@ -13,7 +13,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.css.*
 import kotlinx.css.properties.border
-import model.Cut
+import model.Plane
 import model.Research
 import org.w3c.dom.Element
 import react.RBuilder
@@ -142,7 +142,7 @@ class CutContainer : RComponent<CutContainerProps, CutContainerState>() {
 
   interface Dependencies {
     val storeFactory: StoreFactory
-    val cut: Cut
+    val cut: Plane
     val cutsInput: Observable<Input>
     val cutOutput: (CutController.Output) -> Unit
     val researchRepository: ResearchRepository

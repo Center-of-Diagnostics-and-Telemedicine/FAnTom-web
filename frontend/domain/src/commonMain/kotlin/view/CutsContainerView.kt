@@ -7,7 +7,7 @@ import view.CutsContainerView.Model
 interface CutsContainerView : MviView<Model, Nothing> {
 
   data class Model(
-    val items: List<Cut>,
+    val items: List<Plane>,
     val grid: GridModel
   )
 }

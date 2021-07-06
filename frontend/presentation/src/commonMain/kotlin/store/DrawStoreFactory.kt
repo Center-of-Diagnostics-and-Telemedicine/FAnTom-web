@@ -3,7 +3,7 @@ package store
 import com.arkivanov.mvikotlin.core.store.Executor
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
-import model.Cut
+import model.Plane
 import model.DOSE_REPORT_RESEARCH_CATEGORY
 import model.Research
 import model.isPlanar
@@ -12,7 +12,7 @@ import store.draw.DrawStoreAbstractFactory
 
 internal class DrawStoreFactory(
   storeFactory: StoreFactory,
-  val cut: Cut,
+  val cut: Plane,
   val research: Research
 ) : DrawStoreAbstractFactory(
   storeFactory = storeFactory,

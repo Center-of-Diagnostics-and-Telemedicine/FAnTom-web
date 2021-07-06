@@ -1,4 +1,4 @@
-package components.cutcontainer
+package components.cut
 
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
@@ -25,12 +25,12 @@ class MyCutStoreProvider(
   private val researchRepository: ResearchRepository,
   private val mipRepository: MyMipRepository,
   private val researchId: Int,
-  private val cutType: CutType,
+  private val plane: Plane
 ) {
 
   fun provide(): MyCutStore =
     object : MyCutStore, Store<Intent, State, Label> by storeFactory.create(
-      name = "CutStore_${researchId}_${cutType.intType}",
+      name = "CutStore_${researchId}_${plane.type.intType}",
       initialState = State(),
       bootstrapper = SimpleBootstrapper(Unit),
       executorFactory = ::ExecutorImpl,
@@ -106,7 +106,7 @@ class MyCutStoreProvider(
         black = black,
         white = white,
         gamma = gamma,
-        type = cutType.intType,
+        type = plane.type.intType,
         mipMethod = mip.intValue,
         aproxSize = (mip as? HasIntValue)?.value ?: 0,
         width = 0,

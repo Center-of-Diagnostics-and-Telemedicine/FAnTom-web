@@ -33,7 +33,7 @@ interface MarksController {
   }
 
   sealed class Input {
-    data class AddNewMark(val shape: Shape, val sliceNumber: Int, val cut: Cut) : Input()
+    data class AddNewMark(val shape: Shape, val sliceNumber: Int, val cut: Plane) : Input()
     data class SelectMark(val mark: MarkModel) : Input()
     data class UnselectMark(val mark: MarkModel) : Input()
     data class UpdateMarkWithoutSave(val markToUpdate: MarkModel) : Input()

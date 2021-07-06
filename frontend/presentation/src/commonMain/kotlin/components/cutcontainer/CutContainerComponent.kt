@@ -3,8 +3,10 @@ package components.cutcontainer
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.RouterState
 import com.arkivanov.decompose.value.Value
+import com.arkivanov.decompose.value.observe
 import com.badoo.reaktive.base.Consumer
 import components.Consumer
+import components.asValue
 import components.cut.Cut
 import components.cut.CutRouter
 import components.cutcontainer.CutContainer.*
@@ -12,6 +14,7 @@ import components.cutslider.Slider
 import components.cutslider.SliderRouter
 import components.draw.Draw
 import components.draw.DrawRouter
+import components.getStore
 import components.shapes.Shapes
 import components.shapes.ShapesRouter
 
@@ -23,8 +26,6 @@ class CutContainerComponent(
   draw: (ComponentContext, Consumer<Draw.Output>) -> Draw,
   shapes: (ComponentContext, Consumer<Shapes.Output>) -> Shapes,
 ) : CutContainer, ComponentContext by componentContext, Dependencies by dependencies {
-
-//  override val model: Value<Model> = store.asValue().map(stateToModel)
 
   private val sliderRouter =
     SliderRouter(
@@ -65,6 +66,23 @@ class CutContainerComponent(
     )
 
   override val cutRouterState: Value<RouterState<*, CutChild>> = cutRouter.state
+
+  val store = instanceKeeper.getStore {
+    CutContainerStoreProvider(
+      storeFactory = storeFactory,
+      brightnessRepository = brightnessRepository,
+      mipRepository = mipRepository,
+      researchId = researchId,
+      researchRepository = researchRepository,
+      plane = plane
+    ).provide()
+  }
+
+  init {
+    store.asValue().observe(lifecycle) {
+
+    }
+  }
 
   private fun onSliderOutput(output: Slider.Output) {
     when (output) {

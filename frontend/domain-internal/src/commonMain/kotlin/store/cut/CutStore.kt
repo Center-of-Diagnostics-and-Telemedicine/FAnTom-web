@@ -18,7 +18,7 @@ interface CutStore : Store<Intent, State, Label> {
     data class HandlePresetChanged(val presets: Presets) : Intent()
     data class HandleCircleDrawn(val circle: Circle) : Intent()
     data class HandleRectangleDrawn(val rectangle: Rectangle) : Intent()
-    data class HandleExternalSliceNumberChanged(val externalCut: Cut, val sliceNumber: Int) :
+    data class HandleExternalSliceNumberChanged(val externalCut: Plane, val sliceNumber: Int) :
       Intent()
 
     data class HandleMarks(val list: List<MarkModel>) : Intent()
@@ -56,13 +56,13 @@ interface CutStore : Store<Intent, State, Label> {
 
   sealed class Label {
 
-    data class SliceNumberChanged(val sliceNumber: Int, val cut: Cut) : Label()
-    data class ExternalSliceNumberChanged(val externalCut: Cut, val sliceNumber: Int) : Label()
-    data class CircleDrawn(val circle: Circle, val sliceNumber: Int, val cut: Cut) : Label()
+    data class SliceNumberChanged(val sliceNumber: Int, val cut: Plane) : Label()
+    data class ExternalSliceNumberChanged(val externalCut: Plane, val sliceNumber: Int) : Label()
+    data class CircleDrawn(val circle: Circle, val sliceNumber: Int, val cut: Plane) : Label()
     data class RectangleDrawn(
       val rectangle: Rectangle,
       val sliceNumber: Int,
-      val cut: Cut
+      val cut: Plane
     ) : Label()
 
     data class Marks(val list: List<MarkModel>) : Label()
@@ -73,8 +73,8 @@ interface CutStore : Store<Intent, State, Label> {
     data class UpdateMarkWithoutSave(val mark: MarkModel) : Label()
     data class UpdateMarkWithSave(val mark: MarkModel) : Label()
     data class StartClick(val startDicomX: Double, val startDicomY: Double) : Label()
-    data class OpenFullCut(val cut: Cut) : Label()
-    data class ChangeCutType(val cutType: CutType, val cut: Cut) : Label()
+    data class OpenFullCut(val cut: Plane) : Label()
+    data class ChangeCutType(val cutType: CutType, val cut: Plane) : Label()
 
     object StopMoving : Label()
   }

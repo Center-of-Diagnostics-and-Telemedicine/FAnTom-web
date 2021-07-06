@@ -7,14 +7,14 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.badoo.reaktive.utils.atomic.AtomicInt
 import com.badoo.reaktive.utils.ensureNeverFrozen
-import model.Cut
+import model.Plane
 import model.Research
 import store.userinput.UserInputStore.*
 
 
 abstract class UserInputStoreAbstractFactory(
   private val storeFactory: StoreFactory,
-  private val cut: Cut,
+  private val cut: Plane,
   private val research: Research
 ) {
 

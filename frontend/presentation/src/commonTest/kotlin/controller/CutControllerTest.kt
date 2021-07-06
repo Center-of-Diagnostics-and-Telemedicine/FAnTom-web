@@ -41,7 +41,7 @@ class CutControllerTest {
       override val lifecycle: Lifecycle = this@CutControllerTest.lifecycle
       override val researchRepository: ResearchRepository = TestResearchRepository()
       override val cutOutput: (Output) -> Unit = { output += it }
-      override val cut: Cut = testCut
+      override val cut: Plane = testCut
       override val research: Research = testResearch
 
     }

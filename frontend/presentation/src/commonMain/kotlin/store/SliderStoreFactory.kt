@@ -3,7 +3,7 @@ package store
 import com.arkivanov.mvikotlin.core.store.Executor
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
-import model.Cut
+import model.Plane
 import model.Research
 import store.slider.SliderStore.Intent
 import store.slider.SliderStore.State
@@ -11,7 +11,7 @@ import store.slider.SliderStoreAbstractFactory
 
 internal class SliderStoreFactory(
   storeFactory: StoreFactory,
-  cut: Cut,
+  cut: Plane,
   research: Research
 ) : SliderStoreAbstractFactory(
   storeFactory = storeFactory,

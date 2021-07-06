@@ -5,7 +5,6 @@ import com.arkivanov.decompose.value.Value
 import com.arkivanov.decompose.value.operator.map
 import components.asValue
 import components.cut.Cut.Dependencies
-import components.cutcontainer.MyCutStoreProvider
 import components.getStore
 
 
@@ -21,7 +20,7 @@ class CutComponent(
       mipRepository = mipRepository,
       researchId = researchId,
       researchRepository = researchRepository,
-      cutType = cutType
+      plane = plane
     ).provide()
   }
 

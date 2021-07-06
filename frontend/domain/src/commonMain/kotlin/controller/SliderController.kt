@@ -2,7 +2,7 @@ package controller
 
 import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.store.StoreFactory
-import model.Cut
+import model.Plane
 import model.Research
 import view.SliderView
 
@@ -18,7 +18,7 @@ interface SliderController {
   interface Dependencies {
     val storeFactory: StoreFactory
     val lifecycle: Lifecycle
-    val cut: Cut
+    val cut: Plane
     val research: Research
     val sliderOutput: (Output) -> Unit
   }

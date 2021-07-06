@@ -6,7 +6,7 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
 import com.badoo.reaktive.utils.ensureNeverFrozen
-import model.CutType
+import model.Plane
 import store.draw.DrawStore
 import store.draw.DrawStore.*
 import kotlin.math.pow
@@ -15,12 +15,12 @@ import kotlin.math.sqrt
 internal class DrawStoreProvider(
   private val storeFactory: StoreFactory,
   private val researchId: Int,
-  private val cutType: CutType
+  private val plane: Plane
 ) {
 
   fun provide(): DrawStore =
     object : DrawStore, Store<Intent, State, Label> by storeFactory.create(
-      name = "DrawStore_${researchId}_${cutType.intType}",
+      name = "DrawStore_${researchId}_${plane.type.intType}",
       initialState = State(
         startDicomX = 0.0,
         startDicomY = 0.0,
@@ -29,7 +29,7 @@ internal class DrawStoreProvider(
         isDrawingEllipse = false,
         isMoving = false,
         isContrastBrightness = false,
-        cutType = cutType,
+        cutType = plane.type,
       ),
 //      bootstrapper = SimpleBootstrapper(Unit),
       executorFactory = ::ExecutorImpl,

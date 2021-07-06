@@ -6,14 +6,14 @@ import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.badoo.reaktive.utils.ensureNeverFrozen
-import model.Cut
+import model.Plane
 import model.Research
 import store.slider.SliderStore.Intent
 import store.slider.SliderStore.State
 
 abstract class SliderStoreAbstractFactory(
   private val storeFactory: StoreFactory,
-  private val cut: Cut,
+  private val cut: Plane,
   private val research: Research
 ) {
 

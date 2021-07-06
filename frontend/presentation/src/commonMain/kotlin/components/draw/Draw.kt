@@ -8,6 +8,7 @@ import components.draw.Draw.Dependencies
 import components.draw.Draw.Model
 import components.draw.Draw.Output
 import model.CutType
+import model.Plane
 
 interface Draw {
 
@@ -28,8 +29,8 @@ interface Draw {
   interface Dependencies {
     val storeFactory: StoreFactory
     val drawOutput: Consumer<Output>
+    val plane: Plane
     val researchId: Int
-    val cutType: CutType
   }
 
   sealed class Output {

@@ -9,7 +9,7 @@ interface ShapesStore : Store<Intent, State, Label> {
 
   sealed class Intent : JvmSerializable {
     data class HandleSliceNumberChange(val sliceNumber: Int) : Intent()
-    data class HandleExternalSliceNumberChanged(val sliceNumber: Int, val cut: Cut) : Intent()
+    data class HandleExternalSliceNumberChanged(val sliceNumber: Int, val cut: Plane) : Intent()
     data class HandleMousePosition(val dicomX: Double, val dicomY: Double) : Intent()
     data class HandleMarks(val list: List<MarkModel>) : Intent()
     data class HandleMoveInClick(val deltaX: Double, val deltaY: Double) : Intent()

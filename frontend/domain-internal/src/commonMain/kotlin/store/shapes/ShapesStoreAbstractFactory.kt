@@ -12,7 +12,7 @@ import store.shapes.ShapesStore.*
 
 abstract class ShapesStoreAbstractFactory(
   private val storeFactory: StoreFactory,
-  private val cut: Cut,
+  private val cut: Plane,
   private val research: Research
 ) {
 

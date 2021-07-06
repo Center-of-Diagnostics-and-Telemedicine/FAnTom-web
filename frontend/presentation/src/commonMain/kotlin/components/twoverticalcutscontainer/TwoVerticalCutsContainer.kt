@@ -8,8 +8,9 @@ import com.badoo.reaktive.base.Consumer
 import components.cutcontainer.CutContainer
 import components.twoverticalcutscontainer.TwoVerticalCutsContainer.Dependencies
 import model.CutType
-import model.ResearchData
+import model.Plane
 import model.ResearchDataModel
+import model.buildPlane
 import repository.MyBrightnessRepository
 import repository.MyMipRepository
 import repository.ResearchRepository
@@ -53,6 +54,7 @@ fun TwoVerticalCutsContainer(
         dependencies = object : CutContainer.Dependencies, Dependencies by dependencies {
           override val cutContainerOutput: Consumer<CutContainer.Output> = output
           override val cutType: CutType = cutType
+          override val plane: Plane = buildPlane(cutType, data)
         })
     },
   )

@@ -241,7 +241,7 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
 class DrawState : RState
 
 interface DrawProps : RProps {
-  var cut: Cut
+  var cut: Plane
   var width: Int
   var height: Int
   var drawModel: DrawView.Model
@@ -249,7 +249,7 @@ interface DrawProps : RProps {
 }
 
 fun RBuilder.drawView(
-  cut: Cut,
+  cut: Plane,
   width: Int,
   height: Int,
   drawModel: DrawView.Model,

@@ -282,7 +282,7 @@ val testMarkType = MarkTypeModel(
 const val testStringId = "testId"
 const val testIntId = -1000
 
-val testCut = Cut(
+val testCut = Plane(
   type = CutType.CT_AXIAL,
   data = testCtAxialModalityModel,
   color = axialColor,

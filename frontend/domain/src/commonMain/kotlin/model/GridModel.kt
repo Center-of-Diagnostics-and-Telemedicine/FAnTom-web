@@ -228,7 +228,7 @@ private val doseReportCuts = listOf(
   CutType.CT_2
 )
 
-fun GridModel.buildCuts(data: ResearchData): List<Cut> =
+fun GridModel.buildCuts(data: ResearchData): List<Plane> =
   when (this) {
     is GridModel.Single -> listOf(buildSingleCut(types.first(), data))
     is GridModel.TwoVertical,
@@ -236,7 +236,7 @@ fun GridModel.buildCuts(data: ResearchData): List<Cut> =
     is GridModel.Four -> buildFourCuts(types, data)
   }
 
-fun GridModel.updateCuts(data: ResearchData, oldCut: Cut, newCutType: CutType): List<Cut> {
+fun GridModel.updateCuts(data: ResearchData, oldCut: Plane, newCutType: CutType): List<Plane> {
   val newTypes = types.replace(newValue = newCutType) { it == oldCut.type }
   return when (this) {
     is GridModel.Single -> listOf(buildSingleCut(newCutType, data))
@@ -247,7 +247,7 @@ fun GridModel.updateCuts(data: ResearchData, oldCut: Cut, newCutType: CutType): 
 }
 
 
-private fun buildSingleCut(type: CutType, data: ResearchData): Cut =
+private fun buildSingleCut(type: CutType, data: ResearchData): Plane =
   when (type) {
     CutType.EMPTY -> emptyCut(data)
     CutType.CT_AXIAL -> axialCut(data, ctCuts.filter { it != type })
@@ -267,7 +267,7 @@ private fun buildSingleCut(type: CutType, data: ResearchData): Cut =
   }
 
 
-private fun buildTwoCuts(types: List<CutType>, data: ResearchData): List<Cut> {
+private fun buildTwoCuts(types: List<CutType>, data: ResearchData): List<Plane> {
   val first = types.first()
   val second = types.last()
 
@@ -277,12 +277,12 @@ private fun buildTwoCuts(types: List<CutType>, data: ResearchData): List<Cut> {
   return listOf(firstResult, secondResult)
 }
 
-private fun buildFourCuts(types: List<CutType>, data: ResearchData): List<Cut> =
+private fun buildFourCuts(types: List<CutType>, data: ResearchData): List<Plane> =
   types.map {
     buildEmptySingleCut(it, data)
   }
 
-private fun buildEmptySingleCut(type: CutType, data: ResearchData): Cut {
+private fun buildEmptySingleCut(type: CutType, data: ResearchData): Plane {
   val list = listOf<CutType>()
   return when (type) {
     CutType.EMPTY -> emptyCut(data)
@@ -307,7 +307,7 @@ private fun cutWithTwoTypes(
   main: CutType,
   second: CutType,
   data: ResearchData,
-): Cut {
+): Plane {
   return when (main) {
     CutType.EMPTY -> emptyCut(data)
     CutType.CT_AXIAL -> axialCut(data, ctCuts.filter { it != main && it != second })
@@ -330,8 +330,8 @@ private fun cutWithTwoTypes(
 }
 
 
-private fun emptyCut(data: ResearchData): Cut =
-  Cut(
+private fun emptyCut(data: ResearchData): Plane =
+  Plane(
     type = CutType.EMPTY,
     data = PlaneModel(0, 0, 0.0, 0.0, 0, 0, 0),
     color = "",
@@ -341,8 +341,8 @@ private fun emptyCut(data: ResearchData): Cut =
     availableCutsForChange = listOf()
   )
 
-private fun axialCut(data: ResearchData, types: List<CutType>): Cut =
-  Cut(
+private fun axialCut(data: ResearchData, types: List<CutType>): Plane =
+  Plane(
     type = CutType.CT_AXIAL,
     data = data.modalities[SLICE_TYPE_CT_AXIAL]
       ?: error("CutsContainerStoreFactory: AXIAL NOT FOUND IN DATA"),
@@ -363,8 +363,8 @@ private fun axialCut(data: ResearchData, types: List<CutType>): Cut =
     availableCutsForChange = types
   )
 
-private fun frontalCut(data: ResearchData, types: List<CutType>): Cut =
-  Cut(
+private fun frontalCut(data: ResearchData, types: List<CutType>): Plane =
+  Plane(
     type = CutType.CT_FRONTAL,
     data = data.modalities[SLICE_TYPE_CT_FRONTAL]
       ?: error("CutsContainerStoreFactory: FRONTAL NOT FOUND IN DATA"),
@@ -385,8 +385,8 @@ private fun frontalCut(data: ResearchData, types: List<CutType>): Cut =
     availableCutsForChange = types
   )
 
-private fun sagittalCut(data: ResearchData, types: List<CutType>): Cut =
-  Cut(
+private fun sagittalCut(data: ResearchData, types: List<CutType>): Plane =
+  Plane(
     type = CutType.CT_SAGITTAL,
     data = data.modalities[SLICE_TYPE_CT_SAGITTAL]
       ?: error("CutsContainerStoreFactory: SAGITTAL NOT FOUND IN DATA"),
@@ -407,8 +407,8 @@ private fun sagittalCut(data: ResearchData, types: List<CutType>): Cut =
     availableCutsForChange = types
   )
 
-private fun mgRcc(data: ResearchData, types: List<CutType>): Cut =
-  Cut(
+private fun mgRcc(data: ResearchData, types: List<CutType>): Plane =
+  Plane(
     type = CutType.MG_RCC,
     data = data.modalities[SLICE_TYPE_MG_RCC]
       ?: error("CutsContainerStoreFactory: MG_RCC NOT FOUND IN DATA"),
@@ -419,8 +419,8 @@ private fun mgRcc(data: ResearchData, types: List<CutType>): Cut =
     availableCutsForChange = types
   )
 
-private fun mgLcc(data: ResearchData, types: List<CutType>): Cut =
-  Cut(
+private fun mgLcc(data: ResearchData, types: List<CutType>): Plane =
+  Plane(
     type = CutType.MG_LCC,
     data = data.modalities[SLICE_TYPE_MG_LCC]
       ?: error("CutsContainerStoreFactory: MG_LCC NOT FOUND IN DATA"),
@@ -431,8 +431,8 @@ private fun mgLcc(data: ResearchData, types: List<CutType>): Cut =
     availableCutsForChange = types
   )
 
-private fun mgRmlo(data: ResearchData, types: List<CutType>): Cut =
-  Cut(
+private fun mgRmlo(data: ResearchData, types: List<CutType>): Plane =
+  Plane(
     type = CutType.MG_RMLO,
     data = data.modalities[SLICE_TYPE_MG_RMLO]
       ?: error("CutsContainerStoreFactory: MG_RMLO NOT FOUND IN DATA"),
@@ -443,8 +443,8 @@ private fun mgRmlo(data: ResearchData, types: List<CutType>): Cut =
     availableCutsForChange = types
   )
 
-private fun mgLmlo(data: ResearchData, types: List<CutType>): Cut =
-  Cut(
+private fun mgLmlo(data: ResearchData, types: List<CutType>): Plane =
+  Plane(
     type = CutType.MG_LMLO,
     data = data.modalities[SLICE_TYPE_MG_LMLO]
       ?: error("CutsContainerStoreFactory: MG_LMLO NOT FOUND IN DATA"),
@@ -455,8 +455,8 @@ private fun mgLmlo(data: ResearchData, types: List<CutType>): Cut =
     availableCutsForChange = types
   )
 
-private fun dxGeneric(data: ResearchData, types: List<CutType>): Cut =
-  Cut(
+private fun dxGeneric(data: ResearchData, types: List<CutType>): Plane =
+  Plane(
     type = CutType.DX_GENERIC,
     data = data.modalities[SLICE_TYPE_DX_GENERIC]!!,
     color = generic_color,
@@ -466,8 +466,8 @@ private fun dxGeneric(data: ResearchData, types: List<CutType>): Cut =
     availableCutsForChange = types
   )
 
-private fun dxPosteroAnterior(data: ResearchData, types: List<CutType>): Cut =
-  Cut(
+private fun dxPosteroAnterior(data: ResearchData, types: List<CutType>): Plane =
+  Plane(
     type = CutType.DX_POSTERO_ANTERIOR,
     data = data.modalities[SLICE_TYPE_DX_POSTERO_ANTERIOR]!!,
     color = postero_color,
@@ -477,8 +477,8 @@ private fun dxPosteroAnterior(data: ResearchData, types: List<CutType>): Cut =
     availableCutsForChange = listOf()
   )
 
-private fun dxLeftLateral(data: ResearchData, types: List<CutType>): Cut =
-  Cut(
+private fun dxLeftLateral(data: ResearchData, types: List<CutType>): Plane =
+  Plane(
     type = CutType.DX_LEFT_LATERAL,
     data = data.modalities[SLICE_TYPE_DX_LEFT_LATERAL]!!,
     color = left_lateral_color,
@@ -488,8 +488,8 @@ private fun dxLeftLateral(data: ResearchData, types: List<CutType>): Cut =
     availableCutsForChange = listOf()
   )
 
-private fun dxRightLateral(data: ResearchData, types: List<CutType>): Cut =
-  Cut(
+private fun dxRightLateral(data: ResearchData, types: List<CutType>): Plane =
+  Plane(
     type = CutType.DX_RIGHT_LATERAL,
     data = data.modalities[SLICE_TYPE_DX_RIGHT_LATERAL]!!,
     color = right_lateral_color,
@@ -499,8 +499,8 @@ private fun dxRightLateral(data: ResearchData, types: List<CutType>): Cut =
     availableCutsForChange = listOf()
   )
 
-private fun ct0(data: ResearchData, types: List<CutType>): Cut =
-  Cut(
+private fun ct0(data: ResearchData, types: List<CutType>): Plane =
+  Plane(
     type = CutType.CT_0,
     data = data.modalities[SLICE_TYPE_CT_0]!!,
     color = axialColor,
@@ -510,8 +510,8 @@ private fun ct0(data: ResearchData, types: List<CutType>): Cut =
     availableCutsForChange = types
   )
 
-private fun ct1(data: ResearchData, types: List<CutType>): Cut =
-  Cut(
+private fun ct1(data: ResearchData, types: List<CutType>): Plane =
+  Plane(
     type = CutType.CT_1,
     data = data.modalities[SLICE_TYPE_CT_1]!!,
     color = frontalColor,
@@ -521,8 +521,8 @@ private fun ct1(data: ResearchData, types: List<CutType>): Cut =
     availableCutsForChange = types
   )
 
-private fun ct2(data: ResearchData, types: List<CutType>): Cut =
-  Cut(
+private fun ct2(data: ResearchData, types: List<CutType>): Plane =
+  Plane(
     type = CutType.CT_2,
     data = data.modalities[SLICE_TYPE_CT_2]!!,
     color = sagittalColor,

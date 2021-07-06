@@ -9,7 +9,7 @@ data class Rect(
   val type: MoveRectType
 )
 
-fun Shape.toRects(cut: Cut): List<Rect> {
+fun Shape.toRects(cut: Plane): List<Rect> {
   val sideLength = cut.data.screenSizeH.toDouble() / 100
   return when (cut.researchType) {
     ResearchType.CT -> {

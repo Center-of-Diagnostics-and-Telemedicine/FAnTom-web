@@ -3,14 +3,14 @@ package store
 import com.arkivanov.mvikotlin.core.store.Executor
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
-import model.Cut
+import model.Plane
 import model.Research
 import store.userinput.UserInputStore.*
 import store.userinput.UserInputStoreAbstractFactory
 
 internal class UserInputStoreFactory(
   storeFactory: StoreFactory,
-  val cut: Cut,
+  val cut: Plane,
   val research: Research
 ) : UserInputStoreAbstractFactory(
   storeFactory = storeFactory,

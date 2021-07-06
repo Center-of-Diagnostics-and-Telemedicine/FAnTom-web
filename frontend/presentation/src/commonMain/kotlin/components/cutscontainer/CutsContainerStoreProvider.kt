@@ -7,9 +7,14 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
 import com.badoo.reaktive.observable.map
+import com.badoo.reaktive.observable.observeOn
+import com.badoo.reaktive.observable.subscribeOn
+import com.badoo.reaktive.scheduler.Scheduler
+import com.badoo.reaktive.scheduler.ioScheduler
+import com.badoo.reaktive.scheduler.mainScheduler
 import com.badoo.reaktive.utils.ensureNeverFrozen
+import model.GridModel
 import model.GridType
-import model.ResearchData
 import model.ResearchDataModel
 import model.buildModel
 import repository.GridRepository
@@ -31,7 +36,7 @@ internal class CutsContainerStoreProvider(
       name = "CutsContainerStore_$researchId",
       initialState = State(
         gridType = GridType.initial,
-        gridModel = GridType.initial.buildModel(data)
+        gridModel = GridType.initial.buildModel(data),
       ),
       bootstrapper = SimpleBootstrapper(Unit),
       executorFactory = ::ExecutorImpl,
@@ -44,6 +49,7 @@ internal class CutsContainerStoreProvider(
 
   private sealed class Result : JvmSerializable {
     data class GridChanged(val grid: GridType) : Result()
+    data class GridModelChanged(val gridModel: GridModel) : Result()
   }
 
   private inner class ExecutorImpl : ReaktiveExecutor<Intent, Unit, State, Result, Nothing>() {
@@ -51,6 +57,8 @@ internal class CutsContainerStoreProvider(
       gridRepository
         .grid
         .map(Result::GridChanged)
+        .subscribeOn(ioScheduler)
+        .observeOn(mainScheduler)
         .subscribeScoped(onNext = ::dispatch)
     }
 
@@ -65,6 +73,7 @@ internal class CutsContainerStoreProvider(
     override fun State.reduce(result: Result): State =
       when (result) {
         is Result.GridChanged -> copy(gridType = result.grid)
+        is Result.GridModelChanged -> copy(gridModel = result.gridModel)
       }
   }
 }

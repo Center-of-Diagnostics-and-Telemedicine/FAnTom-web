@@ -16,7 +16,7 @@ import store.shapes.ShapesStoreAbstractFactory
 
 internal class ShapesStoreFactory(
   storeFactory: StoreFactory,
-  val cut: Cut,
+  val cut: Plane,
   val repository: ResearchRepository,
   val research: Research
 ) : ShapesStoreAbstractFactory(
@@ -134,7 +134,7 @@ internal class ShapesStoreFactory(
 
     private fun handleExternalSliceNumberChanged(
       sliceNumber: Int,
-      externalCut: Cut,
+      externalCut: Plane,
       getState: () -> State
     ) {
       when {
@@ -160,12 +160,12 @@ internal class ShapesStoreFactory(
       dispatch(Result.Rects(rectangles))
     }
 
-    private fun updateHorizontalCoefficient(sliceNumber: Int, externalCut: Cut) {
+    private fun updateHorizontalCoefficient(sliceNumber: Int, externalCut: Plane) {
       val coefficient = sliceNumber.toDouble() / externalCut.data.nImages
       dispatch(Result.HorizontalCoefficientChanged(coefficient))
     }
 
-    private fun updateVerticalCoefficient(sliceNumber: Int, externalCut: Cut) {
+    private fun updateVerticalCoefficient(sliceNumber: Int, externalCut: Plane) {
       val coefficient = sliceNumber.toDouble() / externalCut.data.nImages
       dispatch(Result.VerticalCoefficientChanged(coefficient))
     }

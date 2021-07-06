@@ -102,7 +102,7 @@ internal class ResearchMarksStoreProvider(
 //      publish(Label.MarksLoaded(result))
     }
 
-    private fun handleNewMark(shape: Shape, sliceNumber: Int, cut: Cut, getState: () -> State) {
+    private fun handleNewMark(shape: Shape, sliceNumber: Int, cut: Plane, getState: () -> State) {
 //      singleFromCoroutine {
 //        val markToSave = cut.getMarkToSave(shape, sliceNumber)
 //        val mark = researchRepository.saveMark(markToSave!!, research.id).toMarkModel(data.markTypes)

@@ -13,12 +13,12 @@ import store.shapes.ShapesStore.*
 internal class ShapesStoreProvider(
   private val storeFactory: StoreFactory,
   private val researchId: Int,
-  private val cutType: CutType
+  private val plane: Plane
 ) {
 
   fun provide(): ShapesStore =
     object : ShapesStore, Store<Intent, State, Label> by storeFactory.create(
-      name = "ShapesStore_${researchId}_${cutType.intType}",
+      name = "ShapesStore_${researchId}_${plane.type.intType}",
       initialState = State(
         horizontalCoefficient = 0.5,
         verticalCoefficient = 0.5,
@@ -30,7 +30,7 @@ internal class ShapesStoreProvider(
         expertMarks = listOf(),
         rects = listOf(),
         moveRect = null,
-        cutType = cutType,
+        cutType = plane.type,
       ),
 //      bootstrapper = SimpleBootstrapper(Unit),
       executorFactory = ::ExecutorImpl,
@@ -166,7 +166,7 @@ internal class ShapesStoreProvider(
 
     private fun handleExternalSliceNumberChanged(
       sliceNumber: Int,
-      externalCut: Cut,
+      externalCut: Plane,
       getState: () -> State
     ) {
 //      when {
@@ -193,12 +193,12 @@ internal class ShapesStoreProvider(
 //      dispatch(Result.Rects(rectangles))
     }
 
-    private fun updateHorizontalCoefficient(sliceNumber: Int, externalCut: Cut) {
+    private fun updateHorizontalCoefficient(sliceNumber: Int, externalCut: Plane) {
       val coefficient = sliceNumber.toDouble() / externalCut.data.nImages
       dispatch(Result.HorizontalCoefficientChanged(coefficient))
     }
 
-    private fun updateVerticalCoefficient(sliceNumber: Int, externalCut: Cut) {
+    private fun updateVerticalCoefficient(sliceNumber: Int, externalCut: Plane) {
       val coefficient = sliceNumber.toDouble() / externalCut.data.nImages
       dispatch(Result.VerticalCoefficientChanged(coefficient))
     }

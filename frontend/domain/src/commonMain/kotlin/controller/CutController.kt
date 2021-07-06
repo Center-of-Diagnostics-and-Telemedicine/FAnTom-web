@@ -28,7 +28,7 @@ interface CutController {
     val lifecycle: Lifecycle
     val researchRepository: ResearchRepository
     val cutOutput: (Output) -> Unit
-    val cut: Cut
+    val cut: Plane
     val research: Research
   }
 
@@ -40,7 +40,7 @@ interface CutController {
     data class MipValueChanged(val value: Int) : Input()
     data class PresetChanged(val preset: Presets) : Input()
     data class SliceNumberChanged(val sliceNumber: Int) : Input()
-    data class ExternalSliceNumberChanged(val sliceNumber: Int, val cut: Cut) : Input()
+    data class ExternalSliceNumberChanged(val sliceNumber: Int, val cut: Plane) : Input()
     data class Marks(val list: List<MarkModel>) : Input()
     data class ExpertMarks(val list: List<ExpertQuestionsModel>): Input()
     data class ChangeSliceNumberByMarkCenter(val mark: MarkModel) : Input()
@@ -49,15 +49,15 @@ interface CutController {
   }
 
   sealed class Output {
-    data class SliceNumberChanged(val sliceNumber: Int, val cut: Cut) : Output()
-    data class CircleDrawn(val circle: Circle, val sliceNumber: Int, val cut: Cut) : Output()
-    data class RectangleDrawn(val rectangle: Rectangle, val sliceNumber: Int, val cut: Cut) : Output()
+    data class SliceNumberChanged(val sliceNumber: Int, val cut: Plane) : Output()
+    data class CircleDrawn(val circle: Circle, val sliceNumber: Int, val cut: Plane) : Output()
+    data class RectangleDrawn(val rectangle: Rectangle, val sliceNumber: Int, val cut: Plane) : Output()
     data class SelectMark(val mark: MarkModel) : Output()
     data class UnselectMark(val mark: MarkModel) : Output()
     data class ContrastBrightnessChanged(val black: Int, val white: Int) : Output()
     data class UpdateMarkWithoutSave(val mark: MarkModel) : Output()
     data class UpdateMarkWithSave(val mark: MarkModel) : Output()
-    data class OpenFullCut(val cut: Cut) : Output()
-    data class ChangeCutType(val cutType: CutType, val cut: Cut) : Output()
+    data class OpenFullCut(val cut: Plane) : Output()
+    data class ChangeCutType(val cutType: CutType, val cut: Plane) : Output()
   }
 }

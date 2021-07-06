@@ -8,11 +8,13 @@ import com.badoo.reaktive.base.Consumer
 import components.cut.Cut.Output
 import components.cutcontainer.CutContainer.CutChild
 import model.CutType
+import model.Plane
 
 internal class CutRouter(
   routerFactory: RouterFactory,
   private val cutFactory: (ComponentContext, Consumer<Output>) -> Cut,
   private val cutOutput: Consumer<Output>,
+  private val cutInput:
   private val cutType: CutType
 ) {
 

@@ -14,7 +14,7 @@ import com.ccfraser.muirwik.components.mSlider
 import controller.SliderController
 import controller.SliderControllerImpl
 import destroy
-import model.Cut
+import model.Plane
 import model.Research
 import react.*
 import resume
@@ -74,7 +74,7 @@ class SliderComponent(prps: SliderProps) : RComponent<SliderProps, SliderState>(
 
   interface Dependencies {
     val storeFactory: StoreFactory
-    val cut: Cut
+    val cut: Plane
     val sliderOutput: (SliderController.Output) -> Unit
     val sliderInput: Observable<SliderController.Input>
     val research: Research

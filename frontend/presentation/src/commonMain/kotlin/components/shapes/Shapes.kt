@@ -30,8 +30,8 @@ interface Shapes {
   interface Dependencies {
     val storeFactory: StoreFactory
     val shapesOutput: Consumer<Output>
+    val plane: Plane
     val researchId: Int
-    val cutType: CutType
   }
 
   sealed class Output {

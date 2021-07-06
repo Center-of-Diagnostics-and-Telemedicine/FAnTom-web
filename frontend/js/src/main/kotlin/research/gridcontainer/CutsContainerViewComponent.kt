@@ -82,14 +82,14 @@ class CutsContainerViewComponent(prps: CutsContainerProps) :
     }
   }
 
-  private fun RBuilder.singleCutContainer(item: Cut) {
+  private fun RBuilder.singleCutContainer(item: Plane) {
     styledDiv {
       css(rowOfColumnsStyle)
       cutContainer(dependencies = dependencies(item))
     }
   }
 
-  private fun RBuilder.twoHorizontalCutsContainer(items: List<Cut>) {
+  private fun RBuilder.twoHorizontalCutsContainer(items: List<Plane>) {
     styledDiv {
       css {
         flex(1.0)
@@ -104,7 +104,7 @@ class CutsContainerViewComponent(prps: CutsContainerProps) :
 
   }
 
-  private fun RBuilder.twoVerticalCutsContainer(items: List<Cut>) {
+  private fun RBuilder.twoVerticalCutsContainer(items: List<Plane>) {
     styledDiv {
       css {
         flex(1.0)
@@ -123,7 +123,7 @@ class CutsContainerViewComponent(prps: CutsContainerProps) :
     }
   }
 
-  private fun RBuilder.fourCutsContainer(items: List<Cut>) {
+  private fun RBuilder.fourCutsContainer(items: List<Plane>) {
     debugLog(items.toString())
     val leftTop = items[0]
     val rightTop = items[1]
@@ -174,9 +174,9 @@ class CutsContainerViewComponent(prps: CutsContainerProps) :
     }
   }
 
-  private fun dependencies(cut: Cut): CutContainer.Dependencies =
+  private fun dependencies(cut: Plane): CutContainer.Dependencies =
     object : CutContainer.Dependencies, Dependencies by props.dependencies {
-      override val cut: Cut = cut
+      override val cut: Plane = cut
       override val cutOutput: (CutController.Output) -> Unit = ::cutOutput
       override val cutsInput: Observable<CutController.Input> =
         this@CutsContainerViewComponent.cutsInputObservable
