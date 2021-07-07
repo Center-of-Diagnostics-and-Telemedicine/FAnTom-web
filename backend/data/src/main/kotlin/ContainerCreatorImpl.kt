@@ -66,6 +66,8 @@ class ContainerCreatorImpl(
         dockerConfigModel.dockerContainerAppConfigModel.mainFile,
         researchPath,
         dockerConfigModel.dockerContainerAppConfigModel.configFile,
+        dockerConfigModel.dockerContainerAppConfigModel.dictionaryFile,
+        "-r"
       )
       .withHostConfig(hostConfig)
       .withExposedPorts(portInsideContainer)

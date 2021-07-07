@@ -12,5 +12,6 @@ data class DockerContainerAppConfigModel(
   val port: Int,
   val name: String,
   val mainFile: String,
-  val configFile: String
+  val configFile: String,
+  val dictionaryFile: String
 )

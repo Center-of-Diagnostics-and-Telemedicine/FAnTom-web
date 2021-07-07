@@ -178,12 +178,14 @@ private fun Application.dockerContainerAppConfigModel(): DockerContainerAppConfi
   val name = environment.config.property("docker.app.name").getString()
   val mainFile = environment.config.property("docker.app.main_file").getString()
   val configFile = environment.config.property("docker.app.config_file").getString()
+  val dictionaryFile = environment.config.property("docker.app.dictionary_file").getString()
 
   return DockerContainerAppConfigModel(
     port = port,
     name = name,
     mainFile = mainFile,
     configFile = configFile,
+    dictionaryFile = dictionaryFile
   )
 }
 
