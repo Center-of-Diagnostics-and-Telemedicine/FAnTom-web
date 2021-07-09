@@ -10,15 +10,16 @@ import com.arkivanov.decompose.statekeeper.Parcelize
 import com.arkivanov.decompose.value.Value
 import com.badoo.reaktive.base.Consumer
 import components.cut.Cut.Output
+import components.cut.Cut.Input
 import components.cutcontainer.CutContainer.CutChild
 import model.CutType
 
 internal class CutRouter(
   routerFactory: RouterFactory,
-  private val cutFactory: (ComponentContext, Consumer<Cut.Input>, Consumer<Output>) -> Cut,
+  private val cutFactory: (ComponentContext, Consumer<Output>, Consumer<Input>) -> Cut,
   private val cutOutput: Consumer<Output>,
   private val cutType: CutType,
-  private val cutInput: Consumer<Cut.Input>
+  private val cutInput: Consumer<Input>
 ) {
 
   private val router =
@@ -32,7 +33,7 @@ internal class CutRouter(
 
   private fun createChild(config: Config, componentContext: ComponentContext): CutChild =
     when (config) {
-      is Config.Cut -> CutChild.Data(cutFactory(componentContext, cutInput, cutOutput))
+      is Config.Cut -> CutChild.Data(cutFactory(componentContext, cutOutput, cutInput))
       is Config.None -> CutChild.None
     }
 

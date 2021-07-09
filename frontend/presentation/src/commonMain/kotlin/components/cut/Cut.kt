@@ -26,7 +26,7 @@ interface Cut {
     val researchRepository: ResearchRepository
     val mipRepository: MyMipRepository
     val cutOutput: Consumer<Output>
-    val input: Consumer<Input>
+    val cutInput: Consumer<Input>
     val plane: Plane
     val researchId: Int
   }

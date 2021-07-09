@@ -7,7 +7,6 @@ import model.ErrorModel
 data class FantomResearchInitResponse(
   val response: FantomResearchInitModel? = null,
   val error: ErrorModel? = null,
-  val dictionary: List<List<Map<String, FantomMarkTypeEntity>>>? = null
 )
 
 @Serializable
@@ -27,27 +26,19 @@ data class FantomMarkTypeEntity(
 
 @Serializable
 data class FantomCTInitModel(
-  val ct_axial: FantomPlaneModel? = null,
-  val ct_frontal: FantomPlaneModel? = null,
-  val ct_sagittal: FantomPlaneModel? = null,
-  val CT0: FantomPlaneModel? = null,
-  val CT1: FantomPlaneModel? = null,
-  val CT2: FantomPlaneModel? = null,
+  val dimensions: Map<String, FantomPlaneModel>,
   val reversed: Boolean
 )
 
 @Serializable
 data class FantomMGInitModel(
-  val mg_lcc: FantomPlaneModel,
-  val mg_lmlo: FantomPlaneModel,
-  val mg_rcc: FantomPlaneModel,
-  val mg_rmlo: FantomPlaneModel,
+  val dimensions: Map<String, FantomPlaneModel>,
   val reversed: Boolean
 )
 
 @Serializable
 data class FantomDXInitModel(
-  val dx0: FantomPlaneModel,
+  val dimensions: Map<String, FantomPlaneModel>,
   val reversed: Boolean
 )
 
@@ -60,9 +51,10 @@ data class FantomPlaneModel(
   val n_images: Int,
   val screen_size_h: Int = 512,
   val screen_size_v: Int = 512,
-  val reversed: Boolean? = null,
-  val SOPInstanceUID: String? = null,
-  val file: String? = null
+  val series_instance_uid: Int,
+  val type: String? = null,
+  val window_center: Int,
+  val window_width: Int,
 )
 
 

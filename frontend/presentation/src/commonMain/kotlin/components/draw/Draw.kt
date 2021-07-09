@@ -5,8 +5,6 @@ import com.arkivanov.decompose.value.Value
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.base.Consumer
 import components.draw.Draw.Dependencies
-import components.draw.Draw.Model
-import components.draw.Draw.Output
 import model.CutType
 import model.Plane
 
@@ -29,11 +27,16 @@ interface Draw {
   interface Dependencies {
     val storeFactory: StoreFactory
     val drawOutput: Consumer<Output>
+    val drawInput: Consumer<Input>
     val plane: Plane
     val researchId: Int
   }
 
   sealed class Output {
+//    data class SliceNumberChanged(val sliceNumber: Int)
+  }
+
+  sealed class Input {
 //    data class SliceNumberChanged(val sliceNumber: Int)
   }
 }

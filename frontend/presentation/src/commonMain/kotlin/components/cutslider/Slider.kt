@@ -22,12 +22,17 @@ interface Slider {
   interface Dependencies {
     val storeFactory: StoreFactory
     val sliderOutput: Consumer<Output>
+    val sliderInput: Consumer<Input>
     val plane: Plane
     val researchId: Int
   }
 
   sealed class Output {
-    data class SliceNumberChanged(val sliceNumber: Int): Output()
+    data class SliceNumberChanged(val sliceNumber: Int) : Output()
+  }
+
+  sealed class Input {
+    data class ChangeSliceNumber(val sliceNumber: Int) : Input()
   }
 }
 

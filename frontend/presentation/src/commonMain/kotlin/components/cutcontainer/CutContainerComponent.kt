@@ -9,11 +9,7 @@ import com.badoo.reaktive.subject.publish.PublishSubject
 import components.Consumer
 import components.cut.Cut
 import components.cut.CutRouter
-import components.cutcontainer.CutContainer.CutChild
-import components.cutcontainer.CutContainer.Dependencies
-import components.cutcontainer.CutContainer.DrawChild
-import components.cutcontainer.CutContainer.ShapesChild
-import components.cutcontainer.CutContainer.SliderChild
+import components.cutcontainer.CutContainer.*
 import components.cutslider.Slider
 import components.cutslider.SliderRouter
 import components.draw.Draw
@@ -25,13 +21,16 @@ import components.shapes.ShapesRouter
 class CutContainerComponent(
   componentContext: ComponentContext,
   dependencies: Dependencies,
-  cut: (ComponentContext, Consumer<Cut.Input>, Consumer<Cut.Output>) -> Cut,
-  slider: (ComponentContext, Consumer<Slider.Output>) -> Slider,
-  draw: (ComponentContext, Consumer<Draw.Output>) -> Draw,
-  shapes: (ComponentContext, Consumer<Shapes.Output>) -> Shapes,
+  cut: (ComponentContext, Consumer<Cut.Output>, Consumer<Cut.Input>) -> Cut,
+  slider: (ComponentContext, Consumer<Slider.Output>, Consumer<Slider.Input>) -> Slider,
+  draw: (ComponentContext, Consumer<Draw.Output>, Consumer<Draw.Input>) -> Draw,
+  shapes: (ComponentContext, Consumer<Shapes.Output>, Consumer<Shapes.Input>) -> Shapes,
 ) : CutContainer, ComponentContext by componentContext, Dependencies by dependencies {
 
   private val cutInput: Subject<Cut.Input> = PublishSubject()
+  private val shapesInput: Subject<Shapes.Input> = PublishSubject()
+  private val drawInput: Subject<Draw.Input> = PublishSubject()
+  private val sliderInput: Subject<Slider.Input> = PublishSubject()
 
   val store = instanceKeeper.getStore {
     CutContainerStoreProvider(
@@ -49,6 +48,7 @@ class CutContainerComponent(
       routerFactory = this,
       sliderFactory = slider,
       sliderOutput = Consumer(::onSliderOutput),
+      sliderInput = sliderInput,
       cutType = cutType
     )
 
@@ -59,6 +59,7 @@ class CutContainerComponent(
       routerFactory = this,
       drawFactory = draw,
       drawOutput = Consumer(::onDrawOutput),
+      drawInput = drawInput,
       cutType = cutType
     )
   override val drawRouterState: Value<RouterState<*, DrawChild>> = drawRouter.state
@@ -69,6 +70,7 @@ class CutContainerComponent(
       routerFactory = this,
       shapesFactory = shapes,
       shapesOutput = Consumer(::onShapesOutput),
+      shapesInput = shapesInput,
       cutType = cutType
     )
 

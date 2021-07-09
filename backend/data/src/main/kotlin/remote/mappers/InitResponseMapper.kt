@@ -1,21 +1,18 @@
 package remote.mappers
 
 import debugLog
-import model.MarkTypeEntity
+import model.*
 import model.init.ModalityModel
-import model.PlaneModel
 import model.init.ResearchInitModel
 import model.fantom.*
 import java.awt.Color
 
-fun FantomResearchInitModel.toResponse(dictionary: List<List<Map<String, FantomMarkTypeEntity>>>?): ResearchInitModel {
+fun FantomResearchInitModel.toResponse(): ResearchInitModel {
   debugLog("ResearchInitResponse income")
   val resultMarkTypes = mutableMapOf<String, MarkTypeEntity>()
 
-  dictionary?.first()?.map { maps ->
-    maps.map { entry ->
-      resultMarkTypes[entry.key] = transformMarkEntity(entry.value)
-    }
+  dictionary?.map { entry ->
+    resultMarkTypes[entry.key] = transformMarkEntity(entry.value)
   }
   return ResearchInitModel(
     CT = CT.toModalityModel(),
@@ -43,18 +40,26 @@ private fun transformMarkEntity(
 
 fun FantomCTInitModel?.toModalityModel(): ModalityModel? {
   if (this == null) return null
-  val planes = mutableMapOf<String, PlaneModel>()
-  this.CT0?.let { planes["CT0"] = it.toPlaneModel() }
-  this.CT1?.let { planes["CT1"] = it.toPlaneModel() }
-  this.CT2?.let { planes["CT2"] = it.toPlaneModel() }
-  this.ct_axial?.let { planes["ct_axial"] = it.toPlaneModel() }
-  this.ct_frontal?.let { planes["ct_frontal"] = it.toPlaneModel() }
-  this.ct_sagittal?.let { planes["ct_sagittal"] = it.toPlaneModel() }
+  val newDimensions = dimensions.entries.map { entry ->
+    val key = entry.key
+    val value = entry.value
+    val type = dimensions.values.firstOrNull { dimension ->
+      stringTypes.firstOrNull { stringType ->
+        dimension.type == stringType
+      } != null
+    }?.type
+    val newKey = type ?: key
+    val newValue = value.toPlaneModel()
+    newKey to newValue
+  }.associate { it }
   return ModalityModel(
-    planes = planes,
+    planes = newDimensions,
     reversed = reversed
   )
 }
+
+private fun FantomCTInitModel.findFantomPlaneModel(type: String) =
+  this.dimensions.values.firstOrNull { it.type == type }
 
 fun FantomMGInitModel?.toModalityModel(): ModalityModel? {
   if (this == null) return null

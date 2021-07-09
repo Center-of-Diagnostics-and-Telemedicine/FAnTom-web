@@ -65,33 +65,36 @@ fun CutContainer(componentContext: ComponentContext, dependencies: Dependencies)
   CutContainerComponent(
     componentContext = componentContext,
     dependencies = dependencies,
-    slider = { childContext, output ->
+    slider = { childContext, output, input ->
       Slider(
         componentContext = childContext,
         dependencies = object : Slider.Dependencies, Dependencies by dependencies {
           override val sliderOutput: Consumer<Slider.Output> = output
+          override val sliderInput: Consumer<Slider.Input> = input
         })
     },
-    draw = { childContext, output ->
+    draw = { childContext, output, input ->
       Draw(
         componentContext = childContext,
         dependencies = object : Draw.Dependencies, Dependencies by dependencies {
           override val drawOutput: Consumer<Draw.Output> = output
+          override val drawInput: Consumer<Draw.Input> = input
         })
     },
-    shapes = { childContext, output ->
+    shapes = { childContext, output, input ->
       Shapes(
         componentContext = childContext,
         dependencies = object : Shapes.Dependencies, Dependencies by dependencies {
           override val shapesOutput: Consumer<Shapes.Output> = output
+          override val shapesInput: Consumer<Shapes.Input> = input
         })
     },
-    cut = { childContext, input, output ->
+    cut = { childContext, output, input ->
       Cut(
         componentContext = childContext,
         dependencies = object : Cut.Dependencies, Dependencies by dependencies {
           override val cutOutput: Consumer<Cut.Output> = output
-          override val input: Consumer<Cut.Input> = input
+          override val cutInput: Consumer<Cut.Input> = input
         })
     },
   )
