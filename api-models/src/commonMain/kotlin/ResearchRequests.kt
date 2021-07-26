@@ -44,6 +44,7 @@ data class SliceRequestNew(
 data class ImageModel(
   val modality: String,
   val type: String,
+  val sop_instance_uid: String,
   val number: Int,
   val mip: MipModel,
   val width: Int,

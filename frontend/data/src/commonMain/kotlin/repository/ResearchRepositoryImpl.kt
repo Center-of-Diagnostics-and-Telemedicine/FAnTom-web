@@ -71,7 +71,8 @@ class ResearchRepositoryImpl(
             mip_value = aproxSize
           ),
           width = width,
-          height = height
+          height = height,
+          sop_instance_uid = ""
         ),
         brightness = BrightnessModel(
           black = black,
@@ -101,7 +102,8 @@ class ResearchRepositoryImpl(
             mip_value = model.aproxSize
           ),
           width = model.width,
-          height = model.height
+          height = model.height,
+          sop_instance_uid = model.sopInstanceUid
         ),
         brightness = BrightnessModel(
           black = model.black,
@@ -140,7 +142,8 @@ class ResearchRepositoryImpl(
             mip_value = mipValue
           ),
           height = height,
-          width = width
+          width = width,
+          sop_instance_uid = ""
         ),
         point = PointModel(
           vertical = vertical,

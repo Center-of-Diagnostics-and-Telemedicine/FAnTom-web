@@ -14,7 +14,7 @@ data class FantomResearchInitModel(
   val CT: FantomCTInitModel? = null,
   val MG: FantomMGInitModel? = null,
   val DX: FantomDXInitModel? = null,
-  val dictionary: Map<String, FantomMarkTypeEntity>? = null
+  val dictionary: List<Map<String, FantomMarkTypeEntity>>? = null
 )
 
 @Serializable
@@ -24,23 +24,28 @@ data class FantomMarkTypeEntity(
   val CLR: String? = ""
 )
 
+interface FantomModalityInitModel {
+  val dimensions: Map<String, FantomPlaneModel>
+  val reversed: Boolean
+}
+
 @Serializable
 data class FantomCTInitModel(
-  val dimensions: Map<String, FantomPlaneModel>,
-  val reversed: Boolean
-)
+  override val dimensions: Map<String, FantomPlaneModel>,
+  override val reversed: Boolean
+) : FantomModalityInitModel
 
 @Serializable
 data class FantomMGInitModel(
-  val dimensions: Map<String, FantomPlaneModel>,
-  val reversed: Boolean
-)
+  override val dimensions: Map<String, FantomPlaneModel>,
+  override val reversed: Boolean
+) : FantomModalityInitModel
 
 @Serializable
 data class FantomDXInitModel(
-  val dimensions: Map<String, FantomPlaneModel>,
-  val reversed: Boolean
-)
+  override val dimensions: Map<String, FantomPlaneModel>,
+  override val reversed: Boolean
+) : FantomModalityInitModel
 
 @Serializable
 data class FantomPlaneModel(
@@ -51,7 +56,7 @@ data class FantomPlaneModel(
   val n_images: Int,
   val screen_size_h: Int = 512,
   val screen_size_v: Int = 512,
-  val series_instance_uid: Int,
+  val series_instance_uid: String,
   val type: String? = null,
   val window_center: Int,
   val window_width: Int,

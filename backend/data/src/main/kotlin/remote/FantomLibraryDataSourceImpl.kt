@@ -7,7 +7,7 @@ import com.badoo.reaktive.subject.publish.PublishSubject
 import debugLog
 import io.ktor.client.*
 import io.ktor.client.features.*
-import io.ktor.client.features.json.JsonFeature
+import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import io.ktor.client.features.logging.*
 import io.ktor.client.request.*
@@ -68,7 +68,9 @@ class FantomLibraryDataSourceImpl(
   ): FantomSliceResponse {
     return client.post {
       apiUrl("/$RESEARCH_ROUTE/$SLICE_ROUTE")
-      body = Json.encodeToString(SliceRequestNew.serializer(), sliceRequest)
+      val encodeToString = Json.encodeToString(SliceRequestNew.serializer(), sliceRequest)
+      println(encodeToString)
+      body = encodeToString
     }
   }
 

@@ -56,5 +56,6 @@ data class GetSliceModel(
   val sliceNumber: Int,
   val aproxSize: Int,
   val width: Int,
-  val height: Int
+  val height: Int,
+  val sopInstanceUid: String
 )

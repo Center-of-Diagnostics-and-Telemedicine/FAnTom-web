@@ -111,7 +111,8 @@ class MyCutStoreProvider(
         aproxSize = (mip as? HasIntValue)?.value ?: 0,
         width = 0,
         height = 0,
-        sliceNumber = 1
+        sliceNumber = 1,
+        sopInstanceUid = plane.data.SOPInstanceUID ?: ""
       )
     }
 }

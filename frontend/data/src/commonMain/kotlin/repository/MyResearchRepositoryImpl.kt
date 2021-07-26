@@ -100,6 +100,7 @@ class MyResearchRepositoryImpl(
           modality = getModalityStringType(type),
           type = getSliceStringType(type),
           number = sliceNumber,
+          sop_instance_uid = "",
           mip = MipModel(
             mip_method = getMipMethodStringType(mipMethod),
             mip_value = aproxSize
@@ -130,6 +131,7 @@ class MyResearchRepositoryImpl(
           modality = getModalityStringType(model.type),
           type = getSliceStringType(model.type),
           number = model.sliceNumber,
+          sop_instance_uid = model.sopInstanceUid,
           mip = MipModel(
             mip_method = getMipMethodStringType(model.mipMethod),
             mip_value = model.aproxSize
@@ -169,6 +171,7 @@ class MyResearchRepositoryImpl(
           modality = getModalityStringType(type), //TODO(remove this),
           type = getSliceStringType(type),
           number = sliceNumber,
+          sop_instance_uid = "",
           mip = MipModel(
             mip_method = getMipMethodStringType(mipMethod),
             mip_value = mipValue

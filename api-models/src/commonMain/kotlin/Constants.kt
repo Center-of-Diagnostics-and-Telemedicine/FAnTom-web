@@ -91,6 +91,29 @@ val stringTypes = listOf(
   DX_RIGHT_LATERAL_STRING,
 )
 
+val ctStringTypes = listOf(
+  CT_AXIAL_STRING,
+  CT_FRONTAL_STRING,
+  CT_SAGITTAL_STRING,
+  CT_0_STRING,
+  CT_1_STRING,
+  CT_2_STRING,
+)
+
+val mgStringTypes = listOf(
+  MG_RCC_STRING,
+  MG_LCC_STRING,
+  MG_RMLO_STRING,
+  MG_LMLO_STRING,
+)
+
+val dxStringTypes = listOf(
+  DX_GENERIC_STRING,
+  DX_POSTERO_ANTERIOR_STRING,
+  DX_LEFT_LATERAL_STRING,
+  DX_RIGHT_LATERAL_STRING,
+)
+
 const val SHAPE_TYPE_CIRCLE = 0
 const val SHAPE_TYPE_RECTANGLE = 1
 

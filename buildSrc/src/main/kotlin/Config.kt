@@ -8,7 +8,6 @@ import org.jetbrains.kotlin.gradle.dsl.Kotlin2JsProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
-import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalDceDsl
 
 enum class BuildType {
   ALL, METADATA, NON_NATIVE, ANDROID, JVM, JS, LINUX, IOS, MAC_OS
@@ -114,7 +113,13 @@ fun Project.setupMultiplatform() {
     }
 
     doIfBuildTargetAvailable<BuildTarget.Jvm> {
-      jvm()
+      jvm {
+        compilations.all {
+          kotlinOptions {
+            useIR = true
+          }
+        }
+      }
     }
 
     sourceSets {

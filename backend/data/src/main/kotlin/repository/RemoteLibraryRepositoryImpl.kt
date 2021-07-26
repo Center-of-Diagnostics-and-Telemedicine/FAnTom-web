@@ -4,8 +4,8 @@ import debugLog
 import kotlinx.coroutines.delay
 import model.ErrorStringCode
 import model.HounsfieldRequestNew
-import model.init.ResearchInitModel
 import model.SliceRequestNew
+import model.init.ResearchInitModel
 import remote.FantomLibraryDataSource
 import remote.mappers.toResponse
 
@@ -25,7 +25,7 @@ class RemoteLibraryRepositoryImpl(
       return initResearch(accessionNumber)
     }
     return when {
-      response.response != null -> response.response!!.toResponse(response.dictionary)
+      response.response != null -> response.response!!.toResponse()
       response.error != null -> {
         when (response.error!!.error) {
           ErrorStringCode.NOT_INITIALIZED_YET.value -> {
