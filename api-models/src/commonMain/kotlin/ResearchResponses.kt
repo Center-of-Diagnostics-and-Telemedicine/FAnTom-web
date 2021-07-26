@@ -1,6 +1,5 @@
 package model
 
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -62,6 +61,7 @@ data class PlaneModel(
   val screenSizeV: Int = 512,
   val reversed: Boolean? = null,
   val SOPInstanceUID: String? = null,
+  val seriesInstanceUid: String? = null,
   val file: String? = null
 )
 

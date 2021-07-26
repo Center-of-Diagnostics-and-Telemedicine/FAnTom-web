@@ -2,6 +2,7 @@ package decompose.research.cut
 
 import components.shapes.Shapes
 import components.shapes.Shapes.Model
+import decompose.Props
 import decompose.RenderableComponent
 import decompose.research.cut.ShapesUi.State
 import kotlinx.css.*
@@ -12,7 +13,6 @@ import react.dom.attrs
 import styled.css
 import styled.styledCanvas
 import styled.styledDiv
-import decompose.Props
 
 class ShapesUi(props: Props<Shapes>) : RenderableComponent<Shapes, State>(
   props = props,
@@ -27,9 +27,11 @@ class ShapesUi(props: Props<Shapes>) : RenderableComponent<Shapes, State>(
     styledDiv {
       css {
         position = Position.absolute
-        zIndex = 1
         top = 0.px
         left = 0.px
+        zIndex = 1
+        width = 100.pct
+        height = 100.pct
       }
       styledCanvas {
         this@styledCanvas.attrs {

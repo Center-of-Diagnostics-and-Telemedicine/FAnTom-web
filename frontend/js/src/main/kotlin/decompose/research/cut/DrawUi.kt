@@ -31,12 +31,14 @@ class DrawUi(props: Props<Draw>) : RenderableComponent<Draw, State>(
         top = 0.px
         left = 0.px
         zIndex = 2
+        width = 100.pct
+        height = 100.pct
       }
       styledCanvas {
         this@styledCanvas.attrs {
           classes = classes + "draw_canvas_${state.model.cutType}"
-//          width = resultWidth.toString()
-//          height = resultHeight.toString()
+          width = 100.pct.toString()
+          height = 100.pct.toString()
         }
       }
     }

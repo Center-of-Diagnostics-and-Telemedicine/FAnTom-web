@@ -54,8 +54,12 @@ private fun FantomModalityInitModel.mapPlanes(
   val planes = mutableMapOf<String, PlaneModel>()
   dimensions.let {
     stringTypes.forEach { type ->
-      findFantomPlaneModel(type)
-        ?.toPlaneModel(reversed)
+      val pair = findFantomPlaneModel(type)
+      val sopInstanceUid = pair?.first
+      val fantomPlaneModel = pair?.second
+
+      fantomPlaneModel
+        ?.toPlaneModel(reversed, sopInstanceUid)
         ?.let { planeModel ->
           planes[type] = planeModel
         }
@@ -73,10 +77,10 @@ private fun FantomModalityInitModel?.stringTypes() =
   }
 
 
-private fun FantomModalityInitModel.findFantomPlaneModel(type: String) =
-  dimensions.values.firstOrNull { it.type == type }
+private fun FantomModalityInitModel.findFantomPlaneModel(type: String): Pair<String, FantomPlaneModel>? =
+  dimensions.entries.firstOrNull { it.value.type == type }?.let { Pair(it.key, it.value) }
 
-private fun FantomPlaneModel.toPlaneModel(reversed: Boolean): PlaneModel {
+private fun FantomPlaneModel.toPlaneModel(reversed: Boolean, sopInstanceUid: String?): PlaneModel {
   return PlaneModel(
     dicomSizeH = dicom_size_h,
     dicomSizeV = dicom_size_v,
@@ -86,7 +90,8 @@ private fun FantomPlaneModel.toPlaneModel(reversed: Boolean): PlaneModel {
     screenSizeH = screen_size_h,
     screenSizeV = screen_size_v,
     reversed = reversed,
-    SOPInstanceUID = series_instance_uid
+    SOPInstanceUID = sopInstanceUid,
+    seriesInstanceUid = series_instance_uid
   )
 }
 
