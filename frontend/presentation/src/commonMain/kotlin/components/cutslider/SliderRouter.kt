@@ -9,18 +9,19 @@ import components.cutcontainer.CutContainer.SliderChild
 import components.cutslider.Slider.Input
 import components.cutslider.Slider.Output
 import model.CutType
+import model.Plane
 
 internal class SliderRouter(
   routerFactory: RouterFactory,
   private val sliderFactory: (ComponentContext, Consumer<Output>, Consumer<Input>) -> Slider,
   private val sliderOutput: Consumer<Output>,
   private val sliderInput: Consumer<Input>,
-  cutType: CutType
+  private val plane: Plane
 ) {
 
   private val router =
     routerFactory.router(
-      initialConfiguration = if (cutType == CutType.EMPTY) Config.None else Config.Slider,
+      initialConfiguration = if (shouldShowSlider()) Config.Slider else Config.None ,
       key = "SliderRouter",
       childFactory = ::createChild
     )
@@ -44,6 +45,12 @@ internal class SliderRouter(
     if (state.value.activeChild.instance is SliderChild.Data) {
       router.replaceCurrent(Config.None)
     }
+  }
+
+  private fun shouldShowSlider(): Boolean {
+    val slicesMoreThanOne = plane.data.nImages > 1
+    val correctCutType = plane.type != CutType.EMPTY
+    return correctCutType && slicesMoreThanOne
   }
 
   sealed class Config : Parcelable {

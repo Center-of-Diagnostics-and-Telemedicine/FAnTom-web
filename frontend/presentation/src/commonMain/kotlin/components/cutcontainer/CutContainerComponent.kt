@@ -49,7 +49,7 @@ class CutContainerComponent(
       sliderFactory = slider,
       sliderOutput = Consumer(::onSliderOutput),
       sliderInput = sliderInput,
-      cutType = cutType
+      plane = plane
     )
 
   override val sliderRouterState: Value<RouterState<*, SliderChild>> = sliderRouter.state
