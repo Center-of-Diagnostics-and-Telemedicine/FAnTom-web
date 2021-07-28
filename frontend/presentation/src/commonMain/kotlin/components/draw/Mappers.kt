@@ -47,7 +47,10 @@ internal fun MouseDown.toIntent(): Intent {
   return when {
     isDrawEllipse -> Intent.StartDrawEllipse(startDicomX = dicomX, startDicomY = dicomY)
     isDrawRectangle -> Intent.StartDrawRectangle(startDicomX = dicomX, startDicomY = dicomY)
-    isContrastBrightness -> Intent.StartContrastBrightness(startDicomX = dicomX, startDicomY = dicomY)
+    isContrastBrightness -> Intent.StartContrastBrightness(
+      startDicomX = dicomX,
+      startDicomY = dicomY
+    )
     else -> Intent.StartMouseClick(startDicomY = dicomY, startDicomX = dicomX)
   }
 }
@@ -124,8 +127,17 @@ private fun Plane.calculateVerticalRatio(resultHeight: Int) =
 private fun Plane.calculateHorizontalRatio(resultWidth: Int) =
   data.screenSizeH.toDouble() / resultWidth
 
-internal fun mapScreenXToDicomX(screenX: Double, horizontalRatio: Double): Double =
+fun mapScreenXToDicomX(screenX: Double, horizontalRatio: Double): Double =
   screenX * horizontalRatio
 
-internal fun mapScreenYToDicomY(screenY: Double, verticalRatio: Double): Double =
+fun mapScreenYToDicomY(screenY: Double, verticalRatio: Double): Double =
   screenY * verticalRatio
+
+fun mapDicomXToScreenX(dicomX: Double, horizontalRatio: Double): Double =
+  dicomX / horizontalRatio
+
+fun mapDicomYToScreenY(dicomY: Double, verticalRatio: Double): Double =
+  dicomY / verticalRatio
+
+fun mapDicomRadiusToScreenRadius(dicomRadius: Double, screenRadius: Double): Double =
+  dicomRadius / screenRadius

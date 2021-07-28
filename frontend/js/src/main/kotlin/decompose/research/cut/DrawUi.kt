@@ -1,8 +1,7 @@
 package decompose.research.cut
 
-import components.draw.Draw
+import components.draw.*
 import components.draw.Draw.Model
-import components.draw.calculateScreenDimensions
 import decompose.Props
 import decompose.research.cut.DrawUi.State
 import kotlinx.css.*
@@ -16,6 +15,7 @@ import org.w3c.dom.events.WheelEvent
 import react.*
 import react.dom.attrs
 import research.cut.*
+import root.debugLog
 import styled.styledCanvas
 import kotlin.math.PI
 
@@ -50,8 +50,14 @@ class DrawUi(props: Props<Draw>) : CanvasUi<Draw, State, Model>(
     val mouseEvent = it.asDynamic().nativeEvent as MouseEvent
     val rect = (mouseEvent.target as HTMLCanvasElement).getBoundingClientRect()
     val mouseDownModel = MouseDown(
-      dicomX = (mouseEvent.clientX - rect.left) * dimensions.horizontalRatio,
-      dicomY = (mouseEvent.clientY - rect.top) * dimensions.verticalRatio,
+      dicomX = mapScreenXToDicomX(
+        screenX = (mouseEvent.clientX - rect.left),
+        horizontalRatio = dimensions.horizontalRatio
+      ),
+      dicomY = mapScreenYToDicomY(
+        screenY = (mouseEvent.clientY - rect.top),
+        verticalRatio = dimensions.verticalRatio
+      ),
       metaKey = mouseEvent.ctrlKey || mouseEvent.metaKey,
       button = mouseEvent.button,
       shiftKey = mouseEvent.shiftKey,
@@ -64,8 +70,14 @@ class DrawUi(props: Props<Draw>) : CanvasUi<Draw, State, Model>(
     val mouseEvent = it.asDynamic().nativeEvent as MouseEvent
     val rect = (mouseEvent.target as HTMLCanvasElement).getBoundingClientRect()
     component.onMouseMove(
-      dicomX = (mouseEvent.clientX - rect.left) * dimensions.horizontalRatio,
-      dicomY = (mouseEvent.clientY - rect.top) * dimensions.verticalRatio
+      dicomX = mapScreenXToDicomX(
+        screenX = (mouseEvent.clientX - rect.left),
+        horizontalRatio = dimensions.horizontalRatio
+      ),
+      dicomY = mapScreenYToDicomY(
+        screenY = (mouseEvent.clientY - rect.top),
+        verticalRatio = dimensions.verticalRatio
+      ),
     )
   }
 
@@ -105,9 +117,18 @@ class DrawUi(props: Props<Draw>) : CanvasUi<Draw, State, Model>(
     context?.beginPath()
     context?.strokeStyle = "#00ff00"
     context?.arc(
-      circle.dicomCenterX / dimensions.horizontalRatio,
-      circle.dicomCenterY / dimensions.verticalRatio,
-      circle.dicomRadiusHorizontal / dimensions.radiusRatio,
+      mapDicomXToScreenX(
+        dicomX = circle.dicomCenterX,
+        horizontalRatio = dimensions.horizontalRatio
+      ),
+      mapDicomYToScreenY(
+        dicomY = circle.dicomCenterY,
+        verticalRatio = dimensions.verticalRatio
+      ),
+      mapDicomRadiusToScreenRadius(
+        dicomRadius = circle.dicomRadiusHorizontal,
+        screenRadius = dimensions.radiusRatio
+      ),
       0.0,
       2 * PI,
       false
@@ -117,13 +138,29 @@ class DrawUi(props: Props<Draw>) : CanvasUi<Draw, State, Model>(
   }
 
   private fun drawRectangle(rectangle: Rectangle) {
+    debugLog("MY: ${rectangle}")
     val canvas = getCanvas()
     val context = canvas?.getContext()
     context?.beginPath()
     context?.strokeStyle = "#00ff00"
-    val w = rectangle.dicomRadiusHorizontal / dimensions.horizontalRatio
-    val h = rectangle.dicomRadiusVertical / dimensions.verticalRatio
-    context?.rect(rectangle.dicomCenterX, rectangle.dicomCenterY, w, h)
+    val x = mapDicomXToScreenX(
+      dicomX = rectangle.dicomCenterX,
+      horizontalRatio = dimensions.horizontalRatio
+    )
+    val y = mapDicomYToScreenY(
+      dicomY = rectangle.dicomCenterY,
+      verticalRatio = dimensions.verticalRatio
+    )
+    val w = mapDicomRadiusToScreenRadius(
+      dicomRadius = rectangle.dicomRadiusHorizontal,
+      screenRadius = dimensions.horizontalRatio
+    )
+    val h =
+      mapDicomRadiusToScreenRadius(
+        dicomRadius = rectangle.dicomRadiusVertical,
+        screenRadius = dimensions.verticalRatio
+      )
+    context?.rect(x, y, w, h)
     context?.stroke()
     context?.closePath()
   }
