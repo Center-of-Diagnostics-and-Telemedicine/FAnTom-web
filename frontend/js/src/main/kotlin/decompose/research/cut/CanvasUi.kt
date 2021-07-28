@@ -20,7 +20,7 @@ import styled.css
 import styled.styledCanvas
 import styled.styledDiv
 
-abstract class CanvasUi<T : Any, S : RState, Model: Any>(
+abstract class CanvasUi<T : Any, S : RState, Model : Any>(
   props: Props<T>,
   initialState: S
 ) : RenderableComponent<T, S>(props = props, initialState = initialState) {
@@ -61,13 +61,17 @@ abstract class CanvasUi<T : Any, S : RState, Model: Any>(
   protected fun renderContent(clientHeight: Int, clientWidth: Int) {
     testRef?.let {
       react.dom.render(it) {
-        styledCanvas {
-          this@styledCanvas.attrs {
-            classes = classes + getCanvasName()
-            width = clientWidth.toString()
-            height = clientHeight.toString()
-          }
-        }
+        renderCanvas(clientWidth, clientHeight)
+      }
+    }
+  }
+
+  protected open fun RBuilder.renderCanvas(clientWidth: Int, clientHeight: Int) {
+    styledCanvas {
+      this@styledCanvas.attrs {
+        classes = classes + getCanvasName()
+        width = clientWidth.toString()
+        height = clientHeight.toString()
       }
     }
   }
@@ -77,8 +81,8 @@ abstract class CanvasUi<T : Any, S : RState, Model: Any>(
   }
 
   protected fun clearCanvas() {
-    val canvas = document.getElementsByClassName(getCanvasName())[0] as? HTMLCanvasElement
-    val context = canvas?.getContext("2d") as? CanvasRenderingContext2D
+    val canvas = getCanvas()
+    val context = canvas?.getContext()
     context?.clearRect(
       x = 0.0,
       y = 0.0,
@@ -88,6 +92,12 @@ abstract class CanvasUi<T : Any, S : RState, Model: Any>(
   }
 
   abstract fun getCanvasName(): String
+
+  protected fun getCanvas(): HTMLCanvasElement? =
+    document.getElementsByClassName(getCanvasName())[0] as? HTMLCanvasElement
+
+  protected fun HTMLCanvasElement.getContext(): CanvasRenderingContext2D? =
+    getContext("2d") as? CanvasRenderingContext2D
 
   abstract fun getCanvasZIndex(): Int
 

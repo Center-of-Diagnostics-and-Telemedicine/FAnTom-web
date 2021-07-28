@@ -6,21 +6,32 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.base.Consumer
 import components.draw.Draw.Dependencies
 import model.CutType
+import model.MouseDown
 import model.Plane
+import model.Shape
 
 interface Draw {
 
   val model: Value<Model>
 
+  fun onMouseDown(mouseDownModel: MouseDown)
+  fun onMouseMove(dicomX: Double, dicomY: Double)
+  fun onMouseUp()
+  fun onMouseOut()
+  fun onMouseWheel(dicomDeltaY: Int)
+  fun onDoubleClick()
+
   data class Model(
-    val startDicomX: Double,
-    val startDicomY: Double,
-    val dicomRadiusHorizontal: Double,
-    val dicomRadiusVertical: Double,
-    val isDrawingEllipse: Boolean = false,
-    val isDrawingRectangle: Boolean = false,
-    val isMoving: Boolean = false,
-    val isContrastBrightness: Boolean = false,
+    val shape: Shape?,
+    val plane: Plane,
+//    val startDicomX: Double,
+//    val startDicomY: Double,
+//    val dicomRadiusHorizontal: Double,
+//    val dicomRadiusVertical: Double,
+//    val isDrawingEllipse: Boolean = false,
+//    val isDrawingRectangle: Boolean = false,
+//    val isMoving: Boolean = false,
+//    val isContrastBrightness: Boolean = false,
     val cutType: CutType,
   )
 
