@@ -11,6 +11,7 @@ import react.RState
 import styled.css
 import styled.styledDiv
 import decompose.Props
+import root.debugLog
 
 class CutUi(props: Props<Cut>) : RenderableComponent<Cut, State>(
   props = props,
@@ -28,16 +29,17 @@ class CutUi(props: Props<Cut>) : RenderableComponent<Cut, State>(
         zIndex = 0
         width = 100.pct
         height = 100.pct
+        display = Display.flex
+        justifyContent = JustifyContent.center
+        alignItems = Align.center
         backgroundImage = Image("url(\"data:image/bmp;base64,${state.model.slice}\")")
         backgroundSize = "contain"
         backgroundPosition = "center"
         backgroundRepeat = BackgroundRepeat.noRepeat
       }
       if (state.model.loading) {
-        mLinearProgress(color = MLinearProgressColor.secondary) {
-          css {
-            width = 100.pct
-          }
+        mCircularProgress(color = MCircularProgressColor.secondary) {
+          attrs.size = 25.px
         }
       }
     }

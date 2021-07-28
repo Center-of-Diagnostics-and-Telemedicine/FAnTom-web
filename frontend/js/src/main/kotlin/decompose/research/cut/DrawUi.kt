@@ -5,7 +5,6 @@ import components.draw.Draw.Model
 import components.draw.calculateScreenDimensions
 import decompose.Props
 import decompose.research.cut.DrawUi.State
-import kotlinx.browser.document
 import kotlinx.css.*
 import kotlinx.html.classes
 import kotlinx.html.js.*
@@ -14,7 +13,6 @@ import org.w3c.dom.HTMLCanvasElement
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.MouseEvent
 import org.w3c.dom.events.WheelEvent
-import org.w3c.dom.get
 import react.*
 import react.dom.attrs
 import research.cut.*
@@ -71,14 +69,13 @@ class DrawUi(props: Props<Draw>) : CanvasUi<Draw, State, Model>(
     )
   }
 
-  private fun onMouseUp(): (Event) -> Unit = { component.onMouseUp() }
-  private fun onMouseOut(): (Event) -> Unit = { component.onMouseOut() }
-
   private fun onMouseWheel(): (Event) -> Unit = {
     val wheelEvent = it.asDynamic().nativeEvent as WheelEvent
     component.onMouseWheel(dicomDeltaY = if (wheelEvent.deltaY < 0.0) -1 else 1)
   }
 
+  private fun onMouseUp(): (Event) -> Unit = { component.onMouseUp() }
+  private fun onMouseOut(): (Event) -> Unit = { component.onMouseOut() }
   private fun onDoubleClick(): (Event) -> Unit = { component.onDoubleClick() }
 
   override fun updateCanvas(model: Model) {

@@ -64,6 +64,8 @@ class MyCutStoreProvider(
           }
         }
         .subscribeOn(ioScheduler)
+        .doOnBeforeNext { dispatch(Result.Loading) }
+        .doOnBeforeSubscribe { dispatch(Result.Loading) }
         .map(Result::Loaded)
         .observeOn(mainScheduler)
         .subscribeScoped(
