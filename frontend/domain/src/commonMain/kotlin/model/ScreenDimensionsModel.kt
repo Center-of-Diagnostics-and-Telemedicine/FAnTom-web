@@ -10,8 +10,10 @@ data class MouseDown(
 )
 
 data class ScreenDimensionsModel(
-  val screenWidth: Int,
-  val screenHeight: Int,
+  val originalScreenWidth: Int,
+  val originalScreenHeight: Int,
+  val calculatedScreenWidth: Int,
+  val calculatedScreenHeight: Int,
   val top: Int,
   val left: Int,
   val verticalRatio: Double,
@@ -21,8 +23,10 @@ data class ScreenDimensionsModel(
 
 fun initialScreenDimensionsModel(): ScreenDimensionsModel =
   ScreenDimensionsModel(
-    screenWidth = 0,
-    screenHeight = 0,
+    originalScreenWidth = 0,
+    originalScreenHeight = 0,
+    calculatedScreenWidth = 0,
+    calculatedScreenHeight = 0,
     top = 0,
     left = 0,
     verticalRatio = 0.0,

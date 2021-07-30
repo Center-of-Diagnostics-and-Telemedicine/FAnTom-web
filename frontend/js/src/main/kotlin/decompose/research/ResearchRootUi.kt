@@ -7,6 +7,7 @@ import com.ccfraser.muirwik.components.themeContext
 import components.research.ResearchRoot
 import components.research.ResearchRoot.*
 import components.screenLoading
+import decompose.Props
 import decompose.RenderableComponent
 import decompose.renderableChild
 import decompose.research.ResearchRootUi.State
@@ -20,7 +21,6 @@ import react.setState
 import research.*
 import styled.css
 import styled.styledDiv
-import decompose.Props
 
 class ResearchRootUi(props: Props<ResearchRoot>) : RenderableComponent<ResearchRoot, State>(
   props = props,

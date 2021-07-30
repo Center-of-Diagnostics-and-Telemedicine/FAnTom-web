@@ -24,6 +24,14 @@ abstract class RenderableComponent<T : Any, S : RState>(props: Props<T>, initial
     subscriptions.forEach { subscribe(it) }
   }
 
+  override fun componentDidUpdate(prevProps: Props<T>, prevState: S, snapshot: Any) {
+    compDidUpdate()
+  }
+
+  protected open fun compDidUpdate(){
+    println("hello world")
+  }
+
   private fun <T : Any> subscribe(subscription: Subscription<T>) {
     subscription.value.subscribe(subscription.observer)
   }

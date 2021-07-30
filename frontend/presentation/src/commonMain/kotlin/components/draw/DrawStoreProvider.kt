@@ -7,6 +7,8 @@ import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
 import com.badoo.reaktive.utils.ensureNeverFrozen
 import model.Plane
+import model.ScreenDimensionsModel
+import model.initialScreenDimensionsModel
 import store.draw.MyDrawStore
 import store.draw.MyDrawStore.*
 import kotlin.math.pow
@@ -30,7 +32,8 @@ internal class DrawStoreProvider(
         isMoving = false,
         isContrastBrightness = false,
         cutType = plane.type,
-        plane = plane
+        plane = plane,
+        screenDimensionsModel = initialScreenDimensionsModel()
       ),
 //      bootstrapper = SimpleBootstrapper(Unit),
       executorFactory = ::ExecutorImpl,
@@ -52,6 +55,7 @@ internal class DrawStoreProvider(
     data class MouseMove(val dicomX: Double, val dicomY: Double) : Result()
     data class MouseMoveInClick(val dicomX: Double, val dicomY: Double) : Result()
     data class PlanarDrawing(val dicomX: Double, val dicomY: Double) : Result()
+    data class ScreenDimensionsChanged(val dimensions: ScreenDimensionsModel) : Result()
 
     object Idle : Result()
   }
@@ -79,6 +83,8 @@ internal class DrawStoreProvider(
         is Intent.MouseOut -> handleMouseOut()
         is Intent.MouseWheel -> handleMouseData(intent)
         Intent.DoubleClick -> publish(Label.OpenFullCut)
+        is Intent.UpdateScreenDimensions ->
+          dispatch(Result.ScreenDimensionsChanged(intent.dimensions))
       }.let {}
     }
 
@@ -227,6 +233,7 @@ internal class DrawStoreProvider(
           val radius = sqrt((result.dicomX).pow(2) + (result.dicomY).pow(2))
           copy(dicomRadiusHorizontal = radius, dicomRadiusVertical = radius)
         }
+        is Result.ScreenDimensionsChanged -> copy(screenDimensionsModel = result.dimensions)
       }
   }
 }

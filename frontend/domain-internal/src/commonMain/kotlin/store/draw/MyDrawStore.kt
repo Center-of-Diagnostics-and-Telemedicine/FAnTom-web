@@ -18,6 +18,7 @@ interface MyDrawStore : Store<Intent, State, Label> {
     val isContrastBrightness: Boolean = false,
     val cutType: CutType,
     val plane: Plane,
+    val screenDimensionsModel: ScreenDimensionsModel,
   ) {
     fun circle(planar: Boolean): Circle {
       return if (planar) {
@@ -74,6 +75,8 @@ interface MyDrawStore : Store<Intent, State, Label> {
     data class MouseWheel(val deltaDicomY: Int) : Intent()
     object MouseOut : Intent()
     object DoubleClick : Intent()
+
+    data class UpdateScreenDimensions(val dimensions: ScreenDimensionsModel) : Intent()
   }
 
   sealed class Label {

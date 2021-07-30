@@ -10,7 +10,7 @@ import kotlin.math.sqrt
 internal val stateToModel: (State) -> Model =
   {
     Model(
-      if (it.dicomRadiusHorizontal != 0.0) {
+      shape = if (it.dicomRadiusHorizontal != 0.0) {
         when {
           it.isDrawingRectangle -> Rectangle(
             dicomCenterX = it.startDicomX,
@@ -36,7 +36,8 @@ internal val stateToModel: (State) -> Model =
         }
       } else null,
       cutType = it.cutType,
-      plane = it.plane
+      plane = it.plane,
+      screenDimensionsModel = it.screenDimensionsModel
     )
   }
 
@@ -55,20 +56,26 @@ internal fun MouseDown.toIntent(): Intent {
   }
 }
 
-fun Plane.calculateScreenDimensions(
+internal fun Plane.calculateScreenDimensions(
   screenHeight: Int,
   screenWidth: Int
 ): ScreenDimensionsModel {
   val resultWidth = calculateWidth(screenHeight = screenHeight, screenWidth = screenWidth)
+  println("MY: resultWidth = $resultWidth")
   val resultHeight = calculateHeight(screenHeight = screenHeight, screenWidth = screenWidth)
+  println("MY: resultHeight = $resultHeight")
   val resultTop = calculateTop(screenHeight = screenHeight, resultHeight = resultHeight)
+  println("MY: resultTop = $resultTop")
   val resultLeft = calculateLeft(screenWidth = screenWidth, resultWidth = resultWidth)
+  println("MY: resultLeft = $resultLeft")
   val verticalRatio = calculateVerticalRatio(resultHeight = resultHeight)
   val horizontalRatio = calculateHorizontalRatio(resultWidth = resultWidth)
   val radiusRatio = calculateRadiusRatio(resultHeight = resultHeight, resultWidth = resultWidth)
   return ScreenDimensionsModel(
-    screenWidth = resultWidth,
-    screenHeight = resultHeight,
+    originalScreenWidth = screenWidth,
+    originalScreenHeight = screenHeight,
+    calculatedScreenWidth = resultWidth,
+    calculatedScreenHeight = resultHeight,
     top = resultTop,
     left = resultLeft,
     verticalRatio = verticalRatio,
@@ -98,10 +105,15 @@ private fun calculateLeft(screenWidth: Int, resultWidth: Int): Int {
 }
 
 private fun Plane.calculateWidth(screenHeight: Int, screenWidth: Int): Int {
+  println("MY: calculateWidth")
   val dicomWidth = data.screenSizeH
+  println("MY: dicomWidth = $dicomWidth")
   val dicomHeight = data.screenSizeV
+  println("MY: dicomHeight = $dicomHeight")
   val ri = dicomWidth.toDouble() / dicomHeight
+  println("MY: ri = $ri")
   val rs = screenWidth.toDouble() / screenHeight
+  println("MY: rs = $rs")
   return if (rs > ri) {
     dicomWidth * screenHeight / dicomHeight
   } else {

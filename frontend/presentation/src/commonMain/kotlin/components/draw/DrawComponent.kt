@@ -15,13 +15,14 @@ class DrawComponent(
   dependencies: Dependencies
 ) : Draw, ComponentContext by componentContext, Dependencies by dependencies {
 
-  private val store = instanceKeeper.getStore {
-    DrawStoreProvider(
-      storeFactory = storeFactory,
-      researchId = researchId,
-      plane = plane
-    ).provide()
-  }
+  private val store =
+    instanceKeeper.getStore {
+      DrawStoreProvider(
+        storeFactory = storeFactory,
+        researchId = researchId,
+        plane = plane
+      ).provide()
+    }
 
   override val model: Value<Model> = store.asValue().map(stateToModel)
 
@@ -47,5 +48,21 @@ class DrawComponent(
 
   override fun onDoubleClick() {
     store.accept(MyDrawStore.Intent.DoubleClick)
+  }
+
+  override fun onScreenDimensionChanged(clientHeight: Int?, clientWidth: Int?) {
+    if (clientHeight != null && clientWidth != null) {
+      println("MY: onScreenDimensionChanged clientHeight != null && clientWidth != null")
+      val clientHeightDiff = clientHeight != model.value.screenDimensionsModel.originalScreenHeight
+      val clientWidthDiff = clientWidth != model.value.screenDimensionsModel.originalScreenWidth
+      val updateDimensions = clientHeightDiff || clientWidthDiff
+      println("MY: model.value.screenDimensionsModel = ${model.value.screenDimensionsModel}")
+      println("MY: clientHeight = $clientHeight")
+      println("MY: clientWidth = $clientWidth")
+      if (updateDimensions) {
+        val calculateScreenDimensions = plane.calculateScreenDimensions(clientHeight, clientWidth)
+        store.accept(MyDrawStore.Intent.UpdateScreenDimensions(calculateScreenDimensions))
+      }
+    }
   }
 }

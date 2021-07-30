@@ -5,10 +5,7 @@ import com.arkivanov.decompose.value.Value
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.base.Consumer
 import components.draw.Draw.Dependencies
-import model.CutType
-import model.MouseDown
-import model.Plane
-import model.Shape
+import model.*
 
 interface Draw {
 
@@ -20,19 +17,13 @@ interface Draw {
   fun onMouseOut()
   fun onMouseWheel(dicomDeltaY: Int)
   fun onDoubleClick()
+  fun onScreenDimensionChanged(clientHeight: Int?, clientWidth: Int?)
 
   data class Model(
     val shape: Shape?,
     val plane: Plane,
-//    val startDicomX: Double,
-//    val startDicomY: Double,
-//    val dicomRadiusHorizontal: Double,
-//    val dicomRadiusVertical: Double,
-//    val isDrawingEllipse: Boolean = false,
-//    val isDrawingRectangle: Boolean = false,
-//    val isMoving: Boolean = false,
-//    val isContrastBrightness: Boolean = false,
     val cutType: CutType,
+    val screenDimensionsModel: ScreenDimensionsModel,
   )
 
   interface Dependencies {
