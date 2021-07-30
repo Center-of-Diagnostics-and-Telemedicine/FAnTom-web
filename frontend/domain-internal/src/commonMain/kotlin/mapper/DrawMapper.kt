@@ -51,21 +51,21 @@ val drawStateToDrawModel: State.() -> Model = {
   val emptyModel = Model(null)
   if (dicomRadiusHorizontal != 0.0) {
     val shape = when {
-      isDrawingRectangle -> Rectangle(
-        dicomCenterX = startDicomX,
-        dicomCenterY = startDicomY,
-        dicomRadiusHorizontal = dicomRadiusHorizontal,
-        dicomRadiusVertical = dicomRadiusVertical,
+      isDrawingRectangle -> RectangleModel(
+        dicomX = startDicomX,
+        dicomY = startDicomY,
+        dicomWidth = dicomRadiusHorizontal,
+        dicomHeight = dicomRadiusVertical,
         id = -1,
         highlight = false,
         isCenter = false,
         color = defaultMarkColor
       )
-      isDrawingEllipse -> Circle(
-        dicomCenterX = startDicomX,
-        dicomCenterY = startDicomY,
-        dicomRadiusHorizontal = dicomRadiusHorizontal,
-        dicomRadiusVertical = dicomRadiusVertical,
+      isDrawingEllipse -> CircleModel(
+        dicomX = startDicomX,
+        dicomY = startDicomY,
+        dicomWidth = dicomRadiusHorizontal,
+        dicomHeight = dicomRadiusVertical,
         id = -1,
         highlight = false,
         isCenter = false,

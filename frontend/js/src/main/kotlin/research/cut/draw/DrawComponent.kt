@@ -1,6 +1,7 @@
 package research.cut.draw
 
 import com.ccfraser.muirwik.components.themeContext
+import kotlinx.browser.document
 import kotlinx.css.*
 import kotlinx.css.Position
 import kotlinx.html.classes
@@ -16,12 +17,11 @@ import react.RBuilder
 import react.RComponent
 import react.RProps
 import react.RState
+import react.dom.attrs
 import styled.css
 import styled.styledCanvas
 import styled.styledDiv
 import view.DrawView
-import kotlinx.browser.document
-import react.dom.attrs
 import kotlin.math.*
 
 class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
@@ -143,13 +143,13 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
 
   private fun draw(shape: Shape) {
     when (shape) {
-      is Circle -> drawCircle(shape)
-      is Rectangle -> drawRectangle(shape)
+      is CircleModel -> drawCircle(shape)
+      is RectangleModel -> drawRectangle(shape)
       else -> throw NotImplementedError("private fun draw(shape: Shape?) shape not implemented")
     }
   }
 
-  private fun drawCircle(circle: Circle) {
+  private fun drawCircle(circle: CircleModel) {
     circle.let {
       val canvas = document.getElementsByClassName("draw_canvas_${props.cut.type.intType}")[0] as HTMLCanvasElement
       val context = canvas.getContext("2d") as CanvasRenderingContext2D
@@ -162,8 +162,8 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
 
       context.beginPath()
       if (props.cut.isPlanar()) {
-        val radiusX = circle.dicomRadiusHorizontal / horizontalRatio * 0.5
-        val radiusY = circle.dicomRadiusVertical / verticalRatio * 0.5
+        val radiusX = circle.dicomWidth / horizontalRatio * 0.5
+        val radiusY = circle.dicomHeight / verticalRatio * 0.5
         val centerX = startX + radiusX
         val centerY = startY + radiusY
         val step = 0.01
@@ -186,9 +186,9 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
       } else {
         context.strokeStyle = "#00ff00"
         context.arc(
-          circle.dicomCenterX / horizontalRatio,
-          circle.dicomCenterY / verticalRatio,
-          circle.dicomRadiusHorizontal / radiusRatio,
+          circle.dicomX / horizontalRatio,
+          circle.dicomY / verticalRatio,
+          circle.dicomWidth / radiusRatio,
           0.0,
           2 * PI,
           false
@@ -199,7 +199,7 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
     }
   }
 
-  private fun drawRectangle(rectangle: Rectangle) {
+  private fun drawRectangle(rectangle: RectangleModel) {
     rectangle.let {
       val canvas = document.getElementsByClassName("draw_canvas_${props.cut.type.intType}")[0] as HTMLCanvasElement
       val context = canvas.getContext("2d") as CanvasRenderingContext2D
@@ -214,8 +214,8 @@ class DrawComponent(prps: DrawProps) : RComponent<DrawProps, DrawState>(prps) {
       context.strokeStyle = "#00ff00"
       val x = startX
       val y = startY
-      val w = rectangle.dicomRadiusHorizontal / horizontalRatio
-      val h = rectangle.dicomRadiusVertical / verticalRatio
+      val w = rectangle.dicomWidth / horizontalRatio
+      val h = rectangle.dicomHeight / verticalRatio
       context.rect(x, y, w, h)
       context.stroke()
       context.closePath()

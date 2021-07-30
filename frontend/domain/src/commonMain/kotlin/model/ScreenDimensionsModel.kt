@@ -1,8 +1,8 @@
 package model
 
 data class MouseDown(
-  val dicomX: Double,
-  val dicomY: Double,
+  val screenX: Double,
+  val screenY: Double,
   val metaKey: Boolean,
   val button: Short,
   val shiftKey: Boolean,

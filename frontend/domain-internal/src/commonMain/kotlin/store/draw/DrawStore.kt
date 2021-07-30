@@ -1,9 +1,9 @@
 package store.draw
 
 import com.arkivanov.mvikotlin.core.store.Store
-import model.Circle
+import model.CircleModel
 import model.CutType
-import model.Rectangle
+import model.RectangleModel
 import model.defaultMarkColor
 import store.draw.DrawStore.*
 import kotlin.math.abs
@@ -21,26 +21,26 @@ interface DrawStore : Store<Intent, State, Label> {
     val isContrastBrightness: Boolean = false,
     val cutType: CutType,
   ) {
-    fun circle(planar: Boolean): Circle {
+    fun circle(planar: Boolean): CircleModel {
       return if (planar) {
         val horizontalRadius = dicomRadiusHorizontal / 2
         val verticalRadius = dicomRadiusVertical / 2
-        Circle(
-          dicomCenterX = startDicomX + horizontalRadius,
-          dicomCenterY = startDicomY + verticalRadius,
-          dicomRadiusHorizontal = abs(horizontalRadius),
-          dicomRadiusVertical = abs(verticalRadius),
+        CircleModel(
+          dicomX = startDicomX + horizontalRadius,
+          dicomY = startDicomY + verticalRadius,
+          dicomWidth = abs(horizontalRadius),
+          dicomHeight = abs(verticalRadius),
           id = -1,
           highlight = false,
           isCenter = false,
           color = defaultMarkColor
         )
       } else {
-        Circle(
-          dicomCenterX = startDicomX,
-          dicomCenterY = startDicomY,
-          dicomRadiusHorizontal = dicomRadiusHorizontal,
-          dicomRadiusVertical = dicomRadiusVertical,
+        CircleModel(
+          dicomX = startDicomX,
+          dicomY = startDicomY,
+          dicomWidth = dicomRadiusHorizontal,
+          dicomHeight = dicomRadiusVertical,
           id = -1,
           highlight = false,
           isCenter = false,
@@ -49,14 +49,14 @@ interface DrawStore : Store<Intent, State, Label> {
       }
     }
 
-    fun rectangle(): Rectangle {
+    fun rectangle(): RectangleModel {
       val horizontalRadius = dicomRadiusHorizontal / 2
       val verticalRadius = dicomRadiusVertical / 2
-      return Rectangle(
-        dicomCenterX = startDicomX + horizontalRadius,
-        dicomCenterY = startDicomY + verticalRadius,
-        dicomRadiusHorizontal = abs(horizontalRadius),
-        dicomRadiusVertical = abs(verticalRadius),
+      return RectangleModel(
+        dicomX = startDicomX + horizontalRadius,
+        dicomY = startDicomY + verticalRadius,
+        dicomWidth = abs(horizontalRadius),
+        dicomHeight = abs(verticalRadius),
         id = -1,
         highlight = false,
         isCenter = false,
@@ -85,8 +85,8 @@ interface DrawStore : Store<Intent, State, Label> {
     data class MoveInClick(val deltaX: Double, val deltaY: Double) : Label()
     object StopMove : Label()
 
-    data class CircleDrawn(val circle: Circle) : Label()
-    data class RectangleDrawn(val rectangle: Rectangle) : Label()
+    data class CircleDrawn(val circle: CircleModel) : Label()
+    data class RectangleDrawn(val rectangle: RectangleModel) : Label()
 
     data class ChangeSlice(val deltaDicomY: Int) : Label()
 

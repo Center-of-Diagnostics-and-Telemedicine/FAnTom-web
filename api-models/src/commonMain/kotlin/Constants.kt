@@ -116,6 +116,7 @@ val dxStringTypes = listOf(
 
 const val SHAPE_TYPE_CIRCLE = 0
 const val SHAPE_TYPE_RECTANGLE = 1
+const val SHAPE_TYPE_ELLIPSE = 2
 
 /**
 MIP методы

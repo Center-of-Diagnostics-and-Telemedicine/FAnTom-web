@@ -1,6 +1,7 @@
 package components.draw
 
 import components.draw.Draw.Model
+import components.models.shape.toScreenShape
 import model.*
 import store.draw.MyDrawStore.Intent
 import store.draw.MyDrawStore.State
@@ -10,41 +11,19 @@ import kotlin.math.sqrt
 internal val stateToModel: (State) -> Model =
   {
     Model(
-      shape = if (it.dicomRadiusHorizontal != 0.0) {
-        when {
-          it.isDrawingRectangle -> Rectangle(
-            dicomCenterX = it.startDicomX,
-            dicomCenterY = it.startDicomY,
-            dicomRadiusHorizontal = it.dicomRadiusHorizontal,
-            dicomRadiusVertical = it.dicomRadiusVertical,
-            id = -1,
-            highlight = false,
-            isCenter = false,
-            color = defaultMarkColor
-          )
-          it.isDrawingEllipse -> Circle(
-            dicomCenterX = it.startDicomX,
-            dicomCenterY = it.startDicomY,
-            dicomRadiusHorizontal = it.dicomRadiusHorizontal,
-            dicomRadiusVertical = it.dicomRadiusVertical,
-            id = -1,
-            highlight = false,
-            isCenter = false,
-            color = defaultMarkColor
-          )
-          else -> null
-        }
-      } else null,
+      shape = it.shape?.toScreenShape(it.screenDimensionsModel),
       cutType = it.cutType,
       plane = it.plane,
       screenDimensionsModel = it.screenDimensionsModel
     )
   }
 
-internal fun MouseDown.toIntent(): Intent {
+internal fun MouseDown.toIntent(dimensions: ScreenDimensionsModel): Intent {
   val isDrawEllipse = metaKey && button == LEFT_MOUSE_BUTTON
   val isDrawRectangle = shiftKey && button == LEFT_MOUSE_BUTTON
   val isContrastBrightness = button == MIDDLE_MOUSE_BUTTON
+  val dicomX = mapScreenXToDicomX(screenX, dimensions.horizontalRatio)
+  val dicomY = mapScreenYToDicomY(screenY, dimensions.verticalRatio)
   return when {
     isDrawEllipse -> Intent.StartDrawEllipse(startDicomX = dicomX, startDicomY = dicomY)
     isDrawRectangle -> Intent.StartDrawRectangle(startDicomX = dicomX, startDicomY = dicomY)
@@ -61,13 +40,9 @@ internal fun Plane.calculateScreenDimensions(
   screenWidth: Int
 ): ScreenDimensionsModel {
   val resultWidth = calculateWidth(screenHeight = screenHeight, screenWidth = screenWidth)
-  println("MY: resultWidth = $resultWidth")
   val resultHeight = calculateHeight(screenHeight = screenHeight, screenWidth = screenWidth)
-  println("MY: resultHeight = $resultHeight")
   val resultTop = calculateTop(screenHeight = screenHeight, resultHeight = resultHeight)
-  println("MY: resultTop = $resultTop")
   val resultLeft = calculateLeft(screenWidth = screenWidth, resultWidth = resultWidth)
-  println("MY: resultLeft = $resultLeft")
   val verticalRatio = calculateVerticalRatio(resultHeight = resultHeight)
   val horizontalRatio = calculateHorizontalRatio(resultWidth = resultWidth)
   val radiusRatio = calculateRadiusRatio(resultHeight = resultHeight, resultWidth = resultWidth)
@@ -105,15 +80,10 @@ private fun calculateLeft(screenWidth: Int, resultWidth: Int): Int {
 }
 
 private fun Plane.calculateWidth(screenHeight: Int, screenWidth: Int): Int {
-  println("MY: calculateWidth")
   val dicomWidth = data.screenSizeH
-  println("MY: dicomWidth = $dicomWidth")
   val dicomHeight = data.screenSizeV
-  println("MY: dicomHeight = $dicomHeight")
   val ri = dicomWidth.toDouble() / dicomHeight
-  println("MY: ri = $ri")
   val rs = screenWidth.toDouble() / screenHeight
-  println("MY: rs = $rs")
   return if (rs > ri) {
     dicomWidth * screenHeight / dicomHeight
   } else {

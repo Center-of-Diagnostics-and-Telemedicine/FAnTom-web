@@ -1,14 +1,22 @@
 package model
 
-interface PointPosition
+interface PointPosition {
+  val x: Double
+  val y: Double
+}
 
 data class MultiPlanarPointPosition(
-  val x: Double,
-  val y: Double,
+  override val x: Double,
+  override val y: Double,
   val z: Double
 ) : PointPosition
 
 data class PlanarPointPosition(
-  val x: Double,
-  val y: Double
-): PointPosition
+  override val x: Double,
+  override val y: Double
+) : PointPosition
+
+data class MousePositionModel(
+  override val x: Double,
+  override val y: Double
+) : PointPosition

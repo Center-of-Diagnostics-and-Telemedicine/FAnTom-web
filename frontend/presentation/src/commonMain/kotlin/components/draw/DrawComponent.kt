@@ -8,6 +8,7 @@ import components.draw.Draw.Dependencies
 import components.draw.Draw.Model
 import components.getStore
 import model.MouseDown
+import model.ScreenDimensionsModel
 import store.draw.MyDrawStore
 
 class DrawComponent(
@@ -27,10 +28,19 @@ class DrawComponent(
   override val model: Value<Model> = store.asValue().map(stateToModel)
 
   override fun onMouseDown(mouseDownModel: MouseDown) {
-    store.accept(mouseDownModel.toIntent())
+    store.accept(mouseDownModel.toIntent(dimensions = model.value.screenDimensionsModel))
   }
 
-  override fun onMouseMove(dicomX: Double, dicomY: Double) {
+  override fun onMouseMove(screenX: Double, screenY: Double) {
+    val dimensions = model.value.screenDimensionsModel
+    val dicomX = mapScreenXToDicomX(
+      screenX = screenX,
+      horizontalRatio = dimensions.horizontalRatio
+    )
+    val dicomY = mapScreenYToDicomY(
+      screenY = screenY,
+      verticalRatio = dimensions.verticalRatio
+    )
     store.accept(MyDrawStore.Intent.Move(dicomX = dicomX, dicomY = dicomY))
   }
 
@@ -42,8 +52,9 @@ class DrawComponent(
     store.accept(MyDrawStore.Intent.MouseOut)
   }
 
-  override fun onMouseWheel(dicomDeltaY: Int) {
-    store.accept(MyDrawStore.Intent.MouseWheel(deltaDicomY = dicomDeltaY))
+  override fun onMouseWheel(screenDeltaY: Double) {
+    val deltaDicomY = if (screenDeltaY < 0.0) -1 else 1
+    store.accept(MyDrawStore.Intent.MouseWheel(deltaDicomY = deltaDicomY))
   }
 
   override fun onDoubleClick() {
@@ -51,17 +62,23 @@ class DrawComponent(
   }
 
   override fun onScreenDimensionChanged(clientHeight: Int?, clientWidth: Int?) {
+    shouldUpdateDimensions(clientHeight, clientWidth) { dimensions ->
+      store.accept(MyDrawStore.Intent.UpdateScreenDimensions(dimensions))
+    }
+  }
+
+  private inline fun shouldUpdateDimensions(
+    clientHeight: Int?,
+    clientWidth: Int?,
+    block: (should: ScreenDimensionsModel) -> Unit
+  ) {
     if (clientHeight != null && clientWidth != null) {
-      println("MY: onScreenDimensionChanged clientHeight != null && clientWidth != null")
       val clientHeightDiff = clientHeight != model.value.screenDimensionsModel.originalScreenHeight
       val clientWidthDiff = clientWidth != model.value.screenDimensionsModel.originalScreenWidth
       val updateDimensions = clientHeightDiff || clientWidthDiff
-      println("MY: model.value.screenDimensionsModel = ${model.value.screenDimensionsModel}")
-      println("MY: clientHeight = $clientHeight")
-      println("MY: clientWidth = $clientWidth")
       if (updateDimensions) {
-        val calculateScreenDimensions = plane.calculateScreenDimensions(clientHeight, clientWidth)
-        store.accept(MyDrawStore.Intent.UpdateScreenDimensions(calculateScreenDimensions))
+        val newDimensions = plane.calculateScreenDimensions(clientHeight, clientWidth)
+        block(newDimensions)
       }
     }
   }

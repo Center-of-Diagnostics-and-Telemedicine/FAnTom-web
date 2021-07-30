@@ -50,8 +50,8 @@ interface CutController {
 
   sealed class Output {
     data class SliceNumberChanged(val sliceNumber: Int, val cut: Plane) : Output()
-    data class CircleDrawn(val circle: Circle, val sliceNumber: Int, val cut: Plane) : Output()
-    data class RectangleDrawn(val rectangle: Rectangle, val sliceNumber: Int, val cut: Plane) : Output()
+    data class CircleDrawn(val circle: CircleModel, val sliceNumber: Int, val cut: Plane) : Output()
+    data class RectangleDrawn(val rectangle: RectangleModel, val sliceNumber: Int, val cut: Plane) : Output()
     data class SelectMark(val mark: MarkModel) : Output()
     data class UnselectMark(val mark: MarkModel) : Output()
     data class ContrastBrightnessChanged(val black: Int, val white: Int) : Output()

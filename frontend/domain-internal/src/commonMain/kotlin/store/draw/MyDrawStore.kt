@@ -3,69 +3,22 @@ package store.draw
 import com.arkivanov.mvikotlin.core.store.Store
 import model.*
 import store.draw.MyDrawStore.*
-import kotlin.math.abs
 
 interface MyDrawStore : Store<Intent, State, Label> {
 
   data class State(
-    val startDicomX: Double,
-    val startDicomY: Double,
-    val dicomRadiusHorizontal: Double,
-    val dicomRadiusVertical: Double,
-    val isDrawingEllipse: Boolean = false,
-    val isDrawingRectangle: Boolean = false,
-    val isMoving: Boolean = false,
-    val isContrastBrightness: Boolean = false,
+    val shape: Shape? = null,
+    val contrastBrightness: MousePositionModel? = null,
+    val mousePosition: MousePositionModel? = null,
+    val mouseInClickPosition: MousePositionModel? = null,
     val cutType: CutType,
     val plane: Plane,
     val screenDimensionsModel: ScreenDimensionsModel,
-  ) {
-    fun circle(planar: Boolean): Circle {
-      return if (planar) {
-        val horizontalRadius = dicomRadiusHorizontal / 2
-        val verticalRadius = dicomRadiusVertical / 2
-        Circle(
-          dicomCenterX = startDicomX + horizontalRadius,
-          dicomCenterY = startDicomY + verticalRadius,
-          dicomRadiusHorizontal = abs(horizontalRadius),
-          dicomRadiusVertical = abs(verticalRadius),
-          id = -1,
-          highlight = false,
-          isCenter = false,
-          color = defaultMarkColor
-        )
-      } else {
-        Circle(
-          dicomCenterX = startDicomX,
-          dicomCenterY = startDicomY,
-          dicomRadiusHorizontal = dicomRadiusHorizontal,
-          dicomRadiusVertical = dicomRadiusVertical,
-          id = -1,
-          highlight = false,
-          isCenter = false,
-          color = defaultMarkColor
-        )
-      }
-    }
-
-    fun rectangle(): Rectangle {
-      val horizontalRadius = dicomRadiusHorizontal / 2
-      val verticalRadius = dicomRadiusVertical / 2
-      return Rectangle(
-        dicomCenterX = startDicomX + horizontalRadius,
-        dicomCenterY = startDicomY + verticalRadius,
-        dicomRadiusHorizontal = abs(horizontalRadius),
-        dicomRadiusVertical = abs(verticalRadius),
-        id = -1,
-        highlight = false,
-        isCenter = false,
-        color = defaultMarkColor
-      )
-    }
-  }
+  )
 
   sealed class Intent {
     data class StartDrawEllipse(val startDicomX: Double, val startDicomY: Double) : Intent()
+    data class StartDrawCircle(val startDicomX: Double, val startDicomY: Double) : Intent()
     data class StartDrawRectangle(val startDicomX: Double, val startDicomY: Double) : Intent()
     data class StartContrastBrightness(val startDicomX: Double, val startDicomY: Double) : Intent()
     data class StartMouseClick(val startDicomX: Double, val startDicomY: Double) : Intent()
@@ -86,8 +39,9 @@ interface MyDrawStore : Store<Intent, State, Label> {
     data class MoveInClick(val deltaX: Double, val deltaY: Double) : Label()
     object StopMove : Label()
 
-    data class CircleDrawn(val circle: Circle) : Label()
-    data class RectangleDrawn(val rectangle: Rectangle) : Label()
+    data class CircleDrawn(val circle: CircleModel) : Label()
+    data class EllipseDrawn(val ellipse: EllipseModel) : Label()
+    data class RectangleDrawn(val rectangle: RectangleModel) : Label()
 
     data class ChangeSlice(val deltaDicomY: Int) : Label()
 

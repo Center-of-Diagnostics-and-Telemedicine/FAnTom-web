@@ -151,7 +151,7 @@ fun Plane.getPosition(dicomX: Double, dicomY: Double, sliceNumber: Int): PointPo
 }
 
 fun Plane.getMarkToSave(shape: Shape, sliceNumber: Int): MarkData? {
-  return if (shape.dicomCenterX < 0.0 || shape.dicomCenterY < 0.0) {
+  return if (shape.dicomX < 0.0 || shape.dicomY < 0.0) {
     null
   } else {
 
@@ -159,13 +159,13 @@ fun Plane.getMarkToSave(shape: Shape, sliceNumber: Int): MarkData? {
       CutType.EMPTY -> null
       CutType.CT_AXIAL -> {
         MarkData(
-          x = (shape.dicomCenterX),
-          y = (shape.dicomCenterY),
+          x = (shape.dicomX),
+          y = (shape.dicomY),
           z = sliceNumber.toDouble(),
-          radiusHorizontal = shape.dicomRadiusHorizontal,
-          radiusVertical = shape.dicomRadiusHorizontal,
-          sizeVertical = shape.dicomRadiusHorizontal * data.dicomStepH,
-          sizeHorizontal = shape.dicomRadiusHorizontal * data.dicomStepH,
+          radiusHorizontal = shape.dicomWidth,
+          radiusVertical = shape.dicomWidth,
+          sizeVertical = shape.dicomWidth * data.dicomStepH,
+          sizeHorizontal = shape.dicomWidth * data.dicomStepH,
           cutType = type.intType,
           shapeType = shape.getType()
         )
@@ -174,13 +174,13 @@ fun Plane.getMarkToSave(shape: Shape, sliceNumber: Int): MarkData? {
         val verticalRatio = verticalCutData!!.data.nImages.toDouble() / data.screenSizeV
         val horizontalRatio = horizontalCutData!!.data.nImages.toDouble() / data.screenSizeH
         MarkData(
-          x = (shape.dicomCenterX * horizontalRatio),
+          x = (shape.dicomX * horizontalRatio),
           y = sliceNumber.toDouble(),
-          z = (shape.dicomCenterY * verticalRatio),
-          radiusHorizontal = shape.dicomRadiusHorizontal,
-          radiusVertical = shape.dicomRadiusHorizontal,
-          sizeVertical = shape.dicomRadiusHorizontal * data.dicomStepH,
-          sizeHorizontal = shape.dicomRadiusHorizontal * data.dicomStepH,
+          z = (shape.dicomY * verticalRatio),
+          radiusHorizontal = shape.dicomWidth,
+          radiusVertical = shape.dicomWidth,
+          sizeVertical = shape.dicomWidth * data.dicomStepH,
+          sizeHorizontal = shape.dicomWidth * data.dicomStepH,
           cutType = type.intType,
           shapeType = shape.getType()
         )
@@ -190,12 +190,12 @@ fun Plane.getMarkToSave(shape: Shape, sliceNumber: Int): MarkData? {
         val horizontalRatio = horizontalCutData!!.data.nImages.toDouble() / data.screenSizeH
         MarkData(
           x = sliceNumber.toDouble(),
-          y = (shape.dicomCenterX * horizontalRatio),
-          z = (shape.dicomCenterY * verticalRatio),
-          radiusHorizontal = shape.dicomRadiusHorizontal,
-          radiusVertical = shape.dicomRadiusHorizontal,
-          sizeVertical = shape.dicomRadiusHorizontal * data.dicomStepH,
-          sizeHorizontal = shape.dicomRadiusHorizontal * data.dicomStepH,
+          y = (shape.dicomX * horizontalRatio),
+          z = (shape.dicomY * verticalRatio),
+          radiusHorizontal = shape.dicomWidth,
+          radiusVertical = shape.dicomWidth,
+          sizeVertical = shape.dicomWidth * data.dicomStepH,
+          sizeHorizontal = shape.dicomWidth * data.dicomStepH,
           cutType = type.intType,
           shapeType = shape.getType()
         )
@@ -212,13 +212,13 @@ fun Plane.getMarkToSave(shape: Shape, sliceNumber: Int): MarkData? {
       CutType.CT_2,
       CutType.MG_LMLO -> {
         MarkData(
-          x = shape.dicomCenterX,
-          y = shape.dicomCenterY,
+          x = shape.dicomX,
+          y = shape.dicomY,
           z = -1.0,
-          radiusHorizontal = shape.dicomRadiusHorizontal,
-          radiusVertical = shape.dicomRadiusVertical,
-          sizeVertical = shape.dicomRadiusVertical * data.dicomStepV * 2,
-          sizeHorizontal = shape.dicomRadiusHorizontal * data.dicomStepH * 2,
+          radiusHorizontal = shape.dicomWidth,
+          radiusVertical = shape.dicomHeight,
+          sizeVertical = shape.dicomHeight * data.dicomStepV * 2,
+          sizeHorizontal = shape.dicomWidth * data.dicomStepH * 2,
           cutType = type.intType,
           shapeType = shape.getType()
         )

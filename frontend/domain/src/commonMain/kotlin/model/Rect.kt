@@ -18,29 +18,29 @@ fun Shape.toRects(cut: Plane): List<Rect> {
     ResearchType.DX,
     ResearchType.MG -> {
       val leftTop = Rect(
-        left = dicomCenterX - dicomRadiusHorizontal,
-        top = dicomCenterY - dicomRadiusVertical,
+        left = dicomX - dicomWidth,
+        top = dicomY - dicomHeight,
         sideLength = sideLength,
         markId = id,
         type = MoveRectType.LEFT_TOP
       )
       val rightTop = Rect(
-        left = dicomCenterX + dicomRadiusHorizontal,
-        top = dicomCenterY - dicomRadiusVertical,
+        left = dicomX + dicomWidth,
+        top = dicomY - dicomHeight,
         sideLength = sideLength,
         markId = id,
         type = MoveRectType.RIGHT_TOP
       )
       val leftBottom = Rect(
-        left = dicomCenterX - dicomRadiusHorizontal,
-        top = dicomCenterY + dicomRadiusVertical,
+        left = dicomX - dicomWidth,
+        top = dicomY + dicomHeight,
         sideLength = sideLength,
         markId = id,
         type = MoveRectType.LEFT_BOTTOM
       )
       val rightBottom = Rect(
-        left = dicomCenterX + dicomRadiusHorizontal,
-        top = dicomCenterY + dicomRadiusVertical,
+        left = dicomX + dicomWidth,
+        top = dicomY + dicomHeight,
         sideLength = sideLength,
         markId = id,
         type = MoveRectType.RIGHT_BOTTOM
@@ -54,29 +54,29 @@ fun Shape.toRects(cut: Plane): List<Rect> {
 
 private fun Shape.mainRects(sideLength: Double): List<Rect> {
   val left = Rect(
-    left = dicomCenterX - dicomRadiusHorizontal,
-    top = dicomCenterY,
+    left = dicomX - dicomWidth,
+    top = dicomY,
     sideLength = sideLength,
     markId = id,
     type = MoveRectType.LEFT
   )
   val top = Rect(
-    left = dicomCenterX,
-    top = dicomCenterY - dicomRadiusVertical,
+    left = dicomX,
+    top = dicomY - dicomHeight,
     sideLength = sideLength,
     markId = id,
     type = MoveRectType.TOP
   )
   val right = Rect(
-    left = dicomCenterX + dicomRadiusHorizontal,
-    top = dicomCenterY,
+    left = dicomX + dicomWidth,
+    top = dicomY,
     sideLength = sideLength,
     markId = id,
     type = MoveRectType.RIGHT
   )
   val bottom = Rect(
-    left = dicomCenterX,
-    top = dicomCenterY + dicomRadiusVertical,
+    left = dicomX,
+    top = dicomY + dicomHeight,
     sideLength = sideLength,
     markId = id,
     type = MoveRectType.BOTTOM

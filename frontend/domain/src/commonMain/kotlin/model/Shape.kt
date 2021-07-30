@@ -8,10 +8,10 @@ import kotlin.math.sqrt
 const val defaultMarkColor = "#00ff00"
 
 interface Shape {
-  val dicomCenterX: Double
-  val dicomCenterY: Double
-  val dicomRadiusHorizontal: Double
-  val dicomRadiusVertical: Double
+  val dicomX: Double
+  val dicomY: Double
+  val dicomWidth: Double
+  val dicomHeight: Double
   val id: Int
   val highlight: Boolean
   val isCenter: Boolean
@@ -21,41 +21,89 @@ interface Shape {
 
 fun Shape.getType(): Int {
   return when (this) {
-    is Rectangle -> SHAPE_TYPE_RECTANGLE
-    is Circle -> SHAPE_TYPE_CIRCLE
+    is RectangleModel -> SHAPE_TYPE_RECTANGLE
+    is CircleModel -> SHAPE_TYPE_CIRCLE
+    is EllipseModel -> SHAPE_TYPE_ELLIPSE
     else -> throw NotImplementedError("Shape.getType not added")
   }
 }
 
-data class Circle(
-  override val dicomCenterX: Double,
-  override val dicomCenterY: Double,
-  override val dicomRadiusHorizontal: Double,
-  override val dicomRadiusVertical: Double,
+data class CircleModel(
+  override val dicomX: Double,
+  override val dicomY: Double,
+  override val dicomWidth: Double,
+  override val dicomHeight: Double,
   override val id: Int,
   override val highlight: Boolean,
   override val isCenter: Boolean,
   override val color: String,
   override val editable: Boolean = true
-) : Shape
+) : Shape {
+  constructor(dicomX: Double, dicomY: Double) : this(
+    dicomX = dicomX,
+    dicomY = dicomY,
+    dicomWidth = 0.0,
+    dicomHeight = 0.0,
+    id = -1,
+    highlight = false,
+    isCenter = false,
+    color = ""
+  )
+}
 
-data class Rectangle(
-  override val dicomCenterX: Double,
-  override val dicomCenterY: Double,
-  override val dicomRadiusHorizontal: Double,
-  override val dicomRadiusVertical: Double,
+data class EllipseModel(
+  override val dicomX: Double,
+  override val dicomY: Double,
+  override val dicomWidth: Double,
+  override val dicomHeight: Double,
   override val id: Int,
   override val highlight: Boolean,
   override val isCenter: Boolean,
   override val color: String,
   override val editable: Boolean = true
-) : Shape
+) : Shape {
+
+  constructor(dicomX: Double, dicomY: Double) : this(
+    dicomX = dicomX,
+    dicomY = dicomY,
+    dicomWidth = 0.0,
+    dicomHeight = 0.0,
+    id = -1,
+    highlight = false,
+    isCenter = false,
+    color = ""
+  )
+}
+
+data class RectangleModel(
+  override val dicomX: Double,
+  override val dicomY: Double,
+  override val dicomWidth: Double,
+  override val dicomHeight: Double,
+  override val id: Int,
+  override val highlight: Boolean,
+  override val isCenter: Boolean,
+  override val color: String,
+  override val editable: Boolean = true
+) : Shape {
+  constructor(dicomX: Double, dicomY: Double) : this(
+    dicomX = dicomX,
+    dicomY = dicomY,
+    dicomWidth = 0.0,
+    dicomHeight = 0.0,
+    id = -1,
+    highlight = false,
+    isCenter = false,
+    color = ""
+  )
+}
 
 fun MarkModel.toShape(cut: Plane, sliceNumber: Int): Shape? {
   markData.apply {
     return when (shapeType) {
       SHAPE_TYPE_CIRCLE -> toCircle(cut, sliceNumber)
       SHAPE_TYPE_RECTANGLE -> toRectangle(cut)
+      SHAPE_TYPE_ELLIPSE -> toEllipse(cut)
       else -> null
     }
   }
@@ -64,24 +112,24 @@ fun MarkModel.toShape(cut: Plane, sliceNumber: Int): Shape? {
 fun List<Shape>.getShapeByPosition(dicomX: Double, dicomY: Double): Shape? {
   return this
     .filter {
-      val bottom = it.dicomCenterY + it.dicomRadiusVertical
-      val top = it.dicomCenterY - it.dicomRadiusVertical
-      val right = it.dicomCenterX + it.dicomRadiusHorizontal
-      val left = it.dicomCenterX - it.dicomRadiusHorizontal
+      val bottom = it.dicomY + it.dicomHeight
+      val top = it.dicomY - it.dicomHeight
+      val right = it.dicomX + it.dicomWidth
+      val left = it.dicomX - it.dicomWidth
       val inVerticalBound = dicomY < bottom && dicomY > top
       val inHorizontalBound = dicomX < right && dicomX > left
       inVerticalBound && inHorizontalBound
     }
     .minByOrNull {
-      if (it.dicomRadiusHorizontal < it.dicomRadiusVertical) {
-        it.dicomRadiusHorizontal
+      if (it.dicomWidth < it.dicomHeight) {
+        it.dicomWidth
       } else {
-        it.dicomRadiusVertical
+        it.dicomHeight
       }
     }
 }
 
-private fun MarkModel.toCircle(cut: Plane, sliceNumber: Int): Circle? {
+private fun MarkModel.toCircle(cut: Plane, sliceNumber: Int): CircleModel? {
   markData.apply {
     when (cut.type) {
       CutType.EMPTY -> return null
@@ -94,11 +142,11 @@ private fun MarkModel.toCircle(cut: Plane, sliceNumber: Int): Circle? {
           val y = y / verticalRatio
           val h = abs(sliceNumber - z)// * coefficient
           val newRadius = sqrt((radiusHorizontal).pow(2) - (h).pow(2))
-          Circle(
-            dicomCenterX = x,
-            dicomCenterY = y,
-            dicomRadiusHorizontal = newRadius,
-            dicomRadiusVertical = newRadius,
+          CircleModel(
+            dicomX = x,
+            dicomY = y,
+            dicomWidth = newRadius,
+            dicomHeight = newRadius,
             id = id,
             highlight = selected,
             isCenter = sliceNumber == z.roundToInt(),
@@ -117,11 +165,11 @@ private fun MarkModel.toCircle(cut: Plane, sliceNumber: Int): Circle? {
           val resultY = z / verticalRatio
           val h = abs(sliceNumber - y)
           val newRadius = sqrt((radiusHorizontal).pow(2) - h.pow(2))
-          Circle(
-            dicomCenterX = resultX,
-            dicomCenterY = resultY,
-            dicomRadiusHorizontal = newRadius,
-            dicomRadiusVertical = newRadius,
+          CircleModel(
+            dicomX = resultX,
+            dicomY = resultY,
+            dicomWidth = newRadius,
+            dicomHeight = newRadius,
             id = id,
             highlight = selected,
             isCenter = sliceNumber == y.roundToInt(),
@@ -141,11 +189,11 @@ private fun MarkModel.toCircle(cut: Plane, sliceNumber: Int): Circle? {
           val resultY = z / verticalRatio
           val h = abs(sliceNumber - x)
           val newRadius = sqrt((radiusHorizontal).pow(2) - h.pow(2))
-          Circle(
-            dicomCenterX = resultX,
-            dicomCenterY = resultY,
-            dicomRadiusHorizontal = newRadius,
-            dicomRadiusVertical = newRadius,
+          CircleModel(
+            dicomX = resultX,
+            dicomY = resultY,
+            dicomWidth = newRadius,
+            dicomHeight = newRadius,
             id = id,
             highlight = selected,
             isCenter = sliceNumber == x.roundToInt(),
@@ -153,6 +201,9 @@ private fun MarkModel.toCircle(cut: Plane, sliceNumber: Int): Circle? {
           )
         } else null
       }
+      CutType.CT_0,
+      CutType.CT_1,
+      CutType.CT_2,
       CutType.DX_GENERIC,
       CutType.DX_POSTERO_ANTERIOR,
       CutType.DX_LEFT_LATERAL,
@@ -160,15 +211,12 @@ private fun MarkModel.toCircle(cut: Plane, sliceNumber: Int): Circle? {
       CutType.MG_RCC,
       CutType.MG_LCC,
       CutType.MG_RMLO,
-      CutType.CT_0,
-      CutType.CT_1,
-      CutType.CT_2,
       CutType.MG_LMLO -> {
-        return if (markData.cutType == cut.type.intType) Circle(
-          dicomCenterX = x,
-          dicomCenterY = y,
-          dicomRadiusHorizontal = radiusHorizontal,
-          dicomRadiusVertical = radiusVertical,
+        return if (markData.cutType == cut.type.intType) CircleModel(
+          dicomX = x,
+          dicomY = y,
+          dicomWidth = radiusHorizontal,
+          dicomHeight = radiusVertical,
           id = id,
           highlight = selected,
           isCenter = true,
@@ -179,7 +227,7 @@ private fun MarkModel.toCircle(cut: Plane, sliceNumber: Int): Circle? {
   }
 }
 
-private fun MarkModel.toRectangle(cut: Plane): Rectangle? {
+private fun MarkModel.toRectangle(cut: Plane): RectangleModel? {
   markData.apply {
     when (cut.type) {
       CutType.EMPTY,
@@ -197,11 +245,45 @@ private fun MarkModel.toRectangle(cut: Plane): Rectangle? {
       CutType.CT_1,
       CutType.CT_2,
       CutType.DX_RIGHT_LATERAL -> {
-        return if (markData.cutType == cut.type.intType) Rectangle(
-          dicomCenterX = x,
-          dicomCenterY = y,
-          dicomRadiusHorizontal = radiusHorizontal,
-          dicomRadiusVertical = radiusVertical,
+        return if (markData.cutType == cut.type.intType) RectangleModel(
+          dicomX = x,
+          dicomY = y,
+          dicomWidth = radiusHorizontal,
+          dicomHeight = radiusVertical,
+          id = id,
+          highlight = selected,
+          isCenter = true,
+          color = type?.color ?: "",
+          editable = editable
+        ) else null
+      }
+    }
+  }
+}
+
+private fun MarkModel.toEllipse(cut: Plane): EllipseModel? {
+  markData.apply {
+    when (cut.type) {
+      CutType.EMPTY,
+      CutType.CT_AXIAL,
+      CutType.CT_FRONTAL,
+      CutType.CT_SAGITTAL -> return null
+      CutType.MG_RCC,
+      CutType.MG_LCC,
+      CutType.MG_RMLO,
+      CutType.MG_LMLO,
+      CutType.DX_GENERIC,
+      CutType.DX_POSTERO_ANTERIOR,
+      CutType.DX_LEFT_LATERAL,
+      CutType.CT_0,
+      CutType.CT_1,
+      CutType.CT_2,
+      CutType.DX_RIGHT_LATERAL -> {
+        return if (markData.cutType == cut.type.intType) EllipseModel(
+          dicomX = x,
+          dicomY = y,
+          dicomWidth = radiusHorizontal,
+          dicomHeight = radiusVertical,
           id = id,
           highlight = selected,
           isCenter = true,

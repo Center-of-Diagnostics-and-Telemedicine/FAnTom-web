@@ -164,14 +164,14 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
     models.forEach { shape ->
       context.beginPath()
       when (shape) {
-        is Circle -> {
+        is CircleModel -> {
           if (props.cut.isPlanar()) {
             drawPlanarCircle(shape, context)
           } else {
             drawSphere(context, shape)
           }
         }
-        is Rectangle -> {
+        is RectangleModel -> {
           drawPlanarRectangle(shape, context)
         }
       }
@@ -180,7 +180,7 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
     }
   }
 
-  private fun drawPlanarCircle(circle: Circle, context: CanvasRenderingContext2D) {
+  private fun drawPlanarCircle(circle: CircleModel, context: CanvasRenderingContext2D) {
     val color = circle.color
     context.strokeStyle = if (color.isEmpty()) defaultMarkColor else color
     if (circle.highlight) {
@@ -189,10 +189,10 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
       context.lineWidth = 1.0
     }
 
-    val radiusX = circle.dicomRadiusHorizontal / horizontalRatio
-    val radiusY = circle.dicomRadiusVertical / verticalRatio
-    val centerX = circle.dicomCenterX / horizontalRatio
-    val centerY = circle.dicomCenterY / verticalRatio
+    val radiusX = circle.dicomWidth / horizontalRatio
+    val radiusY = circle.dicomHeight / verticalRatio
+    val centerX = circle.dicomX / horizontalRatio
+    val centerY = circle.dicomY / verticalRatio
     val step = 0.01
     var a = step
     val pi2 = PI * 2 - step
@@ -210,14 +210,14 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
     }
   }
 
-  private fun drawPlanarRectangle(rectangle: Rectangle, context: CanvasRenderingContext2D) {
+  private fun drawPlanarRectangle(rectangle: RectangleModel, context: CanvasRenderingContext2D) {
     val color = rectangle.color
     context.fillStyle = if (color.isEmpty()) defaultMarkColor else color
 
-    val x = (rectangle.dicomCenterX - rectangle.dicomRadiusHorizontal) / horizontalRatio
-    val y = (rectangle.dicomCenterY - rectangle.dicomRadiusVertical) / verticalRatio
-    val w = rectangle.dicomRadiusHorizontal / horizontalRatio * 2
-    val h = rectangle.dicomRadiusVertical / verticalRatio * 2
+    val x = (rectangle.dicomX - rectangle.dicomWidth) / horizontalRatio
+    val y = (rectangle.dicomY - rectangle.dicomHeight) / verticalRatio
+    val w = rectangle.dicomWidth / horizontalRatio * 2
+    val h = rectangle.dicomHeight / verticalRatio * 2
     context.globalAlpha = if (rectangle.highlight) 0.5 else 0.3
     context.fillRect(x, y, w, h)
     context.globalAlpha = 1.0
@@ -229,7 +229,7 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
     }
   }
 
-  private fun drawSphere(context: CanvasRenderingContext2D, circle: Circle) {
+  private fun drawSphere(context: CanvasRenderingContext2D, circle: CircleModel) {
     val color = circle.color
     context.strokeStyle = if (color.isEmpty()) defaultMarkColor else color
     if (circle.highlight) {
@@ -238,9 +238,9 @@ class ShapesComponent(prps: ShapesProps) : RComponent<ShapesProps, ShapesState>(
       context.lineWidth = 1.0
     }
     context.arc(
-      circle.dicomCenterX / horizontalRatio,
-      circle.dicomCenterY / verticalRatio,
-      circle.dicomRadiusHorizontal / radiusRatio,
+      circle.dicomX / horizontalRatio,
+      circle.dicomY / verticalRatio,
+      circle.dicomWidth / radiusRatio,
       0.0,
       2 * PI,
       false

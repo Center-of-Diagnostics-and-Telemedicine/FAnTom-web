@@ -16,8 +16,8 @@ interface CutStore : Store<Intent, State, Label> {
     data class HandleMipChanged(val mip: Mip) : Intent()
     data class HandleMipValueChanged(val mipValue: Int) : Intent()
     data class HandlePresetChanged(val presets: Presets) : Intent()
-    data class HandleCircleDrawn(val circle: Circle) : Intent()
-    data class HandleRectangleDrawn(val rectangle: Rectangle) : Intent()
+    data class HandleCircleDrawn(val circle: CircleModel) : Intent()
+    data class HandleRectangleDrawn(val rectangle: RectangleModel) : Intent()
     data class HandleExternalSliceNumberChanged(val externalCut: Plane, val sliceNumber: Int) :
       Intent()
 
@@ -58,9 +58,9 @@ interface CutStore : Store<Intent, State, Label> {
 
     data class SliceNumberChanged(val sliceNumber: Int, val cut: Plane) : Label()
     data class ExternalSliceNumberChanged(val externalCut: Plane, val sliceNumber: Int) : Label()
-    data class CircleDrawn(val circle: Circle, val sliceNumber: Int, val cut: Plane) : Label()
+    data class CircleDrawn(val circle: CircleModel, val sliceNumber: Int, val cut: Plane) : Label()
     data class RectangleDrawn(
-      val rectangle: Rectangle,
+      val rectangle: RectangleModel,
       val sliceNumber: Int,
       val cut: Plane
     ) : Label()
