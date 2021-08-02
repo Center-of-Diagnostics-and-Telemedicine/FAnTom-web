@@ -9,6 +9,7 @@ import model.Plane
 import repository.MyBrightnessRepository
 import repository.MyMipRepository
 import repository.MyResearchRepository
+import store.cut.CutModel
 
 interface Cut {
 
@@ -26,7 +27,7 @@ interface Cut {
     val researchRepository: MyResearchRepository
     val mipRepository: MyMipRepository
     val cutOutput: Consumer<Output>
-    val cutInput: Consumer<Input>
+    val cutInput: Value<Input>
     val plane: Plane
     val researchId: Int
   }
@@ -35,7 +36,7 @@ interface Cut {
   }
 
   sealed class Input {
-    data class SliceNumberChanged(val value: Int) : Input()
+    data class ChangeCutModel(val cutModel: CutModel): Input()
   }
 }
 

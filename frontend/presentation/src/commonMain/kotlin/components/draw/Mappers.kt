@@ -1,10 +1,10 @@
 package components.draw
 
 import components.draw.Draw.Model
+import components.draw.Draw.Output
 import components.models.shape.toScreenShape
 import model.*
-import store.draw.MyDrawStore.Intent
-import store.draw.MyDrawStore.State
+import store.draw.MyDrawStore.*
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -16,6 +16,19 @@ internal val stateToModel: (State) -> Model =
       plane = it.plane,
       screenDimensionsModel = it.screenDimensionsModel
     )
+  }
+
+internal val labelsToOutput: (Label) -> Output =
+  {
+    when (it) {
+      is Label.CircleDrawn -> Output.Circle(it.circle)
+      is Label.EllipseDrawn -> Output.Ellipse(it.ellipse)
+      is Label.RectangleDrawn -> Output.Rectangle(it.rectangle)
+      is Label.ChangeSlice -> TODO()
+      is Label.ChangeContrastBrightness -> TODO()
+      Label.OpenFullCut -> TODO()
+      Label.ContrastBrightnessChanged -> TODO()
+    }
   }
 
 internal fun MouseDown.toIntent(dimensions: ScreenDimensionsModel): Intent {

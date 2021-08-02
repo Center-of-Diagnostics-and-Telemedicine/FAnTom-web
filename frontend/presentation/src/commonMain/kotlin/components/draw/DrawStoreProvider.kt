@@ -77,14 +77,6 @@ internal class DrawStoreProvider(
       dispatch(Result.StartClick(mouseInClickPosition = mouseInClickPosition))
     }
 
-    private fun handleMouseOut() {
-      dispatch(Result.Idle)
-    }
-
-    private fun handleMouseUp(state: State) {
-      dispatch(Result.Idle)
-    }
-
     private fun handleMove(dicomX: Double, dicomY: Double, state: State) {
       val isShapeDrawing = state.shape != null
       val isContrastBrightness = state.contrastBrightness != null
@@ -97,6 +89,24 @@ internal class DrawStoreProvider(
         isMouseMove -> handleMouseMove(dicomX, dicomY, state.mousePosition!!)
         isShapeMoving -> handleShapeMove(dicomX, dicomY, state.mouseInClickPosition!!)
       }
+    }
+
+    private fun handleMouseOut() {
+      dispatch(Result.Idle)
+    }
+
+    private fun handleMouseUp(state: State) {
+      val shape = state.shape
+      when {
+        shape != null -> {
+          when (shape) {
+            is RectangleModel -> publish(Label.RectangleDrawn(shape))
+            is CircleModel -> publish(Label.CircleDrawn(shape))
+            is EllipseModel -> publish(Label.EllipseDrawn(shape))
+          }
+        }
+      }
+      dispatch(Result.Idle)
     }
 
     private fun handleShapeMove(

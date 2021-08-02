@@ -1,25 +1,22 @@
 package components.cut
 
-import com.arkivanov.decompose.ComponentContext
-import com.arkivanov.decompose.RouterFactory
-import com.arkivanov.decompose.RouterState
-import com.arkivanov.decompose.replaceCurrent
-import com.arkivanov.decompose.router
+import com.arkivanov.decompose.*
 import com.arkivanov.decompose.statekeeper.Parcelable
 import com.arkivanov.decompose.statekeeper.Parcelize
 import com.arkivanov.decompose.value.Value
 import com.badoo.reaktive.base.Consumer
-import components.cut.Cut.Output
+import com.badoo.reaktive.observable.Observable
 import components.cut.Cut.Input
+import components.cut.Cut.Output
 import components.cutcontainer.CutContainer.CutChild
 import model.CutType
 
 internal class CutRouter(
   routerFactory: RouterFactory,
-  private val cutFactory: (ComponentContext, Consumer<Output>, Consumer<Input>) -> Cut,
+  private val cutFactory: (ComponentContext, Consumer<Output>, Observable<Input>) -> Cut,
   private val cutOutput: Consumer<Output>,
   private val cutType: CutType,
-  private val cutInput: Consumer<Input>
+  private val cutInput: Observable<Input>
 ) {
 
   private val router =

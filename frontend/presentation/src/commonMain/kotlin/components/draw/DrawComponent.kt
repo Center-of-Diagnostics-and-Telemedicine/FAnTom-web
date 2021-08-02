@@ -3,6 +3,9 @@ package components.draw
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.decompose.value.operator.map
+import com.arkivanov.mvikotlin.extensions.reaktive.labels
+import com.badoo.reaktive.observable.mapNotNull
+import com.badoo.reaktive.observable.subscribe
 import components.asValue
 import components.draw.Draw.Dependencies
 import components.draw.Draw.Model
@@ -26,6 +29,10 @@ class DrawComponent(
     }
 
   override val model: Value<Model> = store.asValue().map(stateToModel)
+
+  init {
+    store.labels.mapNotNull(labelsToOutput).subscribe(onNext = drawOutput::onNext)
+  }
 
   override fun onMouseDown(mouseDownModel: MouseDown) {
     store.accept(mouseDownModel.toIntent(dimensions = model.value.screenDimensionsModel))

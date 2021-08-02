@@ -26,7 +26,7 @@ interface MainFrame {
     val brightnessRepository: MyBrightnessRepository
     val mipRepository: MyMipRepository
     val gridRepository: GridRepository
-    val marksRepository: MarksRepository
+    val marksRepository: MyMarksRepository
     val mainFrameOutput: Consumer<Output>
   }
 

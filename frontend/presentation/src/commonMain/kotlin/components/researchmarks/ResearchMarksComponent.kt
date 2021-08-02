@@ -19,7 +19,8 @@ internal class ResearchMarksComponent(
         storeFactory = storeFactory,
         researchRepository = researchRepository,
         marksRepository = marksRepository,
-        researchId = researchId
+        researchId = researchId,
+        data = data
       ).provide()
     }
 

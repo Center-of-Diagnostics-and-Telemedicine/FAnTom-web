@@ -6,10 +6,7 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.base.Consumer
 import components.draw.Draw.Dependencies
 import components.models.shape.ScreenShape
-import model.CutType
-import model.MouseDown
-import model.Plane
-import model.ScreenDimensionsModel
+import model.*
 
 interface Draw {
 
@@ -39,7 +36,9 @@ interface Draw {
   }
 
   sealed class Output {
-//    data class SliceNumberChanged(val sliceNumber: Int)
+    data class Circle(val circle: CircleModel) : Output()
+    data class Ellipse(val ellipse: EllipseModel) : Output()
+    data class Rectangle(val rectangle: RectangleModel) : Output()
   }
 
   sealed class Input {

@@ -5,6 +5,7 @@ import com.arkivanov.decompose.RouterState
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.base.Consumer
+import com.badoo.reaktive.observable.Observable
 import components.cut.Cut
 import components.cutcontainer.CutContainer.Dependencies
 import components.cutslider.Slider
@@ -13,7 +14,9 @@ import components.shapes.Shapes
 import model.CutType
 import model.Plane
 import model.ResearchDataModel
+import model.Shape
 import repository.MyBrightnessRepository
+import repository.MyMarksRepository
 import repository.MyMipRepository
 import repository.MyResearchRepository
 
@@ -28,6 +31,7 @@ interface CutContainer {
     val storeFactory: StoreFactory
     val brightnessRepository: MyBrightnessRepository
     val researchRepository: MyResearchRepository
+    val marksRepository: MyMarksRepository
     val mipRepository: MyMipRepository
     val cutContainerOutput: Consumer<Output>
     val cutType: CutType
@@ -94,7 +98,7 @@ fun CutContainer(componentContext: ComponentContext, dependencies: Dependencies)
         componentContext = childContext,
         dependencies = object : Cut.Dependencies, Dependencies by dependencies {
           override val cutOutput: Consumer<Cut.Output> = output
-          override val cutInput: Consumer<Cut.Input> = input
+          override val cutInput: Observable<Cut.Input> = input
         })
     },
   )

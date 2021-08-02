@@ -39,7 +39,7 @@ class App() : RComponent<RProps, RState>() {
 
   val mipRepositoryImpl = MyMipRepositoryImpl()
   val brightnessRepositoryImpl = MyBrightnessRepositoryImpl()
-  val marksRepositoryImpl = MarksRepositoryImpl(
+  val marksRepositoryImpl = MyMarksRepositoryImpl(
     remote = MarksRemoteDataSource,
     token = loginRepositoryImpl.local::getToken
   )
@@ -52,7 +52,7 @@ class App() : RComponent<RProps, RState>() {
     override val researchRepository: MyResearchRepository = researchRepositoryImpl
     override val mipRepository: MyMipRepository = mipRepositoryImpl
     override val brightnessRepository: MyBrightnessRepository = brightnessRepositoryImpl
-    override val marksRepository: MarksRepository = marksRepositoryImpl
+    override val marksRepository: MyMarksRepository = marksRepositoryImpl
     override val gridRepository: GridRepository = gridRepositoryImpl
   })
 

@@ -3,10 +3,13 @@ package components.cutcontainer
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.RouterState
 import com.arkivanov.decompose.value.Value
+import com.arkivanov.decompose.value.observe
 import com.badoo.reaktive.base.Consumer
+import com.badoo.reaktive.observable.Observable
 import com.badoo.reaktive.subject.Subject
 import com.badoo.reaktive.subject.publish.PublishSubject
 import components.Consumer
+import components.asValue
 import components.cut.Cut
 import components.cut.CutRouter
 import components.cutcontainer.CutContainer.*
@@ -17,11 +20,13 @@ import components.draw.DrawRouter
 import components.getStore
 import components.shapes.Shapes
 import components.shapes.ShapesRouter
+import model.toShape
+import store.cut.CutContainerStore
 
 class CutContainerComponent(
   componentContext: ComponentContext,
   dependencies: Dependencies,
-  cut: (ComponentContext, Consumer<Cut.Output>, Consumer<Cut.Input>) -> Cut,
+  cut: (ComponentContext, Consumer<Cut.Output>, Observable<Cut.Input>) -> Cut,
   slider: (ComponentContext, Consumer<Slider.Output>, Consumer<Slider.Input>) -> Slider,
   draw: (ComponentContext, Consumer<Draw.Output>, Consumer<Draw.Input>) -> Draw,
   shapes: (ComponentContext, Consumer<Shapes.Output>, Consumer<Shapes.Input>) -> Shapes,
@@ -39,7 +44,9 @@ class CutContainerComponent(
       mipRepository = mipRepository,
       researchId = researchId,
       researchRepository = researchRepository,
-      plane = plane
+      marksRepository = marksRepository,
+      plane = plane,
+      data = data
     ).provide()
   }
 
@@ -64,7 +71,6 @@ class CutContainerComponent(
     )
   override val drawRouterState: Value<RouterState<*, DrawChild>> = drawRouter.state
 
-
   private val shapesRouter =
     ShapesRouter(
       routerFactory = this,
@@ -87,16 +93,37 @@ class CutContainerComponent(
 
   override val cutRouterState: Value<RouterState<*, CutChild>> = cutRouter.state
 
+  init {
+    store.asValue().observe(lifecycle) { state ->
+
+      state.marks
+        .mapNotNull { markModel ->
+          markModel.toShape(plane, state.cutModel.sliceNumber)
+        }
+        .let { shapes ->
+          shapesInput.onNext(Shapes.Input.Shapes(shapes))
+        }
+
+      state.cutModel
+        .let { cutModel ->
+          cutInput.onNext(Cut.Input.ChangeCutModel(cutModel))
+        }
+
+    }
+  }
+
   private fun onSliderOutput(output: Slider.Output) {
     when (output) {
-      is Slider.Output.SliceNumberChanged -> cutInput.onNext(Cut.Input.SliceNumberChanged(output.sliceNumber))
-      else -> throw NotImplementedError("onSliderOutput in CutComponent not implemented for $output")
+      is Slider.Output.SliceNumberChanged ->
+        store.accept(CutContainerStore.Intent.ChangeSliceNumber(output.sliceNumber))
     }
   }
 
   private fun onDrawOutput(output: Draw.Output) {
     when (output) {
-      else -> throw NotImplementedError("onDrawOutput in CutComponent not implemented for $output")
+      is Draw.Output.Circle -> store.accept(CutContainerStore.Intent.HandleNewShape(output.circle))
+      is Draw.Output.Ellipse -> store.accept(CutContainerStore.Intent.HandleNewShape(output.ellipse))
+      is Draw.Output.Rectangle -> store.accept(CutContainerStore.Intent.HandleNewShape(output.rectangle))
     }
   }
 

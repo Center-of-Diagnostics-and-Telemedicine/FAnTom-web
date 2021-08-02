@@ -29,7 +29,7 @@ interface ResearchRoot {
   interface Dependencies {
     val storeFactory: StoreFactory
     val researchRepository: MyResearchRepository
-    val marksRepository: MarksRepository
+    val marksRepository: MyMarksRepository
     val brightnessRepository: MyBrightnessRepository
     val mipRepository: MyMipRepository
     val gridRepository: GridRepository

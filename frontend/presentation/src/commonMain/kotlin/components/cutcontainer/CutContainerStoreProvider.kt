@@ -6,30 +6,45 @@ import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
+import com.badoo.reaktive.completable.observeOn
+import com.badoo.reaktive.completable.subscribeOn
+import com.badoo.reaktive.coroutinesinterop.completableFromCoroutine
 import com.badoo.reaktive.observable.map
+import com.badoo.reaktive.observable.mapIterable
+import com.badoo.reaktive.observable.notNull
+import com.badoo.reaktive.scheduler.ioScheduler
+import com.badoo.reaktive.scheduler.mainScheduler
 import com.badoo.reaktive.utils.ensureNeverFrozen
 import model.*
 import repository.MyBrightnessRepository
+import repository.MyMarksRepository
 import repository.MyMipRepository
 import repository.MyResearchRepository
 import store.cut.CutContainerStore
 import store.cut.CutContainerStore.*
+import store.cut.CutModel
 
 class CutContainerStoreProvider(
   private val storeFactory: StoreFactory,
   private val brightnessRepository: MyBrightnessRepository,
   private val researchRepository: MyResearchRepository,
+  private val marksRepository: MyMarksRepository,
   private val mipRepository: MyMipRepository,
   private val researchId: Int,
-  private val plane: Plane
+  private val plane: Plane,
+  private val data: ResearchDataModel
 ) {
 
   val initialState = State(
-    sliceNumber = plane.data.nImages / 2,
-    blackValue = INITIAL_BLACK.toInt(),
-    whiteValue = INITIAL_WHITE.toInt(),
-    gammaValue = INITIAL_GAMMA,
-    mip = Mip.initial,
+    cutModel = CutModel(
+      sliceNumber = plane.data.nImages / 2,
+      blackValue = INITIAL_BLACK.toInt(),
+      whiteValue = INITIAL_WHITE.toInt(),
+      gammaValue = INITIAL_GAMMA,
+      mip = Mip.initial,
+    ),
+    marks = listOf(),
+    mark = null
   )
 
   fun provide(): CutContainerStore =
@@ -45,41 +60,50 @@ class CutContainerStoreProvider(
       }
     }
 
-  private sealed class Result : JvmSerializable {
-    data class SliceNumber(val value: Int) : Result()
-    data class BlackChanged(val value: Int) : Result()
-    data class WhiteChanged(val value: Int) : Result()
-    data class GammaChanged(val value: Double) : Result()
-    data class MipChanged(val value: Mip) : Result()
-  }
-
   private inner class ExecutorImpl : ReaktiveExecutor<Intent, Unit, State, Result, Label>() {
 
     override fun executeAction(action: Unit, getState: () -> State) {
       println("executeAction")
       brightnessRepository.black
-        .map(Result::BlackChanged)
+        .map { Result.CutModelChanged(getState().cutModel.copy(blackValue = it)) }
         .subscribeScoped(
           onNext = ::dispatch,
           onError = ::handleError
         )
 
       brightnessRepository.white
-        .map(Result::WhiteChanged)
+        .map { Result.CutModelChanged(getState().cutModel.copy(whiteValue = it)) }
         .subscribeScoped(
           onNext = ::dispatch,
           onError = ::handleError
         )
 
       brightnessRepository.gamma
-        .map(Result::GammaChanged)
+        .map { Result.CutModelChanged(getState().cutModel.copy(gammaValue = it)) }
         .subscribeScoped(
           onNext = ::dispatch,
           onError = ::handleError
         )
 
       mipRepository.mipMethod
-        .map(Result::MipChanged)
+        .map { Result.CutModelChanged(getState().cutModel.copy(mip = it)) }
+        .subscribeScoped(
+          onNext = ::dispatch,
+          onError = ::handleError
+        )
+
+      marksRepository.marks
+        .notNull()
+        .mapIterable { it.toMarkModel(data.markTypes) }
+        .map(Result::Marks)
+        .subscribeScoped(
+          onNext = ::dispatch,
+          onError = ::handleError
+        )
+
+      marksRepository.mark
+        .map { it?.toMarkModel(data.markTypes) }
+        .map(Result::CurrentMark)
         .subscribeScoped(
           onNext = ::dispatch,
           onError = ::handleError
@@ -88,13 +112,25 @@ class CutContainerStoreProvider(
 
     override fun executeIntent(intent: Intent, getState: () -> State) {
       when (intent) {
-        is Intent.ChangeSliceNumber -> Result.SliceNumber(intent.sliceNumber)
-        is Intent.ChangeBlackValue -> Result.BlackChanged(intent.value)
-        is Intent.ChangeWhiteValue -> Result.WhiteChanged(intent.value)
-        is Intent.ChangeGammaValue -> Result.GammaChanged(intent.value)
-        is Intent.ChangeMipValue -> Result.MipChanged(intent.mip)
-        else -> throw NotImplementedError("Intent not implemented in CutContainerStoreProvider $intent")
-      }.let {}
+        is Intent.ChangeSliceNumber -> handleNewSliceNumber(intent.sliceNumber, getState())
+        is Intent.HandleNewShape -> handleNewShape(intent.shape, getState())
+      }
+    }
+
+    private fun handleNewSliceNumber(sliceNumber: Int, state: State) {
+      val newCutModel = state.cutModel.copy(sliceNumber = sliceNumber)
+      dispatch(Result.CutModelChanged(newCutModel))
+    }
+
+    private fun handleNewShape(shape: Shape, state: State) {
+      plane.getMarkToSave(shape, state.cutModel.sliceNumber)?.let { markToSave ->
+        completableFromCoroutine {
+          marksRepository.saveMark(markToSave, researchId)
+        }
+          .subscribeOn(ioScheduler)
+          .observeOn(mainScheduler)
+          .subscribeScoped(onError = ::handleError)
+      }
     }
 
     private fun handleError(error: Throwable) {
@@ -102,14 +138,18 @@ class CutContainerStoreProvider(
     }
   }
 
+  private sealed class Result : JvmSerializable {
+    data class CutModelChanged(val cutModel: CutModel) : Result()
+    data class Marks(val marks: List<MarkModel>) : Result()
+    data class CurrentMark(val mark: MarkModel?) : Result()
+  }
+
   private object ReducerImpl : Reducer<State, Result> {
     override fun State.reduce(result: Result): State =
       when (result) {
-        is Result.SliceNumber -> copy(sliceNumber = result.value)
-        is Result.BlackChanged -> copy(blackValue = result.value)
-        is Result.WhiteChanged -> copy(whiteValue = result.value)
-        is Result.GammaChanged -> copy(gammaValue = result.value)
-        is Result.MipChanged -> copy(mip = result.value)
+        is Result.CutModelChanged -> copy(cutModel = result.cutModel)
+        is Result.Marks -> copy(marks = result.marks)
+        is Result.CurrentMark -> copy(mark = result.mark)
       }
   }
 }

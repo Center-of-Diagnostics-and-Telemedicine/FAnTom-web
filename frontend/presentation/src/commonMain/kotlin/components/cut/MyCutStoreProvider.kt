@@ -41,12 +41,6 @@ class MyCutStoreProvider(
       }
     }
 
-  private sealed class Result : JvmSerializable {
-    object Loading : Result()
-    data class Loaded(val slice: String) : Result()
-    data class Error(val message: String) : Result()
-  }
-
   private inner class ExecutorImpl : ReaktiveExecutor<Intent, Unit, State, Result, Label>() {
 
     override fun executeAction(action: Unit, getState: () -> State) {
@@ -90,6 +84,12 @@ class MyCutStoreProvider(
       }
       dispatch(result)
     }
+  }
+
+  private sealed class Result : JvmSerializable {
+    object Loading : Result()
+    data class Loaded(val slice: String) : Result()
+    data class Error(val message: String) : Result()
   }
 
   private object ReducerImpl : Reducer<State, Result> {

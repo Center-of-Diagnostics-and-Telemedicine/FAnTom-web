@@ -34,17 +34,11 @@ interface MyDrawStore : Store<Intent, State, Label> {
 
   sealed class Label {
 
-    data class StartClick(val startDicomX: Double, val startDicomY: Double) : Label()
-    data class MouseMove(val dicomX: Double, val dicomY: Double) : Label()
-    data class MoveInClick(val deltaX: Double, val deltaY: Double) : Label()
-    object StopMove : Label()
-
     data class CircleDrawn(val circle: CircleModel) : Label()
     data class EllipseDrawn(val ellipse: EllipseModel) : Label()
     data class RectangleDrawn(val rectangle: RectangleModel) : Label()
 
     data class ChangeSlice(val deltaDicomY: Int) : Label()
-
     data class ChangeContrastBrightness(val deltaX: Double, val deltaY: Double) : Label()
 
     object OpenFullCut : Label()

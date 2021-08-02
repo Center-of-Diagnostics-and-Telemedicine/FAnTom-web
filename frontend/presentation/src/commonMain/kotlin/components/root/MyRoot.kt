@@ -25,7 +25,7 @@ interface MyRoot {
     val brightnessRepository: MyBrightnessRepository
     val mipRepository: MyMipRepository
     val loginRepository: LoginRepository
-    val marksRepository: MarksRepository
+    val marksRepository: MyMarksRepository
     val gridRepository: GridRepository
   }
 }
