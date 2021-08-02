@@ -48,7 +48,7 @@ internal class DrawStoreProvider(
         is Intent.Move -> handleMove(intent.dicomX, intent.dicomY, getState())
         is Intent.MouseUp -> handleMouseUp(getState())
         is Intent.MouseOut -> handleMouseOut()
-        is Intent.MouseWheel -> handleMouseData(intent)
+        is Intent.MouseWheel -> handleMouseWheel(intent)
         Intent.DoubleClick -> publish(Label.OpenFullCut)
         is Intent.UpdateScreenDimensions ->
           dispatch(Result.ScreenDimensionsChanged(intent.dimensions))
@@ -75,41 +75,14 @@ internal class DrawStoreProvider(
     private fun handleStartClick(startDicomX: Double, startDicomY: Double) {
       val mouseInClickPosition = MousePositionModel(startDicomX, startDicomY)
       dispatch(Result.StartClick(mouseInClickPosition = mouseInClickPosition))
-//      publish(Label.StartClick(startDicomX = startDicomX, startDicomY = startDicomY))
     }
 
     private fun handleMouseOut() {
       dispatch(Result.Idle)
-//      publish(Label.MouseMove(-1.0, -1.0))
     }
 
     private fun handleMouseUp(state: State) {
       dispatch(Result.Idle)
-//      when {
-//        state.isDrawingEllipse -> {
-//          dispatch(Result.Idle)
-////          val circle = state.circle(cut.isPlanar())
-////          publish(Label.CircleDrawn(circle = circle))
-//        }
-//        state.isDrawingCircle -> {
-//          dispatch(Result.Idle)
-//          val ellipse = state.ellipse()
-//          publish(Label.EllipseDrawn(ellipse = ellipse))
-//        }
-//        state.isDrawingRectangle -> {
-//          dispatch(Result.Idle)
-//          val rectangle = state.rectangle()
-//          publish(Label.RectangleDrawn(rectangle = rectangle))
-//        }
-//        state.isContrastBrightness -> {
-//          dispatch(Result.Idle)
-//          publish(Label.ContrastBrightnessChanged)
-//        }
-//        state.isMoving -> {
-//          dispatch(Result.Idle)
-//          publish(Label.StopMove)
-//        }
-//      }
     }
 
     private fun handleMove(dicomX: Double, dicomY: Double, state: State) {
@@ -188,31 +161,21 @@ internal class DrawStoreProvider(
       dispatch(Result.Rectangle(rectangle))
     }
 
-    private fun handleMouseData(intent: Intent.MouseWheel) =
-//      if (cut.data.n_images > 1) {
-//        publish(Label.ChangeSlice(intent.deltaDicomY))
-//      } else
-      null
+    private fun handleMouseWheel(intent: Intent.MouseWheel) {}
   }
 
   private sealed class Result : JvmSerializable {
     data class StartDrawEllipse(val ellipse: EllipseModel) : Result()
-    data class StartDrawCircle(val circle: CircleModel) : Result()
-    data class StartDrawRectangle(val rectangle: RectangleModel) : Result()
-    data class StartContrastBrightness(val contrastBrightness: MousePositionModel) : Result()
-    data class StartClick(val mouseInClickPosition: MousePositionModel) : Result()
-
-    data class Rectangle(val rectangle: RectangleModel) : Result()
-    data class Circle(val circle: CircleModel) : Result()
     data class Ellipse(val ellipse: EllipseModel) : Result()
 
-//    data class MultiPlanarDrawing(val newDicomX: Double, val newDicomY: Double) : Result()
-//    data class PlanarDrawing(val dicomX: Double, val dicomY: Double) : Result()
-//    data class ExternalDrawing(val dicomX: Double, val dicomY: Double) : Result()
-//    data class ContrastBrightness(val dicomX: Double, val dicomY: Double) : Result()
-//    data class MouseMove(val dicomX: Double, val dicomY: Double) : Result()
-//    data class MouseMoveInClick(val dicomX: Double, val dicomY: Double) : Result()
+    data class StartDrawCircle(val circle: CircleModel) : Result()
+    data class Circle(val circle: CircleModel) : Result()
 
+    data class StartDrawRectangle(val rectangle: RectangleModel) : Result()
+    data class Rectangle(val rectangle: RectangleModel) : Result()
+
+    data class StartContrastBrightness(val contrastBrightness: MousePositionModel) : Result()
+    data class StartClick(val mouseInClickPosition: MousePositionModel) : Result()
     data class ScreenDimensionsChanged(val dimensions: ScreenDimensionsModel) : Result()
 
     object Idle : Result()
@@ -232,39 +195,13 @@ internal class DrawStoreProvider(
 
         is Result.StartContrastBrightness -> copy(contrastBrightness = result.contrastBrightness)
         is Result.StartClick -> copy(mouseInClickPosition = result.mouseInClickPosition)
-//        is Result.MultiPlanarDrawing -> {
-//          val xSqr = result.newDicomX - startDicomX
-//          val ySqr = result.newDicomY - startDicomY
-//          val radius = sqrt((xSqr).pow(2) + (ySqr).pow(2))
-//          copy(dicomWidth = radius, dicomHeight = radius)
-//        }
-//        is Result.PlanarDrawing -> copy(
-//          dicomWidth = (result.dicomX - startDicomX),
-//          dicomHeight = (result.dicomY - startDicomY)
-//        )
-//        is Result.ContrastBrightness -> copy(
-//          startDicomX = result.dicomX,
-//          startDicomY = result.dicomY
-//        )
-//        is Result.MouseMove -> copy(
-//          startDicomX = result.dicomX - startDicomX,
-//          startDicomY = result.dicomY - startDicomY
-//        )
-//        is Result.MouseMoveInClick -> copy(
-//          startDicomX = result.dicomX,
-//          startDicomY = result.dicomY
-//        )
+        is Result.ScreenDimensionsChanged -> copy(screenDimensionsModel = result.dimensions)
         Result.Idle -> copy(
           shape = null,
           contrastBrightness = null,
           mousePosition = null,
           mouseInClickPosition = null
         )
-//        is Result.ExternalDrawing -> {
-//          val radius = sqrt((result.dicomX).pow(2) + (result.dicomY).pow(2))
-//          copy(dicomWidth = radius, dicomHeight = radius)
-//        }
-        is Result.ScreenDimensionsChanged -> copy(screenDimensionsModel = result.dimensions)
       }
   }
 }

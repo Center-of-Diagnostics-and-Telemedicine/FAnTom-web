@@ -8,7 +8,7 @@ import components.cut.Cut.Dependencies
 import model.Plane
 import repository.MyBrightnessRepository
 import repository.MyMipRepository
-import repository.ResearchRepository
+import repository.MyResearchRepository
 
 interface Cut {
 
@@ -23,7 +23,7 @@ interface Cut {
   interface Dependencies {
     val storeFactory: StoreFactory
     val brightnessRepository: MyBrightnessRepository
-    val researchRepository: ResearchRepository
+    val researchRepository: MyResearchRepository
     val mipRepository: MyMipRepository
     val cutOutput: Consumer<Output>
     val cutInput: Consumer<Input>

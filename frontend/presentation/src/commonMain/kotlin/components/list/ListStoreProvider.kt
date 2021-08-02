@@ -6,23 +6,25 @@ import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
-import com.badoo.reaktive.coroutinesinterop.singleFromCoroutine
+import com.badoo.reaktive.completable.observeOn
+import com.badoo.reaktive.completable.subscribeOn
+import com.badoo.reaktive.coroutinesinterop.completableFromCoroutine
+import com.badoo.reaktive.observable.map
+import com.badoo.reaktive.observable.notNull
+import com.badoo.reaktive.observable.observeOn
+import com.badoo.reaktive.observable.subscribeOn
 import com.badoo.reaktive.scheduler.ioScheduler
 import com.badoo.reaktive.scheduler.mainScheduler
-import com.badoo.reaktive.single.map
-import com.badoo.reaktive.single.observeOn
-import com.badoo.reaktive.single.subscribeOn
 import com.badoo.reaktive.utils.ensureNeverFrozen
 import model.*
-import repository.ResearchRepository
+import repository.MyResearchRepository
 import store.list.ListStore
 import store.list.ListStore.Intent
 import store.list.ListStore.State
-import kotlin.collections.List
 
 internal class ListStoreProvider(
   private val storeFactory: StoreFactory,
-  private val repository: ResearchRepository
+  private val repository: MyResearchRepository
 ) {
 
   fun provide(): ListStore =
@@ -47,38 +49,42 @@ internal class ListStoreProvider(
   }
 
   private inner class ExecutorImpl : ReaktiveExecutor<Intent, Unit, State, Result, Nothing>() {
-    override fun executeAction(action: Unit, getState: () -> State) = load()
+    override fun executeAction(action: Unit, getState: () -> State) {
+      repository
+        .researches
+        .notNull()
+        .subscribeOn(ioScheduler)
+        .map(Result::Loaded)
+        .observeOn(mainScheduler)
+        .subscribeScoped(onNext = ::dispatch)
+
+      load()
+    }
 
     override fun executeIntent(intent: Intent, getState: () -> State) {
       when (intent) {
-        is Intent.HandleFilterChanged -> filterChanged(intent.filter, intent.category)
+        is Intent.HandleFilterChanged -> filter(intent.filter, intent.category)
         Intent.DismissError -> dispatch(Result.DismissErrorRequested)
         Intent.ReloadRequested -> load()
       }.let {}
     }
 
-    private fun filterChanged(filter: Filter, category: Category) {
-      singleFromCoroutine {
-        repository.getFiltered(filter, category)
+    private fun filter(filter: Filter, category: Category) {
+      completableFromCoroutine {
+        repository.applyFilter(filter, category)
       }
         .subscribeOn(ioScheduler)
-        .map(Result::Loaded)
         .observeOn(mainScheduler)
-        .subscribeScoped(
-          isThreadLocal = true,
-          onSuccess = ::dispatch,
-          onError = ::handleError
-        )
+        .subscribeScoped()
     }
 
     private fun load() {
-      singleFromCoroutine {
-        repository.getResearches()
+      completableFromCoroutine {
+        repository.loadResearches()
       }
         .subscribeOn(ioScheduler)
-        .map(Result::Loaded)
         .observeOn(mainScheduler)
-        .subscribeScoped(isThreadLocal = true, onSuccess = ::dispatch)
+        .subscribeScoped()
     }
 
     private fun handleError(error: Throwable) {

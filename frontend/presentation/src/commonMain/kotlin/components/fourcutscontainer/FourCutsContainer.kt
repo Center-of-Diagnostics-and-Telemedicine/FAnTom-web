@@ -7,10 +7,13 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.base.Consumer
 import components.cutcontainer.CutContainer
 import components.fourcutscontainer.FourCutsContainer.Dependencies
-import model.*
+import model.CutType
+import model.Plane
+import model.ResearchDataModel
+import model.buildPlane
 import repository.MyBrightnessRepository
 import repository.MyMipRepository
-import repository.ResearchRepository
+import repository.MyResearchRepository
 
 interface FourCutsContainer {
 
@@ -31,7 +34,7 @@ interface FourCutsContainer {
   interface Dependencies {
     val storeFactory: StoreFactory
     val fourCutsContainerOutput: Consumer<Output>
-    val researchRepository: ResearchRepository
+    val researchRepository: MyResearchRepository
     val brightnessRepository: MyBrightnessRepository
     val mipRepository: MyMipRepository
     val data: ResearchDataModel

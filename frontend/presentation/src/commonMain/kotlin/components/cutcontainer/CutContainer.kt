@@ -15,7 +15,7 @@ import model.Plane
 import model.ResearchDataModel
 import repository.MyBrightnessRepository
 import repository.MyMipRepository
-import repository.ResearchRepository
+import repository.MyResearchRepository
 
 interface CutContainer {
 
@@ -27,7 +27,7 @@ interface CutContainer {
   interface Dependencies {
     val storeFactory: StoreFactory
     val brightnessRepository: MyBrightnessRepository
-    val researchRepository: ResearchRepository
+    val researchRepository: MyResearchRepository
     val mipRepository: MyMipRepository
     val cutContainerOutput: Consumer<Output>
     val cutType: CutType

@@ -13,10 +13,7 @@ import components.twoverticalcutscontainer.TwoVerticalCutsContainer
 import model.GridType
 import model.ResearchData
 import model.ResearchDataModel
-import repository.GridRepository
-import repository.MyBrightnessRepository
-import repository.MyMipRepository
-import repository.ResearchRepository
+import repository.*
 
 interface CutsContainer {
 
@@ -33,7 +30,7 @@ interface CutsContainer {
   interface Dependencies {
     val storeFactory: StoreFactory
     val cutsContainerOutput: Consumer<Output>
-    val researchRepository: ResearchRepository
+    val researchRepository: MyResearchRepository
     val gridRepository: GridRepository
     val brightnessRepository: MyBrightnessRepository
     val mipRepository: MyMipRepository

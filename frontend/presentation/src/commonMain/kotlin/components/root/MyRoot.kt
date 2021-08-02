@@ -9,7 +9,6 @@ import components.login.Login
 import components.mainframe.MainFrame
 import components.root.MyRoot.Dependencies
 import repository.*
-import kotlin.js.JsName
 
 interface MyRoot {
 
@@ -22,7 +21,7 @@ interface MyRoot {
 
   interface Dependencies {
     val storeFactory: StoreFactory
-    val researchRepository: ResearchRepository
+    val researchRepository: MyResearchRepository
     val brightnessRepository: MyBrightnessRepository
     val mipRepository: MyMipRepository
     val loginRepository: LoginRepository

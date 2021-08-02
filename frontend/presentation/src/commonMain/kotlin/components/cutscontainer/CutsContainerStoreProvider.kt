@@ -9,7 +9,6 @@ import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
 import com.badoo.reaktive.observable.map
 import com.badoo.reaktive.observable.observeOn
 import com.badoo.reaktive.observable.subscribeOn
-import com.badoo.reaktive.scheduler.Scheduler
 import com.badoo.reaktive.scheduler.ioScheduler
 import com.badoo.reaktive.scheduler.mainScheduler
 import com.badoo.reaktive.utils.ensureNeverFrozen
@@ -18,14 +17,14 @@ import model.GridType
 import model.ResearchDataModel
 import model.buildModel
 import repository.GridRepository
-import repository.ResearchRepository
+import repository.MyResearchRepository
 import store.gridcontainer.MyCutsContainerStore
 import store.gridcontainer.MyCutsContainerStore.Intent
 import store.gridcontainer.MyCutsContainerStore.State
 
 internal class CutsContainerStoreProvider(
   private val storeFactory: StoreFactory,
-  private val researchRepository: ResearchRepository,
+  private val researchRepository: MyResearchRepository,
   private val gridRepository: GridRepository,
   private val researchId: Int,
   private val data: ResearchDataModel,

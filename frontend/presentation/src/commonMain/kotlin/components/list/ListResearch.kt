@@ -6,7 +6,7 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.base.Consumer
 import components.list.ResearchList.Dependencies
 import model.Research
-import repository.ResearchRepository
+import repository.MyResearchRepository
 
 interface ResearchList {
 
@@ -24,7 +24,7 @@ interface ResearchList {
 
   interface Dependencies {
     val storeFactory: StoreFactory
-    val researchRepository: ResearchRepository
+    val researchRepository: MyResearchRepository
     val researchListOutput: Consumer<Output>
   }
 

@@ -6,25 +6,25 @@ import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
-import com.badoo.reaktive.coroutinesinterop.singleFromCoroutine
+import com.badoo.reaktive.completable.observeOn
+import com.badoo.reaktive.completable.subscribeOn
+import com.badoo.reaktive.coroutinesinterop.completableFromCoroutine
+import com.badoo.reaktive.observable.map
+import com.badoo.reaktive.observable.notNull
 import com.badoo.reaktive.scheduler.ioScheduler
 import com.badoo.reaktive.scheduler.mainScheduler
-import com.badoo.reaktive.single.map
-import com.badoo.reaktive.single.observeOn
-import com.badoo.reaktive.single.subscribeOn
 import com.badoo.reaktive.utils.ensureNeverFrozen
 import com.badoo.reaktive.utils.printStack
 import model.BASE_ERROR
 import model.ResearchApiExceptions
-import model.ResearchData
 import model.ResearchDataModel
-import repository.ResearchRepository
+import repository.MyResearchRepository
 import store.research.ResearchStore
 import store.research.ResearchStore.*
 
 internal class ResearchStoreProvider(
   private val storeFactory: StoreFactory,
-  private val repository: ResearchRepository,
+  private val repository: MyResearchRepository,
   private val researchId: Int
 ) {
 
@@ -50,7 +50,15 @@ internal class ResearchStoreProvider(
   }
 
   private inner class ExecutorImpl : ReaktiveExecutor<Intent, Unit, State, Result, Label>() {
-    override fun executeAction(action: Unit, getState: () -> State) = load()
+    override fun executeAction(action: Unit, getState: () -> State) {
+      repository
+        .researchData
+        .notNull()
+        .map(Result::Loaded)
+        .subscribeScoped(onError = ::handleError, onNext = ::dispatch)
+
+      load()
+    }
 
     override fun executeIntent(intent: Intent, getState: () -> State) {
       when (intent) {
@@ -62,14 +70,13 @@ internal class ResearchStoreProvider(
     }
 
     private fun handleBackToList() {
-      singleFromCoroutine {
+      completableFromCoroutine {
         repository.closeSession(researchId)
       }
         .subscribeOn(ioScheduler)
         .observeOn(mainScheduler)
         .subscribeScoped(
-          isThreadLocal = true,
-          onSuccess = { publish(Label.Back) },
+          onComplete = { publish(Label.Back) },
           onError = {
             handleError(it)
             publish(Label.Back)
@@ -78,35 +85,26 @@ internal class ResearchStoreProvider(
     }
 
     private fun handleCloseResearch() {
-      singleFromCoroutine {
+      completableFromCoroutine {
         repository.closeResearch(researchId = researchId)
         repository.closeSession(researchId = researchId)
       }
         .subscribeOn(ioScheduler)
         .observeOn(mainScheduler)
         .subscribeScoped(
-          isThreadLocal = true,
-          onSuccess = { publish(Label.Back) },
+          onComplete = { publish(Label.Back) },
           onError = ::handleError
         )
     }
 
     private fun load() {
       dispatch(Result.Loading)
-      singleFromCoroutine {
-        repository.initResearch(
-          researchId = researchId,
-          doseReport = false
-        )
+      completableFromCoroutine {
+        repository.initResearch(researchId = researchId)
       }
         .subscribeOn(ioScheduler)
-        .map(Result::Loaded)
         .observeOn(mainScheduler)
-        .subscribeScoped(
-          isThreadLocal = true,
-          onSuccess = ::dispatch,
-          onError = ::handleError
-        )
+        .subscribeScoped(onError = ::handleError)
     }
 
     private fun handleError(error: Throwable) {

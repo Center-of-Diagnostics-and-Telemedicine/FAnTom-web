@@ -11,14 +11,14 @@ import com.badoo.reaktive.utils.ensureNeverFrozen
 import model.*
 import repository.MyBrightnessRepository
 import repository.MyMipRepository
-import repository.ResearchRepository
+import repository.MyResearchRepository
 import store.cut.CutContainerStore
 import store.cut.CutContainerStore.*
 
 class CutContainerStoreProvider(
   private val storeFactory: StoreFactory,
   private val brightnessRepository: MyBrightnessRepository,
-  private val researchRepository: ResearchRepository,
+  private val researchRepository: MyResearchRepository,
   private val mipRepository: MyMipRepository,
   private val researchId: Int,
   private val plane: Plane

@@ -13,7 +13,7 @@ import model.ResearchDataModel
 import model.buildPlane
 import repository.MyBrightnessRepository
 import repository.MyMipRepository
-import repository.ResearchRepository
+import repository.MyResearchRepository
 
 interface TwoVerticalCutsContainer {
 
@@ -26,7 +26,7 @@ interface TwoVerticalCutsContainer {
   interface Dependencies {
     val storeFactory: StoreFactory
     val twoVerticalCutsContainerOutput: Consumer<Output>
-    val researchRepository: ResearchRepository
+    val researchRepository: MyResearchRepository
     val brightnessRepository: MyBrightnessRepository
     val mipRepository: MyMipRepository
     val data: ResearchDataModel

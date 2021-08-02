@@ -8,8 +8,7 @@ import com.badoo.reaktive.base.Consumer
 import components.list.ResearchList
 import components.listfilters.ListFilters
 import components.listroot.ListRoot.Dependencies
-import repository.LoginRepository
-import repository.ResearchRepository
+import repository.MyResearchRepository
 
 interface ListRoot {
 
@@ -22,7 +21,7 @@ interface ListRoot {
 
   interface Dependencies {
     val storeFactory: StoreFactory
-    val researchRepository: ResearchRepository
+    val researchRepository: MyResearchRepository
     val listRootOutput: Consumer<Output>
   }
 

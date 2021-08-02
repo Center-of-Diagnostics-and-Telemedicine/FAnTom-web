@@ -9,7 +9,6 @@ import components.cutscontainer.CutsContainer
 import components.research.ResearchRoot.Dependencies
 import components.researchmarks.ResearchMarks
 import components.researchtools.ResearchTools
-import model.ResearchData
 import model.ResearchDataModel
 import repository.*
 
@@ -29,7 +28,7 @@ interface ResearchRoot {
 
   interface Dependencies {
     val storeFactory: StoreFactory
-    val researchRepository: ResearchRepository
+    val researchRepository: MyResearchRepository
     val marksRepository: MarksRepository
     val brightnessRepository: MyBrightnessRepository
     val mipRepository: MyMipRepository

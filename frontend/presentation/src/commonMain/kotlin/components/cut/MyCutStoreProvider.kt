@@ -15,14 +15,14 @@ import model.*
 import repository.GetSliceModel
 import repository.MyBrightnessRepository
 import repository.MyMipRepository
-import repository.ResearchRepository
+import repository.MyResearchRepository
 import store.cut.MyCutStore
 import store.cut.MyCutStore.*
 
 class MyCutStoreProvider(
   private val storeFactory: StoreFactory,
   private val brightnessRepository: MyBrightnessRepository,
-  private val researchRepository: ResearchRepository,
+  private val researchRepository: MyResearchRepository,
   private val mipRepository: MyMipRepository,
   private val researchId: Int,
   private val plane: Plane

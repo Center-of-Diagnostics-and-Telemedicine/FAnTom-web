@@ -16,13 +16,13 @@ import com.badoo.reaktive.utils.ensureNeverFrozen
 import com.badoo.reaktive.utils.printStack
 import model.*
 import repository.MarksRepository
-import repository.ResearchRepository
+import repository.MyResearchRepository
 import store.marks.MarksStore
 import store.marks.MarksStore.*
 
 internal class ResearchMarksStoreProvider(
   private val storeFactory: StoreFactory,
-  private val researchRepository: ResearchRepository,
+  private val researchRepository: MyResearchRepository,
   private val marksRepository: MarksRepository,
   private val researchId: Int
 ) {

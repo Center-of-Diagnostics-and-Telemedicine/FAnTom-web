@@ -22,7 +22,7 @@ interface MainFrame {
   interface Dependencies {
     val storeFactory: StoreFactory
     val loginRepository: LoginRepository
-    val researchRepository: ResearchRepository
+    val researchRepository: MyResearchRepository
     val brightnessRepository: MyBrightnessRepository
     val mipRepository: MyMipRepository
     val gridRepository: GridRepository

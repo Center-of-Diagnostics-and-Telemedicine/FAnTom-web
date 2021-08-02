@@ -31,7 +31,7 @@ class App() : RComponent<RProps, RState>() {
     local = LoginLocalDataSource,
     remote = LoginRemoteDataSource
   )
-  val researchRepositoryImpl = ResearchRepositoryImpl(
+  val researchRepositoryImpl = MyResearchRepositoryImpl(
     local = ResearchLocalDataSource,
     remote = ResearchRemoteDataSource,
     token = loginRepositoryImpl.local::getToken
@@ -49,7 +49,7 @@ class App() : RComponent<RProps, RState>() {
   private val myRoot = MyRoot(ctx, dependencies = object : MyRoot.Dependencies {
     override val storeFactory: StoreFactory = LoggingStoreFactory(DefaultStoreFactory)
     override val loginRepository: LoginRepository = loginRepositoryImpl
-    override val researchRepository: ResearchRepository = researchRepositoryImpl
+    override val researchRepository: MyResearchRepository = researchRepositoryImpl
     override val mipRepository: MyMipRepository = mipRepositoryImpl
     override val brightnessRepository: MyBrightnessRepository = brightnessRepositoryImpl
     override val marksRepository: MarksRepository = marksRepositoryImpl
