@@ -9,6 +9,7 @@ import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
 import com.badoo.reaktive.completable.observeOn
 import com.badoo.reaktive.completable.subscribeOn
 import com.badoo.reaktive.coroutinesinterop.completableFromCoroutine
+import com.badoo.reaktive.observable.doOnBeforeNext
 import com.badoo.reaktive.observable.map
 import com.badoo.reaktive.observable.mapIterable
 import com.badoo.reaktive.observable.notNull
@@ -44,7 +45,8 @@ class CutContainerStoreProvider(
       mip = Mip.initial,
     ),
     marks = listOf(),
-    mark = null
+    mark = null,
+    screenDimensionsModel = initialScreenDimensionsModel()
   )
 
   fun provide(): CutContainerStore =
@@ -93,6 +95,7 @@ class CutContainerStoreProvider(
         )
 
       marksRepository.marks
+        .doOnBeforeNext { println("MY: mark income in CutContainerStoreProvider") }
         .notNull()
         .mapIterable { it.toMarkModel(data.markTypes) }
         .map(Result::Marks)
@@ -114,7 +117,8 @@ class CutContainerStoreProvider(
       when (intent) {
         is Intent.ChangeSliceNumber -> handleNewSliceNumber(intent.sliceNumber, getState())
         is Intent.HandleNewShape -> handleNewShape(intent.shape, getState())
-      }
+        is Intent.UpdateScreenDimensions -> dispatch(Result.ScreenDimensionsChanged(intent.dimensions))
+      }.let { }
     }
 
     private fun handleNewSliceNumber(sliceNumber: Int, state: State) {
@@ -142,6 +146,7 @@ class CutContainerStoreProvider(
     data class CutModelChanged(val cutModel: CutModel) : Result()
     data class Marks(val marks: List<MarkModel>) : Result()
     data class CurrentMark(val mark: MarkModel?) : Result()
+    data class ScreenDimensionsChanged(val dimensions: ScreenDimensionsModel) : Result()
   }
 
   private object ReducerImpl : Reducer<State, Result> {
@@ -150,6 +155,7 @@ class CutContainerStoreProvider(
         is Result.CutModelChanged -> copy(cutModel = result.cutModel)
         is Result.Marks -> copy(marks = result.marks)
         is Result.CurrentMark -> copy(mark = result.mark)
+        is Result.ScreenDimensionsChanged -> copy(screenDimensionsModel = result.dimensions)
       }
   }
 }

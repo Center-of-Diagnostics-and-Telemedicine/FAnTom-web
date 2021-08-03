@@ -19,7 +19,11 @@ import repository.MyMarksRepository
 import repository.MyMipRepository
 import repository.MyResearchRepository
 
-interface CutContainer {
+interface ScreenDimensionsListener {
+  fun onScreenDimensionChanged(clientHeight: Int?, clientWidth: Int?)
+}
+
+interface CutContainer : ScreenDimensionsListener {
 
   val sliderRouterState: Value<RouterState<*, SliderChild>>
   val drawRouterState: Value<RouterState<*, DrawChild>>

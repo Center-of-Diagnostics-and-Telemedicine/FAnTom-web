@@ -3,6 +3,9 @@ package components.shapes
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.decompose.value.operator.map
+import com.arkivanov.mvikotlin.core.binder.BinderLifecycleMode
+import com.arkivanov.mvikotlin.extensions.reaktive.bind
+import com.badoo.reaktive.observable.mapNotNull
 import components.asValue
 import components.getStore
 import components.shapes.Shapes.Dependencies
@@ -22,4 +25,10 @@ class ShapesComponent(
   }
 
   override val model: Value<Model> = store.asValue().map(stateToModel)
+
+  init {
+    bind(lifecycle, BinderLifecycleMode.CREATE_DESTROY) {
+      shapesInput.mapNotNull(inputToIntent) bindTo store
+    }
+  }
 }

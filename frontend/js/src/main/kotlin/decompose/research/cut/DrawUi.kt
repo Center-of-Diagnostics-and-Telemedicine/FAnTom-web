@@ -2,9 +2,6 @@ package decompose.research.cut
 
 import components.draw.Draw
 import components.draw.Draw.Model
-import components.models.shape.ScreenCircle
-import components.models.shape.ScreenEllipse
-import components.models.shape.ScreenRectangle
 import decompose.Props
 import decompose.research.cut.DrawUi.State
 import kotlinx.css.*
@@ -19,11 +16,9 @@ import react.RBuilder
 import react.RErrorInfo
 import react.RState
 import react.dom.attrs
-import react.dom.findDOMNode
 import styled.css
 import styled.styledCanvas
 import styled.styledDiv
-import kotlin.math.PI
 
 class DrawUi(props: Props<Draw>) : CanvasUi<Draw, State, Model>(
   props = props,
@@ -35,18 +30,6 @@ class DrawUi(props: Props<Draw>) : CanvasUi<Draw, State, Model>(
     component.model.subscribeToUpdate { updateCanvas(it) }
   }
 
-  override fun componentDidMount() {
-    super.componentDidMount()
-    updateDimensions()
-  }
-
-  override fun compDidUpdate() {
-    updateDimensions()
-  }
-
-  private fun updateDimensions() =
-    component.onScreenDimensionChanged(testRef?.clientHeight, testRef?.clientWidth)
-
   override fun RBuilder.render() {
     styledDiv {
       css {
@@ -57,10 +40,11 @@ class DrawUi(props: Props<Draw>) : CanvasUi<Draw, State, Model>(
         width = 100.pct
         height = 100.pct
       }
-      ref {
-        testRef = findDOMNode(it)
-      }
       styledCanvas {
+        css {
+          marginLeft = state.model.screenDimensionsModel.left.px
+          marginTop = state.model.screenDimensionsModel.top.px
+        }
         this@styledCanvas.attrs {
           classes = classes + getCanvasName()
           width = state.model.screenDimensionsModel.calculatedScreenWidth.toString()
@@ -78,67 +62,7 @@ class DrawUi(props: Props<Draw>) : CanvasUi<Draw, State, Model>(
 
   override fun updateCanvas(model: Model) {
     super.updateCanvas(model)
-    model.shape?.let { shape ->
-      when (shape) {
-        is ScreenCircle -> drawCircle(shape)
-        is ScreenEllipse -> drawEllipse(shape)
-        is ScreenRectangle -> drawRectangle(shape)
-        else -> throw NotImplementedError("private fun draw(shape: Shape?) shape not implemented")
-      }
-    }
-  }
-
-  private fun drawCircle(circle: ScreenCircle) {
-    val canvas = getCanvas()
-    val context = canvas?.getContext()
-
-    context?.beginPath()
-    context?.strokeStyle = "#00ff00"
-    context?.arc(
-      x = circle.screenX,
-      y = circle.screenY,
-      radius = circle.screenWidth / 2,
-      startAngle = 0.0,
-      endAngle = 2 * PI,
-      anticlockwise = false
-    )
-    context?.stroke()
-    context?.closePath()
-  }
-
-  private fun drawEllipse(ellipse: ScreenEllipse) {
-    val radiusX = ellipse.screenWidth / 2
-    val radiusY = ellipse.screenHeight / 2
-    val centerX = ellipse.screenX + radiusX
-    val centerY = ellipse.screenY + radiusY
-
-    val context = getCanvas()?.getContext()
-    context?.strokeStyle = "#00ff00"
-
-    context?.save()
-    context?.beginPath()
-
-    context?.translate(centerX - radiusX, centerY - radiusY)
-    context?.scale(radiusX, radiusY)
-    context?.arc(1.0, 1.0, 1.0, 0.0, 2 * PI, false)
-
-    context?.restore()
-    context?.stroke()
-  }
-
-  private fun drawRectangle(rectangle: ScreenRectangle) {
-    val canvas = getCanvas()
-    val context = canvas?.getContext()
-    context?.beginPath()
-    context?.strokeStyle = "#00ff00"
-    context?.rect(
-      x = rectangle.screenX,
-      y = rectangle.screenY,
-      w = rectangle.screenWidth,
-      h = rectangle.screenHeight
-    )
-    context?.stroke()
-    context?.closePath()
+    model.shape?.let { shape -> drawShape(shape) }
   }
 
   private fun onMouseDown(): (Event) -> Unit = {

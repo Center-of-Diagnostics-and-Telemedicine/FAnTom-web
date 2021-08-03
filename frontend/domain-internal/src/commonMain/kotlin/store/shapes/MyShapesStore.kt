@@ -8,6 +8,10 @@ import store.shapes.MyShapesStore.*
 interface MyShapesStore : Store<Intent, State, Label> {
 
   sealed class Intent : JvmSerializable {
+    data class HandleMousePosition(val dicomX: Double, val dicomY: Double) : Intent()
+    data class HandleSliceNumberChange(val sliceNumber: Int) : Intent()
+    data class HandleShapes(val shapes: List<Shape>) : Intent()
+    data class UpdateScreenDimensions(val dimensions: ScreenDimensionsModel) : Intent()
   }
 
   data class State(
@@ -16,14 +20,11 @@ interface MyShapesStore : Store<Intent, State, Label> {
     val position: PointPosition?,
     val hounsfield: Int?,
     val cutType: CutType,
-    val plane: Plane
+    val plane: Plane,
+    val screenDimensionsModel: ScreenDimensionsModel,
   ) : JvmSerializable
 
   sealed class Label {
-    data class SelectMark(val mark: MarkModel) : Label()
-    data class UnselectMark(val mark: MarkModel) : Label()
-    data class UpdateMarkCoordinates(val mark: MarkModel) : Label()
-    data class UpdateMarkWithSave(val mark: MarkModel) : Label()
     data class ChangeCutType(val cutType: CutType) : Label()
   }
 }

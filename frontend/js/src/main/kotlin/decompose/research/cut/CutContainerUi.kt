@@ -2,17 +2,20 @@ package decompose.research.cut
 
 import com.arkivanov.decompose.RouterState
 import components.cutcontainer.CutContainer
+import decompose.Props
 import decompose.RenderableComponent
 import decompose.renderableChild
 import decompose.research.cut.CutContainerUi.CutContainerStyles.cutContainerStyle
 import decompose.research.cut.CutContainerUi.State
+import kotlinx.browser.window
 import kotlinx.css.*
+import org.w3c.dom.Element
 import react.RBuilder
 import react.RState
+import react.dom.findDOMNode
 import styled.StyleSheet
 import styled.css
 import styled.styledDiv
-import decompose.Props
 
 class CutContainerUi(props: Props<CutContainer>) :
   RenderableComponent<CutContainer, State>(
@@ -27,6 +30,8 @@ class CutContainerUi(props: Props<CutContainer>) :
       )
   ) {
 
+  protected var testRef: Element? = null
+
   init {
 //    component.model.bindToState { model = it }
     component.sliderRouterState.bindToState { sliderRouterState = it }
@@ -35,12 +40,26 @@ class CutContainerUi(props: Props<CutContainer>) :
     component.cutRouterState.bindToState { cutRouterState = it }
   }
 
+  override fun componentDidMount() {
+    super.componentDidMount()
+    window.addEventListener(type = "resize", callback = { compDidUpdate() })
+    updateDimensions()
+  }
+
+  override fun compDidUpdate() = updateDimensions()
+
+  private fun updateDimensions() =
+    component.onScreenDimensionChanged(testRef?.clientHeight, testRef?.clientWidth)
+
   override fun RBuilder.render() {
     styledDiv {
       css(cutContainerStyle)
       styledDiv {
         css {
           grow(Grow.GROW_SHRINK)
+        }
+        ref {
+          testRef = findDOMNode(it)
         }
         when (val instance = state.cutRouterState.activeChild.instance) {
           is CutContainer.CutChild.Data -> renderableChild(CutUi::class, instance.component)
@@ -75,7 +94,6 @@ class CutContainerUi(props: Props<CutContainer>) :
       flexDirection = FlexDirection.column
       position = Position.relative
       background = "#000"
-      textAlign = TextAlign.center
     }
   }
 

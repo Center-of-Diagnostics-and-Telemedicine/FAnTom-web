@@ -3,7 +3,6 @@ package decompose.research.cut
 import components.shapes.Shapes
 import components.shapes.Shapes.Model
 import decompose.Props
-import decompose.RenderableComponent
 import decompose.research.cut.ShapesUi.State
 import kotlinx.css.*
 import kotlinx.html.classes
@@ -14,13 +13,13 @@ import styled.css
 import styled.styledCanvas
 import styled.styledDiv
 
-class ShapesUi(props: Props<Shapes>) : RenderableComponent<Shapes, State>(
+class ShapesUi(props: Props<Shapes>) : CanvasUi<Shapes, State, Model>(
   props = props,
   initialState = State(model = props.component.model.value)
 ) {
 
   init {
-    component.model.subscribe {  }
+    component.model.bindToState { model = it }
   }
 
   override fun RBuilder.render() {
@@ -34,19 +33,26 @@ class ShapesUi(props: Props<Shapes>) : RenderableComponent<Shapes, State>(
         height = 100.pct
       }
       styledCanvas {
-        css{
-          width = 100.pct
-          height = 100.pct
+        css {
+          marginLeft = state.model.screenDimensionsModel.left.px
+          marginTop = state.model.screenDimensionsModel.top.px
         }
         this@styledCanvas.attrs {
           classes = classes + getCanvasName()
+          width = state.model.screenDimensionsModel.calculatedScreenWidth.toString()
+          height = state.model.screenDimensionsModel.calculatedScreenHeight.toString()
         }
       }
     }
   }
 
-  private fun getCanvasName(): String = "shape_canvas_${state.model.cutType}"
-  private fun getCanvasZIndex(): Int = 1
+  override fun updateCanvas(model: Model) {
+    super.updateCanvas(model)
+    model.shapes.forEach { shape -> drawShape(shape) }
+  }
+
+  override fun getCanvasName(): String = "shape_canvas_${state.model.cutType}"
+  override fun getCanvasZIndex(): Int = 1
 
   class State(var model: Model) : RState
 }

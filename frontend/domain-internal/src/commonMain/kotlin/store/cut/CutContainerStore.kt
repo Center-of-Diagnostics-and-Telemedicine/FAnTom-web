@@ -4,6 +4,7 @@ import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import model.MarkModel
 import model.Mip
+import model.ScreenDimensionsModel
 import model.Shape
 import store.cut.CutContainerStore.*
 
@@ -12,12 +13,14 @@ interface CutContainerStore : Store<Intent, State, Label> {
   sealed class Intent : JvmSerializable {
     data class ChangeSliceNumber(val sliceNumber: Int) : Intent()
     data class HandleNewShape(val shape: Shape) : Intent()
+    data class UpdateScreenDimensions(val dimensions: ScreenDimensionsModel) : Intent()
   }
 
   data class State(
     val cutModel: CutModel,
     val marks: List<MarkModel>,
     val mark: MarkModel?,
+    val screenDimensionsModel: ScreenDimensionsModel,
   ) : JvmSerializable
 
 

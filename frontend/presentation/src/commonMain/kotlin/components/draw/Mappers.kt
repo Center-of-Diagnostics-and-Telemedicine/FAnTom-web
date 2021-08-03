@@ -1,10 +1,10 @@
 package components.draw
 
-import components.draw.Draw.Model
-import components.draw.Draw.Output
+import components.draw.Draw.*
 import components.models.shape.toScreenShape
 import model.*
 import store.draw.MyDrawStore.*
+import kotlin.math.ceil
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -16,6 +16,13 @@ internal val stateToModel: (State) -> Model =
       plane = it.plane,
       screenDimensionsModel = it.screenDimensionsModel
     )
+  }
+
+internal val inputToIntent: (Input) -> Intent =
+  {
+    when (it) {
+      is Input.ScreenDimensionsChanged -> Intent.UpdateScreenDimensions(it.dimensions)
+    }
   }
 
 internal val labelsToOutput: (Label) -> Output =
@@ -52,10 +59,14 @@ internal fun Plane.calculateScreenDimensions(
   screenHeight: Int,
   screenWidth: Int
 ): ScreenDimensionsModel {
-  val resultWidth = calculateWidth(screenHeight = screenHeight, screenWidth = screenWidth)
-  val resultHeight = calculateHeight(screenHeight = screenHeight, screenWidth = screenWidth)
-  val resultTop = calculateTop(screenHeight = screenHeight, resultHeight = resultHeight)
-  val resultLeft = calculateLeft(screenWidth = screenWidth, resultWidth = resultWidth)
+  val screenWidthDouble = screenWidth.toDouble()
+  val screenHeightDouble = screenHeight.toDouble()
+  val resultWidth =
+    calculateWidth(screenHeight = screenHeightDouble, screenWidth = screenWidthDouble)
+  val resultHeight =
+    calculateHeight(screenHeight = screenHeightDouble, screenWidth = screenWidthDouble)
+  val resultTop = calculateTop(screenHeight = screenHeightDouble, resultHeight = resultHeight)
+  val resultLeft = calculateLeft(screenWidth = screenWidthDouble, resultWidth = resultWidth)
   val verticalRatio = calculateVerticalRatio(resultHeight = resultHeight)
   val horizontalRatio = calculateHorizontalRatio(resultWidth = resultWidth)
   val radiusRatio = calculateRadiusRatio(resultHeight = resultHeight, resultWidth = resultWidth)
@@ -73,53 +84,53 @@ internal fun Plane.calculateScreenDimensions(
 }
 
 private fun Plane.calculateRadiusRatio(
-  resultHeight: Int,
-  resultWidth: Int
+  resultHeight: Double,
+  resultWidth: Double
 ): Double {
   val dicomRadius =
     sqrt(data.screenSizeV.toDouble().pow(2) + data.screenSizeH.toDouble().pow(2))
-  val screenRadius = sqrt(resultHeight.toDouble().pow(2) + resultWidth.toDouble().pow(2))
+  val screenRadius = sqrt(resultHeight.pow(2) + resultWidth.pow(2))
   return dicomRadius / screenRadius
 }
 
-private fun calculateTop(screenHeight: Int, resultHeight: Int): Int {
+private fun calculateTop(screenHeight: Double, resultHeight: Double): Double {
   val mTop = screenHeight - resultHeight
-  return if (mTop <= 0) 0 else mTop / 2
+  return if (mTop <= 0) 0.0 else ceil(mTop / 2)
 }
 
-private fun calculateLeft(screenWidth: Int, resultWidth: Int): Int {
+private fun calculateLeft(screenWidth: Double, resultWidth: Double): Double {
   val mLeft = screenWidth - resultWidth
-  return if (mLeft <= 0) 0 else mLeft / 2
+  return if (mLeft <= 0) 0.0 else ceil(mLeft / 2)
 }
 
-private fun Plane.calculateWidth(screenHeight: Int, screenWidth: Int): Int {
-  val dicomWidth = data.screenSizeH
-  val dicomHeight = data.screenSizeV
-  val ri = dicomWidth.toDouble() / dicomHeight
-  val rs = screenWidth.toDouble() / screenHeight
+private fun Plane.calculateWidth(screenHeight: Double, screenWidth: Double): Double {
+  val dicomWidth = data.screenSizeH.toDouble()
+  val dicomHeight = data.screenSizeV.toDouble()
+  val ri = dicomWidth / dicomHeight
+  val rs = screenWidth / screenHeight
   return if (rs > ri) {
-    dicomWidth * screenHeight / dicomHeight
+    ceil(dicomWidth * screenHeight / dicomHeight)
   } else {
     screenWidth
   }
 }
 
-private fun Plane.calculateHeight(screenHeight: Int, screenWidth: Int): Int {
-  val dicomWidth = data.screenSizeH
-  val dicomHeight = data.screenSizeV
-  val ri = dicomWidth.toDouble() / dicomHeight
-  val rs = screenWidth.toDouble() / screenHeight
+private fun Plane.calculateHeight(screenHeight: Double, screenWidth: Double): Double {
+  val dicomWidth = data.screenSizeH.toDouble()
+  val dicomHeight = data.screenSizeV.toDouble()
+  val ri = dicomWidth / dicomHeight
+  val rs = screenWidth / screenHeight
   return if (rs > ri) {
     screenHeight
   } else {
-    dicomHeight * screenHeight / dicomWidth
+    ceil(dicomHeight * screenWidth / dicomWidth)
   }
 }
 
-private fun Plane.calculateVerticalRatio(resultHeight: Int) =
+private fun Plane.calculateVerticalRatio(resultHeight: Double): Double =
   data.screenSizeV.toDouble() / resultHeight
 
-private fun Plane.calculateHorizontalRatio(resultWidth: Int) =
+private fun Plane.calculateHorizontalRatio(resultWidth: Double): Double =
   data.screenSizeH.toDouble() / resultWidth
 
 fun mapScreenXToDicomX(screenX: Double, horizontalRatio: Double): Double =

@@ -5,11 +5,9 @@ import com.arkivanov.decompose.value.Value
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.base.Consumer
 import com.badoo.reaktive.observable.Observable
+import components.models.shape.ScreenShape
 import components.shapes.Shapes.Dependencies
-import model.CutType
-import model.Plane
-import model.PointPosition
-import model.Shape
+import model.*
 import repository.MyMarksRepository
 
 interface Shapes {
@@ -19,10 +17,11 @@ interface Shapes {
   data class Model(
     val sliceNumber: Int,
     val position: PointPosition?,
-    val shapes: List<Shape>,
+    val shapes: List<ScreenShape>,
     val hounsfield: Int?,
     val cutType: CutType,
-    val plane: Plane
+    val plane: Plane,
+    val screenDimensionsModel: ScreenDimensionsModel,
   )
 
   interface Dependencies {
@@ -39,6 +38,7 @@ interface Shapes {
 
   sealed class Input {
     data class Shapes(val shapes: List<Shape>) : Input()
+    data class ScreenDimensionsChanged(val dimensions: ScreenDimensionsModel) : Input()
   }
 }
 

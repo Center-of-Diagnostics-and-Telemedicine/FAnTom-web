@@ -19,7 +19,6 @@ interface Draw {
   fun onMouseOut()
   fun onMouseWheel(screenDeltaY: Double)
   fun onDoubleClick()
-  fun onScreenDimensionChanged(clientHeight: Int?, clientWidth: Int?)
 
   data class Model(
     val shape: ScreenShape?,
@@ -43,7 +42,7 @@ interface Draw {
   }
 
   sealed class Input {
-//    data class SliceNumberChanged(val sliceNumber: Int)
+    data class ScreenDimensionsChanged(val dimensions: ScreenDimensionsModel) : Input()
   }
 }
 

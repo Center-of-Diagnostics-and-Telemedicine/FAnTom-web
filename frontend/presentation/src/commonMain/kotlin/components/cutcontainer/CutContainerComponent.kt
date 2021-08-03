@@ -17,11 +17,13 @@ import components.cutslider.Slider
 import components.cutslider.SliderRouter
 import components.draw.Draw
 import components.draw.DrawRouter
+import components.draw.calculateScreenDimensions
 import components.getStore
 import components.shapes.Shapes
 import components.shapes.ShapesRouter
+import model.ScreenDimensionsModel
 import model.toShape
-import store.cut.CutContainerStore
+import store.cut.CutContainerStore.Intent
 
 class CutContainerComponent(
   componentContext: ComponentContext,
@@ -109,21 +111,50 @@ class CutContainerComponent(
           cutInput.onNext(Cut.Input.ChangeCutModel(cutModel))
         }
 
+      state.screenDimensionsModel
+        .let { dimensions ->
+          shapesInput.onNext(Shapes.Input.ScreenDimensionsChanged(dimensions))
+          drawInput.onNext(Draw.Input.ScreenDimensionsChanged(dimensions))
+        }
+
+    }
+  }
+
+  override fun onScreenDimensionChanged(clientHeight: Int?, clientWidth: Int?) {
+    shouldUpdateDimensions(clientHeight, clientWidth) { dimensions ->
+      store.accept(Intent.UpdateScreenDimensions(dimensions))
+    }
+  }
+
+  private inline fun shouldUpdateDimensions(
+    clientHeight: Int?,
+    clientWidth: Int?,
+    block: (should: ScreenDimensionsModel) -> Unit
+  ) {
+    if (clientHeight != null && clientWidth != null) {
+      val state = store.asValue()
+      val clientHeightDiff = clientHeight != state.value.screenDimensionsModel.originalScreenHeight
+      val clientWidthDiff = clientWidth != state.value.screenDimensionsModel.originalScreenWidth
+      val updateDimensions = clientHeightDiff || clientWidthDiff
+      if (updateDimensions) {
+        val newDimensions = plane.calculateScreenDimensions(clientHeight, clientWidth)
+        block(newDimensions)
+      }
     }
   }
 
   private fun onSliderOutput(output: Slider.Output) {
     when (output) {
       is Slider.Output.SliceNumberChanged ->
-        store.accept(CutContainerStore.Intent.ChangeSliceNumber(output.sliceNumber))
+        store.accept(Intent.ChangeSliceNumber(output.sliceNumber))
     }
   }
 
   private fun onDrawOutput(output: Draw.Output) {
     when (output) {
-      is Draw.Output.Circle -> store.accept(CutContainerStore.Intent.HandleNewShape(output.circle))
-      is Draw.Output.Ellipse -> store.accept(CutContainerStore.Intent.HandleNewShape(output.ellipse))
-      is Draw.Output.Rectangle -> store.accept(CutContainerStore.Intent.HandleNewShape(output.rectangle))
+      is Draw.Output.Circle -> store.accept(Intent.HandleNewShape(output.circle))
+      is Draw.Output.Ellipse -> store.accept(Intent.HandleNewShape(output.ellipse))
+      is Draw.Output.Rectangle -> store.accept(Intent.HandleNewShape(output.rectangle))
     }
   }
 
