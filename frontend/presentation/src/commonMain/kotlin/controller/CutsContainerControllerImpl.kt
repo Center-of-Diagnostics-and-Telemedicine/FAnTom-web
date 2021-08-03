@@ -1,8 +1,8 @@
 package controller
 
+import com.arkivanov.essenty.lifecycle.Lifecycle
+import com.arkivanov.essenty.lifecycle.doOnDestroy
 import com.arkivanov.mvikotlin.core.binder.BinderLifecycleMode
-import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
-import com.arkivanov.mvikotlin.core.lifecycle.doOnDestroy
 import com.arkivanov.mvikotlin.extensions.reaktive.bind
 import com.arkivanov.mvikotlin.extensions.reaktive.states
 import com.badoo.reaktive.observable.mapNotNull
@@ -31,9 +31,7 @@ class CutsContainerControllerImpl(val dependencies: CutsContainerController.Depe
     }
 
 
-    dependencies.lifecycle.doOnDestroy {
-      gridContainerStore.dispose()
-    }
+    dependencies.lifecycle.doOnDestroy(gridContainerStore::dispose)
   }
 
   override fun onViewCreated(cutsContainerView: CutsContainerView, viewLifecycle: Lifecycle) {

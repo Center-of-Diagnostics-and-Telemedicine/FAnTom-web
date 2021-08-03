@@ -1,8 +1,8 @@
 package controller
 
+import com.arkivanov.essenty.lifecycle.Lifecycle
+import com.arkivanov.essenty.lifecycle.doOnDestroy
 import com.arkivanov.mvikotlin.core.binder.BinderLifecycleMode
-import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
-import com.arkivanov.mvikotlin.core.lifecycle.doOnDestroy
 import com.arkivanov.mvikotlin.extensions.reaktive.bind
 import com.arkivanov.mvikotlin.extensions.reaktive.events
 import com.arkivanov.mvikotlin.extensions.reaktive.states
@@ -11,7 +11,10 @@ import com.badoo.reaktive.subject.Relay
 import com.badoo.reaktive.subject.publish.PublishSubject
 import controller.SliderController.Dependencies
 import controller.SliderController.Input
-import mapper.*
+import mapper.inputToSliderIntent
+import mapper.sliderEventToOutput
+import mapper.sliderEventToSlideIntent
+import mapper.sliderStateToSliderModel
 import store.SliderStoreFactory
 import view.SliderView
 

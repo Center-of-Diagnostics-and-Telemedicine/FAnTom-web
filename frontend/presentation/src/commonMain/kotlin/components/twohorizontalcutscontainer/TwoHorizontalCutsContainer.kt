@@ -12,6 +12,7 @@ import model.Plane
 import model.ResearchDataModel
 import model.buildPlane
 import repository.MyBrightnessRepository
+import repository.MyMarksRepository
 import repository.MyMipRepository
 import repository.MyResearchRepository
 
@@ -33,6 +34,7 @@ interface TwoHorizontalCutsContainer {
     val researchRepository: MyResearchRepository
     val brightnessRepository: MyBrightnessRepository
     val mipRepository: MyMipRepository
+    val marksRepository: MyMarksRepository
     val data: ResearchDataModel
     val researchId: Int
   }

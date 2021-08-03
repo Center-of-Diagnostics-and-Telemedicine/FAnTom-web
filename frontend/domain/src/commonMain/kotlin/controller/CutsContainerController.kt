@@ -1,6 +1,6 @@
 package controller
 
-import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
+import com.arkivanov.essenty.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import model.*
 import view.CutsContainerView
@@ -31,12 +31,15 @@ interface CutsContainerController {
     data class OpenFullCut(val cut: Plane) : Output()
     data class CloseFullCut(val cut: Plane) : Output()
     data class CircleDrawn(val circle: CircleModel, val sliceNumber: Int, val cut: Plane) : Output()
-    data class RectangleDrawn(val rectangle: RectangleModel, val sliceNumber: Int, val cut: Plane) : Output()
+    data class RectangleDrawn(val rectangle: RectangleModel, val sliceNumber: Int, val cut: Plane) :
+      Output()
+
     data class SelectMark(val mark: MarkModel) : Output()
     data class UnselectMark(val mark: MarkModel) : Output()
     data class ContrastBrightnessChanged(val black: Int, val white: Int) : Output()
     data class UpdateMarkWithoutSave(val markToUpdate: MarkModel) : Output()
     data class UpdateMarkWithSave(val mark: MarkModel) : Output()
-    data class ChangeCutType(val cutType: CutType, val cut: Plane) : CutsContainerController.Output()
+    data class ChangeCutType(val cutType: CutType, val cut: Plane) :
+      CutsContainerController.Output()
   }
 }

@@ -1,7 +1,7 @@
 package controller
 
-import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
-import com.arkivanov.mvikotlin.core.lifecycle.LifecycleRegistry
+import com.arkivanov.essenty.lifecycle.Lifecycle
+import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.badoo.reaktive.scheduler.overrideSchedulers
@@ -24,7 +24,7 @@ class SliderControllerTest {
 
   private val dependencies =
     object : SliderController.Dependencies {
-      override val storeFactory: StoreFactory = DefaultStoreFactory
+      override val storeFactory: StoreFactory = DefaultStoreFactory()
       override val lifecycle: Lifecycle = this@SliderControllerTest.lifecycle
       override val cut: Plane = testCut
       override val research: Research = testResearch

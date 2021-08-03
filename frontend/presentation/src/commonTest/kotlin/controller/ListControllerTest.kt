@@ -1,8 +1,7 @@
 package controller
 
-import repository.TestResearchRepository
-import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
-import com.arkivanov.mvikotlin.core.lifecycle.LifecycleRegistry
+import com.arkivanov.essenty.lifecycle.Lifecycle
+import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.badoo.reaktive.scheduler.overrideSchedulers
@@ -11,6 +10,7 @@ import com.badoo.reaktive.utils.reaktiveUncaughtErrorHandler
 import com.badoo.reaktive.utils.resetReaktiveUncaughtErrorHandler
 import model.Filter
 import repository.ResearchRepository
+import repository.TestResearchRepository
 import resume
 import testFilters
 import testResearches
@@ -24,7 +24,7 @@ class ListControllerTest {
 
   private val dependencies =
     object : ListController.Dependencies {
-      override val storeFactory: StoreFactory = DefaultStoreFactory
+      override val storeFactory: StoreFactory = DefaultStoreFactory()
       override val lifecycle: Lifecycle = this@ListControllerTest.lifecycle
       override val researchRepository: ResearchRepository = TestResearchRepository()
       override val listOutput: (ListController.Output) -> Unit = { output += it }

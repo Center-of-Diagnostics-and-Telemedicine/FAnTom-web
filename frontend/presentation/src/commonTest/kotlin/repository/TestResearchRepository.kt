@@ -57,6 +57,10 @@ class TestResearchRepository : ResearchRepository {
     return testImage
   }
 
+  override suspend fun getSlice(model: GetSliceModel): String {
+    return testImage
+  }
+
   override suspend fun getHounsfieldData(
     sliceNumber: Int,
     type: Int,

@@ -1,5 +1,6 @@
-import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
-import com.arkivanov.mvikotlin.core.lifecycle.LifecycleRegistry
+
+import com.arkivanov.essenty.lifecycle.Lifecycle
+import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 
 fun LifecycleRegistry.resume() {
   if (state == Lifecycle.State.INITIALIZED) {

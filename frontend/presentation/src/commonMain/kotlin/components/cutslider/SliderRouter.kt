@@ -1,10 +1,11 @@
 package components.cutslider
 
 import com.arkivanov.decompose.*
-import com.arkivanov.decompose.statekeeper.Parcelable
-import com.arkivanov.decompose.statekeeper.Parcelize
 import com.arkivanov.decompose.value.Value
+import com.arkivanov.essenty.parcelable.Parcelable
+import com.arkivanov.essenty.parcelable.Parcelize
 import com.badoo.reaktive.base.Consumer
+import com.badoo.reaktive.observable.Observable
 import components.cutcontainer.CutContainer.SliderChild
 import components.cutslider.Slider.Input
 import components.cutslider.Slider.Output
@@ -13,9 +14,9 @@ import model.Plane
 
 internal class SliderRouter(
   routerFactory: RouterFactory,
-  private val sliderFactory: (ComponentContext, Consumer<Output>, Consumer<Input>) -> Slider,
+  private val sliderFactory: (ComponentContext, Consumer<Output>, Observable<Input>) -> Slider,
   private val sliderOutput: Consumer<Output>,
-  private val sliderInput: Consumer<Input>,
+  private val sliderInput: Observable<Input>,
   private val plane: Plane
 ) {
 

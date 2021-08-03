@@ -37,11 +37,11 @@ class ResearchRepositoryImpl(
     }
   }
 
-  override suspend fun initResearch(researchId: Int, doseReport: Boolean): ResearchDataModel {
+  override suspend fun initResearch(researchId: Int, doseReport: Boolean): ResearchData {
     val response = remote.init(token(), researchId)
 
     return when {
-      response.response != null -> response.response!!.toResearchData(researchId)
+      response.response != null -> throw NotImplementedError()//response.response!!.toresearchSliceSizesData(researchId)
       response.error != null -> handleErrorResponse(response.error!!)
       else -> throw ResearchInitializationException
     }

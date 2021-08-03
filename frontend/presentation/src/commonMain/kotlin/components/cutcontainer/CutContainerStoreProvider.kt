@@ -49,7 +49,7 @@ class CutContainerStoreProvider(
 
   fun provide(): CutContainerStore =
     object : CutContainerStore, Store<Intent, State, Label> by storeFactory.create(
-      name = "CutStore_${researchId}_${plane.type.intType}",
+      name = "CutContainerStore_${researchId}_${plane.type.intType}",
       initialState = initialState,
       bootstrapper = SimpleBootstrapper(Unit),
       executorFactory = ::ExecutorImpl,

@@ -12,6 +12,7 @@ import model.Plane
 import model.ResearchDataModel
 import model.buildPlane
 import repository.MyBrightnessRepository
+import repository.MyMarksRepository
 import repository.MyMipRepository
 import repository.MyResearchRepository
 
@@ -36,6 +37,7 @@ interface FourCutsContainer {
     val fourCutsContainerOutput: Consumer<Output>
     val researchRepository: MyResearchRepository
     val brightnessRepository: MyBrightnessRepository
+    val marksRepository: MyMarksRepository
     val mipRepository: MyMipRepository
     val data: ResearchDataModel
     val researchId: Int

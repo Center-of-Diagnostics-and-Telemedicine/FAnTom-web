@@ -4,6 +4,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.base.Consumer
+import com.badoo.reaktive.observable.Observable
 import components.shapes.Shapes.Dependencies
 import model.CutType
 import model.Plane
@@ -28,13 +29,12 @@ interface Shapes {
     val storeFactory: StoreFactory
     val marksRepository: MyMarksRepository
     val shapesOutput: Consumer<Output>
-    val shapesInput: Consumer<Input>
+    val shapesInput: Observable<Input>
     val plane: Plane
     val researchId: Int
   }
 
   sealed class Output {
-//    data class SliceNumberChanged(val sliceNumber: Int)
   }
 
   sealed class Input {

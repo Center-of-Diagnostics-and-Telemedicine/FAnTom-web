@@ -7,9 +7,9 @@ const val DEBUG = true
 
 val storeFactoryInstance =
     if (DEBUG) {
-        LoggingStoreFactory(delegate = TimeTravelStoreFactory(fallback = DefaultStoreFactory))
+        LoggingStoreFactory(delegate = TimeTravelStoreFactory(fallback = DefaultStoreFactory()))
     } else {
-        DefaultStoreFactory
+        DefaultStoreFactory()
     }
 
 val frameWorkType = FrameworkType.REAKTIVE

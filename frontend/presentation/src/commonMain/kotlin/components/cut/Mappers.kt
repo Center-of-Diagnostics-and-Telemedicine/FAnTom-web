@@ -16,6 +16,6 @@ internal val stateToModel: (State) -> Model =
 
 internal val inputToIntent: (Input) -> Intent = {
   when (it){
-    is Input.SliceNumberChanged -> Intent.HandleChangeSliceNumber(it.value)
+    is Input.ChangeCutModel -> Intent.HandleChangeCutModel(it.cutModel)
   }
 }

@@ -11,7 +11,6 @@ import components.singlecutcontainer.SingleCutContainer
 import components.twohorizontalcutscontainer.TwoHorizontalCutsContainer
 import components.twoverticalcutscontainer.TwoVerticalCutsContainer
 import model.GridType
-import model.ResearchData
 import model.ResearchDataModel
 import repository.*
 
@@ -34,6 +33,7 @@ interface CutsContainer {
     val gridRepository: GridRepository
     val brightnessRepository: MyBrightnessRepository
     val mipRepository: MyMipRepository
+    val marksRepository: MyMarksRepository
     val data: ResearchDataModel
     val researchId: Int
   }
@@ -64,18 +64,22 @@ fun CutsContainer(componentContext: ComponentContext, dependencies: Dependencies
     twoVerticalCutsContainerFactory = { childContext, output ->
       TwoVerticalCutsContainer(
         componentContext = childContext,
-        dependencies = object : TwoVerticalCutsContainer.Dependencies, Dependencies by dependencies {
-          override val twoVerticalCutsContainerOutput: Consumer<TwoVerticalCutsContainer.Output> = output
+        dependencies = object : TwoVerticalCutsContainer.Dependencies,
+          Dependencies by dependencies {
+          override val twoVerticalCutsContainerOutput: Consumer<TwoVerticalCutsContainer.Output> =
+            output
         })
     },
-    twoHorizontalCutsContainerFactory = {childContext, output ->
+    twoHorizontalCutsContainerFactory = { childContext, output ->
       TwoHorizontalCutsContainer(
         componentContext = childContext,
-        dependencies = object : TwoHorizontalCutsContainer.Dependencies, Dependencies by dependencies {
-          override val twoHorizontalCutsContainerOutput: Consumer<TwoHorizontalCutsContainer.Output> = output
+        dependencies = object : TwoHorizontalCutsContainer.Dependencies,
+          Dependencies by dependencies {
+          override val twoHorizontalCutsContainerOutput: Consumer<TwoHorizontalCutsContainer.Output> =
+            output
         })
     },
-    fourCutsContainerFactory = {childContext, output ->
+    fourCutsContainerFactory = { childContext, output ->
       FourCutsContainer(
         componentContext = childContext,
         dependencies = object : FourCutsContainer.Dependencies, Dependencies by dependencies {

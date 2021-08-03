@@ -7,31 +7,34 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
 import com.badoo.reaktive.coroutinesinterop.singleFromCoroutine
-import com.badoo.reaktive.observable.*
 import com.badoo.reaktive.scheduler.ioScheduler
 import com.badoo.reaktive.scheduler.mainScheduler
+import com.badoo.reaktive.single.doOnBeforeSubscribe
+import com.badoo.reaktive.single.map
+import com.badoo.reaktive.single.observeOn
+import com.badoo.reaktive.single.subscribeOn
 import com.badoo.reaktive.utils.ensureNeverFrozen
-import model.*
+import model.BASE_ERROR
+import model.HasIntValue
+import model.Plane
+import model.ResearchApiExceptions
 import repository.GetSliceModel
-import repository.MyBrightnessRepository
-import repository.MyMipRepository
 import repository.MyResearchRepository
+import store.cut.CutModel
 import store.cut.MyCutStore
 import store.cut.MyCutStore.*
 
 class MyCutStoreProvider(
   private val storeFactory: StoreFactory,
-  private val brightnessRepository: MyBrightnessRepository,
   private val researchRepository: MyResearchRepository,
-  private val mipRepository: MyMipRepository,
   private val researchId: Int,
   private val plane: Plane
 ) {
 
   fun provide(): MyCutStore =
     object : MyCutStore, Store<Intent, State, Label> by storeFactory.create(
-      name = "CutStore_${researchId}_${plane.type.intType}",
-      initialState = State(),
+      name = "MyCutStore_${researchId}_${plane.type.intType}",
+      initialState = State(cutModel = null),
       bootstrapper = SimpleBootstrapper(Unit),
       executorFactory = ::ExecutorImpl,
       reducer = ReducerImpl
@@ -43,35 +46,26 @@ class MyCutStoreProvider(
 
   private inner class ExecutorImpl : ReaktiveExecutor<Intent, Unit, State, Result, Label>() {
 
-    override fun executeAction(action: Unit, getState: () -> State) {
-      println("executeAction")
-      combineLatest(
-        brightnessRepository.black,
-        brightnessRepository.white,
-        brightnessRepository.gamma,
-        mipRepository.mipMethod,
-        mapper,
-      )
-        .switchMapSingle { model ->
-          singleFromCoroutine {
-            researchRepository.getSlice(model)
-          }
-        }
-        .subscribeOn(ioScheduler)
-        .doOnBeforeNext { dispatch(Result.Loading) }
-        .doOnBeforeSubscribe { dispatch(Result.Loading) }
-        .map(Result::Loaded)
-        .observeOn(mainScheduler)
-        .subscribeScoped(
-          onNext = ::dispatch,
-          onError = ::handleError
-        )
-    }
-
     override fun executeIntent(intent: Intent, getState: () -> State) {
       when (intent) {
-        else -> throw NotImplementedError("Intent not implemented in MyCutStoreProvider $intent")
+        is Intent.HandleChangeCutModel -> handleChangeCutModel(intent.cutModel, getState())
       }.let {}
+    }
+
+    private fun handleChangeCutModel(cutModel: CutModel, state: State) {
+      if (state.cutModel != cutModel) {
+        singleFromCoroutine {
+          researchRepository.getSlice(cutModel.toGetSliceModel())
+        }
+          .doOnBeforeSubscribe {
+            dispatch(Result.CutModelChanged(cutModel))
+            dispatch(Result.Loading)
+          }
+          .subscribeOn(ioScheduler)
+          .map(Result::Loaded)
+          .observeOn(mainScheduler)
+          .subscribeScoped(onSuccess = ::dispatch, onError = ::handleError)
+      }
     }
 
     private fun handleError(error: Throwable) {
@@ -88,6 +82,7 @@ class MyCutStoreProvider(
 
   private sealed class Result : JvmSerializable {
     object Loading : Result()
+    data class CutModelChanged(val cutModel: CutModel) : Result()
     data class Loaded(val slice: String) : Result()
     data class Error(val message: String) : Result()
   }
@@ -96,25 +91,24 @@ class MyCutStoreProvider(
     override fun State.reduce(result: Result): State =
       when (result) {
         is Result.Loading -> copy(loading = true)
+        is Result.CutModelChanged -> copy(cutModel = result.cutModel)
         is Result.Loaded -> copy(loading = false, error = "", slice = result.slice)
         is Result.Error -> copy(error = result.message, loading = false)
       }
   }
 
-  private val mapper: (black: Int, white: Int, gamma: Double, mip: Mip) -> GetSliceModel =
-    { black, white, gamma, mip ->
-      GetSliceModel(
-        researchId = researchId,
-        black = black,
-        white = white,
-        gamma = gamma,
-        type = plane.type.intType,
-        mipMethod = mip.intValue,
-        aproxSize = (mip as? HasIntValue)?.value ?: 0,
-        width = 0,
-        height = 0,
-        sliceNumber = 1,
-        sopInstanceUid = plane.data.SOPInstanceUID ?: ""
-      )
-    }
+  private fun CutModel.toGetSliceModel(): GetSliceModel =
+    GetSliceModel(
+      researchId = researchId,
+      black = blackValue,
+      white = whiteValue,
+      gamma = gammaValue,
+      type = plane.type.intType,
+      mipMethod = mip.intValue,
+      aproxSize = (mip as? HasIntValue)?.value ?: 0,
+      width = 0,
+      height = 0,
+      sliceNumber = 1,
+      sopInstanceUid = plane.data.SOPInstanceUID ?: ""
+    )
 }

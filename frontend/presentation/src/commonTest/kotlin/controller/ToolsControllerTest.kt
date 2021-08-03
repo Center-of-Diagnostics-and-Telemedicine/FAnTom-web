@@ -1,9 +1,7 @@
 package controller
 
-import repository.TestBrightnessRepository
-import repository.TestMipRepository
-import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
-import com.arkivanov.mvikotlin.core.lifecycle.LifecycleRegistry
+import com.arkivanov.essenty.lifecycle.Lifecycle
+import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.badoo.reaktive.scheduler.overrideSchedulers
@@ -13,6 +11,8 @@ import com.badoo.reaktive.utils.resetReaktiveUncaughtErrorHandler
 import model.*
 import repository.BrightnessRepository
 import repository.MipRepository
+import repository.TestBrightnessRepository
+import repository.TestMipRepository
 import resume
 import testMips
 import testPresets
@@ -25,11 +25,11 @@ class ToolsControllerTest {
 
   private val lifecycle = LifecycleRegistry()
   private val output = ArrayList<ToolsController.Output>()
-  private val researchData = testResearchInitModelCT.toResearchSlicesSizesData(doseReport)
+  private val researchData = testResearchInitModelCT.toResearchSlicesSizesData(false)
 
   private val dependencies =
     object : ToolsController.Dependencies {
-      override val storeFactory: StoreFactory = DefaultStoreFactory
+      override val storeFactory: StoreFactory = DefaultStoreFactory()
       override val lifecycle: Lifecycle = this@ToolsControllerTest.lifecycle
       override val toolsOutput: (ToolsController.Output) -> Unit = { output += it }
       override val data: ResearchData = researchData

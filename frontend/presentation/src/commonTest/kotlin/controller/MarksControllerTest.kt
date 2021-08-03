@@ -1,34 +1,37 @@
 package controller
 
-import repository.TestMarksRepository
-import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
-import com.arkivanov.mvikotlin.core.lifecycle.LifecycleRegistry
+import com.arkivanov.essenty.lifecycle.Lifecycle
+import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.badoo.reaktive.scheduler.overrideSchedulers
 import com.badoo.reaktive.test.scheduler.TestScheduler
 import com.badoo.reaktive.utils.reaktiveUncaughtErrorHandler
 import com.badoo.reaktive.utils.resetReaktiveUncaughtErrorHandler
-import model.*
+import model.Research
+import model.ResearchData
+import model.toResearchSlicesSizesData
 import repository.MarksRepository
+import repository.TestMarksRepository
 import resume
 import testComment
 import testMark
 import testMarkType
 import testResearchInitModelCT
 import testResearches
-import view.*
+import view.MarksView
+import view.TestMarksView
 import kotlin.test.*
 
 class MarksControllerTest {
 
   private val lifecycle = LifecycleRegistry()
   private val output = ArrayList<MarksController.Output>()
-  private val researchData = testResearchInitModelCT.toResearchSlicesSizesData(doseReport)
+  private val researchData = testResearchInitModelCT.toResearchSlicesSizesData(false)
 
   private val dependencies =
     object : MarksController.Dependencies {
-      override val storeFactory: StoreFactory = DefaultStoreFactory
+      override val storeFactory: StoreFactory = DefaultStoreFactory()
       override val lifecycle: Lifecycle = this@MarksControllerTest.lifecycle
       override val marksRepository: MarksRepository = TestMarksRepository()
       override val marksOutput: (MarksController.Output) -> Unit = { output += it }

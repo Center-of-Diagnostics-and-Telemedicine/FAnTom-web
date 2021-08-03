@@ -1,8 +1,7 @@
 package controller
 
-import repository.TestCovidMarksRepository
-import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
-import com.arkivanov.mvikotlin.core.lifecycle.LifecycleRegistry
+import com.arkivanov.essenty.lifecycle.Lifecycle
+import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.badoo.reaktive.scheduler.overrideSchedulers
@@ -13,6 +12,7 @@ import model.Research
 import model.ResearchData
 import model.toResearchSlicesSizesData
 import repository.CovidMarksRepository
+import repository.TestCovidMarksRepository
 import resume
 import testLungLobeModel
 import testLungLobeValue
@@ -26,11 +26,11 @@ class CovidMarksControllerTest {
 
   private val lifecycle = LifecycleRegistry()
   private val output = ArrayList<CovidMarksController.Output>()
-  private val researchData = testResearchInitModelCT.toResearchSlicesSizesData(doseReport)
+  private val researchData = testResearchInitModelCT.toResearchSlicesSizesData(false)
 
   private val dependencies =
     object : CovidMarksController.Dependencies {
-      override val storeFactory: StoreFactory = DefaultStoreFactory
+      override val storeFactory: StoreFactory = DefaultStoreFactory()
       override val lifecycle: Lifecycle = this@CovidMarksControllerTest.lifecycle
       override val covidMarksRepository: CovidMarksRepository = TestCovidMarksRepository()
       override val covidMarksOutput: (CovidMarksController.Output) -> Unit = { output += it }

@@ -1,10 +1,7 @@
 package controller
 
-import repository.TestBrightnessRepository
-import repository.TestMipRepository
-import repository.TestResearchRepository
-import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
-import com.arkivanov.mvikotlin.core.lifecycle.LifecycleRegistry
+import com.arkivanov.essenty.lifecycle.Lifecycle
+import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.badoo.reaktive.scheduler.overrideSchedulers
@@ -13,9 +10,7 @@ import com.badoo.reaktive.utils.reaktiveUncaughtErrorHandler
 import com.badoo.reaktive.utils.resetReaktiveUncaughtErrorHandler
 import controller.CutController.*
 import model.*
-import repository.BrightnessRepository
-import repository.MipRepository
-import repository.ResearchRepository
+import repository.*
 import resume
 import testCircle
 import testCut
@@ -37,7 +32,7 @@ class CutControllerTest {
     object : Dependencies {
       override val mipRepository: MipRepository = TestMipRepository()
       override val brightnessRepository: BrightnessRepository = TestBrightnessRepository()
-      override val storeFactory: StoreFactory = DefaultStoreFactory
+      override val storeFactory: StoreFactory = DefaultStoreFactory()
       override val lifecycle: Lifecycle = this@CutControllerTest.lifecycle
       override val researchRepository: ResearchRepository = TestResearchRepository()
       override val cutOutput: (Output) -> Unit = { output += it }

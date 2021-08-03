@@ -1,20 +1,21 @@
 package components.shapes
 
 import com.arkivanov.decompose.*
-import com.arkivanov.decompose.statekeeper.Parcelable
-import com.arkivanov.decompose.statekeeper.Parcelize
 import com.arkivanov.decompose.value.Value
+import com.arkivanov.essenty.parcelable.Parcelable
+import com.arkivanov.essenty.parcelable.Parcelize
 import com.badoo.reaktive.base.Consumer
+import com.badoo.reaktive.observable.Observable
 import components.cutcontainer.CutContainer.ShapesChild
-import components.shapes.Shapes.Output
 import components.shapes.Shapes.Input
+import components.shapes.Shapes.Output
 import model.CutType
 
 internal class ShapesRouter(
   routerFactory: RouterFactory,
-  private val shapesFactory: (ComponentContext, Consumer<Output>, Consumer<Input>) -> Shapes,
+  private val shapesFactory: (ComponentContext, Consumer<Output>, Observable<Input>) -> Shapes,
   private val shapesOutput: Consumer<Output>,
-  private val shapesInput: Consumer<Input>,
+  private val shapesInput: Observable<Input>,
   cutType: CutType
 ) {
 

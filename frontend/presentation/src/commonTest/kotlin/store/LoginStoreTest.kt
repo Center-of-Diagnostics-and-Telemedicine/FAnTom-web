@@ -1,6 +1,5 @@
 package store
 
-import repository.TestLoginRepository
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.badoo.reaktive.scheduler.overrideSchedulers
 import com.badoo.reaktive.test.scheduler.TestScheduler
@@ -8,6 +7,7 @@ import com.badoo.reaktive.utils.reaktiveUncaughtErrorHandler
 import com.badoo.reaktive.utils.resetReaktiveUncaughtErrorHandler
 import invalidLogin
 import invalidPassword
+import repository.TestLoginRepository
 import store.login.LoginStore
 import testLogin
 import testPassword
@@ -66,6 +66,6 @@ class TodoListStoreTest {
   }
 
   private fun createStore() {
-    store = LoginStoreFactory(DefaultStoreFactory, repository).create()
+    store = LoginStoreFactory(DefaultStoreFactory(), repository).create()
   }
 }

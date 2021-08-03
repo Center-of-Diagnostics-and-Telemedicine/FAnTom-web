@@ -1,8 +1,7 @@
 package controller
 
-import repository.TestLoginRepository
-import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
-import com.arkivanov.mvikotlin.core.lifecycle.LifecycleRegistry
+import com.arkivanov.essenty.lifecycle.Lifecycle
+import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.badoo.reaktive.scheduler.overrideSchedulers
@@ -15,6 +14,7 @@ import invalidLogin
 import invalidPassword
 import model.INVALID_AUTH_CREDENTIALS
 import repository.LoginRepository
+import repository.TestLoginRepository
 import resume
 import testLogin
 import testPassword
@@ -29,7 +29,7 @@ class LoginControllerTest {
 
   private val dependencies =
     object : Dependencies {
-      override val storeFactory: StoreFactory = DefaultStoreFactory
+      override val storeFactory: StoreFactory = DefaultStoreFactory()
       override val lifecycle: Lifecycle = this@LoginControllerTest.lifecycle
       override val loginRepository: LoginRepository = TestLoginRepository()
       override val loginOutput: (Output) -> Unit = { output += it }

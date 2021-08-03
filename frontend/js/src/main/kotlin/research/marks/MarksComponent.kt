@@ -1,14 +1,17 @@
 package research.marks
 
-import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
-import com.arkivanov.mvikotlin.core.lifecycle.LifecycleRegistry
-import com.arkivanov.mvikotlin.core.lifecycle.doOnDestroy
+import com.arkivanov.essenty.lifecycle.Lifecycle
+import com.arkivanov.essenty.lifecycle.LifecycleRegistry
+import com.arkivanov.essenty.lifecycle.doOnDestroy
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.observable.Observable
 import com.badoo.reaktive.observable.subscribe
 import com.ccfraser.muirwik.components.mDivider
 import com.ccfraser.muirwik.components.mPaper
-import com.ccfraser.muirwik.components.table.*
+import com.ccfraser.muirwik.components.table.mTable
+import com.ccfraser.muirwik.components.table.mTableBody
+import com.ccfraser.muirwik.components.table.mTableHead
+import com.ccfraser.muirwik.components.table.mTableRow
 import com.ccfraser.muirwik.components.themeContext
 import components.alert
 import controller.MarksController

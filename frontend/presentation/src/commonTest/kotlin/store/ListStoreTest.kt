@@ -45,6 +45,6 @@ class ListStoreTest {
   }
 
   private fun createStore() {
-    store = ListStoreFactory(DefaultStoreFactory, repository).create()
+    store = ListStoreFactory(DefaultStoreFactory(), repository).create()
   }
 }

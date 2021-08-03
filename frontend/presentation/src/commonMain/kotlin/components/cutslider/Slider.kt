@@ -4,6 +4,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.base.Consumer
+import com.badoo.reaktive.observable.Observable
 import components.cutslider.Slider.Dependencies
 import model.Plane
 
@@ -22,7 +23,7 @@ interface Slider {
   interface Dependencies {
     val storeFactory: StoreFactory
     val sliderOutput: Consumer<Output>
-    val sliderInput: Consumer<Input>
+    val sliderInput: Observable<Input>
     val plane: Plane
     val researchId: Int
   }

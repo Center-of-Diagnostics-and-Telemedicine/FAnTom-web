@@ -8,11 +8,14 @@ import com.badoo.reaktive.utils.resetReaktiveUncaughtErrorHandler
 import model.toResearchSlicesSizesData
 import store.tools.ToolsStore
 import testResearchInitModelCT
-import kotlin.test.*
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertTrue
 
 class ToolsStoreTest {
 
-  private val testData = testResearchInitModelCT.toResearchSlicesSizesData(doseReport)
+  private val testData = testResearchInitModelCT.toResearchSlicesSizesData(false)
 
   private lateinit var store: ToolsStore
 
@@ -36,6 +39,6 @@ class ToolsStoreTest {
   }
 
   private fun createStore() {
-    store = ToolsStoreFactory(DefaultStoreFactory, testData).create()
+    store = ToolsStoreFactory(DefaultStoreFactory(), testData).create()
   }
 }

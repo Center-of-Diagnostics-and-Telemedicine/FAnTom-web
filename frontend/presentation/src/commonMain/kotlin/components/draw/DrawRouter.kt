@@ -1,20 +1,21 @@
 package components.draw
 
 import com.arkivanov.decompose.*
-import com.arkivanov.decompose.statekeeper.Parcelable
-import com.arkivanov.decompose.statekeeper.Parcelize
 import com.arkivanov.decompose.value.Value
+import com.arkivanov.essenty.parcelable.Parcelable
+import com.arkivanov.essenty.parcelable.Parcelize
 import com.badoo.reaktive.base.Consumer
+import com.badoo.reaktive.observable.Observable
 import components.cutcontainer.CutContainer.DrawChild
-import components.draw.Draw.Output
 import components.draw.Draw.Input
+import components.draw.Draw.Output
 import model.CutType
 
 internal class DrawRouter(
   routerFactory: RouterFactory,
-  private val drawFactory: (ComponentContext, Consumer<Output>, Consumer<Input>) -> Draw,
+  private val drawFactory: (ComponentContext, Consumer<Output>, Observable<Input>) -> Draw,
   private val drawOutput: Consumer<Output>,
-  private val drawInput: Consumer<Input>,
+  private val drawInput: Observable<Input>,
   private val cutType: CutType,
 ) {
 

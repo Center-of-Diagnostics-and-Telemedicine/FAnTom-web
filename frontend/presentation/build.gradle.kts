@@ -13,9 +13,7 @@ kotlinCompat {
         implementation(project(":frontend:domain-internal"))
         implementation(Deps.Badoo.Reaktive.Reaktive)
         implementation(Deps.Badoo.Reaktive.Utils)
-        implementation(Deps.Badoo.Reaktive.Utils)
         implementation(Deps.Badoo.Reaktive.CoroutinesInterop)
-
         implementation(Deps.Decompose.Core)
       }
     }

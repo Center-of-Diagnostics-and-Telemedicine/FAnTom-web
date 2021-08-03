@@ -27,9 +27,9 @@ class CutContainerComponent(
   componentContext: ComponentContext,
   dependencies: Dependencies,
   cut: (ComponentContext, Consumer<Cut.Output>, Observable<Cut.Input>) -> Cut,
-  slider: (ComponentContext, Consumer<Slider.Output>, Consumer<Slider.Input>) -> Slider,
-  draw: (ComponentContext, Consumer<Draw.Output>, Consumer<Draw.Input>) -> Draw,
-  shapes: (ComponentContext, Consumer<Shapes.Output>, Consumer<Shapes.Input>) -> Shapes,
+  slider: (ComponentContext, Consumer<Slider.Output>, Observable<Slider.Input>) -> Slider,
+  draw: (ComponentContext, Consumer<Draw.Output>, Observable<Draw.Input>) -> Draw,
+  shapes: (ComponentContext, Consumer<Shapes.Output>, Observable<Shapes.Input>) -> Shapes,
 ) : CutContainer, ComponentContext by componentContext, Dependencies by dependencies {
 
   private val cutInput: Subject<Cut.Input> = PublishSubject()

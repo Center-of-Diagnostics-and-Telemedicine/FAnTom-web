@@ -4,6 +4,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.base.Consumer
+import com.badoo.reaktive.observable.Observable
 import components.cut.Cut.Dependencies
 import model.Plane
 import repository.MyBrightnessRepository
@@ -27,7 +28,7 @@ interface Cut {
     val researchRepository: MyResearchRepository
     val mipRepository: MyMipRepository
     val cutOutput: Consumer<Output>
-    val cutInput: Value<Input>
+    val cutInput: Observable<Input>
     val plane: Plane
     val researchId: Int
   }

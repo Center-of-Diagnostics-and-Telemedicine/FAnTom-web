@@ -1,7 +1,7 @@
 package controller
 
-import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
-import com.arkivanov.mvikotlin.core.lifecycle.LifecycleRegistry
+import com.arkivanov.essenty.lifecycle.Lifecycle
+import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.badoo.reaktive.scheduler.overrideSchedulers
@@ -22,11 +22,11 @@ class CutContainerControllerTest {
 
   private val lifecycle = LifecycleRegistry()
   private val output = ArrayList<CutsContainerController.Output>()
-  private val researchData = testResearchInitModelCT.toResearchSlicesSizesData(doseReport)
+  private val researchData = testResearchInitModelCT.toResearchSlicesSizesData(false)
 
   private val dependencies =
     object : CutsContainerController.Dependencies {
-      override val storeFactory: StoreFactory = DefaultStoreFactory
+      override val storeFactory: StoreFactory = DefaultStoreFactory()
       override val lifecycle: Lifecycle = this@CutContainerControllerTest.lifecycle
       override val data: ResearchData = researchData
     }

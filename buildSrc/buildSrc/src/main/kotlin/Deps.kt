@@ -169,7 +169,7 @@ object Deps {
   }
 
   object MVIKotlin : Group(name = "com.arkivanov.mvikotlin") {
-    private const val version = "2.0.3"
+    private const val version = "3.0.0-alpha01"
 
     object Core : Dependency(group = MVIKotlin, name = "mvikotlin", version = version)
     object Main : Dependency(group = MVIKotlin, name = "mvikotlin-main", version = version)
@@ -180,10 +180,12 @@ object Deps {
     object Rx : Dependency(group = MVIKotlin, name = "rx", version = version)
     object Reaktive :
       Dependency(group = MVIKotlin, name = "mvikotlin-extensions-reaktive", version = version)
+    object Coroutines :
+      Dependency(group = MVIKotlin, name = "mvikotlin-extensions-coroutines", version = version)
   }
 
   object Decompose : Group(name = "com.arkivanov.decompose") {
-    private const val version = "0.2.6"
+    private const val version = "0.3.0"
 
     object Core : Dependency(group = Decompose, name = "decompose", version = version)
   }

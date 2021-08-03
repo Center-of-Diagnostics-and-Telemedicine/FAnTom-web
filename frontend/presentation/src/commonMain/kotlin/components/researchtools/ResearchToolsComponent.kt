@@ -37,6 +37,12 @@ internal class ResearchToolsComponent(
   override val grid: Grid =
     gridFactory(childContext(key = "grid"), Consumer(::onGridOutput))
 
+  override val models: Value<Model> = store.asValue().map(stateToModel)
+
+  override fun onBackClick() {
+    toolsOutput.onNext(ResearchTools.Output.Back)
+  }
+
   private fun onMipOutput(output: Mip.Output) {
     when (output) {
       else -> throw NotImplementedError("onMipOutput notImplemented $output")
@@ -53,11 +59,5 @@ internal class ResearchToolsComponent(
     when (output) {
       else -> throw NotImplementedError("onBrightnessOutput notImplemented $output")
     }
-  }
-
-  override val models: Value<Model> = store.asValue().map(stateToModel)
-
-  override fun onBackClick() {
-    toolsOutput.onNext(ResearchTools.Output.Back)
   }
 }
