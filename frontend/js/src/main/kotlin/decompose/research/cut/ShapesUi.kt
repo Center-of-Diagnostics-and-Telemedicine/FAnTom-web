@@ -20,6 +20,7 @@ class ShapesUi(props: Props<Shapes>) : CanvasUi<Shapes, State, Model>(
 
   init {
     component.model.bindToState { model = it }
+    component.model.subscribeToUpdate { updateCanvas(it) }
   }
 
   override fun RBuilder.render() {
