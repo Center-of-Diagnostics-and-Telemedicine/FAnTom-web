@@ -6,6 +6,8 @@ import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
+import com.badoo.reaktive.completable.observeOn
+import com.badoo.reaktive.completable.subscribeOn
 import com.badoo.reaktive.coroutinesinterop.completableFromCoroutine
 import com.badoo.reaktive.observable.*
 import com.badoo.reaktive.scheduler.ioScheduler
@@ -77,15 +79,77 @@ internal class ResearchMarksStoreProvider(
 
     override fun executeIntent(intent: Intent, getState: () -> State) {
       when (intent) {
-        Intent.ReloadRequested -> TODO()
+        is Intent.SelectMark -> handleSelectMark(intent.id, getState())
+        is Intent.DeleteMark -> handleDeleteMark(intent.id, getState())
+        is Intent.ChangeComment -> handleChangeComment(intent.id, intent.comment, getState())
+        is Intent.ChangeMarkType -> handleChangeMarkType(intent.id, intent.typeId, getState())
+        is Intent.ChangeVisibility -> handleChangeVisibility(intent.id, getState())
+        Intent.ReloadRequested -> load()
         Intent.DismissError -> dispatch(Result.DismissErrorRequested)
       }.let {}
+    }
+
+    private fun handleSelectMark(id: Int, state: State) {
+      completableFromCoroutine {
+        state.marks.firstOrNull { it.id == id }?.let { mark ->
+          marksRepository.setMark(mark.toMarkEntity())
+        }
+      }
+        .subscribeOn(ioScheduler)
+        .observeOn(mainScheduler)
+        .subscribeScoped()
+    }
+
+    fun handleDeleteMark(id: Int, state: State) {
+      completableFromCoroutine {
+        marksRepository.deleteMark(id, researchId)
+      }
+        .subscribeOn(ioScheduler)
+        .observeOn(mainScheduler)
+        .subscribeScoped()
+    }
+
+    fun handleChangeComment(id: Int, comment: String, state: State) {
+      completableFromCoroutine {
+        state.currentMark?.let { mark ->
+          marksRepository.updateMark(mark.copy(comment = comment).toMarkEntity(), researchId)
+        }
+      }
+        .subscribeOn(ioScheduler)
+        .observeOn(mainScheduler)
+        .subscribeScoped()
+    }
+
+    fun handleChangeMarkType(id: Int, typeId: String, state: State) {
+      completableFromCoroutine {
+        state.currentMark?.let { mark ->
+          val markType = state.markTypes.first { it.typeId == typeId }
+          marksRepository.updateMark(mark.copy(type = markType).toMarkEntity(), researchId)
+        }
+      }
+        .subscribeOn(ioScheduler)
+        .observeOn(mainScheduler)
+        .subscribeScoped()
+    }
+
+    fun handleChangeVisibility(id: Int, state: State) {
+//      completableFromCoroutine {
+//        state.marks.firstOrNull { it.id == id }.let { mark ->
+//          marksRepository.updateMark(mark.copy(type = markType).toMarkEntity(), researchId)
+//        }
+//      }
+//        .subscribeOn(ioScheduler)
+//        .observeOn(mainScheduler)
+//        .subscribeScoped()
     }
 
     private fun load() {
       completableFromCoroutine {
         marksRepository.loadMarks(researchId)
-      }.subscribeScoped(onError = ::handleError)
+      }
+        .subscribeOn(ioScheduler)
+        .observeOn(mainScheduler)
+        .subscribeScoped(onError = ::handleError)
     }
 
     private fun handleError(error: Throwable) {

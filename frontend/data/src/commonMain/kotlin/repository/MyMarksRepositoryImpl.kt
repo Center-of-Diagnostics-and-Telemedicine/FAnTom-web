@@ -13,8 +13,8 @@ class MyMarksRepositoryImpl(
   private val _mark: BehaviorSubject<MarkEntity?> = BehaviorSubject(null)
   override val mark: Observable<MarkEntity?> = _mark
 
-  private val _marks: BehaviorSubject<List<MarkEntity>?> = BehaviorSubject(null)
-  override val marks: Observable<List<MarkEntity>?> = _marks
+  private val _marks: BehaviorSubject<List<MarkEntity>> = BehaviorSubject(listOf())
+  override val marks: Observable<List<MarkEntity>> = _marks
 
   override suspend fun setMark(mark: MarkEntity?) {
     _mark.onNext(mark)
@@ -37,7 +37,7 @@ class MyMarksRepositoryImpl(
     when {
       response.response != null -> {
         val mark = response.response!!.mark
-        val marks = _marks.value?.plus(mark) ?: listOf(mark)
+        val marks = _marks.value.plus(mark)
         _marks.onNext(marks)
         setMark(mark)
       }
@@ -50,7 +50,7 @@ class MyMarksRepositoryImpl(
     val response = remote.update(mark, researchId, token())
     when {
       response.response != null -> {
-        val marks = _marks.value?.replace(mark) { it.id == mark.id } ?: listOf(mark)
+        val marks = _marks.value.replace(mark) { it.id == mark.id }
         _marks.onNext(marks)
       }
       response.error != null -> mapErrorResponse(response.error!!)
@@ -62,7 +62,7 @@ class MyMarksRepositoryImpl(
     val response = remote.delete(id, researchId, token())
     when {
       response.response != null -> {
-        val marks = _marks.value?.filter { it.id != id }
+        val marks = _marks.value.filter { it.id != id }
         _marks.onNext(marks)
       }
       response.error != null -> mapErrorResponse(response.error!!)

@@ -6,19 +6,27 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.base.Consumer
 import components.researchmarks.ResearchMarks.Dependencies
 import model.MarkModel
+import model.MarkTypeModel
 import model.ResearchDataModel
 import repository.MyMarksRepository
 import repository.MyResearchRepository
 
 interface ResearchMarks {
 
-  val models: Value<Model>
+  val model: Value<Model>
+
+  fun onSelectItem(id: Int)
+  fun onChangeComment(id: Int, comment: String)
+  fun onChangeMarkType(id: Int, typeId: String)
+  fun onChangeVisibility(id: Int)
+  fun onDeleteItem(id: Int)
 
   data class Model(
     val error: String,
     val loading: Boolean,
     val currentMark: MarkModel?,
     val marks: List<MarkModel>,
+    val markTypes: List<MarkTypeModel>
   )
 
   interface Dependencies {

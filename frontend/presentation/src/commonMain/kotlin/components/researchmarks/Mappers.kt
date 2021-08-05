@@ -9,6 +9,7 @@ internal val stateToModel: (State) -> Model =
       error = it.error,
       loading = it.loading,
       currentMark = it.currentMark,
-      marks = it.marks
+      marks = it.marks,
+      markTypes = it.markTypes
     )
   }

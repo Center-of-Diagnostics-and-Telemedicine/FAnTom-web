@@ -9,6 +9,12 @@ import store.marks.MyMarksStore.*
 interface MyMarksStore : Store<Intent, State, Label> {
 
   sealed class Intent : JvmSerializable {
+    data class SelectMark(val id: Int) : Intent()
+    data class DeleteMark(val id: Int) : Intent()
+    data class ChangeComment(val id: Int, val comment: String) : Intent()
+    data class ChangeMarkType(val id: Int, val typeId: String) : Intent()
+    data class ChangeVisibility(val id: Int) : Intent()
+
     object DismissError : Intent()
     object ReloadRequested : Intent()
   }

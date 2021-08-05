@@ -95,7 +95,7 @@ class CutContainerStoreProvider(
         )
 
       marksRepository.marks
-        .doOnBeforeNext { println("MY: mark income in CutContainerStoreProvider") }
+        .doOnBeforeNext { println("MY: mark income in CutContainerStoreProvider, size = ${it?.size}") }
         .notNull()
         .mapIterable { it.toMarkModel(data.markTypes) }
         .map(Result::Marks)
