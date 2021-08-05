@@ -34,6 +34,8 @@ data class CutModel(
   val blackValue: Int,
   val whiteValue: Int,
   val gammaValue: Double,
-  val mip: Mip
+  val mip: Mip,
+  val width: Int,
+  val height: Int
 )
 

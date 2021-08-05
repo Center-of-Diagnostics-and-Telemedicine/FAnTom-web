@@ -7,6 +7,8 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
 import com.badoo.reaktive.coroutinesinterop.singleFromCoroutine
+import com.badoo.reaktive.disposable.CompositeDisposable
+import com.badoo.reaktive.disposable.plusAssign
 import com.badoo.reaktive.scheduler.ioScheduler
 import com.badoo.reaktive.scheduler.mainScheduler
 import com.badoo.reaktive.single.doOnBeforeSubscribe
@@ -46,6 +48,12 @@ class MyCutStoreProvider(
 
   private inner class ExecutorImpl : ReaktiveExecutor<Intent, Unit, State, Result, Label>() {
 
+    private val disposable: CompositeDisposable = CompositeDisposable()
+
+    override fun executeAction(action: Unit, getState: () -> State) {
+      scope { disposable.dispose() }
+    }
+
     override fun executeIntent(intent: Intent, getState: () -> State) {
       when (intent) {
         is Intent.HandleChangeCutModel -> handleChangeCutModel(intent.cutModel, getState())
@@ -54,7 +62,8 @@ class MyCutStoreProvider(
 
     private fun handleChangeCutModel(cutModel: CutModel, state: State) {
       if (state.cutModel != cutModel) {
-        singleFromCoroutine {
+        disposable.clear(true)
+        disposable += singleFromCoroutine {
           researchRepository.getSlice(cutModel.toGetSliceModel())
         }
           .doOnBeforeSubscribe {
@@ -106,9 +115,9 @@ class MyCutStoreProvider(
       type = plane.type.intType,
       mipMethod = mip.intValue,
       aproxSize = (mip as? HasIntValue)?.value ?: 0,
-      width = 0,
-      height = 0,
-      sliceNumber = 1,
+      width = if (width > height) 0 else width,
+      height = if (height > width) 0 else height,
+      sliceNumber = sliceNumber,
       sopInstanceUid = plane.data.SOPInstanceUID ?: ""
     )
 }

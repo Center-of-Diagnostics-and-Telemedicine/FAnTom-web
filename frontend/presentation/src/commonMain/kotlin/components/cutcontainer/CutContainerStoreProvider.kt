@@ -9,7 +9,6 @@ import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
 import com.badoo.reaktive.completable.observeOn
 import com.badoo.reaktive.completable.subscribeOn
 import com.badoo.reaktive.coroutinesinterop.completableFromCoroutine
-import com.badoo.reaktive.observable.doOnBeforeNext
 import com.badoo.reaktive.observable.map
 import com.badoo.reaktive.observable.mapIterable
 import com.badoo.reaktive.observable.notNull
@@ -43,6 +42,8 @@ class CutContainerStoreProvider(
       whiteValue = INITIAL_WHITE.toInt(),
       gammaValue = INITIAL_GAMMA,
       mip = Mip.initial,
+      width = 0,
+      height = 0
     ),
     marks = listOf(),
     mark = null,
@@ -95,7 +96,6 @@ class CutContainerStoreProvider(
         )
 
       marksRepository.marks
-        .doOnBeforeNext { println("MY: mark income in CutContainerStoreProvider, size = ${it?.size}") }
         .notNull()
         .mapIterable { it.toMarkModel(data.markTypes) }
         .map(Result::Marks)
@@ -117,7 +117,7 @@ class CutContainerStoreProvider(
       when (intent) {
         is Intent.ChangeSliceNumber -> handleNewSliceNumber(intent.sliceNumber, getState())
         is Intent.HandleNewShape -> handleNewShape(intent.shape, getState())
-        is Intent.UpdateScreenDimensions -> dispatch(Result.ScreenDimensionsChanged(intent.dimensions))
+        is Intent.UpdateScreenDimensions -> handleDimensions(intent.dimensions, getState())
       }.let { }
     }
 
@@ -135,6 +135,15 @@ class CutContainerStoreProvider(
           .observeOn(mainScheduler)
           .subscribeScoped(onError = ::handleError)
       }
+    }
+
+    private fun handleDimensions(dimensions: ScreenDimensionsModel, state: State) {
+      val newCutModel = state.cutModel.copy(
+        width = dimensions.originalScreenWidth,
+        height = dimensions.originalScreenHeight
+      )
+      dispatch(Result.CutModelChanged(newCutModel))
+      dispatch(Result.ScreenDimensionsChanged(dimensions))
     }
 
     private fun handleError(error: Throwable) {

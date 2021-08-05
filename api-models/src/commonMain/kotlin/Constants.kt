@@ -130,8 +130,8 @@ const val AVERAGE = "average"
 const val MAXVALUE = "maxvalue"
 const val NO_MIP = "no_mip"
 
-const val INITIAL_BLACK = -1150.0
-const val INITIAL_WHITE = 350.0
+const val INITIAL_BLACK = 0.0
+const val INITIAL_WHITE = 1024.0
 const val INITIAL_GAMMA = 1.0
 const val INITIAL_MIP_VALUE = 0
 
