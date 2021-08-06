@@ -8,9 +8,9 @@ interface MyDrawStore : Store<Intent, State, Label> {
 
   data class State(
     val shape: Shape? = null,
-    val contrastBrightness: MousePositionModel? = null,
-    val mousePosition: MousePositionModel? = null,
-    val mouseInClickPosition: MousePositionModel? = null,
+    val contrastBrightness: MouseClickPositionModel? = null,
+    val mousePosition: PointPosition? = null,
+    val mouseInClickPosition: MouseClickPositionModel? = null,
     val cutType: CutType,
     val plane: Plane,
     val screenDimensionsModel: ScreenDimensionsModel,
@@ -40,6 +40,8 @@ interface MyDrawStore : Store<Intent, State, Label> {
 
     data class ChangeSlice(val deltaDicomY: Int) : Label()
     data class ChangeContrastBrightness(val deltaX: Double, val deltaY: Double) : Label()
+
+    data class MousePointPosition(val mousePosition: PointPositionModel) : Label()
 
     object OpenFullCut : Label()
 

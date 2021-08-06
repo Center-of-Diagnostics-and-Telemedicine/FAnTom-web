@@ -42,15 +42,6 @@ internal class ResearchMarksStoreProvider(
       }
     }
 
-  private sealed class Result : JvmSerializable {
-    object Loading : Result()
-    data class Loaded(val marks: List<MarkModel>) : Result()
-    data class CurrentMark(val mark: MarkModel?) : Result()
-    data class MarkTypesLoaded(val markTypes: List<MarkTypeModel>) : Result()
-    data class Error(val error: String) : Result()
-    object DismissErrorRequested : Result()
-  }
-
   private inner class ExecutorImpl : ReaktiveExecutor<Intent, Unit, State, Result, Label>() {
 
     override fun executeAction(action: Unit, getState: () -> State) {
@@ -164,6 +155,15 @@ internal class ResearchMarksStoreProvider(
       }
       dispatch(result)
     }
+  }
+
+  private sealed class Result : JvmSerializable {
+    object Loading : Result()
+    data class Loaded(val marks: List<MarkModel>) : Result()
+    data class CurrentMark(val mark: MarkModel?) : Result()
+    data class MarkTypesLoaded(val markTypes: List<MarkTypeModel>) : Result()
+    data class Error(val error: String) : Result()
+    object DismissErrorRequested : Result()
   }
 
   private object ReducerImpl : Reducer<State, Result> {

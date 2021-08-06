@@ -20,6 +20,28 @@ class MyMarksRepositoryImpl(
     _mark.onNext(mark)
   }
 
+  override suspend fun setMarkByCoordinates(dicomX: Double, dicomY: Double) {
+    _marks.value.filter {
+      val bottom = it.markData.y + it.markData.radiusVertical
+      val top = it.markData.y - it.markData.radiusVertical
+      val right = it.markData.x + it.markData.radiusHorizontal
+      val left = it.markData.x - it.markData.radiusHorizontal
+      val inVerticalBound = dicomY < bottom && dicomY > top
+      val inHorizontalBound = dicomX < right && dicomX > left
+      inVerticalBound && inHorizontalBound
+    }
+      .minByOrNull {
+        if (it.markData.radiusHorizontal < it.markData.radiusVertical) {
+          it.markData.radiusHorizontal
+        } else {
+          it.markData.radiusVertical
+        }
+      }.let {
+        _mark.onNext(it)
+      }
+  }
+
+
   override suspend fun loadMarks(researchId: Int) {
     val response = remote.getAll(token(), researchId)
     when {

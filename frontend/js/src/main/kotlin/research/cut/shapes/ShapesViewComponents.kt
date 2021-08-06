@@ -137,7 +137,7 @@ fun RBuilder.pointPosition(pointPosition: PointPosition) {
             css { color = Color(yellow) }
           }
         }
-        is PlanarPointPosition -> {
+        is PointPositionModel -> {
           mTypography(text = "x: ${it.x.roundToInt()}") {
             css { color = Color.white }
           }

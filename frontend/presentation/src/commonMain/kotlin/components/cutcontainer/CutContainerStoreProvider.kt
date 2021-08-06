@@ -47,7 +47,8 @@ class CutContainerStoreProvider(
     ),
     marks = listOf(),
     mark = null,
-    screenDimensionsModel = initialScreenDimensionsModel()
+    screenDimensionsModel = initialScreenDimensionsModel(),
+    pointPosition = null
   )
 
   fun provide(): CutContainerStore =
@@ -118,6 +119,7 @@ class CutContainerStoreProvider(
         is Intent.ChangeSliceNumber -> handleNewSliceNumber(intent.sliceNumber, getState())
         is Intent.HandleNewShape -> handleNewShape(intent.shape, getState())
         is Intent.UpdateScreenDimensions -> handleDimensions(intent.dimensions, getState())
+        is Intent.PointPosition -> handlePointPosition(intent.pointPosition)
       }.let { }
     }
 
@@ -146,6 +148,10 @@ class CutContainerStoreProvider(
       dispatch(Result.ScreenDimensionsChanged(dimensions))
     }
 
+    private fun handlePointPosition(pointPosition: PointPosition) {
+      dispatch(Result.PointPosition(pointPosition))
+    }
+
     private fun handleError(error: Throwable) {
       error.printStackTrace()
     }
@@ -156,6 +162,7 @@ class CutContainerStoreProvider(
     data class Marks(val marks: List<MarkModel>) : Result()
     data class CurrentMark(val mark: MarkModel?) : Result()
     data class ScreenDimensionsChanged(val dimensions: ScreenDimensionsModel) : Result()
+    data class PointPosition(val pointPosition: model.PointPosition) : Result()
   }
 
   private object ReducerImpl : Reducer<State, Result> {
@@ -165,6 +172,7 @@ class CutContainerStoreProvider(
         is Result.Marks -> copy(marks = result.marks)
         is Result.CurrentMark -> copy(mark = result.mark)
         is Result.ScreenDimensionsChanged -> copy(screenDimensionsModel = result.dimensions)
+        is Result.PointPosition -> copy(pointPosition = result.pointPosition)
       }
   }
 }

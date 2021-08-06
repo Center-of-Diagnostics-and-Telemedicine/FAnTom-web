@@ -145,7 +145,7 @@ fun Plane.getPosition(dicomX: Double, dicomY: Double, sliceNumber: Int): PointPo
       CutType.CT_0,
       CutType.CT_1,
       CutType.CT_2,
-      CutType.DX_RIGHT_LATERAL -> PlanarPointPosition(x = dicomX, y = dicomY)
+      CutType.DX_RIGHT_LATERAL -> PointPositionModel(x = dicomX, y = dicomY)
     }
   }
 }

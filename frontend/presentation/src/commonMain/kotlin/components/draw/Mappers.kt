@@ -31,9 +31,10 @@ internal val labelsToOutput: (Label) -> Output =
       is Label.CircleDrawn -> Output.Circle(it.circle)
       is Label.EllipseDrawn -> Output.Ellipse(it.ellipse)
       is Label.RectangleDrawn -> Output.Rectangle(it.rectangle)
-      is Label.ChangeSlice -> TODO()
-      is Label.ChangeContrastBrightness -> TODO()
-      Label.OpenFullCut -> TODO()
+      is Label.ChangeSlice -> Output.ChangeSlice(it.deltaDicomY)
+      is Label.ChangeContrastBrightness -> Output.ChangeContrastBrightness(it.deltaX, it.deltaY)
+      is Label.MousePointPosition -> Output.PointPosition(it.mousePosition)
+      Label.OpenFullCut -> Output.OpenFullCut
       Label.ContrastBrightnessChanged -> TODO()
     }
   }

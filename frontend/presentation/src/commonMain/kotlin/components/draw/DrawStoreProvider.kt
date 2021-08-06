@@ -5,15 +5,22 @@ import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
+import com.badoo.reaktive.completable.observeOn
+import com.badoo.reaktive.completable.subscribeOn
+import com.badoo.reaktive.coroutinesinterop.completableFromCoroutine
+import com.badoo.reaktive.scheduler.ioScheduler
+import com.badoo.reaktive.scheduler.mainScheduler
 import com.badoo.reaktive.utils.ensureNeverFrozen
 import model.*
+import repository.MyMarksRepository
 import store.draw.MyDrawStore
 import store.draw.MyDrawStore.*
 
 internal class DrawStoreProvider(
   private val storeFactory: StoreFactory,
   private val researchId: Int,
-  private val plane: Plane
+  private val plane: Plane,
+  private val marksRepository: MyMarksRepository
 ) {
 
   fun provide(): MyDrawStore =
@@ -48,7 +55,7 @@ internal class DrawStoreProvider(
         is Intent.Move -> handleMove(intent.dicomX, intent.dicomY, getState())
         is Intent.MouseUp -> handleMouseUp(getState())
         is Intent.MouseOut -> handleMouseOut()
-        is Intent.MouseWheel -> handleMouseWheel(intent)
+        is Intent.MouseWheel -> handleMouseWheel(intent.deltaDicomY)
         Intent.DoubleClick -> publish(Label.OpenFullCut)
         is Intent.UpdateScreenDimensions ->
           dispatch(Result.ScreenDimensionsChanged(intent.dimensions))
@@ -68,26 +75,33 @@ internal class DrawStoreProvider(
     }
 
     private fun handleStartContrastBrightness(startDicomX: Double, startDicomY: Double) {
-      val contrastBrightness = MousePositionModel(startDicomX, startDicomY)
+      val contrastBrightness = MouseClickPositionModel(startX = startDicomX, startY = startDicomY)
       dispatch(Result.StartContrastBrightness(contrastBrightness = contrastBrightness))
     }
 
     private fun handleStartClick(startDicomX: Double, startDicomY: Double) {
-      val mouseInClickPosition = MousePositionModel(startDicomX, startDicomY)
-      dispatch(Result.StartClick(mouseInClickPosition = mouseInClickPosition))
+      completableFromCoroutine {
+        val mouseInClickPosition =
+          MouseClickPositionModel(startX = startDicomX, startY = startDicomY)
+        dispatch(Result.MouseInClickPosition(mouseInClickPosition))
+        marksRepository.setMarkByCoordinates(startDicomX, startDicomY)
+      }
+        .subscribeOn(ioScheduler)
+        .observeOn(mainScheduler)
+        .subscribeScoped()
     }
 
     private fun handleMove(dicomX: Double, dicomY: Double, state: State) {
       val isShapeDrawing = state.shape != null
       val isContrastBrightness = state.contrastBrightness != null
       val isMouseMove = state.mousePosition != null
-      val isShapeMoving = state.mouseInClickPosition != null
+      val isMouseMoveInClick = state.mouseInClickPosition != null
       when {
         isShapeDrawing -> handleDrawing(dicomX, dicomY, state.shape!!)
         isContrastBrightness ->
           handleContrastBrightness(dicomX, dicomY, state.contrastBrightness!!)
-        isMouseMove -> handleMouseMove(dicomX, dicomY, state.mousePosition!!)
-        isShapeMoving -> handleShapeMove(dicomX, dicomY, state.mouseInClickPosition!!)
+        isMouseMoveInClick -> handleMouseMoveInClick(dicomX, dicomY, state.mouseInClickPosition!!)
+        isMouseMove -> handleMouseMove(dicomX, dicomY)
       }
     }
 
@@ -109,24 +123,24 @@ internal class DrawStoreProvider(
       dispatch(Result.Idle)
     }
 
-    private fun handleShapeMove(
+    private fun handleMouseMoveInClick(
       dicomX: Double,
       dicomY: Double,
-      mouseInClickPosition: MousePositionModel
+      mouseInClickPosition: MouseClickPositionModel
     ) {
-      val deltaX = dicomX - mouseInClickPosition.x
-      val deltaY = dicomY - mouseInClickPosition.y
+      dispatch(Result.MouseInClickPosition(mouseInClickPosition.copy(x = dicomX, y = dicomY)))
     }
 
-    private fun handleMouseMove(dicomX: Double, dicomY: Double, mousePosition: MousePositionModel) {
-      val deltaX = dicomX - mousePosition.x
-      val deltaY = dicomY - mousePosition.y
+    private fun handleMouseMove(dicomX: Double, dicomY: Double) {
+      val mousePosition = PointPositionModel(x = dicomX, y = dicomY)
+      dispatch(Result.MousePosition(mousePosition))
+      publish(Label.MousePointPosition(mousePosition))
     }
 
     private fun handleContrastBrightness(
       dicomX: Double,
       dicomY: Double,
-      contrastBrightnessModel: MousePositionModel
+      contrastBrightnessModel: MouseClickPositionModel
     ) {
     }
 
@@ -171,7 +185,7 @@ internal class DrawStoreProvider(
       dispatch(Result.Rectangle(rectangle))
     }
 
-    private fun handleMouseWheel(intent: Intent.MouseWheel) {}
+    private fun handleMouseWheel(deltaDicomY: Int) {}
   }
 
   private sealed class Result : JvmSerializable {
@@ -184,8 +198,10 @@ internal class DrawStoreProvider(
     data class StartDrawRectangle(val rectangle: RectangleModel) : Result()
     data class Rectangle(val rectangle: RectangleModel) : Result()
 
-    data class StartContrastBrightness(val contrastBrightness: MousePositionModel) : Result()
-    data class StartClick(val mouseInClickPosition: MousePositionModel) : Result()
+    data class StartContrastBrightness(val contrastBrightness: MouseClickPositionModel) : Result()
+
+    data class MouseInClickPosition(val mouseInClickPosition: MouseClickPositionModel) : Result()
+    data class MousePosition(val mousePosition: PointPositionModel) : Result()
     data class ScreenDimensionsChanged(val dimensions: ScreenDimensionsModel) : Result()
 
     object Idle : Result()
@@ -204,7 +220,8 @@ internal class DrawStoreProvider(
         is Result.Rectangle -> copy(shape = result.rectangle)
 
         is Result.StartContrastBrightness -> copy(contrastBrightness = result.contrastBrightness)
-        is Result.StartClick -> copy(mouseInClickPosition = result.mouseInClickPosition)
+        is Result.MouseInClickPosition -> copy(mouseInClickPosition = result.mouseInClickPosition)
+        is Result.MousePosition -> copy(mousePosition = result.mousePosition)
         is Result.ScreenDimensionsChanged -> copy(screenDimensionsModel = result.dimensions)
         Result.Idle -> copy(
           shape = null,

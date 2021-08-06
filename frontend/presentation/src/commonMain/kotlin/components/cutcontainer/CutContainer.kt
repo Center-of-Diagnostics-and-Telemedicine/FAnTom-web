@@ -64,6 +64,7 @@ interface CutContainer : ScreenDimensionsListener {
   }
 
   sealed class Output {
+    data class OpenFullCut(val cutType: CutType) : Output()
   }
 }
 

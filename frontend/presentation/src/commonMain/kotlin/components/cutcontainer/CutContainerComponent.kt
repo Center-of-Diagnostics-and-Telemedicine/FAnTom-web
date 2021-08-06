@@ -155,18 +155,23 @@ class CutContainerComponent(
       is Draw.Output.Circle -> store.accept(Intent.HandleNewShape(output.circle))
       is Draw.Output.Ellipse -> store.accept(Intent.HandleNewShape(output.ellipse))
       is Draw.Output.Rectangle -> store.accept(Intent.HandleNewShape(output.rectangle))
-    }
+      is Draw.Output.ChangeSlice ->
+        store.accept(Intent.ChangeSliceNumber(store.state.cutModel.sliceNumber + output.deltaDicomY))
+      is Draw.Output.ChangeContrastBrightness -> TODO()
+      is Draw.Output.PointPosition -> store.accept(Intent.PointPosition(output.pointPosition))
+      is Draw.Output.OpenFullCut -> cutContainerOutput.onNext(Output.OpenFullCut(cutType))
+    }.let { }
   }
 
   private fun onShapesOutput(output: Shapes.Output) {
     when (output) {
       else -> throw NotImplementedError("onShapesOutput in CutComponent not implemented for $output")
-    }
+    }.let {}
   }
 
   private fun onCutOutput(output: Cut.Output) {
     when (output) {
       else -> throw NotImplementedError("onCutOutput in CutComponent not implemented for $output")
-    }
+    }.let {}
   }
 }

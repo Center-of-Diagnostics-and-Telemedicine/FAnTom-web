@@ -8,6 +8,7 @@ import com.badoo.reaktive.observable.Observable
 import components.draw.Draw.Dependencies
 import components.models.shape.ScreenShape
 import model.*
+import repository.MyMarksRepository
 
 interface Draw {
 
@@ -33,12 +34,17 @@ interface Draw {
     val drawInput: Observable<Input>
     val plane: Plane
     val researchId: Int
+    val marksRepository: MyMarksRepository
   }
 
   sealed class Output {
     data class Circle(val circle: CircleModel) : Output()
     data class Ellipse(val ellipse: EllipseModel) : Output()
     data class Rectangle(val rectangle: RectangleModel) : Output()
+    data class ChangeSlice(val deltaDicomY: Int) : Output()
+    data class ChangeContrastBrightness(val deltaX: Double, val deltaY: Double) : Output()
+    data class PointPosition(val pointPosition: PointPositionModel) : Output()
+    object OpenFullCut : Output()
   }
 
   sealed class Input {

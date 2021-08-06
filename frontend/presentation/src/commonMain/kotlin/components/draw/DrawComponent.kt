@@ -24,7 +24,8 @@ class DrawComponent(
       DrawStoreProvider(
         storeFactory = storeFactory,
         researchId = researchId,
-        plane = plane
+        plane = plane,
+        marksRepository = marksRepository
       ).provide()
     }
 

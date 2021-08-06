@@ -11,12 +11,14 @@ data class MultiPlanarPointPosition(
   val z: Double
 ) : PointPosition
 
-data class PlanarPointPosition(
+data class PointPositionModel(
   override val x: Double,
   override val y: Double
 ) : PointPosition
 
-data class MousePositionModel(
-  override val x: Double,
-  override val y: Double
+data class MouseClickPositionModel(
+  val startX: Double,
+  val startY: Double,
+  override val x: Double = 0.0,
+  override val y: Double = 0.0
 ) : PointPosition

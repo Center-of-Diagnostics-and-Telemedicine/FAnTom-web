@@ -1,22 +1,11 @@
 plugins {
     kotlin("jvm")
     id("application")
-    id("distribution")
-    id("com.github.johnrengelman.shadow") version "5.0.0"
 }
 
 application {
     mainClass.set("MainServerKt")
 }
-
-//main_class_name =
-
-//shadowJar {
-//    manifest {
-//        attributes "Main-Class": main_class_name
-//    }
-//    archiveBaseName = "main_server"
-//}
 
 dependencies {
 

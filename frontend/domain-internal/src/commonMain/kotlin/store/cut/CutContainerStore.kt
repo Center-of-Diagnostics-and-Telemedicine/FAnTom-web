@@ -2,10 +2,7 @@ package store.cut
 
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
-import model.MarkModel
-import model.Mip
-import model.ScreenDimensionsModel
-import model.Shape
+import model.*
 import store.cut.CutContainerStore.*
 
 interface CutContainerStore : Store<Intent, State, Label> {
@@ -14,6 +11,7 @@ interface CutContainerStore : Store<Intent, State, Label> {
     data class ChangeSliceNumber(val sliceNumber: Int) : Intent()
     data class HandleNewShape(val shape: Shape) : Intent()
     data class UpdateScreenDimensions(val dimensions: ScreenDimensionsModel) : Intent()
+    data class PointPosition(val pointPosition: PointPositionModel) : Intent()
   }
 
   data class State(
@@ -21,6 +19,7 @@ interface CutContainerStore : Store<Intent, State, Label> {
     val marks: List<MarkModel>,
     val mark: MarkModel?,
     val screenDimensionsModel: ScreenDimensionsModel,
+    val pointPosition: PointPosition?,
   ) : JvmSerializable
 
 
