@@ -21,15 +21,10 @@ class MyMarksRepositoryImpl(
   }
 
   override suspend fun setMarkByCoordinates(dicomX: Double, dicomY: Double) {
-    _marks.value.filter {
-      val bottom = it.markData.y + it.markData.radiusVertical
-      val top = it.markData.y - it.markData.radiusVertical
-      val right = it.markData.x + it.markData.radiusHorizontal
-      val left = it.markData.x - it.markData.radiusHorizontal
-      val inVerticalBound = dicomY < bottom && dicomY > top
-      val inHorizontalBound = dicomX < right && dicomX > left
-      inVerticalBound && inHorizontalBound
-    }
+    _marks.value
+      .filter {
+        it.inBounds(dicomX, dicomY)
+      }
       .minByOrNull {
         if (it.markData.radiusHorizontal < it.markData.radiusVertical) {
           it.markData.radiusHorizontal
@@ -107,3 +102,5 @@ class MyMarksRepositoryImpl(
   }
 
 }
+
+

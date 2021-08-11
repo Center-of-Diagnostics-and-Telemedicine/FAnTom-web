@@ -1,7 +1,9 @@
 package model
 
 import kotlinx.serialization.Serializable
+import kotlin.math.pow
 import kotlin.math.roundToInt
+import kotlin.math.sqrt
 
 @Serializable
 data class MarkEntity(
@@ -78,3 +80,37 @@ fun MarkModel.toMarkEntity(): MarkEntity =
     it.selected = selected
     it.visible = visible
   }
+
+fun MarkEntity.inBounds(dicomX: Double, dicomY: Double): Boolean {
+  return when (markData.shapeType) {
+    SHAPE_TYPE_CIRCLE -> inBoundsCircle(dicomX, dicomY)
+    SHAPE_TYPE_RECTANGLE -> inBoundsRectangle(dicomX, dicomY)
+    SHAPE_TYPE_ELLIPSE -> inBoundsEllipse(dicomX, dicomY)
+    else -> throw NotImplementedError("inBounds not implemented for shapeType = ${markData.shapeType}")
+  }
+}
+
+fun MarkEntity.inBoundsCircle(dicomX: Double, dicomY: Double): Boolean {
+  println("inBoundsCircle")
+  val centerX = markData.x + markData.radiusHorizontal
+  val centerY = markData.y + markData.radiusVertical
+  return sqrt((centerX - dicomX) + (centerY - dicomY)) <= markData.radiusVertical
+}
+
+fun MarkEntity.inBoundsRectangle(dicomX: Double, dicomY: Double): Boolean {
+  println("inBoundsRectangle")
+  val bottom = markData.y + markData.radiusVertical * 2
+  val top = markData.y
+  val right = markData.x + markData.radiusHorizontal * 2
+  val left = markData.x
+  val inVerticalBound = dicomY < bottom && dicomY > top
+  val inHorizontalBound = dicomX < right && dicomX > left
+  return inVerticalBound && inHorizontalBound
+}
+
+fun MarkEntity.inBoundsEllipse(dicomX: Double, dicomY: Double): Boolean {
+  println("inBoundsEllipse")
+  val a = markData.radiusHorizontal / 2
+  val b = markData.radiusVertical / 2
+  return dicomX.pow(2) / a.pow(2) + dicomY.pow(2) / b.pow(2) <= 1
+}
