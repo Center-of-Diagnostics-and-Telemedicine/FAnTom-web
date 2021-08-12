@@ -9,7 +9,6 @@ interface MyDrawStore : Store<Intent, State, Label> {
   data class State(
     val shape: Shape? = null,
     val contrastBrightness: MouseClickPositionModel? = null,
-    val mousePosition: PointPosition? = null,
     val mouseInClickPosition: MouseClickPositionModel? = null,
     val cutType: CutType,
     val plane: Plane,

@@ -15,7 +15,7 @@ interface Shapes {
   val model: Value<Model>
 
   data class Model(
-    val sliceNumber: Int,
+    val sliceNumber: SliceNumberModel,
     val position: PointPosition?,
     val shapes: List<ScreenShape>,
     val hounsfield: Int?,
@@ -38,6 +38,7 @@ interface Shapes {
 
   sealed class Input {
     data class Shapes(val shapes: List<Shape>) : Input()
+    data class MousePosition(val position: PointPosition): Input()
     data class ScreenDimensionsChanged(val dimensions: ScreenDimensionsModel) : Input()
   }
 }

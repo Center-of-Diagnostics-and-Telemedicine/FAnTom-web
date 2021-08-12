@@ -7,6 +7,7 @@ import decompose.RenderableComponent
 import decompose.renderableChild
 import decompose.research.cut.CutContainerUi.CutContainerStyles.cutContainerStyle
 import decompose.research.cut.CutContainerUi.State
+import decompose.research.cut.shapes.ShapesUi
 import kotlinx.browser.window
 import kotlinx.css.*
 import org.w3c.dom.Element

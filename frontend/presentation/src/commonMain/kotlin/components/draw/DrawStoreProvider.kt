@@ -58,7 +58,7 @@ internal class DrawStoreProvider(
         is Intent.MouseWheel -> handleMouseWheel(intent.deltaDicomY)
         Intent.DoubleClick -> publish(Label.OpenFullCut)
         is Intent.UpdateScreenDimensions ->
-          dispatch(Result.ScreenDimensionsChanged(intent.dimensions))
+          handleDimensions(intent.dimensions, getState().screenDimensionsModel)
       }.let {}
     }
 
@@ -94,14 +94,13 @@ internal class DrawStoreProvider(
     private fun handleMove(dicomX: Double, dicomY: Double, state: State) {
       val isShapeDrawing = state.shape != null
       val isContrastBrightness = state.contrastBrightness != null
-      val isMouseMove = state.mousePosition != null
       val isMouseMoveInClick = state.mouseInClickPosition != null
       when {
         isShapeDrawing -> handleDrawing(dicomX, dicomY, state.shape!!)
         isContrastBrightness ->
           handleContrastBrightness(dicomX, dicomY, state.contrastBrightness!!)
         isMouseMoveInClick -> handleMouseMoveInClick(dicomX, dicomY, state.mouseInClickPosition!!)
-        isMouseMove -> handleMouseMove(dicomX, dicomY)
+        else -> publish(Label.MousePointPosition(PointPositionModel(x = dicomX, y = dicomY)))
       }
     }
 
@@ -129,12 +128,6 @@ internal class DrawStoreProvider(
       mouseInClickPosition: MouseClickPositionModel
     ) {
       dispatch(Result.MouseInClickPosition(mouseInClickPosition.copy(x = dicomX, y = dicomY)))
-    }
-
-    private fun handleMouseMove(dicomX: Double, dicomY: Double) {
-      val mousePosition = PointPositionModel(x = dicomX, y = dicomY)
-      dispatch(Result.MousePosition(mousePosition))
-      publish(Label.MousePointPosition(mousePosition))
     }
 
     private fun handleContrastBrightness(
@@ -186,6 +179,15 @@ internal class DrawStoreProvider(
     }
 
     private fun handleMouseWheel(deltaDicomY: Int) {}
+
+    private fun handleDimensions(
+      dimensions: ScreenDimensionsModel,
+      oldDimensions: ScreenDimensionsModel
+    ) {
+      if (dimensions != oldDimensions) {
+        dispatch(Result.ScreenDimensionsChanged(dimensions))
+      }
+    }
   }
 
   private sealed class Result : JvmSerializable {
@@ -201,7 +203,6 @@ internal class DrawStoreProvider(
     data class StartContrastBrightness(val contrastBrightness: MouseClickPositionModel) : Result()
 
     data class MouseInClickPosition(val mouseInClickPosition: MouseClickPositionModel) : Result()
-    data class MousePosition(val mousePosition: PointPositionModel) : Result()
     data class ScreenDimensionsChanged(val dimensions: ScreenDimensionsModel) : Result()
 
     object Idle : Result()
@@ -221,12 +222,10 @@ internal class DrawStoreProvider(
 
         is Result.StartContrastBrightness -> copy(contrastBrightness = result.contrastBrightness)
         is Result.MouseInClickPosition -> copy(mouseInClickPosition = result.mouseInClickPosition)
-        is Result.MousePosition -> copy(mousePosition = result.mousePosition)
         is Result.ScreenDimensionsChanged -> copy(screenDimensionsModel = result.dimensions)
         Result.Idle -> copy(
           shape = null,
           contrastBrightness = null,
-          mousePosition = null,
           mouseInClickPosition = null
         )
       }

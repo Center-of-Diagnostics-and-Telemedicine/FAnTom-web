@@ -1,9 +1,10 @@
-package decompose.research.cut
+package decompose.research.cut.shapes
 
 import components.shapes.Shapes
 import components.shapes.Shapes.Model
 import decompose.Props
-import decompose.research.cut.ShapesUi.State
+import decompose.research.cut.CanvasUi
+import decompose.research.cut.shapes.ShapesUi.State
 import kotlinx.css.*
 import kotlinx.html.classes
 import react.RBuilder
@@ -19,8 +20,10 @@ class ShapesUi(props: Props<Shapes>) : CanvasUi<Shapes, State, Model>(
 ) {
 
   init {
-    component.model.bindToState { model = it }
-    component.model.subscribeToUpdate { updateCanvas(it) }
+    component.model.bindToState {
+      model = it
+      updateCanvas(it)
+    }
   }
 
   override fun RBuilder.render() {
@@ -44,6 +47,8 @@ class ShapesUi(props: Props<Shapes>) : CanvasUi<Shapes, State, Model>(
           height = state.model.screenDimensionsModel.calculatedScreenHeight.toString()
         }
       }
+      state.model.position?.let { pointPosition(it) }
+      sliceNumber(state.model.sliceNumber)
     }
   }
 

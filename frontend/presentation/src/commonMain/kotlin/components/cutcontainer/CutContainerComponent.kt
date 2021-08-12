@@ -21,6 +21,8 @@ import components.draw.calculateScreenDimensions
 import components.getStore
 import components.shapes.Shapes
 import components.shapes.ShapesRouter
+import model.MultiPlanarPointPosition
+import model.PointPositionModel
 import model.ScreenDimensionsModel
 import model.toShape
 import store.cut.CutContainerStore.Intent
@@ -116,6 +118,13 @@ class CutContainerComponent(
           shapesInput.onNext(Shapes.Input.ScreenDimensionsChanged(dimensions))
           drawInput.onNext(Draw.Input.ScreenDimensionsChanged(dimensions))
         }
+
+      state.pointPosition?.let {
+        when (it) {
+          is MultiPlanarPointPosition,
+          is PointPositionModel -> shapesInput.onNext(Shapes.Input.MousePosition(it))
+        }
+      }
 
     }
   }

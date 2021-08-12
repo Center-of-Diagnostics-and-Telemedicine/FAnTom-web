@@ -24,5 +24,6 @@ internal val inputToIntent: (Input) -> Intent =
     when (it) {
       is Input.Shapes -> Intent.HandleShapes(it.shapes)
       is Input.ScreenDimensionsChanged -> Intent.UpdateScreenDimensions(it.dimensions)
+      is Input.MousePosition -> Intent.HandleMousePosition(it.position)
     }
   }

@@ -20,7 +20,7 @@ internal class ShapesStoreProvider(
     object : MyShapesStore, Store<Intent, State, Label> by storeFactory.create(
       name = "MyShapesStore_${researchId}_${plane.type.intType}",
       initialState = State(
-        sliceNumber = 1,
+        sliceNumber = SliceNumberModel(1, plane.data.nImages),
         position = null,
         shapes = listOf(),
         hounsfield = null,
@@ -41,18 +41,29 @@ internal class ShapesStoreProvider(
 
     override fun executeIntent(intent: Intent, getState: () -> State) {
       when (intent) {
-        is Intent.HandleMousePosition -> TODO()
-        is Intent.HandleSliceNumberChange -> TODO()
+        is Intent.HandleMousePosition -> dispatch(Result.PointPositionChanged(intent.mousePosition))
+        is Intent.HandleSliceNumberChange ->
+          dispatch(Result.SliceNumberChanged(getState().sliceNumber.copy(value = intent.sliceNumber)))
         is Intent.HandleShapes -> dispatch(Result.Shapes(intent.shapes))
-        is Intent.UpdateScreenDimensions -> dispatch(Result.ScreenDimensionsChanged(intent.dimensions))
+        is Intent.UpdateScreenDimensions ->
+          handleDimensions(intent.dimensions, getState().screenDimensionsModel)
       }.let { }
+    }
+
+    private fun handleDimensions(
+      dimensions: ScreenDimensionsModel,
+      oldDimensions: ScreenDimensionsModel
+    ) {
+      if (dimensions != oldDimensions) {
+        dispatch(Result.ScreenDimensionsChanged(dimensions))
+      }
     }
 
   }
 
   private sealed class Result : JvmSerializable {
-    data class SliceNumberChanged(val sliceNumber: Int) : Result()
-    data class PointPositionChanged(val position: PointPosition?) : Result()
+    data class SliceNumberChanged(val sliceNumber: SliceNumberModel) : Result()
+    data class PointPositionChanged(val position: PointPosition) : Result()
     data class HounsfieldChanged(val hu: Double) : Result()
     data class Shapes(val shapes: List<Shape>) : Result()
     data class ScreenDimensionsChanged(val dimensions: ScreenDimensionsModel) : Result()

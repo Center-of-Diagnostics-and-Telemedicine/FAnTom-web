@@ -46,11 +46,8 @@ class MarksUi(props: Props<ResearchMarks>) : RenderableComponent<ResearchMarks, 
             }
             tableCell("X")
             tableCell("Y")
-
             tableCell("mm_v")
             tableCell("mm_h")
-            tableCell("Z")
-            tableCell("mm")
             tableCell("Тип")
             tableCell("")
           }
@@ -70,14 +67,14 @@ class MarksUi(props: Props<ResearchMarks>) : RenderableComponent<ResearchMarks, 
         key = area.id,
         onClick = { component.onSelectItem(area.id) }
       ) {
-        if (area.selected) {
+        if (area.id == state.model.currentMark?.id) {
           css {
             backgroundColor = Color(theme.palette.primary.main)
           }
         }
-//      mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.checkbox) {
-//        visibilityButton(area)
-//      }
+        mTableCell(align = MTableCellAlign.center, padding = MTableCellPadding.checkbox) {
+          visibilityButton(area)
+        }
         tableCell("${round(area.markData.x)}")
         tableCell("${round(area.markData.y)}")
         tableCell("${round(area.markData.sizeVertical)}")
@@ -151,16 +148,16 @@ class MarksUi(props: Props<ResearchMarks>) : RenderableComponent<ResearchMarks, 
     )
   }
 
-//  private fun RBuilder.visibilityButton(area: MarkModel) {
-//    mIconButton(
-//      if (area.visible) "visibility" else "visibility_off",
-//      onClick = {
-//        it.stopPropagation()
+  private fun RBuilder.visibilityButton(area: MarkModel) {
+    mIconButton(
+      if (area.visible) "visibility" else "visibility_off",
+      onClick = {
+        it.stopPropagation()
 //        props.eventOutput(MarksView.Event.ChangeVisibility(area))
-//      },
-//      size = MIconButtonSize.small
-//    )
-//  }
+      },
+      size = MIconButtonSize.small
+    )
+  }
 //
 //  private fun RBuilder.commentInput() {
 //    mTextField(
