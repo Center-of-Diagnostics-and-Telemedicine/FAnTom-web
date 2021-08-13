@@ -248,8 +248,8 @@ private fun MarkModel.toRectangle(cut: Plane): RectangleModel? {
         return if (markData.cutType == cut.type.intType) RectangleModel(
           dicomX = x,
           dicomY = y,
-          dicomWidth = radiusHorizontal,
-          dicomHeight = radiusVertical,
+          dicomWidth = radiusHorizontal * 2,
+          dicomHeight = radiusVertical * 2,
           id = id,
           highlight = selected,
           isCenter = true,
@@ -282,8 +282,8 @@ private fun MarkModel.toEllipse(cut: Plane): EllipseModel? {
         return if (markData.cutType == cut.type.intType) EllipseModel(
           dicomX = x,
           dicomY = y,
-          dicomWidth = radiusHorizontal,
-          dicomHeight = radiusVertical,
+          dicomWidth = radiusHorizontal * 2,
+          dicomHeight = radiusVertical * 2,
           id = id,
           highlight = selected,
           isCenter = true,

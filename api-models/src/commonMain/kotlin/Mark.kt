@@ -91,14 +91,12 @@ fun MarkEntity.inBounds(dicomX: Double, dicomY: Double): Boolean {
 }
 
 fun MarkEntity.inBoundsCircle(dicomX: Double, dicomY: Double): Boolean {
-  println("inBoundsCircle")
   val centerX = markData.x + markData.radiusHorizontal
   val centerY = markData.y + markData.radiusVertical
   return sqrt((centerX - dicomX) + (centerY - dicomY)) <= markData.radiusVertical
 }
 
 fun MarkEntity.inBoundsRectangle(dicomX: Double, dicomY: Double): Boolean {
-  println("inBoundsRectangle")
   val bottom = markData.y + markData.radiusVertical * 2
   val top = markData.y
   val right = markData.x + markData.radiusHorizontal * 2
@@ -109,7 +107,6 @@ fun MarkEntity.inBoundsRectangle(dicomX: Double, dicomY: Double): Boolean {
 }
 
 fun MarkEntity.inBoundsEllipse(dicomX: Double, dicomY: Double): Boolean {
-  println("inBoundsEllipse")
   val a = markData.radiusHorizontal / 2
   val b = markData.radiusVertical / 2
   return dicomX.pow(2) / a.pow(2) + dicomY.pow(2) / b.pow(2) <= 1
