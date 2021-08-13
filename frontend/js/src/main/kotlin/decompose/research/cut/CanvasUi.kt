@@ -12,7 +12,6 @@ import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLCanvasElement
 import org.w3c.dom.get
 import react.RState
-import root.debugLog
 import kotlin.math.PI
 
 abstract class CanvasUi<T : Any, S : RState, Model : Any>(
@@ -50,6 +49,11 @@ abstract class CanvasUi<T : Any, S : RState, Model : Any>(
 
     context?.beginPath()
     context?.strokeStyle = circle.color//"#00ff00"
+    if (circle.highlight) {
+      context?.lineWidth = 2.0
+    } else {
+      context?.lineWidth = 1.0
+    }
     context?.arc(
       x = circle.screenX,
       y = circle.screenY,
@@ -70,6 +74,11 @@ abstract class CanvasUi<T : Any, S : RState, Model : Any>(
 
     val context = getCanvas()?.getContext()
     context?.strokeStyle = ellipse.color//"#00ff00"
+    if (ellipse.highlight) {
+      context?.lineWidth = 2.0
+    } else {
+      context?.lineWidth = 1.0
+    }
 
     context?.save()
     context?.beginPath()
@@ -87,6 +96,11 @@ abstract class CanvasUi<T : Any, S : RState, Model : Any>(
     val context = canvas?.getContext()
     context?.beginPath()
     context?.strokeStyle = rectangle.color//"#00ff00"
+    if (rectangle.highlight) {
+      context?.lineWidth = 2.0
+    } else {
+      context?.lineWidth = 1.0
+    }
     context?.rect(
       x = rectangle.screenX,
       y = rectangle.screenY,

@@ -67,7 +67,7 @@ class MarksUi(props: Props<ResearchMarks>) : RenderableComponent<ResearchMarks, 
         key = area.id,
         onClick = { component.onSelectItem(area.id) }
       ) {
-        if (area.id == state.model.currentMark?.id) {
+        if (area.selected) {
           css {
             backgroundColor = Color(theme.palette.primary.main)
           }

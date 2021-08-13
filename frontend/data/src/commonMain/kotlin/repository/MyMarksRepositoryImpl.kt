@@ -24,25 +24,26 @@ class MyMarksRepositoryImpl(
     mark?.selected = true
     _mark.onNext(mark)
 
-    if (mark != null) {
-      _marks.onNext(oldMarks.replace(mark) { it.id == mark.id })
+    val resultMarks = if (mark != null) {
+      oldMarks.replace(mark) { it.id == mark.id }
+    } else {
+      oldMarks
     }
+    _marks.onNext(resultMarks)
   }
 
-  override suspend fun setMarkByCoordinates(dicomX: Double, dicomY: Double) {
-    _marks.value
-      .filter {
-        it.inBounds(dicomX, dicomY)
-      }
+  override suspend fun setMarkByCoordinates(dicomX: Double, dicomY: Double, cutType: CutType) {
+    val mark = _marks.value
+      .filter { it.markData.cutType == cutType.intType }
+      .filter { it.inBounds(dicomX, dicomY) }
       .minByOrNull {
         if (it.markData.radiusHorizontal < it.markData.radiusVertical) {
           it.markData.radiusHorizontal
         } else {
           it.markData.radiusVertical
         }
-      }.let {
-        _mark.onNext(it)
       }
+    setMark(mark?.id)
   }
 
 

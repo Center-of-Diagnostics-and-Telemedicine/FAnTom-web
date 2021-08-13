@@ -84,7 +84,7 @@ internal class DrawStoreProvider(
         val mouseInClickPosition =
           MouseClickPositionModel(startX = startDicomX, startY = startDicomY)
         dispatch(Result.MouseInClickPosition(mouseInClickPosition))
-        marksRepository.setMarkByCoordinates(startDicomX, startDicomY)
+        marksRepository.setMarkByCoordinates(startDicomX, startDicomY, plane.type)
       }
         .subscribeOn(ioScheduler)
         .observeOn(mainScheduler)

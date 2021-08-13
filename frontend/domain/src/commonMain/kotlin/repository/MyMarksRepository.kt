@@ -1,6 +1,7 @@
 package repository
 
 import com.badoo.reaktive.observable.Observable
+import model.CutType
 import model.MarkData
 import model.MarkEntity
 
@@ -12,7 +13,7 @@ interface MyMarksRepository {
   val marks: Observable<List<MarkEntity>?>
 
   suspend fun setMark(id: Int?)
-  suspend fun setMarkByCoordinates(dicomX: Double, dicomY: Double)
+  suspend fun setMarkByCoordinates(dicomX: Double, dicomY: Double, cutType: CutType)
   suspend fun loadMarks(researchId: Int)
   suspend fun saveMark(markToSave: MarkData, researchId: Int)
   suspend fun updateMark(mark: MarkEntity, researchId: Int)
