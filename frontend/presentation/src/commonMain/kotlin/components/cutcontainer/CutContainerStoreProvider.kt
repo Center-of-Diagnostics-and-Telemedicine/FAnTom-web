@@ -68,7 +68,6 @@ class CutContainerStoreProvider(
   private inner class ExecutorImpl : ReaktiveExecutor<Intent, Unit, State, Result, Label>() {
 
     override fun executeAction(action: Unit, getState: () -> State) {
-      println("executeAction")
       brightnessRepository.black
         .map { Result.CutModelChanged(getState().cutModel.copy(blackValue = it)) }
         .subscribeScoped(

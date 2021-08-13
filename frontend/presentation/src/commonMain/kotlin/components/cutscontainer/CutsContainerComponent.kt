@@ -4,12 +4,16 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.RouterState
 import com.arkivanov.decompose.replaceCurrent
 import com.arkivanov.decompose.router
+import com.arkivanov.decompose.value.Value
+import com.arkivanov.decompose.value.operator.map
 import com.arkivanov.essenty.parcelable.Parcelable
 import com.arkivanov.essenty.parcelable.Parcelize
-import com.arkivanov.decompose.value.Value
-import com.arkivanov.decompose.value.observe
-import com.arkivanov.decompose.value.operator.map
+import com.arkivanov.mvikotlin.core.binder.BinderLifecycleMode
+import com.arkivanov.mvikotlin.extensions.reaktive.bind
+import com.arkivanov.mvikotlin.extensions.reaktive.labels
 import com.badoo.reaktive.base.Consumer
+import com.badoo.reaktive.observable.notNull
+import com.badoo.reaktive.observable.subscribe
 import components.Consumer
 import components.asValue
 import components.cutcontainer.CutContainer
@@ -20,6 +24,7 @@ import components.singlecutcontainer.SingleCutContainer
 import components.twohorizontalcutscontainer.TwoHorizontalCutsContainer
 import components.twoverticalcutscontainer.TwoVerticalCutsContainer
 import model.GridType
+import store.gridcontainer.MyCutsContainerStore
 
 class CutsContainerComponent(
   componentContext: ComponentContext,
@@ -52,8 +57,12 @@ class CutsContainerComponent(
   override val model: Value<Model> = store.asValue().map(stateToModel)
 
   init {
-    store.asValue().observe(lifecycle) {
-      changeGrid(it.gridType)
+    bind(lifecycle, BinderLifecycleMode.CREATE_DESTROY) {
+      store.labels.notNull().subscribe {
+        if (it is MyCutsContainerStore.Label.GridTypeChanged) {
+          changeGrid(it.gridType)
+        }
+      }
     }
   }
 

@@ -6,6 +6,7 @@ import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
+import com.badoo.reaktive.observable.doOnAfterNext
 import com.badoo.reaktive.observable.map
 import com.badoo.reaktive.observable.observeOn
 import com.badoo.reaktive.observable.subscribeOn
@@ -19,8 +20,7 @@ import model.buildModel
 import repository.GridRepository
 import repository.MyResearchRepository
 import store.gridcontainer.MyCutsContainerStore
-import store.gridcontainer.MyCutsContainerStore.Intent
-import store.gridcontainer.MyCutsContainerStore.State
+import store.gridcontainer.MyCutsContainerStore.*
 
 internal class CutsContainerStoreProvider(
   private val storeFactory: StoreFactory,
@@ -31,7 +31,7 @@ internal class CutsContainerStoreProvider(
 ) {
 
   fun provide(): MyCutsContainerStore =
-    object : MyCutsContainerStore, Store<Intent, State, Nothing> by storeFactory.create(
+    object : MyCutsContainerStore, Store<Intent, State, Label> by storeFactory.create(
       name = "CutsContainerStore_$researchId",
       initialState = State(
         gridType = GridType.initial,
@@ -51,11 +51,12 @@ internal class CutsContainerStoreProvider(
     data class GridModelChanged(val gridModel: GridModel) : Result()
   }
 
-  private inner class ExecutorImpl : ReaktiveExecutor<Intent, Unit, State, Result, Nothing>() {
+  private inner class ExecutorImpl : ReaktiveExecutor<Intent, Unit, State, Result, Label>() {
     override fun executeAction(action: Unit, getState: () -> State) {
       gridRepository
         .grid
         .map(Result::GridChanged)
+        .doOnAfterNext { publish(Label.GridTypeChanged(it.grid)) }
         .subscribeOn(ioScheduler)
         .observeOn(mainScheduler)
         .subscribeScoped(onNext = ::dispatch)

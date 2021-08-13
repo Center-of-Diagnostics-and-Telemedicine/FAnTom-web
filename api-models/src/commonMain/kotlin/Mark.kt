@@ -101,13 +101,15 @@ fun MarkEntity.inBoundsRectangle(dicomX: Double, dicomY: Double): Boolean {
   val top = markData.y
   val right = markData.x + markData.radiusHorizontal * 2
   val left = markData.x
-  val inVerticalBound = dicomY < bottom && dicomY > top
-  val inHorizontalBound = dicomX < right && dicomX > left
+  val inVerticalBound = dicomY in top..bottom
+  val inHorizontalBound = dicomX in left..right
   return inVerticalBound && inHorizontalBound
 }
 
 fun MarkEntity.inBoundsEllipse(dicomX: Double, dicomY: Double): Boolean {
-  val a = markData.radiusHorizontal / 2
-  val b = markData.radiusVertical / 2
-  return dicomX.pow(2) / a.pow(2) + dicomY.pow(2) / b.pow(2) <= 1
+  val a = markData.radiusHorizontal
+  val b = markData.radiusVertical
+  val h = markData.x + markData.radiusHorizontal
+  val k = markData.y + markData.radiusVertical
+  return (dicomX - h).pow(2) / a.pow(2) + (dicomY - k).pow(2) / b.pow(2) <= 1
 }
