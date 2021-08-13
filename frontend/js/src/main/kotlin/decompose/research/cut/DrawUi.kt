@@ -26,8 +26,10 @@ class DrawUi(props: Props<Draw>) : CanvasUi<Draw, State, Model>(
 ) {
 
   init {
-    component.model.bindToState { model = it }
-    component.model.subscribeToUpdate { updateCanvas(it) }
+    component.model.bindToState {
+      model = it
+      updateCanvas(it)
+    }
   }
 
   override fun RBuilder.render() {

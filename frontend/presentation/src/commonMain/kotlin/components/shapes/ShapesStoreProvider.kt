@@ -63,7 +63,7 @@ internal class ShapesStoreProvider(
 
   private sealed class Result : JvmSerializable {
     data class SliceNumberChanged(val sliceNumber: SliceNumberModel) : Result()
-    data class PointPositionChanged(val position: PointPosition) : Result()
+    data class PointPositionChanged(val position: PointPosition?) : Result()
     data class HounsfieldChanged(val hu: Double) : Result()
     data class Shapes(val shapes: List<Shape>) : Result()
     data class ScreenDimensionsChanged(val dimensions: ScreenDimensionsModel) : Result()

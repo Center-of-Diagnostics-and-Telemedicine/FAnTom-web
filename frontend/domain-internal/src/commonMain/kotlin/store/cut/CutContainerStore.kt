@@ -11,7 +11,7 @@ interface CutContainerStore : Store<Intent, State, Label> {
     data class ChangeSliceNumber(val sliceNumber: Int) : Intent()
     data class HandleNewShape(val shape: Shape) : Intent()
     data class UpdateScreenDimensions(val dimensions: ScreenDimensionsModel) : Intent()
-    data class PointPosition(val pointPosition: PointPositionModel) : Intent()
+    data class PointPosition(val pointPosition: PointPositionModel?) : Intent()
   }
 
   data class State(
@@ -25,6 +25,9 @@ interface CutContainerStore : Store<Intent, State, Label> {
 
   sealed class Label {
     data class CutModelChanged(val cutModel: CutModel) : Label()
+    data class Shapes(val shapes: List<Shape>) : Label()
+    data class MousePosition(val pointPosition: PointPosition?) : Label()
+    data class ScreenDimensions(val dimensions: ScreenDimensionsModel) : Label()
   }
 }
 

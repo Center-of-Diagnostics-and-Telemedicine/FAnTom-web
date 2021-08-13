@@ -40,7 +40,7 @@ interface MyDrawStore : Store<Intent, State, Label> {
     data class ChangeSlice(val deltaDicomY: Int) : Label()
     data class ChangeContrastBrightness(val deltaX: Double, val deltaY: Double) : Label()
 
-    data class MousePointPosition(val mousePosition: PointPositionModel) : Label()
+    data class MousePointPosition(val mousePosition: PointPositionModel?) : Label()
 
     object OpenFullCut : Label()
 

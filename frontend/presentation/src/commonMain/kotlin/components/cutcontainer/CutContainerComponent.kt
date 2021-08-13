@@ -3,9 +3,12 @@ package components.cutcontainer
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.RouterState
 import com.arkivanov.decompose.value.Value
-import com.arkivanov.decompose.value.observe
+import com.arkivanov.mvikotlin.core.binder.BinderLifecycleMode
+import com.arkivanov.mvikotlin.extensions.reaktive.bind
+import com.arkivanov.mvikotlin.extensions.reaktive.labels
 import com.badoo.reaktive.base.Consumer
 import com.badoo.reaktive.observable.Observable
+import com.badoo.reaktive.observable.mapNotNull
 import com.badoo.reaktive.subject.Subject
 import com.badoo.reaktive.subject.publish.PublishSubject
 import components.Consumer
@@ -21,10 +24,7 @@ import components.draw.calculateScreenDimensions
 import components.getStore
 import components.shapes.Shapes
 import components.shapes.ShapesRouter
-import model.MultiPlanarPointPosition
-import model.PointPositionModel
 import model.ScreenDimensionsModel
-import model.toShape
 import store.cut.CutContainerStore.Intent
 
 class CutContainerComponent(
@@ -98,34 +98,10 @@ class CutContainerComponent(
   override val cutRouterState: Value<RouterState<*, CutChild>> = cutRouter.state
 
   init {
-    store.asValue().observe(lifecycle) { state ->
-
-      state.marks
-        .mapNotNull { markModel ->
-          markModel.toShape(plane, state.cutModel.sliceNumber)
-        }
-        .let { shapes ->
-          shapesInput.onNext(Shapes.Input.Shapes(shapes))
-        }
-
-      state.cutModel
-        .let { cutModel ->
-          cutInput.onNext(Cut.Input.ChangeCutModel(cutModel))
-        }
-
-      state.screenDimensionsModel
-        .let { dimensions ->
-          shapesInput.onNext(Shapes.Input.ScreenDimensionsChanged(dimensions))
-          drawInput.onNext(Draw.Input.ScreenDimensionsChanged(dimensions))
-        }
-
-      state.pointPosition?.let {
-        when (it) {
-          is MultiPlanarPointPosition,
-          is PointPositionModel -> shapesInput.onNext(Shapes.Input.MousePosition(it))
-        }
-      }
-
+    bind(lifecycle, BinderLifecycleMode.CREATE_DESTROY) {
+      store.labels.mapNotNull(labelsToShapesInput) bindTo shapesInput
+      store.labels.mapNotNull(labelsToCutInput) bindTo cutInput
+      store.labels.mapNotNull(labelsToDrawInput) bindTo drawInput
     }
   }
 

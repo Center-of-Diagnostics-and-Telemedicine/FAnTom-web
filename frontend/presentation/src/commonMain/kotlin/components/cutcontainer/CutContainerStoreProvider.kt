@@ -9,6 +9,7 @@ import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
 import com.badoo.reaktive.completable.observeOn
 import com.badoo.reaktive.completable.subscribeOn
 import com.badoo.reaktive.coroutinesinterop.completableFromCoroutine
+import com.badoo.reaktive.observable.doOnAfterNext
 import com.badoo.reaktive.observable.map
 import com.badoo.reaktive.observable.mapIterable
 import com.badoo.reaktive.observable.notNull
@@ -77,6 +78,7 @@ class CutContainerStoreProvider(
 
       brightnessRepository.white
         .map { Result.CutModelChanged(getState().cutModel.copy(whiteValue = it)) }
+        .doOnAfterNext { publish(Label.CutModelChanged(it.cutModel)) }
         .subscribeScoped(
           onNext = ::dispatch,
           onError = ::handleError
@@ -84,6 +86,7 @@ class CutContainerStoreProvider(
 
       brightnessRepository.gamma
         .map { Result.CutModelChanged(getState().cutModel.copy(gammaValue = it)) }
+        .doOnAfterNext { publish(Label.CutModelChanged(it.cutModel)) }
         .subscribeScoped(
           onNext = ::dispatch,
           onError = ::handleError
@@ -91,6 +94,7 @@ class CutContainerStoreProvider(
 
       mipRepository.mipMethod
         .map { Result.CutModelChanged(getState().cutModel.copy(mip = it)) }
+        .doOnAfterNext { publish(Label.CutModelChanged(it.cutModel)) }
         .subscribeScoped(
           onNext = ::dispatch,
           onError = ::handleError
@@ -100,6 +104,16 @@ class CutContainerStoreProvider(
         .notNull()
         .mapIterable { it.toMarkModel(data.markTypes) }
         .map(Result::Marks)
+        .doOnAfterNext { result ->
+          result
+            .marks
+            .mapNotNull {
+              it.toShape(plane, getState().cutModel.sliceNumber)
+            }
+            .let {
+              publish(Label.Shapes(it))
+            }
+        }
         .subscribeScoped(
           onNext = ::dispatch,
           onError = ::handleError
@@ -119,13 +133,14 @@ class CutContainerStoreProvider(
         is Intent.ChangeSliceNumber -> handleNewSliceNumber(intent.sliceNumber, getState())
         is Intent.HandleNewShape -> handleNewShape(intent.shape, getState())
         is Intent.UpdateScreenDimensions -> handleDimensions(intent.dimensions, getState())
-        is Intent.PointPosition -> handlePointPosition(intent.pointPosition)
+        is Intent.PointPosition -> handlePointPosition(intent.pointPosition, getState())
       }.let { }
     }
 
     private fun handleNewSliceNumber(sliceNumber: Int, state: State) {
       val newCutModel = state.cutModel.copy(sliceNumber = sliceNumber)
       dispatch(Result.CutModelChanged(newCutModel))
+      publish(Label.CutModelChanged(newCutModel))
     }
 
     private fun handleNewShape(shape: Shape, state: State) {
@@ -140,16 +155,20 @@ class CutContainerStoreProvider(
     }
 
     private fun handleDimensions(dimensions: ScreenDimensionsModel, state: State) {
+      dispatch(Result.ScreenDimensionsChanged(dimensions))
+      publish(Label.ScreenDimensions(dimensions))
+
       val newCutModel = state.cutModel.copy(
         width = dimensions.originalScreenWidth,
         height = dimensions.originalScreenHeight
       )
       dispatch(Result.CutModelChanged(newCutModel))
-      dispatch(Result.ScreenDimensionsChanged(dimensions))
+      publish(Label.CutModelChanged(newCutModel))
     }
 
-    private fun handlePointPosition(pointPosition: PointPosition) {
-      dispatch(Result.PointPosition(pointPosition))
+    private fun handlePointPosition(pointPosition: PointPositionModel?, state: State) {
+      dispatch(Result.MousePosition(pointPosition))
+      publish(Label.MousePosition(pointPosition))
     }
 
     private fun handleError(error: Throwable) {
@@ -162,7 +181,7 @@ class CutContainerStoreProvider(
     data class Marks(val marks: List<MarkModel>) : Result()
     data class CurrentMark(val mark: MarkModel?) : Result()
     data class ScreenDimensionsChanged(val dimensions: ScreenDimensionsModel) : Result()
-    data class PointPosition(val pointPosition: model.PointPosition) : Result()
+    data class MousePosition(val pointPosition: PointPosition?) : Result()
   }
 
   private object ReducerImpl : Reducer<State, Result> {
@@ -172,7 +191,7 @@ class CutContainerStoreProvider(
         is Result.Marks -> copy(marks = result.marks)
         is Result.CurrentMark -> copy(mark = result.mark)
         is Result.ScreenDimensionsChanged -> copy(screenDimensionsModel = result.dimensions)
-        is Result.PointPosition -> copy(pointPosition = result.pointPosition)
+        is Result.MousePosition -> copy(pointPosition = result.pointPosition)
       }
   }
 }

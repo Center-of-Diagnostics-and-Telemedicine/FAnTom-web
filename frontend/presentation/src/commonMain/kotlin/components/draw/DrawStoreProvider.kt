@@ -106,6 +106,7 @@ internal class DrawStoreProvider(
 
     private fun handleMouseOut() {
       dispatch(Result.Idle)
+      publish(Label.MousePointPosition(null))
     }
 
     private fun handleMouseUp(state: State) {

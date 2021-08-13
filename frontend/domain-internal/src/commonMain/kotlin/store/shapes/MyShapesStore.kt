@@ -8,7 +8,7 @@ import store.shapes.MyShapesStore.*
 interface MyShapesStore : Store<Intent, State, Label> {
 
   sealed class Intent : JvmSerializable {
-    data class HandleMousePosition(val mousePosition: PointPosition) : Intent()
+    data class HandleMousePosition(val mousePosition: PointPosition?) : Intent()
     data class HandleSliceNumberChange(val sliceNumber: Int) : Intent()
     data class HandleShapes(val shapes: List<Shape>) : Intent()
     data class UpdateScreenDimensions(val dimensions: ScreenDimensionsModel) : Intent()

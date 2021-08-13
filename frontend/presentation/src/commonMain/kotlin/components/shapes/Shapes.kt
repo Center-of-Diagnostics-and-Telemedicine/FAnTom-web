@@ -38,7 +38,7 @@ interface Shapes {
 
   sealed class Input {
     data class Shapes(val shapes: List<Shape>) : Input()
-    data class MousePosition(val position: PointPosition): Input()
+    data class MousePosition(val position: PointPosition?): Input()
     data class ScreenDimensionsChanged(val dimensions: ScreenDimensionsModel) : Input()
   }
 }

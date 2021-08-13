@@ -43,7 +43,7 @@ interface Draw {
     data class Rectangle(val rectangle: RectangleModel) : Output()
     data class ChangeSlice(val deltaDicomY: Int) : Output()
     data class ChangeContrastBrightness(val deltaX: Double, val deltaY: Double) : Output()
-    data class PointPosition(val pointPosition: PointPositionModel) : Output()
+    data class PointPosition(val pointPosition: PointPositionModel?) : Output()
     object OpenFullCut : Output()
   }
 
