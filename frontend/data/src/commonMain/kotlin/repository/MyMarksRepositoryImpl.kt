@@ -16,8 +16,17 @@ class MyMarksRepositoryImpl(
   private val _marks: BehaviorSubject<List<MarkEntity>> = BehaviorSubject(listOf())
   override val marks: Observable<List<MarkEntity>> = _marks
 
-  override suspend fun setMark(mark: MarkEntity?) {
+  override suspend fun setMark(id: Int?) {
+    val oldMarks = _marks.value
+    oldMarks.firstOrNull { it.selected }?.apply { selected = false }
+
+    val mark = oldMarks.firstOrNull { it.id == id }
+    mark?.selected = true
     _mark.onNext(mark)
+
+    if (mark != null) {
+      _marks.onNext(oldMarks.replace(mark) { it.id == mark.id })
+    }
   }
 
   override suspend fun setMarkByCoordinates(dicomX: Double, dicomY: Double) {
@@ -56,7 +65,7 @@ class MyMarksRepositoryImpl(
         val mark = response.response!!.mark
         val marks = _marks.value.plus(mark)
         _marks.onNext(marks)
-        setMark(mark)
+        setMark(mark.id)
       }
       response.error != null -> mapErrorResponse(response.error!!)
       else -> throw ResearchApiExceptions.MarkCreateException

@@ -82,9 +82,7 @@ internal class ResearchMarksStoreProvider(
 
     private fun handleSelectMark(id: Int, state: State) {
       completableFromCoroutine {
-        state.marks.firstOrNull { it.id == id }?.let { mark ->
-          marksRepository.setMark(mark.toMarkEntity())
-        }
+        marksRepository.setMark(id)
       }
         .subscribeOn(ioScheduler)
         .observeOn(mainScheduler)

@@ -11,7 +11,7 @@ interface MyMarksRepository {
   val mark: Observable<MarkEntity?>
   val marks: Observable<List<MarkEntity>?>
 
-  suspend fun setMark(mark: MarkEntity?)
+  suspend fun setMark(id: Int?)
   suspend fun setMarkByCoordinates(dicomX: Double, dicomY: Double)
   suspend fun loadMarks(researchId: Int)
   suspend fun saveMark(markToSave: MarkData, researchId: Int)

@@ -131,6 +131,7 @@ fun List<Shape>.getShapeByPosition(dicomX: Double, dicomY: Double): Shape? {
 
 private fun MarkModel.toCircle(cut: Plane, sliceNumber: Int): CircleModel? {
   markData.apply {
+    val colorByCutType = getColorByCutType(cut.type)
     when (cut.type) {
       CutType.EMPTY -> return null
       CutType.CT_AXIAL -> {
@@ -150,7 +151,7 @@ private fun MarkModel.toCircle(cut: Plane, sliceNumber: Int): CircleModel? {
             id = id,
             highlight = selected,
             isCenter = sliceNumber == z.roundToInt(),
-            color = type?.color ?: ""
+            color = type?.color ?: colorByCutType
           )
         } else null
       }
@@ -173,7 +174,7 @@ private fun MarkModel.toCircle(cut: Plane, sliceNumber: Int): CircleModel? {
             id = id,
             highlight = selected,
             isCenter = sliceNumber == y.roundToInt(),
-            color = type?.color ?: ""
+            color = type?.color ?: colorByCutType
           )
         } else null
 
@@ -197,7 +198,7 @@ private fun MarkModel.toCircle(cut: Plane, sliceNumber: Int): CircleModel? {
             id = id,
             highlight = selected,
             isCenter = sliceNumber == x.roundToInt(),
-            color = type?.color ?: ""
+            color = type?.color ?: colorByCutType
           )
         } else null
       }
@@ -220,7 +221,7 @@ private fun MarkModel.toCircle(cut: Plane, sliceNumber: Int): CircleModel? {
           id = id,
           highlight = selected,
           isCenter = true,
-          color = type?.color ?: ""
+          color = type?.color ?: colorByCutType
         ) else null
       }
     }
@@ -253,7 +254,7 @@ private fun MarkModel.toRectangle(cut: Plane): RectangleModel? {
           id = id,
           highlight = selected,
           isCenter = true,
-          color = type?.color ?: "",
+          color = type?.color ?: getColorByCutType(cut.type),
           editable = editable
         ) else null
       }
@@ -287,7 +288,7 @@ private fun MarkModel.toEllipse(cut: Plane): EllipseModel? {
           id = id,
           highlight = selected,
           isCenter = true,
-          color = type?.color ?: "",
+          color = type?.color ?: getColorByCutType(cut.type),
           editable = editable
         ) else null
       }

@@ -26,7 +26,7 @@ internal class ShapesStoreProvider(
         hounsfield = null,
         cutType = plane.type,
         plane = plane,
-        screenDimensionsModel = initialScreenDimensionsModel()
+        screenDimensionsModel = initialScreenDimensionsModel(),
       ),
       executorFactory = ::ExecutorImpl,
       reducer = ReducerImpl
