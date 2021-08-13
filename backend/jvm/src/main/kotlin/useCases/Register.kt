@@ -3,11 +3,14 @@ package useCases
 import hash
 import io.ktor.application.*
 import io.ktor.http.*
-import io.ktor.locations.*
+import io.ktor.locations.post
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.Route
-import model.*
+import model.ErrorModel
+import model.ErrorStringCode
+import model.RegistrationRequest
+import model.UserRole
 import repository.UserRepository
 import util.Register
 import util.user

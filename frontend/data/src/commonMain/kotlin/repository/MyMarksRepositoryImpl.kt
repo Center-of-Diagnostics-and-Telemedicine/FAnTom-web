@@ -46,6 +46,21 @@ class MyMarksRepositoryImpl(
     setMark(mark?.id)
   }
 
+  override suspend fun updateMarkPosition(deltaX: Double, deltaY: Double, cutType: CutType) {
+    _mark.value?.let { mark ->
+      val updatedMark = mark.copy(
+        markData = mark.markData.copy(
+          x = mark.markData.x + deltaX,
+          y = mark.markData.y + deltaY
+        )
+      )
+      _mark.onNext(updatedMark)
+
+      val resultMarks = _marks.value.replace(updatedMark) { it.id == mark.id }
+      _marks.onNext(resultMarks)
+    }
+  }
+
 
   override suspend fun loadMarks(researchId: Int) {
     val response = remote.getAll(token(), researchId)

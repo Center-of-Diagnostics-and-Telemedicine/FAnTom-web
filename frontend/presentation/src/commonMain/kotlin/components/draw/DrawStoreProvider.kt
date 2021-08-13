@@ -128,7 +128,14 @@ internal class DrawStoreProvider(
       dicomY: Double,
       mouseInClickPosition: MouseClickPositionModel
     ) {
-      dispatch(Result.MouseInClickPosition(mouseInClickPosition.copy(x = dicomX, y = dicomY)))
+      val copy = mouseInClickPosition.copy(x = dicomX, y = dicomY)
+      dispatch(Result.MouseInClickPosition(copy))
+      completableFromCoroutine {
+        val deltaX = copy.x - copy.startX
+        val deltaY = copy.y - copy.startY
+        marksRepository.updateMarkPosition(deltaX, deltaY, plane.type)
+      }
+        .subscribeScoped()
     }
 
     private fun handleContrastBrightness(

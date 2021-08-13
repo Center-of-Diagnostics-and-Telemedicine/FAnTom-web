@@ -14,6 +14,7 @@ interface MyMarksRepository {
 
   suspend fun setMark(id: Int?)
   suspend fun setMarkByCoordinates(dicomX: Double, dicomY: Double, cutType: CutType)
+  suspend fun updateMarkPosition(deltaX: Double, deltaY: Double, cutType: CutType)
   suspend fun loadMarks(researchId: Int)
   suspend fun saveMark(markToSave: MarkData, researchId: Int)
   suspend fun updateMark(mark: MarkEntity, researchId: Int)
