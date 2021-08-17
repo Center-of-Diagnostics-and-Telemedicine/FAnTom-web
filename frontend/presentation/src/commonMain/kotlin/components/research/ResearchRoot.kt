@@ -34,6 +34,7 @@ interface ResearchRoot {
     val mipRepository: MyMipRepository
     val gridRepository: GridRepository
     val researchOutput: Consumer<Output>
+    val seriesRepository: SeriesRepository
     val researchId: Int
   }
 

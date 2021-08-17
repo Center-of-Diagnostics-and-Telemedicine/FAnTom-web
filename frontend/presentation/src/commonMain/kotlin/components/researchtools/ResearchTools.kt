@@ -8,16 +8,20 @@ import components.brightness.Brightness
 import components.grid.Grid
 import components.mip.Mip
 import components.researchtools.ResearchTools.Dependencies
-import model.ResearchData
+import components.series.Series
 import model.ResearchDataModel
 import model.Tool
-import repository.*
+import repository.GridRepository
+import repository.MyBrightnessRepository
+import repository.MyMipRepository
+import repository.SeriesRepository
 
 interface ResearchTools {
 
   val grid: Grid
   val mip: Mip
   val brightness: Brightness
+  val series: Series
 
   //  val preset: Preset
   val models: Value<Model>
@@ -36,6 +40,7 @@ interface ResearchTools {
     val mipRepository: MyMipRepository
     val brightnessRepository: MyBrightnessRepository
     val gridRepository: GridRepository
+    val seriesRepository: SeriesRepository
     val data: ResearchDataModel
   }
 
@@ -70,4 +75,11 @@ fun ResearchTools(componentContext: ComponentContext, dependencies: Dependencies
           override val gridOutput: Consumer<Grid.Output> = output
         })
     },
+    seriesFactory = { childContext, output ->
+      Series(
+        componentContext = childContext,
+        dependencies = object : Series.Dependencies, Dependencies by dependencies {
+          override val seriesOutput: Consumer<Series.Output> = output
+        })
+    }
   )

@@ -224,6 +224,10 @@ private fun MarkModel.toCircle(cut: Plane, sliceNumber: Int): CircleModel? {
           color = type?.color ?: colorByCutType
         ) else null
       }
+      CutType.CT_UNKNOWN -> TODO()
+      CutType.CT_DOSE_REPORT_UNKNOWN -> TODO()
+      CutType.MG_UNKNOWN -> TODO()
+      CutType.DX_UNKNOWN -> TODO()
     }
   }
 }
@@ -258,6 +262,10 @@ private fun MarkModel.toRectangle(cut: Plane): RectangleModel? {
           editable = editable
         ) else null
       }
+      CutType.CT_UNKNOWN -> TODO()
+      CutType.CT_DOSE_REPORT_UNKNOWN -> TODO()
+      CutType.MG_UNKNOWN -> TODO()
+      CutType.DX_UNKNOWN -> TODO()
     }
   }
 }
@@ -292,6 +300,10 @@ private fun MarkModel.toEllipse(cut: Plane): EllipseModel? {
           editable = editable
         ) else null
       }
+      CutType.CT_UNKNOWN -> TODO()
+      CutType.CT_DOSE_REPORT_UNKNOWN -> TODO()
+      CutType.MG_UNKNOWN -> TODO()
+      CutType.DX_UNKNOWN -> TODO()
     }
   }
 }

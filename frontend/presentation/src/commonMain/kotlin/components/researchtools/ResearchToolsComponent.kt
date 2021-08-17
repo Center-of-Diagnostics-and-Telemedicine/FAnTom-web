@@ -13,6 +13,7 @@ import components.grid.Grid
 import components.mip.Mip
 import components.researchtools.ResearchTools.Dependencies
 import components.researchtools.ResearchTools.Model
+import components.series.Series
 
 internal class ResearchToolsComponent(
   componentContext: ComponentContext,
@@ -20,6 +21,7 @@ internal class ResearchToolsComponent(
   mipFactory: (ComponentContext, Consumer<Mip.Output>) -> Mip,
   brightnessFactory: (ComponentContext, Consumer<Brightness.Output>) -> Brightness,
   gridFactory: (ComponentContext, Consumer<Grid.Output>) -> Grid,
+  seriesFactory: (ComponentContext, Consumer<Series.Output>) -> Series,
 ) : ResearchTools, ComponentContext by componentContext, Dependencies by dependencies {
 
   private val store =
@@ -37,6 +39,9 @@ internal class ResearchToolsComponent(
   override val grid: Grid =
     gridFactory(childContext(key = "grid"), Consumer(::onGridOutput))
 
+  override val series: Series =
+    seriesFactory(childContext(key = "series"), Consumer(::onSeriesOutput))
+
   override val models: Value<Model> = store.asValue().map(stateToModel)
 
   override fun onBackClick() {
@@ -46,6 +51,12 @@ internal class ResearchToolsComponent(
   private fun onMipOutput(output: Mip.Output) {
     when (output) {
       else -> throw NotImplementedError("onMipOutput notImplemented $output")
+    }
+  }
+
+  private fun onSeriesOutput(output: Series.Output) {
+    when (output) {
+      else -> throw NotImplementedError("onSeriesOutput notImplemented $output")
     }
   }
 

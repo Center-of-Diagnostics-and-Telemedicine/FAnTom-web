@@ -3,9 +3,12 @@ package components.research
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.RouterState
 import com.arkivanov.decompose.value.Value
-import com.arkivanov.decompose.value.observe
 import com.arkivanov.decompose.value.operator.map
+import com.arkivanov.mvikotlin.core.binder.BinderLifecycleMode
+import com.arkivanov.mvikotlin.extensions.reaktive.bind
+import com.arkivanov.mvikotlin.extensions.reaktive.labels
 import com.badoo.reaktive.base.Consumer
+import com.badoo.reaktive.observable.mapNotNull
 import components.Consumer
 import components.asValue
 import components.cutscontainer.CutsContainer
@@ -63,12 +66,10 @@ internal class ResearchRootComponent(
     cutsContainerRouter.state
 
   init {
-    store.asValue().observe(lifecycle) {
-      it.data?.let { dataNew ->
-        marksRouter.update(dataNew)
-        toolsRouter.update(dataNew)
-        cutsContainerRouter.update(dataNew)
-      }
+    bind(lifecycle, BinderLifecycleMode.CREATE_DESTROY) {
+      store.labels.mapNotNull(labelToRouters) bindTo marksRouter::update
+      store.labels.mapNotNull(labelToRouters) bindTo toolsRouter::update
+      store.labels.mapNotNull(labelToRouters) bindTo cutsContainerRouter::update
     }
   }
 

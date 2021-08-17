@@ -1,7 +1,7 @@
 package components.research
 
 import components.research.ResearchRoot.Model
-import components.research.ResearchRoot.Output
+import model.ResearchDataModel
 import store.research.ResearchStore.Label
 import store.research.ResearchStore.State
 
@@ -14,9 +14,10 @@ internal val stateToModel: (State) -> Model =
     )
   }
 
-internal val labelsToOutput: (Label) -> Output =
+internal val labelToRouters: (Label) -> ResearchDataModel? =
   {
     when (it) {
-      Label.Back -> TODO()
+      is Label.ResearchData -> it.data
+      Label.Back -> null
     }
   }

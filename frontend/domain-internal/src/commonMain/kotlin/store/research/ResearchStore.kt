@@ -2,11 +2,8 @@ package store.research
 
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
-import model.ResearchData
 import model.ResearchDataModel
-import store.research.ResearchStore.Intent
-import store.research.ResearchStore.State
-import store.research.ResearchStore.Label
+import store.research.ResearchStore.*
 
 interface ResearchStore : Store<Intent, State, Label> {
 
@@ -24,6 +21,7 @@ interface ResearchStore : Store<Intent, State, Label> {
   ) : JvmSerializable
 
   sealed class Label {
+    data class ResearchData(val data: ResearchDataModel) : Label()
     object Back : Label()
   }
 }

@@ -6,6 +6,7 @@ import com.ccfraser.muirwik.components.mDivider
 import com.ccfraser.muirwik.components.spacingUnits
 import com.ccfraser.muirwik.components.themeContext
 import components.researchtools.ResearchTools
+import decompose.Props
 import decompose.RenderableComponent
 import decompose.renderableChild
 import decompose.research.tools.ToolsUi.State
@@ -14,12 +15,9 @@ import kotlinx.css.*
 import model.Tool
 import react.RBuilder
 import react.RState
-import research.tools.grid.grid
-import root.debugLog
 import styled.StyleSheet
 import styled.css
 import styled.styledDiv
-import decompose.Props
 
 class ToolsUi(props: Props<ResearchTools>) : RenderableComponent<ResearchTools, State>(
   props = props,
@@ -59,6 +57,7 @@ class ToolsUi(props: Props<ResearchTools>) : RenderableComponent<ResearchTools, 
       when (tool) {
         is Tool.MIP -> renderableChild(MipUi::class, component.mip)
         is Tool.Brightness -> renderableChild(BrightnessUi::class, component.brightness)
+        is Tool.Series -> renderableChild(SeriesUi::class, component.series)
         is Tool.Preset -> {
         }
 //        is Tool.Preset -> renderPreset(

@@ -19,17 +19,21 @@ enum class CutType(val intType: Int) {
   CT_AXIAL(SLICE_TYPE_CT_AXIAL),
   CT_FRONTAL(SLICE_TYPE_CT_FRONTAL),
   CT_SAGITTAL(SLICE_TYPE_CT_SAGITTAL),
+  CT_UNKNOWN(SLICE_TYPE_CT_UNKNOWN),
   CT_0(SLICE_TYPE_CT_0),
   CT_1(SLICE_TYPE_CT_1),
   CT_2(SLICE_TYPE_CT_2),
+  CT_DOSE_REPORT_UNKNOWN(SLICE_TYPE_DOSE_REPORT_UNKNOWN),
   MG_RCC(SLICE_TYPE_MG_RCC),
   MG_LCC(SLICE_TYPE_MG_LCC),
   MG_RMLO(SLICE_TYPE_MG_RMLO),
   MG_LMLO(SLICE_TYPE_MG_LMLO),
+  MG_UNKNOWN(SLICE_TYPE_MG_UNKNOWN),
   DX_GENERIC(SLICE_TYPE_DX_GENERIC),
   DX_POSTERO_ANTERIOR(SLICE_TYPE_DX_POSTERO_ANTERIOR),
   DX_LEFT_LATERAL(SLICE_TYPE_DX_LEFT_LATERAL),
-  DX_RIGHT_LATERAL(SLICE_TYPE_DX_RIGHT_LATERAL), ;
+  DX_RIGHT_LATERAL(SLICE_TYPE_DX_RIGHT_LATERAL),
+  DX_UNKNOWN(SLICE_TYPE_DX_UNKNOWN), ;
 
   companion object {
     private val VALUES = values()
@@ -63,6 +67,10 @@ fun CutType.getName(): String? =
     CutType.CT_0 -> "CT0"
     CutType.CT_1 -> "CT1"
     CutType.CT_2 -> "CT2"
+    CutType.CT_UNKNOWN -> TODO()
+    CutType.CT_DOSE_REPORT_UNKNOWN -> TODO()
+    CutType.MG_UNKNOWN -> TODO()
+    CutType.DX_UNKNOWN -> TODO()
   }
 
 
@@ -101,6 +109,10 @@ fun getColorByCutType(cutType: CutType): String {
     CutType.CT_0 -> yellow
     CutType.CT_1 -> pink
     CutType.CT_2 -> blue
+    CutType.CT_UNKNOWN -> green
+    CutType.CT_DOSE_REPORT_UNKNOWN ->  green
+    CutType.MG_UNKNOWN ->  green
+    CutType.DX_UNKNOWN ->  green
   }
 }
 
@@ -146,6 +158,10 @@ fun Plane.getPosition(dicomX: Double, dicomY: Double, sliceNumber: Int): PointPo
       CutType.CT_1,
       CutType.CT_2,
       CutType.DX_RIGHT_LATERAL -> PointPositionModel(x = dicomX, y = dicomY)
+      CutType.CT_UNKNOWN -> TODO()
+      CutType.CT_DOSE_REPORT_UNKNOWN -> TODO()
+      CutType.MG_UNKNOWN -> TODO()
+      CutType.DX_UNKNOWN -> TODO()
     }
   }
 }
@@ -223,6 +239,10 @@ fun Plane.getMarkToSave(shape: Shape, sliceNumber: Int): MarkData? {
           shapeType = shape.getType()
         )
       }
+      CutType.CT_UNKNOWN -> TODO()
+      CutType.CT_DOSE_REPORT_UNKNOWN -> TODO()
+      CutType.MG_UNKNOWN -> TODO()
+      CutType.DX_UNKNOWN -> TODO()
     }
   }
 }
@@ -244,6 +264,10 @@ fun Plane.getSliceNumberByMark(mark: MarkModel): Int? {
     CutType.CT_0 -> null
     CutType.CT_1 -> null
     CutType.CT_2 -> null
+    CutType.CT_UNKNOWN -> null
+    CutType.CT_DOSE_REPORT_UNKNOWN -> null
+    CutType.MG_UNKNOWN -> null
+    CutType.DX_UNKNOWN -> null
   }
 }
 
@@ -299,6 +323,10 @@ fun Plane.updateCoordinates(mark: MarkModel, deltaX: Double, deltaY: Double): Ma
         )
       ).also { it.selected = true }
     }
+    CutType.CT_UNKNOWN -> TODO()
+    CutType.CT_DOSE_REPORT_UNKNOWN -> TODO()
+    CutType.MG_UNKNOWN -> TODO()
+    CutType.DX_UNKNOWN -> TODO()
   }
 }
 
@@ -490,6 +518,10 @@ fun Plane.updateCoordinatesByRect(
         }
       }
     }
+    CutType.CT_UNKNOWN -> TODO()
+    CutType.CT_DOSE_REPORT_UNKNOWN -> TODO()
+    CutType.MG_UNKNOWN -> TODO()
+    CutType.DX_UNKNOWN -> TODO()
   }
 }
 
@@ -537,6 +569,10 @@ fun buildPlane(type: CutType, data: ResearchDataModel): Plane =
     CutType.CT_0 -> ct0(data, doseReportCuts.filter { it != type })
     CutType.CT_1 -> ct1(data, doseReportCuts.filter { it != type })
     CutType.CT_2 -> ct2(data, doseReportCuts.filter { it != type })
+    CutType.CT_UNKNOWN -> TODO()
+    CutType.CT_DOSE_REPORT_UNKNOWN -> TODO()
+    CutType.MG_UNKNOWN -> TODO()
+    CutType.DX_UNKNOWN -> TODO()
   }
 
 private fun emptyCut(data: ResearchDataModel): Plane =

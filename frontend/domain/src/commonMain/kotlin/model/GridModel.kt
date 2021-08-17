@@ -202,27 +202,27 @@ fun initialFourGrid(
   }
 }
 
-private val ctCuts = listOf(
+val ctDefaultCutTypes = listOf(
   CutType.CT_AXIAL,
   CutType.CT_FRONTAL,
   CutType.CT_SAGITTAL
 )
 
-private val mgCuts = listOf(
+val mgDefaultCutTypes = listOf(
   CutType.MG_RCC,
   CutType.MG_LCC,
   CutType.MG_LMLO,
   CutType.MG_RMLO
 )
 
-private val dxCuts = listOf(
+val dxDefaultCutTypes = listOf(
   CutType.DX_GENERIC,
   CutType.DX_POSTERO_ANTERIOR,
   CutType.DX_LEFT_LATERAL,
   CutType.DX_RIGHT_LATERAL
 )
 
-private val doseReportCuts = listOf(
+val doseDefaultReportCutTypes = listOf(
   CutType.CT_0,
   CutType.CT_1,
   CutType.CT_2
@@ -250,20 +250,24 @@ fun GridModel.updateCuts(data: ResearchData, oldCut: Plane, newCutType: CutType)
 private fun buildSingleCut(type: CutType, data: ResearchData): Plane =
   when (type) {
     CutType.EMPTY -> emptyCut(data)
-    CutType.CT_AXIAL -> axialCut(data, ctCuts.filter { it != type })
-    CutType.CT_FRONTAL -> frontalCut(data, ctCuts.filter { it != type })
-    CutType.CT_SAGITTAL -> sagittalCut(data, ctCuts.filter { it != type })
-    CutType.MG_RCC -> mgRcc(data, mgCuts.filter { it != type })
-    CutType.MG_LCC -> mgLcc(data, mgCuts.filter { it != type })
-    CutType.MG_RMLO -> mgRmlo(data, mgCuts.filter { it != type })
-    CutType.MG_LMLO -> mgLmlo(data, mgCuts.filter { it != type })
-    CutType.DX_GENERIC -> dxGeneric(data, dxCuts.filter { it != type })
-    CutType.DX_POSTERO_ANTERIOR -> dxPosteroAnterior(data, dxCuts.filter { it != type })
-    CutType.DX_LEFT_LATERAL -> dxLeftLateral(data, dxCuts.filter { it != type })
-    CutType.DX_RIGHT_LATERAL -> dxRightLateral(data, dxCuts.filter { it != type })
-    CutType.CT_0 -> ct0(data, doseReportCuts.filter { it != type })
-    CutType.CT_1 -> ct1(data, doseReportCuts.filter { it != type })
-    CutType.CT_2 -> ct2(data, doseReportCuts.filter { it != type })
+    CutType.CT_AXIAL -> axialCut(data, ctDefaultCutTypes.filter { it != type })
+    CutType.CT_FRONTAL -> frontalCut(data, ctDefaultCutTypes.filter { it != type })
+    CutType.CT_SAGITTAL -> sagittalCut(data, ctDefaultCutTypes.filter { it != type })
+    CutType.MG_RCC -> mgRcc(data, mgDefaultCutTypes.filter { it != type })
+    CutType.MG_LCC -> mgLcc(data, mgDefaultCutTypes.filter { it != type })
+    CutType.MG_RMLO -> mgRmlo(data, mgDefaultCutTypes.filter { it != type })
+    CutType.MG_LMLO -> mgLmlo(data, mgDefaultCutTypes.filter { it != type })
+    CutType.DX_GENERIC -> dxGeneric(data, dxDefaultCutTypes.filter { it != type })
+    CutType.DX_POSTERO_ANTERIOR -> dxPosteroAnterior(data, dxDefaultCutTypes.filter { it != type })
+    CutType.DX_LEFT_LATERAL -> dxLeftLateral(data, dxDefaultCutTypes.filter { it != type })
+    CutType.DX_RIGHT_LATERAL -> dxRightLateral(data, dxDefaultCutTypes.filter { it != type })
+    CutType.CT_0 -> ct0(data, doseDefaultReportCutTypes.filter { it != type })
+    CutType.CT_1 -> ct1(data, doseDefaultReportCutTypes.filter { it != type })
+    CutType.CT_2 -> ct2(data, doseDefaultReportCutTypes.filter { it != type })
+    CutType.CT_UNKNOWN -> TODO()
+    CutType.CT_DOSE_REPORT_UNKNOWN -> TODO()
+    CutType.MG_UNKNOWN -> TODO()
+    CutType.DX_UNKNOWN -> TODO()
   }
 
 
@@ -300,6 +304,10 @@ private fun buildEmptySingleCut(type: CutType, data: ResearchData): Plane {
     CutType.CT_0 -> ct0(data, list)
     CutType.CT_1 -> ct1(data, list)
     CutType.CT_2 -> ct2(data, list)
+    CutType.CT_UNKNOWN -> TODO()
+    CutType.CT_DOSE_REPORT_UNKNOWN -> TODO()
+    CutType.MG_UNKNOWN -> TODO()
+    CutType.DX_UNKNOWN -> TODO()
   }
 }
 
@@ -310,22 +318,26 @@ private fun cutWithTwoTypes(
 ): Plane {
   return when (main) {
     CutType.EMPTY -> emptyCut(data)
-    CutType.CT_AXIAL -> axialCut(data, ctCuts.filter { it != main && it != second })
-    CutType.CT_FRONTAL -> frontalCut(data, ctCuts.filter { it != main && it != second })
-    CutType.CT_SAGITTAL -> sagittalCut(data, ctCuts.filter { it != main && it != second })
-    CutType.MG_RCC -> mgRcc(data, mgCuts.filter { it != main && it != second })
-    CutType.MG_LCC -> mgLcc(data, mgCuts.filter { it != main && it != second })
-    CutType.MG_RMLO -> mgRmlo(data, mgCuts.filter { it != main && it != second })
-    CutType.MG_LMLO -> mgLmlo(data, mgCuts.filter { it != main && it != second })
-    CutType.DX_GENERIC -> dxGeneric(data, dxCuts.filter { it != main && it != second })
+    CutType.CT_AXIAL -> axialCut(data, ctDefaultCutTypes.filter { it != main && it != second })
+    CutType.CT_FRONTAL -> frontalCut(data, ctDefaultCutTypes.filter { it != main && it != second })
+    CutType.CT_SAGITTAL -> sagittalCut(data, ctDefaultCutTypes.filter { it != main && it != second })
+    CutType.MG_RCC -> mgRcc(data, mgDefaultCutTypes.filter { it != main && it != second })
+    CutType.MG_LCC -> mgLcc(data, mgDefaultCutTypes.filter { it != main && it != second })
+    CutType.MG_RMLO -> mgRmlo(data, mgDefaultCutTypes.filter { it != main && it != second })
+    CutType.MG_LMLO -> mgLmlo(data, mgDefaultCutTypes.filter { it != main && it != second })
+    CutType.DX_GENERIC -> dxGeneric(data, dxDefaultCutTypes.filter { it != main && it != second })
     CutType.DX_POSTERO_ANTERIOR -> dxPosteroAnterior(
       data,
-      dxCuts.filter { it != main && it != second })
-    CutType.DX_LEFT_LATERAL -> dxLeftLateral(data, dxCuts.filter { it != main && it != second })
-    CutType.DX_RIGHT_LATERAL -> dxRightLateral(data, dxCuts.filter { it != main && it != second })
-    CutType.CT_0 -> ct0(data, doseReportCuts.filter { it != main && it != second })
-    CutType.CT_1 -> ct1(data, doseReportCuts.filter { it != main && it != second })
-    CutType.CT_2 -> ct2(data, doseReportCuts.filter { it != main && it != second })
+      dxDefaultCutTypes.filter { it != main && it != second })
+    CutType.DX_LEFT_LATERAL -> dxLeftLateral(data, dxDefaultCutTypes.filter { it != main && it != second })
+    CutType.DX_RIGHT_LATERAL -> dxRightLateral(data, dxDefaultCutTypes.filter { it != main && it != second })
+    CutType.CT_0 -> ct0(data, doseDefaultReportCutTypes.filter { it != main && it != second })
+    CutType.CT_1 -> ct1(data, doseDefaultReportCutTypes.filter { it != main && it != second })
+    CutType.CT_2 -> ct2(data, doseDefaultReportCutTypes.filter { it != main && it != second })
+    CutType.CT_UNKNOWN -> TODO()
+    CutType.CT_DOSE_REPORT_UNKNOWN -> TODO()
+    CutType.MG_UNKNOWN -> TODO()
+    CutType.DX_UNKNOWN -> TODO()
   }
 }
 

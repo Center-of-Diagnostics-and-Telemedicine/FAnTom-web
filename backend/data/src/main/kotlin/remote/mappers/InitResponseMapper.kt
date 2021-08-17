@@ -1,8 +1,12 @@
 package remote.mappers
 
 import debugLog
-import model.*
-import model.fantom.*
+import model.MarkTypeEntity
+import model.PlaneModel
+import model.fantom.FantomMarkTypeEntity
+import model.fantom.FantomModalityInitModel
+import model.fantom.FantomPlaneModel
+import model.fantom.FantomResearchInitModel
 import model.init.ModalityModel
 import model.init.ResearchInitModel
 import java.awt.Color
@@ -40,7 +44,7 @@ private fun transformMarkEntity(
 
 fun FantomModalityInitModel?.toModalityModel(): ModalityModel? {
   if (this == null) return null
-  val planes = mapPlanes(stringTypes())
+  val planes = mapPlanes()
   return ModalityModel(
     planes = planes,
     reversed = reversed
@@ -48,37 +52,21 @@ fun FantomModalityInitModel?.toModalityModel(): ModalityModel? {
 
 }
 
-private fun FantomModalityInitModel.mapPlanes(
-  stringTypes: List<String>
-): MutableMap<String, PlaneModel> {
+private fun FantomModalityInitModel.mapPlanes(): MutableMap<String, PlaneModel> {
   val planes = mutableMapOf<String, PlaneModel>()
-  dimensions.let {
-    stringTypes.forEach { type ->
-      val pair = findFantomPlaneModel(type)
-      val sopInstanceUid = pair?.first
-      val fantomPlaneModel = pair?.second
-
-      fantomPlaneModel
-        ?.toPlaneModel(reversed, sopInstanceUid)
-        ?.let { planeModel ->
-          planes[type] = planeModel
-        }
-    }
+  dimensions.map {
+    val sopInstanceUid = it.key
+    val fantomPlaneModel = it.value
+    val type = fantomPlaneModel.type
+    fantomPlaneModel
+      .toPlaneModel(reversed, sopInstanceUid)
+      .let { planeModel ->
+        val key = if (type.isNullOrEmpty()) sopInstanceUid else type
+        planes[key] = planeModel
+      }
   }
   return planes
 }
-
-private fun FantomModalityInitModel?.stringTypes() =
-  when (this) {
-    is FantomCTInitModel -> ctStringTypes
-    is FantomMGInitModel -> mgStringTypes
-    is FantomDXInitModel -> dxStringTypes
-    else -> throw NotImplementedError("Not implemented for $this")
-  }
-
-
-private fun FantomModalityInitModel.findFantomPlaneModel(type: String): Pair<String, FantomPlaneModel>? =
-  dimensions.entries.firstOrNull { it.value.type == type }?.let { Pair(it.key, it.value) }
 
 private fun FantomPlaneModel.toPlaneModel(reversed: Boolean, sopInstanceUid: String?): PlaneModel {
   return PlaneModel(

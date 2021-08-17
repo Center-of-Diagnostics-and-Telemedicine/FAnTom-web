@@ -58,21 +58,33 @@ const val SLICE_TYPE_DX_RIGHT_LATERAL: Int = 10
 const val SLICE_TYPE_CT_0: Int = 11
 const val SLICE_TYPE_CT_1: Int = 12
 const val SLICE_TYPE_CT_2: Int = 13
+const val SLICE_TYPE_DX_UNKNOWN: Int = 16
+const val SLICE_TYPE_CT_UNKNOWN: Int = 14
+const val SLICE_TYPE_MG_UNKNOWN: Int = 15
+const val SLICE_TYPE_DOSE_REPORT_UNKNOWN: Int = 16
 
 const val CT_AXIAL_STRING = "ct_axial"
 const val CT_FRONTAL_STRING = "ct_frontal"
 const val CT_SAGITTAL_STRING = "ct_sagittal"
+const val CT_UNKNOWN_STRING = "ct_unknown"
 const val CT_0_STRING = "CT0"
 const val CT_1_STRING = "CT1"
 const val CT_2_STRING = "CT2"
+const val CT_DOSE_REPORT_UNKNOWN_STRING = "CT_DOSE_REPORT_UNKNOWN"
 const val MG_RCC_STRING = "mg_rcc"
 const val MG_LCC_STRING = "mg_lcc"
 const val MG_RMLO_STRING = "mg_rmlo"
 const val MG_LMLO_STRING = "mg_lmlo"
+const val MG_UNKNOWN_STRING = "mg_unknown"
 const val DX_GENERIC_STRING = "dx_generic"
 const val DX_POSTERO_ANTERIOR_STRING = "dx_postero_anterior"
 const val DX_LEFT_LATERAL_STRING = "dx_left_lateral"
 const val DX_RIGHT_LATERAL_STRING = "dx_right_lateral"
+const val DX_UNKNOWN_STRING = "dx_unknown"
+
+const val CT_DEFAULT_SERIES_STRING = "ct_default_series"
+const val MG_DEFAULT_SERIES_STRING = "mg_default_series"
+const val DX_DEFAULT_SERIES_STRING = "dx_default_series"
 
 val stringTypes = listOf(
   CT_AXIAL_STRING,
@@ -89,25 +101,26 @@ val stringTypes = listOf(
   DX_POSTERO_ANTERIOR_STRING,
   DX_LEFT_LATERAL_STRING,
   DX_RIGHT_LATERAL_STRING,
+  CT_UNKNOWN_STRING,
+  MG_UNKNOWN_STRING,
+  CT_DOSE_REPORT_UNKNOWN_STRING,
+  DX_UNKNOWN_STRING
 )
 
-val ctStringTypes = listOf(
+val ctDefaultStringTypes = listOf(
   CT_AXIAL_STRING,
   CT_FRONTAL_STRING,
   CT_SAGITTAL_STRING,
-  CT_0_STRING,
-  CT_1_STRING,
-  CT_2_STRING,
 )
 
-val mgStringTypes = listOf(
+val mgDefaultStringTypes = listOf(
   MG_RCC_STRING,
   MG_LCC_STRING,
   MG_RMLO_STRING,
   MG_LMLO_STRING,
 )
 
-val dxStringTypes = listOf(
+val dxDefaultStringTypes = listOf(
   DX_GENERIC_STRING,
   DX_POSTERO_ANTERIOR_STRING,
   DX_LEFT_LATERAL_STRING,

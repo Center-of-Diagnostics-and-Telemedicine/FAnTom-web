@@ -25,5 +25,6 @@ val researchEventToResearchIntent: Event.() -> Intent? = {
 val researchLabelToResearchOutput: Label.() -> Output? = {
   when (this) {
     Label.Back -> Output.Close
+    is Label.ResearchData -> null
   }
 }

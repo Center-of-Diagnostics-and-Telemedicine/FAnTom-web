@@ -7,6 +7,7 @@ import com.ccfraser.muirwik.components.list.mListItem
 import com.ccfraser.muirwik.components.transitions.mCollapse
 import components.mip.Mip
 import components.mip.Mip.Model
+import decompose.Props
 import decompose.RenderableComponent
 import decompose.research.tools.MipUi.State
 import kotlinx.css.Display
@@ -18,13 +19,12 @@ import react.RState
 import react.setState
 import styled.css
 import styled.styledDiv
-import decompose.Props
 
 class MipUi(props: Props<Mip>) : RenderableComponent<Mip, State>(
   props = props,
   initialState = State(
     model = props.component.model.value,
-    open = false
+    open = true
   )
 ) {
 

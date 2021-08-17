@@ -12,8 +12,7 @@ import com.arkivanov.mvikotlin.core.binder.BinderLifecycleMode
 import com.arkivanov.mvikotlin.extensions.reaktive.bind
 import com.arkivanov.mvikotlin.extensions.reaktive.labels
 import com.badoo.reaktive.base.Consumer
-import com.badoo.reaktive.observable.notNull
-import com.badoo.reaktive.observable.subscribe
+import com.badoo.reaktive.observable.mapNotNull
 import components.Consumer
 import components.asValue
 import components.cutcontainer.CutContainer
@@ -24,7 +23,6 @@ import components.singlecutcontainer.SingleCutContainer
 import components.twohorizontalcutscontainer.TwoHorizontalCutsContainer
 import components.twoverticalcutscontainer.TwoVerticalCutsContainer
 import model.GridType
-import store.gridcontainer.MyCutsContainerStore
 
 class CutsContainerComponent(
   componentContext: ComponentContext,
@@ -58,11 +56,7 @@ class CutsContainerComponent(
 
   init {
     bind(lifecycle, BinderLifecycleMode.CREATE_DESTROY) {
-      store.labels.notNull().subscribe {
-        if (it is MyCutsContainerStore.Label.GridTypeChanged) {
-          changeGrid(it.gridType)
-        }
-      }
+      store.labels.mapNotNull(labelToChangeGrid) bindTo ::changeGrid
     }
   }
 

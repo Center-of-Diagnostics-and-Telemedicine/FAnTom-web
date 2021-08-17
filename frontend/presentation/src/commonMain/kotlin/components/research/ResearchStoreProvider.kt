@@ -9,6 +9,7 @@ import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
 import com.badoo.reaktive.completable.observeOn
 import com.badoo.reaktive.completable.subscribeOn
 import com.badoo.reaktive.coroutinesinterop.completableFromCoroutine
+import com.badoo.reaktive.observable.doOnAfterNext
 import com.badoo.reaktive.observable.map
 import com.badoo.reaktive.observable.notNull
 import com.badoo.reaktive.scheduler.ioScheduler
@@ -55,6 +56,7 @@ internal class ResearchStoreProvider(
         .researchData
         .notNull()
         .map(Result::Loaded)
+        .doOnAfterNext { publish(Label.ResearchData(it.data)) }
         .subscribeScoped(onError = ::handleError, onNext = ::dispatch)
 
       load()

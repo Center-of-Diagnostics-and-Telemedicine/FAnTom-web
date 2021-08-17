@@ -1,10 +1,13 @@
 package decompose.research.tools
 
-import com.ccfraser.muirwik.components.*
 import com.ccfraser.muirwik.components.list.mList
 import com.ccfraser.muirwik.components.list.mListItem
+import com.ccfraser.muirwik.components.mTextField
+import com.ccfraser.muirwik.components.spacingUnits
+import com.ccfraser.muirwik.components.targetInputValue
 import com.ccfraser.muirwik.components.transitions.mCollapse
 import components.brightness.Brightness
+import decompose.Props
 import decompose.RenderableComponent
 import decompose.research.tools.BrightnessUi.State
 import kotlinx.css.paddingLeft
@@ -16,13 +19,12 @@ import react.RState
 import react.setState
 import styled.css
 import styled.styledDiv
-import decompose.Props
 
 class BrightnessUi(props: Props<Brightness>) : RenderableComponent<Brightness, State>(
   props = props,
   initialState = State(
     model = props.component.model.value,
-    open = false
+    open = true
   )
 ) {
 

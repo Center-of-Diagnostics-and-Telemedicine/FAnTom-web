@@ -19,6 +19,11 @@ sealed class Tool(
     name = "Шаблоны",
     icon = "palette"
   )
+
+  object Series : Tool(
+    name = "Серии",
+    icon = "image"
+  )
 }
 
 sealed interface MyTool {
