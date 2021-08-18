@@ -6,7 +6,7 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.base.Consumer
 import com.badoo.reaktive.observable.Observable
 import components.cut.Cut.Dependencies
-import model.Plane
+import model.MyPlane
 import repository.MyBrightnessRepository
 import repository.MyMipRepository
 import repository.MyResearchRepository
@@ -29,7 +29,7 @@ interface Cut {
     val mipRepository: MyMipRepository
     val cutOutput: Consumer<Output>
     val cutInput: Observable<Input>
-    val plane: Plane
+    val plane: MyPlane
     val researchId: Int
   }
 

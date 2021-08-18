@@ -20,17 +20,19 @@ import components.cutscontainer.CutsContainer.*
 import components.fourcutscontainer.FourCutsContainer
 import components.getStore
 import components.singlecutcontainer.SingleCutContainer
+import components.threecutscontainer.ThreeCutsContainer
 import components.twohorizontalcutscontainer.TwoHorizontalCutsContainer
 import components.twoverticalcutscontainer.TwoVerticalCutsContainer
-import model.GridType
+import model.MyNewGrid
 
 class CutsContainerComponent(
   componentContext: ComponentContext,
   dependencies: Dependencies,
-  private val singleCutContainerFactory: (ComponentContext, Consumer<SingleCutContainer.Output>) -> SingleCutContainer,
-  private val twoVerticalCutsContainerFactory: (ComponentContext, Consumer<TwoVerticalCutsContainer.Output>) -> TwoVerticalCutsContainer,
-  private val twoHorizontalCutsContainerFactory: (ComponentContext, Consumer<TwoHorizontalCutsContainer.Output>) -> TwoHorizontalCutsContainer,
-  private val fourCutsContainerFactory: (ComponentContext, Consumer<FourCutsContainer.Output>) -> FourCutsContainer,
+  private val singleCutContainerFactory: (ComponentContext, MyNewGrid, Consumer<SingleCutContainer.Output>) -> SingleCutContainer,
+  private val twoVerticalCutsContainerFactory: (ComponentContext, MyNewGrid, Consumer<TwoVerticalCutsContainer.Output>) -> TwoVerticalCutsContainer,
+  private val twoHorizontalCutsContainerFactory: (ComponentContext, MyNewGrid, Consumer<TwoHorizontalCutsContainer.Output>) -> TwoHorizontalCutsContainer,
+  private val threeCutsContainerFactory: (ComponentContext, MyNewGrid, Consumer<ThreeCutsContainer.Output>) -> ThreeCutsContainer,
+  private val fourCutsContainerFactory: (ComponentContext, MyNewGrid, Consumer<FourCutsContainer.Output>) -> FourCutsContainer,
 ) : CutsContainer, ComponentContext by componentContext, Dependencies by dependencies {
 
   private val store = instanceKeeper.getStore {
@@ -45,7 +47,7 @@ class CutsContainerComponent(
 
   private val router =
     router<Configuration, Child>(
-      initialConfiguration = Configuration.Four,
+      initialConfiguration = Configuration.None,
       handleBackButton = false,
       childFactory = ::createChild
     )
@@ -60,8 +62,8 @@ class CutsContainerComponent(
     }
   }
 
-  override fun changeGrid(gridType: GridType) {
-    val newConfig = gridType.toConfig()
+  override fun changeGrid(grid: MyNewGrid) {
+    val newConfig = grid.toConfig()
     val oldConfig = router.state.value.activeChild.configuration
     if (oldConfig != newConfig) {
       router.replaceCurrent(newConfig)
@@ -73,52 +75,61 @@ class CutsContainerComponent(
       is Configuration.Single -> Child.Single(
         component = singleCutContainerFactory(
           componentContext,
+          configuration.grid,
           Consumer(::onSingleCutContainerOutput)
         )
       )
-      Configuration.TwoVertical -> Child.TwoVertical(
+      is Configuration.TwoVertical -> Child.TwoVertical(
         component = twoVerticalCutsContainerFactory(
           componentContext,
+          configuration.grid,
           Consumer(::onTwoVerticalCutsContainerOutput)
         )
       )
-      Configuration.TwoHorizontal -> Child.TwoHorizontal(
+      is Configuration.TwoHorizontal -> Child.TwoHorizontal(
         component = twoHorizontalCutsContainerFactory(
           componentContext,
+          configuration.grid,
           Consumer(::onTwoHorizontalCutsContainerOutput)
         )
       )
-      Configuration.Four -> Child.Four(
+      is Configuration.Three -> Child.Three(
+        component = threeCutsContainerFactory(
+          componentContext,
+          configuration.grid,
+          Consumer(::onThreeCutsContainerOutput)
+        )
+      )
+      is Configuration.Four -> Child.Four(
         component = fourCutsContainerFactory(
           componentContext,
+          configuration.grid,
           Consumer(::onFourCutsContainerOutput)
         )
       )
+      is Configuration.None -> Child.None
     }
   }
 
-  private fun GridType.toConfig(): Configuration = when (this) {
-    GridType.Single -> Configuration.Single
-    GridType.TwoVertical -> Configuration.TwoVertical
-    GridType.TwoHorizontal -> Configuration.TwoHorizontal
-    GridType.Four -> Configuration.Four
-  }
+  private fun MyNewGrid.toConfig(): Configuration =
+    when (this) {
+      is MyNewGrid.SingleGrid -> Configuration.Single(this)
+      is MyNewGrid.TwoVerticalGrid -> Configuration.TwoVertical(this)
+      is MyNewGrid.TwoHorizontalGrid -> Configuration.TwoHorizontal(this)
+      is MyNewGrid.ThreeGrid -> Configuration.Three(this)
+      is MyNewGrid.FourGrid -> Configuration.Four(this)
+      is MyNewGrid.EmptyGrid -> Configuration.None
+    }
 
-  private fun onSingleCutContainerOutput(output: SingleCutContainer.Output) {
+  private fun onSingleCutContainerOutput(output: SingleCutContainer.Output) {}
 
-  }
+  private fun onTwoVerticalCutsContainerOutput(output: TwoVerticalCutsContainer.Output) {}
 
-  private fun onTwoVerticalCutsContainerOutput(output: TwoVerticalCutsContainer.Output) {
+  private fun onTwoHorizontalCutsContainerOutput(output: TwoHorizontalCutsContainer.Output) {}
 
-  }
+  private fun onThreeCutsContainerOutput(output: ThreeCutsContainer.Output) {}
 
-  private fun onTwoHorizontalCutsContainerOutput(output: TwoHorizontalCutsContainer.Output) {
-
-  }
-
-  private fun onFourCutsContainerOutput(output: FourCutsContainer.Output) {
-
-  }
+  private fun onFourCutsContainerOutput(output: FourCutsContainer.Output) {}
 
   private fun onCutOutput(output: CutContainer.Output): Unit =
     when (output) {
@@ -127,31 +138,41 @@ class CutsContainerComponent(
 
   private sealed class Configuration : Parcelable {
     @Parcelize
-    object Single : Configuration() {
+    data class Single(val grid: MyNewGrid.SingleGrid) : Configuration() {
       override fun toString(): String {
         return "Configuration.Single"
       }
     }
 
     @Parcelize
-    object TwoVertical : Configuration() {
+    data class TwoVertical(val grid: MyNewGrid.TwoVerticalGrid) : Configuration() {
       override fun toString(): String {
         return "Configuration.TwoVertical"
       }
     }
 
     @Parcelize
-    object TwoHorizontal : Configuration() {
+    data class TwoHorizontal(val grid: MyNewGrid.TwoHorizontalGrid) : Configuration() {
       override fun toString(): String {
         return "Configuration.TwoHorizontal"
       }
     }
 
     @Parcelize
-    object Four : Configuration() {
+    data class Three(val grid: MyNewGrid.ThreeGrid) : Configuration() {
+      override fun toString(): String {
+        return "Configuration.Three"
+      }
+    }
+
+    @Parcelize
+    data class Four(val grid: MyNewGrid.FourGrid) : Configuration() {
       override fun toString(): String {
         return "Configuration.Four"
       }
     }
+
+    @Parcelize
+    object None : Configuration()
   }
 }

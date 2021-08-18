@@ -19,21 +19,17 @@ enum class CutType(val intType: Int) {
   CT_AXIAL(SLICE_TYPE_CT_AXIAL),
   CT_FRONTAL(SLICE_TYPE_CT_FRONTAL),
   CT_SAGITTAL(SLICE_TYPE_CT_SAGITTAL),
-  CT_UNKNOWN(SLICE_TYPE_CT_UNKNOWN),
   CT_0(SLICE_TYPE_CT_0),
   CT_1(SLICE_TYPE_CT_1),
   CT_2(SLICE_TYPE_CT_2),
-  CT_DOSE_REPORT_UNKNOWN(SLICE_TYPE_DOSE_REPORT_UNKNOWN),
   MG_RCC(SLICE_TYPE_MG_RCC),
   MG_LCC(SLICE_TYPE_MG_LCC),
   MG_RMLO(SLICE_TYPE_MG_RMLO),
   MG_LMLO(SLICE_TYPE_MG_LMLO),
-  MG_UNKNOWN(SLICE_TYPE_MG_UNKNOWN),
   DX_GENERIC(SLICE_TYPE_DX_GENERIC),
   DX_POSTERO_ANTERIOR(SLICE_TYPE_DX_POSTERO_ANTERIOR),
   DX_LEFT_LATERAL(SLICE_TYPE_DX_LEFT_LATERAL),
-  DX_RIGHT_LATERAL(SLICE_TYPE_DX_RIGHT_LATERAL),
-  DX_UNKNOWN(SLICE_TYPE_DX_UNKNOWN), ;
+  DX_RIGHT_LATERAL(SLICE_TYPE_DX_RIGHT_LATERAL),;
 
   companion object {
     private val VALUES = values()
@@ -67,10 +63,6 @@ fun CutType.getName(): String? =
     CutType.CT_0 -> "CT0"
     CutType.CT_1 -> "CT1"
     CutType.CT_2 -> "CT2"
-    CutType.CT_UNKNOWN -> TODO()
-    CutType.CT_DOSE_REPORT_UNKNOWN -> TODO()
-    CutType.MG_UNKNOWN -> TODO()
-    CutType.DX_UNKNOWN -> TODO()
   }
 
 
@@ -98,6 +90,9 @@ fun getColorByCutType(cutType: CutType): String {
     CutType.CT_AXIAL -> yellow
     CutType.CT_FRONTAL -> pink
     CutType.CT_SAGITTAL -> blue
+    CutType.CT_0 -> yellow
+    CutType.CT_1 -> pink
+    CutType.CT_2 -> blue
     CutType.MG_RCC -> yellow
     CutType.MG_LCC -> pink
     CutType.MG_RMLO -> blue
@@ -106,13 +101,6 @@ fun getColorByCutType(cutType: CutType): String {
     CutType.DX_POSTERO_ANTERIOR -> pink
     CutType.DX_LEFT_LATERAL -> blue
     CutType.DX_RIGHT_LATERAL -> green
-    CutType.CT_0 -> yellow
-    CutType.CT_1 -> pink
-    CutType.CT_2 -> blue
-    CutType.CT_UNKNOWN -> green
-    CutType.CT_DOSE_REPORT_UNKNOWN ->  green
-    CutType.MG_UNKNOWN ->  green
-    CutType.DX_UNKNOWN ->  green
   }
 }
 
@@ -158,10 +146,6 @@ fun Plane.getPosition(dicomX: Double, dicomY: Double, sliceNumber: Int): PointPo
       CutType.CT_1,
       CutType.CT_2,
       CutType.DX_RIGHT_LATERAL -> PointPositionModel(x = dicomX, y = dicomY)
-      CutType.CT_UNKNOWN -> TODO()
-      CutType.CT_DOSE_REPORT_UNKNOWN -> TODO()
-      CutType.MG_UNKNOWN -> TODO()
-      CutType.DX_UNKNOWN -> TODO()
     }
   }
 }
@@ -239,10 +223,6 @@ fun Plane.getMarkToSave(shape: Shape, sliceNumber: Int): MarkData? {
           shapeType = shape.getType()
         )
       }
-      CutType.CT_UNKNOWN -> TODO()
-      CutType.CT_DOSE_REPORT_UNKNOWN -> TODO()
-      CutType.MG_UNKNOWN -> TODO()
-      CutType.DX_UNKNOWN -> TODO()
     }
   }
 }
@@ -264,10 +244,6 @@ fun Plane.getSliceNumberByMark(mark: MarkModel): Int? {
     CutType.CT_0 -> null
     CutType.CT_1 -> null
     CutType.CT_2 -> null
-    CutType.CT_UNKNOWN -> null
-    CutType.CT_DOSE_REPORT_UNKNOWN -> null
-    CutType.MG_UNKNOWN -> null
-    CutType.DX_UNKNOWN -> null
   }
 }
 
@@ -323,10 +299,6 @@ fun Plane.updateCoordinates(mark: MarkModel, deltaX: Double, deltaY: Double): Ma
         )
       ).also { it.selected = true }
     }
-    CutType.CT_UNKNOWN -> TODO()
-    CutType.CT_DOSE_REPORT_UNKNOWN -> TODO()
-    CutType.MG_UNKNOWN -> TODO()
-    CutType.DX_UNKNOWN -> TODO()
   }
 }
 
@@ -518,10 +490,6 @@ fun Plane.updateCoordinatesByRect(
         }
       }
     }
-    CutType.CT_UNKNOWN -> TODO()
-    CutType.CT_DOSE_REPORT_UNKNOWN -> TODO()
-    CutType.MG_UNKNOWN -> TODO()
-    CutType.DX_UNKNOWN -> TODO()
   }
 }
 
@@ -569,10 +537,6 @@ fun buildPlane(type: CutType, data: ResearchDataModel): Plane =
     CutType.CT_0 -> ct0(data, doseReportCuts.filter { it != type })
     CutType.CT_1 -> ct1(data, doseReportCuts.filter { it != type })
     CutType.CT_2 -> ct2(data, doseReportCuts.filter { it != type })
-    CutType.CT_UNKNOWN -> TODO()
-    CutType.CT_DOSE_REPORT_UNKNOWN -> TODO()
-    CutType.MG_UNKNOWN -> TODO()
-    CutType.DX_UNKNOWN -> TODO()
   }
 
 private fun emptyCut(data: ResearchDataModel): Plane =
@@ -589,18 +553,18 @@ private fun emptyCut(data: ResearchDataModel): Plane =
 private fun axialCut(data: ResearchDataModel, types: List<CutType>): Plane =
   Plane(
     type = CutType.CT_AXIAL,
-    data = data.planes[CT_AXIAL_STRING]
+    data = data.series.values.first().modalityModel.planes[CT_AXIAL_STRING]
       ?: error("CutsContainerStoreFactory: AXIAL NOT FOUND IN DATA"),
     color = axialColor,
     verticalCutData = CutData(
       type = CutType.CT_FRONTAL,
-      data = data.planes[CT_FRONTAL_STRING]
+      data = data.series.values.first().modalityModel.planes[CT_FRONTAL_STRING]
         ?: error("CutsContainerStoreFactory: FRONTAL NOT FOUND IN DATA"),
       color = frontalColor
     ),
     horizontalCutData = CutData(
       type = CutType.CT_SAGITTAL,
-      data = data.planes[CT_SAGITTAL_STRING]
+      data = data.series.values.first().modalityModel.planes[CT_SAGITTAL_STRING]
         ?: error("CutsContainerStoreFactory: SAGITTAL NOT FOUND IN DATA"),
       color = sagittalColor
     ),
@@ -611,18 +575,18 @@ private fun axialCut(data: ResearchDataModel, types: List<CutType>): Plane =
 private fun frontalCut(data: ResearchDataModel, types: List<CutType>): Plane =
   Plane(
     type = CutType.CT_FRONTAL,
-    data = data.planes[CT_FRONTAL_STRING]
+    data = data.series.values.first().modalityModel.planes[CT_FRONTAL_STRING]
       ?: error("CutsContainerStoreFactory: FRONTAL NOT FOUND IN DATA"),
     color = frontalColor,
     verticalCutData = CutData(
       type = CutType.CT_AXIAL,
-      data = data.planes[CT_AXIAL_STRING]
+      data = data.series.values.first().modalityModel.planes[CT_AXIAL_STRING]
         ?: error("CutsContainerStoreFactory: AXIAL NOT FOUND IN DATA"),
       color = axialColor
     ),
     horizontalCutData = CutData(
       type = CutType.CT_SAGITTAL,
-      data = data.planes[CT_SAGITTAL_STRING]
+      data = data.series.values.first().modalityModel.planes[CT_SAGITTAL_STRING]
         ?: error("CutsContainerStoreFactory: SAGITTAL NOT FOUND IN DATA"),
       color = sagittalColor
     ),
@@ -633,18 +597,18 @@ private fun frontalCut(data: ResearchDataModel, types: List<CutType>): Plane =
 private fun sagittalCut(data: ResearchDataModel, types: List<CutType>): Plane =
   Plane(
     type = CutType.CT_SAGITTAL,
-    data = data.planes[CT_SAGITTAL_STRING]
+    data = data.series.values.first().modalityModel.planes[CT_SAGITTAL_STRING]
       ?: error("CutsContainerStoreFactory: SAGITTAL NOT FOUND IN DATA"),
     color = sagittalColor,
     verticalCutData = CutData(
       type = CutType.CT_AXIAL,
-      data = data.planes[CT_AXIAL_STRING]
+      data = data.series.values.first().modalityModel.planes[CT_AXIAL_STRING]
         ?: error("CutsContainerStoreFactory: AXIAL NOT FOUND IN DATA"),
       color = axialColor
     ),
     horizontalCutData = CutData(
       type = CutType.CT_FRONTAL,
-      data = data.planes[CT_FRONTAL_STRING]
+      data = data.series.values.first().modalityModel.planes[CT_FRONTAL_STRING]
         ?: error("CutsContainerStoreFactory: FRONTAL NOT FOUND IN DATA"),
       color = frontalColor
     ),
@@ -655,7 +619,7 @@ private fun sagittalCut(data: ResearchDataModel, types: List<CutType>): Plane =
 private fun mgRcc(data: ResearchDataModel, types: List<CutType>): Plane =
   Plane(
     type = CutType.MG_RCC,
-    data = data.planes[MG_RCC_STRING]
+    data = data.series.values.first().modalityModel.planes[MG_RCC_STRING]
       ?: error("CutsContainerStoreFactory: MG_RCC NOT FOUND IN DATA"),
     color = rcc_color,
     verticalCutData = null,
@@ -667,7 +631,7 @@ private fun mgRcc(data: ResearchDataModel, types: List<CutType>): Plane =
 private fun mgLcc(data: ResearchDataModel, types: List<CutType>): Plane =
   Plane(
     type = CutType.MG_LCC,
-    data = data.planes[MG_LCC_STRING]
+    data = data.series.values.first().modalityModel.planes[MG_LCC_STRING]
       ?: error("CutsContainerStoreFactory: MG_LCC NOT FOUND IN DATA"),
     color = lcc_color,
     verticalCutData = null,
@@ -679,7 +643,7 @@ private fun mgLcc(data: ResearchDataModel, types: List<CutType>): Plane =
 private fun mgRmlo(data: ResearchDataModel, types: List<CutType>): Plane =
   Plane(
     type = CutType.MG_RMLO,
-    data = data.planes[MG_RMLO_STRING]
+    data = data.series.values.first().modalityModel.planes[MG_RMLO_STRING]
       ?: error("CutsContainerStoreFactory: MG_RMLO NOT FOUND IN DATA"),
     color = rmlo_color,
     verticalCutData = null,
@@ -691,7 +655,7 @@ private fun mgRmlo(data: ResearchDataModel, types: List<CutType>): Plane =
 private fun mgLmlo(data: ResearchDataModel, types: List<CutType>): Plane =
   Plane(
     type = CutType.MG_LMLO,
-    data = data.planes[MG_LMLO_STRING]
+    data = data.series.values.first().modalityModel.planes[MG_LMLO_STRING]
       ?: error("CutsContainerStoreFactory: MG_LMLO NOT FOUND IN DATA"),
     color = lmlo_color,
     verticalCutData = null,
@@ -703,7 +667,7 @@ private fun mgLmlo(data: ResearchDataModel, types: List<CutType>): Plane =
 private fun dxGeneric(data: ResearchDataModel, types: List<CutType>): Plane =
   Plane(
     type = CutType.DX_GENERIC,
-    data = data.planes[DX_GENERIC_STRING]!!,
+    data = data.series.values.first().modalityModel.planes[DX_GENERIC_STRING]!!,
     color = generic_color,
     verticalCutData = null,
     horizontalCutData = null,
@@ -714,7 +678,7 @@ private fun dxGeneric(data: ResearchDataModel, types: List<CutType>): Plane =
 private fun dxPosteroAnterior(data: ResearchDataModel, types: List<CutType>): Plane =
   Plane(
     type = CutType.DX_POSTERO_ANTERIOR,
-    data = data.planes[DX_POSTERO_ANTERIOR_STRING]!!,
+    data = data.series.values.first().modalityModel.planes[DX_POSTERO_ANTERIOR_STRING]!!,
     color = postero_color,
     verticalCutData = null,
     horizontalCutData = null,
@@ -725,7 +689,7 @@ private fun dxPosteroAnterior(data: ResearchDataModel, types: List<CutType>): Pl
 private fun dxLeftLateral(data: ResearchDataModel, types: List<CutType>): Plane =
   Plane(
     type = CutType.DX_LEFT_LATERAL,
-    data = data.planes[DX_LEFT_LATERAL_STRING]!!,
+    data = data.series.values.first().modalityModel.planes[DX_LEFT_LATERAL_STRING]!!,
     color = left_lateral_color,
     verticalCutData = null,
     horizontalCutData = null,
@@ -736,7 +700,7 @@ private fun dxLeftLateral(data: ResearchDataModel, types: List<CutType>): Plane 
 private fun dxRightLateral(data: ResearchDataModel, types: List<CutType>): Plane =
   Plane(
     type = CutType.DX_RIGHT_LATERAL,
-    data = data.planes[DX_RIGHT_LATERAL_STRING]!!,
+    data = data.series.values.first().modalityModel.planes[DX_RIGHT_LATERAL_STRING]!!,
     color = right_lateral_color,
     verticalCutData = null,
     horizontalCutData = null,
@@ -747,7 +711,7 @@ private fun dxRightLateral(data: ResearchDataModel, types: List<CutType>): Plane
 private fun ct0(data: ResearchDataModel, types: List<CutType>): Plane =
   Plane(
     type = CutType.CT_0,
-    data = data.planes[CT_0_STRING]!!,
+    data = data.series.values.first().modalityModel.planes[CT_0_STRING]!!,
     color = axialColor,
     verticalCutData = null,
     horizontalCutData = null,
@@ -758,7 +722,7 @@ private fun ct0(data: ResearchDataModel, types: List<CutType>): Plane =
 private fun ct1(data: ResearchDataModel, types: List<CutType>): Plane =
   Plane(
     type = CutType.CT_1,
-    data = data.planes[CT_1_STRING]!!,
+    data = data.series.values.first().modalityModel.planes[CT_1_STRING]!!,
     color = frontalColor,
     verticalCutData = null,
     horizontalCutData = null,
@@ -769,7 +733,7 @@ private fun ct1(data: ResearchDataModel, types: List<CutType>): Plane =
 private fun ct2(data: ResearchDataModel, types: List<CutType>): Plane =
   Plane(
     type = CutType.CT_2,
-    data = data.planes[CT_2_STRING]!!,
+    data = data.series.values.first().modalityModel.planes[CT_2_STRING]!!,
     color = sagittalColor,
     verticalCutData = null,
     horizontalCutData = null,

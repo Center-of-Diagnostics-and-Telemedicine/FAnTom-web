@@ -58,29 +58,21 @@ const val SLICE_TYPE_DX_RIGHT_LATERAL: Int = 10
 const val SLICE_TYPE_CT_0: Int = 11
 const val SLICE_TYPE_CT_1: Int = 12
 const val SLICE_TYPE_CT_2: Int = 13
-const val SLICE_TYPE_DX_UNKNOWN: Int = 16
-const val SLICE_TYPE_CT_UNKNOWN: Int = 14
-const val SLICE_TYPE_MG_UNKNOWN: Int = 15
-const val SLICE_TYPE_DOSE_REPORT_UNKNOWN: Int = 16
 
 const val CT_AXIAL_STRING = "ct_axial"
 const val CT_FRONTAL_STRING = "ct_frontal"
 const val CT_SAGITTAL_STRING = "ct_sagittal"
-const val CT_UNKNOWN_STRING = "ct_unknown"
 const val CT_0_STRING = "CT0"
 const val CT_1_STRING = "CT1"
 const val CT_2_STRING = "CT2"
-const val CT_DOSE_REPORT_UNKNOWN_STRING = "CT_DOSE_REPORT_UNKNOWN"
 const val MG_RCC_STRING = "mg_rcc"
 const val MG_LCC_STRING = "mg_lcc"
 const val MG_RMLO_STRING = "mg_rmlo"
 const val MG_LMLO_STRING = "mg_lmlo"
-const val MG_UNKNOWN_STRING = "mg_unknown"
 const val DX_GENERIC_STRING = "dx_generic"
 const val DX_POSTERO_ANTERIOR_STRING = "dx_postero_anterior"
 const val DX_LEFT_LATERAL_STRING = "dx_left_lateral"
 const val DX_RIGHT_LATERAL_STRING = "dx_right_lateral"
-const val DX_UNKNOWN_STRING = "dx_unknown"
 
 const val CT_DEFAULT_SERIES_STRING = "ct_default_series"
 const val MG_DEFAULT_SERIES_STRING = "mg_default_series"
@@ -100,11 +92,7 @@ val stringTypes = listOf(
   DX_GENERIC_STRING,
   DX_POSTERO_ANTERIOR_STRING,
   DX_LEFT_LATERAL_STRING,
-  DX_RIGHT_LATERAL_STRING,
-  CT_UNKNOWN_STRING,
-  MG_UNKNOWN_STRING,
-  CT_DOSE_REPORT_UNKNOWN_STRING,
-  DX_UNKNOWN_STRING
+  DX_RIGHT_LATERAL_STRING
 )
 
 val ctDefaultStringTypes = listOf(
@@ -144,7 +132,7 @@ const val MAXVALUE = "maxvalue"
 const val NO_MIP = "no_mip"
 
 const val INITIAL_BLACK = 0.0
-const val INITIAL_WHITE = 1024.0
+const val INITIAL_WHITE = 256.0
 const val INITIAL_GAMMA = 1.0
 const val INITIAL_MIP_VALUE = 0
 

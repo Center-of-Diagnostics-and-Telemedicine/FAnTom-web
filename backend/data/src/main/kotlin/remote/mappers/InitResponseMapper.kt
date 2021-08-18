@@ -1,14 +1,11 @@
 package remote.mappers
 
 import debugLog
-import model.MarkTypeEntity
-import model.PlaneModel
-import model.fantom.FantomMarkTypeEntity
-import model.fantom.FantomModalityInitModel
-import model.fantom.FantomPlaneModel
-import model.fantom.FantomResearchInitModel
+import model.*
+import model.fantom.*
 import model.init.ModalityModel
 import model.init.ResearchInitModel
+import model.init.SeriesModel
 import java.awt.Color
 
 fun FantomResearchInitModel.toResponse(): ResearchInitModel {
@@ -19,9 +16,9 @@ fun FantomResearchInitModel.toResponse(): ResearchInitModel {
     resultMarkTypes[entry.key] = transformMarkEntity(entry.value)
   }
   return ResearchInitModel(
-    CT = CT?.toModalityModel(),
-    MG = MG?.toModalityModel(),
-    DX = DX?.toModalityModel(),
+    CT = CT?.toSeriesModel(),
+    MG = MG?.toSeriesModel(),
+    DX = DX?.toSeriesModel(),
     dictionary = resultMarkTypes
   )
 }
@@ -42,17 +39,12 @@ private fun transformMarkEntity(
   } else MarkTypeEntity(CLR = value.CLR, EN = value.EN, RU = value.RU)
 }
 
-fun FantomModalityInitModel?.toModalityModel(): ModalityModel? {
+fun FantomModalityInitModel?.toSeriesModel(): Map<String, SeriesModel>? {
   if (this == null) return null
-  val planes = mapPlanes()
-  return ModalityModel(
-    planes = planes,
-    reversed = reversed
-  )
-
+  return mapSeries(mapPlanes())
 }
 
-private fun FantomModalityInitModel.mapPlanes(): MutableMap<String, PlaneModel> {
+private fun FantomModalityInitModel.mapPlanes(): Map<String, PlaneModel> {
   val planes = mutableMapOf<String, PlaneModel>()
   dimensions.map {
     val sopInstanceUid = it.key
@@ -82,4 +74,50 @@ private fun FantomPlaneModel.toPlaneModel(reversed: Boolean, sopInstanceUid: Str
     seriesInstanceUid = series_instance_uid
   )
 }
+
+private fun FantomModalityInitModel.mapSeries(planes: Map<String, PlaneModel>): Map<String, SeriesModel> {
+  val defaultSeries = mapDefaultSeries(planes)
+  val otherSeries = mapOtherSeries(planes)
+  val result = mutableMapOf<String, SeriesModel>()
+  result[defaultSeriesName()] = defaultSeries
+  otherSeries.forEach { result[it.name] = it }
+  return result
+}
+
+fun FantomModalityInitModel.mapDefaultSeries(planes: Map<String, PlaneModel>): SeriesModel {
+  val defaultPlanes = mutableMapOf<String, PlaneModel>()
+  defaultStringTypes().forEach { defaultType ->
+    planes[defaultType]?.let { plane ->
+      defaultPlanes[defaultType] = plane
+    }
+  }
+  return SeriesModel(
+    name = defaultSeriesName(),
+    modalityModel = ModalityModel(planes = defaultPlanes, reversed = this.reversed)
+  )
+}
+
+fun FantomModalityInitModel.mapOtherSeries(planes: Map<String, PlaneModel>): List<SeriesModel> {
+  val otherPlanes = planes.filterKeys { defaultStringTypes().contains(it).not() }
+  return otherPlanes.map {
+    SeriesModel(
+      name = it.key,
+      modalityModel = ModalityModel(planes = mapOf(it.key to it.value), reversed = this.reversed)
+    )
+  }
+}
+
+fun FantomModalityInitModel.defaultStringTypes(): List<String> =
+  when (this) {
+    is FantomCTInitModel -> ctDefaultStringTypes
+    is FantomDXInitModel -> dxDefaultStringTypes
+    is FantomMGInitModel -> mgDefaultStringTypes
+  }
+
+fun FantomModalityInitModel.defaultSeriesName(): String =
+  when (this) {
+    is FantomCTInitModel -> CT_DEFAULT_SERIES_STRING
+    is FantomDXInitModel -> DX_DEFAULT_SERIES_STRING
+    is FantomMGInitModel -> MG_DEFAULT_SERIES_STRING
+  }
 

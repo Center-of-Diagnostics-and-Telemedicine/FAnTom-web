@@ -9,19 +9,19 @@ import com.badoo.reaktive.observable.Observable
 import components.cutcontainer.CutContainer.ShapesChild
 import components.shapes.Shapes.Input
 import components.shapes.Shapes.Output
-import model.CutType
+import model.MyPlane
 
 internal class ShapesRouter(
   routerFactory: RouterFactory,
   private val shapesFactory: (ComponentContext, Consumer<Output>, Observable<Input>) -> Shapes,
   private val shapesOutput: Consumer<Output>,
   private val shapesInput: Observable<Input>,
-  cutType: CutType
+  private val plane: MyPlane,
 ) {
 
   private val router =
-    routerFactory.router(
-      initialConfiguration = if (cutType == CutType.EMPTY) Config.None else Config.Shapes,
+    routerFactory.router<Config, ShapesChild>(
+      initialConfiguration = Config.Shapes,
       key = "ShapesRouter",
       childFactory = ::createChild
     )

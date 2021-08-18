@@ -99,7 +99,7 @@ class DrawUi(props: Props<Draw>) : CanvasUi<Draw, State, Model>(
   private fun onMouseOut(): (Event) -> Unit = { component.onMouseOut() }
   private fun onDoubleClick(): (Event) -> Unit = { component.onDoubleClick() }
 
-  override fun getCanvasName(): String = "draw_canvas_${state.model.cutType}"
+  override fun getCanvasName(): String = "draw_canvas_${state.model.plane.type}"
   override fun getCanvasZIndex(): Int = 2
 
   override fun componentDidCatch(error: Throwable, info: RErrorInfo) {

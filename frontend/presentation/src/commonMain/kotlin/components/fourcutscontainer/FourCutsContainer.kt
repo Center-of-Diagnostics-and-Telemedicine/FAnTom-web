@@ -7,10 +7,9 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.base.Consumer
 import components.cutcontainer.CutContainer
 import components.fourcutscontainer.FourCutsContainer.Dependencies
-import model.CutType
-import model.Plane
+import model.FourGridModel
+import model.MyPlane
 import model.ResearchDataModel
-import model.buildPlane
 import repository.MyBrightnessRepository
 import repository.MyMarksRepository
 import repository.MyMipRepository
@@ -23,10 +22,10 @@ interface FourCutsContainer {
   val bottomLeftRouterState: Value<RouterState<*, Child>>
   val bottomRightRouterState: Value<RouterState<*, Child>>
 
-  fun changeTopLeftCutType(cutType: CutType)
-  fun changeTopRightCutType(cutType: CutType)
-  fun changeBottomLeftCutType(cutType: CutType)
-  fun changeBottomRightCutType(cutType: CutType)
+  fun changeTopLeftCutType(plane: MyPlane)
+  fun changeTopRightCutType(plane: MyPlane)
+  fun changeBottomLeftCutType(plane: MyPlane)
+  fun changeBottomRightCutType(plane: MyPlane)
 
 //  data class Model(
 //    val cutType: CutType
@@ -40,6 +39,7 @@ interface FourCutsContainer {
     val marksRepository: MyMarksRepository
     val mipRepository: MyMipRepository
     val data: ResearchDataModel
+    val gridModel: FourGridModel
     val researchId: Int
   }
 
@@ -60,12 +60,11 @@ fun FourCutsContainer(
   FourCutsContainerComponent(
     componentContext = componentContext,
     dependencies = dependencies,
-    cutContainerFactory = { childContext, cutType, output ->
+    cutContainerFactory = { childContext, plane, output ->
       CutContainer(componentContext = childContext,
         dependencies = object : CutContainer.Dependencies, Dependencies by dependencies {
           override val cutContainerOutput: Consumer<CutContainer.Output> = output
-          override val cutType: CutType = cutType
-          override val plane: Plane = buildPlane(cutType, data)
+          override val plane: MyPlane = plane
         })
     }
   )

@@ -10,7 +10,6 @@ import decompose.Props
 import decompose.RenderableComponent
 import decompose.renderableChild
 import decompose.research.tools.ToolsUi.State
-import decompose.research.tools.ToolsUi.ToolsStyles.headerStyle
 import kotlinx.css.*
 import model.Tool
 import react.RBuilder
@@ -32,10 +31,7 @@ class ToolsUi(props: Props<ResearchTools>) : RenderableComponent<ResearchTools, 
 
   override fun RBuilder.render() {
     themeContext.Consumer { theme ->
-      styledDiv {
-        css(headerStyle)
-        renderableChild(GridUi::class, component.grid)
-      }
+      renderableChild(GridUi::class, component.grid)
       mDivider()
 
       styledDiv {
@@ -57,7 +53,6 @@ class ToolsUi(props: Props<ResearchTools>) : RenderableComponent<ResearchTools, 
       when (tool) {
         is Tool.MIP -> renderableChild(MipUi::class, component.mip)
         is Tool.Brightness -> renderableChild(BrightnessUi::class, component.brightness)
-        is Tool.Series -> renderableChild(SeriesUi::class, component.series)
         is Tool.Preset -> {
         }
 //        is Tool.Preset -> renderPreset(

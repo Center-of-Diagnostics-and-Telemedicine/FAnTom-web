@@ -5,11 +5,6 @@ import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
-import com.badoo.reaktive.completable.observeOn
-import com.badoo.reaktive.completable.subscribeOn
-import com.badoo.reaktive.coroutinesinterop.completableFromCoroutine
-import com.badoo.reaktive.scheduler.ioScheduler
-import com.badoo.reaktive.scheduler.mainScheduler
 import com.badoo.reaktive.utils.ensureNeverFrozen
 import model.*
 import repository.MyMarksRepository
@@ -19,15 +14,14 @@ import store.draw.MyDrawStore.*
 internal class DrawStoreProvider(
   private val storeFactory: StoreFactory,
   private val researchId: Int,
-  private val plane: Plane,
+  private val plane: MyPlane,
   private val marksRepository: MyMarksRepository
 ) {
 
   fun provide(): MyDrawStore =
     object : MyDrawStore, Store<Intent, State, Label> by storeFactory.create(
-      name = "MyDrawStore_${researchId}_${plane.type.intType}",
+      name = "MyDrawStore_${researchId}_${plane.type}",
       initialState = State(
-        cutType = plane.type,
         plane = plane,
         screenDimensionsModel = initialScreenDimensionsModel()
       ),
@@ -80,15 +74,15 @@ internal class DrawStoreProvider(
     }
 
     private fun handleStartClick(startDicomX: Double, startDicomY: Double) {
-      completableFromCoroutine {
-        val mouseInClickPosition =
-          MouseClickPositionModel(startX = startDicomX, startY = startDicomY)
-        dispatch(Result.MouseInClickPosition(mouseInClickPosition))
-        marksRepository.setMarkByCoordinates(startDicomX, startDicomY, plane.type)
-      }
-        .subscribeOn(ioScheduler)
-        .observeOn(mainScheduler)
-        .subscribeScoped()
+//      completableFromCoroutine {
+//        val mouseInClickPosition =
+//          MouseClickPositionModel(startX = startDicomX, startY = startDicomY)
+//        dispatch(Result.MouseInClickPosition(mouseInClickPosition))
+//        marksRepository.setMarkByCoordinates(startDicomX, startDicomY, plane.type)
+//      }
+//        .subscribeOn(ioScheduler)
+//        .observeOn(mainScheduler)
+//        .subscribeScoped()
     }
 
     private fun handleMove(dicomX: Double, dicomY: Double, state: State) {
@@ -128,14 +122,14 @@ internal class DrawStoreProvider(
       dicomY: Double,
       mouseInClickPosition: MouseClickPositionModel
     ) {
-      val copy = mouseInClickPosition.copy(x = dicomX, y = dicomY)
-      dispatch(Result.MouseInClickPosition(copy))
-      completableFromCoroutine {
-        val deltaX = copy.x - copy.startX
-        val deltaY = copy.y - copy.startY
-        marksRepository.updateMarkPosition(deltaX, deltaY, plane.type)
-      }
-        .subscribeScoped()
+//      val copy = mouseInClickPosition.copy(x = dicomX, y = dicomY)
+//      dispatch(Result.MouseInClickPosition(copy))
+//      completableFromCoroutine {
+//        val deltaX = copy.x - copy.startX
+//        val deltaY = copy.y - copy.startY
+//        marksRepository.updateMarkPosition(deltaX, deltaY, plane.type)
+//      }
+//        .subscribeScoped()
     }
 
     private fun handleContrastBrightness(

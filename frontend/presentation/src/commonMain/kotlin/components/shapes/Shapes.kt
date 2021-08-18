@@ -19,8 +19,7 @@ interface Shapes {
     val position: PointPosition?,
     val shapes: List<ScreenShape>,
     val hounsfield: Int?,
-    val cutType: CutType,
-    val plane: Plane,
+    val plane: MyPlane,
     val screenDimensionsModel: ScreenDimensionsModel,
   )
 
@@ -29,7 +28,7 @@ interface Shapes {
     val marksRepository: MyMarksRepository
     val shapesOutput: Consumer<Output>
     val shapesInput: Observable<Input>
-    val plane: Plane
+    val plane: MyPlane
     val researchId: Int
   }
 

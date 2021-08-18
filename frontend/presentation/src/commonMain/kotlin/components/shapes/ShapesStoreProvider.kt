@@ -13,18 +13,17 @@ import store.shapes.MyShapesStore.*
 internal class ShapesStoreProvider(
   private val storeFactory: StoreFactory,
   private val researchId: Int,
-  private val plane: Plane
+  private val plane: MyPlane
 ) {
 
   fun provide(): MyShapesStore =
     object : MyShapesStore, Store<Intent, State, Label> by storeFactory.create(
-      name = "MyShapesStore_${researchId}_${plane.type.intType}",
+      name = "MyShapesStore_${researchId}_${plane.type}",
       initialState = State(
         sliceNumber = SliceNumberModel(1, plane.data.nImages),
         position = null,
         shapes = listOf(),
         hounsfield = null,
-        cutType = plane.type,
         plane = plane,
         screenDimensionsModel = initialScreenDimensionsModel(),
       ),

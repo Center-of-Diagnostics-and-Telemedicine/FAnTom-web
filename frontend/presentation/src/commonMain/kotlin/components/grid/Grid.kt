@@ -5,8 +5,7 @@ import com.arkivanov.decompose.value.Value
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.base.Consumer
 import components.grid.Grid.Dependencies
-import model.GridType
-import model.ResearchData
+import model.MyNewGridType
 import model.ResearchDataModel
 import repository.GridRepository
 
@@ -14,10 +13,13 @@ interface Grid {
 
   val model: Value<Model>
 
-  fun changeGrid(gridType: GridType)
+  fun changeGrid(gridType: MyNewGridType)
+  fun changeSeries(seriesName: String)
 
   data class Model(
-    val grid: GridType,
+    val grid: MyNewGridType,
+    val series: List<String>,
+    val currentSeries: String
   )
 
   interface Dependencies {

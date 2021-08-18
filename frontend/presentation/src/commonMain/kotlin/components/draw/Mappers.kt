@@ -12,7 +12,6 @@ internal val stateToModel: (State) -> Model =
   {
     Model(
       shape = it.shape?.toScreenShape(it.screenDimensionsModel),
-      cutType = it.cutType,
       plane = it.plane,
       screenDimensionsModel = it.screenDimensionsModel
     )
@@ -56,7 +55,7 @@ internal fun MouseDown.toIntent(dimensions: ScreenDimensionsModel): Intent {
   }
 }
 
-internal fun Plane.calculateScreenDimensions(
+internal fun MyPlane.calculateScreenDimensions(
   screenHeight: Int,
   screenWidth: Int
 ): ScreenDimensionsModel {
@@ -84,7 +83,7 @@ internal fun Plane.calculateScreenDimensions(
   )
 }
 
-private fun Plane.calculateRadiusRatio(
+private fun MyPlane.calculateRadiusRatio(
   resultHeight: Double,
   resultWidth: Double
 ): Double {
@@ -104,7 +103,7 @@ private fun calculateLeft(screenWidth: Double, resultWidth: Double): Double {
   return if (mLeft <= 0) 0.0 else ceil(mLeft / 2)
 }
 
-private fun Plane.calculateWidth(screenHeight: Double, screenWidth: Double): Double {
+private fun MyPlane.calculateWidth(screenHeight: Double, screenWidth: Double): Double {
   val dicomWidth = data.screenSizeH.toDouble()
   val dicomHeight = data.screenSizeV.toDouble()
   val ri = dicomWidth / dicomHeight
@@ -116,7 +115,7 @@ private fun Plane.calculateWidth(screenHeight: Double, screenWidth: Double): Dou
   }
 }
 
-private fun Plane.calculateHeight(screenHeight: Double, screenWidth: Double): Double {
+private fun MyPlane.calculateHeight(screenHeight: Double, screenWidth: Double): Double {
   val dicomWidth = data.screenSizeH.toDouble()
   val dicomHeight = data.screenSizeV.toDouble()
   val ri = dicomWidth / dicomHeight
@@ -128,10 +127,10 @@ private fun Plane.calculateHeight(screenHeight: Double, screenWidth: Double): Do
   }
 }
 
-private fun Plane.calculateVerticalRatio(resultHeight: Double): Double =
+private fun MyPlane.calculateVerticalRatio(resultHeight: Double): Double =
   data.screenSizeV.toDouble() / resultHeight
 
-private fun Plane.calculateHorizontalRatio(resultWidth: Double): Double =
+private fun MyPlane.calculateHorizontalRatio(resultWidth: Double): Double =
   data.screenSizeH.toDouble() / resultWidth
 
 fun mapScreenXToDicomX(screenX: Double, horizontalRatio: Double): Double =

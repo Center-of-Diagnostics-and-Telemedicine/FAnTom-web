@@ -6,7 +6,7 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.base.Consumer
 import com.badoo.reaktive.observable.Observable
 import components.cutslider.Slider.Dependencies
-import model.Plane
+import model.MyPlane
 
 interface Slider {
 
@@ -24,7 +24,7 @@ interface Slider {
     val storeFactory: StoreFactory
     val sliderOutput: Consumer<Output>
     val sliderInput: Observable<Input>
-    val plane: Plane
+    val plane: MyPlane
     val researchId: Int
   }
 

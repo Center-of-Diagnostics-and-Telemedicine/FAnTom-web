@@ -2,21 +2,24 @@ package store.tools
 
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
-import model.GridType
-import model.MyGrid
+import model.MyNewGrid
+import model.MyNewGridType
 import store.tools.MyGridStore.*
 
 interface MyGridStore : Store<Intent, State, Label> {
 
   sealed class Intent : JvmSerializable {
-    data class ChangeGrid(val gridType: GridType) : Intent()
+    data class ChangeGrid(val gridType: MyNewGridType) : Intent()
+    data class ChangeSeries(val series: String) : Intent()
   }
 
   data class State(
-    val grid: GridType
+    val grid: MyNewGrid,
+    val series: List<String>,
+    val currentSeries: String
   ) : JvmSerializable
 
   sealed class Label : JvmSerializable {
-    data class GridChanged(val item: GridType) : Label()
+    data class GridChanged(val item: MyNewGrid) : Label()
   }
 }

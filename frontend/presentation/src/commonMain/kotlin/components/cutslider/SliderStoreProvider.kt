@@ -7,7 +7,7 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
 import com.badoo.reaktive.utils.ensureNeverFrozen
-import model.Plane
+import model.MyPlane
 import store.slider.SliderStore
 import store.slider.SliderStore.Intent
 import store.slider.SliderStore.State
@@ -15,7 +15,7 @@ import store.slider.SliderStore.State
 internal class SliderStoreProvider(
   private val storeFactory: StoreFactory,
   private val researchId: Int,
-  private val plane: Plane
+  private val plane: MyPlane
 ) {
 
   val initialState: State = State(
@@ -26,7 +26,7 @@ internal class SliderStoreProvider(
 
   fun provide(): SliderStore =
     object : SliderStore, Store<Intent, State, Nothing> by storeFactory.create(
-      name = "SliderStore_${researchId}_${plane.type.intType}",
+      name = "SliderStore_${researchId}_${plane.type}",
       initialState = initialState,
       bootstrapper = SimpleBootstrapper(Unit),
       executorFactory = ::ExecutorImpl,

@@ -1,4 +1,4 @@
-package components.fourcutscontainer
+package components.threecutscontainer
 
 import com.arkivanov.decompose.*
 import com.arkivanov.decompose.value.Value
@@ -7,15 +7,14 @@ import com.arkivanov.essenty.parcelable.Parcelize
 import com.badoo.reaktive.base.Consumer
 import components.Consumer
 import components.cutcontainer.CutContainer
-import components.fourcutscontainer.FourCutsContainer.Child
-import components.fourcutscontainer.FourCutsContainer.Dependencies
+import components.threecutscontainer.ThreeCutsContainer.Child
 import model.MyPlane
 
-class FourCutsContainerComponent(
+class ThreeCutsContainerComponent(
   componentContext: ComponentContext,
-  dependencies: Dependencies,
+  dependencies: ThreeCutsContainer.Dependencies,
   private val cutContainerFactory: (ComponentContext, MyPlane, Consumer<CutContainer.Output>) -> CutContainer,
-) : FourCutsContainer, ComponentContext by componentContext, Dependencies by dependencies {
+) : ThreeCutsContainer, ComponentContext by componentContext, ThreeCutsContainer.Dependencies by dependencies {
 
   private val topLeftRouter: Router<ChildConfiguration, Child> = router(
     initialConfiguration = ChildConfiguration(gridModel.topLeft),
@@ -23,13 +22,6 @@ class FourCutsContainerComponent(
     childFactory = ::resolveChild
   )
   override val topLeftRouterState: Value<RouterState<*, Child>> = topLeftRouter.state
-
-  private val topRightRouter: Router<ChildConfiguration, Child> = router(
-    initialConfiguration = ChildConfiguration(gridModel.topRight),
-    key = "TopRightRouter",
-    childFactory = ::resolveChild
-  )
-  override val topRightRouterState: Value<RouterState<*, Child>> = topRightRouter.state
 
   private val bottomLeftRouter: Router<ChildConfiguration, Child> =
     router(
@@ -49,10 +41,6 @@ class FourCutsContainerComponent(
 
   override fun changeTopLeftCutType(plane: MyPlane) {
     topLeftRouter.replaceCurrent(ChildConfiguration(plane))
-  }
-
-  override fun changeTopRightCutType(plane: MyPlane) {
-    topRightRouter.replaceCurrent(ChildConfiguration(plane))
   }
 
   override fun changeBottomLeftCutType(plane: MyPlane) {

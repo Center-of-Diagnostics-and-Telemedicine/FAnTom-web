@@ -23,8 +23,7 @@ interface Draw {
 
   data class Model(
     val shape: ScreenShape?,
-    val plane: Plane,
-    val cutType: CutType,
+    val plane: MyPlane,
     val screenDimensionsModel: ScreenDimensionsModel,
   )
 
@@ -32,7 +31,7 @@ interface Draw {
     val storeFactory: StoreFactory
     val drawOutput: Consumer<Output>
     val drawInput: Observable<Input>
-    val plane: Plane
+    val plane: MyPlane
     val researchId: Int
     val marksRepository: MyMarksRepository
   }

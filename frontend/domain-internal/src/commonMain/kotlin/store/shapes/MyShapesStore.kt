@@ -19,8 +19,7 @@ interface MyShapesStore : Store<Intent, State, Label> {
     val sliceNumber: SliceNumberModel,
     val position: PointPosition?,
     val hounsfield: Int?,
-    val cutType: CutType,
-    val plane: Plane,
+    val plane: MyPlane,
     val screenDimensionsModel: ScreenDimensionsModel,
   ) : JvmSerializable
 

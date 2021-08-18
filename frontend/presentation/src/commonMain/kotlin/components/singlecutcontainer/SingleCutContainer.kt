@@ -7,10 +7,9 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.base.Consumer
 import components.cutcontainer.CutContainer
 import components.singlecutcontainer.SingleCutContainer.Dependencies
-import model.CutType
-import model.Plane
+import model.MyPlane
 import model.ResearchDataModel
-import model.buildPlane
+import model.SingleGridModel
 import repository.MyBrightnessRepository
 import repository.MyMarksRepository
 import repository.MyMipRepository
@@ -20,7 +19,7 @@ interface SingleCutContainer {
 
   val routerState: Value<RouterState<*, Child>>
 
-  fun changeCutType(cutType: CutType)
+  fun changeCutType(plane: MyPlane)
 
 //  data class Model(
 //    val cutType: CutType
@@ -34,6 +33,7 @@ interface SingleCutContainer {
     val marksRepository: MyMarksRepository
     val mipRepository: MyMipRepository
     val data: ResearchDataModel
+    val grid: SingleGridModel
     val researchId: Int
   }
 
@@ -53,12 +53,11 @@ fun SingleCutContainer(
   SingleCutContainerComponent(
     componentContext = componentContext,
     dependencies = dependencies,
-    cutContainerFactory = { childContext, cutType, output ->
+    cutContainerFactory = { childContext, plane, output ->
       CutContainer(componentContext = childContext,
         dependencies = object : CutContainer.Dependencies, Dependencies by dependencies {
           override val cutContainerOutput: Consumer<CutContainer.Output> = output
-          override val cutType: CutType = cutType
-          override val plane: Plane = buildPlane(cutType, data)
+          override val plane: MyPlane = plane
         })
     }
   )

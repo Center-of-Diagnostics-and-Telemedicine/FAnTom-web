@@ -2,13 +2,12 @@ package components.grid
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.Value
-import com.arkivanov.decompose.value.observe
 import com.arkivanov.decompose.value.operator.map
 import components.asValue
 import components.getStore
 import components.grid.Grid.Dependencies
 import components.grid.Grid.Model
-import model.GridType
+import model.MyNewGridType
 import store.tools.MyGridStore.Intent
 
 class GridComponent(
@@ -27,7 +26,11 @@ class GridComponent(
 
   override val model: Value<Model> = store.asValue().map(stateToModel)
 
-  override fun changeGrid(gridType: GridType) {
+  override fun changeGrid(gridType: MyNewGridType) {
     store.accept(Intent.ChangeGrid(gridType))
+  }
+
+  override fun changeSeries(seriesName: String) {
+    store.accept(Intent.ChangeSeries(seriesName))
   }
 }

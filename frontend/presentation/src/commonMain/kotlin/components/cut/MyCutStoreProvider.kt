@@ -18,7 +18,7 @@ import com.badoo.reaktive.single.subscribeOn
 import com.badoo.reaktive.utils.ensureNeverFrozen
 import model.BASE_ERROR
 import model.HasIntValue
-import model.Plane
+import model.MyPlane
 import model.ResearchApiExceptions
 import repository.GetSliceModel
 import repository.MyResearchRepository
@@ -30,12 +30,12 @@ class MyCutStoreProvider(
   private val storeFactory: StoreFactory,
   private val researchRepository: MyResearchRepository,
   private val researchId: Int,
-  private val plane: Plane
+  private val plane: MyPlane
 ) {
 
   fun provide(): MyCutStore =
     object : MyCutStore, Store<Intent, State, Label> by storeFactory.create(
-      name = "MyCutStore_${researchId}_${plane.type.intType}",
+      name = "MyCutStore_${researchId}_${plane.type}",
       initialState = State(cutModel = null),
       bootstrapper = SimpleBootstrapper(Unit),
       executorFactory = ::ExecutorImpl,
@@ -112,12 +112,13 @@ class MyCutStoreProvider(
       black = blackValue,
       white = whiteValue,
       gamma = gammaValue,
-      type = plane.type.intType,
+      type = plane.type,
       mipMethod = mip.intValue,
       aproxSize = (mip as? HasIntValue)?.value ?: 0,
       width = if (width > height) 0 else width,
       height = if (height > width) 0 else height,
       sliceNumber = sliceNumber,
-      sopInstanceUid = plane.data.SOPInstanceUID ?: ""
+      sopInstanceUid = plane.data.SOPInstanceUID ?: "",
+      modality = plane.researchType.name
     )
 }

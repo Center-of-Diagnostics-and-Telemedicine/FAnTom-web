@@ -24,8 +24,8 @@ interface MyResearchRepository {
 fun GetSliceModel.toSliceRequest(): SliceRequestNew =
   SliceRequestNew(
     image = ImageModel(
-      modality = getModalityStringType(type),
-      type = getSliceStringType(type),
+      modality = modality,
+      type = type,
       number = sliceNumber,
       mip = MipModel(
         mip_method = getMipMethodStringType(mipMethod),

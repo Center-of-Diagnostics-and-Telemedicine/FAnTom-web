@@ -94,8 +94,8 @@ class ResearchRepositoryImpl(
       token = token(),
       request = SliceRequestNew(
         image = ImageModel(
-          modality = getModalityStringType(model.type),
-          type = getSliceStringType(model.type),
+          modality = model.modality,
+          type = model.type,
           number = model.sliceNumber,
           mip = MipModel(
             mip_method = getMipMethodStringType(model.mipMethod),

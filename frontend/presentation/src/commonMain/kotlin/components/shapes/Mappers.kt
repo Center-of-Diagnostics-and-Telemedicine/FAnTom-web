@@ -13,7 +13,6 @@ internal val stateToModel: (State) -> Model =
       position = state.position,
       shapes = state.shapes.map { it.toScreenShape(state.screenDimensionsModel) },
       hounsfield = state.hounsfield,
-      cutType = state.cutType,
       plane = state.plane,
       screenDimensionsModel = state.screenDimensionsModel
     )

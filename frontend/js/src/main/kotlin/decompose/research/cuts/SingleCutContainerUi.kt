@@ -3,25 +3,23 @@ package decompose.research.cuts
 import com.arkivanov.decompose.RouterState
 import components.singlecutcontainer.SingleCutContainer
 import components.singlecutcontainer.SingleCutContainer.Child
+import decompose.Props
 import decompose.RenderableComponent
 import decompose.renderableChild
 import decompose.research.cut.CutContainerUi
 import decompose.research.cuts.SingleCutContainerUi.State
 import react.RBuilder
 import react.RState
-import decompose.Props
 
 class SingleCutContainerUi(props: Props<SingleCutContainer>) :
   RenderableComponent<SingleCutContainer, State>(
     props = props,
     initialState = State(
-//    model = props.component.model.value,
       routerState = props.component.routerState.value
     )
   ) {
 
   init {
-//    component.model.bindToState { model = it }
     component.routerState.bindToState { routerState = it }
   }
 

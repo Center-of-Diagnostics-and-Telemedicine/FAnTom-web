@@ -9,20 +9,19 @@ import com.badoo.reaktive.observable.Observable
 import components.cutcontainer.CutContainer.SliderChild
 import components.cutslider.Slider.Input
 import components.cutslider.Slider.Output
-import model.CutType
-import model.Plane
+import model.MyPlane
 
 internal class SliderRouter(
   routerFactory: RouterFactory,
   private val sliderFactory: (ComponentContext, Consumer<Output>, Observable<Input>) -> Slider,
   private val sliderOutput: Consumer<Output>,
   private val sliderInput: Observable<Input>,
-  private val plane: Plane
+  private val plane: MyPlane
 ) {
 
   private val router =
     routerFactory.router(
-      initialConfiguration = if (shouldShowSlider()) Config.Slider else Config.None ,
+      initialConfiguration = if (shouldShowSlider()) Config.Slider else Config.None,
       key = "SliderRouter",
       childFactory = ::createChild
     )
@@ -48,11 +47,7 @@ internal class SliderRouter(
     }
   }
 
-  private fun shouldShowSlider(): Boolean {
-    val slicesMoreThanOne = plane.data.nImages > 1
-    val correctCutType = plane.type != CutType.EMPTY
-    return correctCutType && slicesMoreThanOne
-  }
+  private fun shouldShowSlider(): Boolean = plane.data.nImages > 1
 
   sealed class Config : Parcelable {
     @Parcelize

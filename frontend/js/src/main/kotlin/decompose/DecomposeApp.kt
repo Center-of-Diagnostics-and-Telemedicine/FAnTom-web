@@ -45,7 +45,6 @@ class App() : RComponent<RProps, RState>() {
   )
 
   val gridRepositoryImpl = GridRepositoryImpl()
-  val seriesRepositoryImpl = SeriesRepositoryImpl()
 
   private val myRoot = MyRoot(ctx, dependencies = object : MyRoot.Dependencies {
     override val storeFactory: StoreFactory = LoggingStoreFactory(DefaultStoreFactory())
@@ -55,7 +54,6 @@ class App() : RComponent<RProps, RState>() {
     override val brightnessRepository: MyBrightnessRepository = brightnessRepositoryImpl
     override val marksRepository: MyMarksRepository = marksRepositoryImpl
     override val gridRepository: GridRepository = gridRepositoryImpl
-    override val seriesRepository: SeriesRepository = seriesRepositoryImpl
   })
 
   override fun componentDidMount() {

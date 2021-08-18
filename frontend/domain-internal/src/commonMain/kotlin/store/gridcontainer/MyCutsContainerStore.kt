@@ -2,8 +2,7 @@ package store.gridcontainer
 
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
-import model.GridModel
-import model.GridType
+import model.MyNewGrid
 import store.gridcontainer.MyCutsContainerStore.*
 
 interface MyCutsContainerStore : Store<Intent, State, Label> {
@@ -12,11 +11,12 @@ interface MyCutsContainerStore : Store<Intent, State, Label> {
   }
 
   data class State(
-    val gridType: GridType,
-    val gridModel: GridModel
+    val grid: MyNewGrid? = null,
+    val loading: Boolean = false,
+    val error: String? = null
   ) : JvmSerializable
 
   sealed class Label {
-    data class GridTypeChanged(val gridType: GridType) : Label()
+    data class GridTypeChanged(val grid: MyNewGrid) : Label()
   }
 }

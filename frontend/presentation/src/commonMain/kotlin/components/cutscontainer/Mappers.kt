@@ -1,18 +1,18 @@
 package components.cutscontainer
 
 import components.cutscontainer.CutsContainer.Model
-import model.GridType
+import model.MyNewGrid
 import store.gridcontainer.MyCutsContainerStore.Label
 import store.gridcontainer.MyCutsContainerStore.State
 
 internal val stateToModel: (State) -> Model =
   {
-    Model(gridType = it.gridType)
+    Model(grid = it.grid)
   }
 
-internal val labelToChangeGrid: (Label) -> GridType? =
+internal val labelToChangeGrid: (Label) -> MyNewGrid? =
   {
     when(it){
-      is Label.GridTypeChanged -> it.gridType
+      is Label.GridTypeChanged -> it.grid
     }
   }

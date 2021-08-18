@@ -13,10 +13,8 @@ import com.badoo.reaktive.observable.subscribeOn
 import com.badoo.reaktive.scheduler.ioScheduler
 import com.badoo.reaktive.scheduler.mainScheduler
 import com.badoo.reaktive.utils.ensureNeverFrozen
-import model.GridModel
-import model.GridType
+import model.MyNewGrid
 import model.ResearchDataModel
-import model.buildModel
 import repository.GridRepository
 import repository.MyResearchRepository
 import store.gridcontainer.MyCutsContainerStore
@@ -33,10 +31,7 @@ internal class CutsContainerStoreProvider(
   fun provide(): MyCutsContainerStore =
     object : MyCutsContainerStore, Store<Intent, State, Label> by storeFactory.create(
       name = "CutsContainerStore_$researchId",
-      initialState = State(
-        gridType = GridType.initial,
-        gridModel = GridType.initial.buildModel(data),
-      ),
+      initialState = State(),
       bootstrapper = SimpleBootstrapper(Unit),
       executorFactory = ::ExecutorImpl,
       reducer = ReducerImpl
@@ -47,8 +42,7 @@ internal class CutsContainerStoreProvider(
     }
 
   private sealed class Result : JvmSerializable {
-    data class GridChanged(val grid: GridType) : Result()
-    data class GridModelChanged(val gridModel: GridModel) : Result()
+    data class GridChanged(val grid: MyNewGrid) : Result()
   }
 
   private inner class ExecutorImpl : ReaktiveExecutor<Intent, Unit, State, Result, Label>() {
@@ -72,8 +66,7 @@ internal class CutsContainerStoreProvider(
   private object ReducerImpl : Reducer<State, Result> {
     override fun State.reduce(result: Result): State =
       when (result) {
-        is Result.GridChanged -> copy(gridType = result.grid)
-        is Result.GridModelChanged -> copy(gridModel = result.gridModel)
+        is Result.GridChanged -> copy(grid = result.grid)
       }
   }
 }

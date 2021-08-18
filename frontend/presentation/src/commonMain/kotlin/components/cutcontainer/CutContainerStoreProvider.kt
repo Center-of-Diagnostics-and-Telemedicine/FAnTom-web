@@ -6,15 +6,8 @@ import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.core.utils.JvmSerializable
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
-import com.badoo.reaktive.completable.observeOn
-import com.badoo.reaktive.completable.subscribeOn
-import com.badoo.reaktive.coroutinesinterop.completableFromCoroutine
 import com.badoo.reaktive.observable.doOnAfterNext
 import com.badoo.reaktive.observable.map
-import com.badoo.reaktive.observable.mapIterable
-import com.badoo.reaktive.observable.notNull
-import com.badoo.reaktive.scheduler.ioScheduler
-import com.badoo.reaktive.scheduler.mainScheduler
 import com.badoo.reaktive.utils.ensureNeverFrozen
 import model.*
 import repository.MyBrightnessRepository
@@ -32,7 +25,7 @@ class CutContainerStoreProvider(
   private val marksRepository: MyMarksRepository,
   private val mipRepository: MyMipRepository,
   private val researchId: Int,
-  private val plane: Plane,
+  private val plane: MyPlane,
   private val data: ResearchDataModel
 ) {
 
@@ -54,7 +47,7 @@ class CutContainerStoreProvider(
 
   fun provide(): CutContainerStore =
     object : CutContainerStore, Store<Intent, State, Label> by storeFactory.create(
-      name = "CutContainerStore_${researchId}_${plane.type.intType}",
+      name = "CutContainerStore_${researchId}_${plane.type}",
       initialState = initialState,
       bootstrapper = SimpleBootstrapper(Unit),
       executorFactory = ::ExecutorImpl,
@@ -99,24 +92,24 @@ class CutContainerStoreProvider(
           onError = ::handleError
         )
 
-      marksRepository.marks
-        .notNull()
-        .mapIterable { it.toMarkModel(data.markTypes) }
-        .map(Result::Marks)
-        .doOnAfterNext { result ->
-          result
-            .marks
-            .mapNotNull {
-              it.toShape(plane, getState().cutModel.sliceNumber)
-            }
-            .let {
-              publish(Label.Shapes(it))
-            }
-        }
-        .subscribeScoped(
-          onNext = ::dispatch,
-          onError = ::handleError
-        )
+//      marksRepository.marks
+//        .notNull()
+//        .mapIterable { it.toMarkModel(data.markTypes) }
+//        .map(Result::Marks)
+//        .doOnAfterNext { result ->
+//          result
+//            .marks
+//            .mapNotNull {
+//              it.toShape(plane, getState().cutModel.sliceNumber)
+//            }
+//            .let {
+//              publish(Label.Shapes(it))
+//            }
+//        }
+//        .subscribeScoped(
+//          onNext = ::dispatch,
+//          onError = ::handleError
+//        )
 
       marksRepository.mark
         .map { it?.toMarkModel(data.markTypes) }
@@ -143,14 +136,14 @@ class CutContainerStoreProvider(
     }
 
     private fun handleNewShape(shape: Shape, state: State) {
-      plane.getMarkToSave(shape, state.cutModel.sliceNumber)?.let { markToSave ->
-        completableFromCoroutine {
-          marksRepository.saveMark(markToSave, researchId)
-        }
-          .subscribeOn(ioScheduler)
-          .observeOn(mainScheduler)
-          .subscribeScoped(onError = ::handleError)
-      }
+//      plane.getMarkToSave(shape, state.cutModel.sliceNumber)?.let { markToSave ->
+//        completableFromCoroutine {
+//          marksRepository.saveMark(markToSave, researchId)
+//        }
+//          .subscribeOn(ioScheduler)
+//          .observeOn(mainScheduler)
+//          .subscribeScoped(onError = ::handleError)
+//      }
     }
 
     private fun handleDimensions(dimensions: ScreenDimensionsModel, state: State) {

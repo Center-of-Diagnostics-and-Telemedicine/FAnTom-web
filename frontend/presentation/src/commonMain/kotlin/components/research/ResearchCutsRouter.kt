@@ -1,13 +1,12 @@
 package components.research
 
 import com.arkivanov.decompose.*
+import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.parcelable.Parcelable
 import com.arkivanov.essenty.parcelable.Parcelize
-import com.arkivanov.decompose.value.Value
 import com.badoo.reaktive.base.Consumer
 import components.cutscontainer.CutsContainer
 import components.research.ResearchRoot.CutsChild
-import model.ResearchData
 import model.ResearchDataModel
 
 internal class ResearchCutsRouter(
@@ -30,19 +29,19 @@ internal class ResearchCutsRouter(
     componentContext: ComponentContext
   ): CutsChild =
     when (config) {
-      is Config.Marks -> CutsChild.Data(cutsFactory(componentContext, config.data, cutsOutput))
+      is Config.Cuts -> CutsChild.Data(cutsFactory(componentContext, config.data, cutsOutput))
       is Config.None -> CutsChild.None
     }
 
   fun update(data: ResearchDataModel) {
     if (state.value.activeChild.instance is CutsChild.None) {
-      router.push(Config.Marks(data))
+      router.push(Config.Cuts(data))
     }
   }
 
   sealed class Config : Parcelable {
     @Parcelize
-    data class Marks(val data: ResearchDataModel) : Config()
+    data class Cuts(val data: ResearchDataModel) : Config()
 
     @Parcelize
     object None : Config()

@@ -57,7 +57,7 @@ class ShapesUi(props: Props<Shapes>) : CanvasUi<Shapes, State, Model>(
     model.shapes.forEach { shape -> drawShape(shape) }
   }
 
-  override fun getCanvasName(): String = "shape_canvas_${state.model.cutType}"
+  override fun getCanvasName(): String = "shape_canvas_${state.model.plane.type}"
   override fun getCanvasZIndex(): Int = 1
 
   class State(var model: Model) : RState

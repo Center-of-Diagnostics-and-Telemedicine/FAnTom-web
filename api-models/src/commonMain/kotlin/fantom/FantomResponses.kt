@@ -24,7 +24,7 @@ data class FantomMarkTypeEntity(
   val CLR: String? = ""
 )
 
-interface FantomModalityInitModel {
+sealed interface FantomModalityInitModel {
   val dimensions: Map<String, FantomPlaneModel>
   val reversed: Boolean
 }

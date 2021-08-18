@@ -71,7 +71,7 @@ class CutContainerComponent(
       drawFactory = draw,
       drawOutput = Consumer(::onDrawOutput),
       drawInput = drawInput,
-      cutType = cutType
+      plane = plane
     )
   override val drawRouterState: Value<RouterState<*, DrawChild>> = drawRouter.state
 
@@ -81,7 +81,7 @@ class CutContainerComponent(
       shapesFactory = shapes,
       shapesOutput = Consumer(::onShapesOutput),
       shapesInput = shapesInput,
-      cutType = cutType
+      plane = plane
     )
 
   override val shapesRouterState: Value<RouterState<*, ShapesChild>> = shapesRouter.state
@@ -92,7 +92,7 @@ class CutContainerComponent(
       cutFactory = cut,
       cutOutput = Consumer(::onCutOutput),
       cutInput = cutInput,
-      cutType = cutType
+      plane = plane
     )
 
   override val cutRouterState: Value<RouterState<*, CutChild>> = cutRouter.state
@@ -144,7 +144,7 @@ class CutContainerComponent(
         store.accept(Intent.ChangeSliceNumber(store.state.cutModel.sliceNumber + output.deltaDicomY))
       is Draw.Output.ChangeContrastBrightness -> TODO()
       is Draw.Output.PointPosition -> store.accept(Intent.PointPosition(output.pointPosition))
-      is Draw.Output.OpenFullCut -> cutContainerOutput.onNext(Output.OpenFullCut(cutType))
+      is Draw.Output.OpenFullCut -> cutContainerOutput.onNext(Output.OpenFullCut(plane.type))
     }.let { }
   }
 

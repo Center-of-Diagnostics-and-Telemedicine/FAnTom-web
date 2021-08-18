@@ -13,10 +13,16 @@ data class ResearchInitResponse(
 
 @Serializable
 data class ResearchInitModel(
-  val CT: ModalityModel? = null,
-  val MG: ModalityModel? = null,
-  val DX: ModalityModel? = null,
+  val CT: Map<String, SeriesModel>? = null,
+  val MG: Map<String, SeriesModel>? = null,
+  val DX: Map<String, SeriesModel>? = null,
   val dictionary: Map<String, MarkTypeEntity>? = null
+)
+
+@Serializable
+data class SeriesModel(
+  val name: String,
+  val modalityModel: ModalityModel
 )
 
 @Serializable

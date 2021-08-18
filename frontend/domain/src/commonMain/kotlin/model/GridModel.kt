@@ -28,7 +28,7 @@ sealed interface GridType {
   }
 
   companion object {
-    val initial = Four
+    val initial = Single
   }
 }
 
@@ -264,10 +264,6 @@ private fun buildSingleCut(type: CutType, data: ResearchData): Plane =
     CutType.CT_0 -> ct0(data, doseDefaultReportCutTypes.filter { it != type })
     CutType.CT_1 -> ct1(data, doseDefaultReportCutTypes.filter { it != type })
     CutType.CT_2 -> ct2(data, doseDefaultReportCutTypes.filter { it != type })
-    CutType.CT_UNKNOWN -> TODO()
-    CutType.CT_DOSE_REPORT_UNKNOWN -> TODO()
-    CutType.MG_UNKNOWN -> TODO()
-    CutType.DX_UNKNOWN -> TODO()
   }
 
 
@@ -304,10 +300,6 @@ private fun buildEmptySingleCut(type: CutType, data: ResearchData): Plane {
     CutType.CT_0 -> ct0(data, list)
     CutType.CT_1 -> ct1(data, list)
     CutType.CT_2 -> ct2(data, list)
-    CutType.CT_UNKNOWN -> TODO()
-    CutType.CT_DOSE_REPORT_UNKNOWN -> TODO()
-    CutType.MG_UNKNOWN -> TODO()
-    CutType.DX_UNKNOWN -> TODO()
   }
 }
 
@@ -334,10 +326,6 @@ private fun cutWithTwoTypes(
     CutType.CT_0 -> ct0(data, doseDefaultReportCutTypes.filter { it != main && it != second })
     CutType.CT_1 -> ct1(data, doseDefaultReportCutTypes.filter { it != main && it != second })
     CutType.CT_2 -> ct2(data, doseDefaultReportCutTypes.filter { it != main && it != second })
-    CutType.CT_UNKNOWN -> TODO()
-    CutType.CT_DOSE_REPORT_UNKNOWN -> TODO()
-    CutType.MG_UNKNOWN -> TODO()
-    CutType.DX_UNKNOWN -> TODO()
   }
 }
 

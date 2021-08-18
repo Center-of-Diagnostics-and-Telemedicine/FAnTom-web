@@ -1,17 +1,17 @@
 package repository
 
 import com.badoo.reaktive.observable.Observable
-import com.badoo.reaktive.observable.subscribe
 import com.badoo.reaktive.subject.behavior.BehaviorSubject
-import model.*
+import model.EmptyGridModel
+import model.MyNewGrid
 
 class GridRepositoryImpl : GridRepository {
 
-  private val _gridSubject = BehaviorSubject<GridType>(GridType.initial)
-  override val grid: Observable<GridType> = _gridSubject
+  private val _gridSubject = BehaviorSubject<MyNewGrid>(EmptyGridModel)
+  override val grid: Observable<MyNewGrid> = _gridSubject
 
-  override fun changeGrid(gridType: GridType) {
-    _gridSubject.onNext(gridType)
+  override fun changeGrid(grid: MyNewGrid) {
+    _gridSubject.onNext(grid)
   }
 
 }

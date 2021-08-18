@@ -1,7 +1,11 @@
 package decompose.research.tools
 
 import com.ccfraser.muirwik.components.*
+import com.ccfraser.muirwik.components.list.mList
+import com.ccfraser.muirwik.components.list.mListItem
+import com.ccfraser.muirwik.components.transitions.mCollapse
 import components.grid.Grid
+import decompose.Props
 import decompose.RenderableComponent
 import decompose.research.tools.GridUi.GridStyles.squareCss
 import decompose.research.tools.GridUi.GridStyles.squareHoverCss
@@ -13,7 +17,7 @@ import kotlinx.css.properties.transition
 import kotlinx.html.js.onClickFunction
 import kotlinx.html.js.onMouseOutFunction
 import kotlinx.html.js.onMouseOverFunction
-import model.GridType
+import model.MyNewGridType
 import react.RBuilder
 import react.RState
 import react.dom.attrs
@@ -23,7 +27,6 @@ import styled.StyleSheet
 import styled.StyledElementBuilder
 import styled.css
 import styled.styledDiv
-import decompose.Props
 
 class GridUi(props: Props<Grid>) : RenderableComponent<Grid, State>(
   props = props,
@@ -38,17 +41,19 @@ class GridUi(props: Props<Grid>) : RenderableComponent<Grid, State>(
 
   override fun RBuilder.render() {
     themeContext.Consumer { theme ->
-      mPaper {
-        div {
-          this@div.attrs {
-            onMouseOutFunction = {
-              setState {
-                firstHover = false//state.model.grid.types.isNotEmpty()
-                secondHover = false//state.model.grid.types.size > 1
-                thirdHover = false//state.model.grid.types.size > 2
-                fourthHover = false//state.model.grid.types.size > 3
+      styledDiv {
+        css(ToolsUi.ToolsStyles.headerStyle)
+        mPaper {
+          div {
+            this@div.attrs {
+              onMouseOutFunction = {
+                setState {
+                  firstHover = false//state.model.grid.types.isNotEmpty()
+                  secondHover = false//state.model.grid.types.size > 1
+                  thirdHover = false//state.model.grid.types.size > 2
+                  fourthHover = false//state.model.grid.types.size > 3
+                }
               }
-            }
 //            onMouseOverFunction = {
 //              setState {
 //                firstHover = false
@@ -57,54 +62,69 @@ class GridUi(props: Props<Grid>) : RenderableComponent<Grid, State>(
 //                fourthHover = false
 //              }
 //            }
-          }
-          mGridContainer {
-            css {
-              display = Display.flex
-              flexDirection = FlexDirection.column
             }
+            mGridContainer {
+              css {
+                display = Display.flex
+                flexDirection = FlexDirection.column
+              }
 
-            mGridItem {
-              mGridContainer {
-                gridItem(
-                  predicate = state.firstHover,
-                  onClick = { component.changeGrid(GridType.Single) },
-                  onMouseOver = { setState { firstHover = true } }
-                )
-                gridItem(
-                  predicate = state.secondHover,
-                  onClick = { component.changeGrid(GridType.TwoHorizontal) },
-                  onMouseOver = {
-                    setState {
-                      secondHover = true
-                      firstHover = true
-                    }
-                  })
+              mGridItem {
+                mGridContainer {
+                  gridItem(
+                    predicate = state.firstHover,
+                    onClick = { component.changeGrid(MyNewGridType.Single) },
+                    onMouseOver = { setState { firstHover = true } }
+                  )
+                  gridItem(
+                    predicate = state.secondHover,
+                    onClick = { component.changeGrid(MyNewGridType.TwoHorizontal) },
+                    onMouseOver = {
+                      setState {
+                        secondHover = true
+                        firstHover = true
+                      }
+                    })
+                }
+              }
+              mGridItem {
+                mGridContainer {
+                  gridItem(
+                    predicate = state.thirdHover,
+                    onClick = { component.changeGrid(MyNewGridType.TwoVertical) },
+                    onMouseOver = {
+                      setState {
+                        thirdHover = true
+                        firstHover = true
+                      }
+                    })
+                  gridItem(
+                    predicate = state.fourthHover,
+                    onClick = { component.changeGrid(MyNewGridType.Four) },
+                    onMouseOver = {
+                      setState {
+                        firstHover = true
+                        secondHover = true
+                        thirdHover = true
+                        fourthHover = true
+                      }
+                    })
+                }
               }
             }
-            mGridItem {
-              mGridContainer {
-                gridItem(
-                  predicate = state.thirdHover,
-                  onClick = { component.changeGrid(GridType.TwoVertical) },
-                  onMouseOver = {
-                    setState {
-                      thirdHover = true
-                      firstHover = true
-                    }
-                  })
-                gridItem(
-                  predicate = state.fourthHover,
-                  onClick = { component.changeGrid(GridType.Four) },
-                  onMouseOver = {
-                    setState {
-                      firstHover = true
-                      secondHover = true
-                      thirdHover = true
-                      fourthHover = true
-                    }
-                  })
-              }
+          }
+        }
+      }
+      styledDiv {
+        mCollapse(show = state.open) {
+          mList {
+            css { paddingLeft = 4.spacingUnits }
+            state.model.series.forEach { seriesName ->
+              mListItem(
+                primaryText = seriesName,
+                onClick = { component.changeSeries(seriesName) },
+                selected = seriesName == state.model.currentSeries
+              )
             }
           }
         }
@@ -157,7 +177,8 @@ class GridUi(props: Props<Grid>) : RenderableComponent<Grid, State>(
     var firstHover: Boolean = false,
     var secondHover: Boolean = false,
     var thirdHover: Boolean = false,
-    var fourthHover: Boolean = false
+    var fourthHover: Boolean = false,
+    var open: Boolean = true
   ) : RState
 
 }

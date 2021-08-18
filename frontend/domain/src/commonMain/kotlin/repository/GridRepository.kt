@@ -1,14 +1,12 @@
 package repository
 
 import com.badoo.reaktive.observable.Observable
-import model.GridModel
-import model.GridType
-import model.Plane
+import model.MyNewGrid
 
 interface GridRepository {
 
-  val grid: Observable<GridType>
+  val grid: Observable<MyNewGrid>
 
-  fun changeGrid(gridType: GridType)
+  fun changeGrid(grid: MyNewGrid)
 
 }

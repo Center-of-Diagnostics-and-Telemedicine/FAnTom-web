@@ -9,38 +9,35 @@ import components.Consumer
 import components.cutcontainer.CutContainer
 import components.twohorizontalcutscontainer.TwoHorizontalCutsContainer.Child
 import components.twohorizontalcutscontainer.TwoHorizontalCutsContainer.Dependencies
-import model.CutType
-import model.initialTwoHorizontalGrid
+import model.MyPlane
 
 class TwoHorizontalCutsContainerComponent(
   componentContext: ComponentContext,
   dependencies: Dependencies,
-  private val cutContainerFactory: (ComponentContext, CutType, Consumer<CutContainer.Output>) -> CutContainer,
+  private val cutContainerFactory: (ComponentContext, MyPlane, Consumer<CutContainer.Output>) -> CutContainer,
 ) : TwoHorizontalCutsContainer, ComponentContext by componentContext, Dependencies by dependencies {
-
-  val grid = initialTwoHorizontalGrid(data.type)
 
   private val leftRouter: Router<ChildConfiguration, Child> =
     router(
-      initialConfiguration = ChildConfiguration(grid.left),
+      initialConfiguration = ChildConfiguration(gridModel.left),
       key = "LeftRouter",
       childFactory = ::resolveChild
     )
   override val leftRouterState: Value<RouterState<*, Child>> = leftRouter.state
 
   private val rightRouter: Router<ChildConfiguration, Child> = router(
-    initialConfiguration = ChildConfiguration(grid.right),
+    initialConfiguration = ChildConfiguration(gridModel.right),
     key = "RightRouter",
     childFactory = ::resolveChild
   )
   override val rightRouterState: Value<RouterState<*, Child>> = rightRouter.state
 
-  override fun changeLeftCutType(cutType: CutType) {
-    leftRouter.replaceCurrent(ChildConfiguration(cutType))
+  override fun changeLeftCutType(plane: MyPlane) {
+    leftRouter.replaceCurrent(ChildConfiguration(plane))
   }
 
-  override fun changeRightCutType(cutType: CutType) {
-    rightRouter.replaceCurrent(ChildConfiguration(cutType))
+  override fun changeRightCutType(plane: MyPlane) {
+    rightRouter.replaceCurrent(ChildConfiguration(plane))
   }
 
   private fun resolveChild(
@@ -50,7 +47,7 @@ class TwoHorizontalCutsContainerComponent(
     Child(
       component = cutContainerFactory(
         componentContext,
-        config.cutType,
+        config.plane,
         Consumer(::onCutOutput)
       )
     )
@@ -61,5 +58,5 @@ class TwoHorizontalCutsContainerComponent(
     }
 
   @Parcelize
-  private data class ChildConfiguration(val cutType: CutType) : Parcelable
+  private data class ChildConfiguration(val plane: MyPlane) : Parcelable
 }

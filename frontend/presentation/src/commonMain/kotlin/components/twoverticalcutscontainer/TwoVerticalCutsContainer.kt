@@ -7,10 +7,9 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.base.Consumer
 import components.cutcontainer.CutContainer
 import components.twoverticalcutscontainer.TwoVerticalCutsContainer.Dependencies
-import model.CutType
-import model.Plane
+import model.MyPlane
 import model.ResearchDataModel
-import model.buildPlane
+import model.TwoVerticalGridModel
 import repository.MyBrightnessRepository
 import repository.MyMarksRepository
 import repository.MyMipRepository
@@ -21,8 +20,8 @@ interface TwoVerticalCutsContainer {
   val topRouterState: Value<RouterState<*, Child>>
   val bottomRouterState: Value<RouterState<*, Child>>
 
-  fun changeTopCutType(cutType: CutType)
-  fun changeBottomCutType(cutType: CutType)
+  fun changeTopCutType(plane: MyPlane)
+  fun changeBottomCutType(plane: MyPlane)
 
   interface Dependencies {
     val storeFactory: StoreFactory
@@ -32,6 +31,7 @@ interface TwoVerticalCutsContainer {
     val marksRepository: MyMarksRepository
     val mipRepository: MyMipRepository
     val data: ResearchDataModel
+    val gridModel: TwoVerticalGridModel
     val researchId: Int
   }
 
@@ -51,12 +51,11 @@ fun TwoVerticalCutsContainer(
   TwoVerticalCutsContainerComponent(
     componentContext = componentContext,
     dependencies = dependencies,
-    cutContainerFactory = { childContext, cutType, output ->
+    cutContainerFactory = { childContext, plane, output ->
       CutContainer(componentContext = childContext,
         dependencies = object : CutContainer.Dependencies, Dependencies by dependencies {
           override val cutContainerOutput: Consumer<CutContainer.Output> = output
-          override val cutType: CutType = cutType
-          override val plane: Plane = buildPlane(cutType, data)
+          override val plane: MyPlane = plane
         })
     },
   )

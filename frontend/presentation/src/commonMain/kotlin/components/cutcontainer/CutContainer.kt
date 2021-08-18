@@ -11,8 +11,7 @@ import components.cutcontainer.CutContainer.Dependencies
 import components.cutslider.Slider
 import components.draw.Draw
 import components.shapes.Shapes
-import model.CutType
-import model.Plane
+import model.MyPlane
 import model.ResearchDataModel
 import repository.MyBrightnessRepository
 import repository.MyMarksRepository
@@ -37,10 +36,9 @@ interface CutContainer : ScreenDimensionsListener {
     val marksRepository: MyMarksRepository
     val mipRepository: MyMipRepository
     val cutContainerOutput: Consumer<Output>
-    val cutType: CutType
     val researchId: Int
     val data: ResearchDataModel
-    val plane: Plane
+    val plane: MyPlane
   }
 
   sealed class SliderChild {
@@ -64,7 +62,7 @@ interface CutContainer : ScreenDimensionsListener {
   }
 
   sealed class Output {
-    data class OpenFullCut(val cutType: CutType) : Output()
+    data class OpenFullCut(val planeName: String) : Output()
   }
 }
 
