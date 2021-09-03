@@ -12,7 +12,7 @@ fun FantomResearchInitModel.toResponse(): ResearchInitModel {
   debugLog("ResearchInitResponse income")
   val resultMarkTypes = mutableMapOf<String, MarkTypeEntity>()
 
-  dictionary?.firstOrNull()?.map { entry ->
+  dictionary?.map { entry ->
     resultMarkTypes[entry.key] = transformMarkEntity(entry.value)
   }
   return ResearchInitModel(

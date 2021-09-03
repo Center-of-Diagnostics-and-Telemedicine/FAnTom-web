@@ -14,7 +14,7 @@ data class FantomResearchInitModel(
   val CT: FantomCTInitModel? = null,
   val MG: FantomMGInitModel? = null,
   val DX: FantomDXInitModel? = null,
-  val dictionary: List<Map<String, FantomMarkTypeEntity>>? = null
+  val dictionary: Map<String, FantomMarkTypeEntity>? = null
 )
 
 @Serializable
